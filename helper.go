@@ -1,7 +1,7 @@
 package indicator
 
 // Multiply values with multipler.
-func Multiply(values []float64, multiplier float64) []float64 {
+func multiply(values []float64, multiplier float64) []float64 {
 	result := make([]float64, len(values))
 
 	for i, value := range values {
@@ -12,12 +12,12 @@ func Multiply(values []float64, multiplier float64) []float64 {
 }
 
 // Divide values with divider.
-func Divide(values []float64, divider float64) []float64 {
-	return Multiply(values, float64(1)/divider)
+func divide(values []float64, divider float64) []float64 {
+	return multiply(values, float64(1)/divider)
 }
 
 // Add values1 and values2.
-func Add(values1, values2 []float64) []float64 {
+func add(values1, values2 []float64) []float64 {
 	if len(values1) != len(values2) {
 		panic("not the same length")
 	}
@@ -31,7 +31,7 @@ func Add(values1, values2 []float64) []float64 {
 }
 
 // Substract values2 from values1.
-func Substract(values1, values2 []float64) []float64 {
-	substract := Multiply(values2, float64(-1))
-	return Add(values1, substract)
+func substract(values1, values2 []float64) []float64 {
+	substract := multiply(values2, float64(-1))
+	return add(values1, substract)
 }

@@ -8,7 +8,7 @@ func TestMultiply(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	multiplier := float64(2)
 
-	result := Multiply(values, multiplier)
+	result := multiply(values, multiplier)
 	if len(result) != len(values) {
 		t.Fatal("result not same size")
 	}
@@ -27,7 +27,7 @@ func TestDivide(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
 	divider := float64(2)
 
-	result := Divide(values, divider)
+	result := divide(values, divider)
 	if len(result) != len(values) {
 		t.Fatal("result not same size")
 	}
@@ -52,13 +52,13 @@ func TestAddWithDifferentSizes(t *testing.T) {
 		}
 	}()
 
-	Add(values1, values2)
+	add(values1, values2)
 }
 
 func TestAdd(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-	result := Add(values, values)
+	result := add(values, values)
 	if len(result) != len(values) {
 		t.Fatal("result not same size")
 	}
@@ -77,7 +77,7 @@ func TestSubstract(t *testing.T) {
 	values1 := []float64{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
 	values2 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-	result := Substract(values1, values2)
+	result := substract(values1, values2)
 	if len(result) != len(values1) {
 		t.Fatal("result not same size")
 	}
