@@ -4,7 +4,16 @@
 
 # Indicator Go
 
-Indicator is a Golang module providing various stock technical analysis indicators for trading.
+Indicator is a Golang module providing various stock technical analysis indicators for trading. The following list of indicators are currently supported by this package:
+
+- [Simple Moving Average (SMA)](#simple-moving-average-sma)
+- [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
+- [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+- [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
+- [Bollinger Bands](#bollinger-bands)
+- [Awesome Oscillator](#awesome-oscillator)
+- [Williams R](#williams-r)
+- [Typical Price](#typical-price)
 
 ## Usage
 
@@ -52,7 +61,7 @@ result := indicator.Ema(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
 
 #### Moving Average Convergence Divergence (MACD)
 
-The [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) function calculates the MACD and the Signal.
+The [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) function calculates a trend-following momentum indicator that shows the relationship between two moving averages of price.
 
 ```
 MACD = 12-Period EMA - 26-Period EMA.
@@ -65,7 +74,7 @@ macd, signal := indicator.Macd(close)
 
 #### Bollinger Bands
 
-The [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) function calculates the bollinger bands, middle band, upper band, lower band.
+The [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) function calculates the bollinger bands, middle band, upper band, lower band, provides identification of when a stock is oversold or overbought.
 
 ```
 Middle Band = 20-Period SMA.
@@ -79,7 +88,7 @@ middleBand, upperBand, lowerBand := indicator.BollingerBands(close)
 
 #### Awesome Oscillator
 
-The [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) function calculates the awesome oscillator based on low and high daily prices for a given stock.
+The [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) function calculates the awesome oscillator based on low and high daily prices for a given stock. It is an indicator used to measure market momentum. 
 
 ```
 Median Price = ((Low + High) / 2)
@@ -92,7 +101,7 @@ result := indicator.AwesomeOscillator(low, high)
 
 #### Williams R
 
-The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and close prices.
+The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and close prices. It is a type of momentum indicator that moves between 0 and -100 and measures overbought and oversold levels.
 
 ```
 WR = (Highest High - Close) / (Highest High - Lowest Low)
