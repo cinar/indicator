@@ -102,6 +102,18 @@ WR = (Highest High - Close) / (Highest High - Lowest Low)
 result := indicator.WilliamsR(low, high, close)
 ```
 
+#### Typical Price
+
+The [TypicalPrice](https://pkg.go.dev/github.com/cinar/indicator#TypicalPrice) function calculates another approximation of average price for each period and can be used as a filter for moving average systems.
+
+```
+Typical Price = (High + Low + Close) / 3
+```
+
+```Golang
+ta, sma20 := indicator.TypicalPrice(high, low, close)
+```
+
 ## License
 
 The source code is provided under MIT License.

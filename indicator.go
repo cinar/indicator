@@ -82,3 +82,24 @@ func WilliamsR(low, high, close []float64) []float64 {
 
 	return result
 }
+
+// Typical Price. It is another approximation of average price for each
+// period and can be used as a filter for moving average systems.
+//
+// Typical Price = (High + Low + Close) / 3
+//
+// Returns typical price, 20-Period SMA.
+func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
+	if len(high) != len(low) || len(low) != len(close) {
+		panic("not all same size")
+	}
+
+	sma20 := Sma(20, close)
+
+	ta := make([]float64, len(close))
+	for i := 0; i < len(ta); i++ {
+		ta[i] = (high[i] + low[i] + close[i]) / float64(3)
+	}
+
+	return ta, sma20
+}
