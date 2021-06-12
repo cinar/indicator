@@ -17,6 +17,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Typical Price](#typical-price)
 - [Relative Strength Index (RSI)](#relative-strength-index-rsi)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
+- [Actual True Range (ATR)](#actual-true-range-atr)
 
 ## Usage
 
