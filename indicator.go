@@ -37,6 +37,31 @@ func BollingerBands(close []float64) ([]float64, []float64, []float64) {
 	return middleBand, upperBand, lowerBand
 }
 
+// Bollinger Band Width. It measures the percentage difference between the
+// upper band and the lower band. It decreases as Bollinger Bands narrows
+// and increases as Bollinger Bands widens
+//
+// During a period of rising price volatity the band width widens, and
+// during a period of low market volatity band width contracts.
+//
+// Band Width = (Upper Band - Lower Band) / Middle Band
+//
+// Returns bandWidth, bandWidthEma90
+func BollingerBandWidth(middleBand, upperBand, lowerBand []float64) ([]float64, []float64) {
+	if len(middleBand) != len(upperBand) || len(upperBand) != len(lowerBand) {
+		panic("bands not same size")
+	}
+
+	bandWidth := make([]float64, len(middleBand))
+	for i := 0; i < len(bandWidth); i++ {
+		bandWidth[i] = (upperBand[i] - lowerBand[i]) / middleBand[i]
+	}
+
+	bandWidthEma90 := Ema(90, bandWidth)
+
+	return bandWidth, bandWidthEma90
+}
+
 // Awesome Oscillator.
 //
 // Median Price = ((Low + High) / 2).

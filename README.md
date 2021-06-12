@@ -1,6 +1,6 @@
 [![GoDoc](https://godoc.org/github.com/cinar/indicator?status.svg)](https://godoc.org/github.com/cinar/indicator)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/cinar/indicator.svg?branch=main)](https://travis-ci.com/cinar/indicator)
+[![Build Status](https://travis-ci.com/cinar/indicator.svg?branch=master)](https://travis-ci.com/cinar/indicator)
 
 # Indicator Go
 
@@ -11,6 +11,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Bollinger Bands](#bollinger-bands)
+- [Bollinger Band Width](#bollinger-band-width)
 - [Awesome Oscillator](#awesome-oscillator)
 - [Williams R](#williams-r)
 - [Typical Price](#typical-price)
@@ -85,6 +86,23 @@ Lower Band = 20-Period SMA - 2 (20-Period Std)
 
 ```Golang
 middleBand, upperBand, lowerBand := indicator.BollingerBands(close)
+```
+
+#### Bollinger Band Width
+
+The [BollingerBandWidth](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandWidth) function 
+measures the percentage difference between the upper band and the lower band. It decreases as
+Bollinger Bands narrows and increases as Bollinger Bands widens.
+
+During a period of rising price volatility the band width widens, and during a period of low market
+volatility band width contracts.
+
+```
+Band Width = (Upper Band - Lower Band) / Middle Band
+```
+
+```Golang
+bandWidth, bandWidthEma90 := indicator.BollingerBandWidth(middleBand, upperBand, lowerBand)
 ```
 
 #### Awesome Oscillator
