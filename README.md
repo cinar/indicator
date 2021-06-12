@@ -16,6 +16,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Williams R](#williams-r)
 - [Typical Price](#typical-price)
 - [Relative Strength Index (RSI)](#relative-strength-index-rsi)
+- [On-Balance Volume (OBV)](#on-balance-volume-obv)
 
 ## Usage
 
@@ -153,6 +154,21 @@ RSI = 100 - (100 / (1 + RS))
 
 ```Golang
 rs, rsi := indicator.Rsi(close)
+```
+
+#### On-Balance Volume (OBV)
+
+The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading
+momentum indicator that uses volume flow to predict changes in stock price.
+
+```
+                  volume, if Close > Close-Prev
+OBV = OBV-Prev +       0, if Clsoe = Close-Prev
+                 -volume, if Close < Close-Prev
+```
+
+```Golang
+result := indicator.Obv(close, volume)
 ```
 
 ## License

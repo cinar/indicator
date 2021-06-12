@@ -154,3 +154,31 @@ func Rsi(close []float64) ([]float64, []float64) {
 
 	return rs, rsi
 }
+
+// On-Balance Volume (OBV). It is a technical trading momentum indicator that
+// uses volume flow to predict changes in stock price.
+//
+//                   volume, if Close > Close-Prev
+// OBV = OBV-Prev +       0, if Close = Close-Prev
+//                  -volume, if Close < Close-Prev
+//
+// Returns obv
+func Obv(close []float64, volume []int64) []int64 {
+	if len(close) != len(volume) {
+		panic("not all same size")
+	}
+
+	obv := make([]int64, len(volume))
+
+	for i := 1; i < len(obv); i++ {
+		obv[i] = obv[i-1]
+
+		if close[i] > close[i-1] {
+			obv[i] += volume[i]
+		} else if close[i] < close[i-1] {
+			obv[i] -= volume[i]
+		}
+	}
+
+	return obv
+}
