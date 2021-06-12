@@ -163,7 +163,7 @@ momentum indicator that uses volume flow to predict changes in stock price.
 
 ```
                   volume, if Close > Close-Prev
-OBV = OBV-Prev +       0, if Clsoe = Close-Prev
+OBV = OBV-Prev +       0, if Close = Close-Prev
                  -volume, if Close < Close-Prev
 ```
 
