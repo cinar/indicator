@@ -91,3 +91,59 @@ func TestSubstract(t *testing.T) {
 		}
 	}
 }
+
+func TestDiffWithLargerBefore(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatal("did not check size")
+		}
+	}()
+
+	diff([]float64{}, 10)
+}
+
+func TestDiff(t *testing.T) {
+	values := []float64{1, 2, 1, 4, 2, 2, 6, 8, 2, 10}
+	expected := []float64{0, 1, -1, 3, -2, 0, 4, 2, -6, 8}
+	before := 1
+
+	actual := diff(values, before)
+
+	if len(actual) != len(expected) {
+		t.Fatalf("actual %d expected %d", len(actual), len(expected))
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestGroupPositivesAndNegatives(t *testing.T) {
+	values := []float64{1, 0, -2, -4, 6, 0, 0, 4, 2, -20}
+	expectedPositives := []float64{1, 6, 4, 2}
+	expectedNegatives := []float64{-2, -4, -20}
+
+	actualPositives, actualNegatives := groupPositivesAndNegatives(values)
+
+	if len(actualPositives) != len(expectedPositives) {
+		t.Fatalf("actual positives %d expected positives %d", len(actualPositives), len(expectedPositives))
+	}
+
+	for i := 0; i < len(actualPositives); i++ {
+		if actualPositives[i] != expectedPositives[i] {
+			t.Fatalf("at %d actual positive %f expected positive %f", i, actualPositives[i], expectedPositives[i])
+		}
+	}
+
+	if len(actualNegatives) != len(expectedNegatives) {
+		t.Fatalf("actual positives %d expected positives %d", len(actualNegatives), len(expectedNegatives))
+	}
+
+	for i := 0; i < len(actualNegatives); i++ {
+		if actualNegatives[i] != expectedNegatives[i] {
+			t.Fatalf("at %d actual negative %f expected negative %f", i, actualNegatives[i], expectedNegatives[i])
+		}
+	}
+}

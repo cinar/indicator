@@ -1,6 +1,8 @@
 package indicator
 
-import "sort"
+import (
+	"sort"
+)
 
 // Moving Average Convergence Divergence (MACD).
 //
@@ -102,4 +104,28 @@ func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
 	}
 
 	return ta, sma20
+}
+
+// Relative Strength Index (RSI). It is a momentum indicator that measures the magnitude
+// of recent price changes to evaluate overbought and oversold conditions.
+//
+// RS = Average Gain / Average Loss
+// RSI = 100 - (100 / (1 + RS))
+//
+// Returns rs, rsi
+func Rsi(close []float64) ([]float64, []float64) {
+	gains, losses := groupPositivesAndNegatives(diff(close, 1))
+
+	meanGains := Sma(14, gains)
+	meanLosses := Sma(14, losses)
+
+	rsi := make([]float64, len(close))
+	rs := make([]float64, len(close))
+
+	for i := 0; i < len(rsi); i++ {
+		rs[i] = meanGains[i] / (float64(-1) * meanLosses[i])
+		rsi[i] = 100 - (100 / (1 + rs[i]))
+	}
+
+	return rs, rsi
 }

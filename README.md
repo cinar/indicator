@@ -14,6 +14,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Awesome Oscillator](#awesome-oscillator)
 - [Williams R](#williams-r)
 - [Typical Price](#typical-price)
+- [Relative Strength Index (RSI)](#relative-strength-index-rsi)
 
 ## Usage
 
@@ -121,6 +122,19 @@ Typical Price = (High + Low + Close) / 3
 
 ```Golang
 ta, sma20 := indicator.TypicalPrice(high, low, close)
+```
+
+#### Relative Strength Index (RSI)
+
+The [Rsi](https://pkg.go.dev/github.com/cinar/indicator#Rsi) function calculates a momentum indicator that measures the magnitude of recent price changes to evaluate overbought and oversold conditions.
+
+```
+RS = Average Gain / Average Loss
+RSI = 100 - (100 / (1 + RS))
+```
+
+```Golang
+rs, rsi := indicator.Rsi(close)
 ```
 
 ## License
