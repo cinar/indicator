@@ -171,6 +171,21 @@ OBV = OBV-Prev +       0, if Close = Close-Prev
 result := indicator.Obv(close, volume)
 ```
 
+#### Actual True Range (ATR)
+
+The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical 
+analysis indicator that measures market volatility by decomposing the entire range of stock 
+prices for that period.
+
+```
+TR = Max((High - Low), (High - Close), (Close - Low))
+ATR = 14-Period SMA TR
+```
+
+```Golang
+tr, atr := indicator.Atr(high, low, close)
+```
+
 ## License
 
 The source code is provided under MIT License.
