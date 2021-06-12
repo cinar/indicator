@@ -188,10 +188,10 @@ func Obv(close []float64, volume []int64) []int64 {
 // volatility by decomposing the entire range of stock prices for that period.
 //
 // TR = Max((High - Low), (High - Close), (Close - Low))
-// ATR = 14-Period SMA TR
+// ATR = SMA TR
 //
 // Returns tr, atr
-func Atr(high, low, close []float64) ([]float64, []float64) {
+func Atr(period int, high, low, close []float64) ([]float64, []float64) {
 	if len(high) != len(low) || len(low) != len(close) {
 		panic("not all same size")
 	}
@@ -202,7 +202,7 @@ func Atr(high, low, close []float64) ([]float64, []float64) {
 		tr[i] = math.Max(high[i]-low[i], math.Max(high[i]-close[i], close[i]-low[i]))
 	}
 
-	atr := Sma(14, tr)
+	atr := Sma(period, tr)
 
 	return tr, atr
 }

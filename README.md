@@ -184,7 +184,7 @@ ATR = 14-Period SMA TR
 ```
 
 ```Golang
-tr, atr := indicator.Atr(high, low, close)
+tr, atr := indicator.Atr(14, high, low, close)
 ```
 
 ## License
