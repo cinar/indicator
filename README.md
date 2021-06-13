@@ -21,6 +21,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Chandelier Exit](#chandelier-exit)
 - [Ichimoku Cloud](#ichimoku-cloud)
 - [Stochastic Oscillator](#stochastic-oscillator)
+- [Aroon Indicator](#aroon-indicator)
 
 ## Usage
 
@@ -224,6 +225,19 @@ D = 3-Period SMA of K
 
 ```Golang
 k, d := indicator.StochasticOscillator(high, low, close)
+```
+
+#### Aroon Indicator
+
+The [Aroon](https://pkg.go.dev/github.com/cinar/indicator#Aroon) function calculates a technical indicator that is used to identify trend changes in the price of a stock, as well as the strength of that trend. It consists of two lines, Aroon Up, and Aroon Down. The Aroon Up line measures measures the strength of the uptrend, and the Aroon Down measures the strength of the downtrend. When Aroon Up is above Aroon Down, it indicates bullish price, and when Aroon Down is above Aroon Up, it indicates bearish price.
+
+```
+Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
+Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
+```
+
+```Golang
+aroonUp, aroonDown := indicator.Aroon(high, low)
 ```
 
 ## License

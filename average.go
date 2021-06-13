@@ -103,3 +103,26 @@ func Min(period int, values []float64) []float64 {
 
 	return result
 }
+
+// Since last values change.
+func Since(values []float64) []int {
+	result := make([]int, len(values))
+
+	lastValue := math.NaN()
+	sinceLast := 0
+
+	for i := 0; i < len(values); i++ {
+		value := values[i]
+
+		if value != lastValue {
+			lastValue = value
+			sinceLast = 0
+		} else {
+			sinceLast++
+		}
+
+		result[i] = sinceLast
+	}
+
+	return result
+}

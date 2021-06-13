@@ -64,3 +64,17 @@ func TestEma(t *testing.T) {
 		}
 	}
 }
+
+func TestSince(t *testing.T) {
+	values := []float64{1, 2, 2, 3, 4, 4, 4, 4, 5, 6}
+	expected := []int{0, 0, 1, 0, 0, 1, 2, 3, 0, 0}
+
+	actual := Since(values)
+	// TODO: check size.
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %d expected %d", i, actual[i], expected[i])
+		}
+	}
+}

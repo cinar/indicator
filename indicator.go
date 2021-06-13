@@ -251,3 +251,31 @@ func StochasticOscillator(high, low, close []float64) ([]float64, []float64) {
 
 	return k, d
 }
+
+// Aroon Indicator. It is a technical indicator that is used to identify trend changes
+// in the price of a stock, as well as the strength of that trend. It consists of two
+// lines, Arron Up, and Aroon Down. The Aroon Up line measures the strength of the
+// uptrend, and the Aroon Down measures the strength of the downtrend. When Aroon Up
+// is above Aroon Down, it indicates bullish price, and when Aroon Down is above
+// Aroon Up, it indicates bearish price.
+//
+// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
+// Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
+//
+// Returns aroonUp, aroonDown
+func Aroon(high, low []float64) ([]float64, []float64) {
+	checkSameSize(high, low)
+
+	sinceLastHigh25 := Since(Max(25, high))
+	sinceLastLow25 := Since(Min(25, low))
+
+	aroonUp := make([]float64, len(high))
+	aroonDown := make([]float64, len(high))
+
+	for i := 0; i < len(aroonUp); i++ {
+		aroonUp[i] = (float64(25-sinceLastHigh25[i]) / 25) * 100
+		aroonDown[i] = (float64(25-sinceLastLow25[i]) / 25) * 100
+	}
+
+	return aroonUp, aroonDown
+}
