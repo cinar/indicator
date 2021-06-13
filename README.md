@@ -19,6 +19,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
 - [Actual True Range (ATR)](#actual-true-range-atr)
 - [Chandelier Exit](#chandelier-exit)
+- [Ichimoku Cloud](#ichimoku-cloud)
 
 ## Usage
 
@@ -200,6 +201,22 @@ Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
 
 ```Golang
 chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, close)
+```
+
+#### Ichimoku Cloud
+
+The [IchimokuCloud](https://pkg.go.dev/github.com/cinar/indicator#IchimokuCloud), also known as Ichimoku Kinko Hyo, calculates a versatile indicator that defines support and resistence, identifies tred direction, gauges momentum, and provides trading signals.
+
+```
+Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
+Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
+Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
+Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
+Chikou Span (Lagging Span) = Close plotted 26 days in the past.
+```
+
+```Golang
+conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, close)
 ```
 
 ## License

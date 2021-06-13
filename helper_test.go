@@ -147,3 +147,21 @@ func TestGroupPositivesAndNegatives(t *testing.T) {
 		}
 	}
 }
+
+func TestShiftRight(t *testing.T) {
+	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	expected := []float64{0, 0, 0, 0, 1, 2, 3, 4, 5, 6}
+	period := 4
+
+	actual := shiftRight(period, values)
+
+	if len(actual) != len(expected) {
+		t.Fatalf("actual %d expected %d", len(actual), len(expected))
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}

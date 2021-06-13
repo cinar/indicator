@@ -65,3 +65,14 @@ func groupPositivesAndNegatives(values []float64) ([]float64, []float64) {
 
 	return positives, negatives
 }
+
+// Shift right for period.
+func shiftRight(period int, values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := period; i < len(result); i++ {
+		result[i] = values[i-period]
+	}
+
+	return result
+}

@@ -216,3 +216,27 @@ func ChandelierExit(high, low, close []float64) ([]float64, []float64) {
 
 	return chandelierExitLong, chandelierExitShort
 }
+
+// Ichimoku Cloud. Also known as Ichimoku Kinko Hyo, is a versatile indicator that defines support and
+// resistence, identifies trend direction, gauges momentum, and provides trading signals.
+//
+// Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
+// Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
+// Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
+// Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
+// Chikou Span (Lagging Span) = Close plotted 26 days in the past.
+//
+// Returns conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingSpan
+func IchimokuCloud(high, low, close []float64) ([]float64, []float64, []float64, []float64, []float64) {
+	if len(high) != len(low) || len(low) != len(close) {
+		panic("not all same size")
+	}
+
+	conversionLine := divide(add(Max(9, high), Min(9, low)), float64(2))
+	baseLine := divide(add(Max(26, high), Min(26, low)), float64(2))
+	leadingSpanA := divide(add(conversionLine, baseLine), float64(2))
+	leadingSpanB := divide(add(Max(52, high), Min(52, low)), float64(2))
+	laggingLine := shiftRight(26, close)
+
+	return conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine
+}
