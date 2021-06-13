@@ -2,7 +2,6 @@ package indicator
 
 import (
 	"math"
-	"sort"
 )
 
 // Moving Average Convergence Divergence (MACD).
@@ -87,25 +86,14 @@ func AwesomeOscillator(low, high []float64) []float64 {
 // Returns wr.
 func WilliamsR(low, high, close []float64) []float64 {
 	period := 14
+
+	highestHigh := Max(period, high)
+	lowestLow := Min(period, low)
+
 	result := make([]float64, len(close))
-	lowPeriod := make([]float64, period)
-	highPeriod := make([]float64, period)
 
 	for i := 0; i < len(close); i++ {
-		lowPeriod[i%period] = low[i]
-		sort.Float64s(lowPeriod)
-
-		highPeriod[i%period] = high[i]
-		sort.Float64s(highPeriod)
-
-		lowestLowIndex := 0
-		if i < period {
-			lowestLowIndex = period - i - 1
-		}
-
-		highestHighIndex := period - 1
-
-		result[i] = (highPeriod[highestHighIndex] - close[i]) / (highPeriod[highestHighIndex] - lowPeriod[lowestLowIndex]) * float64(-100)
+		result[i] = (highestHigh[i] - close[i]) / (highestHigh[i] - lowestLow[i]) * float64(-100)
 	}
 
 	return result
@@ -205,4 +193,26 @@ func Atr(period int, high, low, close []float64) ([]float64, []float64) {
 	atr := Sma(period, tr)
 
 	return tr, atr
+}
+
+// Chandelier Exit. It sets a trailing stop-loss based on the Average True Value (ATR).
+//
+// Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
+// Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+//
+// Returns chandelierExitLong, chandelierExitShort
+func ChandelierExit(high, low, close []float64) ([]float64, []float64) {
+	_, atr22 := Atr(22, high, low, close)
+	highestHigh22 := Max(22, high)
+	lowestLow22 := Min(22, low)
+
+	chandelierExitLong := make([]float64, len(close))
+	chandelierExitShort := make([]float64, len(close))
+
+	for i := 0; i < len(chandelierExitLong); i++ {
+		chandelierExitLong[i] = highestHigh22[i] - (atr22[i] * float64(3))
+		chandelierExitShort[i] = lowestLow22[i] + (atr22[i] * float64(3))
+	}
+
+	return chandelierExitLong, chandelierExitShort
 }

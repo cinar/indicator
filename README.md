@@ -187,6 +187,20 @@ ATR = 14-Period SMA TR
 tr, atr := indicator.Atr(14, high, low, close)
 ```
 
+#### Chandelier Exit
+
+The [ChandelierExit](https://pkg.go.dev/github.com/cinar/indicator#ChandelierExit) function sets a
+trailing stop-loss based on the Average True Value (ATR).
+
+```
+Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
+Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+```
+
+```Golang
+chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, close)
+```
+
 ## License
 
 The source code is provided under MIT License.

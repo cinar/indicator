@@ -1,6 +1,9 @@
 package indicator
 
-import "math"
+import (
+	"math"
+	"sort"
+)
 
 // Simple Moving Average (SMA).
 func Sma(period int, values []float64) []float64 {
@@ -57,6 +60,45 @@ func Ema(period int, values []float64) []float64 {
 		} else {
 			result[i] = value
 		}
+	}
+
+	return result
+}
+
+// Moving max for the given period.
+// TODO: Not optimal. Needs to be done with a binary tree and a ring buffer.
+func Max(period int, values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	buffer := make([]float64, period)
+
+	for i := 0; i < len(values); i++ {
+		buffer[i%period] = values[i]
+		sort.Float64s(buffer)
+
+		result[i] = buffer[period-1]
+	}
+
+	return result
+}
+
+// Moving min for the given period.
+// TODO: Not optimal. Needs to be done with a binary tree and a ring buffer.
+func Min(period int, values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	buffer := make([]float64, period)
+
+	for i := 0; i < len(values); i++ {
+		buffer[i%period] = values[i]
+		sort.Float64s(buffer)
+
+		lowest := 0
+		if i < period {
+			lowest = lowest - i - 1
+		}
+
+		result[i] = buffer[lowest]
 	}
 
 	return result
