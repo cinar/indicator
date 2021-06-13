@@ -28,7 +28,7 @@ func Macd(close []float64) ([]float64, []float64) {
 // Returns middle band, upper band, lower band.
 func BollingerBands(close []float64) ([]float64, []float64, []float64) {
 	std := Std(20, close)
-	std2 := multiply(std, 2)
+	std2 := multiplyBy(std, 2)
 
 	middleBand := Sma(20, close)
 	upperBand := add(middleBand, std2)
@@ -48,9 +48,7 @@ func BollingerBands(close []float64) ([]float64, []float64, []float64) {
 //
 // Returns bandWidth, bandWidthEma90
 func BollingerBandWidth(middleBand, upperBand, lowerBand []float64) ([]float64, []float64) {
-	if len(middleBand) != len(upperBand) || len(upperBand) != len(lowerBand) {
-		panic("bands not same size")
-	}
+	checkSameSize(middleBand, upperBand, lowerBand)
 
 	bandWidth := make([]float64, len(middleBand))
 	for i := 0; i < len(bandWidth); i++ {
@@ -69,7 +67,7 @@ func BollingerBandWidth(middleBand, upperBand, lowerBand []float64) ([]float64, 
 //
 // Returns ao.
 func AwesomeOscillator(low, high []float64) []float64 {
-	medianPrice := divide(add(low, high), float64(2))
+	medianPrice := divideBy(add(low, high), float64(2))
 	sma5 := Sma(5, medianPrice)
 	sma34 := Sma(34, medianPrice)
 	ao := substract(sma5, sma34)
@@ -106,9 +104,7 @@ func WilliamsR(low, high, close []float64) []float64 {
 //
 // Returns typical price, 20-Period SMA.
 func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
-	if len(high) != len(low) || len(low) != len(close) {
-		panic("not all same size")
-	}
+	checkSameSize(high, low, close)
 
 	sma20 := Sma(20, close)
 
@@ -180,9 +176,7 @@ func Obv(close []float64, volume []int64) []int64 {
 //
 // Returns tr, atr
 func Atr(period int, high, low, close []float64) ([]float64, []float64) {
-	if len(high) != len(low) || len(low) != len(close) {
-		panic("not all same size")
-	}
+	checkSameSize(high, low, close)
 
 	tr := make([]float64, len(close))
 
@@ -228,15 +222,32 @@ func ChandelierExit(high, low, close []float64) ([]float64, []float64) {
 //
 // Returns conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingSpan
 func IchimokuCloud(high, low, close []float64) ([]float64, []float64, []float64, []float64, []float64) {
-	if len(high) != len(low) || len(low) != len(close) {
-		panic("not all same size")
-	}
+	checkSameSize(high, low, close)
 
-	conversionLine := divide(add(Max(9, high), Min(9, low)), float64(2))
-	baseLine := divide(add(Max(26, high), Min(26, low)), float64(2))
-	leadingSpanA := divide(add(conversionLine, baseLine), float64(2))
-	leadingSpanB := divide(add(Max(52, high), Min(52, low)), float64(2))
+	conversionLine := divideBy(add(Max(9, high), Min(9, low)), float64(2))
+	baseLine := divideBy(add(Max(26, high), Min(26, low)), float64(2))
+	leadingSpanA := divideBy(add(conversionLine, baseLine), float64(2))
+	leadingSpanB := divideBy(add(Max(52, high), Min(52, low)), float64(2))
 	laggingLine := shiftRight(26, close)
 
 	return conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine
+}
+
+// Stochastic Oscillator. It is a momentum indicator that shows the location of the close
+// relative to high-low range over a set number of periods.
+//
+// K = (Close - Lowest Low) / (Highest High - Lowest Low) * 100
+// D = 3-Period SMA of K
+//
+// Returns k, d
+func StochasticOscillator(high, low, close []float64) ([]float64, []float64) {
+	checkSameSize(high, low, close)
+
+	highestHigh14 := Max(14, high)
+	lowestLow14 := Min(15, low)
+
+	k := divide(substract(close, lowestLow14), multiplyBy(substract(highestHigh14, lowestLow14), float64(100)))
+	d := Sma(3, k)
+
+	return k, d
 }

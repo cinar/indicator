@@ -20,6 +20,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Actual True Range (ATR)](#actual-true-range-atr)
 - [Chandelier Exit](#chandelier-exit)
 - [Ichimoku Cloud](#ichimoku-cloud)
+- [Stochastic Oscillator](#stochastic-oscillator)
 
 ## Usage
 
@@ -94,12 +95,9 @@ middleBand, upperBand, lowerBand := indicator.BollingerBands(close)
 
 #### Bollinger Band Width
 
-The [BollingerBandWidth](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandWidth) function 
-measures the percentage difference between the upper band and the lower band. It decreases as
-Bollinger Bands narrows and increases as Bollinger Bands widens.
+The [BollingerBandWidth](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandWidth) function  measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
 
-During a period of rising price volatility the band width widens, and during a period of low market
-volatility band width contracts.
+During a period of rising price volatility the band width widens, and during a period of low market volatility band width contracts.
 
 ```
 Band Width = (Upper Band - Lower Band) / Middle Band
@@ -161,8 +159,7 @@ rs, rsi := indicator.Rsi(close)
 
 #### On-Balance Volume (OBV)
 
-The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading
-momentum indicator that uses volume flow to predict changes in stock price.
+The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
 
 ```
                   volume, if Close > Close-Prev
@@ -176,9 +173,7 @@ result := indicator.Obv(close, volume)
 
 #### Actual True Range (ATR)
 
-The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical 
-analysis indicator that measures market volatility by decomposing the entire range of stock 
-prices for that period.
+The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
 ```
 TR = Max((High - Low), (High - Close), (Close - Low))
@@ -191,8 +186,7 @@ tr, atr := indicator.Atr(14, high, low, close)
 
 #### Chandelier Exit
 
-The [ChandelierExit](https://pkg.go.dev/github.com/cinar/indicator#ChandelierExit) function sets a
-trailing stop-loss based on the Average True Value (ATR).
+The [ChandelierExit](https://pkg.go.dev/github.com/cinar/indicator#ChandelierExit) function sets a trailing stop-loss based on the Average True Value (ATR).
 
 ```
 Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
@@ -217,6 +211,19 @@ Chikou Span (Lagging Span) = Close plotted 26 days in the past.
 
 ```Golang
 conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, close)
+```
+
+#### Stochastic Oscillator
+
+The [StochasticOscillator](https://pkg.go.dev/github.com/cinar/indicator#StochasticOscillator) function calculates a momentum indicator that shows the location of the close relative to high-low range over a set number of periods.
+
+```
+K = (Close - Lowest Low) / (Highest High - Lowest Low) * 100
+D = 3-Period SMA of K
+```
+
+```Golang
+k, d := indicator.StochasticOscillator(high, low, close)
 ```
 
 ## License

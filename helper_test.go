@@ -4,11 +4,11 @@ import (
 	"testing"
 )
 
-func TestMultiply(t *testing.T) {
+func TestMultiplyBy(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	multiplier := float64(2)
 
-	result := multiply(values, multiplier)
+	result := multiplyBy(values, multiplier)
 	if len(result) != len(values) {
 		t.Fatal("result not same size")
 	}
@@ -23,11 +23,29 @@ func TestMultiply(t *testing.T) {
 	}
 }
 
-func TestDivide(t *testing.T) {
+func TestMultiply(t *testing.T) {
+	values1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	values2 := []float64{2, 4, 2, 4, 2, 4, 2, 4, 2, 4}
+	expected := []float64{2, 8, 6, 16, 10, 24, 14, 32, 18, 40}
+
+	actual := multiply(values1, values2)
+
+	if len(actual) != len(expected) {
+		t.Fatalf("actual %d expected %d", len(actual), len(expected))
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestDivideBy(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
 	divider := float64(2)
 
-	result := divide(values, divider)
+	result := divideBy(values, divider)
 	if len(result) != len(values) {
 		t.Fatal("result not same size")
 	}
@@ -38,6 +56,21 @@ func TestDivide(t *testing.T) {
 
 		if actual != expected {
 			t.Fatalf("result %d actual %f expected %f", i, actual, expected)
+		}
+	}
+}
+
+func TestDivide(t *testing.T) {
+	values1 := []float64{2, 8, 6, 16, 10, 24, 14, 32, 18, 40}
+	values2 := []float64{2, 4, 2, 4, 2, 4, 2, 4, 2, 4}
+	expected := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+	actual := divide(values1, values2)
+	checkSameSize(actual, expected)
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
 		}
 	}
 }
@@ -59,9 +92,7 @@ func TestAdd(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 	result := add(values, values)
-	if len(result) != len(values) {
-		t.Fatal("result not same size")
-	}
+	checkSameSize(result, values)
 
 	for i := 0; i < len(result); i++ {
 		expected := values[i] + values[i]
@@ -78,9 +109,7 @@ func TestSubstract(t *testing.T) {
 	values2 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 	result := substract(values1, values2)
-	if len(result) != len(values1) {
-		t.Fatal("result not same size")
-	}
+	checkSameSize(result, values1)
 
 	for i := 0; i < len(result); i++ {
 		expected := values1[i] - values2[i]
@@ -108,10 +137,7 @@ func TestDiff(t *testing.T) {
 	before := 1
 
 	actual := diff(values, before)
-
-	if len(actual) != len(expected) {
-		t.Fatalf("actual %d expected %d", len(actual), len(expected))
-	}
+	checkSameSize(actual, expected)
 
 	for i := 0; i < len(actual); i++ {
 		if actual[i] != expected[i] {
@@ -127,18 +153,13 @@ func TestGroupPositivesAndNegatives(t *testing.T) {
 
 	actualPositives, actualNegatives := groupPositivesAndNegatives(values)
 
-	if len(actualPositives) != len(expectedPositives) {
-		t.Fatalf("actual positives %d expected positives %d", len(actualPositives), len(expectedPositives))
-	}
+	checkSameSize(actualPositives, expectedPositives)
+	checkSameSize(actualNegatives, expectedNegatives)
 
 	for i := 0; i < len(actualPositives); i++ {
 		if actualPositives[i] != expectedPositives[i] {
 			t.Fatalf("at %d actual positive %f expected positive %f", i, actualPositives[i], expectedPositives[i])
 		}
-	}
-
-	if len(actualNegatives) != len(expectedNegatives) {
-		t.Fatalf("actual positives %d expected positives %d", len(actualNegatives), len(expectedNegatives))
 	}
 
 	for i := 0; i < len(actualNegatives); i++ {
@@ -154,10 +175,7 @@ func TestShiftRight(t *testing.T) {
 	period := 4
 
 	actual := shiftRight(period, values)
-
-	if len(actual) != len(expected) {
-		t.Fatalf("actual %d expected %d", len(actual), len(expected))
-	}
+	checkSameSize(actual, expected)
 
 	for i := 0; i < len(actual); i++ {
 		if actual[i] != expected[i] {

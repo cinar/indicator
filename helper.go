@@ -1,7 +1,22 @@
 package indicator
 
-// Multiply values with multipler.
-func multiply(values []float64, multiplier float64) []float64 {
+// Check values same size.
+func checkSameSize(values ...[]float64) {
+	if len(values) < 2 {
+		return
+	}
+
+	n := len(values[0])
+
+	for i := 1; i < len(values); i++ {
+		if len(values[i]) != n {
+			panic("not all same size")
+		}
+	}
+}
+
+// Multiply values by multipler.
+func multiplyBy(values []float64, multiplier float64) []float64 {
 	result := make([]float64, len(values))
 
 	for i, value := range values {
@@ -11,16 +26,40 @@ func multiply(values []float64, multiplier float64) []float64 {
 	return result
 }
 
-// Divide values with divider.
-func divide(values []float64, divider float64) []float64 {
-	return multiply(values, float64(1)/divider)
+// Multiply values1 and values2.
+func multiply(values1, values2 []float64) []float64 {
+	checkSameSize(values1, values2)
+
+	result := make([]float64, len(values1))
+
+	for i := 0; i < len(result); i++ {
+		result[i] = values1[i] * values2[i]
+	}
+
+	return result
+}
+
+// Divide values by divider.
+func divideBy(values []float64, divider float64) []float64 {
+	return multiplyBy(values, float64(1)/divider)
+}
+
+// Divide values1 by values2.
+func divide(values1, values2 []float64) []float64 {
+	checkSameSize(values1, values2)
+
+	result := make([]float64, len(values1))
+
+	for i := 0; i < len(result); i++ {
+		result[i] = values1[i] / values2[i]
+	}
+
+	return result
 }
 
 // Add values1 and values2.
 func add(values1, values2 []float64) []float64 {
-	if len(values1) != len(values2) {
-		panic("not the same length")
-	}
+	checkSameSize(values1, values2)
 
 	result := make([]float64, len(values1))
 	for i := 0; i < len(result); i++ {
@@ -32,7 +71,7 @@ func add(values1, values2 []float64) []float64 {
 
 // Substract values2 from values1.
 func substract(values1, values2 []float64) []float64 {
-	substract := multiply(values2, float64(-1))
+	substract := multiplyBy(values2, float64(-1))
 	return add(values1, substract)
 }
 
