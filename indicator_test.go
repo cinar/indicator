@@ -68,6 +68,9 @@ func TestParabolicSAR(t *testing.T) {
 	}
 
 	psar, trend := ParabolicSar(high, low, close)
+	if len(psar) != len(expectedPsar) || len(trend) != len(expectedTrend) {
+		t.Fatal("not the same size")
+	}
 
 	for i := 0; i < len(expectedPsar); i++ {
 		currentPsar := math.Round(psar[i]*100) / 100
