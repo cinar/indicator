@@ -22,6 +22,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Ichimoku Cloud](#ichimoku-cloud)
 - [Stochastic Oscillator](#stochastic-oscillator)
 - [Aroon Indicator](#aroon-indicator)
+- [Parabolic SAR](#parabolic-sar)
 
 ## Usage
 
@@ -238,6 +239,34 @@ Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
 
 ```Golang
 aroonUp, aroonDown := indicator.Aroon(high, low)
+```
+
+#### Parabolic SAR
+
+The [ParabolicSar](https://pkg.go.dev/github.com/cinar/indicator#ParabolicSar) function calculates an identifier for the trend and the trailing stop.
+
+```
+PSAR = PSAR[i - 1] - ((PSAR[i - 1] - EP) * AF)
+```
+
+If the trend is Falling:
+ - PSAR is the maximum of PSAR or the previous two high values.
+ - If the current high is greather than or equals to PSAR, use EP.
+
+If the trend is Rising:
+ - PSAR is the minimum of PSAR or the previous two low values.
+ - If the current low is less than or equials to PSAR, use EP.
+
+If PSAR is greather than the closing, trend is falling, and the EP is set to the minimum of EP or the low.
+
+If PSAR is lower than or equals to the closing, trend is rising, and the EP is set to the maximum of EP or the high.
+
+If the trend is the same, and AF is less than 0.20, increment it by 0.02. If the trend is not the same, set AF to 0.02.
+
+Based on video [How to Calculate the PSAR Using Excel - Revised Version](https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s).
+
+```Golang
+psar, trend := indicator.ParabolicSar(high, low, close)
 ```
 
 ## License

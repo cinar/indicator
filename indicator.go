@@ -4,6 +4,22 @@ import (
 	"math"
 )
 
+// Trend indicator.
+type Trend int
+
+const (
+	// Falling trend.
+	Falling Trend = iota
+
+	// Rising trend.
+	Rising
+)
+
+const (
+	psarAfStep = 0.02
+	psarAfMax  = 0.20
+)
+
 // Moving Average Convergence Divergence (MACD).
 //
 // MACD = 12-Period EMA - 26-Period EMA.
@@ -278,4 +294,85 @@ func Aroon(high, low []float64) ([]float64, []float64) {
 	}
 
 	return aroonUp, aroonDown
+}
+
+// Parabolic SAR. It is a popular technical indicator for identifying the trend
+// and as a trailing stop.
+//
+// PSAR = PSAR[i - 1] - ((PSAR[i - 1] - EP) * AF)
+//
+// If the trend is Falling:
+//  - PSAR is the maximum of PSAR or the previous two high values.
+//  - If the current high is greather than or equals to PSAR, use EP.
+//
+// If the trend is Rising:
+//  - PSAR is the minimum of PSAR or the previous two low values.
+//  - If the current low is less than or equals to PSAR, use EP.
+//
+// If PSAR is greater than the closing, trend is falling, and the EP
+// is set to the minimum of EP or the low.
+//
+// If PSAR is lower than or equals to the closing, trend is rising, and the EP
+// is set to the maximum of EP or the high.
+//
+// If the trend is the same, and AF is less than 0.20, increment it by 0.02.
+// If the trend is not the same, set AF to 0.02.
+//
+// Based on video https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s.
+//
+// Returns psar, trend
+func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
+	checkSameSize(high, low)
+
+	trend := make([]Trend, len(high))
+	psar := make([]float64, len(high))
+
+	var af, ep float64
+
+	trend[0] = Falling
+	psar[0] = high[0]
+	af = psarAfStep
+	ep = low[0]
+
+	for i := 1; i < len(psar); i++ {
+		psar[i] = psar[i-1] - ((psar[i-1] - ep) * af)
+
+		if trend[i-1] == Falling {
+			psar[i] = math.Max(psar[i], high[i-1])
+			if i > 1 {
+				psar[i] = math.Max(psar[i], high[i-2])
+			}
+
+			if high[i] >= psar[i] {
+				psar[i] = ep
+			}
+		} else {
+			psar[i] = math.Min(psar[i], low[i-1])
+			if i > 1 {
+				psar[i] = math.Min(psar[i], low[i-2])
+			}
+
+			if low[i] <= psar[i] {
+				psar[i] = ep
+			}
+		}
+
+		prevEp := ep
+
+		if psar[i] > close[i] {
+			trend[i] = Falling
+			ep = math.Min(ep, low[i])
+		} else {
+			trend[i] = Rising
+			ep = math.Max(ep, high[i])
+		}
+
+		if trend[i] != trend[i-1] {
+			af = psarAfStep
+		} else if prevEp != ep && af < psarAfMax {
+			af += psarAfStep
+		}
+	}
+
+	return psar, trend
 }
