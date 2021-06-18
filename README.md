@@ -23,6 +23,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Stochastic Oscillator](#stochastic-oscillator)
 - [Aroon Indicator](#aroon-indicator)
 - [Parabolic SAR](#parabolic-sar)
+- [Vortex Indicator](#vortex-indicator)
 
 ## Usage
 
@@ -267,6 +268,30 @@ Based on video [How to Calculate the PSAR Using Excel - Revised Version](https:/
 
 ```Golang
 psar, trend := indicator.ParabolicSar(high, low, close)
+```
+
+#### Vortex Indicator
+
+The [Vortex](https://pkg.go.dev/github.com/cinar/indicator#Vortex) function provides two oscillators that capture positive and negative trend movement. A bullish signal triggers when the positive trend indicator crosses above the negative trend indicator or a key level. A bearish signal triggers when the negative trend indicator crosses above the positive trend indicator or a key level.
+
+```
++VM = Abs(Current High - Prior Low)
+-VM = Abs(Current Low - Prior High)
+
++VM14 = 14-Period Sum of +VM
+-VM14 = 14-Period Sum of -VM
+
+TR = Max((High[i]-Low[i]), Abs(High[i]-Close[i-1]), Abs(Low[i]-Close[i-1]))
+TR14 = 14-Period Sum of TR
+
++VI14 = +VM14 / TR14
+-VI14 = -VM14 / TR14
+```
+
+Based on [Vortex Indicator](https://school.stockcharts.com/doku.php?id=technical_indicators:vortex_indicator)
+
+```Golang
+plusVi, minusVi := indicator.Vortex(high, low, close)
 ```
 
 ## License

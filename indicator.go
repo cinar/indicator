@@ -376,3 +376,64 @@ func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
 
 	return psar, trend
 }
+
+// Vortex Indicator. It provides two oscillators that capture positive and
+// negative trend movement. A bullish signal triggers when the positive
+// trend indicator crosses above the negative trend indicator or a key
+// level. A bearish signal triggers when the negative trend indicator
+// crosses above the positive trend indicator or a key level.
+//
+// +VM = Abs(Current High - Prior Low)
+// -VM = Abd(Current Low - Prior High)
+//
+// +VM14 = 14-Period Sum of +VM
+// -VM14 = 14-Period Sum of -VM
+//
+// TR = Max((High[i]-Low[i]), Abs(High[i]-Close[i-1]), Abs(Low[i]-Close[i-1]))
+// TR14 = 14-Period Sum of TR
+//
+// +VI14 = +VM14 / TR14
+// -VI14 = -VM14 / TR14
+//
+// Based on https://school.stockcharts.com/doku.php?id=technical_indicators:vortex_indicator
+//
+// Returns plusVi, minusVi
+func Vortex(high, low, close []float64) ([]float64, []float64) {
+	checkSameSize(high, low, close)
+
+	period := 14
+
+	plusVi := make([]float64, len(high))
+	minusVi := make([]float64, len(high))
+
+	plusVm := make([]float64, period)
+	minusVm := make([]float64, period)
+	tr := make([]float64, period)
+
+	var plusVmSum, minusVmSum, trSum float64
+
+	for i := 1; i < len(high); i++ {
+		j := i % period
+
+		plusVmSum -= plusVm[j]
+		plusVm[j] = math.Abs(high[i] - low[i-1])
+		plusVmSum += plusVm[j]
+
+		minusVmSum -= minusVm[j]
+		minusVm[j] = math.Abs(low[i] - high[i-1])
+		minusVmSum += minusVm[j]
+
+		highLow := high[i] - low[i]
+		highPrevClose := math.Abs(high[i] - close[i-1])
+		lowPrevClose := math.Abs(low[i] - close[i-1])
+
+		trSum -= tr[j]
+		tr[j] = math.Max(highLow, math.Max(highPrevClose, lowPrevClose))
+		trSum += tr[j]
+
+		plusVi[i] = plusVmSum / trSum
+		minusVi[i] = minusVmSum / trSum
+	}
+
+	return plusVi, minusVi
+}

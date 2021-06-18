@@ -83,3 +83,62 @@ func TestParabolicSAR(t *testing.T) {
 		}
 	}
 }
+
+func TestVertex(t *testing.T) {
+	high := []float64{
+		1404.14,
+		1405.95,
+		1405.98,
+		1405.87,
+		1410.03,
+	}
+
+	low := []float64{
+		1396.13,
+		1398.80,
+		1395.62,
+		1397.32,
+		1400.60,
+	}
+
+	close := []float64{
+		1402.22,
+		1402.80,
+		1405.87,
+		1404.11,
+		1403.93,
+	}
+
+	expectedPlusVi := []float64{
+		0.00000,
+		1.37343,
+		0.97087,
+		1.04566,
+		1.12595,
+	}
+
+	expectedMinusVi := []float64{
+		0.00000,
+		0.74685,
+		0.89492,
+		0.93361,
+		0.83404,
+	}
+
+	plusVi, minusVi := Vortex(high, low, close)
+	if len(plusVi) != len(expectedPlusVi) || len(minusVi) != len(expectedMinusVi) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(plusVi); i++ {
+		actualPlusVi := math.Round(plusVi[i]*100000) / 100000
+		if actualPlusVi != expectedPlusVi[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actualPlusVi, expectedPlusVi[i])
+		}
+
+		actualMinusVi := math.Round(minusVi[i]*100000) / 100000
+		if actualMinusVi != expectedMinusVi[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actualMinusVi, expectedMinusVi[i])
+		}
+	}
+}
