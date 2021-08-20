@@ -25,7 +25,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Parabolic SAR](#parabolic-sar)
 - [Vortex Indicator](#vortex-indicator)
 - [Acceleration Bands](#acceleration-bands)
-- [Accumulation/Distribution (A/D)](#accumulation-distribution-a-d)
+- [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
 
 ## Usage
 
