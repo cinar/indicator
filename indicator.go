@@ -437,3 +437,23 @@ func Vortex(high, low, close []float64) ([]float64, []float64) {
 
 	return plusVi, minusVi
 }
+
+// Acceleration Bands. Plots upper and lower envelope bands
+// around a simple moving average.
+//
+// Upper Band = SMA(High * (1 + 4 * (High - Low) / (High + Low)))
+// Middle Band = SMA(Close)
+// Lower Band = SMA(Low * (1 + 4 * (High - Low) / (High + Low)))
+//
+// Returns upper band, middle band, lower band.
+func AccelerationBands(high, low, close []float64) ([]float64, []float64, []float64) {
+	checkSameSize(high, low, close)
+
+	k := addBy(multiplyBy(divide(substract(high, low), add(high, low)), 4), 1)
+
+	upperBand := Sma(20, multiply(high, k))
+	middleBand := Sma(20, close)
+	lowerBand := Sma(20, multiply(low, k))
+
+	return upperBand, middleBand, lowerBand
+}

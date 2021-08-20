@@ -24,6 +24,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Aroon Indicator](#aroon-indicator)
 - [Parabolic SAR](#parabolic-sar)
 - [Vortex Indicator](#vortex-indicator)
+- [Acceleration Bands](#acceleration-bands)
 
 ## Usage
 
@@ -292,6 +293,20 @@ Based on [Vortex Indicator](https://school.stockcharts.com/doku.php?id=technical
 
 ```Golang
 plusVi, minusVi := indicator.Vortex(high, low, close)
+```
+
+#### Acceleration Bands
+
+The [AccelerationBands](https://pkg.go.dev/github.com/cinar/indicator#AccelerationBands) plots upper and lower envelope bands around a simple moving average.
+
+```
+Upper Band = SMA(High * (1 + 4 * (High - Low) / (High + Low)))
+Middle Band = SMA(Close)
+Lower Band = SMA(Low * (1 + 4 * (High - Low) / (High + Low)))
+```
+
+```golang
+upperBand, middleBand, lowerBand := indicator.AccelerationBands(high, low, close)
 ```
 
 ## License

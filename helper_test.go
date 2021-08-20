@@ -104,6 +104,20 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+func TestAddBy(t *testing.T) {
+	values := []float64{1, 2, 3, 4}
+	expected := []float64{2, 3, 4, 5}
+
+	actual := addBy(values, 1)
+	checkSameSize(actual, expected)
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("result %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
 func TestSubstract(t *testing.T) {
 	values1 := []float64{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
 	values2 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
