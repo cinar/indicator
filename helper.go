@@ -69,6 +69,17 @@ func add(values1, values2 []float64) []float64 {
 	return result
 }
 
+// Add addition to values.
+func addBy(values []float64, addition float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(result); i++ {
+		result[i] = values[i] + addition
+	}
+
+	return result
+}
+
 // Substract values2 from values1.
 func substract(values1, values2 []float64) []float64 {
 	substract := multiplyBy(values2, float64(-1))
