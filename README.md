@@ -25,6 +25,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 - [Parabolic SAR](#parabolic-sar)
 - [Vortex Indicator](#vortex-indicator)
 - [Acceleration Bands](#acceleration-bands)
+- [Accumulation/Distribution (A/D)](#accumulation-distribution-a-d)
 
 ## Usage
 
@@ -307,6 +308,24 @@ Lower Band = SMA(Low * (1 + 4 * (High - Low) / (High + Low)))
 
 ```golang
 upperBand, middleBand, lowerBand := indicator.AccelerationBands(high, low, close)
+```
+
+#### Accumulation/Distribution (A/D)
+
+The [AccumulationDistribution](https://pkg.go.dev/github.com/cinar/indicator#AccumulationDistribution) is a cumulative indicator that uses volume and price to assess whether a stock is being accumulated or distributed.
+
+The Accumulation/Distribution seeks to identify divergences between the stock price and the volume flow.
+
+```
+MFM = ((Close - Low) - (High - Close)) / (High - Low)
+MFV = MFM * Period Volume
+AD = Previous AD + CMFV
+```
+
+Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.com/terms/a/accumulationdistribution.asp).
+
+```golang
+ad := indicator.AccumulationDistribution(high, low, close,
 ```
 
 ## License
