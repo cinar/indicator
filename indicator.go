@@ -457,3 +457,28 @@ func AccelerationBands(high, low, close []float64) ([]float64, []float64, []floa
 
 	return upperBand, middleBand, lowerBand
 }
+
+// Accumulation/Distribution Indicator (A/D). Cumulative indicator
+// that uses volume and price to assess whether a stock is
+// being accumulated or distributed.
+//
+// MFM = ((Close - Low) - (High - Close)) / (High - Low)
+// MFV = MFM * Period Volume
+// AD = Previous AD + CMFV
+//
+// Returns ad.
+func AccumulationDistribution(high, low, close []float64, volume []int64) []float64 {
+	checkSameSize(high, low, close)
+
+	ad := make([]float64, len(close))
+
+	for i := 0; i < len(ad); i++ {
+		if i > 0 {
+			ad[i] = ad[i-1]
+		}
+
+		ad[i] += float64(volume[i]) * (((close[i] - low[i]) - (high[i] - close[i])) / (high[i] - low[i]))
+	}
+
+	return ad
+}
