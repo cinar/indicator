@@ -162,7 +162,7 @@ func Rsi(close []float64) ([]float64, []float64) {
 	rs := make([]float64, len(close))
 
 	for i := 0; i < len(rsi); i++ {
-		rs[i] = meanGains[i] / (float64(-1) * meanLosses[i])
+		rs[i] = meanGains[i] / meanLosses[i]
 		rsi[i] = 100 - (100 / (1 + rs[i]))
 	}
 
