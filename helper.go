@@ -101,21 +101,6 @@ func diff(values []float64, before int) []float64 {
 	return result
 }
 
-// Groups positives and negatives. Ignores zeros.
-func groupPositivesAndNegatives(values []float64) ([]float64, []float64) {
-	var positives, negatives []float64
-
-	for _, value := range values {
-		if value > 0 {
-			positives = append(positives, value)
-		} else if value < 0 {
-			negatives = append(negatives, value)
-		}
-	}
-
-	return positives, negatives
-}
-
 // Shift right for period.
 func shiftRight(period int, values []float64) []float64 {
 	result := make([]float64, len(values))

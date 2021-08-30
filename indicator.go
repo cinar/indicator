@@ -140,7 +140,20 @@ func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
 //
 // Returns rs, rsi
 func Rsi(close []float64) ([]float64, []float64) {
-	gains, losses := groupPositivesAndNegatives(diff(close, 1))
+	gains := make([]float64, len(close))
+	losses := make([]float64, len(close))
+
+	for i := 1; i < len(close); i++ {
+		difference := close[i] - close[i-1]
+
+		if difference > 0 {
+			gains[i] = difference
+			losses[i] = 0
+		} else {
+			losses[i] = -difference
+			gains[i] = 0
+		}
+	}
 
 	meanGains := Sma(14, gains)
 	meanLosses := Sma(14, losses)
