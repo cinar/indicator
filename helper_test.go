@@ -160,29 +160,6 @@ func TestDiff(t *testing.T) {
 	}
 }
 
-func TestGroupPositivesAndNegatives(t *testing.T) {
-	values := []float64{1, 0, -2, -4, 6, 0, 0, 4, 2, -20}
-	expectedPositives := []float64{1, 6, 4, 2}
-	expectedNegatives := []float64{-2, -4, -20}
-
-	actualPositives, actualNegatives := groupPositivesAndNegatives(values)
-
-	checkSameSize(actualPositives, expectedPositives)
-	checkSameSize(actualNegatives, expectedNegatives)
-
-	for i := 0; i < len(actualPositives); i++ {
-		if actualPositives[i] != expectedPositives[i] {
-			t.Fatalf("at %d actual positive %f expected positive %f", i, actualPositives[i], expectedPositives[i])
-		}
-	}
-
-	for i := 0; i < len(actualNegatives); i++ {
-		if actualNegatives[i] != expectedNegatives[i] {
-			t.Fatalf("at %d actual negative %f expected negative %f", i, actualNegatives[i], expectedNegatives[i])
-		}
-	}
-}
-
 func TestShiftRight(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	expected := []float64{0, 0, 0, 0, 1, 2, 3, 4, 5, 6}
