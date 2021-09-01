@@ -95,7 +95,7 @@ func Min(period int, values []float64) []float64 {
 
 		lowest := 0
 		if i < period {
-			lowest = lowest - i - 1
+			lowest = period - i - 1
 		}
 
 		result[i] = buffer[lowest]
