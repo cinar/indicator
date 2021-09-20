@@ -462,7 +462,7 @@ func Vortex(high, low, close []float64) ([]float64, []float64) {
 func AccelerationBands(high, low, close []float64) ([]float64, []float64, []float64) {
 	checkSameSize(high, low, close)
 
-  k := divide(substract(high, low), add(high, low))
+	k := divide(substract(high, low), add(high, low))
 
 	upperBand := Sma(20, multiply(high, addBy(multiplyBy(k, 4), 1)))
 	middleBand := Sma(20, close)
