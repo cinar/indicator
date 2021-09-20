@@ -131,10 +131,10 @@ func RsiStrategy(asset Asset, sellAt, buyAt float64) []Action {
 	return actions
 }
 
-// Default RSI strategy function. It buys 
+// Default RSI strategy function. It buys
 // below 30 and sells above 70.
 func DefaultRsiStrategy(asset Asset) []Action {
-  return RsiStrategy(asset, 70, 30)
+	return RsiStrategy(asset, 70, 30)
 }
 
 // Make RSI strategy function.
