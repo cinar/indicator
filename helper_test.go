@@ -174,3 +174,30 @@ func TestShiftRight(t *testing.T) {
 		}
 	}
 }
+
+func TestRoundDigits(t *testing.T) {
+	value := 1.5182345
+	expected := 1.5182
+
+	actual := roundDigits(value, 4)
+
+	if actual != expected {
+		t.Fatalf("actual %f expected %f", actual, expected)
+	}
+}
+
+func TestGenerateNunbers(t *testing.T) {
+	expected := []float64{2, 4, 6, 8}
+
+	actual := generateNumbers(2, 10, 2)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
