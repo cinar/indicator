@@ -142,3 +142,22 @@ func TestVertex(t *testing.T) {
 		}
 	}
 }
+
+func TestChandeForecastOscillator(t *testing.T) {
+	close := []float64{1, 5, 12, 20}
+	expected := []float64{110, -26, -5.8333, 4.5}
+
+	actual := ChandeForecastOscillator(close)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		a := roundDigits(actual[i], 4)
+
+		if a != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
+		}
+	}
+}

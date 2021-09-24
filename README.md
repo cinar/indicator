@@ -30,6 +30,7 @@ The following list of indicators are currently supported by this package:
 - [Vortex Indicator](#vortex-indicator)
 - [Acceleration Bands](#acceleration-bands)
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
+- [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator)
 
 ## Strategies Provided
 
@@ -342,7 +343,23 @@ AD = Previous AD + CMFV
 Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.com/terms/a/accumulationdistribution.asp).
 
 ```golang
-ad := indicator.AccumulationDistribution(high, low, close,
+ad := indicator.AccumulationDistribution(high, low, close)
+```
+
+#### Chande Forecast Oscillator (CFO)
+
+The Chande Forecast Oscillator developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
+
+```
+R = Linreg(Close)
+CFO = ((Close - R) / Close) * 100
+```
+
+Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs.net/chande-forecast-oscillator/), [Forecast Oscillator
+](https://www.fmlabs.com/reference/default.htm?url=ForecastOscillator.htm), and [Least Squares Regression](https://www.mathsisfun.com/data/least-squares-regression.html).
+
+```golang
+cfo := indicator.ChandeForecastOscillator(close)
 ```
 
 ### Strategies
