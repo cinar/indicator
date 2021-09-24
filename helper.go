@@ -1,5 +1,9 @@
 package indicator
 
+import (
+	"math"
+)
+
 // Check values same size.
 func checkSameSize(values ...[]float64) {
 	if len(values) < 2 {
@@ -110,4 +114,24 @@ func shiftRight(period int, values []float64) []float64 {
 	}
 
 	return result
+}
+
+// Round value to digits.
+func roundDigits(value float64, digits int) float64 {
+	n := math.Pow(10, float64(digits))
+
+	return math.Round(value*n) / n
+}
+
+// Generate numbers.
+func generateNumbers(begin, end, step float64) []float64 {
+	n := int(math.Round((end - begin) / step))
+
+	numbers := make([]float64, n)
+
+	for i := 0; i < n; i++ {
+		numbers[i] = begin + (step * float64(i))
+	}
+
+	return numbers
 }
