@@ -1,8 +1,8 @@
 package indicator
 
 import (
+	"github.com/cinar/indicator/container/bst"
 	"math"
-	"sort"
 )
 
 // Simple Moving Average (SMA).
@@ -66,39 +66,42 @@ func Ema(period int, values []float64) []float64 {
 }
 
 // Moving max for the given period.
-// TODO: Not optimal. Needs to be done with a binary tree and a ring buffer.
 func Max(period int, values []float64) []float64 {
 	result := make([]float64, len(values))
 
 	buffer := make([]float64, period)
+	bst := bst.New()
 
 	for i := 0; i < len(values); i++ {
-		buffer[i%period] = values[i]
-		sort.Float64s(buffer)
+		bst.Insert(values[i])
 
-		result[i] = buffer[period-1]
+		if i >= period {
+			bst.Remove(buffer[i%period])
+		}
+
+		buffer[i%period] = values[i]
+		result[i] = bst.Max().(float64)
 	}
 
 	return result
 }
 
 // Moving min for the given period.
-// TODO: Not optimal. Needs to be done with a binary tree and a ring buffer.
 func Min(period int, values []float64) []float64 {
 	result := make([]float64, len(values))
 
 	buffer := make([]float64, period)
+	bst := bst.New()
 
 	for i := 0; i < len(values); i++ {
-		buffer[i%period] = values[i]
-		sort.Float64s(buffer)
+		bst.Insert(values[i])
 
-		lowest := 0
-		if i < period {
-			lowest = period - i - 1
+		if i >= period {
+			bst.Remove(buffer[i%period])
 		}
 
-		result[i] = buffer[lowest]
+		buffer[i%period] = values[i]
+		result[i] = bst.Min().(float64)
 	}
 
 	return result
