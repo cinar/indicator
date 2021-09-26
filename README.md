@@ -349,6 +349,8 @@ ad := indicator.AccumulationDistribution(high, low, close,
 
 The strategies are where the results from one or more indicators gets combined to produce a recommended action.
 
+**The information provided on this project is strictly for informational purposes and is not to be construed as advice or solicitation to buy or sell any security.**
+
 The stragies operates on an [Asset](https://pkg.go.dev/github.com/cinar/indicator#Asset) with the following members.
 
 ```golang
@@ -464,6 +466,10 @@ The [WilliamsRStrategy](https://pkg.go.dev/github.com/cinar/indicator#WilliamsRS
 ```golang
 actions := indicator.WilliamsRStrategy(asset)
 ```
+
+## Disclaimer
+
+The information provided on this project is strictly for informational purposes and is not to be construed as advice or solicitation to buy or sell any security.
 
 ## License
 
