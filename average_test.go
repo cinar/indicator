@@ -78,3 +78,29 @@ func TestSince(t *testing.T) {
 		}
 	}
 }
+
+func TestMin(t *testing.T) {
+	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	expected := []float64{1, 1, 1, 1, 2, 3, 4, 5, 6}
+
+	actual := Min(4, values)
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestMax(t *testing.T) {
+	values := []float64{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
+	expected := []float64{10, 10, 10, 10, 9, 8, 7, 6, 5}
+
+	actual := Max(4, values)
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
