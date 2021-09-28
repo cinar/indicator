@@ -514,3 +514,25 @@ func ChandeForecastOscillator(close []float64) []float64 {
 
 	return cfo
 }
+
+// Moving Chande Forecast Oscillator calculates based on
+// the given period.
+//
+// The Chande Forecast Oscillator developed by Tushar Chande The Forecast
+// Oscillator plots the percentage difference between the closing price and
+// the n-period linear regression forecasted price. The oscillator is above
+// zero when the forecast price is greater than the closing price and less
+// than zero if it is below.
+//
+// R = Linreg(Close)
+// CFO = ((Close - R) / Close) * 100
+//
+// Returns cfo.
+func MovingChandeForecastOscillator(period int, close []float64) []float64 {
+	x := generateNumbers(0, float64(len(close)), 1)
+	r := MovingLinearRegressionUsingLeastSquare(period, x, close)
+
+	cfo := multiplyBy(divide(substract(close, r), close), 100)
+
+	return cfo
+}
