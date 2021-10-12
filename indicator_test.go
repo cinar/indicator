@@ -144,10 +144,10 @@ func TestVertex(t *testing.T) {
 }
 
 func TestChandeForecastOscillator(t *testing.T) {
-	close := []float64{1, 5, 12, 20}
+	closing := []float64{1, 5, 12, 20}
 	expected := []float64{110, -26, -5.8333, 4.5}
 
-	actual := ChandeForecastOscillator(close)
+	actual := ChandeForecastOscillator(closing)
 
 	if len(actual) != len(expected) {
 		t.Fatal("not the same size")
