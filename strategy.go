@@ -1,7 +1,6 @@
 package indicator
 
 import (
-	"log"
 	"time"
 )
 
@@ -41,20 +40,16 @@ func BuyAndHoldStrategy(asset Asset) []Action {
 
 // Trend strategy. Buy when trending up for count times,
 // sell when trending down for count times.
-func TrendStrategy(asset Asset, count int) []Action {
-	if count < 1 {
-		log.Fatal("count cannot be less than 1")
-	}
-
+func TrendStrategy(asset Asset, count uint) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	if len(actions) == 0 {
 		return actions
 	}
 
-	var lastClosing float64 = asset.Closing[0]
-	var trendCount int
-	var trendUp bool
+	lastClosing := asset.Closing[0]
+	trendCount := uint(1)
+	trendUp := false
 
 	actions[0] = HOLD
 
@@ -72,7 +67,7 @@ func TrendStrategy(asset Asset, count int) []Action {
 
 		lastClosing = closing
 
-		if trendCount == count {
+		if trendCount >= count {
 			if trendUp {
 				actions[i] = BUY
 			} else {
@@ -87,7 +82,7 @@ func TrendStrategy(asset Asset, count int) []Action {
 }
 
 // Make trend strategy function.
-func MakeTrendStrategy(count int) StrategyFunction {
+func MakeTrendStrategy(count uint) StrategyFunction {
 	return func(asset Asset) []Action {
 		return TrendStrategy(asset, count)
 	}
