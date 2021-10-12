@@ -30,7 +30,8 @@ The following list of indicators are currently supported by this package:
 - [Vortex Indicator](#vortex-indicator)
 - [Acceleration Bands](#acceleration-bands)
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
-- [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator)
+- [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator-cfo)
+- [Projection Oscillator (PO)](#projection-oscillator-po)
 
 ## Strategies Provided
 
@@ -348,7 +349,7 @@ ad := indicator.AccumulationDistribution(high, low, closing)
 
 #### Chande Forecast Oscillator (CFO)
 
-The Chande Forecast Oscillator developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
+The [ChandeForecastOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillator) developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
 
 ```
 R = Linreg(Closing)
@@ -360,6 +361,23 @@ Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs
 
 ```golang
 cfo := indicator.ChandeForecastOscillator(closing)
+```
+
+#### Projection Oscillator (PO)
+
+The [ProjectionOscillator](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillator) calculates the Projection Oscillator (PO). The PO uses the linear regression slope, along with highs and lows.
+
+Period defines the moving window to calculates the PO, and the smooth period defines the moving windows to take EMA of PO.
+
+```
+PL = Min(period, (high + MLS(period, x, high)))
+PU = Max(period, (low + MLS(period, x, low)))
+PO = 100 * (Closing - PL) / (PU - PL)
+SPO = EMA(smooth, PO)
+```
+
+```golang
+po, spo := indicator.ProjectionOscillator(12, 4, high, low, closing)
 ```
 
 ### Strategies

@@ -536,3 +536,32 @@ func MovingChandeForecastOscillator(period int, closing []float64) []float64 {
 
 	return cfo
 }
+
+// ProjectionOscillator calculates the Projection Oscillator (PO). The PO
+// uses the linear regression slope, along with highs and lows.
+//
+// Period defines the moving window to calculates the PO, and the smooth
+// period defines the moving windows to take EMA of PO.
+//
+// PL = Min(period, (high + MLS(period, x, high)))
+// PU = Max(period, (low + MLS(period, x, low)))
+// PO = 100 * (Closing - PL) / (PU - PL)
+// SPO = EMA(smooth, PO)
+//
+// Returns po, spo.
+func ProjectionOscillator(period, smooth int, high, low, closing []float64) ([]float64, []float64) {
+	x := generateNumbers(0, float64(len(closing)), 1)
+	mHigh, _ := MovingLeastSquare(period, x, high)
+	mLow, _ := MovingLeastSquare(period, x, low)
+
+	vHigh := add(high, multiply(mHigh, x))
+	vLow := add(low, multiply(mLow, x))
+
+	pu := Max(period, vHigh)
+	pl := Min(period, vLow)
+
+	po := divide(multiplyBy(substract(closing, pl), 100), substract(pu, pl))
+	spo := Ema(smooth, po)
+
+	return po, spo
+}
