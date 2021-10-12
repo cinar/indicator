@@ -99,7 +99,7 @@ Signal = 9-Period EMA of MACD.
 ```
 
 ```Golang
-macd, signal := indicator.Macd(close)
+macd, signal := indicator.Macd(closing)
 ```
 
 #### Bollinger Bands
@@ -113,7 +113,7 @@ Lower Band = 20-Period SMA - 2 (20-Period Std)
 ```
 
 ```Golang
-middleBand, upperBand, lowerBand := indicator.BollingerBands(close)
+middleBand, upperBand, lowerBand := indicator.BollingerBands(closing)
 ```
 
 #### Bollinger Band Width
@@ -145,14 +145,14 @@ result := indicator.AwesomeOscillator(low, high)
 
 #### Williams R
 
-The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and close prices. It is a type of momentum indicator that moves between 0 and -100 and measures overbought and oversold levels.
+The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and closing prices. It is a type of momentum indicator that moves between 0 and -100 and measures overbought and oversold levels.
 
 ```
-WR = (Highest High - Close) / (Highest High - Lowest Low)
+WR = (Highest High - Closing) / (Highest High - Lowest Low)
 ```
 
 ```Golang
-result := indicator.WilliamsR(low, high, close)
+result := indicator.WilliamsR(low, high, closing)
 ```
 
 #### Typical Price
@@ -160,11 +160,11 @@ result := indicator.WilliamsR(low, high, close)
 The [TypicalPrice](https://pkg.go.dev/github.com/cinar/indicator#TypicalPrice) function calculates another approximation of average price for each period and can be used as a filter for moving average systems.
 
 ```
-Typical Price = (High + Low + Close) / 3
+Typical Price = (High + Low + Closing) / 3
 ```
 
 ```Golang
-ta, sma20 := indicator.TypicalPrice(high, low, close)
+ta, sma20 := indicator.TypicalPrice(high, low, closing)
 ```
 
 #### Relative Strength Index (RSI)
@@ -177,7 +177,7 @@ RSI = 100 - (100 / (1 + RS))
 ```
 
 ```Golang
-rs, rsi := indicator.Rsi(close)
+rs, rsi := indicator.Rsi(closing)
 ```
 
 #### On-Balance Volume (OBV)
@@ -185,13 +185,13 @@ rs, rsi := indicator.Rsi(close)
 The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
 
 ```
-                  volume, if Close > Close-Prev
-OBV = OBV-Prev +       0, if Close = Close-Prev
-                 -volume, if Close < Close-Prev
+                  volume, if Closing > Closing-Prev
+OBV = OBV-Prev +       0, if Closing = Closing-Prev
+                 -volume, if Closing < Closing-Prev
 ```
 
 ```Golang
-result := indicator.Obv(close, volume)
+result := indicator.Obv(closing, volume)
 ```
 
 #### Actual True Range (ATR)
@@ -199,12 +199,12 @@ result := indicator.Obv(close, volume)
 The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
 ```
-TR = Max((High - Low), (High - Close), (Close - Low))
+TR = Max((High - Low), (High - Closing), (Closing - Low))
 ATR = 14-Period SMA TR
 ```
 
 ```Golang
-tr, atr := indicator.Atr(14, high, low, close)
+tr, atr := indicator.Atr(14, high, low, closing)
 ```
 
 #### Chandelier Exit
@@ -217,7 +217,7 @@ Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
 ```
 
 ```Golang
-chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, close)
+chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, closing)
 ```
 
 #### Ichimoku Cloud
@@ -229,24 +229,24 @@ Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
 Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
 Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
 Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
-Chikou Span (Lagging Span) = Close plotted 26 days in the past.
+Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
 ```
 
 ```Golang
-conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, close)
+conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, closing)
 ```
 
 #### Stochastic Oscillator
 
-The [StochasticOscillator](https://pkg.go.dev/github.com/cinar/indicator#StochasticOscillator) function calculates a momentum indicator that shows the location of the close relative to high-low range over a set number of periods.
+The [StochasticOscillator](https://pkg.go.dev/github.com/cinar/indicator#StochasticOscillator) function calculates a momentum indicator that shows the location of the closing relative to high-low range over a set number of periods.
 
 ```
-K = (Close - Lowest Low) / (Highest High - Lowest Low) * 100
+K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 D = 3-Period SMA of K
 ```
 
 ```Golang
-k, d := indicator.StochasticOscillator(high, low, close)
+k, d := indicator.StochasticOscillator(high, low, closing)
 ```
 
 #### Aroon Indicator
@@ -287,7 +287,7 @@ If the trend is the same, and AF is less than 0.20, increment it by 0.02. If the
 Based on video [How to Calculate the PSAR Using Excel - Revised Version](https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s).
 
 ```Golang
-psar, trend := indicator.ParabolicSar(high, low, close)
+psar, trend := indicator.ParabolicSar(high, low, closing)
 ```
 
 #### Vortex Indicator
@@ -301,7 +301,7 @@ The [Vortex](https://pkg.go.dev/github.com/cinar/indicator#Vortex) function prov
 +VM14 = 14-Period Sum of +VM
 -VM14 = 14-Period Sum of -VM
 
-TR = Max((High[i]-Low[i]), Abs(High[i]-Close[i-1]), Abs(Low[i]-Close[i-1]))
+TR = Max((High[i]-Low[i]), Abs(High[i]-Closing[i-1]), Abs(Low[i]-Closing[i-1]))
 TR14 = 14-Period Sum of TR
 
 +VI14 = +VM14 / TR14
@@ -311,7 +311,7 @@ TR14 = 14-Period Sum of TR
 Based on [Vortex Indicator](https://school.stockcharts.com/doku.php?id=technical_indicators:vortex_indicator)
 
 ```Golang
-plusVi, minusVi := indicator.Vortex(high, low, close)
+plusVi, minusVi := indicator.Vortex(high, low, closing)
 ```
 
 #### Acceleration Bands
@@ -320,12 +320,12 @@ The [AccelerationBands](https://pkg.go.dev/github.com/cinar/indicator#Accelerati
 
 ```
 Upper Band = SMA(High * (1 + 4 * (High - Low) / (High + Low)))
-Middle Band = SMA(Close)
+Middle Band = SMA(Closing)
 Lower Band = SMA(Low * (1 + 4 * (High - Low) / (High + Low)))
 ```
 
 ```golang
-upperBand, middleBand, lowerBand := indicator.AccelerationBands(high, low, close)
+upperBand, middleBand, lowerBand := indicator.AccelerationBands(high, low, closing)
 ```
 
 #### Accumulation/Distribution (A/D)
@@ -335,7 +335,7 @@ The [AccumulationDistribution](https://pkg.go.dev/github.com/cinar/indicator#Acc
 The Accumulation/Distribution seeks to identify divergences between the stock price and the volume flow.
 
 ```
-MFM = ((Close - Low) - (High - Close)) / (High - Low)
+MFM = ((Closing - Low) - (High - Closing)) / (High - Low)
 MFV = MFM * Period Volume
 AD = Previous AD + CMFV
 ```
@@ -343,7 +343,7 @@ AD = Previous AD + CMFV
 Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.com/terms/a/accumulationdistribution.asp).
 
 ```golang
-ad := indicator.AccumulationDistribution(high, low, close)
+ad := indicator.AccumulationDistribution(high, low, closing)
 ```
 
 #### Chande Forecast Oscillator (CFO)
@@ -351,15 +351,15 @@ ad := indicator.AccumulationDistribution(high, low, close)
 The Chande Forecast Oscillator developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
 
 ```
-R = Linreg(Close)
-CFO = ((Close - R) / Close) * 100
+R = Linreg(Closing)
+CFO = ((Closing - R) / Closing) * 100
 ```
 
 Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs.net/chande-forecast-oscillator/), [Forecast Oscillator
 ](https://www.fmlabs.com/reference/default.htm?url=ForecastOscillator.htm), and [Least Squares Regression](https://www.mathsisfun.com/data/least-squares-regression.html).
 
 ```golang
-cfo := indicator.ChandeForecastOscillator(close)
+cfo := indicator.ChandeForecastOscillator(closing)
 ```
 
 ### Strategies
@@ -374,7 +374,7 @@ The stragies operates on an [Asset](https://pkg.go.dev/github.com/cinar/indicato
 type Asset struct {
 	Date   []time.Time
 	Open   []float64
-	Close  []float64
+	Closing  []float64
 	High   []float64
 	Low    []float64
 	Volume []int64

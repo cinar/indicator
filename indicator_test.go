@@ -31,7 +31,7 @@ func TestParabolicSAR(t *testing.T) {
 		3494.39,
 	}
 
-	close := []float64{
+	closing := []float64{
 		3790.55,
 		3546.20,
 		3507.31,
@@ -67,7 +67,7 @@ func TestParabolicSAR(t *testing.T) {
 		Rising,
 	}
 
-	psar, trend := ParabolicSar(high, low, close)
+	psar, trend := ParabolicSar(high, low, closing)
 	if len(psar) != len(expectedPsar) || len(trend) != len(expectedTrend) {
 		t.Fatal("not the same size")
 	}
@@ -101,7 +101,7 @@ func TestVertex(t *testing.T) {
 		1400.60,
 	}
 
-	close := []float64{
+	closing := []float64{
 		1402.22,
 		1402.80,
 		1405.87,
@@ -125,7 +125,7 @@ func TestVertex(t *testing.T) {
 		0.83404,
 	}
 
-	plusVi, minusVi := Vortex(high, low, close)
+	plusVi, minusVi := Vortex(high, low, closing)
 	if len(plusVi) != len(expectedPlusVi) || len(minusVi) != len(expectedMinusVi) {
 		t.Fatal("not the same size")
 	}
