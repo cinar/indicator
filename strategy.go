@@ -16,12 +16,12 @@ const (
 
 // Asset values.
 type Asset struct {
-	Date   []time.Time
-	Open   []float64
-	Close  []float64
-	High   []float64
-	Low    []float64
-	Volume []int64
+	Date    []time.Time
+	Opening []float64
+	Closing []float64
+	High    []float64
+	Low     []float64
+	Volume  []int64
 }
 
 // Strategy function. It takes an Asset and returns
@@ -52,25 +52,25 @@ func TrendStrategy(asset Asset, count int) []Action {
 		return actions
 	}
 
-	var lastClose float64 = asset.Close[0]
+	var lastClosing float64 = asset.Closing[0]
 	var trendCount int
 	var trendUp bool
 
 	actions[0] = HOLD
 
 	for i := 1; i < len(actions); i++ {
-		close := asset.Close[i]
+		closing := asset.Closing[i]
 
-		if trendUp && (lastClose <= close) {
+		if trendUp && (lastClosing <= closing) {
 			trendCount++
-		} else if !trendUp && (lastClose >= close) {
+		} else if !trendUp && (lastClosing >= closing) {
 			trendCount++
 		} else {
 			trendUp = !trendUp
 			trendCount = 1
 		}
 
-		lastClose = close
+		lastClosing = closing
 
 		if trendCount == count {
 			if trendUp {
@@ -97,7 +97,7 @@ func MakeTrendStrategy(count int) StrategyFunction {
 func MacdStrategy(asset Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
-	macd, signal := Macd(asset.Close)
+	macd, signal := Macd(asset.Closing)
 
 	for i := 0; i < len(actions); i++ {
 		if macd[i] > signal[i] {
@@ -116,7 +116,7 @@ func MacdStrategy(asset Asset) []Action {
 func RsiStrategy(asset Asset, sellAt, buyAt float64) []Action {
 	actions := make([]Action, len(asset.Date))
 
-	_, rsi := Rsi(asset.Close)
+	_, rsi := Rsi(asset.Closing)
 
 	for i := 0; i < len(actions); i++ {
 		if rsi[i] <= buyAt {
@@ -166,12 +166,12 @@ func MacdAndRsiStrategy(asset Asset) []Action {
 func BollingerBandsStrategy(asset Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
-	_, upperBand, lowerBand := BollingerBands(asset.Close)
+	_, upperBand, lowerBand := BollingerBands(asset.Closing)
 
 	for i := 0; i < len(actions); i++ {
-		if asset.Close[i] > upperBand[i] {
+		if asset.Closing[i] > upperBand[i] {
 			actions[i] = SELL
-		} else if asset.Close[i] < lowerBand[i] {
+		} else if asset.Closing[i] < lowerBand[i] {
 			actions[i] = BUY
 		} else {
 			actions[i] = HOLD
@@ -204,7 +204,7 @@ func AwesomeOscillatorStrategy(asset Asset) []Action {
 func WilliamsRStrategy(asset Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
-	wr := WilliamsR(asset.Low, asset.High, asset.Close)
+	wr := WilliamsR(asset.Low, asset.High, asset.Closing)
 
 	for i := 0; i < len(actions); i++ {
 		if wr[i] < -20 {

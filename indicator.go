@@ -26,9 +26,9 @@ const (
 // Signal = 9-Period EMA of MACD.
 //
 // Returns MACD, signal.
-func Macd(close []float64) ([]float64, []float64) {
-	ema12 := Ema(12, close)
-	ema26 := Ema(26, close)
+func Macd(closing []float64) ([]float64, []float64) {
+	ema12 := Ema(12, closing)
+	ema26 := Ema(26, closing)
 	macd := substract(ema12, ema26)
 	signal := Ema(9, macd)
 
@@ -42,11 +42,11 @@ func Macd(close []float64) ([]float64, []float64) {
 // Lower Band = 20-Period SMA - 2 (20-Period Std)
 //
 // Returns middle band, upper band, lower band.
-func BollingerBands(close []float64) ([]float64, []float64, []float64) {
-	std := Std(20, close)
+func BollingerBands(closing []float64) ([]float64, []float64, []float64) {
+	std := Std(20, closing)
 	std2 := multiplyBy(std, 2)
 
-	middleBand := Sma(20, close)
+	middleBand := Sma(20, closing)
 	upperBand := add(middleBand, std2)
 	lowerBand := substract(middleBand, std2)
 
@@ -93,21 +93,21 @@ func AwesomeOscillator(low, high []float64) []float64 {
 
 // Williams R. Determine overbought and oversold.
 //
-// WR = (Highest High - Close) / (Highest High - Lowest Low) * -100.
+// WR = (Highest High - Closing) / (Highest High - Lowest Low) * -100.
 //
 // Buy when -80 and below. Sell when -20 and above.
 //
 // Returns wr.
-func WilliamsR(low, high, close []float64) []float64 {
+func WilliamsR(low, high, closing []float64) []float64 {
 	period := 14
 
 	highestHigh := Max(period, high)
 	lowestLow := Min(period, low)
 
-	result := make([]float64, len(close))
+	result := make([]float64, len(closing))
 
-	for i := 0; i < len(close); i++ {
-		result[i] = (highestHigh[i] - close[i]) / (highestHigh[i] - lowestLow[i]) * float64(-100)
+	for i := 0; i < len(closing); i++ {
+		result[i] = (highestHigh[i] - closing[i]) / (highestHigh[i] - lowestLow[i]) * float64(-100)
 	}
 
 	return result
@@ -116,17 +116,17 @@ func WilliamsR(low, high, close []float64) []float64 {
 // Typical Price. It is another approximation of average price for each
 // period and can be used as a filter for moving average systems.
 //
-// Typical Price = (High + Low + Close) / 3
+// Typical Price = (High + Low + Closing) / 3
 //
 // Returns typical price, 20-Period SMA.
-func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
-	checkSameSize(high, low, close)
+func TypicalPrice(low, high, closing []float64) ([]float64, []float64) {
+	checkSameSize(high, low, closing)
 
-	sma20 := Sma(20, close)
+	sma20 := Sma(20, closing)
 
-	ta := make([]float64, len(close))
+	ta := make([]float64, len(closing))
 	for i := 0; i < len(ta); i++ {
-		ta[i] = (high[i] + low[i] + close[i]) / float64(3)
+		ta[i] = (high[i] + low[i] + closing[i]) / float64(3)
 	}
 
 	return ta, sma20
@@ -139,12 +139,12 @@ func TypicalPrice(low, high, close []float64) ([]float64, []float64) {
 // RSI = 100 - (100 / (1 + RS))
 //
 // Returns rs, rsi
-func Rsi(close []float64) ([]float64, []float64) {
-	gains := make([]float64, len(close))
-	losses := make([]float64, len(close))
+func Rsi(closing []float64) ([]float64, []float64) {
+	gains := make([]float64, len(closing))
+	losses := make([]float64, len(closing))
 
-	for i := 1; i < len(close); i++ {
-		difference := close[i] - close[i-1]
+	for i := 1; i < len(closing); i++ {
+		difference := closing[i] - closing[i-1]
 
 		if difference > 0 {
 			gains[i] = difference
@@ -158,8 +158,8 @@ func Rsi(close []float64) ([]float64, []float64) {
 	meanGains := Sma(14, gains)
 	meanLosses := Sma(14, losses)
 
-	rsi := make([]float64, len(close))
-	rs := make([]float64, len(close))
+	rsi := make([]float64, len(closing))
+	rs := make([]float64, len(closing))
 
 	for i := 0; i < len(rsi); i++ {
 		rs[i] = meanGains[i] / meanLosses[i]
@@ -172,13 +172,13 @@ func Rsi(close []float64) ([]float64, []float64) {
 // On-Balance Volume (OBV). It is a technical trading momentum indicator that
 // uses volume flow to predict changes in stock price.
 //
-//                   volume, if Close > Close-Prev
-// OBV = OBV-Prev +       0, if Close = Close-Prev
-//                  -volume, if Close < Close-Prev
+//                   volume, if Closing > Closing-Prev
+// OBV = OBV-Prev +       0, if Closing = Closing-Prev
+//                  -volume, if Closing < Closing-Prev
 //
 // Returns obv
-func Obv(close []float64, volume []int64) []int64 {
-	if len(close) != len(volume) {
+func Obv(closing []float64, volume []int64) []int64 {
+	if len(closing) != len(volume) {
 		panic("not all same size")
 	}
 
@@ -187,9 +187,9 @@ func Obv(close []float64, volume []int64) []int64 {
 	for i := 1; i < len(obv); i++ {
 		obv[i] = obv[i-1]
 
-		if close[i] > close[i-1] {
+		if closing[i] > closing[i-1] {
 			obv[i] += volume[i]
-		} else if close[i] < close[i-1] {
+		} else if closing[i] < closing[i-1] {
 			obv[i] -= volume[i]
 		}
 	}
@@ -200,17 +200,17 @@ func Obv(close []float64, volume []int64) []int64 {
 // Average True Range (ATR). It is a technical analysis indicator that measures market
 // volatility by decomposing the entire range of stock prices for that period.
 //
-// TR = Max((High - Low), (High - Close), (Close - Low))
+// TR = Max((High - Low), (High - Closing), (Closing - Low))
 // ATR = SMA TR
 //
 // Returns tr, atr
-func Atr(period int, high, low, close []float64) ([]float64, []float64) {
-	checkSameSize(high, low, close)
+func Atr(period int, high, low, closing []float64) ([]float64, []float64) {
+	checkSameSize(high, low, closing)
 
-	tr := make([]float64, len(close))
+	tr := make([]float64, len(closing))
 
 	for i := 0; i < len(tr); i++ {
-		tr[i] = math.Max(high[i]-low[i], math.Max(high[i]-close[i], close[i]-low[i]))
+		tr[i] = math.Max(high[i]-low[i], math.Max(high[i]-closing[i], closing[i]-low[i]))
 	}
 
 	atr := Sma(period, tr)
@@ -224,13 +224,13 @@ func Atr(period int, high, low, close []float64) ([]float64, []float64) {
 // Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
 //
 // Returns chandelierExitLong, chandelierExitShort
-func ChandelierExit(high, low, close []float64) ([]float64, []float64) {
-	_, atr22 := Atr(22, high, low, close)
+func ChandelierExit(high, low, closing []float64) ([]float64, []float64) {
+	_, atr22 := Atr(22, high, low, closing)
 	highestHigh22 := Max(22, high)
 	lowestLow22 := Min(22, low)
 
-	chandelierExitLong := make([]float64, len(close))
-	chandelierExitShort := make([]float64, len(close))
+	chandelierExitLong := make([]float64, len(closing))
+	chandelierExitShort := make([]float64, len(closing))
 
 	for i := 0; i < len(chandelierExitLong); i++ {
 		chandelierExitLong[i] = highestHigh22[i] - (atr22[i] * float64(3))
@@ -247,35 +247,35 @@ func ChandelierExit(high, low, close []float64) ([]float64, []float64) {
 // Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
 // Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
 // Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
-// Chikou Span (Lagging Span) = Close plotted 26 days in the past.
+// Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
 //
 // Returns conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingSpan
-func IchimokuCloud(high, low, close []float64) ([]float64, []float64, []float64, []float64, []float64) {
-	checkSameSize(high, low, close)
+func IchimokuCloud(high, low, closing []float64) ([]float64, []float64, []float64, []float64, []float64) {
+	checkSameSize(high, low, closing)
 
 	conversionLine := divideBy(add(Max(9, high), Min(9, low)), float64(2))
 	baseLine := divideBy(add(Max(26, high), Min(26, low)), float64(2))
 	leadingSpanA := divideBy(add(conversionLine, baseLine), float64(2))
 	leadingSpanB := divideBy(add(Max(52, high), Min(52, low)), float64(2))
-	laggingLine := shiftRight(26, close)
+	laggingLine := shiftRight(26, closing)
 
 	return conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine
 }
 
-// Stochastic Oscillator. It is a momentum indicator that shows the location of the close
+// Stochastic Oscillator. It is a momentum indicator that shows the location of the closing
 // relative to high-low range over a set number of periods.
 //
-// K = (Close - Lowest Low) / (Highest High - Lowest Low) * 100
+// K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 // D = 3-Period SMA of K
 //
 // Returns k, d
-func StochasticOscillator(high, low, close []float64) ([]float64, []float64) {
-	checkSameSize(high, low, close)
+func StochasticOscillator(high, low, closing []float64) ([]float64, []float64) {
+	checkSameSize(high, low, closing)
 
 	highestHigh14 := Max(14, high)
 	lowestLow14 := Min(15, low)
 
-	k := divide(substract(close, lowestLow14), multiplyBy(substract(highestHigh14, lowestLow14), float64(100)))
+	k := divide(substract(closing, lowestLow14), multiplyBy(substract(highestHigh14, lowestLow14), float64(100)))
 	d := Sma(3, k)
 
 	return k, d
@@ -334,7 +334,7 @@ func Aroon(high, low []float64) ([]float64, []float64) {
 // Based on video https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s.
 //
 // Returns psar, trend
-func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
+func ParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
 	checkSameSize(high, low)
 
 	trend := make([]Trend, len(high))
@@ -372,7 +372,7 @@ func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
 
 		prevEp := ep
 
-		if psar[i] > close[i] {
+		if psar[i] > closing[i] {
 			trend[i] = Falling
 			ep = math.Min(ep, low[i])
 		} else {
@@ -402,7 +402,7 @@ func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
 // +VM14 = 14-Period Sum of +VM
 // -VM14 = 14-Period Sum of -VM
 //
-// TR = Max((High[i]-Low[i]), Abs(High[i]-Close[i-1]), Abs(Low[i]-Close[i-1]))
+// TR = Max((High[i]-Low[i]), Abs(High[i]-Closing[i-1]), Abs(Low[i]-Closing[i-1]))
 // TR14 = 14-Period Sum of TR
 //
 // +VI14 = +VM14 / TR14
@@ -411,8 +411,8 @@ func ParabolicSar(high, low, close []float64) ([]float64, []Trend) {
 // Based on https://school.stockcharts.com/doku.php?id=technical_indicators:vortex_indicator
 //
 // Returns plusVi, minusVi
-func Vortex(high, low, close []float64) ([]float64, []float64) {
-	checkSameSize(high, low, close)
+func Vortex(high, low, closing []float64) ([]float64, []float64) {
+	checkSameSize(high, low, closing)
 
 	period := 14
 
@@ -437,11 +437,11 @@ func Vortex(high, low, close []float64) ([]float64, []float64) {
 		minusVmSum += minusVm[j]
 
 		highLow := high[i] - low[i]
-		highPrevClose := math.Abs(high[i] - close[i-1])
-		lowPrevClose := math.Abs(low[i] - close[i-1])
+		highPrevClosing := math.Abs(high[i] - closing[i-1])
+		lowPrevClosing := math.Abs(low[i] - closing[i-1])
 
 		trSum -= tr[j]
-		tr[j] = math.Max(highLow, math.Max(highPrevClose, lowPrevClose))
+		tr[j] = math.Max(highLow, math.Max(highPrevClosing, lowPrevClosing))
 		trSum += tr[j]
 
 		plusVi[i] = plusVmSum / trSum
@@ -455,17 +455,17 @@ func Vortex(high, low, close []float64) ([]float64, []float64) {
 // around a simple moving average.
 //
 // Upper Band = SMA(High * (1 + 4 * (High - Low) / (High + Low)))
-// Middle Band = SMA(Close)
+// Middle Band = SMA(Closing)
 // Lower Band = SMA(Low * (1 - 4 * (High - Low) / (High + Low)))
 //
 // Returns upper band, middle band, lower band.
-func AccelerationBands(high, low, close []float64) ([]float64, []float64, []float64) {
-	checkSameSize(high, low, close)
+func AccelerationBands(high, low, closing []float64) ([]float64, []float64, []float64) {
+	checkSameSize(high, low, closing)
 
 	k := divide(substract(high, low), add(high, low))
 
 	upperBand := Sma(20, multiply(high, addBy(multiplyBy(k, 4), 1)))
-	middleBand := Sma(20, close)
+	middleBand := Sma(20, closing)
 	lowerBand := Sma(20, multiply(low, addBy(multiplyBy(k, -4), 1)))
 
 	return upperBand, middleBand, lowerBand
@@ -475,22 +475,22 @@ func AccelerationBands(high, low, close []float64) ([]float64, []float64, []floa
 // that uses volume and price to assess whether a stock is
 // being accumulated or distributed.
 //
-// MFM = ((Close - Low) - (High - Close)) / (High - Low)
+// MFM = ((Closing - Low) - (High - Closing)) / (High - Low)
 // MFV = MFM * Period Volume
 // AD = Previous AD + CMFV
 //
 // Returns ad.
-func AccumulationDistribution(high, low, close []float64, volume []int64) []float64 {
-	checkSameSize(high, low, close)
+func AccumulationDistribution(high, low, closing []float64, volume []int64) []float64 {
+	checkSameSize(high, low, closing)
 
-	ad := make([]float64, len(close))
+	ad := make([]float64, len(closing))
 
 	for i := 0; i < len(ad); i++ {
 		if i > 0 {
 			ad[i] = ad[i-1]
 		}
 
-		ad[i] += float64(volume[i]) * (((close[i] - low[i]) - (high[i] - close[i])) / (high[i] - low[i]))
+		ad[i] += float64(volume[i]) * (((closing[i] - low[i]) - (high[i] - closing[i])) / (high[i] - low[i]))
 	}
 
 	return ad
