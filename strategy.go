@@ -284,7 +284,7 @@ func ProjectionOscillatorStrategy(period, smooth int, asset Asset) []Action {
 }
 
 // Make projection oscillator strategy.
-func MakeProjectionOscillatorStrategy(period, smooth int, asset Asset) StrategyFunction {
+func MakeProjectionOscillatorStrategy(period, smooth int) StrategyFunction {
 	return func(asset Asset) []Action {
 		return ProjectionOscillatorStrategy(period, smooth, asset)
 	}
