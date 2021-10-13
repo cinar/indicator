@@ -213,3 +213,48 @@ func WilliamsRStrategy(asset Asset) []Action {
 
 	return actions
 }
+
+// Chande forecast oscillator strategy.
+func ChandeForecastOscillatorStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	cfo := ChandeForecastOscillator(asset.Closing)
+
+	for i := 0; i < len(actions); i++ {
+		if cfo[i] < 0 {
+			actions[i] = BUY
+		} else if cfo[i] > 0 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
+
+// Moving chande forecast oscillator strategy function.
+func MovingChandeForecastOscillatorStrategy(period int, asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	cfo := MovingChandeForecastOscillator(period, asset.Closing)
+
+	for i := 0; i < len(actions); i++ {
+		if cfo[i] < 0 {
+			actions[i] = BUY
+		} else if cfo[i] > 0 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
+
+// Make moving chande forecast oscillator strategy.
+func MakeMovingChandeForecastOscillatorStrategy(period int) StrategyFunction {
+	return func(asset Asset) []Action {
+		return MovingChandeForecastOscillatorStrategy(period, asset)
+	}
+}
