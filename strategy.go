@@ -258,3 +258,34 @@ func MakeMovingChandeForecastOscillatorStrategy(period int) StrategyFunction {
 		return MovingChandeForecastOscillatorStrategy(period, asset)
 	}
 }
+
+// Projection oscillator strategy function.
+func ProjectionOscillatorStrategy(period, smooth int, asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	po, spo := ProjectionOscillator(
+		period,
+		smooth,
+		asset.High,
+		asset.Low,
+		asset.Closing)
+
+	for i := 0; i < len(actions); i++ {
+		if po[i] > spo[i] {
+			actions[i] = BUY
+		} else if po[i] < spo[i] {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
+
+// Make projection oscillator strategy.
+func MakeProjectionOscillatorStrategy(period, smooth int, asset Asset) StrategyFunction {
+	return func(asset Asset) []Action {
+		return ProjectionOscillatorStrategy(period, smooth, asset)
+	}
+}
