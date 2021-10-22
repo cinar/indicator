@@ -161,3 +161,27 @@ func Dema(period int, values []float64) []float64 {
 
 	return dema
 }
+
+// Trima function calculates the Triangular Moving Average (TRIMA).
+//
+// If period is even:
+//   TRIMA = SMA(period / 2, SMA((period / 2) + 1, values))
+// If period is odd:
+//   TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
+//
+// Returns trima.
+func Trima(period int, values []float64) []float64 {
+	var n1, n2 int
+
+	if period%2 == 0 {
+		n1 = period / 2
+		n2 = n1 + 1
+	} else {
+		n1 = (period + 1) / 2
+		n2 = n1
+	}
+
+	trima := Sma(n1, Sma(n2, values))
+
+	return trima
+}

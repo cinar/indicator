@@ -15,6 +15,7 @@ The following list of indicators are currently supported by this package:
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 - [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
 - [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
+- [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Bollinger Bands](#bollinger-bands)
 - [Bollinger Band Width](#bollinger-band-width)
@@ -122,10 +123,29 @@ DEMA = (2 * EMA(values)) - EMA(EMA(values))
 ```
 
 ```Golang
-dema := indicator.Dema(period, values
+dema := indicator.Dema(period, values)
 ```
 
 Based on [Double Exponential Moving Average (DEMA)](https://www.investopedia.com/terms/d/double-exponential-moving-average.asp).
+
+#### Triangular Moving Average (TRIMA)
+
+The [Trima](https://pkg.go.dev/github.com/cinar/indicator#Trima) function calculates the Triangular Moving Average (TRIMA) for a given period.
+
+The Triangular Moving Average (TRIMA) is a weighted moving average putting more weight to the middle values.
+
+```
+If period is even:
+   TRIMA = SMA(period / 2, SMA((period / 2) + 1, values))
+If period is odd:
+   TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
+```
+
+```Golang
+trima := indicator.Trima(period, values)
+```
+
+Based on [Triangular Moving Average](https://tulipindicators.org/trima).
 
 ### Indicators
 
