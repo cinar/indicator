@@ -13,6 +13,7 @@ The following list of indicators are currently supported by this package:
 - [Simple Moving Average (SMA)](#simple-moving-average-sma)
 - [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+- [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Bollinger Bands](#bollinger-bands)
 - [Bollinger Band Width](#bollinger-band-width)
@@ -88,6 +89,25 @@ The [Ema](https://pkg.go.dev/github.com/cinar/indicator#Ema) function calculates
 ```Golang
 result := indicator.Ema(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
 ```
+
+#### Triple Exponential Moving Average (TEMA)
+
+The [Tema](https://pkg.go.dev/github.com/cinar/indicator#Tema) function calculates the Triple Exponential Moving Average (TEMA) for a given period.
+
+The triple exponential moving average (TEMA) was designed to smooth value fluctuations, thereby making it easier to identify trends without the lag associated with traditional moving averages. It does this by taking multiple exponential moving averages (EMA) of the original EMA and subtracting out some of the lag.
+
+```
+TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
+EMA1 = EMA(values)
+EMA2 = EMA(EMA1)
+EMA3 = EMA(EMA2)
+```
+
+```Golang
+tema := indicator.Tema(period, values)
+```
+
+Based on [Triple Exponential Moving Average (TEMA)](https://www.investopedia.com/terms/t/triple-exponential-moving-average.asp).
 
 ### Indicators
 
