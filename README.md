@@ -14,6 +14,7 @@ The following list of indicators are currently supported by this package:
 - [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 - [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
+- [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Bollinger Bands](#bollinger-bands)
 - [Bollinger Band Width](#bollinger-band-width)
@@ -109,6 +110,22 @@ tema := indicator.Tema(period, values)
 ```
 
 Based on [Triple Exponential Moving Average (TEMA)](https://www.investopedia.com/terms/t/triple-exponential-moving-average.asp).
+
+#### Double Exponential Moving Average (DEMA)
+
+The [Dema](https://pkg.go.dev/github.com/cinar/indicator#Dema) function calculates the Double Exponential Moving Average (DEMA) for a given period.
+
+The double exponential moving average (DEMA) is a technical indicator introduced by Patrick Mulloy. The purpose is to reduce the amount of noise present in price charts used by technical traders. The DEMA uses two exponential moving averages (EMAs) to eliminate lag. It helps confirm uptrends when the price is above the average, and helps confirm downtrends when the price is below the average. When the price crosses the average that may signal a trend change.
+
+```
+DEMA = (2 * EMA(values)) - EMA(EMA(values))
+```
+
+```Golang
+dema := indicator.Dema(period, values
+```
+
+Based on [Double Exponential Moving Average (DEMA)](https://www.investopedia.com/terms/d/double-exponential-moving-average.asp).
 
 ### Indicators
 
