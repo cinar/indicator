@@ -129,3 +129,21 @@ func Since(values []float64) []int {
 
 	return result
 }
+
+// Tema calculates the Triple Exponential Moving Average (TEMA).
+//
+// TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
+// EMA1 = EMA(values)
+// EMA2 = EMA(EMA1)
+// EMA3 = EMA(EMA2)
+//
+// Returns tema.
+func Tema(period int, values []float64) []float64 {
+	ema1 := Ema(period, values)
+	ema2 := Ema(period, ema1)
+	ema3 := Ema(period, ema2)
+
+	tema := add(substract(multiplyBy(ema1, 3), multiplyBy(ema2, 3)), ema3)
+
+	return tema
+}
