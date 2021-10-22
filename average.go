@@ -147,3 +147,17 @@ func Tema(period int, values []float64) []float64 {
 
 	return tema
 }
+
+// Dema calculates the Double Exponential Moving Average (DEMA).
+//
+// DEMA = (2 * EMA(values)) - EMA(EMA(values))
+//
+// Returns dema.
+func Dema(period int, values []float64) []float64 {
+	ema1 := Ema(period, values)
+	ema2 := Ema(period, ema1)
+
+	dema := substract(multiplyBy(ema1, 2), ema2)
+
+	return dema
+}
