@@ -13,11 +13,8 @@ import (
 type Trend int
 
 const (
-	// Falling trend.
-	Falling Trend = iota
-
-	// Rising trend.
-	Rising
+	Falling Trend = -1
+	Rising        = 1
 )
 
 const (

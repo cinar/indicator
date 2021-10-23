@@ -13,9 +13,9 @@ import (
 type Action int
 
 const (
-	HOLD Action = iota
-	BUY
-	SELL
+	SELL Action = -1
+	HOLD        = 0
+	BUY         = 1
 )
 
 // Asset values.
