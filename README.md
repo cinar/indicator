@@ -4,52 +4,71 @@
 
 # Indicator Go
 
-Indicator is a Golang module providing various stock technical analysis indicators, and strategies for trading. 
+Indicator is a Golang module providing various stock technical analysis indicators, and strategies for trading.
 
 ## Indicators Provided
 
 The following list of indicators are currently supported by this package:
 
-- [Simple Moving Average (SMA)](#simple-moving-average-sma)
-- [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
-- [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
-- [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
-- [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
-- [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
-- [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
-- [Bollinger Bands](#bollinger-bands)
-- [Bollinger Band Width](#bollinger-band-width)
-- [Awesome Oscillator](#awesome-oscillator)
-- [Williams R](#williams-r)
-- [Typical Price](#typical-price)
-- [Relative Strength Index (RSI)](#relative-strength-index-rsi)
-- [On-Balance Volume (OBV)](#on-balance-volume-obv)
-- [Actual True Range (ATR)](#actual-true-range-atr)
-- [Chandelier Exit](#chandelier-exit)
-- [Ichimoku Cloud](#ichimoku-cloud)
-- [Stochastic Oscillator](#stochastic-oscillator)
+### Trend Indicators
+
+Trend indicators measure the direction and strength of a trend.
+
 - [Aroon Indicator](#aroon-indicator)
-- [Parabolic SAR](#parabolic-sar)
-- [Vortex Indicator](#vortex-indicator)
-- [Acceleration Bands](#acceleration-bands)
-- [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
 - [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator-cfo)
+- [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
+- [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+- [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
+- [Parabolic SAR](#parabolic-sar)
+- [Simple Moving Average (SMA)](#simple-moving-average-sma)
+- [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
+- [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
+- [Typical Price](#typical-price)
+- [Vortex Indicator](#vortex-indicator)
+
+### Momentum Indicators
+
+Momentum indicators measure the speed of movement.
+
+- [Awesome Oscillator](#awesome-oscillator)
+- [Ichimoku Cloud](#ichimoku-cloud)
+- [Relative Strength Index (RSI)](#relative-strength-index-rsi)
+- [Stochastic Oscillator](#stochastic-oscillator)
+- [Williams R](#williams-r)
+
+### Volatility Indicators
+
+Volatility indicators measure the rate of movement regardless of its direction.
+
+- [Acceleration Bands](#acceleration-bands)
+- [Actual True Range (ATR)](#actual-true-range-atr)
+- [Bollinger Band Width](#bollinger-band-width)
+- [Bollinger Bands](#bollinger-bands)
+- [Chandelier Exit](#chandelier-exit)
+- [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
 - [Projection Oscillator (PO)](#projection-oscillator-po)
+
+### Volume Indicators
+
+Volumne indicators measure the strength of a trend based the volume.
+
+- [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
+- [On-Balance Volume (OBV)](#on-balance-volume-obv)
 
 ## Strategies Provided
 
 The following list of strategies are currently supported by this package:
 
-- [Buy and Hold Strategy](#buy-and-hold-strategy)
-- [Trend Strategy](#trend-strategy)
-- [MACD Strategy](#macd-strategy)
-- [RSI Strategy](#rsi-strategy)
-- [MACD and RSI Strategy](#macd-and-rsi-strategy)
-- [Bollinger Bands Strategy](#bollinger-bands-strategy)
 - [Awesome Oscillator Strategy](#awesome-oscillator-strategy)
-- [Williams R Strategy](#williams-r-strategy)
+- [Bollinger Bands Strategy](#bollinger-bands-strategy)
+- [Buy and Hold Strategy](#buy-and-hold-strategy)
 - [Chande Forecast Oscillator Strategy](#chande-forecast-oscillator-strategy)
+- [MACD and RSI Strategy](#macd-and-rsi-strategy)
+- [MACD Strategy](#macd-strategy)
 - [Projection Oscillator Strategy](#projection-oscillator-strategy)
+- [RSI Strategy](#rsi-strategy)
+- [Trend Strategy](#trend-strategy)
+- [Williams R Strategy](#williams-r-strategy)
 
 ## Usage
 
@@ -67,50 +86,38 @@ import (
 )
 ```
 
-### Moving Averages
+## Indicators
 
-#### Simple Moving Average (SMA)
+### Trend Indicators
 
-The [Sma](https://pkg.go.dev/github.com/cinar/indicator#Sma) function calculates the simple moving average for a given period.
+#### Aroon Indicator
 
-```Golang
-result := indicator.Sma(2, []float64{2, 4, 6, 8, 10})
-```
-
-#### Moving Standard Deviation (Std)
-
-The [Std](https://pkg.go.dev/github.com/cinar/indicator#Std) function calculates the moving standard deviation for a given period.
-
-```Golang
-result := indicator.Std(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
-```
-
-#### Exponential Moving Average (EMA)
-
-The [Ema](https://pkg.go.dev/github.com/cinar/indicator#Ema) function calculates the exponential moving average for a given period.
-
-```Golang
-result := indicator.Ema(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
-```
-
-#### Triple Exponential Moving Average (TEMA)
-
-The [Tema](https://pkg.go.dev/github.com/cinar/indicator#Tema) function calculates the Triple Exponential Moving Average (TEMA) for a given period.
-
-The triple exponential moving average (TEMA) was designed to smooth value fluctuations, thereby making it easier to identify trends without the lag associated with traditional moving averages. It does this by taking multiple exponential moving averages (EMA) of the original EMA and subtracting out some of the lag.
+The [Aroon](https://pkg.go.dev/github.com/cinar/indicator#Aroon) function calculates a technical indicator that is used to identify trend changes in the price of a stock, as well as the strength of that trend. It consists of two lines, Aroon Up, and Aroon Down. The Aroon Up line measures measures the strength of the uptrend, and the Aroon Down measures the strength of the downtrend. When Aroon Up is above Aroon Down, it indicates bullish price, and when Aroon Down is above Aroon Up, it indicates bearish price.
 
 ```
-TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
-EMA1 = EMA(values)
-EMA2 = EMA(EMA1)
-EMA3 = EMA(EMA2)
+Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
+Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
 ```
 
 ```Golang
-tema := indicator.Tema(period, values)
+aroonUp, aroonDown := indicator.Aroon(high, low)
 ```
 
-Based on [Triple Exponential Moving Average (TEMA)](https://www.investopedia.com/terms/t/triple-exponential-moving-average.asp).
+#### Chande Forecast Oscillator (CFO)
+
+The [ChandeForecastOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillator) developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
+
+```
+R = Linreg(Closing)
+CFO = ((Closing - R) / Closing) * 100
+```
+
+Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs.net/chande-forecast-oscillator/), [Forecast Oscillator
+](https://www.fmlabs.com/reference/default.htm?url=ForecastOscillator.htm), and [Least Squares Regression](https://www.mathsisfun.com/data/least-squares-regression.html).
+
+```golang
+cfo := indicator.ChandeForecastOscillator(closing)
+```
 
 #### Double Exponential Moving Average (DEMA)
 
@@ -127,6 +134,65 @@ dema := indicator.Dema(period, values)
 ```
 
 Based on [Double Exponential Moving Average (DEMA)](https://www.investopedia.com/terms/d/double-exponential-moving-average.asp).
+
+#### Exponential Moving Average (EMA)
+
+The [Ema](https://pkg.go.dev/github.com/cinar/indicator#Ema) function calculates the exponential moving average for a given period.
+
+```Golang
+result := indicator.Ema(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
+```
+
+#### Moving Average Convergence Divergence (MACD)
+
+The [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) function calculates a trend-following momentum indicator that shows the relationship between two moving averages of price.
+
+```
+MACD = 12-Period EMA - 26-Period EMA.
+Signal = 9-Period EMA of MACD.
+```
+
+```Golang
+macd, signal := indicator.Macd(closing)
+```
+
+#### Parabolic SAR
+
+The [ParabolicSar](https://pkg.go.dev/github.com/cinar/indicator#ParabolicSar) function calculates an identifier for the trend and the trailing stop.
+
+```
+PSAR = PSAR[i - 1] - ((PSAR[i - 1] - EP) * AF)
+```
+
+If the trend is Falling:
+
+- PSAR is the maximum of PSAR or the previous two high values.
+- If the current high is greather than or equals to PSAR, use EP.
+
+If the trend is Rising:
+
+- PSAR is the minimum of PSAR or the previous two low values.
+- If the current low is less than or equials to PSAR, use EP.
+
+If PSAR is greather than the closing, trend is falling, and the EP is set to the minimum of EP or the low.
+
+If PSAR is lower than or equals to the closing, trend is rising, and the EP is set to the maximum of EP or the high.
+
+If the trend is the same, and AF is less than 0.20, increment it by 0.02. If the trend is not the same, set AF to 0.02.
+
+Based on video [How to Calculate the PSAR Using Excel - Revised Version](https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s).
+
+```Golang
+psar, trend := indicator.ParabolicSar(high, low, closing)
+```
+
+#### Simple Moving Average (SMA)
+
+The [Sma](https://pkg.go.dev/github.com/cinar/indicator#Sma) function calculates the simple moving average for a given period.
+
+```Golang
+result := indicator.Sma(2, []float64{2, 4, 6, 8, 10})
+```
 
 #### Triangular Moving Average (TRIMA)
 
@@ -147,73 +213,24 @@ trima := indicator.Trima(period, values)
 
 Based on [Triangular Moving Average](https://tulipindicators.org/trima).
 
-### Indicators
+#### Triple Exponential Moving Average (TEMA)
 
-#### Moving Average Convergence Divergence (MACD)
+The [Tema](https://pkg.go.dev/github.com/cinar/indicator#Tema) function calculates the Triple Exponential Moving Average (TEMA) for a given period.
 
-The [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) function calculates a trend-following momentum indicator that shows the relationship between two moving averages of price.
-
-```
-MACD = 12-Period EMA - 26-Period EMA.
-Signal = 9-Period EMA of MACD.
-```
-
-```Golang
-macd, signal := indicator.Macd(closing)
-```
-
-#### Bollinger Bands
-
-The [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) function calculates the bollinger bands, middle band, upper band, lower band, provides identification of when a stock is oversold or overbought.
+The triple exponential moving average (TEMA) was designed to smooth value fluctuations, thereby making it easier to identify trends without the lag associated with traditional moving averages. It does this by taking multiple exponential moving averages (EMA) of the original EMA and subtracting out some of the lag.
 
 ```
-Middle Band = 20-Period SMA.
-Upper Band = 20-Period SMA + 2 (20-Period Std)
-Lower Band = 20-Period SMA - 2 (20-Period Std)
+TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
+EMA1 = EMA(values)
+EMA2 = EMA(EMA1)
+EMA3 = EMA(EMA2)
 ```
 
 ```Golang
-middleBand, upperBand, lowerBand := indicator.BollingerBands(closing)
+tema := indicator.Tema(period, values)
 ```
 
-#### Bollinger Band Width
-
-The [BollingerBandWidth](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandWidth) function  measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
-
-During a period of rising price volatility the band width widens, and during a period of low market volatility band width contracts.
-
-```
-Band Width = (Upper Band - Lower Band) / Middle Band
-```
-
-```Golang
-bandWidth, bandWidthEma90 := indicator.BollingerBandWidth(middleBand, upperBand, lowerBand)
-```
-
-#### Awesome Oscillator
-
-The [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) function calculates the awesome oscillator based on low and high daily prices for a given stock. It is an indicator used to measure market momentum. 
-
-```
-Median Price = ((Low + High) / 2)
-AO = 5-Period SMA - 34-Period SMA.
-```
-
-```Golang
-result := indicator.AwesomeOscillator(low, high)
-```
-
-#### Williams R
-
-The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and closing prices. It is a type of momentum indicator that moves between 0 and -100 and measures overbought and oversold levels.
-
-```
-WR = (Highest High - Closing) / (Highest High - Lowest Low)
-```
-
-```Golang
-result := indicator.WilliamsR(low, high, closing)
-```
+Based on [Triple Exponential Moving Average (TEMA)](https://www.investopedia.com/terms/t/triple-exponential-moving-average.asp).
 
 #### Typical Price
 
@@ -225,129 +242,6 @@ Typical Price = (High + Low + Closing) / 3
 
 ```Golang
 ta, sma20 := indicator.TypicalPrice(high, low, closing)
-```
-
-#### Relative Strength Index (RSI)
-
-The [Rsi](https://pkg.go.dev/github.com/cinar/indicator#Rsi) function calculates a momentum indicator that measures the magnitude of recent price changes to evaluate overbought and oversold conditions.
-
-```
-RS = Average Gain / Average Loss
-RSI = 100 - (100 / (1 + RS))
-```
-
-```Golang
-rs, rsi := indicator.Rsi(closing)
-```
-
-#### On-Balance Volume (OBV)
-
-The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
-
-```
-                  volume, if Closing > Closing-Prev
-OBV = OBV-Prev +       0, if Closing = Closing-Prev
-                 -volume, if Closing < Closing-Prev
-```
-
-```Golang
-result := indicator.Obv(closing, volume)
-```
-
-#### Actual True Range (ATR)
-
-The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
-
-```
-TR = Max((High - Low), (High - Closing), (Closing - Low))
-ATR = 14-Period SMA TR
-```
-
-```Golang
-tr, atr := indicator.Atr(14, high, low, closing)
-```
-
-#### Chandelier Exit
-
-The [ChandelierExit](https://pkg.go.dev/github.com/cinar/indicator#ChandelierExit) function sets a trailing stop-loss based on the Average True Value (ATR).
-
-```
-Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
-Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
-```
-
-```Golang
-chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, closing)
-```
-
-#### Ichimoku Cloud
-
-The [IchimokuCloud](https://pkg.go.dev/github.com/cinar/indicator#IchimokuCloud), also known as Ichimoku Kinko Hyo, calculates a versatile indicator that defines support and resistence, identifies tred direction, gauges momentum, and provides trading signals.
-
-```
-Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
-Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
-Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
-Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
-Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
-```
-
-```Golang
-conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, closing)
-```
-
-#### Stochastic Oscillator
-
-The [StochasticOscillator](https://pkg.go.dev/github.com/cinar/indicator#StochasticOscillator) function calculates a momentum indicator that shows the location of the closing relative to high-low range over a set number of periods.
-
-```
-K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
-D = 3-Period SMA of K
-```
-
-```Golang
-k, d := indicator.StochasticOscillator(high, low, closing)
-```
-
-#### Aroon Indicator
-
-The [Aroon](https://pkg.go.dev/github.com/cinar/indicator#Aroon) function calculates a technical indicator that is used to identify trend changes in the price of a stock, as well as the strength of that trend. It consists of two lines, Aroon Up, and Aroon Down. The Aroon Up line measures measures the strength of the uptrend, and the Aroon Down measures the strength of the downtrend. When Aroon Up is above Aroon Down, it indicates bullish price, and when Aroon Down is above Aroon Up, it indicates bearish price.
-
-```
-Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
-Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
-```
-
-```Golang
-aroonUp, aroonDown := indicator.Aroon(high, low)
-```
-
-#### Parabolic SAR
-
-The [ParabolicSar](https://pkg.go.dev/github.com/cinar/indicator#ParabolicSar) function calculates an identifier for the trend and the trailing stop.
-
-```
-PSAR = PSAR[i - 1] - ((PSAR[i - 1] - EP) * AF)
-```
-
-If the trend is Falling:
- - PSAR is the maximum of PSAR or the previous two high values.
- - If the current high is greather than or equals to PSAR, use EP.
-
-If the trend is Rising:
- - PSAR is the minimum of PSAR or the previous two low values.
- - If the current low is less than or equials to PSAR, use EP.
-
-If PSAR is greather than the closing, trend is falling, and the EP is set to the minimum of EP or the low.
-
-If PSAR is lower than or equals to the closing, trend is rising, and the EP is set to the maximum of EP or the high.
-
-If the trend is the same, and AF is less than 0.20, increment it by 0.02. If the trend is not the same, set AF to 0.02.
-
-Based on video [How to Calculate the PSAR Using Excel - Revised Version](https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s).
-
-```Golang
-psar, trend := indicator.ParabolicSar(high, low, closing)
 ```
 
 #### Vortex Indicator
@@ -374,6 +268,77 @@ Based on [Vortex Indicator](https://school.stockcharts.com/doku.php?id=technical
 plusVi, minusVi := indicator.Vortex(high, low, closing)
 ```
 
+### Momentum Indicators
+
+#### Awesome Oscillator
+
+The [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) function calculates the awesome oscillator based on low and high daily prices for a given stock. It is an indicator used to measure market momentum.
+
+```
+Median Price = ((Low + High) / 2)
+AO = 5-Period SMA - 34-Period SMA.
+```
+
+```Golang
+result := indicator.AwesomeOscillator(low, high)
+```
+
+#### Ichimoku Cloud
+
+The [IchimokuCloud](https://pkg.go.dev/github.com/cinar/indicator#IchimokuCloud), also known as Ichimoku Kinko Hyo, calculates a versatile indicator that defines support and resistence, identifies tred direction, gauges momentum, and provides trading signals.
+
+```
+Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
+Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
+Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
+Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
+Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
+```
+
+```Golang
+conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, closing)
+```
+
+#### Relative Strength Index (RSI)
+
+The [Rsi](https://pkg.go.dev/github.com/cinar/indicator#Rsi) function calculates a momentum indicator that measures the magnitude of recent price changes to evaluate overbought and oversold conditions.
+
+```
+RS = Average Gain / Average Loss
+RSI = 100 - (100 / (1 + RS))
+```
+
+```Golang
+rs, rsi := indicator.Rsi(closing)
+```
+
+#### Stochastic Oscillator
+
+The [StochasticOscillator](https://pkg.go.dev/github.com/cinar/indicator#StochasticOscillator) function calculates a momentum indicator that shows the location of the closing relative to high-low range over a set number of periods.
+
+```
+K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
+D = 3-Period SMA of K
+```
+
+```Golang
+k, d := indicator.StochasticOscillator(high, low, closing)
+```
+
+#### Williams R
+
+The [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) function calculates the Williams R based on low, high, and closing prices. It is a type of momentum indicator that moves between 0 and -100 and measures overbought and oversold levels.
+
+```
+WR = (Highest High - Closing) / (Highest High - Lowest Low)
+```
+
+```Golang
+result := indicator.WilliamsR(low, high, closing)
+```
+
+### Volatility Indicators
+
 #### Acceleration Bands
 
 The [AccelerationBands](https://pkg.go.dev/github.com/cinar/indicator#AccelerationBands) plots upper and lower envelope bands around a simple moving average.
@@ -387,6 +352,87 @@ Lower Band = SMA(Low * (1 + 4 * (High - Low) / (High + Low)))
 ```golang
 upperBand, middleBand, lowerBand := indicator.AccelerationBands(high, low, closing)
 ```
+
+#### Actual True Range (ATR)
+
+The [Atr](https://pkg.go.dev/github.com/cinar/indicator#Atr) function calculates a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
+
+```
+TR = Max((High - Low), (High - Closing), (Closing - Low))
+ATR = 14-Period SMA TR
+```
+
+```Golang
+tr, atr := indicator.Atr(14, high, low, closing)
+```
+
+#### Bollinger Bands
+
+The [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) function calculates the bollinger bands, middle band, upper band, lower band, provides identification of when a stock is oversold or overbought.
+
+```
+Middle Band = 20-Period SMA.
+Upper Band = 20-Period SMA + 2 (20-Period Std)
+Lower Band = 20-Period SMA - 2 (20-Period Std)
+```
+
+```Golang
+middleBand, upperBand, lowerBand := indicator.BollingerBands(closing)
+```
+
+#### Bollinger Band Width
+
+The [BollingerBandWidth](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandWidth) function measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
+
+During a period of rising price volatility the band width widens, and during a period of low market volatility band width contracts.
+
+```
+Band Width = (Upper Band - Lower Band) / Middle Band
+```
+
+```Golang
+bandWidth, bandWidthEma90 := indicator.BollingerBandWidth(middleBand, upperBand, lowerBand)
+```
+
+#### Chandelier Exit
+
+The [ChandelierExit](https://pkg.go.dev/github.com/cinar/indicator#ChandelierExit) function sets a trailing stop-loss based on the Average True Value (ATR).
+
+```
+Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
+Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+```
+
+```Golang
+chandelierExitLong, chandelierExitShort := indicator.ChandelierExit(high, low, closing)
+```
+
+#### Moving Standard Deviation (Std)
+
+The [Std](https://pkg.go.dev/github.com/cinar/indicator#Std) function calculates the moving standard deviation for a given period.
+
+```Golang
+result := indicator.Std(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
+```
+
+#### Projection Oscillator (PO)
+
+The [ProjectionOscillator](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillator) calculates the Projection Oscillator (PO). The PO uses the linear regression slope, along with highs and lows.
+
+Period defines the moving window to calculates the PO, and the smooth period defines the moving windows to take EMA of PO.
+
+```
+PL = Min(period, (high + MLS(period, x, high)))
+PU = Max(period, (low + MLS(period, x, low)))
+PO = 100 * (Closing - PL) / (PU - PL)
+SPO = EMA(smooth, PO)
+```
+
+```golang
+po, spo := indicator.ProjectionOscillator(12, 4, high, low, closing)
+```
+
+### Volume Indicators
 
 #### Accumulation/Distribution (A/D)
 
@@ -406,37 +452,18 @@ Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.co
 ad := indicator.AccumulationDistribution(high, low, closing)
 ```
 
-#### Chande Forecast Oscillator (CFO)
+#### On-Balance Volume (OBV)
 
-The [ChandeForecastOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillator) developed by Tushar Chande The Forecast Oscillator plots the percentage difference between the closing price and the n-period linear regression forecasted price. The oscillator is above zero when the forecast price is greater than the closing price and less than zero if it is below.
-
-```
-R = Linreg(Closing)
-CFO = ((Closing - R) / Closing) * 100
-```
-
-Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs.net/chande-forecast-oscillator/), [Forecast Oscillator
-](https://www.fmlabs.com/reference/default.htm?url=ForecastOscillator.htm), and [Least Squares Regression](https://www.mathsisfun.com/data/least-squares-regression.html).
-
-```golang
-cfo := indicator.ChandeForecastOscillator(closing)
-```
-
-#### Projection Oscillator (PO)
-
-The [ProjectionOscillator](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillator) calculates the Projection Oscillator (PO). The PO uses the linear regression slope, along with highs and lows.
-
-Period defines the moving window to calculates the PO, and the smooth period defines the moving windows to take EMA of PO.
+The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
 
 ```
-PL = Min(period, (high + MLS(period, x, high)))
-PU = Max(period, (low + MLS(period, x, low)))
-PO = 100 * (Closing - PL) / (PU - PL)
-SPO = EMA(smooth, PO)
+                  volume, if Closing > Closing-Prev
+OBV = OBV-Prev +       0, if Closing = Closing-Prev
+                 -volume, if Closing < Closing-Prev
 ```
 
-```golang
-po, spo := indicator.ProjectionOscillator(12, 4, high, low, closing)
+```Golang
+result := indicator.Obv(closing, volume)
 ```
 
 ### Strategies
@@ -477,6 +504,22 @@ const (
 )
 ```
 
+#### Awesome Oscillator Strategy
+
+The [AwesomeOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillatorStrategy) uses the _ao_ values that are generated by the [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) indicator function to provide a SELL action when the _ao_ is below zero, and a BUY action when _ao_ is above zero.
+
+```golang
+actions := indicator.AwesomeOscillatorStrategy(asset)
+```
+
+#### Bollinger Bands Strategy
+
+The [BollingerBandsStrategy](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandsStrategy) uses the _upperBand_, and _lowerBand_ values that are generated by the [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) indicator function to provide a SELL action when the asset's closing is above the _upperBand_, and a BUY action when the asset's closing is below the _lowerBand_ values.
+
+```golang
+actions := indicator.BollingerBandsStrategy(asset)
+```
+
 #### Buy and Hold Strategy
 
 The [BuyAndHoldStrategy](https://pkg.go.dev/github.com/cinar/indicator#BuyAndHoldStrategy) provides a simple strategy to buy the given asset and hold it. It provides a good indicator for the change of asset's value without any other strategy is used.
@@ -485,32 +528,41 @@ The [BuyAndHoldStrategy](https://pkg.go.dev/github.com/cinar/indicator#BuyAndHol
 actions := indicator.BuyAndHoldStrategy(asset)
 ```
 
-#### Trend Strategy
+#### Chande Forecast Oscillator Strategy
 
-The [TrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#TrendStrategy) provides a simply strategy to buy the given asset following the asset's closing value increases in *count* subsequent rows. Produces the sell action following the asset's closing value decreases in *count* subsequent rows.
+The [ChandeForecastOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillatorStrategy) uses _cfo_ values that are generated by the [ChandeForecastOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillator) indicator function to provide a BUY action when _cfo_ is below zero, and SELL action when _cfo_ is above zero.
 
 ```golang
-actions := indicator.TrendStrategy(asset, 4)
+actions := indicator.ChandeForecastOscillatorStrategy(asset)
 ```
 
-The function signature of [TrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#TrendStrategy) does not match the [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) type, as it requires an additional *count* parameter. The [MakeTrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#MakeTrendStrategy) function can be used to return a [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) instance based on the given *count* value.
+#### MACD and RSI Strategy
+
+The [MacdAndRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdAndRsiStrategy) function uses the actions generated by the [MacdStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdStrategy) and the [DefaultRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#DefaultRsiStrategy) to provide BUY and SELL actions.
 
 ```golang
-strategy := indicator.MakeTrendStrategy(4)
-actions := strategy(asset)
+actions := indicator.MacdAndRsiStrategy(asset)
 ```
 
 #### MACD Strategy
 
-The [MacdStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdStrategy) uses the *macd*, and *signal* values that are generated by the [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) indicator function to provide a BUY action when *macd* crosses above *signal*, and SELL action when *macd* crosses below *signal*.
+The [MacdStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdStrategy) uses the _macd_, and _signal_ values that are generated by the [Macd](https://pkg.go.dev/github.com/cinar/indicator#Macd) indicator function to provide a BUY action when _macd_ crosses above _signal_, and SELL action when _macd_ crosses below _signal_.
 
 ```golang
 actions := indicator.MacdStrategy(asset)
 ```
 
+#### Projection Oscillator Strategy
+
+The [ProjectionOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillatorStrategy) uses _po_ and _spo_ values that are generated by the [ProjectionOscillator](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillator) indicator function to provide a BUY action when _po_ is above _spo_, and SELL action when _po_ is below _spo_.
+
+```golang
+actions := indicator.ProjectionOscillatorStrategy(period, smooth, asset)
+```
+
 #### RSI Strategy
 
-The [RsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#RsiStrategy) uses the *rsi* values that are generated by the [Rsi](https://pkg.go.dev/github.com/cinar/indicator#Rsi) indicator function to provide a BUY action when *rsi* is below the *buyAt* parameter, and a SELL action when *rsi* is above the *sellAt* parameter.
+The [RsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#RsiStrategy) uses the _rsi_ values that are generated by the [Rsi](https://pkg.go.dev/github.com/cinar/indicator#Rsi) indicator function to provide a BUY action when _rsi_ is below the _buyAt_ parameter, and a SELL action when _rsi_ is above the _sellAt_ parameter.
 
 ```golang
 actions := indicator.RsiStrategy(asset, 70, 30)
@@ -522,59 +574,34 @@ The RSI strategy is usually used with 70-30, or 80-20 values. The [DefaultRsiStr
 actions := indicator.DefaultRsiStrategy(asset)
 ```
 
-The function signature of [RsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#RsiStrategy) does not match the [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) type, as it requires an additional *sellAt*, and *buyAt* parameters. The [MakeRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#MakeRsiStrategy) function can be used to return a [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) instance based on the given *sellAt*, and *buyAt* values.
+The function signature of [RsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#RsiStrategy) does not match the [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) type, as it requires an additional _sellAt_, and _buyAt_ parameters. The [MakeRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#MakeRsiStrategy) function can be used to return a [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) instance based on the given _sellAt_, and _buyAt_ values.
 
 ```golang
 strategy := indicator.MakeRsiStrategy(80, 20)
 actions := strategy(asset)
 ```
 
-#### MACD and RSI Strategy
+#### Trend Strategy
 
-The [MacdAndRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdAndRsiStrategy) function uses the actions generated by the [MacdStrategy](https://pkg.go.dev/github.com/cinar/indicator#MacdStrategy) and the [DefaultRsiStrategy](https://pkg.go.dev/github.com/cinar/indicator#DefaultRsiStrategy) to provide BUY and SELL actions.
+The [TrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#TrendStrategy) provides a simply strategy to buy the given asset following the asset's closing value increases in _count_ subsequent rows. Produces the sell action following the asset's closing value decreases in _count_ subsequent rows.
 
 ```golang
-actions := indicator.MacdAndRsiStrategy(asset)
+actions := indicator.TrendStrategy(asset, 4)
 ```
 
-#### Bollinger Bands Strategy
-
-The [BollingerBandsStrategy](https://pkg.go.dev/github.com/cinar/indicator#BollingerBandsStrategy) uses the *upperBand*, and *lowerBand* values that are generated by the [BollingerBands](https://pkg.go.dev/github.com/cinar/indicator#BollingerBands) indicator function to provide a SELL action when the asset's closing is above the *upperBand*, and a BUY action when the asset's closing is below the *lowerBand* values.
+The function signature of [TrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#TrendStrategy) does not match the [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) type, as it requires an additional _count_ parameter. The [MakeTrendStrategy](https://pkg.go.dev/github.com/cinar/indicator#MakeTrendStrategy) function can be used to return a [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) instance based on the given _count_ value.
 
 ```golang
-actions := indicator.BollingerBandsStrategy(asset)
-```
-
-#### Awesome Oscillator Strategy
-
-The [AwesomeOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillatorStrategy) uses the *ao* values that are generated by the [AwesomeOscillator](https://pkg.go.dev/github.com/cinar/indicator#AwesomeOscillator) indicator function to provide a SELL action when the *ao* is below zero, and a BUY action when *ao* is above zero.
-
-```golang
-actions := indicator.AwesomeOscillatorStrategy(asset)
+strategy := indicator.MakeTrendStrategy(4)
+actions := strategy(asset)
 ```
 
 #### Williams R Strategy
 
-The [WilliamsRStrategy](https://pkg.go.dev/github.com/cinar/indicator#WilliamsRStrategy) uses the *wr* values that are generated by the [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) indicator function to provide a SELL action when the *wr* is below -20, and a BUY action when *wr* is above -80.
+The [WilliamsRStrategy](https://pkg.go.dev/github.com/cinar/indicator#WilliamsRStrategy) uses the _wr_ values that are generated by the [WilliamsR](https://pkg.go.dev/github.com/cinar/indicator#WilliamsR) indicator function to provide a SELL action when the _wr_ is below -20, and a BUY action when _wr_ is above -80.
 
 ```golang
 actions := indicator.WilliamsRStrategy(asset)
-```
-
-#### Chande Forecast Oscillator Strategy
-
-The [ChandeForecastOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillatorStrategy) uses *cfo* values that are generated by the [ChandeForecastOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChandeForecastOscillator) indicator function to provide a BUY action when *cfo* is below zero, and SELL action when *cfo* is above zero.
-
-```golang
-actions := indicator.ChandeForecastOscillatorStrategy(asset)
-```
-
-#### Projection Oscillator Strategy
-
-The [ProjectionOscillatorStrategy](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillatorStrategy) uses *po* and *spo* values that are generated by the [ProjectionOscillator](https://pkg.go.dev/github.com/cinar/indicator#ProjectionOscillator) indicator function to provide a BUY action when *po* is above *spo*, and SELL action when *po* is below *spo*.
-
-```golang
-actions := indicator.ProjectionOscillatorStrategy(period, smooth, asset)
 ```
 
 ## Disclaimer
