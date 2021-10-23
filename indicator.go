@@ -14,7 +14,7 @@ type Trend int
 
 const (
 	Falling Trend = -1
-	Rising        = 1
+	Rising  Trend = 1
 )
 
 const (
