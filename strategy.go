@@ -14,8 +14,8 @@ type Action int
 
 const (
 	SELL Action = -1
-	HOLD        = 0
-	BUY         = 1
+	HOLD Action = 0
+	BUY  Action = 1
 )
 
 // Asset values.
