@@ -77,6 +77,18 @@ func Aroon(high, low []float64) ([]float64, []float64) {
 	return aroonUp, aroonDown
 }
 
+// The BalanceOfPower function calculates the strength of buying and selling
+// pressure. Positive value indicates an upward trend, and negative value
+// indicates a downward trend. Zero indicates a balance between the two.
+//
+// BOP = (Closing - Opening) / (High - Low)
+//
+// Returns bop.
+func BalanceOfPower(opening, high, low, closing []float64) []float64 {
+	bop := divide(substract(closing, opening), substract(high, low))
+	return bop
+}
+
 // The Chande Forecast Oscillator developed by Tushar Chande The Forecast
 // Oscillator plots the percentage difference between the closing price and
 // the n-period linear regression forecasted price. The oscillator is above

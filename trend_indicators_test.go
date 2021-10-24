@@ -29,6 +29,28 @@ func TestAbsolutePriceOscillator(t *testing.T) {
 	}
 }
 
+func TestBalanceOfPower(t *testing.T) {
+	opening := []float64{10, 20, 15, 50}
+	high := []float64{40, 25, 20, 60}
+	low := []float64{4, 10, 5, 6}
+	closing := []float64{20, 15, 50, 55}
+	expected := []float64{0.28, -0.33, 2.33, 0.09}
+
+	actual := BalanceOfPower(opening, high, low, closing)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		a := roundDigits(actual[i], 2)
+
+		if a != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
+		}
+	}
+}
+
 func TestChandeForecastOscillator(t *testing.T) {
 	closing := []float64{1, 5, 12, 20}
 	expected := []float64{110, -26, -5.8333, 4.5}

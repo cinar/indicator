@@ -4,6 +4,7 @@ Trend indicators measure the direction and strength of a trend.
 
 - [Absolute Price Oscillator (APO)](#absolute-price-oscillator-apo)
 - [Aroon Indicator](#aroon-indicator)
+- [Balance of Power (BOP)](trend_indicators.md#balance-of-power-bop)
 - [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator-cfo)
 - [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
@@ -45,6 +46,18 @@ Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
 
 ```Golang
 aroonUp, aroonDown := indicator.Aroon(high, low)
+```
+
+#### Balance of Power (BOP)
+
+The [BalanceOfPower](https://pkg.go.dev/github.com/cinar/indicator#BalanceOfPower) function calculates the strength of buying and selling pressure. Positive value indicates an upward trend, and negative value indicates a downward trend. Zero indicates a balance between the two.
+
+```
+BOP = (Closing - Opening) / (High - Low)
+```
+
+```Golang
+bop := indicator.BalanceOfPower(opening, high, low, closing)
 ```
 
 #### Chande Forecast Oscillator (CFO)
