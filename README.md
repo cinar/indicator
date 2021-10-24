@@ -15,7 +15,6 @@ The following list of indicators are currently supported by this package:
 - [Absolute Price Oscillator (APO)](trend_indicators.md#absolute-price-oscillator-apo)
 - [Aroon Indicator](trend_indicators.md#aroon-indicator)
 - [Balance of Power (BOP)](trend_indicators.md#balance-of-power-bop)
-- [Chaikin Oscillator](trend_indicators.md#chaikin-oscillator)
 - [Chande Forecast Oscillator (CFO)](trend_indicators.md#chande-forecast-oscillator-cfo)
 - [Double Exponential Moving Average (DEMA)](trend_indicators.md#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](trend_indicators.md#exponential-moving-average-ema)
@@ -34,6 +33,7 @@ The following list of indicators are currently supported by this package:
 ### Momentum Indicators
 
 - [Awesome Oscillator](momentum_indicators.md#awesome-oscillator)
+- [Chaikin Oscillator](momentum_indicators.md#chaikin-oscillator)
 - [Ichimoku Cloud](momentum_indicators.md#ichimoku-cloud)
 - [Relative Strength Index (RSI)](momentum_indicators.md#relative-strength-index-rsi)
 - [Stochastic Oscillator](momentum_indicators.md#stochastic-oscillator)
