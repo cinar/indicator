@@ -23,6 +23,32 @@ const (
 	psarAfMax  = 0.20
 )
 
+// The AbsolutePriceOscillator function calculates a technical indicator that is used
+// to follow trends. APO crossing above zero indicates bullish, while crossing below
+// zero indicates bearish. Positive value is upward trend, while negative value is
+// downward trend.
+//
+// Fast = Ema(fastPeriod, values)
+// Slow = Ema(slowPeriod, values)
+// APO = Fast - Slow
+//
+// Returns apo.
+func AbsolutePriceOscillator(fastPeriod, slowPeriod int, values []float64) []float64 {
+	fast := Ema(fastPeriod, values)
+	slow := Ema(slowPeriod, values)
+	apo := substract(fast, slow)
+
+	return apo
+}
+
+// The DefaultAbsolutePriceOscillator function calculates APO with the most
+// frequently used fast and short periods are 14 and 30.
+//
+// Returns apo.
+func DefaultAbsolutePriceOscillator(values []float64) []float64 {
+	return AbsolutePriceOscillator(14, 30, values)
+}
+
 // Aroon Indicator. It is a technical indicator that is used to identify trend changes
 // in the price of a stock, as well as the strength of that trend. It consists of two
 // lines, Arron Up, and Aroon Down. The Aroon Up line measures the strength of the

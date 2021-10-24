@@ -12,6 +12,7 @@ The following list of indicators are currently supported by this package:
 
 ### Trend Indicators
 
+- [Absolute Price Oscillator (APO)](trend_indicators.md#absolute-price-oscillator-apo)
 - [Aroon Indicator](trend_indicators.md#aroon-indicator)
 - [Chande Forecast Oscillator (CFO)](trend_indicators.md#chande-forecast-oscillator-cfo)
 - [Double Exponential Moving Average (DEMA)](trend_indicators.md#double-exponential-moving-average-dema)
