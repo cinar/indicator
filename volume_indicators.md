@@ -20,7 +20,7 @@ AD = Previous AD + CMFV
 Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.com/terms/a/accumulationdistribution.asp).
 
 ```golang
-ad := indicator.AccumulationDistribution(high, low, closing)
+ad := indicator.AccumulationDistribution(high, low, closing, volume)
 ```
 
 #### On-Balance Volume (OBV)

@@ -3,6 +3,7 @@
 Momentum indicators measure the speed of movement.
 
 - [Awesome Oscillator](#awesome-oscillator)
+- [Chaikin Oscillator](#chaikin-oscillator)
 - [Ichimoku Cloud](#ichimoku-cloud)
 - [Relative Strength Index (RSI)](#relative-strength-index-rsi)
 - [Stochastic Oscillator](#stochastic-oscillator)
@@ -20,6 +21,20 @@ AO = 5-Period SMA - 34-Period SMA.
 ```Golang
 result := indicator.AwesomeOscillator(low, high)
 ```
+
+#### Chaikin Oscillator
+
+The [ChaikinOscillator](https://pkg.go.dev/github.com/cinar/indicator#ChaikinOscillator) function measures the momentum of the [Accumulation/Distribution (A/D)](volume_indicators.md#accumulationdistribution-ad) using the [Moving Average Convergence Divergence (MACD)](trend_indicators.md#moving-average-convergence-divergence-macd) formula. It takes the difference between fast and slow periods EMA of the A/D. Cross above the A/D line indicates bullish.
+
+```
+CO = Ema(fastPeriod, AD) - Ema(slowPeriod, AD)
+```
+
+```Golang
+co, ad := indicator.ChaikinOscillator(fastPeriod, slowPeriod, high, low, closing)
+```
+
+Most frequently used fast and short periods are 3 and 10. The [DefaultChaikinOscillator](https://pkg.go.dev/github.com/cinar/indicator#DefaultChaikinOscillator) function calculates Chaikin Oscillator with those periods.
 
 #### Ichimoku Cloud
 

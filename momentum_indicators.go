@@ -20,6 +20,31 @@ func AwesomeOscillator(low, high []float64) []float64 {
 	return ao
 }
 
+// The ChaikinOscillator function measures the momentum of the
+// Accumulation/Distribution (A/D) using the Moving Average
+// Convergence Divergence (MACD) formula. It takes the
+// difference between fast and slow periods EMA of the A/D.
+// Cross above the A/D line indicates bullish.
+//
+// CO = Ema(fastPeriod, AD) - Ema(slowPeriod, AD)
+//
+// Returns co, ad.
+func ChaikinOscillator(fastPeriod, slowPeriod int, low, high, closing []float64, volume []int64) ([]float64, []float64) {
+	ad := AccumulationDistribution(high, low, closing, volume)
+	co := substract(Ema(fastPeriod, ad), Ema(slowPeriod, ad))
+
+	return co, ad
+}
+
+// The DefaultChaikinOscillator function calculates Chaikin
+// Oscillator with the most frequently used fast and short
+// periods, 3 and 10.
+//
+// Returns co, ad.
+func DefaultChaikinOscillator(low, high, closing []float64, volume []int64) ([]float64, []float64) {
+	return ChaikinOscillator(3, 10, low, high, closing, volume)
+}
+
 // Ichimoku Cloud. Also known as Ichimoku Kinko Hyo, is a versatile indicator that defines support and
 // resistence, identifies trend direction, gauges momentum, and provides trading signals.
 //
