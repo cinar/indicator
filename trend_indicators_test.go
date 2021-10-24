@@ -194,6 +194,26 @@ func TestParabolicSAR(t *testing.T) {
 	}
 }
 
+func TestQstick(t *testing.T) {
+	opening := []float64{81.85, 81.2, 81.55, 82.91, 83.1, 83.41, 82.71, 82.7, 84.2, 84.25, 84.03, 85.45, 86.18, 88, 87.6}
+	closing := []float64{81.59, 81.06, 82.87, 83, 83.61, 83.15, 82.84, 83.99, 84.55, 84.36, 85.53, 86.54, 86.89, 87.77, 87.29}
+	expected := []float64{-0.26, -0.20, 0.31, 0.25, 0.3, 0.3, 0.36, 0.35, 0.4, 0.32, 0.68, 0.87, 0.75, 0.64, 0.55}
+
+	actual := Qstick(5, opening, closing)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		a := roundDigits(actual[i], 2)
+
+		if a != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
+		}
+	}
+}
+
 func TestSma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10}
 	sma := []float64{2, 3, 5, 7, 9}
