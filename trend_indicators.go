@@ -299,6 +299,16 @@ func ParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
 	return psar, trend
 }
 
+// The Qstick function calculates the ratio of recent up and down bars.
+//
+// QS = Sma(Closing - Opening)
+//
+// Returns qs.
+func Qstick(period int, opening, closing []float64) []float64 {
+	qs := Sma(period, substract(closing, opening))
+	return qs
+}
+
 // Simple Moving Average (SMA).
 func Sma(period int, values []float64) []float64 {
 	result := make([]float64, len(values))

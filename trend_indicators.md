@@ -12,6 +12,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Moving Max](#moving-max)
 - [Moving Min](#moving-min)
 - [Parabolic SAR](#parabolic-sar)
+- [Qstick](trend_indicator.md#qstick)
 - [Simple Moving Average (SMA)](#simple-moving-average-sma)
 - [Since Change](#since-change)
 - [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
@@ -157,6 +158,18 @@ Based on video [How to Calculate the PSAR Using Excel - Revised Version](https:/
 
 ```Golang
 psar, trend := indicator.ParabolicSar(high, low, closing)
+```
+
+#### Qstick
+
+The [Qstick](https://pkg.go.dev/github.com/cinar/indicator#Qstick) function calculates the ratio of recent up and down bars.
+
+```
+QS = Sma(Closing - Opening)
+```
+
+```Golang
+qs := indicator.Qstick(period, closing, opening)
 ```
 
 #### Simple Moving Average (SMA)
