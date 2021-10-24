@@ -2,6 +2,7 @@
 
 Trend indicators measure the direction and strength of a trend.
 
+- [Absolute Price Oscillator (APO)](#absolute-price-oscillator-apo)
 - [Aroon Indicator](#aroon-indicator)
 - [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator-cfo)
 - [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
@@ -16,6 +17,22 @@ Trend indicators measure the direction and strength of a trend.
 - [Triple Exponential Moving Average (TEMA)](#triple-exponential-moving-average-tema)
 - [Typical Price](#typical-price)
 - [Vortex Indicator](#vortex-indicator)
+
+#### Absolute Price Oscillator (APO)
+
+The [AbsolutePriceOscillator](https://pkg.go.dev/github.com/cinar/indicator#AbsolutePriceOscillator) function calculates a technical indicator that is used to follow trends. APO crossing above zero indicates bullish, while crossing below zero indicates bearish. Positive value is upward trend, while negative value is downward trend.
+
+```
+Fast = Ema(fastPeriod, values)
+Slow = Ema(slowPeriod, values)
+APO = Fast - Slow
+```
+
+```Golang
+apo := indicator.AbsolutePriceOscillator(fastPeriod, slowPeriod, values)
+```
+
+Most frequently used fast and short periods are 14 and 30. The [DefaultAbsoluePriceOscillator](https://pkg.go.dev/github.com/cinar/indicator#DefaultAbsolutePriceOscillator) function calculates APO with those periods.
 
 #### Aroon Indicator
 

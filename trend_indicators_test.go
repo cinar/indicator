@@ -10,6 +10,25 @@ import (
 	"testing"
 )
 
+func TestAbsolutePriceOscillator(t *testing.T) {
+	values := []float64{1, 2, 1, 5, 8, 10, 4, 6, 5, 2}
+	expected := []float64{0, 0.33, 0, 1.26, 2.26, 2.65, 0.14, 0.22, -0.14, -1.19}
+
+	actual := AbsolutePriceOscillator(2, 5, values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		a := roundDigits(actual[i], 2)
+
+		if a != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
+		}
+	}
+}
+
 func TestChandeForecastOscillator(t *testing.T) {
 	closing := []float64{1, 5, 12, 20}
 	expected := []float64{110, -26, -5.8333, 4.5}
