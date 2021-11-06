@@ -214,6 +214,35 @@ func TestQstick(t *testing.T) {
 	}
 }
 
+func TestKdj(t *testing.T) {
+	low := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	high := []float64{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
+	closing := []float64{5, 10, 15, 20, 25, 30, 35, 40, 45, 50}
+	expectedK := []float64{44.44, 45.91, 46.70, 48.12, 48.66, 48.95, 49.14, 49.26, 49.36, 49.26}
+	expectedD := []float64{44.44, 45.18, 45.68, 46.91, 47.82, 48.58, 48.91, 49.12, 49.25, 49.30}
+	expectedJ := []float64{44.44, 47.37, 48.72, 50.55, 50.32, 49.70, 49.58, 49.56, 49.57, 49.19}
+
+	k, d, j := DefaultKdj(high, low, closing)
+
+	for i := 0; i < len(k); i++ {
+		actualK := roundDigits(k[i], 2)
+		actualD := roundDigits(d[i], 2)
+		actualJ := roundDigits(j[i], 2)
+
+		if actualK != expectedK[i] {
+			t.Fatalf("k %d actual %f expected %f", i, actualK, expectedK[i])
+		}
+
+		if actualD != expectedD[i] {
+			t.Fatalf("d %d actual %f expected %f", i, actualD, expectedK[i])
+		}
+
+		if actualJ != expectedJ[i] {
+			t.Fatalf("j %d actual %f expected %f", i, actualJ, expectedK[i])
+		}
+	}
+}
+
 func TestSma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10}
 	sma := []float64{2, 3, 5, 7, 9}

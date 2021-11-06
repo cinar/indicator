@@ -309,6 +309,44 @@ func Qstick(period int, opening, closing []float64) []float64 {
 	return qs
 }
 
+// The Kdj function calculates the KDJ  indicator, also known as
+// the Random Index. KDJ is calculated similar to the Stochastic
+// Oscillator with the difference of having the J line. It is
+// used to analyze the trend and entry points.
+//
+// The K and D lines show if the asset is overbought when they
+// crosses above 80%, and oversold when they crosses below
+// 20%. The J line represents the divergence.
+//
+//
+// RSV = ((Closing - Min(Low, rPeriod))
+//       / (Max(High, rPeriod) - Min(Low, rPeriod))) * 100
+// K = Sma(RSV, kPeriod)
+// D = Sma(K, dPeriod)
+// J = (3 * K) - (2 * D)
+//
+// Returns k, d, j.
+func Kdj(rPeriod, kPeriod, dPeriod int, high, low, closing []float64) ([]float64, []float64, []float64) {
+	highest := Max(rPeriod, high)
+	lowest := Min(rPeriod, low)
+
+	rsv := multiplyBy(divide(substract(closing, lowest), substract(highest, lowest)), 100)
+
+	k := Sma(kPeriod, rsv)
+	d := Sma(dPeriod, k)
+	j := substract(multiplyBy(k, 3), multiplyBy(d, 2))
+
+	return k, d, j
+}
+
+// The DefaultKdj function calculates KDJ based on default periods
+// consisting of rPeriod of 9, kPeriod of 3, and dPeriod of 3.
+//
+// Returns k, d, j.
+func DefaultKdj(high, low, closing []float64) ([]float64, []float64, []float64) {
+	return Kdj(9, 3, 3, high, low, closing)
+}
+
 // Simple Moving Average (SMA).
 func Sma(period int, values []float64) []float64 {
 	result := make([]float64, len(values))

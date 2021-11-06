@@ -13,6 +13,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Moving Min](#moving-min)
 - [Parabolic SAR](#parabolic-sar)
 - [Qstick](trend_indicator.md#qstick)
+- [Random Index (KDJ)](#random-index-kdj)
 - [Simple Moving Average (SMA)](#simple-moving-average-sma)
 - [Since Change](#since-change)
 - [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
@@ -170,6 +171,29 @@ QS = Sma(Closing - Opening)
 
 ```Golang
 qs := indicator.Qstick(period, closing, opening)
+```
+
+#### Random Index (KDJ)
+
+The [Kdj](https://pkg.go.dev/github.com/cinar/indicator#Kdj) function calculates the KDJ  indicator, also known as the Random Index. KDJ is calculated similar to the Stochastic Oscillator with the difference of having the J line. It is used to analyze the trend and entry points.
+
+The K and D lines show if the asset is overbought when they crosses above 80%, and oversold when they crosses below 20%. The J line represents the divergence.
+
+```
+RSV = ((Closing - Min(Low, rPeriod)) / (Max(High, rPeriod) - Min(Low, rPeriod))) * 100
+K = Sma(RSV, kPeriod)
+D = Sma(K, dPeriod)
+J = (3 * K) - (2 * D)
+```
+
+```Golang
+k, d, j := indicator.Kdj(rPeriod, kPeriod, dPeriod, high, low, closing)
+```
+
+By default, _rPeriod_ of 9, _kPeriod_ of 3, and _dPeriod_ of 3 are used. The [DefaultKdj](https://pkg.go.dev/github.com/cinar/indicator#DefaultKdj) function can be used with those periods.
+
+```Golang
+k, d, j := indicator.DefaultKdj(high, low, closing)
 ```
 
 #### Simple Moving Average (SMA)
