@@ -23,6 +23,7 @@ The following list of indicators are currently supported by this package:
 - [Moving Min](trend_indicators.md#moving-min)
 - [Parabolic SAR](trend_indicators.md#parabolic-sar)
 - [Qstick](trend_indicators.md#qstick)
+- [Random Index (KDJ)](trend_indicators.md#random-index-kdj)
 - [Simple Moving Average (SMA)](trend_indicators.md#simple-moving-average-sma)
 - [Since Change](trend_indicators.md#since-change)
 - [Triangular Moving Average (TRIMA)](trend_indicators.md#triangular-moving-average-trima)
@@ -65,6 +66,7 @@ The following list of strategies are currently supported by this package:
 ### Trend Strategies
 
 - [Chande Forecast Oscillator Strategy](trend_strategies.md#chande-forecast-oscillator-strategy)
+- [KDJ Strategy](trend_strategies.md#kdj-strategy)
 - [MACD Strategy](trend_strategies.md#macd-strategy)
 - [Trend Strategy](trend_strategies.md#trend-strategy)
 
