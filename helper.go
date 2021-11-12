@@ -110,6 +110,17 @@ func diff(values []float64, before int) []float64 {
 	return result
 }
 
+// Percent difference between current and before values.
+func percentDiff(values []float64, before int) []float64 {
+	result := make([]float64, len(values))
+
+	for i := before; i < len(values); i++ {
+		result[i] = (values[i] - values[i-before]) / values[i-before]
+	}
+
+	return result
+}
+
 // Shift right for period.
 func shiftRight(period int, values []float64) []float64 {
 	result := make([]float64, len(values))

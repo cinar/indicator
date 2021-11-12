@@ -11,6 +11,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Moving Max](#moving-max)
 - [Moving Min](#moving-min)
+- [Moving Sum](#moving-sum)
 - [Parabolic SAR](#parabolic-sar)
 - [Qstick](trend_indicator.md#qstick)
 - [Random Index (KDJ)](#random-index-kdj)
@@ -129,6 +130,14 @@ The [Min](https://pkg.go.dev/github.com/cinar/indicator#Min) function gives the 
 
 ```Golang
 max := indicator.Min(period, values)
+```
+
+#### Moving Sum
+
+The [Sum](https://pkg.go.dev/github.com/cinar/indicator#Sum) function gives the sum value within the given moving period.
+
+```Golang
+sum := indicator.Sum(period, values)
 ```
 
 #### Parabolic SAR

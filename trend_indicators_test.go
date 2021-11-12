@@ -277,6 +277,24 @@ func TestSince(t *testing.T) {
 	}
 }
 
+func TestSum(t *testing.T) {
+	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	expected := []float64{1, 3, 6, 10, 14, 18, 22, 26, 30, 34}
+	period := 4
+
+	actual := Sum(period, values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
 func TestVortex(t *testing.T) {
 	high := []float64{
 		1404.14,
