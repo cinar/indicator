@@ -6,8 +6,9 @@
 package indicator
 
 import (
-	"github.com/cinar/indicator/container/bst"
 	"math"
+
+	"github.com/cinar/indicator/container/bst"
 )
 
 // Trend indicator.
@@ -385,6 +386,24 @@ func Since(values []float64) []int {
 		}
 
 		result[i] = sinceLast
+	}
+
+	return result
+}
+
+// Moving sum for the given period.
+func Sum(period int, values []float64) []float64 {
+	result := make([]float64, len(values))
+	sum := 0.0
+
+	for i := 0; i < len(values); i++ {
+		sum += values[i]
+
+		if i >= period {
+			sum -= values[i-period]
+		}
+
+		result[i] = sum
 	}
 
 	return result

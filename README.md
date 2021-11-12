@@ -4,7 +4,7 @@
 
 # Indicator Go
 
-Indicator is a Golang module providing various stock technical analysis indicators, and strategies for trading.
+Indicator is a Golang module providing various stock technical analysis indicators, strategies, and a backtest framework for trading.
 
 ## Indicators Provided
 
@@ -21,6 +21,7 @@ The following list of indicators are currently supported by this package:
 - [Moving Average Convergence Divergence (MACD)](trend_indicators.md#moving-average-convergence-divergence-macd)
 - [Moving Max](trend_indicators.md#moving-max)
 - [Moving Min](trend_indicators.md#moving-min)
+- [Moving Sum](trend_indicators.md#moving-sum)
 - [Parabolic SAR](trend_indicators.md#parabolic-sar)
 - [Qstick](trend_indicators.md#qstick)
 - [Random Index (KDJ)](trend_indicators.md#random-index-kdj)
@@ -151,6 +152,42 @@ The [BuyAndHoldStrategy](https://pkg.go.dev/github.com/cinar/indicator#BuyAndHol
 
 ```golang
 actions := indicator.BuyAndHoldStrategy(asset)
+```
+
+### Backtest
+
+Backtesting is the method for seeing how well a strategy would have done. The following backtesting functions are provided for evaluating strategies.
+
+#### Normalize Actions
+
+The [NormalizeActions](https://pkg.go.dev/github.com/cinar/indicator#NormalizeActions) takes a list of independenc actions, such as _SELL_, _SELL_, _BUY_, _SELL_, _HOLD_, _SELL_, and produces a normalized list where the actions are following the proper _BUY_, _HOLD_, _SELL_, _HOLD_ order.
+
+```golang
+normalized := indicator.NormalizeActions(actions)
+```
+
+#### Count Transactions
+
+The [CountTransactions](https://pkg.go.dev/github.com/cinar/indicator#CountTransactions) takes a list of normalized actions, and counts the _BUY_ and _SELL_ actions.
+
+```golang
+count := indicator.CountTransactions(actions)
+```
+
+#### Apply Actions
+
+The [ApplyActions](https://pkg.go.dev/github.com/cinar/indicator#ApplyActions) takes the given list of prices, applies the given list of normalized actions, and returns the gains.
+
+```golang
+gains := indicator.ApplyActions(prices, actions)
+```
+
+#### Normalize Gains
+
+The [NormalizeGains](https://pkg.go.dev/github.com/cinar/indicator#NormalizeGains) takes the given list of prices, calculates the price gains, substracts it from the given list of gains.
+
+```golang
+normalizedGains := indicator.NormalizeGains(prices, gains)
 ```
 
 ## Disclaimer

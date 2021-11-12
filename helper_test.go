@@ -165,6 +165,21 @@ func TestDiff(t *testing.T) {
 	}
 }
 
+func TestPercentDiff(t *testing.T) {
+	values := []float64{1, 2, 8, 32, 64}
+	expected := []float64{0, 1, 3, 3, 1}
+	before := 1
+
+	actual := percentDiff(values, before)
+	checkSameSize(actual, expected)
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
 func TestShiftRight(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	expected := []float64{0, 0, 0, 0, 1, 2, 3, 4, 5, 6}
