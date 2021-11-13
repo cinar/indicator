@@ -86,7 +86,9 @@ The following list of strategies are currently supported by this package:
 
 ### Compound Strategies
 
+- [All Strategies](compound_strategies.md#all-strategies)
 - [MACD and RSI Strategy](compound_strategies.md#macd-and-rsi-strategy)
+- [Run Strategies](compound_strategies.md#run-strategies)
 
 ## Usage
 
