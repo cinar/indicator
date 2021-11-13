@@ -60,9 +60,10 @@ The following list of indicators are currently supported by this package:
 
 The following list of strategies are currently supported by this package:
 
-### Reference Strategies
-
-- [Buy and Hold Strategy](#buy-and-hold-strategy)
+- [Asset](strategy.md#asset)
+- [Action](strategy.md#action)
+- [Strategy Function](strategy.md#strategy-function)
+- [Buy and Hold Strategy](strategy.md#buy-and-hold-strategy)
 
 ### Trend Strategies
 
@@ -84,11 +85,22 @@ The following list of strategies are currently supported by this package:
 
 ### Volume Strategies
 
+- No Strategies.
+
 ### Compound Strategies
 
 - [All Strategies](compound_strategies.md#all-strategies)
 - [MACD and RSI Strategy](compound_strategies.md#macd-and-rsi-strategy)
 - [Run Strategies](compound_strategies.md#run-strategies)
+
+## Backtest
+
+Backtesting is the method for seeing how well a strategy would have done. The following backtesting functions are provided for evaluating strategies.
+
+- [Apply Actions](backtest.md#apply-actions)
+- [Count Transactions](backtest.md#count-transactions)
+- [Normalize Actions](backtest.md#normalize-actions)
+- [Normalize Gains](backtest.md#normalize-gains)
 
 ## Usage
 
@@ -104,92 +116,6 @@ Import indicator.
 import (
     "github.com/cinar/indicator"
 )
-```
-
-### Strategies
-
-The strategies are where the results from one or more indicators gets combined to produce a recommended action.
-
-**The information provided on this project is strictly for informational purposes and is not to be construed as advice or solicitation to buy or sell any security.**
-
-The stragies operates on an [Asset](https://pkg.go.dev/github.com/cinar/indicator#Asset) with the following members.
-
-```golang
-type Asset struct {
-	Date    []time.Time
-	Opening []float64
-	Closing []float64
-	High    []float64
-	Low     []float64
-	Volume  []int64
-}
-```
-
-The [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) takes an [Asset](https://pkg.go.dev/github.com/cinar/indicator#Asset), and provides an array of [Action](https://pkg.go.dev/github.com/cinar/indicator#Action) for each row.
-
-```golang
-// Strategy function.
-type StrategyFunction func(Asset) []Action
-```
-
-The following [Action](https://pkg.go.dev/github.com/cinar/indicator#Action) values are currently provided.
-
-```golang
-type Action int
-
-const (
-	SELL Action = -1
-	HOLD Action = 0
-	BUY  Action = 1
-)
-```
-
-### Reference Strategies
-
-Reference strategies provide a base for comparing the actual outcome of a given strategy.
-
-#### Buy and Hold Strategy
-
-The [BuyAndHoldStrategy](https://pkg.go.dev/github.com/cinar/indicator#BuyAndHoldStrategy) provides a simple strategy to buy the given asset and hold it. It provides a good indicator for the change of asset's value without any other strategy is used.
-
-```golang
-actions := indicator.BuyAndHoldStrategy(asset)
-```
-
-### Backtest
-
-Backtesting is the method for seeing how well a strategy would have done. The following backtesting functions are provided for evaluating strategies.
-
-#### Normalize Actions
-
-The [NormalizeActions](https://pkg.go.dev/github.com/cinar/indicator#NormalizeActions) takes a list of independenc actions, such as _SELL_, _SELL_, _BUY_, _SELL_, _HOLD_, _SELL_, and produces a normalized list where the actions are following the proper _BUY_, _HOLD_, _SELL_, _HOLD_ order.
-
-```golang
-normalized := indicator.NormalizeActions(actions)
-```
-
-#### Count Transactions
-
-The [CountTransactions](https://pkg.go.dev/github.com/cinar/indicator#CountTransactions) takes a list of normalized actions, and counts the _BUY_ and _SELL_ actions.
-
-```golang
-count := indicator.CountTransactions(actions)
-```
-
-#### Apply Actions
-
-The [ApplyActions](https://pkg.go.dev/github.com/cinar/indicator#ApplyActions) takes the given list of prices, applies the given list of normalized actions, and returns the gains.
-
-```golang
-gains := indicator.ApplyActions(prices, actions)
-```
-
-#### Normalize Gains
-
-The [NormalizeGains](https://pkg.go.dev/github.com/cinar/indicator#NormalizeGains) takes the given list of prices, calculates the price gains, substracts it from the given list of gains.
-
-```golang
-normalizedGains := indicator.NormalizeGains(prices, gains)
 ```
 
 ## Disclaimer
