@@ -58,12 +58,14 @@ The following list of indicators are currently supported by this package:
 
 ## Strategies Provided
 
-The following list of strategies are currently supported by this package:
+Strategies relies on the following:
 
 - [Asset](strategy.md#asset)
 - [Action](strategy.md#action)
 - [Strategy Function](strategy.md#strategy-function)
 - [Buy and Hold Strategy](strategy.md#buy-and-hold-strategy)
+
+The following list of strategies are currently supported by this package:
 
 ### Trend Strategies
 
