@@ -25,10 +25,34 @@ func AllStrategies(strategies ...StrategyFunction) StrategyFunction {
 	}
 }
 
-// MACD and RSI strategy.
-func MacdAndRsiStrategy(asset Asset) []Action {
-	strategy := AllStrategies(MacdStrategy, DefaultRsiStrategy)
-	return strategy(asset)
+// The SeparateStrategies function takes a buy strategy and a sell strategy.
+//
+// It returns a BUY action if the buy strategy returns a BUY action and
+// the the sell strategy returns a HOLD action.
+//
+// It returns a SELL action if the sell strategy returns a SELL action
+// and the buy strategy returns a HOLD action.
+//
+// It returns HOLD otherwise.
+func SeparateStategies(buyStrategy, sellStrategy StrategyFunction) StrategyFunction {
+	return func(asset Asset) []Action {
+		actions := make([]Action, len(asset.Date))
+
+		buyActions := buyStrategy(asset)
+		sellActions := sellStrategy(asset)
+
+		for i := 0; i < len(actions); i++ {
+			if buyActions[i] == BUY && sellActions[i] == HOLD {
+				actions[i] = BUY
+			} else if sellActions[i] == SELL && buyActions[i] == HOLD {
+				actions[i] = SELL
+			} else {
+				actions[i] = HOLD
+			}
+		}
+
+		return actions
+	}
 }
 
 // The RunStrategies takes one or more StrategyFunction and returns
@@ -41,4 +65,10 @@ func RunStrategies(asset Asset, strategies ...StrategyFunction) [][]Action {
 	}
 
 	return actions
+}
+
+// MACD and RSI strategy.
+func MacdAndRsiStrategy(asset Asset) []Action {
+	strategy := AllStrategies(MacdStrategy, DefaultRsiStrategy)
+	return strategy(asset)
 }
