@@ -57,3 +57,36 @@ func Obv(closing []float64, volume []int64) []int64 {
 
 	return obv
 }
+
+// The Money Flow Index (MFI) analyzes both the closing price and the volume
+// to measure to identify overbought and oversold states. It is similar to
+// the Relative Strength Index (RSI), but it also uses the volume.
+//
+// Raw Money Flow = Typical Price * Volume
+// Money Ratio = Positive Money Flow / Negative Money Flow
+// Money Flow Index = 100 - (100 / (1 + Money Ratio))
+//
+// Retruns money flow index values.
+func MoneyFlowIndex(period int, high, low, closing []float64, volume []int64) []float64 {
+	typicalPrice, _ := TypicalPrice(low, high, closing)
+	rawMoneyFlow := multiply(typicalPrice, asFloat64(volume))
+
+	signs := extractSign(diff(rawMoneyFlow, 1))
+	moneyFlow := multiply(signs, rawMoneyFlow)
+
+	positiveMoneyFlow := keepPositives(moneyFlow)
+	negativeMoneyFlow := keepNegatives(moneyFlow)
+
+	moneyRatio := divide(
+		Sum(period, positiveMoneyFlow),
+		Sum(period, negativeMoneyFlow))
+
+	moneyFlowIndex := addBy(multiplyBy(pow(addBy(moneyRatio, 1), -1), -100), 100)
+
+	return moneyFlowIndex
+}
+
+// Default money flow index with period 14.
+func DefaultMoneyFlowIndex(high, low, closing []float64, volume []int64) []float64 {
+	return MoneyFlowIndex(14, high, low, closing, volume)
+}

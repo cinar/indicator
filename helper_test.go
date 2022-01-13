@@ -221,3 +221,89 @@ func TestGenerateNunbers(t *testing.T) {
 		}
 	}
 }
+
+func TestAsFloat64(t *testing.T) {
+	values := []int64{1, 2, 3, 4}
+	expected := []float64{1, 2, 3, 4}
+
+	actual := asFloat64(values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestPow(t *testing.T) {
+	values := []float64{1, 2, 3, 4}
+	expected := []float64{1, 4, 9, 16}
+	exponent := 2.0
+
+	actual := pow(values, exponent)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestExtractSign(t *testing.T) {
+	values := []float64{1, -2, 3, 4, -5, 0, 6, -8, -9, 10}
+	expected := []float64{1, -1, 1, 1, -1, 1, 1, -1, -1, 1}
+
+	actual := extractSign(values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestKeepPositives(t *testing.T) {
+	values := []float64{1, -2, -3, 4}
+	expected := []float64{1, 0, 0, 4}
+
+	actual := keepPositives(values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
+func TestKeepNegatives(t *testing.T) {
+	values := []float64{1, -2, -3, 4}
+	expected := []float64{0, -2, -3, 0}
+
+	actual := keepNegatives(values)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}

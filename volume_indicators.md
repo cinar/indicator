@@ -4,6 +4,7 @@ Volumne indicators measure the strength of a trend based the volume.
 
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
+- [Money Flow Index (MFI)](#money-flow-index-mfi)
 
 #### Accumulation/Distribution (A/D)
 
@@ -36,6 +37,23 @@ OBV = OBV-Prev +       0, if Closing = Closing-Prev
 ```Golang
 result := indicator.Obv(closing, volume)
 ```
+
+#### Money Flow Index (MFI)
+
+The [MoneyFlowIndex](https://pkg.go.dev/github.com/cinar/indicator#MoneyFlowIndex) function analyzes both the closing price and the volume to measure to identify overbought and oversold states. It is similar to the Relative Strength Index (RSI), but it also uses the volume.
+
+```
+Raw Money Flow = Typical Price * Volume
+Money Ratio = Positive Money Flow / Negative Money Flow
+Money Flow Index = 100 - (100 / (1 + Money Ratio))
+```
+
+```Golang
+result := indicator.MoneyFlowIndex(period, high, low, closing, volume)
+```
+
+The [DefaultMoneyFlowIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultMoneyFlowIndex) function uses the default period of 14.
+
 
 ## Disclaimer
 

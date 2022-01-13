@@ -55,6 +55,7 @@ The following list of indicators are currently supported by this package:
 
 - [Accumulation/Distribution (A/D)](volume_indicators.md#accumulationdistribution-ad)
 - [On-Balance Volume (OBV)](volume_indicators.md#on-balance-volume-obv)
+- [Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
 
 ## Strategies Provided
 
@@ -87,7 +88,7 @@ The following list of strategies are currently supported by this package:
 
 ### Volume Strategies
 
-- No Strategies.
+- [Money Flow Index Strategy](volume_strategies.md#money-flow-index-strategy)
 
 ### Compound Strategies
 

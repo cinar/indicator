@@ -151,3 +151,70 @@ func generateNumbers(begin, end, step float64) []float64 {
 
 	return numbers
 }
+
+// Convets the []int64 to []float64.
+func asFloat64(values []int64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(values); i++ {
+		result[i] = float64(values[i])
+	}
+
+	return result
+}
+
+// Calculate power of base with exponent.
+func pow(base []float64, exponent float64) []float64 {
+	result := make([]float64, len(base))
+
+	for i := 0; i < len(result); i++ {
+		result[i] = math.Pow(base[i], exponent)
+	}
+
+	return result
+}
+
+// Extact sign.
+func extractSign(values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(result); i++ {
+		if values[i] >= 0 {
+			result[i] = 1
+		} else {
+			result[i] = -1
+		}
+	}
+
+	return result
+}
+
+// Keep positives.
+func keepPositives(values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(values); i++ {
+		if values[i] > 0 {
+			result[i] = values[i]
+		} else {
+			result[i] = 0
+		}
+	}
+
+	return result
+}
+
+// Keep negatives.
+func keepNegatives(values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(values); i++ {
+		if values[i] < 0 {
+			result[i] = values[i]
+		} else {
+			result[i] = 0
+		}
+	}
+
+	return result
+}
