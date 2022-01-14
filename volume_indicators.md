@@ -7,6 +7,7 @@ Volumne indicators measure the strength of a trend based the volume.
 - [Force Index (FI)](#force-index-fi)
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
+- [Volume Price Trend (VPT)](#volume-price-trend-vpt)
 
 #### Accumulation/Distribution (A/D)
 
@@ -93,6 +94,18 @@ OBV = OBV-Prev +       0, if Closing = Closing-Prev
 
 ```Golang
 result := indicator.Obv(closing, volume)
+```
+
+#### Volume Price Trend (VPT)
+
+The [VolumePriceTrend](https://pkg.go.dev/github.com/cinar/indicator#VolumePriceTrend) provides a correlation between the volume and the price.
+
+```
+VPT = Previous VPT + (Volume * (Current Closing - Previous Closing) / Previous Closing)
+```
+
+```Golang
+result := indicator.VolumePriceTrend(closing, volume)
 ```
 
 ## Disclaimer

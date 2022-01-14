@@ -47,3 +47,12 @@ func TestDefaultEaseOfMovement(t *testing.T) {
 	actual := roundDigitsAll(DefaultEaseOfMovement(high, low, volume), 2)
 	testEquals(t, actual, expected)
 }
+
+func TestVolumePriceTrend(t *testing.T) {
+	closing := []float64{9, 11, 7, 10, 8}
+	volume := []int64{100, 110, 80, 120, 90}
+	expected := []float64{0, 24.44, -4.65, 46.78, 28.78}
+
+	actual := roundDigitsAll(VolumePriceTrend(closing, volume), 2)
+	testEquals(t, actual, expected)
+}

@@ -126,3 +126,17 @@ func EaseOfMovement(period int, high, low []float64, volume []int64) []float64 {
 func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
 	return EaseOfMovement(14, high, low, volume)
 }
+
+// The Volume Price Trend (VPT) provides a correlation between the
+// volume and the price.
+//
+// VPT = Previous VPT + (Volume * (Current Closing - Previous Closing) / Previous Closing)
+//
+// Returns volume price trend values.
+func VolumePriceTrend(closing []float64, volume []int64) []float64 {
+	previousClosing := shiftRight(1, closing)
+	// TODO: Consider changing shiftRightBy to fill with last value.
+	previousClosing[0] = closing[0]
+	vpt := multiply(asFloat64(volume), divide(substract(closing, previousClosing), previousClosing))
+	return Sum(len(vpt), vpt)
+}

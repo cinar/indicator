@@ -60,6 +60,7 @@ The following list of indicators are currently supported by this package:
 - [Force Index (FI)](volume_indicators.md#force-index-fi)
 - [Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](volume_indicators.md#on-balance-volume-obv)
+- [Volume Price Trend (VPT)](volume_indicators.md#volume-price-trend-vpt)
 
 ## Strategies Provided
 
