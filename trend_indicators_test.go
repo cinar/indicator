@@ -200,18 +200,7 @@ func TestQstick(t *testing.T) {
 	expected := []float64{10, 2.5, 13.33, 11.25, 9.4, 5.2, 3.8, -5.2}
 
 	actual := Qstick(5, opening, closing)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 2)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
 
 func TestKdj(t *testing.T) {
@@ -224,43 +213,18 @@ func TestKdj(t *testing.T) {
 
 	k, d, j := DefaultKdj(high, low, closing)
 
-	for i := 0; i < len(k); i++ {
-		actualK := roundDigits(k[i], 2)
-		actualD := roundDigits(d[i], 2)
-		actualJ := roundDigits(j[i], 2)
-
-		if actualK != expectedK[i] {
-			t.Fatalf("k %d actual %f expected %f", i, actualK, expectedK[i])
-		}
-
-		if actualD != expectedD[i] {
-			t.Fatalf("d %d actual %f expected %f", i, actualD, expectedK[i])
-		}
-
-		if actualJ != expectedJ[i] {
-			t.Fatalf("j %d actual %f expected %f", i, actualJ, expectedK[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(k, 2), expectedK)
+	testEquals(t, roundDigitsAll(d, 2), expectedD)
+	testEquals(t, roundDigitsAll(j, 2), expectedJ)
 }
 
 func TestSma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10}
-	sma := []float64{2, 3, 5, 7, 9}
+	expected := []float64{2, 3, 5, 7, 9}
 	period := 2
 
-	result := Sma(period, values)
-	if len(result) != len(sma) {
-		t.Fatal("result not same size")
-	}
-
-	for i := 0; i < len(result); i++ {
-		actual := result[i]
-		expected := sma[i]
-
-		if actual != expected {
-			t.Fatalf("result %d actual %f expected %f", i, actual, expected)
-		}
-	}
+	actual := Sma(period, values)
+	testEquals(t, actual, expected)
 }
 
 func TestSince(t *testing.T) {
@@ -268,7 +232,9 @@ func TestSince(t *testing.T) {
 	expected := []int{0, 0, 1, 0, 0, 1, 2, 3, 0, 0}
 
 	actual := Since(values)
-	// TODO: check size.
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
 
 	for i := 0; i < len(actual); i++ {
 		if actual[i] != expected[i] {
@@ -283,16 +249,7 @@ func TestSum(t *testing.T) {
 	period := 4
 
 	actual := Sum(period, values)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		if actual[i] != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
-		}
-	}
+	testEquals(t, actual, expected)
 }
 
 func TestVortex(t *testing.T) {
@@ -337,19 +294,6 @@ func TestVortex(t *testing.T) {
 	}
 
 	plusVi, minusVi := Vortex(high, low, closing)
-	if len(plusVi) != len(expectedPlusVi) || len(minusVi) != len(expectedMinusVi) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(plusVi); i++ {
-		actualPlusVi := math.Round(plusVi[i]*100000) / 100000
-		if actualPlusVi != expectedPlusVi[i] {
-			t.Fatalf("at %d actual %f expected %f", i, actualPlusVi, expectedPlusVi[i])
-		}
-
-		actualMinusVi := math.Round(minusVi[i]*100000) / 100000
-		if actualMinusVi != expectedMinusVi[i] {
-			t.Fatalf("at %d actual %f expected %f", i, actualMinusVi, expectedMinusVi[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(plusVi, 5), expectedPlusVi)
+	testEquals(t, roundDigitsAll(minusVi, 5), expectedMinusVi)
 }

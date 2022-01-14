@@ -60,16 +60,5 @@ func TestLinearRegressionUsingLeastSquare(t *testing.T) {
 	expected := []float64{-1.1379, 4.6552, 13.3448, 19.1379}
 
 	actual := LinearRegressionUsingLeastSquare(x, y)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 4)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 4), expected)
 }

@@ -3,6 +3,7 @@
 Volumne indicators measure the strength of a trend based the volume.
 
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
+- [Ease of Movement (EMV)](#ease-of-movement-emv)
 - [Force Index (FI)](#force-index-fi)
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
@@ -23,6 +24,27 @@ Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.co
 
 ```golang
 ad := indicator.AccumulationDistribution(high, low, closing, volume)
+```
+
+#### Ease of Movement (EMV)
+
+The [EaseOfMovement](https://pkg.go.dev/github.com/cinar/indicator#EaseOfMovement) is a volume based oscillator measuring the ease of price movement.
+
+```
+Distance Moved = ((High + Low) / 2) - ((Priod High + Prior Low) /2)
+Box Ratio = ((Volume / 100000000) / (High - Low))
+EMV(1) = Distance Moved / Box Ratio
+EMV(14) = SMA(14, EMV(1))
+```
+
+```Golang
+emv := indicator.EaseOfMovement(period, high, low, volume)
+```
+
+The [DefaultEaseOfMovement](https://pkg.go.dev/github.com/cinar/indicator#DefaultEaseOfMovement) functio uses the default period of 14.
+
+```Golang
+emv := indicator.DefaultEaseOfMovement(high, low, volume)
 ```
 
 #### Force Index (FI)

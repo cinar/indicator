@@ -7,6 +7,7 @@ package indicator
 
 import (
 	"math"
+	"testing"
 )
 
 // Check values same size.
@@ -129,6 +130,17 @@ func roundDigits(value float64, digits int) float64 {
 	return math.Round(value*n) / n
 }
 
+// Round values to digits.
+func roundDigitsAll(values []float64, digits int) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(result); i++ {
+		result[i] = roundDigits(values[i], digits)
+	}
+
+	return result
+}
+
 // Generate numbers.
 func generateNumbers(begin, end, step float64) []float64 {
 	n := int(math.Round((end - begin) / step))
@@ -207,4 +219,17 @@ func keepNegatives(values []float64) []float64 {
 	}
 
 	return result
+}
+
+// Test equals.
+func testEquals(t *testing.T, actual, expected []float64) {
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
 }

@@ -105,3 +105,24 @@ func ForceIndex(period int, closing []float64, volume []int64) []float64 {
 func DefaultForceIndex(closing []float64, volume []int64) []float64 {
 	return ForceIndex(13, closing, volume)
 }
+
+// The Ease of Movement (EMV) is a volume based oscillator measuring
+// the ease of price movement.
+//
+// Distance Moved = ((High + Low) / 2) - ((Priod High + Prior Low) /2)
+// Box Ratio = ((Volume / 100000000) / (High - Low))
+// EMV(1) = Distance Moved / Box Ratio
+// EMV(14) = SMA(14, EMV(1))
+//
+// Returns ease of movement values.
+func EaseOfMovement(period int, high, low []float64, volume []int64) []float64 {
+	distanceMoved := diff(divideBy(add(high, low), 2), 1)
+	boxRatio := divide(divideBy(asFloat64(volume), float64(100000000)), substract(high, low))
+	emv := Sma(period, divide(distanceMoved, boxRatio))
+	return emv
+}
+
+// The default Ease of Movement with the default period of 14.
+func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
+	return EaseOfMovement(14, high, low, volume)
+}

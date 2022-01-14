@@ -6,6 +6,8 @@
 
 Indicator is a Golang module providing various stock technical analysis indicators, strategies, and a backtest framework for trading.
 
+*I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).*
+
 ## Indicators Provided
 
 The following list of indicators are currently supported by this package:
@@ -54,6 +56,7 @@ The following list of indicators are currently supported by this package:
 ### Volume Indicators
 
 - [Accumulation/Distribution (A/D)](volume_indicators.md#accumulationdistribution-ad)
+- [Ease of Movement (EMV)](volume_indicators.md#ease-of-movement-emv)
 - [Force Index (FI)](volume_indicators.md#force-index-fi)
 - [Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](volume_indicators.md#on-balance-volume-obv)
@@ -89,6 +92,7 @@ The following list of strategies are currently supported by this package:
 
 ### Volume Strategies
 
+- [Ease of Movement Strategy](volume_strategies.md#ease-of-movement-strategy)
 - [Force Index Strategy](volume_strategies.md#force-index-strategy)
 - [Money Flow Index Strategy](volume_strategies.md#money-flow-index-strategy)
 

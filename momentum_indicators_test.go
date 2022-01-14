@@ -17,16 +17,5 @@ func TestChaikinOscillator(t *testing.T) {
 	expected := []float64{0, -7.41, -18.52, -31.69, -46.09, -61.27, -76.95, -92.97}
 
 	actual, _ := ChaikinOscillator(2, 5, low, high, closing, volume)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 2)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }

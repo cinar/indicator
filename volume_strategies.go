@@ -44,3 +44,22 @@ func ForceIndexStrategy(asset Asset) []Action {
 
 	return actions
 }
+
+// Ease of movement strategy.
+func EaseOfMovementStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	emv := DefaultEaseOfMovement(asset.High, asset.Low, asset.Volume)
+
+	for i := 0; i < len(actions); i++ {
+		if emv[i] > 0 {
+			actions[i] = BUY
+		} else if emv[i] < 0 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
