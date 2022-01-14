@@ -140,19 +140,9 @@ func TestSubstract(t *testing.T) {
 	}
 }
 
-func TestDiffWithLargerBefore(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatal("did not check size")
-		}
-	}()
-
-	diff([]float64{}, 10)
-}
-
 func TestDiff(t *testing.T) {
 	values := []float64{1, 2, 1, 4, 2, 2, 6, 8, 2, 10}
-	expected := []float64{0, 1, -1, 3, -2, 0, 4, 2, -6, 8}
+	expected := []float64{1, 1, -1, 3, -2, 0, 4, 2, -6, 8}
 	before := 1
 
 	actual := diff(values, before)

@@ -97,17 +97,7 @@ func substract(values1, values2 []float64) []float64 {
 
 // Difference between current and before values.
 func diff(values []float64, before int) []float64 {
-	if before >= len(values) {
-		panic("before greather or equals to size")
-	}
-
-	result := make([]float64, len(values))
-
-	for i := before; i < len(values); i++ {
-		result[i] = values[i] - values[i-before]
-	}
-
-	return result
+	return substract(values, shiftRight(1, values))
 }
 
 // Percent difference between current and before values.

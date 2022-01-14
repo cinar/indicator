@@ -90,3 +90,18 @@ func MoneyFlowIndex(period int, high, low, closing []float64, volume []int64) []
 func DefaultMoneyFlowIndex(high, low, closing []float64, volume []int64) []float64 {
 	return MoneyFlowIndex(14, high, low, closing, volume)
 }
+
+// The Force Index (FI) uses the closing price and the volume to assess
+// the power behind a move and identify turning points.
+//
+// Force Index = EMA(period, (Current - Previous) * Volume)
+//
+// Returns force index.
+func ForceIndex(period int, closing []float64, volume []int64) []float64 {
+	return Ema(period, multiply(diff(closing, 1), asFloat64(volume)))
+}
+
+// The default Force Index (FI) with window size of 13.
+func DefaultForceIndex(closing []float64, volume []int64) []float64 {
+	return ForceIndex(13, closing, volume)
+}

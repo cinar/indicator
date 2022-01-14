@@ -3,8 +3,9 @@
 Volumne indicators measure the strength of a trend based the volume.
 
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
-- [On-Balance Volume (OBV)](#on-balance-volume-obv)
+- [Force Index (FI)](#force-index-fi)
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
+- [On-Balance Volume (OBV)](#on-balance-volume-obv)
 
 #### Accumulation/Distribution (A/D)
 
@@ -24,18 +25,22 @@ Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.co
 ad := indicator.AccumulationDistribution(high, low, closing, volume)
 ```
 
-#### On-Balance Volume (OBV)
+#### Force Index (FI)
 
-The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
+The [ForceIndex](https://pkg.go.dev/github.com/cinar/indicator#ForceIndex) uses the closing price and the volume to assess the power behind a move and identify turning points.
 
 ```
-                  volume, if Closing > Closing-Prev
-OBV = OBV-Prev +       0, if Closing = Closing-Prev
-                 -volume, if Closing < Closing-Prev
+Force Index = EMA(period, (Current - Previous) * Volume)
 ```
 
 ```Golang
-result := indicator.Obv(closing, volume)
+fi := indicator.ForceIndex(period, closing, volume)
+```
+
+The [DefaultForceIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultForceIndex) function uses the default period of 13.
+
+```Golang
+fi := DefaultForceIndex(closing, volume)
 ```
 
 #### Money Flow Index (MFI)
@@ -54,6 +59,19 @@ result := indicator.MoneyFlowIndex(period, high, low, closing, volume)
 
 The [DefaultMoneyFlowIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultMoneyFlowIndex) function uses the default period of 14.
 
+#### On-Balance Volume (OBV)
+
+The [Obv](https://pkg.go.dev/github.com/cinar/indicator#Obv) function calculates a technical trading momentum indicator that uses volume flow to predict changes in stock price.
+
+```
+                  volume, if Closing > Closing-Prev
+OBV = OBV-Prev +       0, if Closing = Closing-Prev
+                 -volume, if Closing < Closing-Prev
+```
+
+```Golang
+result := indicator.Obv(closing, volume)
+```
 
 ## Disclaimer
 

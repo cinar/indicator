@@ -5,6 +5,7 @@
 
 package indicator
 
+// Money flow index strategy.
 func MoneyFlowIndexStrategy(asset Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
@@ -19,6 +20,25 @@ func MoneyFlowIndexStrategy(asset Asset) []Action {
 			actions[i] = SELL
 		} else {
 			actions[i] = BUY
+		}
+	}
+
+	return actions
+}
+
+// Force index strategy function.
+func ForceIndexStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	forceIndex := DefaultForceIndex(asset.Closing, asset.Volume)
+
+	for i := 0; i < len(actions); i++ {
+		if forceIndex[i] > 0 {
+			actions[i] = BUY
+		} else if forceIndex[i] < 0 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
 		}
 	}
 
