@@ -97,7 +97,7 @@ func substract(values1, values2 []float64) []float64 {
 
 // Difference between current and before values.
 func diff(values []float64, before int) []float64 {
-	return substract(values, shiftRight(1, values))
+	return substract(values, shiftRight(before, values))
 }
 
 // Percent difference between current and before values.
