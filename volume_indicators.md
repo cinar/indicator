@@ -8,6 +8,7 @@ Volumne indicators measure the strength of a trend based the volume.
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
 - [Volume Price Trend (VPT)](#volume-price-trend-vpt)
+- [Volume Weighted Average Price (VWAP)](#volume-weighted-average-price-vwap)
 
 #### Accumulation/Distribution (A/D)
 
@@ -106,6 +107,24 @@ VPT = Previous VPT + (Volume * (Current Closing - Previous Closing) / Previous C
 
 ```Golang
 result := indicator.VolumePriceTrend(closing, volume)
+```
+
+#### Volume Weighted Average Price (VWAP)
+
+The [VolumeWeightedAveragePrice](https://pkg.go.dev/github.com/cinar/indicator#VolumeWeightedAveragePrice) provides the average price the asset has traded.
+
+```
+VWAP = Sum(Closing * Volume) / Sum(Volume)
+```
+
+```Golang
+result := indicator.VolumeWeightedAveragePrice(period, closing, volume)
+```
+
+The [DefaultVolumeWeightedAveragePrice](https://pkg.go.dev/github.com/cinar/indicator#DefaultVolumeWeightedAveragePrice) function uses the default period of 14.
+
+```Golang
+result := indicator.DefaultVolumeWeightedAveragePrice(closing, volume)
 ```
 
 ## Disclaimer

@@ -56,3 +56,22 @@ func TestVolumePriceTrend(t *testing.T) {
 	actual := roundDigitsAll(VolumePriceTrend(closing, volume), 2)
 	testEquals(t, actual, expected)
 }
+
+func TestVolumeWeightedAveragePrice(t *testing.T) {
+	closing := []float64{9, 11, 7, 10, 8}
+	volume := []int64{100, 110, 80, 120, 90}
+	period := 2
+	expected := []float64{9, 10.05, 9.32, 8.8, 9.14}
+
+	actual := roundDigitsAll(VolumeWeightedAveragePrice(period, closing, volume), 2)
+	testEquals(t, actual, expected)
+}
+
+func TestDefaultVolumeWeightedAveragePrice(t *testing.T) {
+	closing := []float64{9, 11, 7, 10, 8}
+	volume := []int64{100, 110, 80, 120, 90}
+	expected := []float64{9, 10.05, 9.21, 9.44, 9.18}
+
+	actual := roundDigitsAll(DefaultVolumeWeightedAveragePrice(closing, volume), 2)
+	testEquals(t, actual, expected)
+}

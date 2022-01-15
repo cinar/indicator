@@ -61,6 +61,7 @@ The following list of indicators are currently supported by this package:
 - [Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
 - [On-Balance Volume (OBV)](volume_indicators.md#on-balance-volume-obv)
 - [Volume Price Trend (VPT)](volume_indicators.md#volume-price-trend-vpt)
+- [Volume Weighted Average Price (VWAP)](volume_indicators.md#volume-weighted-average-price-vwap)
 
 ## Strategies Provided
 
@@ -96,6 +97,7 @@ The following list of strategies are currently supported by this package:
 - [Ease of Movement Strategy](volume_strategies.md#ease-of-movement-strategy)
 - [Force Index Strategy](volume_strategies.md#force-index-strategy)
 - [Money Flow Index Strategy](volume_strategies.md#money-flow-index-strategy)
+- [Volume Weighted Average Price Strategy](volume_strategies.md#volume-weighted-average-price-strategy)
 
 ### Compound Strategies
 

@@ -140,3 +140,19 @@ func VolumePriceTrend(closing []float64, volume []int64) []float64 {
 	vpt := multiply(asFloat64(volume), divide(substract(closing, previousClosing), previousClosing))
 	return Sum(len(vpt), vpt)
 }
+
+// The Volume Weighted Average Price (VWAP) provides the average price
+// the asset has traded.
+//
+// VWAP = Sum(Closing * Volume) / Sum(Volume)
+//
+// Returns vwap values.
+func VolumeWeightedAveragePrice(period int, closing []float64, volume []int64) []float64 {
+	v := asFloat64(volume)
+	return divide(Sum(period, multiply(closing, v)), Sum(period, v))
+}
+
+// Default volume weighted average price with period of 14.
+func DefaultVolumeWeightedAveragePrice(closing []float64, volume []int64) []float64 {
+	return VolumeWeightedAveragePrice(14, closing, volume)
+}

@@ -63,3 +63,22 @@ func EaseOfMovementStrategy(asset Asset) []Action {
 
 	return actions
 }
+
+// Volume weighted average price strategy function.
+func VolumeWeightedAveragePriceStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	vwap := DefaultVolumeWeightedAveragePrice(asset.Closing, asset.Volume)
+
+	for i := 0; i < len(actions); i++ {
+		if vwap[i] > asset.Closing[i] {
+			actions[i] = BUY
+		} else if vwap[i] < asset.Closing[i] {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
