@@ -5,6 +5,12 @@
 
 package indicator
 
+// Starting value for NVI.
+const NVI_STARTING_VALUE = 1000
+
+// Default period of CMF.
+const CMF_DEFAULT_PERIOD = 20
+
 // Accumulation/Distribution Indicator (A/D). Cumulative indicator
 // that uses volume and price to assess whether a stock is
 // being accumulated or distributed.
@@ -178,7 +184,7 @@ func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
 
 	for i := 0; i < len(nvi); i++ {
 		if i == 0 {
-			nvi[i] = 1000
+			nvi[i] = NVI_STARTING_VALUE
 		} else if volume[i-1] < volume[i] {
 			nvi[i] = nvi[i-1]
 		} else {
@@ -187,4 +193,25 @@ func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
 	}
 
 	return nvi
+}
+
+// The Chaikin Money Flow (CMF) measures the amount of money flow volume
+// over a given period.
+//
+// Money Flow Multiplier = ((Closing - Low) - (High - Closing)) / (High - Low)
+// Money Flow Volume = Money Flow Multiplier * Volume
+// Chaikin Money Flow = Sum(20, Money Flow Volume) / Sum(20, Volume)
+//
+func ChaikinMoneyFlow(high, low, closing []float64, volume []int64) []float64 {
+	moneyFlowMultiplier := divide(
+		substract(substract(closing, low), substract(high, closing)),
+		substract(high, low))
+
+	moneyFlowVolume := multiply(moneyFlowMultiplier, asFloat64(volume))
+
+	cmf := divide(
+		Sum(CMF_DEFAULT_PERIOD, moneyFlowVolume),
+		Sum(CMF_DEFAULT_PERIOD, asFloat64(volume)))
+
+	return cmf
 }

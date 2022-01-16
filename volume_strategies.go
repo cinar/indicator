@@ -102,3 +102,26 @@ func NegativeVolumeIndexStrategy(asset Asset) []Action {
 
 	return actions
 }
+
+// Chaikin money flow strategy.
+func ChaikinMoneyFlowStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	cmf := ChaikinMoneyFlow(
+		asset.High,
+		asset.Low,
+		asset.Closing,
+		asset.Volume)
+
+	for i := 0; i < len(actions); i++ {
+		if cmf[i] < 0 {
+			actions[i] = BUY
+		} else if cmf[i] > 0 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}

@@ -3,6 +3,7 @@
 Volumne indicators measure the strength of a trend based the volume.
 
 - [Accumulation/Distribution (A/D)](#accumulationdistribution-ad)
+- [Chaikin Money Flow (CMF)](#chaikin-money-flow-cmf)
 - [Ease of Movement (EMV)](#ease-of-movement-emv)
 - [Force Index (FI)](#force-index-fi)
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
@@ -27,6 +28,20 @@ Based on [Accumulation/Distribution Indicator (A/D)](https://www.investopedia.co
 
 ```golang
 ad := indicator.AccumulationDistribution(high, low, closing, volume)
+```
+
+#### Chaikin Money Flow (CMF)
+
+The [ChaikinMoneyFlow](https://pkg.go.dev/github.com/cinar/indicator#ChaikinMoneyFlow) measures the amount of money flow volume over a given period.
+
+```
+Money Flow Multiplier = ((Closing - Low) - (High - Closing)) / (High - Low)
+Money Flow Volume = Money Flow Multiplier * Volume
+Chaikin Money Flow = Sum(20, Money Flow Volume) / Sum(20, Volume)
+```
+
+```Golang
+cmf := indicator.ChaikinMoneyFlow(high, low, closing, volume)
 ```
 
 #### Ease of Movement (EMV)

@@ -56,6 +56,7 @@ The following list of indicators are currently supported by this package:
 ### Volume Indicators
 
 - [Accumulation/Distribution (A/D)](volume_indicators.md#accumulationdistribution-ad)
+- [Chaikin Money Flow (CMF)](volume_indicators.md#chaikin-money-flow-cmf)
 - [Ease of Movement (EMV)](volume_indicators.md#ease-of-movement-emv)
 - [Force Index (FI)](volume_indicators.md#force-index-fi)
 - [Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
@@ -95,6 +96,7 @@ The following list of strategies are currently supported by this package:
 
 ### Volume Strategies
 
+- [Chaikin Money Flow Strategy](volume_strategies.md#chaikin-money-flow-strategy)
 - [Ease of Movement Strategy](volume_strategies.md#ease-of-movement-strategy)
 - [Force Index Strategy](volume_strategies.md#force-index-strategy)
 - [Money Flow Index Strategy](volume_strategies.md#money-flow-index-strategy)

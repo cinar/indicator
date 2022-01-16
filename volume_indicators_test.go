@@ -84,3 +84,14 @@ func TestNegativeVolumeIndex(t *testing.T) {
 	actual := roundDigitsAll(NegativeVolumeIndex(closing, volume), 2)
 	testEquals(t, actual, expected)
 }
+
+func TestChaikinMoneyFlow(t *testing.T) {
+	high := []float64{10, 9, 12, 14, 12}
+	low := []float64{6, 7, 9, 12, 10}
+	volume := []int64{100, 110, 80, 120, 90}
+	closing := []float64{9, 11, 7, 10, 8}
+	expected := []float64{0.5, 1.81, 0.67, -0.41, -0.87}
+
+	actual := roundDigitsAll(ChaikinMoneyFlow(high, low, closing, volume), 2)
+	testEquals(t, actual, expected)
+}
