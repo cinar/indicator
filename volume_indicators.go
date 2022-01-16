@@ -156,3 +156,35 @@ func VolumeWeightedAveragePrice(period int, closing []float64, volume []int64) [
 func DefaultVolumeWeightedAveragePrice(closing []float64, volume []int64) []float64 {
 	return VolumeWeightedAveragePrice(14, closing, volume)
 }
+
+// The Negative Volume Index (NVI) is a cumulative indicator using
+// the change in volume to decide when the smart money is active.
+//
+// If Volume is greather than Previous Volume:
+//
+//     NVI = Previous NVI
+//
+// Otherwise:
+//
+//     NVI = Previous NVI + (((Closing - Previous Closing) / Previous Closing) * Previous NVI)
+//
+// Returns nvi values.
+func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
+	if len(closing) != len(volume) {
+		panic("not all same size")
+	}
+
+	nvi := make([]float64, len(closing))
+
+	for i := 0; i < len(nvi); i++ {
+		if i == 0 {
+			nvi[i] = 1000
+		} else if volume[i-1] < volume[i] {
+			nvi[i] = nvi[i-1]
+		} else {
+			nvi[i] = nvi[i-1] + (((closing[i] - closing[i-1]) / closing[i-1]) * nvi[i-1])
+		}
+	}
+
+	return nvi
+}

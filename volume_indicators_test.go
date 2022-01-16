@@ -75,3 +75,12 @@ func TestDefaultVolumeWeightedAveragePrice(t *testing.T) {
 	actual := roundDigitsAll(DefaultVolumeWeightedAveragePrice(closing, volume), 2)
 	testEquals(t, actual, expected)
 }
+
+func TestNegativeVolumeIndex(t *testing.T) {
+	closing := []float64{9, 11, 7, 10, 8}
+	volume := []int64{100, 110, 80, 120, 90}
+	expected := []float64{1000, 1000, 636.36, 636.36, 509.09}
+
+	actual := roundDigitsAll(NegativeVolumeIndex(closing, volume), 2)
+	testEquals(t, actual, expected)
+}

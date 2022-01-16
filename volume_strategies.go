@@ -82,3 +82,23 @@ func VolumeWeightedAveragePriceStrategy(asset Asset) []Action {
 
 	return actions
 }
+
+// Negative volume index strategy.
+func NegativeVolumeIndexStrategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	nvi := NegativeVolumeIndex(asset.Closing, asset.Volume)
+	nvi255 := Ema(255, nvi)
+
+	for i := 0; i < len(actions); i++ {
+		if nvi[i] < nvi255[i] {
+			actions[i] = BUY
+		} else if nvi[i] > nvi255[i] {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}

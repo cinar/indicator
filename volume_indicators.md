@@ -6,6 +6,7 @@ Volumne indicators measure the strength of a trend based the volume.
 - [Ease of Movement (EMV)](#ease-of-movement-emv)
 - [Force Index (FI)](#force-index-fi)
 - [Money Flow Index (MFI)](#money-flow-index-mfi)
+- [Negative Volume Index (NVI)](#negative-volume-index-nvi)
 - [On-Balance Volume (OBV)](#on-balance-volume-obv)
 - [Volume Price Trend (VPT)](#volume-price-trend-vpt)
 - [Volume Weighted Average Price (VWAP)](#volume-weighted-average-price-vwap)
@@ -82,6 +83,24 @@ result := indicator.MoneyFlowIndex(period, high, low, closing, volume)
 ```
 
 The [DefaultMoneyFlowIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultMoneyFlowIndex) function uses the default period of 14.
+
+#### Negative Volume Index (NVI)
+
+The [NegativeVolumeIndex](https://pkg.go.dev/github.com/cinar/indicator#NegativeVolumeIndex) function calculates a cumulative indicator using the change in volume to decide when the smart money is active.
+
+```
+If Volume is greather than Previous Volume:
+
+    NVI = Previous NVI
+
+Otherwise:
+
+    NVI = Previous NVI + (((Closing - Previous Closing) / Previous Closing) * Previous NVI)
+```
+
+```Golang
+result := indicator.NegativeVolumeIndex(closing, volume)
+```
 
 #### On-Balance Volume (OBV)
 
