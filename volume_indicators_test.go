@@ -12,7 +12,7 @@ func TestMoneyFlowIndex(t *testing.T) {
 	low := []float64{6, 7, 9, 12, 10}
 	closing := []float64{9, 11, 7, 10, 8}
 	volume := []int64{100, 110, 80, 120, 90}
-	expected := []float64{100, 100, 406.85, 207.69, 266.67}
+	expected := []float64{100, 100, 57.01, 65.85, 61.54}
 	period := 2
 
 	actual := roundDigitsAll(MoneyFlowIndex(period, high, low, closing, volume), 2)
