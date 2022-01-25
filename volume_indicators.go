@@ -85,7 +85,7 @@ func MoneyFlowIndex(period int, high, low, closing []float64, volume []int64) []
 
 	moneyRatio := divide(
 		Sum(period, positiveMoneyFlow),
-		Sum(period, negativeMoneyFlow))
+		Sum(period, multiplyBy(negativeMoneyFlow, -1)))
 
 	moneyFlowIndex := addBy(multiplyBy(pow(addBy(moneyRatio, 1), -1), -100), 100)
 
