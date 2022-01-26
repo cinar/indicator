@@ -26,3 +26,16 @@ func TestUlcerIndex(t *testing.T) {
 	actual := DefaultUlcerIndex(closing)
 	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
+
+func TestDonchianChannel(t *testing.T) {
+	closing := []float64{9, 11, 7, 10, 8}
+	period := 4
+	expectedUpperChannel := []float64{9, 11, 11, 11, 11}
+	expectedMiddleChannel := []float64{9, 10, 9, 9, 9}
+	expectedLowerChannel := []float64{9, 9, 7, 7, 7}
+
+	actualUpperChannel, actualMiddleChannel, actualLowerChannel := DonchianChannel(period, closing)
+	testEquals(t, roundDigitsAll(actualUpperChannel, 2), expectedUpperChannel)
+	testEquals(t, roundDigitsAll(actualMiddleChannel, 2), expectedMiddleChannel)
+	testEquals(t, roundDigitsAll(actualLowerChannel, 2), expectedLowerChannel)
+}
