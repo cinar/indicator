@@ -233,3 +233,14 @@ func testEquals(t *testing.T, actual, expected []float64) {
 		}
 	}
 }
+
+// Sqrt of given values.
+func sqrt(values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(values); i++ {
+		result[i] = math.Sqrt(values[i])
+	}
+
+	return result
+}
