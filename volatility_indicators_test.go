@@ -39,3 +39,17 @@ func TestDonchianChannel(t *testing.T) {
 	testEquals(t, roundDigitsAll(actualMiddleChannel, 2), expectedMiddleChannel)
 	testEquals(t, roundDigitsAll(actualLowerChannel, 2), expectedLowerChannel)
 }
+
+func TestKeltnerChannel(t *testing.T) {
+	high := []float64{10, 9, 12, 14, 12}
+	low := []float64{6, 7, 9, 12, 10}
+	closing := []float64{9, 11, 7, 10, 8}
+	expectedUpperBand := []float64{17, 17.19, 17.65, 17.58, 17.38}
+	expectedMiddleLine := []float64{9, 9.19, 8.98, 9.08, 8.98}
+	expectedLowerBand := []float64{1, 1.19, 0.32, 0.58, 0.58}
+
+	actualUpperBand, actualMiddleLine, actualLowerBand := DefaultKeltnerChannel(high, low, closing)
+	testEquals(t, roundDigitsAll(actualUpperBand, 2), expectedUpperBand)
+	testEquals(t, roundDigitsAll(actualMiddleLine, 2), expectedMiddleLine)
+	testEquals(t, roundDigitsAll(actualLowerBand, 2), expectedLowerBand)
+}
