@@ -208,3 +208,28 @@ func DonchianChannel(period int, closing []float64) ([]float64, []float64, []flo
 
 	return upperChannel, middleChannel, lowerChannel
 }
+
+// The Keltner Channel (KC) provides volatility-based bands that are placed
+// on either side of an asset's price and can aid in determining the
+// direction of a trend.
+//
+// Middle Line = EMA(period, closings)
+// Upper Band = EMA(period, closings) + 2 * ATR(period, highs, lows, closings)
+// Lower Band = EMA(period, closings) - 2 * ATR(period, highs, lows, closings)
+//
+// Returns upperBand, middleLine, lowerBand.
+func KeltnerChannel(period int, high, low, closing []float64) ([]float64, []float64, []float64) {
+	_, atr := Atr(period, high, low, closing)
+	atr2 := multiplyBy(atr, 2)
+
+	middleLine := Ema(period, closing)
+	upperBand := add(middleLine, atr2)
+	lowerBand := substract(middleLine, atr2)
+
+	return upperBand, middleLine, lowerBand
+}
+
+// The default keltner channel with the default period of 20.
+func DefaultKeltnerChannel(high, low, closing []float64) ([]float64, []float64, []float64) {
+	return KeltnerChannel(20, high, low, closing)
+}

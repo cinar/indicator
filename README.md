@@ -51,6 +51,7 @@ The following list of indicators are currently supported by this package:
 - [Bollinger Bands](volatility_indicators.md#bollinger-bands)
 - [Chandelier Exit](volatility_indicators.md#chandelier-exit)
 - [Donchian Channel (DC)](volatility_indicators.md#donchian-channel-dc)
+- [Keltner Channel (KC)](volatility_indicators.md#keltner-channel-kc)
 - [Moving Standard Deviation (Std)](volatility_indicators.md#moving-standard-deviation-std)
 - [Projection Oscillator (PO)](volatility_indicators.md#projection-oscillator-po)
 - [Ulcer Index (UI)](volatility_indicators.md#ulcer-index-ui)

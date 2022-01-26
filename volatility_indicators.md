@@ -8,6 +8,7 @@ Volatility indicators measure the rate of movement regardless of its direction.
 - [Bollinger Bands](#bollinger-bands)
 - [Chandelier Exit](#chandelier-exit)
 - [Donchian Channel (DC)](#donchian-channel-dc)
+- [Keltner Channel (KC)](#keltner-channel-kc)
 - [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
 - [Projection Oscillator (PO)](#projection-oscillator-po)
 - [Ulcer Index (UI)](#ulcer-index-ui)
@@ -92,6 +93,26 @@ Middle Channel = (Upper Channel + Lower Channel) / 2
 
 ```golang
 upperChannel, middleChannel, lowerChannel := indicator.DonchianChannel(period, closing)
+```
+
+#### Keltner Channel (KC)
+
+The [KeltnerChannel](https://pkg.go.dev/github.com/cinar/indicator#KeltnerChannel) provides volatility-based bands that are placed on either side of an asset's price and can aid in determining the direction of a trend.
+
+```
+Middle Line = EMA(period, closings)
+Upper Band = EMA(period, closings) + 2 * ATR(period, highs, lows, closings)
+Lower Band = EMA(period, closings) - 2 * ATR(period, highs, lows, closings)
+```
+
+```golang
+upperBand, middleLine, lowerBand := indicator.KeltnerChannel(period, high, low, closing)
+```
+
+The [DefaultKeltnerChannel](https://pkg.go.dev/github.com/cinar/indicator#DefaultKeltnerChannel) calculates it with the default period of 20.
+
+```golang
+upperBand, middleLine, lowerBand := indicator.DefaultKeltnerChannel(high, low, closing)
 ```
 
 #### Moving Standard Deviation (Std)
