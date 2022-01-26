@@ -164,3 +164,26 @@ func ProjectionOscillator(period, smooth int, high, low, closing []float64) ([]f
 
 	return po, spo
 }
+
+// The Ulcer Index (UI) measures downside risk. The index increases in value
+// as the price moves farther away from a recent high and falls as the price
+// rises to new highs.
+//
+// High Closings = Max(period, Closings)
+// Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
+// Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
+// Ulcer Index = Sqrt(Squared Average)
+//
+// Returns ui.
+func UlcerIndex(period int, closing []float64) []float64 {
+	highClosing := Max(period, closing)
+	percentageDrawdown := multiplyBy(divide(substract(closing, highClosing), highClosing), 100)
+	squaredAverage := Sma(period, multiply(percentageDrawdown, percentageDrawdown))
+	ui := sqrt(squaredAverage)
+	return ui
+}
+
+// The default ulcer index with the default period of 14.
+func DefaultUlcerIndex(closing []float64) []float64 {
+	return UlcerIndex(14, closing)
+}

@@ -9,6 +9,7 @@ Volatility indicators measure the rate of movement regardless of its direction.
 - [Chandelier Exit](#chandelier-exit)
 - [Moving Standard Deviation (Std)](#moving-standard-deviation-std)
 - [Projection Oscillator (PO)](#projection-oscillator-po)
+- [Ulcer Index (UI)](#ulcer-index-ui)
 
 #### Acceleration Bands
 
@@ -101,6 +102,27 @@ SPO = EMA(smooth, PO)
 
 ```golang
 po, spo := indicator.ProjectionOscillator(12, 4, high, low, closing)
+```
+
+#### Ulcer Index (UI)
+
+The [UlcerIndex](https://pkg.go.dev/github.com/cinar/indicator#UlcerIndex) measures downside risk. The index increases in value as the price moves farther away from a recent high and falls as the price rises to new highs.
+
+```
+High Closings = Max(period, Closings)
+Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
+Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
+Ulcer Index = Sqrt(Squared Average)
+```
+
+```golang
+ui := indicator.UlcerIndex(period, closing)
+```
+
+The [DefaultUlcerIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultUlcerIndex) measures the ulcer index with the default period of 14.
+
+```golang
+ui := indicator.DefaultUlcerIndex(closing)
 ```
 
 ## Disclaimer
