@@ -140,9 +140,7 @@ func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
 //
 // Returns volume price trend values.
 func VolumePriceTrend(closing []float64, volume []int64) []float64 {
-	previousClosing := shiftRight(1, closing)
-	// TODO: Consider changing shiftRightBy to fill with last value.
-	previousClosing[0] = closing[0]
+	previousClosing := shiftRightAndFillBy(1, closing[0], closing)
 	vpt := multiply(asFloat64(volume), divide(substract(closing, previousClosing), previousClosing))
 	return Sum(len(vpt), vpt)
 }

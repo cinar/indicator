@@ -170,6 +170,21 @@ func TestPercentDiff(t *testing.T) {
 	}
 }
 
+func TestShiftRightAndFillBy(t *testing.T) {
+	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	expected := []float64{1, 1, 1, 1, 1, 2, 3, 4, 5, 6}
+	period := 4
+
+	actual := shiftRightAndFillBy(period, values[0], values)
+	checkSameSize(actual, expected)
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
+		}
+	}
+}
+
 func TestShiftRight(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	expected := []float64{0, 0, 0, 0, 1, 2, 3, 4, 5, 6}

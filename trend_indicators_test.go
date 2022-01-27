@@ -252,6 +252,15 @@ func TestSum(t *testing.T) {
 	testEquals(t, actual, expected)
 }
 
+func TestTrix(t *testing.T) {
+	values := []float64{2, 4, 6, 8, 12, 14, 16, 18, 20}
+	period := 4
+	expected := []float64{0, 0.06, 0.17, 0.26, 0.33, 0.33, 0.3, 0.25, 0.21}
+
+	actual := Trix(period, values)
+	testEquals(t, roundDigitsAll(actual, 2), expected)
+}
+
 func TestVortex(t *testing.T) {
 	high := []float64{
 		1404.14,

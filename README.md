@@ -29,8 +29,9 @@ The following list of indicators are currently supported by this package:
 - [Random Index (KDJ)](trend_indicators.md#random-index-kdj)
 - [Simple Moving Average (SMA)](trend_indicators.md#simple-moving-average-sma)
 - [Since Change](trend_indicators.md#since-change)
-- [Triangular Moving Average (TRIMA)](trend_indicators.md#triangular-moving-average-trima)
 - [Triple Exponential Moving Average (TEMA)](trend_indicators.md#triple-exponential-moving-average-tema)
+- [Triangular Moving Average (TRIMA)](trend_indicators.md#triangular-moving-average-trima)
+- [Triple Exponential Average (TRIX)](trend_indicators.md#triple-exponential-average-trix)
 - [Typical Price](trend_indicators.md#typical-price)
 - [Vortex Indicator](trend_indicators.md#vortex-indicator)
 

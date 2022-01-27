@@ -112,15 +112,24 @@ func percentDiff(values []float64, before int) []float64 {
 	return result
 }
 
-// Shift right for period.
-func shiftRight(period int, values []float64) []float64 {
+// Shift right for period and fills with value.
+func shiftRightAndFillBy(period int, fill float64, values []float64) []float64 {
 	result := make([]float64, len(values))
 
-	for i := period; i < len(result); i++ {
-		result[i] = values[i-period]
+	for i := 0; i < len(result); i++ {
+		if i < period {
+			result[i] = fill
+		} else {
+			result[i] = values[i-period]
+		}
 	}
 
 	return result
+}
+
+// Shift right for period.
+func shiftRight(period int, values []float64) []float64 {
+	return shiftRightAndFillBy(period, 0, values)
 }
 
 // Round value to digits.
