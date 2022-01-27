@@ -109,6 +109,29 @@ func ChandeForecastOscillator(closing []float64) []float64 {
 	return cfo
 }
 
+// The Community Channel Index (CMI) is a momentum-based oscillator
+// used to help determine when an investment vehicle is reaching a
+// condition of being overbought or oversold.
+//
+// Moving Average = Sma(Period, Typical Price)
+// Mean Deviation = Sma(Period, Abs(Typical Price - Moving Average))
+// CMI = (Typical Price - Moving Average) / (0.015 * Mean Deviation)
+//
+// Returns cmi.
+func CommunityChannelIndex(period int, high, low, closing []float64) []float64 {
+	tp, _ := TypicalPrice(low, high, closing)
+	ma := Sma(period, tp)
+	md := Sma(period, abs(substract(tp, ma)))
+	cci := divide(substract(tp, ma), multiplyBy(md, 0.015))
+
+	return cci
+}
+
+// The default community channel index with the period of 20.
+func DefaultCommunityChannelIndex(high, low, closing []float64) []float64 {
+	return CommunityChannelIndex(20, high, low, closing)
+}
+
 // Dema calculates the Double Exponential Moving Average (DEMA).
 //
 // DEMA = (2 * EMA(values)) - EMA(EMA(values))

@@ -6,6 +6,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Aroon Indicator](#aroon-indicator)
 - [Balance of Power (BOP)](trend_indicators.md#balance-of-power-bop)
 - [Chande Forecast Oscillator (CFO)](#chande-forecast-oscillator-cfo)
+- [Community Channel Index (CMI)](#community-channel-index-cmi)
 - [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
@@ -78,6 +79,25 @@ Based on [Chande Forecast Oscillator Formula, Strategy](https://www.stockmaniacs
 
 ```golang
 cfo := indicator.ChandeForecastOscillator(closing)
+```
+#### Community Channel Index (CMI)
+
+The [CommunityChannelIndex](https://pkg.go.dev/github.com/cinar/indicator#CommunityChannelIndex) is a momentum-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
+
+```
+Moving Average = Sma(Period, Typical Price)
+Mean Deviation = Sma(Period, Abs(Typical Price - Moving Average))
+CMI = (Typical Price - Moving Average) / (0.015 * Mean Deviation)
+```
+
+```golang
+result := indicator.CommunityChannelIndex(period, high, low, closing)
+```
+
+The [DefaultCommunityChannelIndex](https://pkg.go.dev/github.com/cinar/indicator#DefaultCommunityChannelIndex) calculates with the period of 20.
+
+```golang
+result := indicator.DefaultCommunityChannelIndex(high, low, closing)
 ```
 
 #### Double Exponential Moving Average (DEMA)

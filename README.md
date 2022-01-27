@@ -18,6 +18,7 @@ The following list of indicators are currently supported by this package:
 - [Aroon Indicator](trend_indicators.md#aroon-indicator)
 - [Balance of Power (BOP)](trend_indicators.md#balance-of-power-bop)
 - [Chande Forecast Oscillator (CFO)](trend_indicators.md#chande-forecast-oscillator-cfo)
+- [Community Channel Index (CMI)](trend_indicators.md#community-channel-index-cmi)
 - [Double Exponential Moving Average (DEMA)](trend_indicators.md#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](trend_indicators.md#exponential-moving-average-ema)
 - [Moving Average Convergence Divergence (MACD)](trend_indicators.md#moving-average-convergence-divergence-macd)

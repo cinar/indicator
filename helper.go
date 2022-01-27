@@ -253,3 +253,14 @@ func sqrt(values []float64) []float64 {
 
 	return result
 }
+
+// Abs of given values.
+func abs(values []float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i := 0; i < len(values); i++ {
+		result[i] = math.Abs(values[i])
+	}
+
+	return result
+}
