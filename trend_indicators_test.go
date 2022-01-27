@@ -70,6 +70,27 @@ func TestChandeForecastOscillator(t *testing.T) {
 	}
 }
 
+func TestCommunityChannelIndex(t *testing.T) {
+	high := []float64{10, 9, 12, 14, 12}
+	low := []float64{6, 7, 9, 12, 10}
+	closing := []float64{9, 11, 7, 10, 8}
+	expected := []float64{math.NaN(), 133.33, 114.29, 200, 26.32}
+
+	actual := DefaultCommunityChannelIndex(high, low, closing)
+
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 1; i < len(expected); i++ {
+		a := roundDigits(actual[i], 2)
+
+		if a != expected[i] {
+			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
+		}
+	}
+}
+
 func TestEma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 12, 14, 16, 18, 20}
 	ema := []float64{2, 3.333, 5.111, 7.037, 10.346, 12.782, 14.927, 16.976, 18.992}
