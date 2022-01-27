@@ -409,6 +409,24 @@ func Sum(period int, values []float64) []float64 {
 	return result
 }
 
+// Tema calculates the Triple Exponential Moving Average (TEMA).
+//
+// TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
+// EMA1 = EMA(values)
+// EMA2 = EMA(EMA1)
+// EMA3 = EMA(EMA2)
+//
+// Returns tema.
+func Tema(period int, values []float64) []float64 {
+	ema1 := Ema(period, values)
+	ema2 := Ema(period, ema1)
+	ema3 := Ema(period, ema2)
+
+	tema := add(substract(multiplyBy(ema1, 3), multiplyBy(ema2, 3)), ema3)
+
+	return tema
+}
+
 // Trima function calculates the Triangular Moving Average (TRIMA).
 //
 // If period is even:
@@ -433,22 +451,25 @@ func Trima(period int, values []float64) []float64 {
 	return trima
 }
 
-// Tema calculates the Triple Exponential Moving Average (TEMA).
+// Triple Exponential Average (TRIX) indicator is an oscillator used to
+// identify oversold and overbought markets, and it can also be used
+// as a momentum indicator. Like many oscillators, TRIX oscillates
+// around a zero line.
 //
-// TEMA = (3 * EMA1) - (3 * EMA2) + EMA3
-// EMA1 = EMA(values)
-// EMA2 = EMA(EMA1)
-// EMA3 = EMA(EMA2)
+// EMA1 = EMA(period, values)
+// EMA2 = EMA(period, EMA1)
+// EMA3 = EMA(period, EMA2)
+// TRIX = (EMA3 - Previous EMA3) / Previous EMA3
 //
-// Returns tema.
-func Tema(period int, values []float64) []float64 {
+// Returns trix.
+func Trix(period int, values []float64) []float64 {
 	ema1 := Ema(period, values)
 	ema2 := Ema(period, ema1)
 	ema3 := Ema(period, ema2)
+	previous := shiftRightAndFillBy(1, ema3[0], ema3)
+	trix := divide(substract(ema3, previous), previous)
 
-	tema := add(substract(multiplyBy(ema1, 3), multiplyBy(ema2, 3)), ema3)
-
-	return tema
+	return trix
 }
 
 // Typical Price. It is another approximation of average price for each
