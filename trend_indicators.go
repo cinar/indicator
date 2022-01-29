@@ -178,6 +178,24 @@ func Macd(closing []float64) ([]float64, []float64) {
 	return macd, signal
 }
 
+// The Mass Index (MI) uses the high-low range to identify trend reversals
+// based on range expansions.
+//
+// Singe EMA = EMA(9, Highs - Lows)
+// Double EMA = EMA(9, Single EMA)
+// Ratio = Single EMA / Double EMA
+// MI = Sum(25, Ratio)
+//
+// Returns mi.
+func MassIndex(high, low []float64) []float64 {
+	ema1 := Ema(9, substract(high, low))
+	ema2 := Ema(9, ema1)
+	ratio := divide(ema1, ema2)
+	mi := Sum(25, ratio)
+
+	return mi
+}
+
 // Moving Chande Forecast Oscillator calculates based on
 // the given period.
 //

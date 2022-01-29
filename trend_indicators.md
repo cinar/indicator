@@ -9,6 +9,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Community Channel Index (CMI)](#community-channel-index-cmi)
 - [Double Exponential Moving Average (DEMA)](#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+- [Mass Index (MI)](#mass-index-mi)
 - [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 - [Moving Max](#moving-max)
 - [Moving Min](#moving-min)
@@ -122,6 +123,21 @@ The [Ema](https://pkg.go.dev/github.com/cinar/indicator#Ema) function calculates
 
 ```Golang
 result := indicator.Ema(2, []float64{2, 4, 6, 8, 12, 14, 16, 18, 20})
+```
+
+#### Mass Index (MI)
+
+The [MassIndex](https://pkg.go.dev/github.com/cinar/indicator#MassIndex) uses the high-low range to identify trend reversals based on range expansions.
+
+```
+Singe EMA = EMA(9, Highs - Lows)
+Double EMA = EMA(9, Single EMA)
+Ratio = Single EMA / Double EMA
+MI = Sum(25, Ratio)
+```
+
+```Golang
+result := indicator.MassIndex(high, low)
 ```
 
 #### Moving Average Convergence Divergence (MACD)

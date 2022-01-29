@@ -21,6 +21,7 @@ The following list of indicators are currently supported by this package:
 - [Community Channel Index (CMI)](trend_indicators.md#community-channel-index-cmi)
 - [Double Exponential Moving Average (DEMA)](trend_indicators.md#double-exponential-moving-average-dema)
 - [Exponential Moving Average (EMA)](trend_indicators.md#exponential-moving-average-ema)
+- [Mass Index (MI)](trend_indicators.md#mass-index-mi)
 - [Moving Average Convergence Divergence (MACD)](trend_indicators.md#moving-average-convergence-divergence-macd)
 - [Moving Max](trend_indicators.md#moving-max)
 - [Moving Min](trend_indicators.md#moving-min)
