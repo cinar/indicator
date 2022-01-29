@@ -6,7 +6,6 @@
 package indicator
 
 import (
-	"math"
 	"testing"
 )
 
@@ -15,18 +14,7 @@ func TestAbsolutePriceOscillator(t *testing.T) {
 	expected := []float64{0, 0.33, 0, 1.26, 2.26, 2.65, 0.14, 0.22, -0.14, -1.19}
 
 	actual := AbsolutePriceOscillator(2, 5, values)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 2)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
 
 func TestBalanceOfPower(t *testing.T) {
@@ -37,18 +25,7 @@ func TestBalanceOfPower(t *testing.T) {
 	expected := []float64{0.28, -0.33, 2.33, 0.09}
 
 	actual := BalanceOfPower(opening, high, low, closing)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 2)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
 
 func TestChandeForecastOscillator(t *testing.T) {
@@ -56,59 +33,26 @@ func TestChandeForecastOscillator(t *testing.T) {
 	expected := []float64{110, -26, -5.8333, 4.5}
 
 	actual := ChandeForecastOscillator(closing)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(expected); i++ {
-		a := roundDigits(actual[i], 4)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 4), expected)
 }
 
 func TestCommunityChannelIndex(t *testing.T) {
 	high := []float64{10, 9, 12, 14, 12}
 	low := []float64{6, 7, 9, 12, 10}
 	closing := []float64{9, 11, 7, 10, 8}
-	expected := []float64{math.NaN(), 133.33, 114.29, 200, 26.32}
+	expected := []float64{0, 133.33, 114.29, 200, 26.32}
 
 	actual := DefaultCommunityChannelIndex(high, low, closing)
-
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 1; i < len(expected); i++ {
-		a := roundDigits(actual[i], 2)
-
-		if a != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, a, expected[i])
-		}
-	}
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
 
 func TestEma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 12, 14, 16, 18, 20}
-	ema := []float64{2, 3.333, 5.111, 7.037, 10.346, 12.782, 14.927, 16.976, 18.992}
+	expected := []float64{2, 3.333, 5.111, 7.037, 10.346, 12.782, 14.927, 16.976, 18.992}
 	period := 2
 
-	result := Ema(period, values)
-	if len(result) != len(ema) {
-		t.Fatal("result not same size")
-	}
-
-	for i := 0; i < len(result); i++ {
-		actual := math.Round(result[i]*1000) / 1000
-		expected := ema[i]
-
-		if actual != expected {
-			t.Fatalf("result %d actual %f expected %f", i, actual, expected)
-		}
-	}
+	actual := Ema(period, values)
+	testEquals(t, roundDigitsAll(actual, 3), expected)
 }
 
 func TestMassIndex(t *testing.T) {
@@ -116,45 +60,24 @@ func TestMassIndex(t *testing.T) {
 	low := []float64{6, 7, 9, 12, 10}
 	expected := []float64{1, 1.92, 2.83, 3.69, 4.52}
 
-	result := MassIndex(high, low)
-
-	if len(result) != len(expected) {
-		t.Fatal("result not same size")
-	}
-
-	for i := 0; i < len(result); i++ {
-		actual := math.Round(result[i]*100) / 100
-
-		if actual != expected[i] {
-			t.Fatalf("result %d actual %f expected %f", i, actual, expected[i])
-		}
-	}
+	actual := MassIndex(high, low)
+	testEquals(t, roundDigitsAll(actual, 2), expected)
 }
 
 func TestMax(t *testing.T) {
 	values := []float64{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
-	expected := []float64{10, 10, 10, 10, 9, 8, 7, 6, 5}
+	expected := []float64{10, 10, 10, 10, 9, 8, 7, 6, 5, 4}
 
 	actual := Max(4, values)
-
-	for i := 0; i < len(expected); i++ {
-		if actual[i] != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
-		}
-	}
+	testEquals(t, actual, expected)
 }
 
 func TestMin(t *testing.T) {
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	expected := []float64{1, 1, 1, 1, 2, 3, 4, 5, 6}
+	expected := []float64{1, 1, 1, 1, 2, 3, 4, 5, 6, 7}
 
 	actual := Min(4, values)
-
-	for i := 0; i < len(expected); i++ {
-		if actual[i] != expected[i] {
-			t.Fatalf("at %d actual %f expected %f", i, actual[i], expected[i])
-		}
-	}
+	testEquals(t, actual, expected)
 }
 
 func TestParabolicSAR(t *testing.T) {
@@ -219,16 +142,9 @@ func TestParabolicSAR(t *testing.T) {
 	}
 
 	psar, trend := ParabolicSar(high, low, closing)
-	if len(psar) != len(expectedPsar) || len(trend) != len(expectedTrend) {
-		t.Fatal("not the same size")
-	}
+	testEquals(t, roundDigitsAll(psar, 2), expectedPsar)
 
-	for i := 0; i < len(expectedPsar); i++ {
-		currentPsar := math.Round(psar[i]*100) / 100
-		if currentPsar != expectedPsar[i] {
-			t.Fatalf("at %d actual %f expected %f", i, currentPsar, expectedPsar[i])
-		}
-
+	for i := 0; i < len(expectedTrend); i++ {
 		if trend[i] != expectedTrend[i] {
 			t.Fatalf("at %d actual %d expected %d", i, trend[i], expectedTrend[i])
 		}
@@ -273,15 +189,7 @@ func TestSince(t *testing.T) {
 	expected := []int{0, 0, 1, 0, 0, 1, 2, 3, 0, 0}
 
 	actual := Since(values)
-	if len(actual) != len(expected) {
-		t.Fatal("not the same size")
-	}
-
-	for i := 0; i < len(actual); i++ {
-		if actual[i] != expected[i] {
-			t.Fatalf("at %d actual %d expected %d", i, actual[i], expected[i])
-		}
-	}
+	testEqualsInt(t, actual, expected)
 }
 
 func TestSum(t *testing.T) {

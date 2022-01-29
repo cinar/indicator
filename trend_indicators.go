@@ -123,6 +123,7 @@ func CommunityChannelIndex(period int, high, low, closing []float64) []float64 {
 	ma := Sma(period, tp)
 	md := Sma(period, abs(substract(tp, ma)))
 	cci := divide(substract(tp, ma), multiplyBy(md, 0.015))
+	cci[0] = 0
 
 	return cci
 }
