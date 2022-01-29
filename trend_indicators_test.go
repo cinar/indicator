@@ -111,6 +111,26 @@ func TestEma(t *testing.T) {
 	}
 }
 
+func TestMassIndex(t *testing.T) {
+	high := []float64{10, 9, 12, 14, 12}
+	low := []float64{6, 7, 9, 12, 10}
+	expected := []float64{1, 1.92, 2.83, 3.69, 4.52}
+
+	result := MassIndex(high, low)
+
+	if len(result) != len(expected) {
+		t.Fatal("result not same size")
+	}
+
+	for i := 0; i < len(result); i++ {
+		actual := math.Round(result[i]*100) / 100
+
+		if actual != expected[i] {
+			t.Fatalf("result %d actual %f expected %f", i, actual, expected[i])
+		}
+	}
+}
+
 func TestMax(t *testing.T) {
 	values := []float64{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
 	expected := []float64{10, 10, 10, 10, 9, 8, 7, 6, 5}
