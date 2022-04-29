@@ -390,6 +390,32 @@ func DefaultKdj(high, low, closing []float64) ([]float64, []float64, []float64) 
 	return Kdj(9, 3, 3, high, low, closing)
 }
 
+// Rolling Moving Average (RMA).
+//
+// R[0] to R[p-1] is SMA(values)
+// R[p] and after is R[i] = ((R[i-1]*(p-1)) + v[i]) / p
+//
+// Returns r.
+func Rma(period int, values []float64) []float64 {
+	result := make([]float64, len(values))
+	sum := float64(0)
+
+	for i, value := range values {
+		count := i + 1
+
+		if i < period {
+			sum += value
+		} else {
+			sum = (result[i-1] * float64(period-1)) + value
+			count = period
+		}
+
+		result[i] = sum / float64(count)
+	}
+
+	return result
+}
+
 // Simple Moving Average (SMA).
 func Sma(period int, values []float64) []float64 {
 	result := make([]float64, len(values))
