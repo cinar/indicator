@@ -90,8 +90,8 @@ func Rsi(closing []float64) ([]float64, []float64) {
 		}
 	}
 
-	meanGains := Sma(14, gains)
-	meanLosses := Sma(14, losses)
+	meanGains := Rma(14, gains)
+	meanLosses := Rma(14, losses)
 
 	rsi := make([]float64, len(closing))
 	rs := make([]float64, len(closing))
