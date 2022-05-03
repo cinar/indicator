@@ -115,9 +115,9 @@ func StochasticOscillator(high, low, closing []float64) ([]float64, []float64) {
 	checkSameSize(high, low, closing)
 
 	highestHigh14 := Max(14, high)
-	lowestLow14 := Min(15, low)
+	lowestLow14 := Min(14, low)
 
-	k := divide(substract(closing, lowestLow14), multiplyBy(substract(highestHigh14, lowestLow14), float64(100)))
+	k := multiplyBy(divide(substract(closing, lowestLow14), substract(highestHigh14, lowestLow14)), float64(100))
 	d := Sma(3, k)
 
 	return k, d
