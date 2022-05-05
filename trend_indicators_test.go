@@ -175,6 +175,43 @@ func TestKdj(t *testing.T) {
 	testEquals(t, roundDigitsAll(j, 2), expectedJ)
 }
 
+func TestRma(t *testing.T) {
+	values := []float64{
+		0,
+		0.00005,
+		0.000017,
+		0.000262,
+		0.000107,
+		0,
+		0,
+		0.000597,
+		0,
+		0,
+		0.000059,
+		0.000198,
+		0.000073,
+		0,
+		0.000006,
+		0,
+		0.000077,
+		0.000032,
+		0.000112,
+	}
+
+	expected := []float64{
+		0.00009735714286,
+		0.00009083163265,
+		0.00008434365889,
+		0.00008381911183,
+		0.0000801177467,
+		0.00008239505051,
+	}
+	period := 14
+
+	actual := Rma(period, values)
+	testEquals(t, roundDigitsAll(actual[len(actual)-6:], 14), expected)
+}
+
 func TestSma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10}
 	expected := []float64{2, 3, 5, 7, 9}
