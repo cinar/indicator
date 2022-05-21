@@ -64,6 +64,11 @@ RSI = 100 - (100 / (1 + RS))
 ```Golang
 rs, rsi := indicator.Rsi(closing)
 ```
+The [RsiPeriod](https://pkg.go.dev/github.com/cinar/indicator#RsiPeriod) allows to calculate the RSI indicator with a non-standard period.
+
+```Golang
+rs, rsi := indicator.RsiPeriod(period, closing)
+```
 
 #### Stochastic Oscillator
 

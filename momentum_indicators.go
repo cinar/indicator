@@ -81,7 +81,6 @@ func Rsi(closing []float64) ([]float64, []float64) {
 }
 
 // RsiPeriod allows to calculate the RSI indicator with a non-standard period.
-
 func RsiPeriod(period int, closing []float64) ([]float64, []float64) {
 	gains := make([]float64, len(closing))
 	losses := make([]float64, len(closing))
