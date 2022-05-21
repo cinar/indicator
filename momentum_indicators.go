@@ -75,6 +75,14 @@ func IchimokuCloud(high, low, closing []float64) ([]float64, []float64, []float6
 //
 // Returns rs, rsi
 func Rsi(closing []float64) ([]float64, []float64) {
+	rs, rsi := RsiPeriod(14, closing)
+
+	return rs, rsi
+}
+
+// RsiPeriod allows to calculate the RSI indicator with a non-standard period.
+
+func RsiPeriod(period int, closing []float64) ([]float64, []float64) {
 	gains := make([]float64, len(closing))
 	losses := make([]float64, len(closing))
 
@@ -90,8 +98,8 @@ func Rsi(closing []float64) ([]float64, []float64) {
 		}
 	}
 
-	meanGains := Rma(14, gains)
-	meanLosses := Rma(14, losses)
+	meanGains := Rma(period, gains)
+	meanLosses := Rma(period, losses)
 
 	rsi := make([]float64, len(closing))
 	rs := make([]float64, len(closing))
