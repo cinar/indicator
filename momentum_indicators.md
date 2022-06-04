@@ -6,6 +6,8 @@ Momentum indicators measure the speed of movement.
 - [Chaikin Oscillator](#chaikin-oscillator)
 - [Ichimoku Cloud](#ichimoku-cloud)
 - [Relative Strength Index (RSI)](#relative-strength-index-rsi)
+- [RSI 2](#rsi-2)
+- [RSI Period](#rsi-period)
 - [Stochastic Oscillator](#stochastic-oscillator)
 - [Williams R](#williams-r)
 
@@ -64,6 +66,17 @@ RSI = 100 - (100 / (1 + RS))
 ```Golang
 rs, rsi := indicator.Rsi(closing)
 ```
+
+#### RSI 2
+
+The [Rsi2](https://pkg.go.dev/github.com/cinar/indicator#Rsi2) function calculates a calculates a RSI with 2 period that provides a mean-reversion trading strategy. It is developed by Larry Connors.
+
+```Golang
+rs, rsi := indicator.Rsi2(closing)
+```
+
+#### RSI Period
+
 The [RsiPeriod](https://pkg.go.dev/github.com/cinar/indicator#RsiPeriod) allows to calculate the RSI indicator with a non-standard period.
 
 ```Golang

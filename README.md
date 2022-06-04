@@ -44,6 +44,8 @@ The following list of indicators are currently supported by this package:
 - [Chaikin Oscillator](momentum_indicators.md#chaikin-oscillator)
 - [Ichimoku Cloud](momentum_indicators.md#ichimoku-cloud)
 - [Relative Strength Index (RSI)](momentum_indicators.md#relative-strength-index-rsi)
+- [RSI 2](momentum_indicators.md#rsi-2)
+- [RSI Period](momentum_indicators.md#rsi-period)
 - [Stochastic Oscillator](momentum_indicators.md#stochastic-oscillator)
 - [Williams R](momentum_indicators.md#williams-r)
 
@@ -94,6 +96,7 @@ The following list of strategies are currently supported by this package:
 
 - [Awesome Oscillator Strategy](momentum_strategies.md#awesome-oscillator-strategy)
 - [RSI Strategy](momentum_strategies.md#rsi-strategy)
+- [RSI 2 Strategy](momentum_strategies.md#rsi-2-strategy)
 - [Williams R Strategy](momentum_strategies.md#williams-r-strategy)
 
 ### Volatility Strategies

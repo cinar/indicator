@@ -56,6 +56,27 @@ func MakeRsiStrategy(sellAt, buyAt float64) StrategyFunction {
 	}
 }
 
+// RSI 2 strategy. When 2-period RSI moves below 10, it is considered deeply oversold, 
+// and the other way around when moves above 90.
+func Rsi2Strategy(asset Asset) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	_, rsi := Rsi2(asset.Closing)
+
+	for i := 0; i < len(actions); i++ {
+		if rsi[i] < 10 {
+			actions[i] = BUY
+		} else if rsi[i] > 90 {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
+
+
 // Williams R strategy function.
 func WilliamsRStrategy(asset Asset) []Action {
 	actions := make([]Action, len(asset.Date))

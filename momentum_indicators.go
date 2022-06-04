@@ -75,9 +75,15 @@ func IchimokuCloud(high, low, closing []float64) ([]float64, []float64, []float6
 //
 // Returns rs, rsi
 func Rsi(closing []float64) ([]float64, []float64) {
-	rs, rsi := RsiPeriod(14, closing)
+	return RsiPeriod(14, closing)
+}
 
-	return rs, rsi
+// RSI with 2 period, a mean-reversion trading strategy
+// developed by Larry Connors.
+//
+// REturns rs, rsi
+func Rsi2(closing []float64) ([]float64, []float64) {
+	return RsiPeriod(2, closing)
 }
 
 // RsiPeriod allows to calculate the RSI indicator with a non-standard period.
