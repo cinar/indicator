@@ -6,7 +6,7 @@
 package indicator
 
 // Chande forecast oscillator strategy.
-func ChandeForecastOscillatorStrategy(asset Asset) []Action {
+func ChandeForecastOscillatorStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	cfo := ChandeForecastOscillator(asset.Closing)
@@ -25,7 +25,7 @@ func ChandeForecastOscillatorStrategy(asset Asset) []Action {
 }
 
 // Moving chande forecast oscillator strategy function.
-func MovingChandeForecastOscillatorStrategy(period int, asset Asset) []Action {
+func MovingChandeForecastOscillatorStrategy(period int, asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	cfo := MovingChandeForecastOscillator(period, asset.Closing)
@@ -45,7 +45,7 @@ func MovingChandeForecastOscillatorStrategy(period int, asset Asset) []Action {
 
 // Make moving chande forecast oscillator strategy.
 func MakeMovingChandeForecastOscillatorStrategy(period int) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		return MovingChandeForecastOscillatorStrategy(period, asset)
 	}
 }
@@ -57,7 +57,7 @@ func MakeMovingChandeForecastOscillatorStrategy(period int) StrategyFunction {
 // above 80%.
 //
 // Returns actions.
-func KdjStrategy(rPeriod, kPeriod, dPeriod int, asset Asset) []Action {
+func KdjStrategy(rPeriod, kPeriod, dPeriod int, asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	k, d, j := Kdj(rPeriod, kPeriod, dPeriod, asset.High, asset.Low, asset.Closing)
@@ -77,18 +77,18 @@ func KdjStrategy(rPeriod, kPeriod, dPeriod int, asset Asset) []Action {
 
 // Make KDJ strategy function.
 func MakeKdjStrategy(rPeriod, kPeriod, dPeriod int) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		return KdjStrategy(rPeriod, kPeriod, dPeriod, asset)
 	}
 }
 
 // Default KDJ strategy function.
-func DefaultKdjStrategy(asset Asset) []Action {
+func DefaultKdjStrategy(asset *Asset) []Action {
 	return KdjStrategy(9, 3, 3, asset)
 }
 
 // MACD strategy.
-func MacdStrategy(asset Asset) []Action {
+func MacdStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	macd, signal := Macd(asset.Closing)
@@ -108,7 +108,7 @@ func MacdStrategy(asset Asset) []Action {
 
 // Trend strategy. Buy when trending up for count times,
 // sell when trending down for count times.
-func TrendStrategy(asset Asset, count uint) []Action {
+func TrendStrategy(asset *Asset, count uint) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	if len(actions) == 0 {
@@ -151,7 +151,7 @@ func TrendStrategy(asset Asset, count uint) []Action {
 
 // Make trend strategy function.
 func MakeTrendStrategy(count uint) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		return TrendStrategy(asset, count)
 	}
 }

@@ -30,10 +30,10 @@ type Asset struct {
 
 // Strategy function. It takes an Asset and returns
 // actions for each row.
-type StrategyFunction func(Asset) []Action
+type StrategyFunction func(*Asset) []Action
 
 // Buy and hold strategy. Buys at the beginning and holds.
-func BuyAndHoldStrategy(asset Asset) []Action {
+func BuyAndHoldStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	for i := 0; i < len(actions); i++ {

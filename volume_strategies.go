@@ -6,7 +6,7 @@
 package indicator
 
 // Money flow index strategy.
-func MoneyFlowIndexStrategy(asset Asset) []Action {
+func MoneyFlowIndexStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	moneyFlowIndex := DefaultMoneyFlowIndex(
@@ -27,7 +27,7 @@ func MoneyFlowIndexStrategy(asset Asset) []Action {
 }
 
 // Force index strategy function.
-func ForceIndexStrategy(asset Asset) []Action {
+func ForceIndexStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	forceIndex := DefaultForceIndex(asset.Closing, asset.Volume)
@@ -46,7 +46,7 @@ func ForceIndexStrategy(asset Asset) []Action {
 }
 
 // Ease of movement strategy.
-func EaseOfMovementStrategy(asset Asset) []Action {
+func EaseOfMovementStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	emv := DefaultEaseOfMovement(asset.High, asset.Low, asset.Volume)
@@ -65,7 +65,7 @@ func EaseOfMovementStrategy(asset Asset) []Action {
 }
 
 // Volume weighted average price strategy function.
-func VolumeWeightedAveragePriceStrategy(asset Asset) []Action {
+func VolumeWeightedAveragePriceStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	vwap := DefaultVolumeWeightedAveragePrice(asset.Closing, asset.Volume)
@@ -84,7 +84,7 @@ func VolumeWeightedAveragePriceStrategy(asset Asset) []Action {
 }
 
 // Negative volume index strategy.
-func NegativeVolumeIndexStrategy(asset Asset) []Action {
+func NegativeVolumeIndexStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	nvi := NegativeVolumeIndex(asset.Closing, asset.Volume)
@@ -104,7 +104,7 @@ func NegativeVolumeIndexStrategy(asset Asset) []Action {
 }
 
 // Chaikin money flow strategy.
-func ChaikinMoneyFlowStrategy(asset Asset) []Action {
+func ChaikinMoneyFlowStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	cmf := ChaikinMoneyFlow(
