@@ -31,7 +31,7 @@ The [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFun
 
 ```golang
 // Strategy function.
-type StrategyFunction func(Asset) []Action
+type StrategyFunction func(*Asset) []Action
 ```
 
 #### Action
