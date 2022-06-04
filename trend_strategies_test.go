@@ -11,7 +11,7 @@ import (
 )
 
 func TestTrendStrategy(t *testing.T) {
-	asset := Asset{
+	asset := &Asset{
 		Date: []time.Time{
 			time.Now(), time.Now(), time.Now(), time.Now(), time.Now(),
 		},

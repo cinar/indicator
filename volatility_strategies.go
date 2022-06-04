@@ -6,7 +6,7 @@
 package indicator
 
 // Bollinger bands strategy function.
-func BollingerBandsStrategy(asset Asset) []Action {
+func BollingerBandsStrategy(asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	_, upperBand, lowerBand := BollingerBands(asset.Closing)
@@ -25,7 +25,7 @@ func BollingerBandsStrategy(asset Asset) []Action {
 }
 
 // Projection oscillator strategy function.
-func ProjectionOscillatorStrategy(period, smooth int, asset Asset) []Action {
+func ProjectionOscillatorStrategy(period, smooth int, asset *Asset) []Action {
 	actions := make([]Action, len(asset.Date))
 
 	po, spo := ProjectionOscillator(
@@ -50,7 +50,7 @@ func ProjectionOscillatorStrategy(period, smooth int, asset Asset) []Action {
 
 // Make projection oscillator strategy.
 func MakeProjectionOscillatorStrategy(period, smooth int) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		return ProjectionOscillatorStrategy(period, smooth, asset)
 	}
 }

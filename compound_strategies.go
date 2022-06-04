@@ -10,7 +10,7 @@ package indicator
 // if all strategies are returning the same action, otherwise it
 // will return a HOLD action.
 func AllStrategies(strategies ...StrategyFunction) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		actions := RunStrategies(asset, strategies...)
 
 		for i := 1; i < len(actions); i++ {
@@ -35,7 +35,7 @@ func AllStrategies(strategies ...StrategyFunction) StrategyFunction {
 //
 // It returns HOLD otherwise.
 func SeparateStategies(buyStrategy, sellStrategy StrategyFunction) StrategyFunction {
-	return func(asset Asset) []Action {
+	return func(asset *Asset) []Action {
 		actions := make([]Action, len(asset.Date))
 
 		buyActions := buyStrategy(asset)
@@ -57,7 +57,7 @@ func SeparateStategies(buyStrategy, sellStrategy StrategyFunction) StrategyFunct
 
 // The RunStrategies takes one or more StrategyFunction and returns
 // the acitions for each.
-func RunStrategies(asset Asset, strategies ...StrategyFunction) [][]Action {
+func RunStrategies(asset *Asset, strategies ...StrategyFunction) [][]Action {
 	actions := make([][]Action, len(strategies))
 
 	for i := 0; i < len(strategies); i++ {
@@ -68,7 +68,7 @@ func RunStrategies(asset Asset, strategies ...StrategyFunction) [][]Action {
 }
 
 // MACD and RSI strategy.
-func MacdAndRsiStrategy(asset Asset) []Action {
+func MacdAndRsiStrategy(asset *Asset) []Action {
 	strategy := AllStrategies(MacdStrategy, DefaultRsiStrategy)
 	return strategy(asset)
 }
