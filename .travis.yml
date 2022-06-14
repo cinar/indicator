@@ -4,7 +4,7 @@ go:
 - 1.14
 
 before-install:
-- go install github.com/mattn/goveralls@v0.0.11
+- go install github.com/mattn/goveralls@0.0.11
 
 script:
 - $GOPATH/bin/goveralls -service=travis-ci
