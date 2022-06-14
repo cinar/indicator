@@ -1,4 +1,10 @@
 language: go
 
 go:
-- 1.16.5
+- 1.14
+
+before-install:
+- go install github.com/mattn/goveralls@latest
+
+script:
+- $GOPATH/bin/goveralls -service=travis-ci
