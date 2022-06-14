@@ -1,6 +1,7 @@
 [![GoDoc](https://godoc.org/github.com/cinar/indicator?status.svg)](https://godoc.org/github.com/cinar/indicator)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.com/cinar/indicator.svg?branch=master)](https://travis-ci.com/cinar/indicator)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator)
 
 # Indicator Go
 
