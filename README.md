@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.com/cinar/indicator.svg?branch=master)](https://travis-ci.com/cinar/indicator)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator)
-[![Coverage Status](https://coveralls.io/repos/github/cinar/indicator/badge.svg?branch=master)](https://coveralls.io/github/cinar/indicator?branch=master)
+[![codecov](https://codecov.io/gh/cinar/indicator/branch/master/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
 
 # Indicator Go
 
