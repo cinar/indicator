@@ -2,9 +2,3 @@ language: go
 
 go:
 - tip
-
-before-install:
-- go install github.com/mattn/goveralls@latest
-
-script:
-- $GOPATH/bin/goveralls -service=travis-ci
