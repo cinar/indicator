@@ -15,7 +15,7 @@ func AwesomeOscillator(low, high []float64) []float64 {
 	medianPrice := divideBy(add(low, high), float64(2))
 	sma5 := Sma(5, medianPrice)
 	sma34 := Sma(34, medianPrice)
-	ao := substract(sma5, sma34)
+	ao := subtract(sma5, sma34)
 
 	return ao
 }
@@ -31,7 +31,7 @@ func AwesomeOscillator(low, high []float64) []float64 {
 // Returns co, ad.
 func ChaikinOscillator(fastPeriod, slowPeriod int, low, high, closing []float64, volume []int64) ([]float64, []float64) {
 	ad := AccumulationDistribution(high, low, closing, volume)
-	co := substract(Ema(fastPeriod, ad), Ema(slowPeriod, ad))
+	co := subtract(Ema(fastPeriod, ad), Ema(slowPeriod, ad))
 
 	return co, ad
 }
@@ -130,7 +130,7 @@ func StochasticOscillator(high, low, closing []float64) ([]float64, []float64) {
 	highestHigh14 := Max(14, high)
 	lowestLow14 := Min(14, low)
 
-	k := multiplyBy(divide(substract(closing, lowestLow14), substract(highestHigh14, lowestLow14)), float64(100))
+	k := multiplyBy(divide(subtract(closing, lowestLow14), subtract(highestHigh14, lowestLow14)), float64(100))
 	d := Sma(3, k)
 
 	return k, d

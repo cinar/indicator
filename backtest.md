@@ -33,7 +33,7 @@ normalized := indicator.NormalizeActions(actions)
 
 #### Normalize Gains
 
-The [NormalizeGains](https://pkg.go.dev/github.com/cinar/indicator#NormalizeGains) takes the given list of prices, calculates the price gains, substracts it from the given list of gains.
+The [NormalizeGains](https://pkg.go.dev/github.com/cinar/indicator#NormalizeGains) takes the given list of prices, calculates the price gains, subtracts it from the given list of gains.
 
 ```golang
 normalizedGains := indicator.NormalizeGains(prices, gains)
