@@ -123,7 +123,7 @@ func DefaultForceIndex(closing []float64, volume []int64) []float64 {
 // Returns ease of movement values.
 func EaseOfMovement(period int, high, low []float64, volume []int64) []float64 {
 	distanceMoved := diff(divideBy(add(high, low), 2), 1)
-	boxRatio := divide(divideBy(asFloat64(volume), float64(100000000)), substract(high, low))
+	boxRatio := divide(divideBy(asFloat64(volume), float64(100000000)), subtract(high, low))
 	emv := Sma(period, divide(distanceMoved, boxRatio))
 	return emv
 }
@@ -141,7 +141,7 @@ func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
 // Returns volume price trend values.
 func VolumePriceTrend(closing []float64, volume []int64) []float64 {
 	previousClosing := shiftRightAndFillBy(1, closing[0], closing)
-	vpt := multiply(asFloat64(volume), divide(substract(closing, previousClosing), previousClosing))
+	vpt := multiply(asFloat64(volume), divide(subtract(closing, previousClosing), previousClosing))
 	return Sum(len(vpt), vpt)
 }
 
@@ -202,8 +202,8 @@ func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
 //
 func ChaikinMoneyFlow(high, low, closing []float64, volume []int64) []float64 {
 	moneyFlowMultiplier := divide(
-		substract(substract(closing, low), substract(high, closing)),
-		substract(high, low))
+		subtract(subtract(closing, low), subtract(high, closing)),
+		subtract(high, low))
 
 	moneyFlowVolume := multiply(moneyFlowMultiplier, asFloat64(volume))
 

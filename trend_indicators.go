@@ -37,7 +37,7 @@ const (
 func AbsolutePriceOscillator(fastPeriod, slowPeriod int, values []float64) []float64 {
 	fast := Ema(fastPeriod, values)
 	slow := Ema(slowPeriod, values)
-	apo := substract(fast, slow)
+	apo := subtract(fast, slow)
 
 	return apo
 }
@@ -86,7 +86,7 @@ func Aroon(high, low []float64) ([]float64, []float64) {
 //
 // Returns bop.
 func BalanceOfPower(opening, high, low, closing []float64) []float64 {
-	bop := divide(substract(closing, opening), substract(high, low))
+	bop := divide(subtract(closing, opening), subtract(high, low))
 	return bop
 }
 
@@ -104,7 +104,7 @@ func ChandeForecastOscillator(closing []float64) []float64 {
 	x := generateNumbers(0, float64(len(closing)), 1)
 	r := LinearRegressionUsingLeastSquare(x, closing)
 
-	cfo := multiplyBy(divide(substract(closing, r), closing), 100)
+	cfo := multiplyBy(divide(subtract(closing, r), closing), 100)
 
 	return cfo
 }
@@ -121,8 +121,8 @@ func ChandeForecastOscillator(closing []float64) []float64 {
 func CommunityChannelIndex(period int, high, low, closing []float64) []float64 {
 	tp, _ := TypicalPrice(low, high, closing)
 	ma := Sma(period, tp)
-	md := Sma(period, abs(substract(tp, ma)))
-	cci := divide(substract(tp, ma), multiplyBy(md, 0.015))
+	md := Sma(period, abs(subtract(tp, ma)))
+	cci := divide(subtract(tp, ma), multiplyBy(md, 0.015))
 	cci[0] = 0
 
 	return cci
@@ -142,7 +142,7 @@ func Dema(period int, values []float64) []float64 {
 	ema1 := Ema(period, values)
 	ema2 := Ema(period, ema1)
 
-	dema := substract(multiplyBy(ema1, 2), ema2)
+	dema := subtract(multiplyBy(ema1, 2), ema2)
 
 	return dema
 }
@@ -173,7 +173,7 @@ func Ema(period int, values []float64) []float64 {
 func Macd(closing []float64) ([]float64, []float64) {
 	ema12 := Ema(12, closing)
 	ema26 := Ema(26, closing)
-	macd := substract(ema12, ema26)
+	macd := subtract(ema12, ema26)
 	signal := Ema(9, macd)
 
 	return macd, signal
@@ -189,7 +189,7 @@ func Macd(closing []float64) ([]float64, []float64) {
 //
 // Returns mi.
 func MassIndex(high, low []float64) []float64 {
-	ema1 := Ema(9, substract(high, low))
+	ema1 := Ema(9, subtract(high, low))
 	ema2 := Ema(9, ema1)
 	ratio := divide(ema1, ema2)
 	mi := Sum(25, ratio)
@@ -214,7 +214,7 @@ func MovingChandeForecastOscillator(period int, closing []float64) []float64 {
 	x := generateNumbers(0, float64(len(closing)), 1)
 	r := MovingLinearRegressionUsingLeastSquare(period, x, closing)
 
-	cfo := multiplyBy(divide(substract(closing, r), closing), 100)
+	cfo := multiplyBy(divide(subtract(closing, r), closing), 100)
 
 	return cfo
 }
@@ -348,7 +348,7 @@ func ParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
 //
 // Returns qs.
 func Qstick(period int, opening, closing []float64) []float64 {
-	qs := Sma(period, substract(closing, opening))
+	qs := Sma(period, subtract(closing, opening))
 	return qs
 }
 
@@ -373,11 +373,11 @@ func Kdj(rPeriod, kPeriod, dPeriod int, high, low, closing []float64) ([]float64
 	highest := Max(rPeriod, high)
 	lowest := Min(rPeriod, low)
 
-	rsv := multiplyBy(divide(substract(closing, lowest), substract(highest, lowest)), 100)
+	rsv := multiplyBy(divide(subtract(closing, lowest), subtract(highest, lowest)), 100)
 
 	k := Sma(kPeriod, rsv)
 	d := Sma(dPeriod, k)
-	j := substract(multiplyBy(k, 3), multiplyBy(d, 2))
+	j := subtract(multiplyBy(k, 3), multiplyBy(d, 2))
 
 	return k, d, j
 }
@@ -490,7 +490,7 @@ func Tema(period int, values []float64) []float64 {
 	ema2 := Ema(period, ema1)
 	ema3 := Ema(period, ema2)
 
-	tema := add(substract(multiplyBy(ema1, 3), multiplyBy(ema2, 3)), ema3)
+	tema := add(subtract(multiplyBy(ema1, 3), multiplyBy(ema2, 3)), ema3)
 
 	return tema
 }
@@ -535,7 +535,7 @@ func Trix(period int, values []float64) []float64 {
 	ema2 := Ema(period, ema1)
 	ema3 := Ema(period, ema2)
 	previous := shiftRightAndFillBy(1, ema3[0], ema3)
-	trix := divide(substract(ema3, previous), previous)
+	trix := divide(subtract(ema3, previous), previous)
 
 	return trix
 }

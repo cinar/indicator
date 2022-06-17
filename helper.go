@@ -90,15 +90,15 @@ func addBy(values []float64, addition float64) []float64 {
 	return result
 }
 
-// Substract values2 from values1.
-func substract(values1, values2 []float64) []float64 {
-	substract := multiplyBy(values2, float64(-1))
-	return add(values1, substract)
+// subtract values2 from values1.
+func subtract(values1, values2 []float64) []float64 {
+	subtract := multiplyBy(values2, float64(-1))
+	return add(values1, subtract)
 }
 
 // Difference between current and before values.
 func diff(values []float64, before int) []float64 {
-	return substract(values, shiftRight(before, values))
+	return subtract(values, shiftRight(before, values))
 }
 
 // Percent difference between current and before values.

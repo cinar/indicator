@@ -69,10 +69,10 @@ func ApplyActions(prices []float64, actions []Action) []float64 {
 }
 
 // The NormalizeGains takes the given list of prices, calculates the
-// price gains, substracts it from the given list of gains.
+// price gains, subtracts it from the given list of gains.
 func NormalizeGains(prices, gains []float64) []float64 {
 	priceGains := Sum(len(prices), percentDiff(prices, 1))
-	normalized := substract(gains, priceGains)
+	normalized := subtract(gains, priceGains)
 
 	return normalized
 }

@@ -20,7 +20,7 @@ import (
 func AccelerationBands(high, low, closing []float64) ([]float64, []float64, []float64) {
 	checkSameSize(high, low, closing)
 
-	k := divide(substract(high, low), add(high, low))
+	k := divide(subtract(high, low), add(high, low))
 
 	upperBand := Sma(20, multiply(high, addBy(multiplyBy(k, 4), 1)))
 	middleBand := Sma(20, closing)
@@ -86,7 +86,7 @@ func BollingerBands(closing []float64) ([]float64, []float64, []float64) {
 
 	middleBand := Sma(20, closing)
 	upperBand := add(middleBand, std2)
-	lowerBand := substract(middleBand, std2)
+	lowerBand := subtract(middleBand, std2)
 
 	return middleBand, upperBand, lowerBand
 }
@@ -159,7 +159,7 @@ func ProjectionOscillator(period, smooth int, high, low, closing []float64) ([]f
 	pu := Max(period, vHigh)
 	pl := Min(period, vLow)
 
-	po := divide(multiplyBy(substract(closing, pl), 100), substract(pu, pl))
+	po := divide(multiplyBy(subtract(closing, pl), 100), subtract(pu, pl))
 	spo := Ema(smooth, po)
 
 	return po, spo
@@ -177,7 +177,7 @@ func ProjectionOscillator(period, smooth int, high, low, closing []float64) ([]f
 // Returns ui.
 func UlcerIndex(period int, closing []float64) []float64 {
 	highClosing := Max(period, closing)
-	percentageDrawdown := multiplyBy(divide(substract(closing, highClosing), highClosing), 100)
+	percentageDrawdown := multiplyBy(divide(subtract(closing, highClosing), highClosing), 100)
 	squaredAverage := Sma(period, multiply(percentageDrawdown, percentageDrawdown))
 	ui := sqrt(squaredAverage)
 
@@ -224,7 +224,7 @@ func KeltnerChannel(period int, high, low, closing []float64) ([]float64, []floa
 
 	middleLine := Ema(period, closing)
 	upperBand := add(middleLine, atr2)
-	lowerBand := substract(middleLine, atr2)
+	lowerBand := subtract(middleLine, atr2)
 
 	return upperBand, middleLine, lowerBand
 }
