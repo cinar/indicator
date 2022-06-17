@@ -1,8 +1,9 @@
 [![GoDoc](https://godoc.org/github.com/cinar/indicator?status.svg)](https://godoc.org/github.com/cinar/indicator)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/cinar/indicator.svg?branch=master)](https://travis-ci.com/cinar/indicator)
+[![Build Status](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/cinar/indicator/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator)
 [![codecov](https://codecov.io/gh/cinar/indicator/branch/master/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
+[![CodeQL Analysis](https://github.com/cinar/indicator/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cinar/indicator/actions/workflows/codeql-analysis.yml)
 
 # Indicator Go
 
