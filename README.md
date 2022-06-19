@@ -46,6 +46,7 @@ The following list of indicators are currently supported by this package:
 - [Awesome Oscillator](momentum_indicators.md#awesome-oscillator)
 - [Chaikin Oscillator](momentum_indicators.md#chaikin-oscillator)
 - [Ichimoku Cloud](momentum_indicators.md#ichimoku-cloud)
+- [Percentage Volume Oscillator (PVO)](momentum_indicators.md#percentage-volume-oscillator-pvo)
 - [Relative Strength Index (RSI)](momentum_indicators.md#relative-strength-index-rsi)
 - [RSI 2](momentum_indicators.md#rsi-2)
 - [RSI Period](momentum_indicators.md#rsi-period)
