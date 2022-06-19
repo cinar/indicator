@@ -67,6 +67,33 @@ func IchimokuCloud(high, low, closing []float64) ([]float64, []float64, []float6
 	return conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine
 }
 
+// Percentage Volume Oscillator (PVO). It is a momentum oscillator for the volume.
+// It is used to indicate the ups and downs based on the volume. A breakout is
+// confirmed when PVO is positive.
+//
+// PVO = ((EMA(fastPeriod, volumes) - EMA(slowPeriod, volumes)) / EMA(longPeriod, volumes)) * 100
+// Signal = EMA(9, PVO)
+// Histogram = PVO - Signal
+//
+// Returns pvo, signal, histogram
+func PercentageVolumeOscillator(fastPeriod, slowPeriod, signalPeriod int, volume []int64) ([]float64, []float64, []float64) {
+	volumeAsFloat := asFloat64(volume)
+	fastEma := Ema(fastPeriod, volumeAsFloat)
+	slowEma := Ema(slowPeriod, volumeAsFloat)
+	pvo := multiplyBy(divide(subtract(fastEma, slowEma), slowEma), 100)
+	signal := Ema(signalPeriod, pvo)
+	histogram := subtract(pvo, signal)
+
+	return pvo, signal, histogram
+}
+
+// Default Percentage Volume Oscillator calculates it with the default periods of 12, 26, 9.
+//
+// Returns pvo, signal, histogram
+func DefaultPercentageVolumeOscillator(volume []int64) ([]float64, []float64, []float64) {
+	return PercentageVolumeOscillator(12, 26, 9, volume)
+}
+
 // Relative Strength Index (RSI). It is a momentum indicator that measures the magnitude
 // of recent price changes to evaluate overbought and oversold conditions.
 //
