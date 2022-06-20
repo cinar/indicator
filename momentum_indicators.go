@@ -67,6 +67,32 @@ func IchimokuCloud(high, low, closing []float64) ([]float64, []float64, []float6
 	return conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine
 }
 
+// Percentage Price Oscillator (PPO). It is a momentum oscillator for the price.
+// It is used to indicate the ups and downs based on the price. A breakout is
+// confirmed when PPO is positive.
+//
+// PPO = ((EMA(fastPeriod, prices) - EMA(slowPeriod, prices)) / EMA(longPeriod, prices)) * 100
+// Signal = EMA(9, PPO)
+// Histogram = PPO - Signal
+//
+// Returns ppo, signal, histogram
+func PercentagePriceOscillator(fastPeriod, slowPeriod, signalPeriod int, price []float64) ([]float64, []float64, []float64) {
+	fastEma := Ema(fastPeriod, price)
+	slowEma := Ema(slowPeriod, price)
+	ppo := multiplyBy(divide(subtract(fastEma, slowEma), slowEma), 100)
+	signal := Ema(signalPeriod, ppo)
+	histogram := subtract(ppo, signal)
+
+	return ppo, signal, histogram
+}
+
+// Default Percentage Price Oscillator calculates it with the default periods of 12, 26, 9.
+//
+// Returns ppo, signal, histogram
+func DefaultPercentagePriceOscillator(price []float64) ([]float64, []float64, []float64) {
+	return PercentagePriceOscillator(12, 26, 9, price)
+}
+
 // Percentage Volume Oscillator (PVO). It is a momentum oscillator for the volume.
 // It is used to indicate the ups and downs based on the volume. A breakout is
 // confirmed when PVO is positive.

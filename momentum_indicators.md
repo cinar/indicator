@@ -5,6 +5,7 @@ Momentum indicators measure the speed of movement.
 - [Awesome Oscillator](#awesome-oscillator)
 - [Chaikin Oscillator](#chaikin-oscillator)
 - [Ichimoku Cloud](#ichimoku-cloud)
+- [Percentage Price Oscillator (PPO)](#percentage-price-oscillator-ppo)
 - [Percentage Volume Oscillator (PVO)](#percentage-volume-oscillator-pvo)
 - [Relative Strength Index (RSI)](#relative-strength-index-rsi)
 - [RSI 2](#rsi-2)
@@ -53,6 +54,31 @@ Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
 
 ```Golang
 conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingLine := indicator.IchimokuCloud(high, low, closing)
+```
+
+#### Percentage Price Oscillator (PPO)
+
+The [PercentagePriceOscillator](https://pkg.go.dev/github.com/cinar/indicator#PercentagePriceOscillator) function calculates a momentum oscillator for the price It is used to indicate the ups and downs based on the price. A breakout is confirmed when PPO is positive.
+
+```
+PPO = ((EMA(fastPeriod, prices) - EMA(slowPeriod, prices)) / EMA(longPeriod, prices)) * 100
+Signal = EMA(9, PPO)
+Histogram = PPO - Signal
+```
+
+```Golang
+ppo, signal, histogram := indicator.PercentagePriceOscillator(
+    fastPeriod, 
+    slowPeriod, 
+    signalPeriod, 
+    price
+)
+```
+
+The [DefaultPercentagePriceOscillator](https://pkg.go.dev/github.com/cinar/indicator#DefaultPercentagePriceOscillator) function calculates it with the default periods of 12, 26, 9.
+
+```Golang
+ppo, signal, histogram := indicator.DefaultPercentagePriceOscillator(price)
 ```
 
 #### Percentage Volume Oscillator (PVO)
