@@ -118,14 +118,15 @@ func ChandelierExit(high, low, closing []float64) ([]float64, []float64) {
 func Std(period int, values, ma []float64) []float64 {
 	result := make([]float64, len(values))
 
-	for i := range values {
-		result[i] = 0.0
-		if i >= period-1 {
-			sum := float64(0)
-			for k := i - (period - 1); k <= i; k++ {
-				sum += (values[k] - ma[i]) * (values[k] - ma[i])
-			}
-			result[i] = math.Sqrt(sum / float64(period))
+	sum2 := 0.0
+	for i, v := range values {
+		sum2 += v * v
+		if i < period-1 {
+			result[i] = 0.0
+		} else {
+			result[i] = math.Sqrt(sum2/float64(period) - ma[i]*ma[i])
+			w := values[i-(period-1)]
+			sum2 -= w * w
 		}
 	}
 
