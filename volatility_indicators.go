@@ -83,7 +83,7 @@ func BollingerBandWidth(middleBand, upperBand, lowerBand []float64) ([]float64, 
 func BollingerBands(closing []float64) ([]float64, []float64, []float64) {
 	middleBand := Sma(20, closing)
 
-	std := Std(20, closing, middleBand)
+	std := StdFromSma(20, closing, middleBand)
 	std2 := multiplyBy(std, 2)
 
 	upperBand := add(middleBand, std2)
@@ -115,7 +115,12 @@ func ChandelierExit(high, low, closing []float64) ([]float64, []float64) {
 }
 
 // Standard deviation.
-func Std(period int, values, ma []float64) []float64 {
+func Std(period int, values []float64) []float64 {
+	return StdFromSma(period, values, Sma(period, values))
+}
+
+// Standard deviation from the given SMA.
+func StdFromSma(period int, values, sma []float64) []float64 {
 	result := make([]float64, len(values))
 
 	sum2 := 0.0
@@ -124,7 +129,7 @@ func Std(period int, values, ma []float64) []float64 {
 		if i < period-1 {
 			result[i] = 0.0
 		} else {
-			result[i] = math.Sqrt(sum2/float64(period) - ma[i]*ma[i])
+			result[i] = math.Sqrt(sum2/float64(period) - sma[i]*sma[i])
 			w := values[i-(period-1)]
 			sum2 -= w * w
 		}
