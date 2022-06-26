@@ -49,7 +49,16 @@ func TestStd(t *testing.T) {
 	expected := []float64{0, 1, 1, 1, 2, 1, 1, 1, 1}
 	period := 2
 
-	actual := Std(period, values, Sma(period, values))
+	actual := Std(period, values)
+	testEquals(t, roundDigitsAll(actual, 3), expected)
+}
+
+func TestStdFromSma(t *testing.T) {
+	values := []float64{2, 4, 6, 8, 12, 14, 16, 18, 20}
+	expected := []float64{0, 1, 1, 1, 2, 1, 1, 1, 1}
+	period := 2
+
+	actual := StdFromSma(period, values, Sma(period, values))
 	testEquals(t, roundDigitsAll(actual, 3), expected)
 }
 
