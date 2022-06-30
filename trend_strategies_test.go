@@ -68,6 +68,37 @@ func TestVwmaStrategy(t *testing.T) {
 
 	period := 3
 
-	actual := VwmaStrategy(asset, period)
+	strategy := MakeVwmaStrategy(period)
+	actual := strategy(asset)
+	testEqualsAction(t, actual, expected)
+}
+
+func TestDefaultVwmaStrategy(t *testing.T) {
+	asset := &Asset{
+		Date: []time.Time{
+			time.Now(), time.Now(), time.Now(), time.Now(), time.Now(),
+		},
+		Opening: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Closing: []float64{
+			20, 21, 21, 19, 16,
+		},
+		High: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Low: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Volume: []int64{
+			100, 50, 40, 50, 100,
+		},
+	}
+
+	expected := []Action{
+		HOLD, SELL, SELL, SELL, SELL,
+	}
+
+	actual := DefaultVwmaStrategy(asset)
 	testEqualsAction(t, actual, expected)
 }
