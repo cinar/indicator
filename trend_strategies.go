@@ -155,3 +155,39 @@ func MakeTrendStrategy(count uint) StrategyFunction {
 		return TrendStrategy(asset, count)
 	}
 }
+
+// The VwmaStrategy function uses SMA and VWMA indicators to provide
+// a BUY action when VWMA is above SMA, and a SELL signal when VWMA
+// is below SMA, a HOLD signal otherwse.
+//
+// Returns actions
+func VwmaStrategy(asset *Asset, period int) []Action {
+	actions := make([]Action, len(asset.Date))
+
+	sma := Sma(period, asset.Closing)
+	vwma := Vwma(period, asset.Closing, asset.Volume)
+
+	for i := 0; i < len(actions); i++ {
+		if vwma[i] > sma[i] {
+			actions[i] = BUY
+		} else if vwma[i] < sma[i] {
+			actions[i] = SELL
+		} else {
+			actions[i] = HOLD
+		}
+	}
+
+	return actions
+}
+
+// Makes a VWMA strategy for the given period.
+func MakeVwmaStrategy(period int) StrategyFunction {
+	return func(asset *Asset) []Action {
+		return VwmaStrategy(asset, period)
+	}
+}
+
+// Default VWMA strategy function.
+func DefaultVwmaStrategy(asset *Asset) []Action {
+	return VwmaStrategy(asset, 20)
+}

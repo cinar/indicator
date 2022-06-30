@@ -24,6 +24,7 @@ Trend indicators measure the direction and strength of a trend.
 - [Triangular Moving Average (TRIMA)](#triangular-moving-average-trima)
 - [Triple Exponential Average (TRIX)](#triple-exponential-average-trix)
 - [Typical Price](#typical-price)
+- [Volume Weighted Moving Average (VWMA)](#volume-weighted-moving-average-vwma)
 - [Vortex Indicator](#vortex-indicator)
 
 #### Absolute Price Oscillator (APO)
@@ -335,6 +336,17 @@ Typical Price = (High + Low + Closing) / 3
 
 ```Golang
 ta, sma20 := indicator.TypicalPrice(high, low, closing)
+```
+#### Volume Weighted Moving Average (VWMA)
+
+The [Vwma](https://pkg.go.dev/github.com/cinar/indicator#Vwma) function calculates the Volume Weighted Moving Average (VWMA) averaging the price data with an emphasis on volume, meaning areas with higher volume will have a greater weight.
+
+```
+VWMA = Sum(Price * Volume) / Sum(Volume) for a given Period.
+```
+
+```Golang
+vwma := indicator.Vwma(period, closing, volume)
 ```
 
 #### Vortex Indicator

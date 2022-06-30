@@ -619,3 +619,22 @@ func Vortex(high, low, closing []float64) ([]float64, []float64) {
 
 	return plusVi, minusVi
 }
+
+// The Vwma function calculates the Volume Weighted Moving Average (VWMA)
+// averaging the price data with an emphasis on volume, meaning areas
+// with higher volume will have a greater weight.
+//
+// VWMA = Sum(Price * Volume) / Sum(Volume) for a given Period.
+//
+// Returns vwma
+func Vwma(period int, closing []float64, volume []int64) []float64 {
+	floatVolume := asFloat64(volume)
+	vwma := divide(Sum(period, multiply(closing, floatVolume)), Sum(period, floatVolume))
+
+	return vwma
+}
+
+// The DefaultVwma function calculates VWMA with a period of 20.
+func DefaultVwma(closing []float64, volume []int64) []float64 {
+	return Vwma(20, closing, volume)
+}

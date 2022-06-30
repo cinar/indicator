@@ -36,11 +36,38 @@ func TestTrendStrategy(t *testing.T) {
 		HOLD, HOLD, BUY, HOLD, SELL,
 	}
 
-	actions := TrendStrategy(asset, 2)
+	actual := TrendStrategy(asset, 2)
+	testEqualsAction(t, actual, expected)
+}
 
-	for i := 0; i < len(expected); i++ {
-		if actions[i] != expected[i] {
-			t.Fatalf("at %d actual %d expected %d", i, actions[i], expected[i])
-		}
+func TestVwmaStrategy(t *testing.T) {
+	asset := &Asset{
+		Date: []time.Time{
+			time.Now(), time.Now(), time.Now(), time.Now(), time.Now(),
+		},
+		Opening: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Closing: []float64{
+			20, 21, 21, 19, 16,
+		},
+		High: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Low: []float64{
+			0, 0, 0, 0, 0,
+		},
+		Volume: []int64{
+			100, 50, 40, 50, 100,
+		},
 	}
+
+	expected := []Action{
+		HOLD, SELL, SELL, SELL, SELL,
+	}
+
+	period := 3
+
+	actual := VwmaStrategy(asset, period)
+	testEqualsAction(t, actual, expected)
 }
