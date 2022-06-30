@@ -6,6 +6,7 @@ Trend strategies generate signals based on a trend indicator.
 - [MACD Strategy](#macd-strategy)
 - [KDJ Strategy](#kdj-strategy)
 - [Trend Strategy](#trend-strategy)
+- [Volume Weighted Moving Average (VWMA) Strategy](#volume-weighted-moving-average-vwma-strategy)
 
 #### Chande Forecast Oscillator Strategy
 
@@ -57,6 +58,27 @@ The function signature of [TrendStrategy](https://pkg.go.dev/github.com/cinar/in
 ```golang
 strategy := indicator.MakeTrendStrategy(4)
 actions := strategy(asset)
+```
+
+#### Volume Weighted Moving Average (VWMA) Strategy
+
+The [VwmaStrategy](https://pkg.go.dev/github.com/cinar/indicator#VwmaStrategy) function uses SMA and VWMA indicators to provide a _BUY_ action when VWMA is above SMA, and a _SELL_ signal when VWMA is below SMA, a _HOLD_ signal otherwse.
+
+```golang
+actions := indicator.VwmaStrategy(asset, 3)
+```
+
+The function signature of [VwmaStrategy](https://pkg.go.dev/github.com/cinar/indicator#VwmaStrategy) does not match the [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) type, as it requires an additional _period_ parameter. The [MakeVwmaStrategy](https://pkg.go.dev/github.com/cinar/indicator#MakeVwmaStrategy) function can be used to return a [StrategyFunction](https://pkg.go.dev/github.com/cinar/indicator#StrategyFunction) instance based on the given _count_ value.
+
+```golang
+strategy := indicator.MakeTrendStrategy(4)
+actions := strategy(asset)
+```
+
+The [DefaultVwmaStrategy](https://pkg.go.dev/github.com/cinar/indicator#DefaultVwmaStrategy) function can be used with the default period of 20.
+
+```golang
+actions := indicator.DefaultVwmaStrategy(asset)
 ```
 
 ## Disclaimer

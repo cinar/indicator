@@ -256,6 +256,19 @@ func testEqualsInt(t *testing.T, actual, expected []int) {
 	}
 }
 
+// Test equals action array.
+func testEqualsAction(t *testing.T, actual, expected []Action) {
+	if len(actual) != len(expected) {
+		t.Fatal("not the same size")
+	}
+
+	for i := 0; i < len(expected); i++ {
+		if actual[i] != expected[i] {
+			t.Fatalf("at %d actual %d expected %d", i, actual[i], expected[i])
+		}
+	}
+}
+
 // Sqrt of given values.
 func sqrt(values []float64) []float64 {
 	result := make([]float64, len(values))

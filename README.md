@@ -39,6 +39,7 @@ The following list of indicators are currently supported by this package:
 - [Triangular Moving Average (TRIMA)](trend_indicators.md#triangular-moving-average-trima)
 - [Triple Exponential Average (TRIX)](trend_indicators.md#triple-exponential-average-trix)
 - [Typical Price](trend_indicators.md#typical-price)
+- [Volume Weighted Moving Average (VWMA)](trend_indicators.md#volume-weighted-moving-average-vwma)
 - [Vortex Indicator](trend_indicators.md#vortex-indicator)
 
 ### Momentum Indicators
@@ -96,6 +97,7 @@ The following list of strategies are currently supported by this package:
 - [KDJ Strategy](trend_strategies.md#kdj-strategy)
 - [MACD Strategy](trend_strategies.md#macd-strategy)
 - [Trend Strategy](trend_strategies.md#trend-strategy)
+- [Volume Weighted Moving Average (VWMA) Strategy](trend_strategies.md#volume-weighted-moving-average-vwma-strategy)
 
 ### Momentum Strategies
 
