@@ -19,10 +19,6 @@ const (
 	Rising  Trend = 1
 )
 
-const (
-	psarAfStep = 0.02
-	psarAfMax  = 0.20
-)
 
 // The AbsolutePriceOscillator function calculates a technical indicator that is used
 // to follow trends. APO crossing above zero indicates bullish, while crossing below
@@ -286,7 +282,7 @@ func Min(period int, values []float64) []float64 {
 // Based on video https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s.
 //
 // Returns psar, trend
-func ParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
+func ParabolicSar(high, low, closing []float64, psarAfStep float64, psarAfMax float64) ([]float64, []Trend) {
 	checkSameSize(high, low)
 
 	trend := make([]Trend, len(high))
