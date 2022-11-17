@@ -5,10 +5,6 @@
 
 package indicator
 
-import (
-	"log"
-)
-
 // Least square.
 //
 // y = mx + b
@@ -97,8 +93,6 @@ func MovingLinearRegressionUsingLeastSquare(period int, x, y []float64) []float6
 	m, b := MovingLeastSquare(period, x, y)
 
 	r := make([]float64, len(x))
-	log.Println(m)
-	log.Println(b)
 
 	for i := 0; i < len(r); i++ {
 		r[i] = (m[i] * x[i]) + b[i]
