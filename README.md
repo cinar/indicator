@@ -3,7 +3,6 @@
 [![Build Status](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/cinar/indicator/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator)
 [![codecov](https://codecov.io/gh/cinar/indicator/branch/master/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
-[![CodeQL Analysis](https://github.com/cinar/indicator/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cinar/indicator/actions/workflows/codeql-analysis.yml)
 
 # Indicator Go
 
