@@ -80,6 +80,15 @@ func TestDivide(t *testing.T) {
 	}
 }
 
+func TestDivideWithZeros(t *testing.T) {
+	values1 := []float64{2, 8, 6, 16, 10, 24, 14, 32, 18, 40}
+	values2 := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expected := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	actual := divide(values1, values2)
+	testEquals(t, actual, expected)
+}
+
 func TestAddWithDifferentSizes(t *testing.T) {
 	values1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	values2 := []float64{1, 2, 3, 4, 5}

@@ -157,3 +157,22 @@ func TestStochasticOscillator(t *testing.T) {
 	actualK, _ := StochasticOscillator(high, low, closing)
 	testEquals(t, roundDigitsAll(actualK, 2), expectedK)
 }
+
+func TestStochasticOscillatorWithClosingOnly(t *testing.T) {
+	closing := []float64{
+		126.00, 126.60, 127.10, 127.20, 128.10,
+		128.20, 126.30, 126.00, 126.60, 127.00,
+		127.50, 128.00, 128.10, 127.29, 127.18,
+		128.01, 127.11, 127.73, 127.06, 127.33,
+	}
+	expectedK := []float64{
+		38.79, 54.87, 80.67, 84.39, 97.84,
+		93.43, 39.14, 32.5, 49.17, 60.28,
+		75.97, 88.89, 91.47, 70.54, 67.7,
+		89.15, 65.89, 81.91, 64.60, 74.66,
+	}
+
+	actualK, actualD := StochasticOscillator(closing, closing, closing)
+	t.Fatal(actualK, actualD)
+	testEquals(t, roundDigitsAll(actualK, 2), expectedK)
+}

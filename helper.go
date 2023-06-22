@@ -62,6 +62,11 @@ func divide(values1, values2 []float64) []float64 {
 
 	for i := 0; i < len(result); i++ {
 		result[i] = values1[i] / values2[i]
+		if values2[i] != 0 {
+			result[i] = values1[i] / values2[i]
+		} else {
+			result[i] = 0
+		}
 	}
 
 	return result
