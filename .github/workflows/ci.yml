@@ -1,18 +1,40 @@
-name: Test and Coverage
+name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - uses: actions/setup-go@v3
-        with:
-          go-version: '1.14'
-      - name: Run coverage
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.20.5
+
+    - name: Go vet
+      run: go vet ./...
+
+    - name: Run Gosec
+      uses: securego/gosec@master
+      with:
+        args: ./...
+
+    - name: Go fix
+      run: go fix ./...
+      
+    - name: Go build
+      run: go build -v ./...
+
+    - name: Go test
+      run: go test -v -coverprofile=coverage.out ./...
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      
