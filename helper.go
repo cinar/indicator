@@ -290,3 +290,18 @@ func abs(values []float64) []float64 {
 
 	return result
 }
+
+// fillNaNWith fills the NaN values with the given fill value.
+func fillNaNWith(values []float64, fill float64) []float64 {
+	result := make([]float64, len(values))
+
+	for i, value := range values {
+		if math.IsNaN(value) {
+			value = fill
+		}
+
+		result[i] = value
+	}
+
+	return result
+}
