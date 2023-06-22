@@ -184,7 +184,7 @@ func StochasticOscillator(high, low, closing []float64) ([]float64, []float64) {
 	lowestLow14 := Min(14, low)
 
 	k := multiplyBy(divide(subtract(closing, lowestLow14), subtract(highestHigh14, lowestLow14)), float64(100))
-	d := Sma(3, k)
+	d := Sma(3, fillNaNWith(k, 0))
 
 	return k, d
 }
