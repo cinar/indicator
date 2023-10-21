@@ -27,7 +27,7 @@ func TestTrendStrategy(t *testing.T) {
 		Low: []float64{
 			0, 0, 0, 0, 0,
 		},
-		Volume: []int64{
+		Volume: []float64{
 			0, 0, 0, 0, 0,
 		},
 	}
@@ -57,7 +57,7 @@ func TestVwmaStrategy(t *testing.T) {
 		Low: []float64{
 			0, 0, 0, 0, 0,
 		},
-		Volume: []int64{
+		Volume: []float64{
 			100, 50, 40, 50, 100,
 		},
 	}
@@ -90,7 +90,7 @@ func TestDefaultVwmaStrategy(t *testing.T) {
 		Low: []float64{
 			0, 0, 0, 0, 0,
 		},
-		Volume: []int64{
+		Volume: []float64{
 			100, 50, 40, 50, 100,
 		},
 	}

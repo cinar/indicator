@@ -13,7 +13,7 @@ func TestChaikinOscillator(t *testing.T) {
 	high := []float64{10, 11, 12, 13, 14, 15, 16, 17}
 	low := []float64{1, 2, 3, 4, 5, 6, 7, 8}
 	closing := []float64{5, 6, 7, 8, 9, 10, 11, 12}
-	volume := []int64{100, 200, 300, 400, 500, 600, 700, 800}
+	volume := []float64{100, 200, 300, 400, 500, 600, 700, 800}
 	expected := []float64{0, -7.41, -18.52, -31.69, -46.09, -61.27, -76.95, -92.97}
 
 	actual, _ := ChaikinOscillator(2, 5, low, high, closing, volume)
@@ -76,7 +76,7 @@ func TestPercentagePriceOscillator(t *testing.T) {
 }
 
 func TestPercentageVolumeOscillator(t *testing.T) {
-	volume := []int64{
+	volume := []float64{
 		6954, 4511, 4474, 4126, 4572, 3936, 3192, 3090, 3476, 3852, 3107, 3604,
 		4145, 5192, 3560, 3961, 4322, 3901, 3392, 4278, 4212, 4428, 3846, 3824,
 		4142, 4964, 4683, 4630, 4746, 4254, 4197, 4236, 3877, 4474, 3943, 3969,

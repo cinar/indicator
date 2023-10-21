@@ -267,12 +267,12 @@ func Min(period int, values []float64) []float64 {
 // PSAR = PSAR[i - 1] - ((PSAR[i - 1] - EP) * AF)
 //
 // If the trend is Falling:
-//  - PSAR is the maximum of PSAR or the previous two high values.
-//  - If the current high is greather than or equals to PSAR, use EP.
+//   - PSAR is the maximum of PSAR or the previous two high values.
+//   - If the current high is greather than or equals to PSAR, use EP.
 //
 // If the trend is Rising:
-//  - PSAR is the minimum of PSAR or the previous two low values.
-//  - If the current low is less than or equals to PSAR, use EP.
+//   - PSAR is the minimum of PSAR or the previous two low values.
+//   - If the current low is less than or equals to PSAR, use EP.
 //
 // If PSAR is greater than the closing, trend is falling, and the EP
 // is set to the minimum of EP or the low.
@@ -361,9 +361,10 @@ func Qstick(period int, opening, closing []float64) []float64 {
 // crosses above 80%, and oversold when they crosses below
 // 20%. The J line represents the divergence.
 //
-//
 // RSV = ((Closing - Min(Low, rPeriod))
-//       / (Max(High, rPeriod) - Min(Low, rPeriod))) * 100
+//
+//	/ (Max(High, rPeriod) - Min(Low, rPeriod))) * 100
+//
 // K = Sma(RSV, kPeriod)
 // D = Sma(K, dPeriod)
 // J = (3 * K) - (2 * D)
@@ -498,9 +499,12 @@ func Tema(period int, values []float64) []float64 {
 // Trima function calculates the Triangular Moving Average (TRIMA).
 //
 // If period is even:
-//   TRIMA = SMA(period / 2, SMA((period / 2) + 1, values))
+//
+//	TRIMA = SMA(period / 2, SMA((period / 2) + 1, values))
+//
 // If period is odd:
-//   TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
+//
+//	TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
 //
 // Returns trima.
 func Trima(period int, values []float64) []float64 {
@@ -627,14 +631,13 @@ func Vortex(high, low, closing []float64) ([]float64, []float64) {
 // VWMA = Sum(Price * Volume) / Sum(Volume) for a given Period.
 //
 // Returns vwma
-func Vwma(period int, closing []float64, volume []int64) []float64 {
-	floatVolume := asFloat64(volume)
-	vwma := divide(Sum(period, multiply(closing, floatVolume)), Sum(period, floatVolume))
+func Vwma(period int, closing, volume []float64) []float64 {
+	vwma := divide(Sum(period, multiply(closing, volume)), Sum(period, volume))
 
 	return vwma
 }
 
 // The DefaultVwma function calculates VWMA with a period of 20.
-func DefaultVwma(closing []float64, volume []int64) []float64 {
+func DefaultVwma(closing, volume []float64) []float64 {
 	return Vwma(20, closing, volume)
 }

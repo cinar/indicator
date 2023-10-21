@@ -21,7 +21,7 @@ type Asset struct {
 	Closing []float64
 	High    []float64
 	Low     []float64
-	Volume  []int64
+	Volume  []float64
 }
 ```
 
