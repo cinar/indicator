@@ -20,7 +20,7 @@ const CMF_DEFAULT_PERIOD = 20
 // AD = Previous AD + CMFV
 //
 // Returns ad.
-func AccumulationDistribution(high, low, closing []float64, volume []int64) []float64 {
+func AccumulationDistribution(high, low, closing, volume []float64) []float64 {
 	checkSameSize(high, low, closing)
 
 	ad := make([]float64, len(closing))
@@ -39,17 +39,19 @@ func AccumulationDistribution(high, low, closing []float64, volume []int64) []fl
 // On-Balance Volume (OBV). It is a technical trading momentum indicator that
 // uses volume flow to predict changes in stock price.
 //
-//                   volume, if Closing > Closing-Prev
+//	volume, if Closing > Closing-Prev
+//
 // OBV = OBV-Prev +       0, if Closing = Closing-Prev
-//                  -volume, if Closing < Closing-Prev
+//
+//	-volume, if Closing < Closing-Prev
 //
 // Returns obv
-func Obv(closing []float64, volume []int64) []int64 {
+func Obv(closing, volume []float64) []float64 {
 	if len(closing) != len(volume) {
 		panic("not all same size")
 	}
 
-	obv := make([]int64, len(volume))
+	obv := make([]float64, len(volume))
 
 	for i := 1; i < len(obv); i++ {
 		obv[i] = obv[i-1]
@@ -73,9 +75,9 @@ func Obv(closing []float64, volume []int64) []int64 {
 // Money Flow Index = 100 - (100 / (1 + Money Ratio))
 //
 // Retruns money flow index values.
-func MoneyFlowIndex(period int, high, low, closing []float64, volume []int64) []float64 {
+func MoneyFlowIndex(period int, high, low, closing, volume []float64) []float64 {
 	typicalPrice, _ := TypicalPrice(low, high, closing)
-	rawMoneyFlow := multiply(typicalPrice, asFloat64(volume))
+	rawMoneyFlow := multiply(typicalPrice, volume)
 
 	signs := extractSign(diff(rawMoneyFlow, 1))
 	moneyFlow := multiply(signs, rawMoneyFlow)
@@ -93,7 +95,7 @@ func MoneyFlowIndex(period int, high, low, closing []float64, volume []int64) []
 }
 
 // Default money flow index with period 14.
-func DefaultMoneyFlowIndex(high, low, closing []float64, volume []int64) []float64 {
+func DefaultMoneyFlowIndex(high, low, closing, volume []float64) []float64 {
 	return MoneyFlowIndex(14, high, low, closing, volume)
 }
 
@@ -103,12 +105,12 @@ func DefaultMoneyFlowIndex(high, low, closing []float64, volume []int64) []float
 // Force Index = EMA(period, (Current - Previous) * Volume)
 //
 // Returns force index.
-func ForceIndex(period int, closing []float64, volume []int64) []float64 {
-	return Ema(period, multiply(diff(closing, 1), asFloat64(volume)))
+func ForceIndex(period int, closing, volume []float64) []float64 {
+	return Ema(period, multiply(diff(closing, 1), volume))
 }
 
 // The default Force Index (FI) with window size of 13.
-func DefaultForceIndex(closing []float64, volume []int64) []float64 {
+func DefaultForceIndex(closing, volume []float64) []float64 {
 	return ForceIndex(13, closing, volume)
 }
 
@@ -121,15 +123,15 @@ func DefaultForceIndex(closing []float64, volume []int64) []float64 {
 // EMV(14) = SMA(14, EMV(1))
 //
 // Returns ease of movement values.
-func EaseOfMovement(period int, high, low []float64, volume []int64) []float64 {
+func EaseOfMovement(period int, high, low, volume []float64) []float64 {
 	distanceMoved := diff(divideBy(add(high, low), 2), 1)
-	boxRatio := divide(divideBy(asFloat64(volume), float64(100000000)), subtract(high, low))
+	boxRatio := divide(divideBy(volume, float64(100000000)), subtract(high, low))
 	emv := Sma(period, divide(distanceMoved, boxRatio))
 	return emv
 }
 
 // The default Ease of Movement with the default period of 14.
-func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
+func DefaultEaseOfMovement(high, low, volume []float64) []float64 {
 	return EaseOfMovement(14, high, low, volume)
 }
 
@@ -139,9 +141,9 @@ func DefaultEaseOfMovement(high, low []float64, volume []int64) []float64 {
 // VPT = Previous VPT + (Volume * (Current Closing - Previous Closing) / Previous Closing)
 //
 // Returns volume price trend values.
-func VolumePriceTrend(closing []float64, volume []int64) []float64 {
+func VolumePriceTrend(closing, volume []float64) []float64 {
 	previousClosing := shiftRightAndFillBy(1, closing[0], closing)
-	vpt := multiply(asFloat64(volume), divide(subtract(closing, previousClosing), previousClosing))
+	vpt := multiply(volume, divide(subtract(closing, previousClosing), previousClosing))
 	return Sum(len(vpt), vpt)
 }
 
@@ -151,13 +153,12 @@ func VolumePriceTrend(closing []float64, volume []int64) []float64 {
 // VWAP = Sum(Closing * Volume) / Sum(Volume)
 //
 // Returns vwap values.
-func VolumeWeightedAveragePrice(period int, closing []float64, volume []int64) []float64 {
-	v := asFloat64(volume)
-	return divide(Sum(period, multiply(closing, v)), Sum(period, v))
+func VolumeWeightedAveragePrice(period int, closing, volume []float64) []float64 {
+	return divide(Sum(period, multiply(closing, volume)), Sum(period, volume))
 }
 
 // Default volume weighted average price with period of 14.
-func DefaultVolumeWeightedAveragePrice(closing []float64, volume []int64) []float64 {
+func DefaultVolumeWeightedAveragePrice(closing, volume []float64) []float64 {
 	return VolumeWeightedAveragePrice(14, closing, volume)
 }
 
@@ -166,14 +167,14 @@ func DefaultVolumeWeightedAveragePrice(closing []float64, volume []int64) []floa
 //
 // If Volume is greather than Previous Volume:
 //
-//     NVI = Previous NVI
+//	NVI = Previous NVI
 //
 // Otherwise:
 //
-//     NVI = Previous NVI + (((Closing - Previous Closing) / Previous Closing) * Previous NVI)
+//	NVI = Previous NVI + (((Closing - Previous Closing) / Previous Closing) * Previous NVI)
 //
 // Returns nvi values.
-func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
+func NegativeVolumeIndex(closing, volume []float64) []float64 {
 	if len(closing) != len(volume) {
 		panic("not all same size")
 	}
@@ -199,17 +200,16 @@ func NegativeVolumeIndex(closing []float64, volume []int64) []float64 {
 // Money Flow Multiplier = ((Closing - Low) - (High - Closing)) / (High - Low)
 // Money Flow Volume = Money Flow Multiplier * Volume
 // Chaikin Money Flow = Sum(20, Money Flow Volume) / Sum(20, Volume)
-//
-func ChaikinMoneyFlow(high, low, closing []float64, volume []int64) []float64 {
+func ChaikinMoneyFlow(high, low, closing, volume []float64) []float64 {
 	moneyFlowMultiplier := divide(
 		subtract(subtract(closing, low), subtract(high, closing)),
 		subtract(high, low))
 
-	moneyFlowVolume := multiply(moneyFlowMultiplier, asFloat64(volume))
+	moneyFlowVolume := multiply(moneyFlowMultiplier, volume)
 
 	cmf := divide(
 		Sum(CMF_DEFAULT_PERIOD, moneyFlowVolume),
-		Sum(CMF_DEFAULT_PERIOD, asFloat64(volume)))
+		Sum(CMF_DEFAULT_PERIOD, volume))
 
 	return cmf
 }

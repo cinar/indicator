@@ -29,7 +29,7 @@ func AwesomeOscillator(low, high []float64) []float64 {
 // CO = Ema(fastPeriod, AD) - Ema(slowPeriod, AD)
 //
 // Returns co, ad.
-func ChaikinOscillator(fastPeriod, slowPeriod int, low, high, closing []float64, volume []int64) ([]float64, []float64) {
+func ChaikinOscillator(fastPeriod, slowPeriod int, low, high, closing, volume []float64) ([]float64, []float64) {
 	ad := AccumulationDistribution(high, low, closing, volume)
 	co := subtract(Ema(fastPeriod, ad), Ema(slowPeriod, ad))
 
@@ -41,7 +41,7 @@ func ChaikinOscillator(fastPeriod, slowPeriod int, low, high, closing []float64,
 // periods, 3 and 10.
 //
 // Returns co, ad.
-func DefaultChaikinOscillator(low, high, closing []float64, volume []int64) ([]float64, []float64) {
+func DefaultChaikinOscillator(low, high, closing, volume []float64) ([]float64, []float64) {
 	return ChaikinOscillator(3, 10, low, high, closing, volume)
 }
 
@@ -102,10 +102,9 @@ func DefaultPercentagePriceOscillator(price []float64) ([]float64, []float64, []
 // Histogram = PVO - Signal
 //
 // Returns pvo, signal, histogram
-func PercentageVolumeOscillator(fastPeriod, slowPeriod, signalPeriod int, volume []int64) ([]float64, []float64, []float64) {
-	volumeAsFloat := asFloat64(volume)
-	fastEma := Ema(fastPeriod, volumeAsFloat)
-	slowEma := Ema(slowPeriod, volumeAsFloat)
+func PercentageVolumeOscillator(fastPeriod, slowPeriod, signalPeriod int, volume []float64) ([]float64, []float64, []float64) {
+	fastEma := Ema(fastPeriod, volume)
+	slowEma := Ema(slowPeriod, volume)
 	pvo := multiplyBy(divide(subtract(fastEma, slowEma), slowEma), 100)
 	signal := Ema(signalPeriod, pvo)
 	histogram := subtract(pvo, signal)
@@ -116,7 +115,7 @@ func PercentageVolumeOscillator(fastPeriod, slowPeriod, signalPeriod int, volume
 // Default Percentage Volume Oscillator calculates it with the default periods of 12, 26, 9.
 //
 // Returns pvo, signal, histogram
-func DefaultPercentageVolumeOscillator(volume []int64) ([]float64, []float64, []float64) {
+func DefaultPercentageVolumeOscillator(volume []float64) ([]float64, []float64, []float64) {
 	return PercentageVolumeOscillator(12, 26, 9, volume)
 }
 

@@ -295,7 +295,7 @@ func TestVortex(t *testing.T) {
 
 func TestVwma(t *testing.T) {
 	closing := []float64{20, 21, 21, 19, 16}
-	volume := []int64{100, 50, 40, 50, 100}
+	volume := []float64{100, 50, 40, 50, 100}
 	expected := []float64{20, 20.33, 20.47, 20.29, 17.84}
 	period := 3
 
@@ -305,7 +305,7 @@ func TestVwma(t *testing.T) {
 
 func TestDefaultVwma(t *testing.T) {
 	closing := []float64{20, 21, 21, 19, 16}
-	volume := []int64{100, 50, 40, 50, 100}
+	volume := []float64{100, 50, 40, 50, 100}
 	expected := []float64{20, 20.33, 20.47, 20.17, 18.94}
 
 	actual := DefaultVwma(closing, volume)
