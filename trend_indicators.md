@@ -201,12 +201,18 @@ If PSAR is greather than the closing, trend is falling, and the EP is set to the
 
 If PSAR is lower than or equals to the closing, trend is rising, and the EP is set to the maximum of EP or the high.
 
-If the trend is the same, and AF is less than 0.20, increment it by 0.02. If the trend is not the same, set AF to 0.02.
+If the trend is the same, and AF is less than psarAfMax, increment it by psarAfStep. If the trend is not the same, set AF to psarAfStep.
 
 Based on video [How to Calculate the PSAR Using Excel - Revised Version](https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s).
 
 ```Golang
-psar, trend := indicator.ParabolicSar(high, low, closing)
+psar, trend := indicator.ParabolicSar(high, low, closing, 0.02, 0.20)
+```
+
+The `DefaultParabolicSar` function calculates the Parabolic SAR using a psarAfStep of 0.02, and psarAfMax of 0.20.
+
+```Golang
+psar, trend := indicator.DefaultParabolicSar(high, low, closing)
 ```
 
 #### Qstick

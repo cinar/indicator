@@ -276,13 +276,13 @@ func Min(period int, values []float64) []float64 {
 // If PSAR is lower than or equals to the closing, trend is rising, and the EP
 // is set to the maximum of EP or the high.
 //
-// If the trend is the same, and AF is less than 0.20, increment it by 0.02.
-// If the trend is not the same, set AF to 0.02.
+// If the trend is the same, and AF is less than psarAfMax, increment it by psarAfStep.
+// If the trend is not the same, set AF to psarAfStep.
 //
 // Based on video https://www.youtube.com/watch?v=MuEpGBAH7pw&t=0s.
 //
 // Returns psar, trend
-func ParabolicSar(high, low, closing []float64, psarAfStep float64, psarAfMax float64) ([]float64, []Trend) {
+func ParabolicSar(high, low, closing []float64, psarAfStep, psarAfMax float64) ([]float64, []Trend) {
 	checkSameSize(high, low)
 
 	trend := make([]Trend, len(high))
@@ -336,6 +336,14 @@ func ParabolicSar(high, low, closing []float64, psarAfStep float64, psarAfMax fl
 	}
 
 	return psar, trend
+} 
+
+// DefaultParabolicSar function calculates the Parabolic SAR using a psarAfStep
+// of 0.02, and psarAfMax of 0.20.
+//
+// Returns psar, trend
+func DefaultParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
+    return ParabolicSar(high, low, closing, 0.02, 0.20)
 }
 
 // The Qstick function calculates the ratio of recent up and down bars.

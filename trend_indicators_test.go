@@ -141,7 +141,7 @@ func TestParabolicSAR(t *testing.T) {
 		Rising,
 	}
 
-	psar, trend := ParabolicSar(high, low, closing)
+	psar, trend := DefaultParabolicSar(high, low, closing)
 	testEquals(t, roundDigitsAll(psar, 2), expectedPsar)
 
 	for i := 0; i < len(expectedTrend); i++ {
