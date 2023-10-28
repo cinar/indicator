@@ -6,6 +6,7 @@
 package indicator
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -214,10 +215,11 @@ func TestRma(t *testing.T) {
 
 func TestSma(t *testing.T) {
 	values := []float64{2, 4, 6, 8, 10}
-	expected := []float64{2, 3, 5, 7, 9}
+	expected := []float64{0, 3, 5, 7, 9}
 	period := 2
 
 	actual := Sma(period, values)
+	fmt.Print(actual)
 	testEquals(t, actual, expected)
 }
 

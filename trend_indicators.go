@@ -19,7 +19,6 @@ const (
 	Rising  Trend = 1
 )
 
-
 // The AbsolutePriceOscillator function calculates a technical indicator that is used
 // to follow trends. APO crossing above zero indicates bullish, while crossing below
 // zero indicates bearish. Positive value is upward trend, while negative value is
@@ -336,14 +335,14 @@ func ParabolicSar(high, low, closing []float64, psarAfStep, psarAfMax float64) (
 	}
 
 	return psar, trend
-} 
+}
 
 // DefaultParabolicSar function calculates the Parabolic SAR using a psarAfStep
 // of 0.02, and psarAfMax of 0.20.
 //
 // Returns psar, trend
 func DefaultParabolicSar(high, low, closing []float64) ([]float64, []Trend) {
-    return ParabolicSar(high, low, closing, 0.02, 0.20)
+	return ParabolicSar(high, low, closing, 0.02, 0.20)
 }
 
 // The Qstick function calculates the ratio of recent up and down bars.
@@ -423,22 +422,22 @@ func Rma(period int, values []float64) []float64 {
 
 // Simple Moving Average (SMA).
 func Sma(period int, values []float64) []float64 {
-	result := make([]float64, len(values))
-	sum := float64(0)
-
-	for i, value := range values {
-		count := i + 1
-		sum += value
-
-		if i >= period {
-			sum -= values[i-period]
-			count = period
-		}
-
-		result[i] = sum / float64(count)
+	if len(values) < period {
+		return nil
 	}
 
-	return result
+	smaValues := make([]float64, len(values))
+
+	// Calculate the SMA values using a sliding window approach
+	for i := period - 1; i < len(values); i++ {
+		var sum float64
+		for j := 0; j < period; j++ {
+			sum += values[i-j]
+		}
+		smaValues[i] = sum / float64(period)
+	}
+
+	return smaValues
 }
 
 // Since last values change.
