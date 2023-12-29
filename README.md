@@ -8,13 +8,17 @@
 
 Indicator is a Golang module providing various stock technical analysis indicators, strategies, and a backtest framework for trading.
 
+> [!IMPORTANT]
 > I have recently started working on the [v2 version](https://github.com/cinar/indicator/tree/v2). It is a complete rewrite of the library with the following goals:
 >
-> - Achieving and maintaining 100% code coverage, along with test files for each indicator and strategy.
-> - Operating on data streams (Go channels) for both inputs and outputs.
+> - Achieving and maintaining minimum of 90% code coverage.
+> - Having test data in CSV format for each indicator and strategy for each validation.
+> - Operating on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the `v1 version`.
+> - Having each indicator and strategy fully configurable with no preset values.
 > - Supporting all numeric formats using Golang generics.
 
-*I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).*
+> [!NOTE]
+> I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 ## Indicators Provided
 
