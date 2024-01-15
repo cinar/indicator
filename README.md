@@ -12,7 +12,7 @@ Indicator is a Golang module providing various stock technical analysis indicato
 > -	Operating on data streams (Go channels) for both inputs and outputs.
 > -	Having each indicator and strategy fully configurable with no preset values.
 > -	Supporting all numeric formats using Golang generics.
->
+
 > [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
