@@ -1,19 +1,25 @@
-[![GoDoc](https://godoc.org/github.com/cinar/indicator?status.svg)](https://godoc.org/github.com/cinar/indicator) [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/cinar/indicator/actions/workflows/ci.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator) [![codecov](https://codecov.io/gh/cinar/indicator/branch/master/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
+[![GoDoc](https://godoc.org/github.com/cinar/indicator?status.svg)](https://godoc.org/github.com/cinar/indicator) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator)](https://goreportcard.com/report/github.com/cinar/indicator) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/branch/v2/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
 
 Indicator Go
 ============
 
-Indicator is a Golang module providing various stock technical analysis indicators, strategies, and a backtest framework for trading.
+Indicator is a Golang module providing a comprehensive set of technical analysis indicators, strategies, and a backtest framework.
 
-> [!IMPORTANT] I have recently started working on the [v2 version](https://github.com/cinar/indicator/tree/v2). It is a complete rewrite of the library with the following goals:
+> [!IMPORTANT]  
+> The [v2 version](https://github.com/cinar/indicator/tree/v2) is a complete rewrite of the library with the following goals:
 >
 > -	Achieving and maintaining minimum of 90% code coverage.
-> -	Having test data in CSV format for each indicator and strategy for easyt validation.
-> -	Operating on data streams (Go channels) for both inputs and outputs.
+> -	Having test data in CSV format for each indicator and strategy for each validation.
+> -	Operating on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the `v1 version`.
 > -	Having each indicator and strategy fully configurable with no preset values.
 > -	Supporting all numeric formats using Golang generics.
+
+> [!WARNING] Not everything has been fully ported from `v1 version` to `v2 version`. Any indicator or strategy without a link to documentation is not currently implemented in the `v2 version`. Your contributions are highly welcomed. Feel free to contribute to the project and help us expand the library.
 >
-> [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+> You can find the [v1 version](https://github.com/cinar/indicator) of the library in the `v1` branch.
+
+> [!NOTE]
+> I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
 ----------------------
@@ -22,126 +28,165 @@ The following list of indicators are currently supported by this package:
 
 ### 📈 Trend Indicators
 
--	[Absolute Price Oscillator (APO)](trend_indicators.md#absolute-price-oscillator-apo)
--	[Aroon Indicator](trend_indicators.md#aroon-indicator)
--	[Balance of Power (BOP)](trend_indicators.md#balance-of-power-bop)
--	[Chande Forecast Oscillator (CFO)](trend_indicators.md#chande-forecast-oscillator-cfo)
--	[Community Channel Index (CMI)](trend_indicators.md#community-channel-index-cmi)
--	[Double Exponential Moving Average (DEMA)](trend_indicators.md#double-exponential-moving-average-dema)
--	[Exponential Moving Average (EMA)](trend_indicators.md#exponential-moving-average-ema)
--	[Mass Index (MI)](trend_indicators.md#mass-index-mi)
--	[Moving Average Convergence Divergence (MACD)](trend_indicators.md#moving-average-convergence-divergence-macd)
--	[Moving Max](trend_indicators.md#moving-max)
--	[Moving Min](trend_indicators.md#moving-min)
--	[Moving Sum](trend_indicators.md#moving-sum)
--	[Parabolic SAR](trend_indicators.md#parabolic-sar)
--	[Qstick](trend_indicators.md#qstick)
--	[Random Index (KDJ)](trend_indicators.md#random-index-kdj)
--	[Rolling Moving Average (RMA)](trend_indicators.md#rolling-moving-average-rma)
--	[Simple Moving Average (SMA)](trend_indicators.md#simple-moving-average-sma)
--	[Since Change](trend_indicators.md#since-change)
--	[Triple Exponential Moving Average (TEMA)](trend_indicators.md#triple-exponential-moving-average-tema)
--	[Triangular Moving Average (TRIMA)](trend_indicators.md#triangular-moving-average-trima)
--	[Triple Exponential Average (TRIX)](trend_indicators.md#triple-exponential-average-trix)
--	[Typical Price](trend_indicators.md#typical-price)
--	[Volume Weighted Moving Average (VWMA)](trend_indicators.md#volume-weighted-moving-average-vwma)
--	[Vortex Indicator](trend_indicators.md#vortex-indicator)
+-	[Absolute Price Oscillator (APO)](trend/README.md#type-apo)
+-	[Aroon Indicator](trend/README.md#type-aroon)
+-	[Balance of Power (BoP)](trend/README.md#type-bop)
+-	Chande Forecast Oscillator (CFO)
+-	[Community Channel Index (CCI)](trend/README.md#type-cci)
+-	[Double Exponential Moving Average (DEMA)](trend/README.md#type-dema)
+-	[Exponential Moving Average (EMA)](trend/README.md#type-ema)
+-	[Mass Index (MI)](trend/README.md#type-massindex)
+-	[Moving Average Convergence Divergence (MACD)](trend/README.md#type-macd)
+-   [Moving Least Square (MLS)](trend/README.md#type-mls)
+-	[Moving Max](trend/README.md#type-movingmax)
+-	[Moving Min](trend/README.md#type-movingmin)
+-	[Moving Sum](trend/README.md#type-movingsum)
+-	Parabolic SAR
+-	[Random Index (KDJ)](trend/README.md#type-kdj)
+-	[Rolling Moving Average (RMA)](trend/README.md#type-rma)
+-	[Simple Moving Average (SMA)](trend/README.md#type-sma)
+-	[Since Change](helper/README.md#func-since)
+-	[Triple Exponential Moving Average (TEMA)](trend/README.md#type-tema)
+-	[Triangular Moving Average (TRIMA)](trend/README.md#type-trima)
+-	[Triple Exponential Average (TRIX)](trend/README.md#type-trix)
+-	[Typical Price](trend/README.md#type-typicalprice)
+-	[Volume Weighted Moving Average (VWMA)](trend/README.md#type-vwma)
+-	Vortex Indicator
 
 ### 🚀 Momentum Indicators
 
--	[Awesome Oscillator](momentum_indicators.md#awesome-oscillator)
--	[Chaikin Oscillator](momentum_indicators.md#chaikin-oscillator)
--	[Ichimoku Cloud](momentum_indicators.md#ichimoku-cloud)
--	[Percentage Price Oscillator (PPO)](momentum_indicators.md#percentage-price-oscillator-ppo)
--	[Percentage Volume Oscillator (PVO)](momentum_indicators.md#percentage-volume-oscillator-pvo)
--	[Relative Strength Index (RSI)](momentum_indicators.md#relative-strength-index-rsi)
--	[RSI 2](momentum_indicators.md#rsi-2)
--	[RSI Period](momentum_indicators.md#rsi-period)
--	[Stochastic Oscillator](momentum_indicators.md#stochastic-oscillator)
--	[Williams R](momentum_indicators.md#williams-r)
+-	[Awesome Oscillator](momentum/README.md#type-awesomeoscillator)
+-	[Chaikin Oscillator](momentum/README.md#type-chaikinoscillator)
+-	[Ichimoku Cloud](momentum/README.md#type-ichimokucloud)
+-	[Percentage Price Oscillator (PPO)](momentum/README.md#type-ppo)
+-	[Percentage Volume Oscillator (PVO)](momentum/README.md#type-pvo)
+-	[Relative Strength Index (RSI)](momentum/README.md#type-rsi)
+-	[Qstick](momentum/README.md#type-qstick)
+-	[Stochastic Oscillator](momentum/README.md#type-stochasticoscillator)
+-	[Williams R](momentum/README.md#type-williamsr)
 
 ### 🎢 Volatility Indicators
 
--	[Acceleration Bands](volatility_indicators.md#acceleration-bands)
--	[Actual True Range (ATR)](volatility_indicators.md#actual-true-range-atr)
--	[Bollinger Band Width](volatility_indicators.md#bollinger-band-width)
--	[Bollinger Bands](volatility_indicators.md#bollinger-bands)
--	[Chandelier Exit](volatility_indicators.md#chandelier-exit)
--	[Donchian Channel (DC)](volatility_indicators.md#donchian-channel-dc)
--	[Keltner Channel (KC)](volatility_indicators.md#keltner-channel-kc)
--	[Moving Standard Deviation (Std)](volatility_indicators.md#moving-standard-deviation-std)
--	[Projection Oscillator (PO)](volatility_indicators.md#projection-oscillator-po)
--	[Ulcer Index (UI)](volatility_indicators.md#ulcer-index-ui)
+-	[Acceleration Bands](volatility/README.md#type-accelerationbands)
+-	[Actual True Range (ATR)](volatility/README.md#type-atr)
+-	[Bollinger Band Width](volatility/README.md#type-bollingerbandwidth)
+-	[Bollinger Bands](volatility/README.md#type-bollingerbands)
+-	[Chandelier Exit](volatility/README.md#type-chandelierexit)
+-	[Donchian Channel (DC)](volatility/README.md#type-donchianchannel)
+-	[Keltner Channel (KC)](volatility/README.md#type-keltnerchannel)
+-	[Moving Standard Deviation (Std)](volatility/README.md#type-movingstd)
+-	Projection Oscillator (PO)
+-	[Ulcer Index (UI)](volatility/README.md#type-ulcerindex)
 
 ### 📢 Volume Indicators
 
--	[Accumulation/Distribution (A/D)](volume_indicators.md#accumulationdistribution-ad)
--	[Chaikin Money Flow (CMF)](volume_indicators.md#chaikin-money-flow-cmf)
--	[Ease of Movement (EMV)](volume_indicators.md#ease-of-movement-emv)
--	[Force Index (FI)](volume_indicators.md#force-index-fi)
--	[Money Flow Index (MFI)](volume_indicators.md#money-flow-index-mfi)
--	[Negative Volume Index (NVI)](volume_indicators.md#negative-volume-index-nvi)
--	[On-Balance Volume (OBV)](volume_indicators.md#on-balance-volume-obv)
--	[Volume Price Trend (VPT)](volume_indicators.md#volume-price-trend-vpt)
--	[Volume Weighted Average Price (VWAP)](volume_indicators.md#volume-weighted-average-price-vwap)
+-	[Accumulation/Distribution (A/D)](volume/README.md#type-ad)
+-	[Chaikin Money Flow (CMF)](volume/README.md#type-cmf)
+-	[Ease of Movement (EMV)](volume/README.md#type-emv)
+-	[Force Index (FI)](volume/README.md#type-fi)
+-	[Money Flow Index (MFI)](volume/README.md#type-mfi)
+-	[Money Flow Multiplier (MFM)](volume/README.md#type-mfm)
+-	[Money Flow Volume (MFV)](volume/README.md#type-mfv)
+-	[Negative Volume Index (NVI)](volume/README.md#type-nvi)
+-	[On-Balance Volume (OBV)](volume/README.md#type-obv)
+-	[Volume Price Trend (VPT)](volume/README.md#type-vpt)
+-	[Volume Weighted Average Price (VWAP)](volume/README.md#type-vwap)
 
 🧠 Strategies Provided
 ----------------------
 
-Strategies relies on the following:
-
--	[Asset](strategy.md#asset)
--	[Action](strategy.md#action)
--	[Strategy Function](strategy.md#strategy-function)
--	[Buy and Hold Strategy](strategy.md#buy-and-hold-strategy)
-
 The following list of strategies are currently supported by this package:
+
+### ⚖ Base Strategies
+
+-	[Buy and Hold Strategy](strategy/README.md#type-buyandholdstrategy)
 
 ### 📈 Trend Strategies
 
--	[Chande Forecast Oscillator Strategy](trend_strategies.md#chande-forecast-oscillator-strategy)
--	[KDJ Strategy](trend_strategies.md#kdj-strategy)
--	[MACD Strategy](trend_strategies.md#macd-strategy)
--	[Trend Strategy](trend_strategies.md#trend-strategy)
--	[Volume Weighted Moving Average (VWMA) Strategy](trend_strategies.md#volume-weighted-moving-average-vwma-strategy)
+-	[Absolute Price Oscillator (APO) Strategy](strategy/trend/README.md#type-apostrategy)
+-	[Aroon Strategy](strategy/trend/README.md#type-aroonstrategy)
+-	[Balance of Power (BoP) Strategy](strategy/trend/README.md#type-bopstrategy)
+-	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#type-demastrategy)
+-	Chande Forecast Oscillator Strategy
+-	[Community Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
+-	[Random Index (KDJ) Strategy](strategy/trend/README.md#type-kdjstrategy)
+-	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#type-macdstrategy)
+-	[Qstick Strategy](strategy/trend/README.md#type-qstickstrategy)
+-	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#type-trimastrategy)
+-	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#type-trixstrategy)
+-	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#type-vwmastrategy)
 
 ### 🚀 Momentum Strategies
 
--	[Awesome Oscillator Strategy](momentum_strategies.md#awesome-oscillator-strategy)
--	[RSI Strategy](momentum_strategies.md#rsi-strategy)
--	[RSI 2 Strategy](momentum_strategies.md#rsi-2-strategy)
--	[Williams R Strategy](momentum_strategies.md#williams-r-strategy)
+-	Awesome Oscillator Strategy
+-	RSI Strategy
+-	RSI 2 Strategy
+-	Williams R Strategy
 
 ### 🎢 Volatility Strategies
 
--	[Bollinger Bands Strategy](volatility_strategies.md#bollinger-bands-strategy)
--	[Projection Oscillator Strategy](volatility_strategies.md#projection-oscillator-strategy)
+-	[Bollinger Bands Strategy](strategy/volatility/README.md#type-bollingerbandsstrategy)
+-	Projection Oscillator Strategy
 
 ### 📢 Volume Strategies
 
--	[Chaikin Money Flow Strategy](volume_strategies.md#chaikin-money-flow-strategy)
--	[Ease of Movement Strategy](volume_strategies.md#ease-of-movement-strategy)
--	[Force Index Strategy](volume_strategies.md#force-index-strategy)
--	[Money Flow Index Strategy](volume_strategies.md#money-flow-index-strategy)
--	[Negative Volume Index Strategy](volume_strategies.md#negative-volume-index-strategy)
--	[Volume Weighted Average Price Strategy](volume_strategies.md#volume-weighted-average-price-strategy)
+-	Chaikin Money Flow Strategy
+-	Ease of Movement Strategy
+-	Force Index Strategy
+-	Money Flow Index Strategy
+-	Negative Volume Index Strategy
+-	Volume Weighted Average Price Strategy
 
 ### 🧪 Compound Strategies
 
--	[All Strategies](compound_strategies.md#all-strategies)
--	[Run Strategies](compound_strategies.md#run-strategies)
--	[Separate Strategies](compound_strategies.md#separate-strategies)
--	[MACD and RSI Strategy](compound_strategies.md#macd-and-rsi-strategy)
+Compound strategies merge multiple strategies to produce integrated recommendations. They combine individual strategies' recommendations using various decision-making logic.
+
+-	[All Strategy](strategy/README.md#type-allstrategy)
+-	[Or Strategy](strategy/README.md#type-orstrategy)
+-	[Majority Strategy](strategy/README.md#type-majoritystrategy)
+
+🗃 Repositories
+--------------
+
+Repository serves as a centralized storage and retrieval location for [asset snapshots](asset/README.md#type-snapshot).
+
+The following [repository implementations](asset/README.md#type-repository) are provided.
+
+-	[File System Repository](asset/README.md#type-filesystemrepository)
+-	[In Memory Repository](asset/README.md#type-inmemoryrepository)
+-	[Tiingo Repository](asset/README.md#type-tiingorepository)
+
+The [Sync function]() facilitates the synchronization of assets between designated source and target repositories by employing multi-worker concurrency for enhanced efficiency. This function serves the purpose of procuring the most recent snapshots from remote repositories and seamlessly transferring them to local repositories, such as file system repositories.
+
+The `indicator-sync` command line tool also offers the capability of synchronizing data between the Tiingo Repository and the File System Repository. To illustrate its usage, consider the following example command:
+
+```bash
+$ indicator-sync -key $TIINGO_KEY -target /home/user/assets -days 30
+```
+
+This command effectively retrieves the most recent snapshots for assets residing within the `/home/user/assets` directory from the Tiingo Repository. In the event that the local asset file is devoid of content, it automatically extends its reach to synchronize 30 days' worth of snapshots, ensuring a comprehensive and up-to-date repository.
 
 ⏳ Backtesting
 --------------
 
-Backtesting is the method for seeing how well a strategy would have done. The following backtesting functions are provided for evaluating strategies.
+The [Backtest functionality](strategy/README.md#type-backtest), using the [Outcome](strategy/README.md#func-outcome), rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy-asset pairing.
 
--	[Apply Actions](backtest.md#apply-actions)
--	[Count Transactions](backtest.md#count-transactions)
--	[Normalize Actions](backtest.md#normalize-actions)
--	[Normalize Gains](backtest.md#normalize-gains)
+```go
+backtest := strategy.NewBacktest(repository, outputDir)
+backtest.Names = append(backtest.Names, "brk-b")
+backtest.Strategies = append(backtest.Strategies, trend.NewApoStrategy())
+
+err = backtest.Run()
+if err != nil {
+	t.Fatal(err)
+}
+```
+
+The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. This capability encompasses the application of all currently recognized strategies, culminating in the generation of detailed reports within a designated output directory.
+
+```bash
+$ indicator-backtest -repository /home/user/assets -output /home/user/reports -workers 1
+```
 
 Usage
 -----
@@ -159,6 +204,11 @@ import (
     "github.com/cinar/indicator"
 )
 ```
+
+Contributing to the Project
+---------------------------
+
+Anyone can contribute to Indicator library. Please make sure to read our [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) guide first. Follow the [How to Contribute to Indicator](./CONTRIBUTING.md) to contribute.
 
 Disclaimer
 ----------
@@ -212,3 +262,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
