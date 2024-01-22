@@ -75,7 +75,7 @@ The following list of indicators are currently supported by this package:
 -	[Donchian Channel (DC)](volatility/README.md#type-donchianchannel)
 -	[Keltner Channel (KC)](volatility/README.md#type-keltnerchannel)
 -	[Moving Standard Deviation (Std)](volatility/README.md#type-movingstd)
--	Projection Oscillator (PO)
+-	[Projection Oscillator (PO)](volatility/README.md#type-po)
 -	[Ulcer Index (UI)](volatility/README.md#type-ulcerindex)
 
 ### 📢 Volume Indicators

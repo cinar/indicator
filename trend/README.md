@@ -741,7 +741,7 @@ Example:
 
 ```
 mls := trend.NewMlsWithPeriod[float64](14)
-ms, bs := mls.Compute(values)
+ms, bs := mls.Compute(x , y)
 ```
 
 ```go

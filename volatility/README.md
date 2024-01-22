@@ -61,6 +61,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewMovingStdWithPeriod\[T helper.Number\]\(period int\) \*MovingStd\[T\]](<#NewMovingStdWithPeriod>)
   - [func \(m \*MovingStd\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingStd[T].Compute>)
   - [func \(m \*MovingStd\[T\]\) IdlePeriod\(\) int](<#MovingStd[T].IdlePeriod>)
+- [type Po](<#Po>)
+  - [func NewPo\[T helper.Number\]\(\) \*Po\[T\]](<#NewPo>)
+  - [func NewPoWithPeriod\[T helper.Number\]\(period int\) \*Po\[T\]](<#NewPoWithPeriod>)
+  - [func \(p \*Po\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Po[T].Compute>)
+  - [func \(p \*Po\[T\]\) IdlePeriod\(\) int](<#Po[T].IdlePeriod>)
 - [type UlcerIndex](<#UlcerIndex>)
   - [func NewUlcerIndex\[T helper.Number\]\(\) \*UlcerIndex\[T\]](<#NewUlcerIndex>)
   - [func \(u \*UlcerIndex\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#UlcerIndex[T].Compute>)
@@ -123,6 +128,15 @@ const (
 const (
     // DefaultKeltnerChannelPeriod is the default period for the Keltner Channel.
     DefaultKeltnerChannelPeriod = 20
+)
+```
+
+<a name="DefaultPoPeriod"></a>
+
+```go
+const (
+    // DefaultPoPeriod is the default period for the Projection Oscillator (PO).
+    DefaultPoPeriod = 14
 )
 ```
 
@@ -584,6 +598,66 @@ func (m *MovingStd[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
+
+<a name="Po"></a>
+## type [Po](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L28-L37>)
+
+Po represents the configuration parameters for calculating the Projection Oscillator \(PO\). It uses the linear regression slope, along with highs and lows. Period defines the moving window to calculates the PO.
+
+```
+PL = Min(period, (high + MLS(period, x, high)))
+PH = Max(period, (low + MLS(period, x, low)))
+PO = 100 * (Closing - PL) / (PH - PL)
+```
+
+Example:
+
+```
+po := volatility.NewPo()
+ps := po.Compute(highs, lows, closings)
+```
+
+```go
+type Po[T helper.Number] struct {
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewPo"></a>
+### func [NewPo](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L40>)
+
+```go
+func NewPo[T helper.Number]() *Po[T]
+```
+
+NewPo function initializes a new PO instance with the default parameters.
+
+<a name="NewPoWithPeriod"></a>
+### func [NewPoWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L45>)
+
+```go
+func NewPoWithPeriod[T helper.Number](period int) *Po[T]
+```
+
+NewPoWithPeriod function initializes a new PO instance with the given period.
+
+<a name="Po[T].Compute"></a>
+### func \(\*Po\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L54>)
+
+```go
+func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the PO over the specified period.
+
+<a name="Po[T].IdlePeriod"></a>
+### func \(\*Po\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L114>)
+
+```go
+func (p *Po[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that PO won't yield any results.
 
 <a name="UlcerIndex"></a>
 ## type [UlcerIndex](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L30-L33>)

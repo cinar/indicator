@@ -35,6 +35,7 @@ The information provided on this project is strictly for informational purposes 
 - [func ChangePercent\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangePercent>)
 - [func ChangeRatio\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangeRatio>)
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
+- [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
 - [func DecrementBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DecrementBy>)
 - [func Divide\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Divide>)
 - [func DivideBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DivideBy>)
@@ -274,6 +275,33 @@ func CheckEquals[T comparable](inputs ...<-chan T) error
 ```
 
 CheckEquals determines whether the two channels are equal.
+
+<a name="Count"></a>
+## func [Count](<https://github.com/cinar/indicator/blob/v2/helper/count.go#L25>)
+
+```go
+func Count[T Number, O any](from T, other <-chan O) <-chan T
+```
+
+Count generates a sequence of numbers starting with a specified value, from, and incrementing by one until the given other channel continues to produce values.
+
+Example:
+
+```
+other := make(chan int, 4)
+other <- 1
+other <- 1
+other <- 1
+other <- 1
+close(other)
+
+c := Count(0, other)
+
+fmt.Println(<- s) // 1
+fmt.Println(<- s) // 2
+fmt.Println(<- s) // 3
+fmt.Println(<- s) // 4
+```
 
 <a name="DecrementBy"></a>
 ## func [DecrementBy](<https://github.com/cinar/indicator/blob/v2/helper/decrement_by.go#L16>)
