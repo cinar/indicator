@@ -60,6 +60,10 @@ The information provided on this project is strictly for informational purposes 
   - [func NewMassIndex\[T helper.Number\]\(\) \*MassIndex\[T\]](<#NewMassIndex>)
   - [func \(m \*MassIndex\[T\]\) Compute\(highs, lows \<\-chan T\) \<\-chan T](<#MassIndex[T].Compute>)
   - [func \(m \*MassIndex\[T\]\) IdlePeriod\(\) int](<#MassIndex[T].IdlePeriod>)
+- [type Mlr](<#Mlr>)
+  - [func NewMlrWithPeriod\[T helper.Number\]\(period int\) \*Mlr\[T\]](<#NewMlrWithPeriod>)
+  - [func \(m \*Mlr\[T\]\) Compute\(x, y \<\-chan T\) \<\-chan T](<#Mlr[T].Compute>)
+  - [func \(m \*Mlr\[T\]\) IdlePeriod\(\) int](<#Mlr[T].IdlePeriod>)
 - [type Mls](<#Mls>)
   - [func NewMlsWithPeriod\[T helper.Number\]\(period int\) \*Mls\[T\]](<#NewMlsWithPeriod>)
   - [func \(m \*Mls\[T\]\) Compute\(x, y \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Mls[T].Compute>)
@@ -723,6 +727,56 @@ func (m *MassIndex[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Mass Index won't yield any results.
 
+<a name="Mlr"></a>
+## type [Mlr](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L19-L22>)
+
+Mlr represents the configuration parameters for calculating the Moving Linear Regression.
+
+```
+y = mx + b
+```
+
+Example:
+
+```
+mlr := trend.NewMlrWithPeriod[float64](14)
+rs := mlr.Compute(x , y)
+```
+
+```go
+type Mlr[T helper.Number] struct {
+    // Mls is the Moving Least Square instance.
+    Mls *Mls[T]
+}
+```
+
+<a name="NewMlrWithPeriod"></a>
+### func [NewMlrWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L25>)
+
+```go
+func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T]
+```
+
+NewMlrWithPeriod function initializes a new MLR instance with the given period.
+
+<a name="Mlr[T].Compute"></a>
+### func \(\*Mlr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L32>)
+
+```go
+func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the MLR r.
+
+<a name="Mlr[T].IdlePeriod"></a>
+### func \(\*Mlr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L51>)
+
+```go
+func (m *Mlr[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that MLR won't yield any results.
+
 <a name="Mls"></a>
 ## type [Mls](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L25-L28>)
 
@@ -767,7 +821,7 @@ NewMlsWithPeriod function initializes a new MLS instance with the given period.
 func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute function takes a channel of numbers and computes the MLS and the signal line.
+Compute function takes a channel of numbers and computes the MLS m and b.
 
 <a name="Mls[T].IdlePeriod"></a>
 ### func \(\*Mls\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L105>)

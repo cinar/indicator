@@ -38,6 +38,7 @@ The following list of indicators are currently supported by this package:
 -	[Mass Index (MI)](trend/README.md#type-massindex)
 -	[Moving Average Convergence Divergence (MACD)](trend/README.md#type-macd)
 -   [Moving Least Square (MLS)](trend/README.md#type-mls)
+-   [Moving Linear Regression (MLR)](trend/README.md#type-mlr)
 -	[Moving Max](trend/README.md#type-movingmax)
 -	[Moving Min](trend/README.md#type-movingmin)
 -	[Moving Sum](trend/README.md#type-movingsum)

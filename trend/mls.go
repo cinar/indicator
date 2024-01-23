@@ -34,7 +34,7 @@ func NewMlsWithPeriod[T helper.Number](period int) *Mls[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the MLS and the signal line.
+// Compute function takes a channel of numbers and computes the MLS m and b.
 func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T) {
 	xSplice := helper.Duplicate(x, 3)
 	ySplice := helper.Duplicate(y, 2)
