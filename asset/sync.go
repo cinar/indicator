@@ -70,7 +70,9 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 
 			for name := range jobs {
 				lastDate, err := target.LastDate(name)
-				if err != nil {
+				if err == nil {
+					lastDate = lastDate.AddDate(0, 0, 1)
+				} else {
 					lastDate = defaultStartDate
 				}
 
