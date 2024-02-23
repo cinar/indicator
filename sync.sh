@@ -1,6 +1,6 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
-set SP_500 \
+SP_500=(\
 A AAL AAPL  ABBV ABNB ABT ACGL ACN  ADBE ADI ADM ADP ADSK  AEE AEP AES \
 AFL AIG AIZ AJG AKAM ALB ALGN ALL  ALLE AMAT AMCR AMD AME AMGN AMP AMT \
 AMZN ANET ANSS AON AOS APA APD APH  APTV ARE ATO AVB AVGO AVY AWK AXON \
@@ -31,17 +31,28 @@ TER TFC TFX TGT  TJX TMO TMUS TPR TRGP TRMB TROW TRV  TSCO TSLA TSN TT \
 TTWO TXN TXT TYL UAL UBER UDR UHS  ULTA UNH UNP UPS URI USB V VFC VICI \
 VLO VLTO VMC VRSK  VRSN VRTX VTR VTRS VZ WAB WAT WBA  WBD WDC WEC WELL \
 WFC WHR WM  WMB WMT WRB WRK WST  WTW WY WYNN XEL XOM XRAY  XYL YUM ZBH \
-ZBRA ZION ZTS
+ZBRA ZION ZTS \
+)
 
-set COUNT (count $SP_500)
+COUNT=${#SP_500[@]}
 
-for FROM in (seq 1 50 (math $COUNT + 1));
-	set TO (math $FROM + 50 - 1)
+# Check for TIINGO KEY.
+if [[ $# -ne 1 ]];
+then
+	echo "Usage $0 TIINGO_KEY" >&2
+	exit 2
+fi
 
-	echo Sync from $FROM to $TO...
-	go run cmd/indicator-sync/main.go -key $TIINGO_KEY -target ~/assets -days 3650 $SP_500[$FROM..$TO]
+TIINGO_KEY=$1
 
-	echo Sleep
+for FROM in $(seq 0 50 "$COUNT");
+do
+	TO=$((FROM + 50))
+
+	echo Sync from "$FROM" to "$TO"...
+	go run cmd/indicator-sync/main.go -key "$TIINGO_KEY" -target ~/assets -days 3650 "${SP_500[@]:$FROM:$TO}"
+
+	#echo Sleep
 	sleep 1h
-end
+done
 
