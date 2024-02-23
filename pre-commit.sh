@@ -7,22 +7,22 @@
 (command -v markdownfmt) || go install github.com/shurcooL/markdownfmt@latest
 
 PACKAGES=(asset helper momentum strategy trend volatility volume)
-PACKAGE_FILES=(${PACKAGES[@]/#/./})
-PACKAGE_FILES=(${PACKAGE_FILES[@]/%//...})
+PACKAGE_FILES=("${PACKAGES[@]/#/./}")
+PACKAGE_FILES=("${PACKAGE_FILES[@]/%//...}")
 
 go fmt ./...
 go fix ./...
 go vet ./...
-go test -cover ${PACKAGE_FILES[@]}
+go test -cover "${PACKAGE_FILES[@]}"
 gosec ./...
 
 revive -config=revive.toml ./...
 staticcheck ./...
 
-for package in ${PACKAGES[@]};
+for package in "${PACKAGES[@]}";
 do
-    echo Package $package
-    gomarkdoc --repository.default-branch v2 --output $package/README.md ./$package
+    echo Package "$package"
+    gomarkdoc --repository.default-branch v2 --output "$package"/README.md ./"$package"
 done
 
 # markdownfmt -w README.md
