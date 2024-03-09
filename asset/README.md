@@ -481,7 +481,7 @@ func NewTiingoRepository(apiKey string) *TiingoRepository
 NewTiingoRepository initializes a file system repository with the given API key.
 
 <a name="TiingoRepository.Append"></a>
-### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/v2/asset/tiingo_repository.go#L226>)
+### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/v2/asset/tiingo_repository.go#L234>)
 
 ```go
 func (*TiingoRepository) Append(_ string, _ <-chan *Snapshot) error
@@ -517,7 +517,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="TiingoRepository.LastDate"></a>
-### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/v2/asset/tiingo_repository.go#L190>)
+### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/v2/asset/tiingo_repository.go#L194>)
 
 ```go
 func (r *TiingoRepository) LastDate(name string) (time.Time, error)

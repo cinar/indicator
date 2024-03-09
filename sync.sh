@@ -44,15 +44,14 @@ then
 fi
 
 TIINGO_KEY=$1
+CHUNK=50
 
-for FROM in $(seq 0 50 "$COUNT");
+for FROM in $(seq 0 "$CHUNK" "$COUNT");
 do
-	TO=$((FROM + 50))
-
 	echo Sync from "$FROM" to "$TO"...
-	go run cmd/indicator-sync/main.go -key "$TIINGO_KEY" -target ~/assets -days 3650 "${SP_500[@]:$FROM:$TO}"
+	go run cmd/indicator-sync/main.go -key "$TIINGO_KEY" -target ~/assets -days 3650 "${SP_500[@]:FROM:CHUNK}"
 
-	#echo Sleep
+	echo Sleep
 	sleep 1h
 done
 

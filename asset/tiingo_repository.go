@@ -146,6 +146,10 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 		return nil, err
 	}
 
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("request failed with %s", res.Status)
+	}
+
 	snapshots := make(chan *Snapshot)
 
 	go func() {
@@ -200,6 +204,10 @@ func (r *TiingoRepository) LastDate(name string) (time.Time, error) {
 	res, err := r.client.Do(req)
 	if err != nil {
 		return lastDate, err
+	}
+
+	if res.StatusCode != 200 {
+		return lastDate, fmt.Errorf("request failed with %s", res.Status)
 	}
 
 	body, err := io.ReadAll(res.Body)
