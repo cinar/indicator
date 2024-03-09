@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -35,16 +37,24 @@ type RsiStrategy struct {
 
 // NewRsiStrategy function initializes a new RSI strategy instance with the default parameters.
 func NewRsiStrategy() *RsiStrategy {
+	return NewRsiStrategyWith(
+		DefaultRsiStrategyBuyAt,
+		DefaultRsiStrategySellAt,
+	)
+}
+
+// NewRsiStrategyWith function initializes a new RSI strategy instance with the given parameters.
+func NewRsiStrategyWith(buyAt, sellAt float64) *RsiStrategy {
 	return &RsiStrategy{
 		Rsi:    momentum.NewRsi[float64](),
-		BuyAt:  DefaultRsiStrategyBuyAt,
-		SellAt: DefaultRsiStrategySellAt,
+		BuyAt:  buyAt,
+		SellAt: sellAt,
 	}
 }
 
 // Name returns the name of the strategy.
-func (*RsiStrategy) Name() string {
-	return "RSI Strategy"
+func (r *RsiStrategy) Name() string {
+	return fmt.Sprintf("RSI Strategy %.0f-%.0f", r.BuyAt, r.SellAt)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.

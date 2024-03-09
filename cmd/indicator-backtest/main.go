@@ -13,6 +13,7 @@ import (
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/strategy/compound"
 	"github.com/cinar/indicator/v2/strategy/momentum"
 	"github.com/cinar/indicator/v2/strategy/trend"
 	"github.com/cinar/indicator/v2/strategy/volatility"
@@ -44,6 +45,7 @@ func main() {
 	backtest.Workers = workers
 	backtest.LastDays = lastDays
 	backtest.Names = append(backtest.Names, flag.Args()...)
+	backtest.Strategies = append(backtest.Strategies, compound.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, momentum.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, strategy.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, trend.AllStrategies()...)
