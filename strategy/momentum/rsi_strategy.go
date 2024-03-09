@@ -12,11 +12,11 @@ import (
 )
 
 const (
-	// DefaultRsiBuyAt defines the default RSI level at which a Buy action is generated.
-	DefaultRsiBuyAt = 30
+	// DefaultRsiStrategyBuyAt defines the default RSI level at which a Buy action is generated.
+	DefaultRsiStrategyBuyAt = 30
 
-	// DefaultRsiSellAt defines the default RSI level at which a Sell action is generated.
-	DefaultRsiSellAt = 70
+	// DefaultRsiStrategySellAt defines the default RSI level at which a Sell action is generated.
+	DefaultRsiStrategySellAt = 70
 )
 
 // RsiStrategy represents the configuration parameters for calculating the RSI strategy.
@@ -37,8 +37,8 @@ type RsiStrategy struct {
 func NewRsiStrategy() *RsiStrategy {
 	return &RsiStrategy{
 		Rsi:    momentum.NewRsi[float64](),
-		BuyAt:  DefaultRsiBuyAt,
-		SellAt: DefaultRsiSellAt,
+		BuyAt:  DefaultRsiStrategyBuyAt,
+		SellAt: DefaultRsiStrategySellAt,
 	}
 }
 
