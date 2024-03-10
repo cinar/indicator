@@ -30,6 +30,7 @@ The information provided on this project is strictly for informational purposes 
 - [func CheckResults\(results \<\-chan \*Result, actions \<\-chan Action, outcomes \<\-chan float64\) error](<#CheckResults>)
 - [func ComputeWithOutcome\(s Strategy, c \<\-chan \*asset.Snapshot\) \(\<\-chan Action, \<\-chan float64\)](<#ComputeWithOutcome>)
 - [func CountActions\(acs \[\]\<\-chan Action\) \(int, int, int, bool\)](<#CountActions>)
+- [func CountTransactions\(ac \<\-chan Action\) \<\-chan int](<#CountTransactions>)
 - [func DenormalizeActions\(ac \<\-chan Action\) \<\-chan Action](<#DenormalizeActions>)
 - [func NormalizeActions\(ac \<\-chan Action\) \<\-chan Action](<#NormalizeActions>)
 - [func Outcome\[T helper.Number\]\(values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#Outcome>)
@@ -121,6 +122,15 @@ func CountActions(acs []<-chan Action) (int, int, int, bool)
 ```
 
 CountActions taken a slice of Action channels, and counts them by their type.
+
+<a name="CountTransactions"></a>
+## func [CountTransactions](<https://github.com/cinar/indicator/blob/v2/strategy/action.go#L110>)
+
+```go
+func CountTransactions(ac <-chan Action) <-chan int
+```
+
+CountTransactions counts the number of recommended Buy and Sell actions.
 
 <a name="DenormalizeActions"></a>
 ## func [DenormalizeActions](<https://github.com/cinar/indicator/blob/v2/strategy/action.go#L72>)
@@ -262,7 +272,7 @@ type Backtest struct {
 ```
 
 <a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L77>)
+### func [NewBacktest](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L80>)
 
 ```go
 func NewBacktest(repository asset.Repository, outputDir string) *Backtest
@@ -271,7 +281,7 @@ func NewBacktest(repository asset.Repository, outputDir string) *Backtest
 NewBacktest function initializes a new backtest instance.
 
 <a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L92>)
+### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L95>)
 
 ```go
 func (b *Backtest) Run() error

@@ -105,3 +105,16 @@ func CountActions(acs []<-chan Action) (int, int, int, bool) {
 
 	return buy, hold, sell, true
 }
+
+// CountTransactions counts the number of recommended Buy and Sell actions.
+func CountTransactions(ac <-chan Action) <-chan int {
+	var transactions int
+
+	return helper.Map(ac, func(action Action) int {
+		if action != Hold {
+			transactions++
+		}
+
+		return transactions
+	})
+}

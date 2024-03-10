@@ -22,6 +22,7 @@
                             <th>Strategy</th>
                             <th>Action</th>
                             <th>Outcome</th>
+                            <th>Transactions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +48,9 @@
                                 {{ end }}
                                 {{ printf "%.2f" .Outcome }}%
                                 </span>
+                            </td>
+                            <td>
+                                {{ .Transactions }}
                             </td>
                         </tr>
                         {{ end }}

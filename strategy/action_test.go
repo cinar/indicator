@@ -118,3 +118,15 @@ func TestCountActionsEmpty(t *testing.T) {
 		t.Fatal("is ok")
 	}
 }
+
+func TestCountTransactions(t *testing.T) {
+	actions := helper.SliceToChan([]strategy.Action{strategy.Hold, strategy.Buy, strategy.Hold, strategy.Sell})
+	expected := helper.SliceToChan([]int{0, 1, 1, 2})
+
+	actual := strategy.CountTransactions(actions)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

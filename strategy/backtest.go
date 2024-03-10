@@ -71,6 +71,9 @@ type backtestResult struct {
 
 	// Outcome is the effectiveness of applying the recommended actions.
 	Outcome float64
+
+	// Transactions is the number of transactions made by the strategy.
+	Transactions int
 }
 
 // NewBacktest function initializes a new backtest instance.
@@ -185,8 +188,11 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 			actions, outcomes := ComputeWithOutcome(st, snapshotCopies[0])
 			report := st.Report(snapshotCopies[1])
 
-			actions = helper.Last(DenormalizeActions(actions), 1)
+			actionsSplice := helper.Duplicate(actions, 2)
+
+			actions = helper.Last(DenormalizeActions(actionsSplice[0]), 1)
 			outcomes = helper.Last(outcomes, 1)
+			transactions := helper.Last(CountTransactions(actionsSplice[1]), 1)
 
 			err := report.WriteToFile(path.Join(b.outputDir, b.strategyReportFileName(name, st.Name())))
 			if err != nil {
@@ -199,6 +205,7 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 				StrategyName: st.Name(),
 				Action:       <-actions,
 				Outcome:      <-outcomes * 100,
+				Transactions: <-transactions,
 			})
 		}
 
