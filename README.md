@@ -119,7 +119,7 @@ The following list of strategies are currently supported by this package:
 
 ### 🚀 Momentum Strategies
 
--	Awesome Oscillator Strategy
+-	[Awesome Oscillator Strategy](strategy/momentum/README.md#type-awesomeoscillatorstrategy)
 -   [RSI Strategy](strategy/momentum/README.md#type-rsistrategy)
 -	Williams R Strategy
 

@@ -23,6 +23,7 @@ import "github.com/cinar/indicator/v2/strategy"
 // AllStrategies returns a slice containing references to all available momentum strategies.
 func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
+		NewAwesomeOscillatorStrategy(),
 		NewRsiStrategy(),
 	}
 }
