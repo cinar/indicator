@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -25,14 +27,31 @@ type MacdStrategy struct {
 
 // NewMacdStrategy function initializes a new MACD strategy instance.
 func NewMacdStrategy() *MacdStrategy {
+	return NewMacdStrategyWith(
+		trend.DefaultMacdPeriod1,
+		trend.DefaultMacdPeriod2,
+		trend.DefaultMacdPeriod3,
+	)
+}
+
+// NewMacdStrategyWith function initializes a new MACD strategy instance with the given parameters.
+func NewMacdStrategyWith(period1, period2, period3 int) *MacdStrategy {
 	return &MacdStrategy{
-		Macd: trend.NewMacd[float64](),
+		Macd: trend.NewMacdWithPeriod[float64](
+			period1,
+			period2,
+			period3,
+		),
 	}
 }
 
 // Name returns the name of the strategy.
-func (*MacdStrategy) Name() string {
-	return "MACD Strategy"
+func (m *MacdStrategy) Name() string {
+	return fmt.Sprintf("MACD Strategy (%d,%d,%d)",
+		m.Macd.Ema1.Period,
+		m.Macd.Ema2.Period,
+		m.Macd.Ema3.Period,
+	)
 }
 
 // Compute processes the provided asset snapshots and generates a

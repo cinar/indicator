@@ -51,7 +51,7 @@ func NewMacdRsiStrategyWith(buyAt, sellAt float64) *MacdRsiStrategy {
 
 // Name returns the name of the strategy.
 func (m *MacdRsiStrategy) Name() string {
-	return fmt.Sprintf("MACD-RSI Strategy %.0f-%.0f",
+	return fmt.Sprintf("MACD-RSI Strategy (%.0f, %.0f)",
 		m.RsiStrategy.BuyAt,
 		m.RsiStrategy.SellAt,
 	)

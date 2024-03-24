@@ -32,22 +32,21 @@ type Macd[T helper.Number] struct {
 	Ema3 *Ema[T]
 }
 
-// NewMacd function initializes a new APO instance
-// with the default parameters.
+// NewMacd function initializes a new MACD instance with the default parameters.
 func NewMacd[T helper.Number]() *Macd[T] {
-	ema1 := NewEma[T]()
-	ema1.Period = DefaultMacdPeriod1
+	return NewMacdWithPeriod[T](
+		DefaultMacdPeriod1,
+		DefaultMacdPeriod2,
+		DefaultMacdPeriod3,
+	)
+}
 
-	ema2 := NewEma[T]()
-	ema2.Period = DefaultMacdPeriod2
-
-	ema3 := NewEma[T]()
-	ema3.Period = DefaultMacdPeriod3
-
+// NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
+func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T] {
 	return &Macd[T]{
-		Ema1: ema1,
-		Ema2: ema2,
-		Ema3: ema3,
+		Ema1: NewEmaWithPeriod[T](period1),
+		Ema2: NewEmaWithPeriod[T](period2),
+		Ema3: NewEmaWithPeriod[T](period3),
 	}
 }
 

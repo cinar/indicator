@@ -54,6 +54,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(kdj \*Kdj\[T\]\) IdlePeriod\(\) int](<#Kdj[T].IdlePeriod>)
 - [type Macd](<#Macd>)
   - [func NewMacd\[T helper.Number\]\(\) \*Macd\[T\]](<#NewMacd>)
+  - [func NewMacdWithPeriod\[T helper.Number\]\(period1, period2, period3 int\) \*Macd\[T\]](<#NewMacdWithPeriod>)
   - [func \(m \*Macd\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Macd[T].Compute>)
   - [func \(m \*Macd\[T\]\) IdlePeriod\(\) int](<#Macd[T].IdlePeriod>)
 - [type MassIndex](<#MassIndex>)
@@ -652,16 +653,25 @@ type Macd[T helper.Number] struct {
 ```
 
 <a name="NewMacd"></a>
-### func [NewMacd](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L37>)
+### func [NewMacd](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L36>)
 
 ```go
 func NewMacd[T helper.Number]() *Macd[T]
 ```
 
-NewMacd function initializes a new APO instance with the default parameters.
+NewMacd function initializes a new MACD instance with the default parameters.
+
+<a name="NewMacdWithPeriod"></a>
+### func [NewMacdWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L45>)
+
+```go
+func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T]
+```
+
+NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
 
 <a name="Macd[T].Compute"></a>
-### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L56>)
+### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L55>)
 
 ```go
 func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T)
@@ -670,7 +680,7 @@ func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the MACD and the signal line.
 
 <a name="Macd[T].IdlePeriod"></a>
-### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L72>)
+### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L71>)
 
 ```go
 func (m *Macd[T]) IdlePeriod() int
