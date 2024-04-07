@@ -77,6 +77,7 @@ The following list of indicators are currently supported by this package:
 -	[Keltner Channel (KC)](volatility/README.md#type-keltnerchannel)
 -	[Moving Standard Deviation (Std)](volatility/README.md#type-movingstd)
 -	[Projection Oscillator (PO)](volatility/README.md#type-po)
+-   [Super Trend](volatility/README.md#type-supertrend)
 -	[Ulcer Index (UI)](volatility/README.md#type-ulcerindex)
 
 ### 📢 Volume Indicators

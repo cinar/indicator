@@ -24,5 +24,6 @@ import "github.com/cinar/indicator/v2/strategy"
 func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewBollingerBandsStrategy(),
+		NewSuperTrendStrategy(),
 	}
 }

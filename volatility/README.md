@@ -66,6 +66,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewPoWithPeriod\[T helper.Number\]\(period int\) \*Po\[T\]](<#NewPoWithPeriod>)
   - [func \(p \*Po\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Po[T].Compute>)
   - [func \(p \*Po\[T\]\) IdlePeriod\(\) int](<#Po[T].IdlePeriod>)
+- [type SuperTrend](<#SuperTrend>)
+  - [func NewSuperTrend\[T helper.Number\]\(\) \*SuperTrend\[T\]](<#NewSuperTrend>)
+  - [func NewSuperTrendWith\[T helper.Number\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWith>)
+  - [func \(s \*SuperTrend\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#SuperTrend[T].Compute>)
+  - [func \(s \*SuperTrend\[T\]\) IdlePeriod\(\) int](<#SuperTrend[T].IdlePeriod>)
 - [type UlcerIndex](<#UlcerIndex>)
   - [func NewUlcerIndex\[T helper.Number\]\(\) \*UlcerIndex\[T\]](<#NewUlcerIndex>)
   - [func \(u \*UlcerIndex\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#UlcerIndex[T].Compute>)
@@ -83,6 +88,18 @@ const (
 
     // DefaultChandelierExitMultiplier is the default multiplier for the Chandelier Exit.
     DefaultChandelierExitMultiplier = 3
+)
+```
+
+<a name="DefaultSuperTrendPeriod"></a>
+
+```go
+const (
+    // DefaultSuperTrendPeriod is the default period value.
+    DefaultSuperTrendPeriod = 14
+
+    // DefaultSuperTrendMultiplier is the default multiplier value.
+    DefaultSuperTrendMultiplier = 2.5
 )
 ```
 
@@ -658,6 +675,74 @@ func (p *Po[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that PO won't yield any results.
+
+<a name="SuperTrend"></a>
+## type [SuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L38-L41>)
+
+SuperTrend represents the configuration parameters for calculating the Super Trend.
+
+```
+BasicUpperBands = (High + Low) / 2 + Multiplier * ATR
+BasicLowerBands = (High + Low) / 2 - Multiplier * ATR
+FinalUpperBands = If (BasicUpperBand < PreviousFinalUpperBand)
+                  Or (PreviousClose > PreviousFinalUpperBand)
+                  Then BasicUpperBand Else PreviousFinalUpperBand
+FinalLowerBands = If (BasicLowerBand > PreviousFinalLowerBand)
+                  Or (PreviousClose < PreviousFinalLowerBand)
+                  Then BasicLowerBand Else PreviousFinalLowerBand
+SuperTrend = If upTrend
+			 Then
+               If (Close <= FinalUpperBand) Then FinalUpperBand Else FinalLowerBand
+             Else
+               If (Close >= FinalLowerBand) Then FinalLowerBand Else FinalUpperBand
+
+UpTrend = If (SuperTrend == FinalUpperBand) Then True Else False
+```
+
+Example:
+
+```go
+type SuperTrend[T helper.Number] struct {
+    Atr        *Atr[T]
+    Multiplier T
+}
+```
+
+<a name="NewSuperTrend"></a>
+### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L44>)
+
+```go
+func NewSuperTrend[T helper.Number]() *SuperTrend[T]
+```
+
+NewSuperTrend function initializes a new Super Trend instance with the default parameters.
+
+<a name="NewSuperTrendWith"></a>
+### func [NewSuperTrendWith](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L54>)
+
+```go
+func NewSuperTrendWith[T helper.Number](period int, multiplier T) *SuperTrend[T]
+```
+
+NewSuperTrendWith function initializes a new Super Trend instance with the given parameters.
+
+<a name="SuperTrend[T].Compute"></a>
+### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L62>)
+
+```go
+func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function calculates the Super Trend, using separate channels for highs, lows, and closings.
+
+<a name="SuperTrend[T].IdlePeriod"></a>
+### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L152>)
+
+```go
+func (s *SuperTrend[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Super Trend won't yield any results.
 
 <a name="UlcerIndex"></a>
 ## type [UlcerIndex](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L30-L33>)
