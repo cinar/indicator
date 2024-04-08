@@ -5,6 +5,8 @@
 package volatility
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -21,14 +23,22 @@ type SuperTrendStrategy struct {
 
 // NewSuperTrendStrategy function initializes a new Super Trend strategy instance.
 func NewSuperTrendStrategy() *SuperTrendStrategy {
+	return NewSuperTrendStrategyWith(
+		volatility.DefaultSuperTrendPeriod,
+		volatility.DefaultSuperTrendMultiplier,
+	)
+}
+
+// NewSuperTrendStrategyWith function initializes a new Super Trend strategy with the given parameters.
+func NewSuperTrendStrategyWith(period int, multiplier float64) *SuperTrendStrategy {
 	return &SuperTrendStrategy{
-		SuperTrend: volatility.NewSuperTrend[float64](),
+		SuperTrend: volatility.NewSuperTrendWith[float64](period, multiplier),
 	}
 }
 
 // Name returns the name of the strategy.
-func (*SuperTrendStrategy) Name() string {
-	return "Super Trend Strategy"
+func (s *SuperTrendStrategy) Name() string {
+	return fmt.Sprintf("Super Trend Strategy (%d, %f)", s.SuperTrend.Atr.Sma.Period, s.SuperTrend.Multiplier)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.

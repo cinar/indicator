@@ -25,5 +25,8 @@ func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewBollingerBandsStrategy(),
 		NewSuperTrendStrategy(),
+		NewSuperTrendStrategyWith(14, 3),
+		NewSuperTrendStrategyWith(10, 3),
+		NewSuperTrendStrategyWith(7, 3),
 	}
 }
