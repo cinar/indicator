@@ -38,7 +38,7 @@ func NewSuperTrendStrategyWith(period int, multiplier float64) *SuperTrendStrate
 
 // Name returns the name of the strategy.
 func (s *SuperTrendStrategy) Name() string {
-	return fmt.Sprintf("Super Trend Strategy (%d, %f)", s.SuperTrend.Atr.Sma.Period, s.SuperTrend.Multiplier)
+	return fmt.Sprintf("Super Trend Strategy (%d, %.0f)", s.SuperTrend.Atr.Sma.Period, s.SuperTrend.Multiplier)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
