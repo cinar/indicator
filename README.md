@@ -53,6 +53,7 @@ The following list of indicators are currently supported by this package:
 -	[Typical Price](trend/README.md#type-typicalprice)
 -	[Volume Weighted Moving Average (VWMA)](trend/README.md#type-vwma)
 -	Vortex Indicator
+-   [Weighted Moving Average (WMA)](trend/README.md#type-wma)
 
 ### 🚀 Momentum Indicators
 
