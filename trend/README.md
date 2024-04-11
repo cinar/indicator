@@ -48,6 +48,10 @@ The information provided on this project is strictly for informational purposes 
   - [func NewEmaWithPeriod\[T helper.Number\]\(period int\) \*Ema\[T\]](<#NewEmaWithPeriod>)
   - [func \(ema \*Ema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Ema[T].Compute>)
   - [func \(ema \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
+- [type Hma](<#Hma>)
+  - [func NewHmaWith\[T helper.Number\]\(period int\) \*Hma\[T\]](<#NewHmaWith>)
+  - [func \(h \*Hma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Hma[T].Compute>)
+  - [func \(h \*Hma\[T\]\) IdlePeriod\(\) int](<#Hma[T].IdlePeriod>)
 - [type Kdj](<#Kdj>)
   - [func NewKdj\[T helper.Number\]\(\) \*Kdj\[T\]](<#NewKdj>)
   - [func \(kdj \*Kdj\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].Compute>)
@@ -569,6 +573,58 @@ func (ema *Ema[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that EMA yield any results.
+
+<a name="Hma"></a>
+## type [Hma](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L20-L29>)
+
+Hma represents the configuration parameters for calculating the Hull Moving Average \(HMA\). Developed by Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
+
+```
+WMA1 = WMA(period/2 , values)
+WMA2 = WMA(period, values)
+WMA3 = WMA(sqrt(period), (2 * WMA1) - WMA2)
+HMA = WMA3
+```
+
+```go
+type Hma[T helper.Number] struct {
+    // First WMA.
+    Wma1 *Wma[T]
+
+    // Second WMA.
+    Wma2 *Wma[T]
+
+    // Third WMA.
+    Wma3 *Wma[T]
+}
+```
+
+<a name="NewHmaWith"></a>
+### func [NewHmaWith](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L32>)
+
+```go
+func NewHmaWith[T helper.Number](period int) *Hma[T]
+```
+
+NewHmaWith function initializes a new HMA instance with the given parameters.
+
+<a name="Hma[T].Compute"></a>
+### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L41>)
+
+```go
+func (h *Hma[T]) Compute(values <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the HMA and the signal line.
+
+<a name="Hma[T].IdlePeriod"></a>
+### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L68>)
+
+```go
+func (h *Hma[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that HMA won't yield any results.
 
 <a name="Kdj"></a>
 ## type [Kdj](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L41-L53>)
@@ -1348,7 +1404,7 @@ IdlePeriod is the initial period that VWMA won't yield any results.
 <a name="Wma"></a>
 ## type [Wma](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L15-L18>)
 
-Wma represents the configuration parameters for calculating the Weighted Moving Average \(VWMA\). It calculates a moving average by putting more weight on recent data and less on past data.
+Wma represents the configuration parameters for calculating the Weighted Moving Average \(WMA\). It calculates a moving average by putting more weight on recent data and less on past data.
 
 ```
 WMA = ((Value1 * 1/N) + (Value2 * 2/N) + ...) / 2
@@ -1377,7 +1433,7 @@ NewWmaWith function initializes a new WMA instance with the given parameters.
 func (w *Wma[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the VWMA and the signal line.
+Compute function takes a channel of numbers and computes the WMA and the signal line.
 
 <a name="Wma[T].IdlePeriod"></a>
 ### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L53>)

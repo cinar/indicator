@@ -8,7 +8,7 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
-// Wma represents the configuration parameters for calculating the Weighted Moving Average (VWMA).
+// Wma represents the configuration parameters for calculating the Weighted Moving Average (WMA).
 // It calculates a moving average by putting more weight on recent data and less on past data.
 //
 //	WMA = ((Value1 * 1/N) + (Value2 * 2/N) + ...) / 2
@@ -24,7 +24,7 @@ func NewWmaWith[T helper.Number](period int) *Wma[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the VWMA and the signal line.
+// Compute function takes a channel of numbers and computes the WMA and the signal line.
 func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 	window := helper.NewRing[T](w.Period)
 

@@ -33,6 +33,7 @@ The following list of indicators are currently supported by this package:
 -	[Balance of Power (BoP)](trend/README.md#type-bop)
 -	Chande Forecast Oscillator (CFO)
 -	[Community Channel Index (CCI)](trend/README.md#type-cci)
+-   [Hull Moving Average (HMA)](trend/README.md#type-hma)
 -	[Double Exponential Moving Average (DEMA)](trend/README.md#type-dema)
 -	[Exponential Moving Average (EMA)](trend/README.md#type-ema)
 -	[Mass Index (MI)](trend/README.md#type-massindex)
