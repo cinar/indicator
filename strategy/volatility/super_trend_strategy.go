@@ -23,22 +23,19 @@ type SuperTrendStrategy struct {
 
 // NewSuperTrendStrategy function initializes a new Super Trend strategy instance.
 func NewSuperTrendStrategy() *SuperTrendStrategy {
-	return NewSuperTrendStrategyWith(
-		volatility.DefaultSuperTrendPeriod,
-		volatility.DefaultSuperTrendMultiplier,
-	)
+	return NewSuperTrendStrategyWith(volatility.NewSuperTrend[float64]())
 }
 
-// NewSuperTrendStrategyWith function initializes a new Super Trend strategy with the given parameters.
-func NewSuperTrendStrategyWith(period int, multiplier float64) *SuperTrendStrategy {
+// NewSuperTrendStrategyWith function initializes a new Super Trend strategy with the given Super Trend instance.
+func NewSuperTrendStrategyWith(superTrend *volatility.SuperTrend[float64]) *SuperTrendStrategy {
 	return &SuperTrendStrategy{
-		SuperTrend: volatility.NewSuperTrendWith[float64](period, multiplier),
+		SuperTrend: superTrend,
 	}
 }
 
 // Name returns the name of the strategy.
 func (s *SuperTrendStrategy) Name() string {
-	return fmt.Sprintf("Super Trend Strategy (%d, %.0f)", s.SuperTrend.Atr.Sma.Period, s.SuperTrend.Multiplier)
+	return fmt.Sprintf("Super Trend Strategy (%s, %.1f)", s.SuperTrend.Atr.Ma.String(), s.SuperTrend.Multiplier)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.

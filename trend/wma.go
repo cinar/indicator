@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -52,4 +54,9 @@ func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 // IdlePeriod is the initial period that WMA won't yield any results.
 func (w *Wma[T]) IdlePeriod() int {
 	return w.Period - 1
+}
+
+// String is the string representation of the WMA.
+func (w *Wma[T]) String() string {
+	return fmt.Sprintf("WMA(%d)", w.Period)
 }

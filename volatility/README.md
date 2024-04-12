@@ -31,6 +31,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AccelerationBands\[T\]\) IdlePeriod\(\) int](<#AccelerationBands[T].IdlePeriod>)
 - [type Atr](<#Atr>)
   - [func NewAtr\[T helper.Number\]\(\) \*Atr\[T\]](<#NewAtr>)
+  - [func NewAtrWithMa\[T helper.Number\]\(ma trend.Ma\[T\]\) \*Atr\[T\]](<#NewAtrWithMa>)
   - [func NewAtrWithPeriod\[T helper.Number\]\(period int\) \*Atr\[T\]](<#NewAtrWithPeriod>)
   - [func \(a \*Atr\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Atr[T].Compute>)
   - [func \(a \*Atr\[T\]\) IdlePeriod\(\) int](<#Atr[T].IdlePeriod>)
@@ -68,7 +69,8 @@ The information provided on this project is strictly for informational purposes 
   - [func \(p \*Po\[T\]\) IdlePeriod\(\) int](<#Po[T].IdlePeriod>)
 - [type SuperTrend](<#SuperTrend>)
   - [func NewSuperTrend\[T helper.Number\]\(\) \*SuperTrend\[T\]](<#NewSuperTrend>)
-  - [func NewSuperTrendWith\[T helper.Number\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWith>)
+  - [func NewSuperTrendWithMa\[T helper.Number\]\(ma trend.Ma\[T\], multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithMa>)
+  - [func NewSuperTrendWithPeriod\[T helper.Number\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithPeriod>)
   - [func \(s \*SuperTrend\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#SuperTrend[T].Compute>)
   - [func \(s \*SuperTrend\[T\]\) IdlePeriod\(\) int](<#SuperTrend[T].IdlePeriod>)
 - [type UlcerIndex](<#UlcerIndex>)
@@ -219,14 +221,16 @@ func (a *AccelerationBands[T]) IdlePeriod() int
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 
 <a name="Atr"></a>
-## type [Atr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L30-L33>)
+## type [Atr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L32-L35>)
 
 Atr represents the configuration parameters for calculating the Average True Range \(ATR\). It is a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
 ```
 TR = Max((High - Low), (High - Closing), (Closing - Low))
-ATR = SMA TR
+ATR = MA TR
 ```
+
+By default, SMA is used as the MA.
 
 Example:
 
@@ -237,13 +241,13 @@ atr.Compute(highs, lows, closings)
 
 ```go
 type Atr[T helper.Number] struct {
-    // Sma is the SMA for the ATR.
-    Sma *trend.Sma[T]
+    // Ma is the moving average for the ATR.
+    Ma trend.Ma[T]
 }
 ```
 
 <a name="NewAtr"></a>
-### func [NewAtr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L36>)
+### func [NewAtr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L38>)
 
 ```go
 func NewAtr[T helper.Number]() *Atr[T]
@@ -251,8 +255,17 @@ func NewAtr[T helper.Number]() *Atr[T]
 
 NewAtr function initializes a new ATR instance with the default parameters.
 
+<a name="NewAtrWithMa"></a>
+### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L48>)
+
+```go
+func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
+```
+
+NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
+
 <a name="NewAtrWithPeriod"></a>
-### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L41>)
+### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L43>)
 
 ```go
 func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
@@ -261,7 +274,7 @@ func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
 NewAtrWithPeriod function initializes a new ATR instance with the given period.
 
 <a name="Atr[T].Compute"></a>
-### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L48>)
+### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L55>)
 
 ```go
 func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -270,7 +283,7 @@ func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the ATR over the specified period.
 
 <a name="Atr[T].IdlePeriod"></a>
-### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L59>)
+### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L66>)
 
 ```go
 func (a *Atr[T]) IdlePeriod() int
@@ -428,7 +441,7 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Chandelier Exit over the specified period.
 
 <a name="ChandelierExit[T].IdlePeriod"></a>
-### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L75>)
+### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L74>)
 
 ```go
 func (c *ChandelierExit[T]) IdlePeriod() int
@@ -677,7 +690,7 @@ func (p *Po[T]) IdlePeriod() int
 IdlePeriod is the initial period that PO won't yield any results.
 
 <a name="SuperTrend"></a>
-## type [SuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L38-L41>)
+## type [SuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L39-L42>)
 
 SuperTrend represents the configuration parameters for calculating the Super Trend.
 
@@ -709,7 +722,7 @@ type SuperTrend[T helper.Number] struct {
 ```
 
 <a name="NewSuperTrend"></a>
-### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L44>)
+### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L45>)
 
 ```go
 func NewSuperTrend[T helper.Number]() *SuperTrend[T]
@@ -717,17 +730,26 @@ func NewSuperTrend[T helper.Number]() *SuperTrend[T]
 
 NewSuperTrend function initializes a new Super Trend instance with the default parameters.
 
-<a name="NewSuperTrendWith"></a>
-### func [NewSuperTrendWith](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L54>)
+<a name="NewSuperTrendWithMa"></a>
+### func [NewSuperTrendWithMa](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L64>)
 
 ```go
-func NewSuperTrendWith[T helper.Number](period int, multiplier T) *SuperTrend[T]
+func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T]
 ```
 
-NewSuperTrendWith function initializes a new Super Trend instance with the given parameters.
+NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance and multiplier.
+
+<a name="NewSuperTrendWithPeriod"></a>
+### func [NewSuperTrendWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L55>)
+
+```go
+func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T]
+```
+
+NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
 
 <a name="SuperTrend[T].Compute"></a>
-### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L62>)
+### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L72>)
 
 ```go
 func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -736,7 +758,7 @@ func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function calculates the Super Trend, using separate channels for highs, lows, and closings.
 
 <a name="SuperTrend[T].IdlePeriod"></a>
-### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L152>)
+### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L162>)
 
 ```go
 func (s *SuperTrend[T]) IdlePeriod() int

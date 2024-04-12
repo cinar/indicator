@@ -37,3 +37,12 @@ func TestSma(t *testing.T) {
 		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }
+
+func TestSmaString(t *testing.T) {
+	expected := "SMA(10)"
+	actual := trend.NewSmaWithPeriod[float64](10).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

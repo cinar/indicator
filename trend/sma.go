@@ -4,7 +4,11 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"fmt"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 const (
 	// DefaultSmaPeriod is the default SMA period.
@@ -49,4 +53,9 @@ func (s *Sma[T]) Compute(c <-chan T) <-chan T {
 // IdlePeriod is the initial period that SMA won't yield any results.
 func (s *Sma[T]) IdlePeriod() int {
 	return s.Period - 1
+}
+
+// String is the string representation of the SMA.
+func (s *Sma[T]) String() string {
+	return fmt.Sprintf("SMA(%d)", s.Period)
 }

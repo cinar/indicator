@@ -5,6 +5,7 @@
 package trend
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -19,21 +20,21 @@ import (
 //	HMA = WMA3
 type Hma[T helper.Number] struct {
 	// First WMA.
-	Wma1 *Wma[T]
+	wma1 *Wma[T]
 
 	// Second WMA.
-	Wma2 *Wma[T]
+	wma2 *Wma[T]
 
 	// Third WMA.
-	Wma3 *Wma[T]
+	wma3 *Wma[T]
 }
 
-// NewHmaWith function initializes a new HMA instance with the given parameters.
-func NewHmaWith[T helper.Number](period int) *Hma[T] {
+// NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
+func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
 	return &Hma[T]{
-		Wma1: NewWmaWith[T](int(math.Round(float64(period) / 2))),
-		Wma2: NewWmaWith[T](period),
-		Wma3: NewWmaWith[T](int(math.Round(math.Sqrt(float64(period))))),
+		wma1: NewWmaWith[T](int(math.Round(float64(period) / 2))),
+		wma2: NewWmaWith[T](period),
+		wma3: NewWmaWith[T](int(math.Round(math.Sqrt(float64(period))))),
 	}
 }
 
@@ -42,29 +43,34 @@ func (h *Hma[T]) Compute(values <-chan T) <-chan T {
 	valuesSplice := helper.Duplicate(values, 2)
 
 	//	WMA1 = WMA(period/2 , values)
-	wma1 := h.Wma1.Compute(valuesSplice[0])
+	wmas1 := h.wma1.Compute(valuesSplice[0])
 
 	//	WMA2 = WMA(period, values)
-	wma2 := h.Wma2.Compute(valuesSplice[1])
+	wmas2 := h.wma2.Compute(valuesSplice[1])
 
-	wma1 = helper.Skip(wma1, h.Wma2.IdlePeriod()-h.Wma1.IdlePeriod())
+	wmas1 = helper.Skip(wmas1, h.wma2.IdlePeriod()-h.wma1.IdlePeriod())
 
 	// WMA3 = WMA(sqrt(period), (2 * WMA1) - WMA2)
-	wma3 := h.Wma3.Compute(
+	wmas3 := h.wma3.Compute(
 		helper.Subtract(
 			helper.MultiplyBy(
-				wma1,
+				wmas1,
 				2,
 			),
-			wma2,
+			wmas2,
 		),
 	)
 
 	// HMA = WMA3
-	return wma3
+	return wmas3
 }
 
 // IdlePeriod is the initial period that HMA won't yield any results.
 func (h *Hma[T]) IdlePeriod() int {
-	return h.Wma2.IdlePeriod() + h.Wma3.IdlePeriod()
+	return h.wma2.IdlePeriod() + h.wma3.IdlePeriod()
+}
+
+// String is the string representation of the HMA.
+func (h *Hma[T]) String() string {
+	return fmt.Sprintf("HMA(%d)", h.wma2.Period)
 }

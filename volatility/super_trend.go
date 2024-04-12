@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/trend"
 )
 
 const (
@@ -44,16 +45,25 @@ type SuperTrend[T helper.Number] struct {
 func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
 	multiplier := DefaultSuperTrendMultiplier
 
-	return NewSuperTrendWith[T](
+	return NewSuperTrendWithPeriod[T](
 		DefaultSuperTrendPeriod,
 		T(multiplier),
 	)
 }
 
-// NewSuperTrendWith function initializes a new Super Trend instance with the given parameters.
-func NewSuperTrendWith[T helper.Number](period int, multiplier T) *SuperTrend[T] {
+// NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
+func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T] {
+	return NewSuperTrendWithMa[T](
+		trend.NewHmaWithPeriod[T](period),
+		multiplier,
+	)
+}
+
+// NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance
+// and multiplier.
+func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T] {
 	return &SuperTrend[T]{
-		Atr:        NewAtrWithPeriod[T](period),
+		Atr:        NewAtrWithMa(ma),
 		Multiplier: multiplier,
 	}
 }

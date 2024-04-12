@@ -4,7 +4,11 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"fmt"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 const (
 	// DefaultEmaPeriod is the default EMA period of 20.
@@ -47,7 +51,7 @@ func NewEmaWithPeriod[T helper.Number](period int) *Ema[T] {
 }
 
 // Compute function takes a channel of numbers and computes the EMA over the specified period.
-func (ema *Ema[T]) Compute(c <-chan T) <-chan T {
+func (e *Ema[T]) Compute(c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
@@ -55,12 +59,12 @@ func (ema *Ema[T]) Compute(c <-chan T) <-chan T {
 
 		// Initial EMA value is the SMA.
 		sma := NewSma[T]()
-		sma.Period = ema.Period
+		sma.Period = e.Period
 
-		before := <-sma.Compute(helper.Head(c, ema.Period))
+		before := <-sma.Compute(helper.Head(c, e.Period))
 		result <- before
 
-		multiplier := ema.Smoothing / T(ema.Period+1)
+		multiplier := e.Smoothing / T(e.Period+1)
 
 		for n := range c {
 			before = (n-before)*multiplier + before
@@ -72,6 +76,11 @@ func (ema *Ema[T]) Compute(c <-chan T) <-chan T {
 }
 
 // IdlePeriod is the initial period that EMA yield any results.
-func (ema *Ema[T]) IdlePeriod() int {
-	return ema.Period - 1
+func (e *Ema[T]) IdlePeriod() int {
+	return e.Period - 1
+}
+
+// String is the string representation of the EMA.
+func (e *Ema[T]) String() string {
+	return fmt.Sprintf("EMA(%d)", e.Period)
 }

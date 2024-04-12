@@ -46,16 +46,19 @@ The information provided on this project is strictly for informational purposes 
 - [type Ema](<#Ema>)
   - [func NewEma\[T helper.Number\]\(\) \*Ema\[T\]](<#NewEma>)
   - [func NewEmaWithPeriod\[T helper.Number\]\(period int\) \*Ema\[T\]](<#NewEmaWithPeriod>)
-  - [func \(ema \*Ema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Ema[T].Compute>)
-  - [func \(ema \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
+  - [func \(e \*Ema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Ema[T].Compute>)
+  - [func \(e \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
+  - [func \(e \*Ema\[T\]\) String\(\) string](<#Ema[T].String>)
 - [type Hma](<#Hma>)
-  - [func NewHmaWith\[T helper.Number\]\(period int\) \*Hma\[T\]](<#NewHmaWith>)
+  - [func NewHmaWithPeriod\[T helper.Number\]\(period int\) \*Hma\[T\]](<#NewHmaWithPeriod>)
   - [func \(h \*Hma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Hma[T].Compute>)
   - [func \(h \*Hma\[T\]\) IdlePeriod\(\) int](<#Hma[T].IdlePeriod>)
+  - [func \(h \*Hma\[T\]\) String\(\) string](<#Hma[T].String>)
 - [type Kdj](<#Kdj>)
   - [func NewKdj\[T helper.Number\]\(\) \*Kdj\[T\]](<#NewKdj>)
   - [func \(kdj \*Kdj\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].Compute>)
   - [func \(kdj \*Kdj\[T\]\) IdlePeriod\(\) int](<#Kdj[T].IdlePeriod>)
+- [type Ma](<#Ma>)
 - [type Macd](<#Macd>)
   - [func NewMacd\[T helper.Number\]\(\) \*Macd\[T\]](<#NewMacd>)
   - [func NewMacdWithPeriod\[T helper.Number\]\(period1, period2, period3 int\) \*Macd\[T\]](<#NewMacdWithPeriod>)
@@ -98,6 +101,7 @@ The information provided on this project is strictly for informational purposes 
   - [func NewSmaWithPeriod\[T helper.Number\]\(period int\) \*Sma\[T\]](<#NewSmaWithPeriod>)
   - [func \(s \*Sma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Sma[T].Compute>)
   - [func \(s \*Sma\[T\]\) IdlePeriod\(\) int](<#Sma[T].IdlePeriod>)
+  - [func \(s \*Sma\[T\]\) String\(\) string](<#Sma[T].String>)
 - [type Tema](<#Tema>)
   - [func NewTema\[T helper.Number\]\(\) \*Tema\[T\]](<#NewTema>)
   - [func \(t \*Tema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Tema[T].Compute>)
@@ -121,6 +125,7 @@ The information provided on this project is strictly for informational purposes 
   - [func NewWmaWith\[T helper.Number\]\(period int\) \*Wma\[T\]](<#NewWmaWith>)
   - [func \(w \*Wma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Wma[T].Compute>)
   - [func \(w \*Wma\[T\]\) IdlePeriod\(\) int](<#Wma[T].IdlePeriod>)
+  - [func \(w \*Wma\[T\]\) String\(\) string](<#Wma[T].String>)
 
 
 ## Constants
@@ -515,7 +520,7 @@ func (d *Dema[T]) IdlePeriod() int
 IdlePeriod is the initial period that DEMA won't yield any results.
 
 <a name="Ema"></a>
-## type [Ema](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L25-L31>)
+## type [Ema](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L29-L35>)
 
 Ema represents the parameters for calculating the Exponential Moving Average.
 
@@ -539,7 +544,7 @@ type Ema[T helper.Number] struct {
 ```
 
 <a name="NewEma"></a>
-### func [NewEma](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L34>)
+### func [NewEma](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L38>)
 
 ```go
 func NewEma[T helper.Number]() *Ema[T]
@@ -548,7 +553,7 @@ func NewEma[T helper.Number]() *Ema[T]
 NewEma function initializes a new EMA instance with the default parameters.
 
 <a name="NewEmaWithPeriod"></a>
-### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L42>)
+### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L46>)
 
 ```go
 func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
@@ -557,25 +562,34 @@ func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
 NewEmaWithPeriod function initializes a new EMA instance with the given period.
 
 <a name="Ema[T].Compute"></a>
-### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L50>)
+### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L54>)
 
 ```go
-func (ema *Ema[T]) Compute(c <-chan T) <-chan T
+func (e *Ema[T]) Compute(c <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the EMA over the specified period.
 
 <a name="Ema[T].IdlePeriod"></a>
-### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L75>)
+### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L79>)
 
 ```go
-func (ema *Ema[T]) IdlePeriod() int
+func (e *Ema[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that EMA yield any results.
 
+<a name="Ema[T].String"></a>
+### func \(\*Ema\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L84>)
+
+```go
+func (e *Ema[T]) String() string
+```
+
+String is the string representation of the EMA.
+
 <a name="Hma"></a>
-## type [Hma](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L20-L29>)
+## type [Hma](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L21-L30>)
 
 Hma represents the configuration parameters for calculating the Hull Moving Average \(HMA\). Developed by Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
 
@@ -588,28 +602,21 @@ HMA = WMA3
 
 ```go
 type Hma[T helper.Number] struct {
-    // First WMA.
-    Wma1 *Wma[T]
-
-    // Second WMA.
-    Wma2 *Wma[T]
-
-    // Third WMA.
-    Wma3 *Wma[T]
+    // contains filtered or unexported fields
 }
 ```
 
-<a name="NewHmaWith"></a>
-### func [NewHmaWith](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L32>)
+<a name="NewHmaWithPeriod"></a>
+### func [NewHmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L33>)
 
 ```go
-func NewHmaWith[T helper.Number](period int) *Hma[T]
+func NewHmaWithPeriod[T helper.Number](period int) *Hma[T]
 ```
 
-NewHmaWith function initializes a new HMA instance with the given parameters.
+NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
 
 <a name="Hma[T].Compute"></a>
-### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L41>)
+### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L42>)
 
 ```go
 func (h *Hma[T]) Compute(values <-chan T) <-chan T
@@ -618,13 +625,22 @@ func (h *Hma[T]) Compute(values <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the HMA and the signal line.
 
 <a name="Hma[T].IdlePeriod"></a>
-### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L68>)
+### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L69>)
 
 ```go
 func (h *Hma[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that HMA won't yield any results.
+
+<a name="Hma[T].String"></a>
+### func \(\*Hma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L74>)
+
+```go
+func (h *Hma[T]) String() string
+```
+
+String is the string representation of the HMA.
 
 <a name="Kdj"></a>
 ## type [Kdj](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L41-L53>)
@@ -691,6 +707,24 @@ func (kdj *Kdj[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that KDJ won't yield any results.
+
+<a name="Ma"></a>
+## type [Ma](<https://github.com/cinar/indicator/blob/v2/trend/ma.go#L12-L21>)
+
+Ma represents the interface for the Moving Average \(MA\) indicators.
+
+```go
+type Ma[T helper.Number] interface {
+    // Compute function takes a channel of numbers and computes the MA.
+    Compute(<-chan T) <-chan T
+
+    // IdlePeriod is the initial period that MA won't yield any results.
+    IdlePeriod() int
+
+    // String is the string representation of the MA instance.
+    String() string
+}
+```
 
 <a name="Macd"></a>
 ## type [Macd](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L29-L33>)
@@ -1120,7 +1154,7 @@ func (r *Rma[T]) IdlePeriod() int
 IdlePeriod is the initial period that RMA won't yield any results.
 
 <a name="Sma"></a>
-## type [Sma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L22-L25>)
+## type [Sma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L26-L29>)
 
 Sma represents the parameters for calculating the Simple Moving Average.
 
@@ -1141,7 +1175,7 @@ type Sma[T helper.Number] struct {
 ```
 
 <a name="NewSma"></a>
-### func [NewSma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L28>)
+### func [NewSma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L32>)
 
 ```go
 func NewSma[T helper.Number]() *Sma[T]
@@ -1150,7 +1184,7 @@ func NewSma[T helper.Number]() *Sma[T]
 NewSma function initializes a new SMA instance with the default parameters.
 
 <a name="NewSmaWithPeriod"></a>
-### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L33>)
+### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L37>)
 
 ```go
 func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
@@ -1159,7 +1193,7 @@ func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
 NewSmaWithPeriod function initializes a new SMA instance with the default parameters.
 
 <a name="Sma[T].Compute"></a>
-### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L40>)
+### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L44>)
 
 ```go
 func (s *Sma[T]) Compute(c <-chan T) <-chan T
@@ -1168,13 +1202,22 @@ func (s *Sma[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the SMA over the specified period.
 
 <a name="Sma[T].IdlePeriod"></a>
-### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L50>)
+### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L54>)
 
 ```go
 func (s *Sma[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that SMA won't yield any results.
+
+<a name="Sma[T].String"></a>
+### func \(\*Sma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L59>)
+
+```go
+func (s *Sma[T]) String() string
+```
+
+String is the string representation of the SMA.
 
 <a name="Tema"></a>
 ## type [Tema](<https://github.com/cinar/indicator/blob/v2/trend/tema.go#L18-L22>)
@@ -1402,7 +1445,7 @@ func (v *Vwma[T]) IdlePeriod() int
 IdlePeriod is the initial period that VWMA won't yield any results.
 
 <a name="Wma"></a>
-## type [Wma](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L15-L18>)
+## type [Wma](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L17-L20>)
 
 Wma represents the configuration parameters for calculating the Weighted Moving Average \(WMA\). It calculates a moving average by putting more weight on recent data and less on past data.
 
@@ -1418,7 +1461,7 @@ type Wma[T helper.Number] struct {
 ```
 
 <a name="NewWmaWith"></a>
-### func [NewWmaWith](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L21>)
+### func [NewWmaWith](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L23>)
 
 ```go
 func NewWmaWith[T helper.Number](period int) *Wma[T]
@@ -1427,7 +1470,7 @@ func NewWmaWith[T helper.Number](period int) *Wma[T]
 NewWmaWith function initializes a new WMA instance with the given parameters.
 
 <a name="Wma[T].Compute"></a>
-### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L28>)
+### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L30>)
 
 ```go
 func (w *Wma[T]) Compute(values <-chan T) <-chan T
@@ -1436,12 +1479,21 @@ func (w *Wma[T]) Compute(values <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the WMA and the signal line.
 
 <a name="Wma[T].IdlePeriod"></a>
-### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L53>)
+### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L55>)
 
 ```go
 func (w *Wma[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that WMA won't yield any results.
+
+<a name="Wma[T].String"></a>
+### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L60>)
+
+```go
+func (w *Wma[T]) String() string
+```
+
+String is the string representation of the WMA.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

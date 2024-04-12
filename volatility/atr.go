@@ -21,15 +21,17 @@ const (
 // entire range of stock prices for that period.
 //
 //	TR = Max((High - Low), (High - Closing), (Closing - Low))
-//	ATR = SMA TR
+//	ATR = MA TR
+//
+// By default, SMA is used as the MA.
 //
 // Example:
 //
 //	atr := volatility.NewAtr()
 //	atr.Compute(highs, lows, closings)
 type Atr[T helper.Number] struct {
-	// Sma is the SMA for the ATR.
-	Sma *trend.Sma[T]
+	// Ma is the moving average for the ATR.
+	Ma trend.Ma[T]
 }
 
 // NewAtr function initializes a new ATR instance with the default parameters.
@@ -39,8 +41,13 @@ func NewAtr[T helper.Number]() *Atr[T] {
 
 // NewAtrWithPeriod function initializes a new ATR instance with the given period.
 func NewAtrWithPeriod[T helper.Number](period int) *Atr[T] {
+	return NewAtrWithMa[T](trend.NewSmaWithPeriod[T](period))
+}
+
+// NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
+func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T] {
 	return &Atr[T]{
-		Sma: trend.NewSmaWithPeriod[T](period),
+		Ma: ma,
 	}
 }
 
@@ -50,12 +57,12 @@ func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T {
 		return T(math.Max(float64(high-low), math.Max(float64(high-closing), float64(closing-low))))
 	})
 
-	atr := a.Sma.Compute(tr)
+	atr := a.Ma.Compute(tr)
 
 	return atr
 }
 
 // IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 func (a *Atr[T]) IdlePeriod() int {
-	return a.Sma.Period - 1
+	return a.Ma.IdlePeriod()
 }

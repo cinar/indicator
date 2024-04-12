@@ -38,3 +38,12 @@ func TestEma(t *testing.T) {
 		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }
+
+func TestEmaString(t *testing.T) {
+	expected := "EMA(10)"
+	actual := trend.NewEmaWithPeriod[float64](10).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
