@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestRoundDigits(t *testing.T) {
-	input := []float64{10.1234, 5.678, 6.78, 8.91011}
-	expected := []float64{10.12, 5.68, 6.78, 8.91}
+	input := helper.SliceToChan([]float64{10.1234, 5.678, 6.78, 8.91011})
+	expected := helper.SliceToChan([]float64{10.12, 5.68, 6.78, 8.91})
 
-	actual := helper.ChanToSlice(helper.RoundDigits(helper.SliceToChan(input), 2))
+	actual := helper.RoundDigits(input, 2)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

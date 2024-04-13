@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -57,11 +56,10 @@ func TestRingEmpty(t *testing.T) {
 	}
 
 	for i := 0; i < size; i++ {
-		n, ok := ring.Get()
+		_, ok := ring.Get()
 		if !ok {
 			t.Fatal("is empty")
 		}
-		fmt.Printf("%d %d\n", i, n)
 	}
 
 	if !ring.IsEmpty() {

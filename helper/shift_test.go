@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestShift(t *testing.T) {
-	input := []int{2, 4, 6, 8}
-	expected := []int{0, 0, 0, 0, 2, 4, 6, 8}
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{0, 0, 0, 0, 2, 4, 6, 8})
 
-	actual := helper.ChanToSlice(helper.Shift(helper.SliceToChan(input), 4, 0))
+	actual := helper.Shift(input, 4, 0)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

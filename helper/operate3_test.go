@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -16,14 +15,15 @@ func TestOperate3(t *testing.T) {
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	cc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 
-	expected := []int{3, 6, 9, 12, 15, 18, 21, 24, 27, 30}
+	expected := helper.SliceToChan([]int{3, 6, 9, 12, 15, 18, 21, 24, 27, 30})
 
-	actual := helper.ChanToSlice(helper.Operate3(ac, bc, cc, func(a, b, c int) int {
+	actual := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
 		return a + b + c
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -32,14 +32,15 @@ func TestOperate3FirstEnds(t *testing.T) {
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	cc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 
-	expected := []int{3, 6, 9, 12, 15, 18, 21, 24}
+	expected := helper.SliceToChan([]int{3, 6, 9, 12, 15, 18, 21, 24})
 
-	actual := helper.ChanToSlice(helper.Operate3(ac, bc, cc, func(a, b, c int) int {
+	actual := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
 		return a + b + c
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -48,14 +49,15 @@ func TestOperate3SecondEnds(t *testing.T) {
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8})
 	cc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 
-	expected := []int{3, 6, 9, 12, 15, 18, 21, 24}
+	expected := helper.SliceToChan([]int{3, 6, 9, 12, 15, 18, 21, 24})
 
-	actual := helper.ChanToSlice(helper.Operate3(ac, bc, cc, func(a, b, c int) int {
+	actual := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
 		return a + b + c
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -64,13 +66,14 @@ func TestOperate3ThirdEnds(t *testing.T) {
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	cc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8})
 
-	expected := []int{3, 6, 9, 12, 15, 18, 21, 24}
+	expected := helper.SliceToChan([]int{3, 6, 9, 12, 15, 18, 21, 24})
 
-	actual := helper.ChanToSlice(helper.Operate3(ac, bc, cc, func(a, b, c int) int {
+	actual := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
 		return a + b + c
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

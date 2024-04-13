@@ -5,24 +5,23 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestChanToSlice(t *testing.T) {
-	expected := []int{2, 4, 6, 8}
+	input := []int{2, 4, 6, 8}
+	expected := helper.SliceToChan(input)
 
-	c := make(chan int, len(expected))
-	for _, n := range expected {
-		c <- n
+	actual := make(chan int, len(input))
+	for _, n := range input {
+		actual <- n
 	}
-	close(c)
+	close(actual)
 
-	actual := helper.ChanToSlice(c)
-
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

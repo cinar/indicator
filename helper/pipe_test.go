@@ -5,21 +5,22 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestPipe(t *testing.T) {
-	expected := []int{2, 4, 6, 8}
-	input := helper.SliceToChan(expected)
-	output := make(chan int)
+	data := []int{2, 4, 6, 8}
+	expected := helper.SliceToChan(data)
 
-	go helper.Pipe(input, output)
-	actual := helper.ChanToSlice(output)
+	input := helper.SliceToChan(data)
+	actual := make(chan int)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	go helper.Pipe(input, actual)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

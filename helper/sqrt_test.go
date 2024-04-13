@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestSqrt(t *testing.T) {
-	input := []int{9, 81, 16, 100}
-	expected := []int{3, 9, 4, 10}
+	input := helper.SliceToChan([]int{9, 81, 16, 100})
+	expected := helper.SliceToChan([]int{3, 9, 4, 10})
 
-	actual := helper.ChanToSlice(helper.Sqrt(helper.SliceToChan(input)))
+	actual := helper.Sqrt(input)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

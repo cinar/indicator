@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -15,14 +14,15 @@ func TestOperate(t *testing.T) {
 	ac := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 
-	expected := []int{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
+	expected := helper.SliceToChan([]int{2, 4, 6, 8, 10, 12, 14, 16, 18, 20})
 
-	actual := helper.ChanToSlice(helper.Operate(ac, bc, func(a, b int) int {
+	actual := helper.Operate(ac, bc, func(a, b int) int {
 		return a + b
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -30,14 +30,15 @@ func TestOperateFirstEnds(t *testing.T) {
 	ac := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8})
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 
-	expected := []int{2, 4, 6, 8, 10, 12, 14, 16}
+	expected := helper.SliceToChan([]int{2, 4, 6, 8, 10, 12, 14, 16})
 
-	actual := helper.ChanToSlice(helper.Operate(ac, bc, func(a, b int) int {
+	actual := helper.Operate(ac, bc, func(a, b int) int {
 		return a + b
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -45,13 +46,14 @@ func TestOperateSecondEnds(t *testing.T) {
 	ac := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5, 6, 7, 8})
 
-	expected := []int{2, 4, 6, 8, 10, 12, 14, 16}
+	expected := helper.SliceToChan([]int{2, 4, 6, 8, 10, 12, 14, 16})
 
-	actual := helper.ChanToSlice(helper.Operate(ac, bc, func(a, b int) int {
+	actual := helper.Operate(ac, bc, func(a, b int) int {
 		return a + b
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

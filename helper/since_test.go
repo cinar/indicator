@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestSince(t *testing.T) {
-	input := []int{1, 1, 2, 2, 2, 1, 2, 3, 3, 4}
-	expected := []int{0, 1, 0, 1, 2, 0, 0, 0, 1, 0}
+	input := helper.SliceToChan([]int{1, 1, 2, 2, 2, 1, 2, 3, 3, 4})
+	expected := helper.SliceToChan([]int{0, 1, 0, 1, 2, 0, 0, 0, 1, 0})
 
-	actual := helper.ChanToSlice(helper.Since(helper.SliceToChan(input)))
+	actual := helper.Since(input)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -13,11 +12,12 @@ import (
 
 func TestKeepNegatives(t *testing.T) {
 	input := []int{-10, 20, 4, -5}
-	expected := []int{-10, 0, 0, -5}
+	expected := helper.SliceToChan([]int{-10, 0, 0, -5})
 
-	actual := helper.ChanToSlice(helper.KeepNegatives(helper.SliceToChan(input)))
+	actual := helper.KeepNegatives(helper.SliceToChan(input))
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

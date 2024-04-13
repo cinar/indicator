@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -13,11 +12,12 @@ import (
 
 func TestIncrementBy(t *testing.T) {
 	input := []int{1, 2, 3, 4}
-	expected := []int{2, 3, 4, 5}
+	expected := helper.SliceToChan([]int{2, 3, 4, 5})
 
-	actual := helper.ChanToSlice(helper.IncrementBy(helper.SliceToChan(input), 1))
+	actual := helper.IncrementBy(helper.SliceToChan(input), 1)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

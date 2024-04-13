@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -22,13 +21,14 @@ func TestMap(t *testing.T) {
 		{High: 20, Low: 15},
 	}
 
-	expected := []int{5, 15}
+	expected := helper.SliceToChan([]int{5, 15})
 
-	actual := helper.ChanToSlice(helper.Map(helper.SliceToChan(input), func(r Row) int {
+	actual := helper.Map(helper.SliceToChan(input), func(r Row) int {
 		return r.Low
-	}))
+	})
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

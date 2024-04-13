@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestPow(t *testing.T) {
-	input := []int{2, 3, 5, 10}
-	expected := []int{4, 9, 25, 100}
+	input := helper.SliceToChan([]int{2, 3, 5, 10})
+	expected := helper.SliceToChan([]int{4, 9, 25, 100})
 
-	actual := helper.ChanToSlice(helper.Pow(helper.SliceToChan(input), 2))
+	actual := helper.Pow(input, 2)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("actual %v expected %v", actual, expected)
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
