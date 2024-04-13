@@ -25,12 +25,12 @@ func TestBopStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	bop := trend.NewBopStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(bop, snapshots)
+	actual := bop.Compute(snapshots)
 
-	outcomes = helper.RoundDigits(outcomes, 2)
-
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

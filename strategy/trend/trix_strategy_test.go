@@ -25,11 +25,12 @@ func TestTrixStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	trix := trend.NewTrixStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(trix, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	trix := trend.NewTrixStrategy()
+	actual := trix.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

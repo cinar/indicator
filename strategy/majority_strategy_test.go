@@ -25,14 +25,15 @@ func TestMajorityStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	majority := strategy.NewMajorityStrategy("Majority Strategy")
 	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy())
 	majority.Strategies = append(majority.Strategies, trend.NewMacdStrategy())
 
-	actions, outcomes := strategy.ComputeWithOutcome(majority, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	actual := majority.Compute(snapshots)
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

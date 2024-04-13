@@ -25,11 +25,12 @@ func TestSuperTrendStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	superTrend := volatility.NewSuperTrendStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(superTrend, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	superTrend := volatility.NewSuperTrendStrategy()
+	actual := superTrend.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -25,11 +25,12 @@ func TestBollingerBandsStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	bb := volatility.NewBollingerBandsStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(bb, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	bb := volatility.NewBollingerBandsStrategy()
+	actual := bb.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

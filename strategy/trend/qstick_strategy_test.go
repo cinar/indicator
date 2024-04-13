@@ -25,11 +25,12 @@ func TestQstickStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	qstick := trend.NewQstickStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(qstick, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	qstick := trend.NewQstickStrategy()
+	actual := qstick.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

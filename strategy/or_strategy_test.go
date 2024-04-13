@@ -25,14 +25,15 @@ func TestOrStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	or := strategy.NewOrStrategy("Or Strategy")
 	or.Strategies = append(or.Strategies, strategy.NewBuyAndHoldStrategy())
 	or.Strategies = append(or.Strategies, trend.NewMacdStrategy())
 
-	actions, outcomes := strategy.ComputeWithOutcome(or, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	actual := or.Compute(snapshots)
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

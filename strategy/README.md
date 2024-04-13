@@ -27,7 +27,6 @@ The information provided on this project is strictly for informational purposes 
 - [Constants](<#constants>)
 - [func ActionSources\(strategies \[\]Strategy, snapshots \<\-chan \*asset.Snapshot\) \[\]\<\-chan Action](<#ActionSources>)
 - [func ActionsToAnnotations\(ac \<\-chan Action\) \<\-chan string](<#ActionsToAnnotations>)
-- [func CheckResults\(results \<\-chan \*Result, actions \<\-chan Action, outcomes \<\-chan float64\) error](<#CheckResults>)
 - [func ComputeWithOutcome\(s Strategy, c \<\-chan \*asset.Snapshot\) \(\<\-chan Action, \<\-chan float64\)](<#ComputeWithOutcome>)
 - [func CountActions\(acs \[\]\<\-chan Action\) \(int, int, int, bool\)](<#CountActions>)
 - [func CountTransactions\(ac \<\-chan Action\) \<\-chan int](<#CountTransactions>)
@@ -95,15 +94,6 @@ func ActionsToAnnotations(ac <-chan Action) <-chan string
 ```
 
 ActionsToAnnotations takes a channel of action recommendations and returns a new channel containing corresponding annotations for those actions.
-
-<a name="CheckResults"></a>
-## func [CheckResults](<https://github.com/cinar/indicator/blob/v2/strategy/result.go#L20>)
-
-```go
-func CheckResults(results <-chan *Result, actions <-chan Action, outcomes <-chan float64) error
-```
-
-CheckResults checks the actual strategy results against the expected results.
 
 <a name="ComputeWithOutcome"></a>
 ## func [ComputeWithOutcome](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L42>)
@@ -439,14 +429,13 @@ func (a *OrStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="Result"></a>
-## type [Result](<https://github.com/cinar/indicator/blob/v2/strategy/result.go#L14-L17>)
+## type [Result](<https://github.com/cinar/indicator/blob/v2/strategy/result.go#L9-L11>)
 
 Result is only used inside the test cases to facilitate the comparison between the actual and expected strategy results.
 
 ```go
 type Result struct {
-    Action  Action
-    Outcome float64
+    Action Action
 }
 ```
 

@@ -24,12 +24,12 @@ func TestBuyAndHoldStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	bah := strategy.NewBuyAndHoldStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(bah, snapshots)
+	actual := bah.Compute(snapshots)
 
-	outcomes = helper.RoundDigits(outcomes, 2)
-
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

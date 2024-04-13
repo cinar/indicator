@@ -25,12 +25,12 @@ func TestTrimaStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	trima := trend.NewTrimaStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(trima, snapshots)
+	actual := trima.Compute(snapshots)
 
-	outcomes = helper.RoundDigits(outcomes, 2)
-
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

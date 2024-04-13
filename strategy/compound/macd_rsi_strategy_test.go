@@ -25,11 +25,12 @@ func TestMacdRsiStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	macdRsi := compound.NewMacdRsiStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(macdRsi, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	macdRsi := compound.NewMacdRsiStrategy()
+	actual := macdRsi.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

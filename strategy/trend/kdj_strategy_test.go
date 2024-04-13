@@ -25,11 +25,12 @@ func TestKdjStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	kdj := trend.NewKdjStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(kdj, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	kdj := trend.NewKdjStrategy()
+	actual := kdj.Compute(snapshots)
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

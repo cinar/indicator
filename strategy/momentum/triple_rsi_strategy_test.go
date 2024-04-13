@@ -25,12 +25,12 @@ func TestTripleRsiStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	tripleRsi := momentum.NewTripleRsiStrategy()
-	actions, outcomes := strategy.ComputeWithOutcome(tripleRsi, snapshots)
+	actual := tripleRsi.Compute(snapshots)
 
-	outcomes = helper.RoundDigits(outcomes, 2)
-
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}

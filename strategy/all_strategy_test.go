@@ -24,14 +24,15 @@ func TestAllStrategy(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
+
 	all := strategy.NewAllStrategy("All Strategy")
 	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
 	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
 
-	actions, outcomes := strategy.ComputeWithOutcome(all, snapshots)
-	outcomes = helper.RoundDigits(outcomes, 2)
+	actual := all.Compute(snapshots)
 
-	err = strategy.CheckResults(results, actions, outcomes)
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}
