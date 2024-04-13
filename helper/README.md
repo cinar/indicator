@@ -41,6 +41,7 @@ The information provided on this project is strictly for informational purposes 
 - [func DivideBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DivideBy>)
 - [func Drain\[T any\]\(c \<\-chan T\)](<#Drain>)
 - [func Duplicate\[T any\]\(input \<\-chan T, count int\) \[\]\<\-chan T](<#Duplicate>)
+- [func Echo\[T any\]\(input \<\-chan T, last, count int\) \<\-chan T](<#Echo>)
 - [func Field\[T, S any\]\(c \<\-chan \*S, name string\) \(\<\-chan T, error\)](<#Field>)
 - [func Filter\[T any\]\(c \<\-chan T, p func\(T\) bool\) \<\-chan T](<#Filter>)
 - [func First\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#First>)
@@ -382,6 +383,23 @@ outputs := helper.Duplicates[float64](helper.SliceToChan(expected), 2)
 
 fmt.Println(helper.ChanToSlice(outputs[0])) // [-10, 20, -4, -5]
 fmt.Println(helper.ChanToSlice(outputs[1])) // [-10, 20, -4, -5]
+```
+
+<a name="Echo"></a>
+## func [Echo](<https://github.com/cinar/indicator/blob/v2/helper/echo.go#L14>)
+
+```go
+func Echo[T any](input <-chan T, last, count int) <-chan T
+```
+
+Echo takes a channel of numbers, repeats the specified count of numbers at the end by the specified count.
+
+Example:
+
+```
+input := helper.SliceToChan([]int{2, 4, 6, 8})
+output := helper.Echo(input, 2, 4))
+fmt.Println(helper.ChanToSlice(output)) // [2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8]
 ```
 
 <a name="Field"></a>
