@@ -78,7 +78,7 @@ const (
 ```
 
 <a name="ActionSources"></a>
-## func [ActionSources](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L62>)
+## func [ActionSources](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L67>)
 
 ```go
 func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action
@@ -460,7 +460,7 @@ type Strategy interface {
 ```
 
 <a name="AllStrategies"></a>
-### func [AllStrategies](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L54>)
+### func [AllStrategies](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L59>)
 
 ```go
 func AllStrategies() []Strategy

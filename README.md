@@ -222,7 +222,7 @@ The information provided on this project is strictly for informational purposes 
 License
 -------
 
-The `v2.x.x` and above are provided under GNU AGPLv3 License.
+The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact me.
 
 ```
 Copyright (c) 2021-2024 Onur Cinar.    
