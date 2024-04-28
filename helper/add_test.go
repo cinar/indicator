@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2021-2024 Onur Cinar.
 // The source code is provided under GNU AGPLv3 License.
-// https://github.com/cinar/indicator/v2
+// https://github.com/cinar/indicator
 package helper_test
 
 import (

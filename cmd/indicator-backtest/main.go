@@ -1,6 +1,6 @@
 // Copyright (c) 2021-2024 Onur Cinar.
 // The source code is provided under GNU AGPLv3 License.
-// https://github.com/cinar/indicator/v2
+// https://github.com/cinar/indicator
 
 // main is the indicator backtest command line program.
 package main
@@ -28,7 +28,7 @@ func main() {
 	fmt.Fprintln(os.Stderr, "Indicator Backtest")
 	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
 	fmt.Fprintln(os.Stderr, "The source code is provided under GNU AGPLv3 License.")
-	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator/v2")
+	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
 	fmt.Fprintln(os.Stderr)
 
 	flag.StringVar(&repositoryDir, "repository", ".", "file system repository directory")
