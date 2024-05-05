@@ -63,12 +63,12 @@ func (m *MacdStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 
 	actions := helper.Operate(macds, signals, func(macd, signal float64) strategy.Action {
 		// A MACD value crossing above signal line suggests a bullish trend.
-		if macd > signal {
+		if (macd > signal) && (macd < 0) {
 			return strategy.Buy
 		}
 
 		// A MACD value crossing below signal line suggests a bearish trend.
-		if signal > macd {
+		if (signal > macd) && (macd > 0) {
 			return strategy.Sell
 		}
 
