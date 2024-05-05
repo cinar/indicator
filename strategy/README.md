@@ -59,6 +59,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*OrStrategy\) Name\(\) string](<#OrStrategy.Name>)
   - [func \(a \*OrStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#OrStrategy.Report>)
 - [type Result](<#Result>)
+- [type SplitStrategy](<#SplitStrategy>)
+  - [func NewSplitStrategy\(buyStrategy, sellStrategy Strategy\) \*SplitStrategy](<#NewSplitStrategy>)
+  - [func \(s \*SplitStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#SplitStrategy.Compute>)
+  - [func \(s \*SplitStrategy\) Name\(\) string](<#SplitStrategy.Name>)
+  - [func \(s \*SplitStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SplitStrategy.Report>)
 - [type Strategy](<#Strategy>)
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
 
@@ -438,6 +443,57 @@ type Result struct {
     Action Action
 }
 ```
+
+<a name="SplitStrategy"></a>
+## type [SplitStrategy](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L17-L23>)
+
+SplitStrategy leverages two separate strategies. It utilizes the first strategy to identify potential Buy opportunities, and the second strategy to identify potential Sell opportunities. When there is a conflicting recommendation, returns Hold.
+
+```go
+type SplitStrategy struct {
+    // BuyStrategy is used to identify potential Buy opportunities.
+    BuyStrategy Strategy
+
+    // SellStrategy is used to identify potential Sell opportunities.
+    SellStrategy Strategy
+}
+```
+
+<a name="NewSplitStrategy"></a>
+### func [NewSplitStrategy](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L26>)
+
+```go
+func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy
+```
+
+NewSplitStrategy function initializes a new split strategy with the given parameters.
+
+<a name="SplitStrategy.Compute"></a>
+### func \(\*SplitStrategy\) [Compute](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L39>)
+
+```go
+func (s *SplitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="SplitStrategy.Name"></a>
+### func \(\*SplitStrategy\) [Name](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L34>)
+
+```go
+func (s *SplitStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="SplitStrategy.Report"></a>
+### func \(\*SplitStrategy\) [Report](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L75>)
+
+```go
+func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="Strategy"></a>
 ## type [Strategy](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L27-L38>)

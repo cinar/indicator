@@ -148,6 +148,7 @@ Compound strategies merge multiple strategies to produce integrated recommendati
 -	[Or Strategy](strategy/README.md#type-orstrategy)
 -	[Majority Strategy](strategy/README.md#type-majoritystrategy)
 -   [MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
+-   [Split Strategy](strategy/README.md#type-splitstrategy)
 
 🗃 Repositories
 --------------
