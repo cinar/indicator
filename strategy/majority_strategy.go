@@ -22,8 +22,13 @@ type MajorityStrategy struct {
 
 // NewMajorityStrategy function initializes an empty majority strategies group with the given name.
 func NewMajorityStrategy(name string) *MajorityStrategy {
+	return NewMajorityStrategyWith(name, []Strategy{})
+}
+
+// NewMajorityStrategyWith function initializes a majority strategies group with the given name and strategies.
+func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrategy {
 	return &MajorityStrategy{
-		Strategies: []Strategy{},
+		Strategies: strategies,
 		name:       name,
 	}
 }

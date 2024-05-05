@@ -92,3 +92,19 @@ func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 
 	return report
 }
+
+// AllSplitStrategies performs a cartesian product operation on the given strategies, resulting in a collection
+// containing all split strategies formed by combining individual buy and sell strategies.
+func AllSplitStrategies(strategies []Strategy) []Strategy {
+	splitStrategies := make([]Strategy, 0, len(strategies)*len(strategies))
+
+	for _, buyStrategy := range strategies {
+		for _, sellStrategy := range strategies {
+			if buyStrategy != sellStrategy {
+				splitStrategies = append(splitStrategies, NewSplitStrategy(buyStrategy, sellStrategy))
+			}
+		}
+	}
+
+	return splitStrategies
+}

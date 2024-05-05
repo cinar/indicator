@@ -61,3 +61,21 @@ func TestSplitStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAllSplitStrategies(t *testing.T) {
+	strategies := []strategy.Strategy{
+		strategy.NewBuyAndHoldStrategy(),
+		strategy.NewMajorityStrategyWith("", []strategy.Strategy{
+			strategy.NewBuyAndHoldStrategy(),
+		}),
+	}
+
+	allSplitStrategies := strategy.AllSplitStrategies(strategies)
+
+	expected := len(strategies)*len(strategies) - len(strategies)
+	actual := len(allSplitStrategies)
+
+	if actual != expected {
+		t.Fatalf("actual=%d expected=%d", actual, expected)
+	}
+}
