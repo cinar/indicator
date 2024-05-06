@@ -50,6 +50,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(b \*BuyAndHoldStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#BuyAndHoldStrategy.Report>)
 - [type MajorityStrategy](<#MajorityStrategy>)
   - [func NewMajorityStrategy\(name string\) \*MajorityStrategy](<#NewMajorityStrategy>)
+  - [func NewMajorityStrategyWith\(name string, strategies \[\]Strategy\) \*MajorityStrategy](<#NewMajorityStrategyWith>)
   - [func \(a \*MajorityStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#MajorityStrategy.Compute>)
   - [func \(a \*MajorityStrategy\) Name\(\) string](<#MajorityStrategy.Name>)
   - [func \(a \*MajorityStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#MajorityStrategy.Report>)
@@ -65,6 +66,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(s \*SplitStrategy\) Name\(\) string](<#SplitStrategy.Name>)
   - [func \(s \*SplitStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SplitStrategy.Report>)
 - [type Strategy](<#Strategy>)
+  - [func AllSplitStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllSplitStrategies>)
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
 
 
@@ -355,8 +357,17 @@ func NewMajorityStrategy(name string) *MajorityStrategy
 
 NewMajorityStrategy function initializes an empty majority strategies group with the given name.
 
+<a name="NewMajorityStrategyWith"></a>
+### func [NewMajorityStrategyWith](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L29>)
+
+```go
+func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrategy
+```
+
+NewMajorityStrategyWith function initializes a majority strategies group with the given name and strategies.
+
 <a name="MajorityStrategy.Compute"></a>
-### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L37>)
+### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L42>)
 
 ```go
 func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -365,7 +376,7 @@ func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Acti
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="MajorityStrategy.Name"></a>
-### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L32>)
+### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L37>)
 
 ```go
 func (a *MajorityStrategy) Name() string
@@ -374,7 +385,7 @@ func (a *MajorityStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="MajorityStrategy.Report"></a>
-### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L65>)
+### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/v2/strategy/majority_strategy.go#L70>)
 
 ```go
 func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -514,6 +525,15 @@ type Strategy interface {
     Report(snapshots <-chan *asset.Snapshot) *helper.Report
 }
 ```
+
+<a name="AllSplitStrategies"></a>
+### func [AllSplitStrategies](<https://github.com/cinar/indicator/blob/v2/strategy/split_strategy.go#L98>)
+
+```go
+func AllSplitStrategies(strategies []Strategy) []Strategy
+```
+
+AllSplitStrategies performs a cartesian product operation on the given strategies, resulting in a collection containing all split strategies formed by combining individual buy and sell strategies.
 
 <a name="AllStrategies"></a>
 ### func [AllStrategies](<https://github.com/cinar/indicator/blob/v2/strategy/strategy.go#L59>)
