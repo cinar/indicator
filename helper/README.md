@@ -30,6 +30,7 @@ The information provided on this project is strictly for informational purposes 
 - [func AppendOrWriteToCsvFile\[T any\]\(fileName string, hasHeader bool, rows \<\-chan \*T\) error](<#AppendOrWriteToCsvFile>)
 - [func Apply\[T Number\]\(c \<\-chan T, f func\(T\) T\) \<\-chan T](<#Apply>)
 - [func Buffered\[T any\]\(c \<\-chan T, size int\) \<\-chan T](<#Buffered>)
+- [func ChanToJSON\[T any\]\(c \<\-chan T, w io.Writer\) error](<#ChanToJSON>)
 - [func ChanToSlice\[T any\]\(c \<\-chan T\) \[\]T](<#ChanToSlice>)
 - [func Change\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#Change>)
 - [func ChangePercent\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangePercent>)
@@ -47,6 +48,7 @@ The information provided on this project is strictly for informational purposes 
 - [func First\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#First>)
 - [func Head\[T Number\]\(c \<\-chan T, count int\) \<\-chan T](<#Head>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
+- [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
 - [func KeepNegatives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepNegatives>)
 - [func KeepPositives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepPositives>)
 - [func Last\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Last>)
@@ -194,6 +196,27 @@ func Buffered[T any](c <-chan T, size int) <-chan T
 Buffered takes a channel of any type and returns a new channel of the same type with a buffer of the specified size. This allows the original channel to continue sending data even if the receiving end is temporarily unavailable.
 
 Example:
+
+<a name="ChanToJSON"></a>
+## func [ChanToJSON](<https://github.com/cinar/indicator/blob/v2/helper/chan_to_json.go#L23>)
+
+```go
+func ChanToJSON[T any](c <-chan T, w io.Writer) error
+```
+
+ChanToJSON converts a channel of values into JSON format and writes it to the specified writer.
+
+Example:
+
+```
+input := helper.SliceToChan([]int{2, 4, 6, 8})
+
+var buffer bytes.Buffer
+err := helper.ChanToJSON(input, &buffer)
+
+fmt.Println(buffer.String())
+// Output: [2,4,6,8,9]
+```
 
 <a name="ChanToSlice"></a>
 ## func [ChanToSlice](<https://github.com/cinar/indicator/blob/v2/helper/chan_to_slice.go#L19>)
@@ -470,6 +493,17 @@ input := []int{1, 2, 3, 4}
 actual := helper.IncrementBy(helper.SliceToChan(input), 1)
 fmt.Println(helper.ChanToSlice(actual)) // [2, 3, 4, 5]
 ```
+
+<a name="JSONToChan"></a>
+## func [JSONToChan](<https://github.com/cinar/indicator/blob/v2/helper/json_to_chan.go#L16>)
+
+```go
+func JSONToChan[T any](r io.Reader) <-chan T
+```
+
+JSONToChan reads values from the specified reader in JSON format into a channel of values.
+
+Example:
 
 <a name="KeepNegatives"></a>
 ## func [KeepNegatives](<https://github.com/cinar/indicator/blob/v2/helper/keep_negatives.go#L15>)
