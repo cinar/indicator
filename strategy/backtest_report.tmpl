@@ -22,6 +22,7 @@
                             <th>Asset</th>
                             <th>Strategy</th>
                             <th>Action</th>
+                            <th>Since</th>
                             <th>Outcome</th>
                         </tr>
                     </thead>
@@ -38,6 +39,9 @@
                                 {{ else }}
                                 <span class="tag is-success">Buy</span>
                                 {{ end }}
+                            </td>
+                            <td>
+                                {{ .Since }}
                             </td>
                             <td>
                                 {{ if lt .Outcome 0.0  }}

@@ -269,7 +269,7 @@ type Backtest struct {
 ```
 
 <a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L80>)
+### func [NewBacktest](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L83>)
 
 ```go
 func NewBacktest(repository asset.Repository, outputDir string) *Backtest
@@ -278,7 +278,7 @@ func NewBacktest(repository asset.Repository, outputDir string) *Backtest
 NewBacktest function initializes a new backtest instance.
 
 <a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L95>)
+### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/v2/strategy/backtest.go#L98>)
 
 ```go
 func (b *Backtest) Run() error

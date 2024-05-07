@@ -64,7 +64,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Seq\[T Number\]\(from, to, increment T\) \<\-chan T](<#Seq>)
 - [func Shift\[T any\]\(c \<\-chan T, count int, fill T\) \<\-chan T](<#Shift>)
 - [func Sign\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sign>)
-- [func Since\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Since>)
+- [func Since\[T comparable, R Number\]\(c \<\-chan T\) \<\-chan R](<#Since>)
 - [func Skip\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Skip>)
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
@@ -755,7 +755,7 @@ fmt.Println(helper.ChanToSlice(sign)) // [-1, 1, -1, 0]
 ## func [Since](<https://github.com/cinar/indicator/blob/v2/helper/since.go#L9>)
 
 ```go
-func Since[T Number](c <-chan T) <-chan T
+func Since[T comparable, R Number](c <-chan T) <-chan R
 ```
 
 Since counts the number of periods since the last change of value in a channel of numbers.

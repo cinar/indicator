@@ -6,12 +6,13 @@ package helper
 
 // Since counts the number of periods since the last change of
 // value in a channel of numbers.
-func Since[T Number](c <-chan T) <-chan T {
+func Since[T comparable, R Number](c <-chan T) <-chan R {
 	first := true
-	last := T(0)
-	count := T(0)
 
-	return Apply(c, func(n T) T {
+	var last T
+	var count R
+
+	return Map(c, func(n T) R {
 		if first || last != n {
 			first = false
 			last = n

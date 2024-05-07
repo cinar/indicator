@@ -69,6 +69,9 @@ type backtestResult struct {
 	// Action is the last recommended action by the strategy.
 	Action Action
 
+	// Since indicates how long the current action recommendation has been in effect.
+	Since int
+
 	// Outcome is the effectiveness of applying the recommended actions.
 	Outcome float64
 
@@ -188,11 +191,12 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 			actions, outcomes := ComputeWithOutcome(st, snapshotCopies[0])
 			report := st.Report(snapshotCopies[1])
 
-			actionsSplice := helper.Duplicate(actions, 2)
+			actionsSplice := helper.Duplicate(actions, 3)
 
 			actions = helper.Last(DenormalizeActions(actionsSplice[0]), 1)
+			sinces := helper.Last(helper.Since[Action, int](actionsSplice[1]), 1)
 			outcomes = helper.Last(outcomes, 1)
-			transactions := helper.Last(CountTransactions(actionsSplice[1]), 1)
+			transactions := helper.Last(CountTransactions(actionsSplice[2]), 1)
 
 			err := report.WriteToFile(path.Join(b.outputDir, b.strategyReportFileName(name, st.Name())))
 			if err != nil {
@@ -204,6 +208,7 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 				AssetName:    name,
 				StrategyName: st.Name(),
 				Action:       <-actions,
+				Since:        <-sinces,
 				Outcome:      <-outcomes * 100,
 				Transactions: <-transactions,
 			})
