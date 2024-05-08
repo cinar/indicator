@@ -199,14 +199,14 @@ Usage
 Install package.
 
 ```bash
-go get github.com/cinar/indicator
+go get github.com/cinar/indicator/v2
 ```
 
 Import indicator.
 
 ```Golang
 import (
-    "github.com/cinar/indicator"
+    "github.com/cinar/indicator/v2"
 )
 ```
 

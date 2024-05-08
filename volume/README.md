@@ -62,7 +62,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(\*Nvi\[T\]\) IdlePeriod\(\) int](<#Nvi[T].IdlePeriod>)
 - [type Obv](<#Obv>)
   - [func NewObv\[T helper.Number\]\(\) \*Obv\[T\]](<#NewObv>)
-  - [func \(o \*Obv\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Obv[T].Compute>)
+  - [func \(\*Obv\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Obv[T].Compute>)
   - [func \(\*Obv\[T\]\) IdlePeriod\(\) int](<#Obv[T].IdlePeriod>)
 - [type Vpt](<#Vpt>)
   - [func NewVpt\[T helper.Number\]\(\) \*Vpt\[T\]](<#NewVpt>)
@@ -616,7 +616,7 @@ NewObv function initializes a new OBV instance with the default parameters.
 ### func \(\*Obv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volume/obv.go#L29>)
 
 ```go
-func (o *Obv[T]) Compute(closings, volumes <-chan T) <-chan T
+func (*Obv[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the OBV.
