@@ -26,7 +26,7 @@ func NewObv[T helper.Number]() *Obv[T] {
 }
 
 // Compute function takes a channel of numbers and computes the OBV.
-func (o *Obv[T]) Compute(closings, volumes <-chan T) <-chan T {
+func (*Obv[T]) Compute(closings, volumes <-chan T) <-chan T {
 	var previous T
 
 	return helper.Operate(closings, volumes, func(closing, volume T) T {
