@@ -270,7 +270,7 @@ const (
 ```
 
 <a name="Apo"></a>
-## type [Apo](<https://github.com/cinar/indicator/blob/v2/trend/apo.go#L41-L53>)
+## type [Apo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L41-L53>)
 
 Apo represents the configuration parameters for calculating the Absolute Price Oscillator \(APO\). An APO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive APO values signify an upward trend, while negative values signify a downward trend.
 
@@ -307,7 +307,7 @@ type Apo[T helper.Number] struct {
 ```
 
 <a name="NewApo"></a>
-### func [NewApo](<https://github.com/cinar/indicator/blob/v2/trend/apo.go#L57>)
+### func [NewApo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L57>)
 
 ```go
 func NewApo[T helper.Number]() *Apo[T]
@@ -316,7 +316,7 @@ func NewApo[T helper.Number]() *Apo[T]
 NewApo function initializes a new APO instance with the default parameters.
 
 <a name="Apo[T].Compute"></a>
-### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/apo.go#L68>)
+### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L68>)
 
 ```go
 func (apo *Apo[T]) Compute(c <-chan T) <-chan T
@@ -325,7 +325,7 @@ func (apo *Apo[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the APO over the specified period.
 
 <a name="Aroon"></a>
-## type [Aroon](<https://github.com/cinar/indicator/blob/v2/trend/aroon.go#L30-L33>)
+## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L30-L33>)
 
 Aroon represent the configuration for calculating the Aroon indicator. It is a technical analysis tool that gauges trend direction and strength in asset prices. It comprises two lines: Aroon Up and Aroon Down. Aroon Up measures uptrend strength, while Aroon Down measures downtrend strength. When Aroon Up exceeds Aroon Down, it suggests a bullish trend; when Aroon Down surpasses Aroon Up, it indicates a bearish trend.
 
@@ -351,7 +351,7 @@ type Aroon[T helper.Number] struct {
 ```
 
 <a name="NewAroon"></a>
-### func [NewAroon](<https://github.com/cinar/indicator/blob/v2/trend/aroon.go#L37>)
+### func [NewAroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L37>)
 
 ```go
 func NewAroon[T helper.Number]() *Aroon[T]
@@ -360,7 +360,7 @@ func NewAroon[T helper.Number]() *Aroon[T]
 NewAroon function initializes a new Aroon instance with the default parameters.
 
 <a name="Aroon[T].Compute"></a>
-### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/aroon.go#L45>)
+### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L45>)
 
 ```go
 func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T)
@@ -369,7 +369,7 @@ func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the Aroon over the specified period.
 
 <a name="Bop"></a>
-## type [Bop](<https://github.com/cinar/indicator/blob/v2/trend/bop.go#L16>)
+## type [Bop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L16>)
 
 Bop gauges the strength of buying and selling forces using the Balance of Power \(BoP\) indicator. A positive BoP value suggests an upward trend, while a negative value indicates a downward trend. A BoP value of zero implies equilibrium between the two forces.
 
@@ -382,7 +382,7 @@ type Bop[T helper.Number] struct{}
 ```
 
 <a name="NewBop"></a>
-### func [NewBop](<https://github.com/cinar/indicator/blob/v2/trend/bop.go#L20>)
+### func [NewBop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L20>)
 
 ```go
 func NewBop[T helper.Number]() *Bop[T]
@@ -391,7 +391,7 @@ func NewBop[T helper.Number]() *Bop[T]
 NewBop function initializes a new BOP instance with the default parameters.
 
 <a name="Bop[T].Compute"></a>
-### func \(\*Bop\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/bop.go#L26>)
+### func \(\*Bop\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L26>)
 
 ```go
 func (*Bop[T]) Compute(opening, high, low, closing <-chan T) <-chan T
@@ -400,7 +400,7 @@ func (*Bop[T]) Compute(opening, high, low, closing <-chan T) <-chan T
 Compute processes a channel of open, high, low, and close values, computing the BOP for each entry.
 
 <a name="Cci"></a>
-## type [Cci](<https://github.com/cinar/indicator/blob/v2/trend/cci.go#L29-L32>)
+## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L29-L32>)
 
 Cci represents the configuration parameters for calculating the Community Channel Index \(CCI\). CCI is a momentum\-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
 
@@ -426,7 +426,7 @@ type Cci[T helper.Number] struct {
 ```
 
 <a name="NewCci"></a>
-### func [NewCci](<https://github.com/cinar/indicator/blob/v2/trend/cci.go#L35>)
+### func [NewCci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L35>)
 
 ```go
 func NewCci[T helper.Number]() *Cci[T]
@@ -435,7 +435,7 @@ func NewCci[T helper.Number]() *Cci[T]
 NewCci function initializes a new CCI instance with the default parameters.
 
 <a name="NewCciWithPeriod"></a>
-### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/cci.go#L42>)
+### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L42>)
 
 ```go
 func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
@@ -444,7 +444,7 @@ func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
 NewCciWithPeriod function initializes a new CCI instance with the given period.
 
 <a name="Cci[T].Compute"></a>
-### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/cci.go#L49>)
+### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L49>)
 
 ```go
 func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -453,7 +453,7 @@ func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the CCI and the signal line.
 
 <a name="Cci[T].IdlePeriod"></a>
-### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/cci.go#L92>)
+### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L92>)
 
 ```go
 func (c *Cci[T]) IdlePeriod() int
@@ -462,7 +462,7 @@ func (c *Cci[T]) IdlePeriod() int
 IdlePeriod is the initial period that CCI won't yield any results.
 
 <a name="Dema"></a>
-## type [Dema](<https://github.com/cinar/indicator/blob/v2/trend/dema.go#L22-L30>)
+## type [Dema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L22-L30>)
 
 Dema represents the parameters for calculating the Double Exponential Moving Average \(DEMA\). A bullish cross occurs when DEMA with 5 days period moves above DEMA with 35 days period. A bearish cross occurs when DEMA with 35 days period moves above DEMA With 5 days period.
 
@@ -493,7 +493,7 @@ type Dema[T helper.Number] struct {
 ```
 
 <a name="NewDema"></a>
-### func [NewDema](<https://github.com/cinar/indicator/blob/v2/trend/dema.go#L34>)
+### func [NewDema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L34>)
 
 ```go
 func NewDema[T helper.Number]() *Dema[T]
@@ -502,7 +502,7 @@ func NewDema[T helper.Number]() *Dema[T]
 NewDema function initializes a new DEMA instance with the default parameters.
 
 <a name="Dema[T].Compute"></a>
-### func \(\*Dema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/dema.go#L43>)
+### func \(\*Dema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L43>)
 
 ```go
 func (d *Dema[T]) Compute(c <-chan T) <-chan T
@@ -511,7 +511,7 @@ func (d *Dema[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the DEMA over the specified period.
 
 <a name="Dema[T].IdlePeriod"></a>
-### func \(\*Dema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/dema.go#L54>)
+### func \(\*Dema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L54>)
 
 ```go
 func (d *Dema[T]) IdlePeriod() int
@@ -520,7 +520,7 @@ func (d *Dema[T]) IdlePeriod() int
 IdlePeriod is the initial period that DEMA won't yield any results.
 
 <a name="Ema"></a>
-## type [Ema](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L29-L35>)
+## type [Ema](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L29-L35>)
 
 Ema represents the parameters for calculating the Exponential Moving Average.
 
@@ -544,7 +544,7 @@ type Ema[T helper.Number] struct {
 ```
 
 <a name="NewEma"></a>
-### func [NewEma](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L38>)
+### func [NewEma](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L38>)
 
 ```go
 func NewEma[T helper.Number]() *Ema[T]
@@ -553,7 +553,7 @@ func NewEma[T helper.Number]() *Ema[T]
 NewEma function initializes a new EMA instance with the default parameters.
 
 <a name="NewEmaWithPeriod"></a>
-### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L46>)
+### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L46>)
 
 ```go
 func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
@@ -562,7 +562,7 @@ func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
 NewEmaWithPeriod function initializes a new EMA instance with the given period.
 
 <a name="Ema[T].Compute"></a>
-### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L54>)
+### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L54>)
 
 ```go
 func (e *Ema[T]) Compute(c <-chan T) <-chan T
@@ -571,7 +571,7 @@ func (e *Ema[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the EMA over the specified period.
 
 <a name="Ema[T].IdlePeriod"></a>
-### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L79>)
+### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L79>)
 
 ```go
 func (e *Ema[T]) IdlePeriod() int
@@ -580,7 +580,7 @@ func (e *Ema[T]) IdlePeriod() int
 IdlePeriod is the initial period that EMA yield any results.
 
 <a name="Ema[T].String"></a>
-### func \(\*Ema\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/ema.go#L84>)
+### func \(\*Ema\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L84>)
 
 ```go
 func (e *Ema[T]) String() string
@@ -589,7 +589,7 @@ func (e *Ema[T]) String() string
 String is the string representation of the EMA.
 
 <a name="Hma"></a>
-## type [Hma](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L21-L30>)
+## type [Hma](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L21-L30>)
 
 Hma represents the configuration parameters for calculating the Hull Moving Average \(HMA\). Developed by Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
 
@@ -607,7 +607,7 @@ type Hma[T helper.Number] struct {
 ```
 
 <a name="NewHmaWithPeriod"></a>
-### func [NewHmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L33>)
+### func [NewHmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L33>)
 
 ```go
 func NewHmaWithPeriod[T helper.Number](period int) *Hma[T]
@@ -616,7 +616,7 @@ func NewHmaWithPeriod[T helper.Number](period int) *Hma[T]
 NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
 
 <a name="Hma[T].Compute"></a>
-### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L42>)
+### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L42>)
 
 ```go
 func (h *Hma[T]) Compute(values <-chan T) <-chan T
@@ -625,7 +625,7 @@ func (h *Hma[T]) Compute(values <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the HMA and the signal line.
 
 <a name="Hma[T].IdlePeriod"></a>
-### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L69>)
+### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L69>)
 
 ```go
 func (h *Hma[T]) IdlePeriod() int
@@ -634,7 +634,7 @@ func (h *Hma[T]) IdlePeriod() int
 IdlePeriod is the initial period that HMA won't yield any results.
 
 <a name="Hma[T].String"></a>
-### func \(\*Hma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/hma.go#L74>)
+### func \(\*Hma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L74>)
 
 ```go
 func (h *Hma[T]) String() string
@@ -643,7 +643,7 @@ func (h *Hma[T]) String() string
 String is the string representation of the HMA.
 
 <a name="Kdj"></a>
-## type [Kdj](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L41-L53>)
+## type [Kdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L41-L53>)
 
 Kdj represents the configuration parameters for calculating the KDJ, also known as the Random Index. KDJ is calculated similar to the Stochastic Oscillator with the difference of having the J line. It is used to analyze the trend and entry points.
 
@@ -682,7 +682,7 @@ type Kdj[T helper.Number] struct {
 ```
 
 <a name="NewKdj"></a>
-### func [NewKdj](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L56>)
+### func [NewKdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L56>)
 
 ```go
 func NewKdj[T helper.Number]() *Kdj[T]
@@ -691,7 +691,7 @@ func NewKdj[T helper.Number]() *Kdj[T]
 NewKdj function initializes a new Kdj instance with the default parameters
 
 <a name="Kdj[T].Compute"></a>
-### func \(\*Kdj\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L74>)
+### func \(\*Kdj\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L74>)
 
 ```go
 func (kdj *Kdj[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -700,7 +700,7 @@ func (kdj *Kdj[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-c
 Compute function takes a channel of numbers and computes the KDJ over the specified period. Returns K, D, J.
 
 <a name="Kdj[T].IdlePeriod"></a>
-### func \(\*Kdj\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/kdj.go#L113>)
+### func \(\*Kdj\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L113>)
 
 ```go
 func (kdj *Kdj[T]) IdlePeriod() int
@@ -709,7 +709,7 @@ func (kdj *Kdj[T]) IdlePeriod() int
 IdlePeriod is the initial period that KDJ won't yield any results.
 
 <a name="Ma"></a>
-## type [Ma](<https://github.com/cinar/indicator/blob/v2/trend/ma.go#L12-L21>)
+## type [Ma](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L12-L21>)
 
 Ma represents the interface for the Moving Average \(MA\) indicators.
 
@@ -727,7 +727,7 @@ type Ma[T helper.Number] interface {
 ```
 
 <a name="Macd"></a>
-## type [Macd](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L29-L33>)
+## type [Macd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L29-L33>)
 
 Macd represents the configuration parameters for calculating the Moving Average Convergence Divergence \(MACD\).
 
@@ -747,7 +747,7 @@ type Macd[T helper.Number] struct {
 ```
 
 <a name="NewMacd"></a>
-### func [NewMacd](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L36>)
+### func [NewMacd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L36>)
 
 ```go
 func NewMacd[T helper.Number]() *Macd[T]
@@ -756,7 +756,7 @@ func NewMacd[T helper.Number]() *Macd[T]
 NewMacd function initializes a new MACD instance with the default parameters.
 
 <a name="NewMacdWithPeriod"></a>
-### func [NewMacdWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L45>)
+### func [NewMacdWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L45>)
 
 ```go
 func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T]
@@ -765,7 +765,7 @@ func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T]
 NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
 
 <a name="Macd[T].Compute"></a>
-### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L55>)
+### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L55>)
 
 ```go
 func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T)
@@ -774,7 +774,7 @@ func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the MACD and the signal line.
 
 <a name="Macd[T].IdlePeriod"></a>
-### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/macd.go#L71>)
+### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L71>)
 
 ```go
 func (m *Macd[T]) IdlePeriod() int
@@ -783,7 +783,7 @@ func (m *Macd[T]) IdlePeriod() int
 IdlePeriod is the initial period that MACD won't yield any results.
 
 <a name="MassIndex"></a>
-## type [MassIndex](<https://github.com/cinar/indicator/blob/v2/trend/mass_index.go#L32-L36>)
+## type [MassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L32-L36>)
 
 MassIndex represents the configuration parameters for calculating the Mass Index. It uses the high\-low range to identify trend reversals based on range expansions.
 
@@ -805,7 +805,7 @@ type MassIndex[T helper.Number] struct {
 ```
 
 <a name="NewMassIndex"></a>
-### func [NewMassIndex](<https://github.com/cinar/indicator/blob/v2/trend/mass_index.go#L40>)
+### func [NewMassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L40>)
 
 ```go
 func NewMassIndex[T helper.Number]() *MassIndex[T]
@@ -814,7 +814,7 @@ func NewMassIndex[T helper.Number]() *MassIndex[T]
 NewMassIndex function initializes a new APO instance with the default parameters.
 
 <a name="MassIndex[T].Compute"></a>
-### func \(\*MassIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/mass_index.go#L55>)
+### func \(\*MassIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L55>)
 
 ```go
 func (m *MassIndex[T]) Compute(highs, lows <-chan T) <-chan T
@@ -823,7 +823,7 @@ func (m *MassIndex[T]) Compute(highs, lows <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Mass Index.
 
 <a name="MassIndex[T].IdlePeriod"></a>
-### func \(\*MassIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/mass_index.go#L73>)
+### func \(\*MassIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L73>)
 
 ```go
 func (m *MassIndex[T]) IdlePeriod() int
@@ -832,7 +832,7 @@ func (m *MassIndex[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mass Index won't yield any results.
 
 <a name="Mlr"></a>
-## type [Mlr](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L19-L22>)
+## type [Mlr](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L19-L22>)
 
 Mlr represents the configuration parameters for calculating the Moving Linear Regression.
 
@@ -855,7 +855,7 @@ type Mlr[T helper.Number] struct {
 ```
 
 <a name="NewMlrWithPeriod"></a>
-### func [NewMlrWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L25>)
+### func [NewMlrWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L25>)
 
 ```go
 func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T]
@@ -864,7 +864,7 @@ func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T]
 NewMlrWithPeriod function initializes a new MLR instance with the given period.
 
 <a name="Mlr[T].Compute"></a>
-### func \(\*Mlr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L32>)
+### func \(\*Mlr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L32>)
 
 ```go
 func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T
@@ -873,7 +873,7 @@ func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the MLR r.
 
 <a name="Mlr[T].IdlePeriod"></a>
-### func \(\*Mlr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/mlr.go#L51>)
+### func \(\*Mlr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L51>)
 
 ```go
 func (m *Mlr[T]) IdlePeriod() int
@@ -882,7 +882,7 @@ func (m *Mlr[T]) IdlePeriod() int
 IdlePeriod is the initial period that MLR won't yield any results.
 
 <a name="Mls"></a>
-## type [Mls](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L25-L28>)
+## type [Mls](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L25-L28>)
 
 Mls represents the configuration parameters for calculating the Moving Least Square \(MLS\). It is a regression analysis to determine the line of best fit for the given set of data.
 
@@ -910,7 +910,7 @@ type Mls[T helper.Number] struct {
 ```
 
 <a name="NewMlsWithPeriod"></a>
-### func [NewMlsWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L31>)
+### func [NewMlsWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L31>)
 
 ```go
 func NewMlsWithPeriod[T helper.Number](period int) *Mls[T]
@@ -919,7 +919,7 @@ func NewMlsWithPeriod[T helper.Number](period int) *Mls[T]
 NewMlsWithPeriod function initializes a new MLS instance with the given period.
 
 <a name="Mls[T].Compute"></a>
-### func \(\*Mls\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L38>)
+### func \(\*Mls\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L38>)
 
 ```go
 func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T)
@@ -928,7 +928,7 @@ func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the MLS m and b.
 
 <a name="Mls[T].IdlePeriod"></a>
-### func \(\*Mls\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/mls.go#L105>)
+### func \(\*Mls\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L105>)
 
 ```go
 func (m *Mls[T]) IdlePeriod() int
@@ -937,7 +937,7 @@ func (m *Mls[T]) IdlePeriod() int
 IdlePeriod is the initial period that MLS won't yield any results.
 
 <a name="MovingMax"></a>
-## type [MovingMax](<https://github.com/cinar/indicator/blob/v2/trend/moving_max.go#L13-L16>)
+## type [MovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L13-L16>)
 
 MovingMax represents the configuration parameters for calculating the Moving Max over the specified period.
 
@@ -951,7 +951,7 @@ type MovingMax[T helper.Number] struct {
 ```
 
 <a name="NewMovingMax"></a>
-### func [NewMovingMax](<https://github.com/cinar/indicator/blob/v2/trend/moving_max.go#L19>)
+### func [NewMovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L19>)
 
 ```go
 func NewMovingMax[T helper.Number]() *MovingMax[T]
@@ -960,7 +960,7 @@ func NewMovingMax[T helper.Number]() *MovingMax[T]
 NewMovingMax function initializes a new Moving Max instance with the default parameters.
 
 <a name="NewMovingMaxWithPeriod"></a>
-### func [NewMovingMaxWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_max.go#L24>)
+### func [NewMovingMaxWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L24>)
 
 ```go
 func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
@@ -969,7 +969,7 @@ func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
 NewMovingMaxWithPeriod function initializes a new Moving Max instance with the given period.
 
 <a name="MovingMax[T].Compute"></a>
-### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/moving_max.go#L33>)
+### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L33>)
 
 ```go
 func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
@@ -978,7 +978,7 @@ func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Max over the specified period.
 
 <a name="MovingMax[T].IdlePeriod"></a>
-### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_max.go#L49>)
+### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L49>)
 
 ```go
 func (m *MovingMax[T]) IdlePeriod() int
@@ -987,7 +987,7 @@ func (m *MovingMax[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Max won't yield any results.
 
 <a name="MovingMin"></a>
-## type [MovingMin](<https://github.com/cinar/indicator/blob/v2/trend/moving_min.go#L13-L16>)
+## type [MovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L13-L16>)
 
 MovingMin represents the configuration parameters for calculating the Moving Min over the specified period.
 
@@ -1001,7 +1001,7 @@ type MovingMin[T helper.Number] struct {
 ```
 
 <a name="NewMovingMin"></a>
-### func [NewMovingMin](<https://github.com/cinar/indicator/blob/v2/trend/moving_min.go#L19>)
+### func [NewMovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L19>)
 
 ```go
 func NewMovingMin[T helper.Number]() *MovingMin[T]
@@ -1010,7 +1010,7 @@ func NewMovingMin[T helper.Number]() *MovingMin[T]
 NewMovingMin function initializes a new Moving Min instance with the default parameters.
 
 <a name="NewMovingMinWithPeriod"></a>
-### func [NewMovingMinWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_min.go#L24>)
+### func [NewMovingMinWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L24>)
 
 ```go
 func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
@@ -1019,7 +1019,7 @@ func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
 NewMovingMinWithPeriod function initializes a new Moving Min instance with the given period.
 
 <a name="MovingMin[T].Compute"></a>
-### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/moving_min.go#L33>)
+### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L33>)
 
 ```go
 func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
@@ -1028,7 +1028,7 @@ func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Min over the specified period.
 
 <a name="MovingMin[T].IdlePeriod"></a>
-### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_min.go#L49>)
+### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L49>)
 
 ```go
 func (m *MovingMin[T]) IdlePeriod() int
@@ -1037,7 +1037,7 @@ func (m *MovingMin[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Min won't yield any results.
 
 <a name="MovingSum"></a>
-## type [MovingSum](<https://github.com/cinar/indicator/blob/v2/trend/moving_sum.go#L15-L18>)
+## type [MovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L15-L18>)
 
 MovingSum represents the configuration parameters for calculating the Moving Sum over the specified period.
 
@@ -1056,7 +1056,7 @@ type MovingSum[T helper.Number] struct {
 ```
 
 <a name="NewMovingSum"></a>
-### func [NewMovingSum](<https://github.com/cinar/indicator/blob/v2/trend/moving_sum.go#L21>)
+### func [NewMovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L21>)
 
 ```go
 func NewMovingSum[T helper.Number]() *MovingSum[T]
@@ -1065,7 +1065,7 @@ func NewMovingSum[T helper.Number]() *MovingSum[T]
 NewMovingSum function initializes a new Moving Sum instance with the default parameters.
 
 <a name="NewMovingSumWithPeriod"></a>
-### func [NewMovingSumWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_sum.go#L26>)
+### func [NewMovingSumWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L26>)
 
 ```go
 func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T]
@@ -1074,7 +1074,7 @@ func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T]
 NewMovingSumWithPeriod function initializes a new Moving Sum instance with the given period.
 
 <a name="MovingSum[T].Compute"></a>
-### func \(\*MovingSum\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/moving_sum.go#L34>)
+### func \(\*MovingSum\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L34>)
 
 ```go
 func (m *MovingSum[T]) Compute(c <-chan T) <-chan T
@@ -1083,7 +1083,7 @@ func (m *MovingSum[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Sum over the specified period.
 
 <a name="MovingSum[T].IdlePeriod"></a>
-### func \(\*MovingSum\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/moving_sum.go#L49>)
+### func \(\*MovingSum\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L49>)
 
 ```go
 func (m *MovingSum[T]) IdlePeriod() int
@@ -1092,7 +1092,7 @@ func (m *MovingSum[T]) IdlePeriod() int
 IdlePeriod is the initial period that Moving Sum won't yield any results.
 
 <a name="Rma"></a>
-## type [Rma](<https://github.com/cinar/indicator/blob/v2/trend/rma.go#L25-L28>)
+## type [Rma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L25-L28>)
 
 Rma represents the parameters for calculating Rolling Moving Average \(RMA\).
 
@@ -1118,7 +1118,7 @@ type Rma[T helper.Number] struct {
 ```
 
 <a name="NewRma"></a>
-### func [NewRma](<https://github.com/cinar/indicator/blob/v2/trend/rma.go#L31>)
+### func [NewRma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L31>)
 
 ```go
 func NewRma[T helper.Number]() *Rma[T]
@@ -1127,7 +1127,7 @@ func NewRma[T helper.Number]() *Rma[T]
 NewRma function initializes a new RMA instance with the default parameters.
 
 <a name="NewRmaWithPeriod"></a>
-### func [NewRmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/rma.go#L36>)
+### func [NewRmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L36>)
 
 ```go
 func NewRmaWithPeriod[T helper.Number](period int) *Rma[T]
@@ -1136,7 +1136,7 @@ func NewRmaWithPeriod[T helper.Number](period int) *Rma[T]
 NewRmaWithPeriod function initializes a new RMA instance with the given period.
 
 <a name="Rma[T].Compute"></a>
-### func \(\*Rma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/rma.go#L43>)
+### func \(\*Rma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L43>)
 
 ```go
 func (r *Rma[T]) Compute(c <-chan T) <-chan T
@@ -1145,7 +1145,7 @@ func (r *Rma[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the RMA over the specified period.
 
 <a name="Rma[T].IdlePeriod"></a>
-### func \(\*Rma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/rma.go#L66>)
+### func \(\*Rma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L66>)
 
 ```go
 func (r *Rma[T]) IdlePeriod() int
@@ -1154,7 +1154,7 @@ func (r *Rma[T]) IdlePeriod() int
 IdlePeriod is the initial period that RMA won't yield any results.
 
 <a name="Sma"></a>
-## type [Sma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L26-L29>)
+## type [Sma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L26-L29>)
 
 Sma represents the parameters for calculating the Simple Moving Average.
 
@@ -1175,7 +1175,7 @@ type Sma[T helper.Number] struct {
 ```
 
 <a name="NewSma"></a>
-### func [NewSma](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L32>)
+### func [NewSma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L32>)
 
 ```go
 func NewSma[T helper.Number]() *Sma[T]
@@ -1184,7 +1184,7 @@ func NewSma[T helper.Number]() *Sma[T]
 NewSma function initializes a new SMA instance with the default parameters.
 
 <a name="NewSmaWithPeriod"></a>
-### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L37>)
+### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L37>)
 
 ```go
 func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
@@ -1193,7 +1193,7 @@ func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
 NewSmaWithPeriod function initializes a new SMA instance with the default parameters.
 
 <a name="Sma[T].Compute"></a>
-### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L44>)
+### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L44>)
 
 ```go
 func (s *Sma[T]) Compute(c <-chan T) <-chan T
@@ -1202,7 +1202,7 @@ func (s *Sma[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the SMA over the specified period.
 
 <a name="Sma[T].IdlePeriod"></a>
-### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L54>)
+### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L54>)
 
 ```go
 func (s *Sma[T]) IdlePeriod() int
@@ -1211,7 +1211,7 @@ func (s *Sma[T]) IdlePeriod() int
 IdlePeriod is the initial period that SMA won't yield any results.
 
 <a name="Sma[T].String"></a>
-### func \(\*Sma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/sma.go#L59>)
+### func \(\*Sma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L59>)
 
 ```go
 func (s *Sma[T]) String() string
@@ -1220,7 +1220,7 @@ func (s *Sma[T]) String() string
 String is the string representation of the SMA.
 
 <a name="Tema"></a>
-## type [Tema](<https://github.com/cinar/indicator/blob/v2/trend/tema.go#L18-L22>)
+## type [Tema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L18-L22>)
 
 Tema represents the configuration parameters for calculating the Triple Exponential Moving Average \(TEMA\).
 
@@ -1240,7 +1240,7 @@ type Tema[T helper.Number] struct {
 ```
 
 <a name="NewTema"></a>
-### func [NewTema](<https://github.com/cinar/indicator/blob/v2/trend/tema.go#L26>)
+### func [NewTema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L26>)
 
 ```go
 func NewTema[T helper.Number]() *Tema[T]
@@ -1249,7 +1249,7 @@ func NewTema[T helper.Number]() *Tema[T]
 NewTema function initializes a new TEMA instance with the default parameters.
 
 <a name="Tema[T].Compute"></a>
-### func \(\*Tema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/tema.go#L36>)
+### func \(\*Tema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L36>)
 
 ```go
 func (t *Tema[T]) Compute(c <-chan T) <-chan T
@@ -1258,7 +1258,7 @@ func (t *Tema[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the TEMA and the signal line.
 
 <a name="Tema[T].IdlePeriod"></a>
-### func \(\*Tema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/tema.go#L65>)
+### func \(\*Tema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L65>)
 
 ```go
 func (t *Tema[T]) IdlePeriod() int
@@ -1267,7 +1267,7 @@ func (t *Tema[T]) IdlePeriod() int
 IdlePeriod is the initial period that TEMA won't yield any results.
 
 <a name="Trima"></a>
-## type [Trima](<https://github.com/cinar/indicator/blob/v2/trend/trima.go#L26-L29>)
+## type [Trima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L26-L29>)
 
 Trima represents the configuration parameters for calculating the Triangular Moving Average \(TRIMA\).
 
@@ -1291,7 +1291,7 @@ type Trima[T helper.Number] struct {
 ```
 
 <a name="NewTrima"></a>
-### func [NewTrima](<https://github.com/cinar/indicator/blob/v2/trend/trima.go#L33>)
+### func [NewTrima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L33>)
 
 ```go
 func NewTrima[T helper.Number]() *Trima[T]
@@ -1300,7 +1300,7 @@ func NewTrima[T helper.Number]() *Trima[T]
 NewTrima function initializes a new TRIMA instance with the default parameters.
 
 <a name="Trima[T].Compute"></a>
-### func \(\*Trima\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/trima.go#L41>)
+### func \(\*Trima\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L41>)
 
 ```go
 func (t *Trima[T]) Compute(c <-chan T) <-chan T
@@ -1309,7 +1309,7 @@ func (t *Trima[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the TRIMA and the signal line.
 
 <a name="Trima[T].IdlePeriod"></a>
-### func \(\*Trima\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/trima.go#L56>)
+### func \(\*Trima\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L56>)
 
 ```go
 func (t *Trima[T]) IdlePeriod() int
@@ -1318,7 +1318,7 @@ func (t *Trima[T]) IdlePeriod() int
 IdlePeriod is the initial period that TRIMA won't yield any results.
 
 <a name="Trix"></a>
-## type [Trix](<https://github.com/cinar/indicator/blob/v2/trend/trix.go#L29-L32>)
+## type [Trix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L29-L32>)
 
 Trix represents the configuration parameters for calculating the Triple Exponential Average \(TRIX\). TRIX indicator is an oscillator used to identify oversold and overbought markets, and it can also be used as a momentum indicator. Like many oscillators, TRIX oscillates around a zero line.
 
@@ -1344,7 +1344,7 @@ type Trix[T helper.Number] struct {
 ```
 
 <a name="NewTrix"></a>
-### func [NewTrix](<https://github.com/cinar/indicator/blob/v2/trend/trix.go#L35>)
+### func [NewTrix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L35>)
 
 ```go
 func NewTrix[T helper.Number]() *Trix[T]
@@ -1353,7 +1353,7 @@ func NewTrix[T helper.Number]() *Trix[T]
 NewTrix function initializes a new TRIX instance with the default parameters.
 
 <a name="Trix[T].Compute"></a>
-### func \(\*Trix\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/trix.go#L42>)
+### func \(\*Trix\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L42>)
 
 ```go
 func (t *Trix[T]) Compute(c <-chan T) <-chan T
@@ -1362,7 +1362,7 @@ func (t *Trix[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the TRIX and the signal line.
 
 <a name="Trix[T].IdlePeriod"></a>
-### func \(\*Trix\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/trix.go#L59>)
+### func \(\*Trix\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L59>)
 
 ```go
 func (t *Trix[T]) IdlePeriod() int
@@ -1371,7 +1371,7 @@ func (t *Trix[T]) IdlePeriod() int
 IdlePeriod is the initial period that TRIX won't yield any results.
 
 <a name="TypicalPrice"></a>
-## type [TypicalPrice](<https://github.com/cinar/indicator/blob/v2/trend/typical_price.go#L16>)
+## type [TypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L16>)
 
 TypicalPrice represents the configuration parameters for calculating the Typical Price. It is another approximation of average price for each period and can be used as a filter for moving average systems.
 
@@ -1384,7 +1384,7 @@ type TypicalPrice[T helper.Number] struct{}
 ```
 
 <a name="NewTypicalPrice"></a>
-### func [NewTypicalPrice](<https://github.com/cinar/indicator/blob/v2/trend/typical_price.go#L19>)
+### func [NewTypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L19>)
 
 ```go
 func NewTypicalPrice[T helper.Number]() *TypicalPrice[T]
@@ -1393,7 +1393,7 @@ func NewTypicalPrice[T helper.Number]() *TypicalPrice[T]
 NewTypicalPrice function initializes a new Typical Price instance with the default parameters.
 
 <a name="TypicalPrice[T].Compute"></a>
-### func \(\*TypicalPrice\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/typical_price.go#L24>)
+### func \(\*TypicalPrice\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L24>)
 
 ```go
 func (*TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T
@@ -1402,7 +1402,7 @@ func (*TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Typical Price and the signal line.
 
 <a name="Vwma"></a>
-## type [Vwma](<https://github.com/cinar/indicator/blob/v2/trend/vwma.go#L21-L24>)
+## type [Vwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L21-L24>)
 
 Vwma represents the configuration parameters for calculating the Volume Weighted Moving Average \(VWMA\) It averages the price data with an emphasis on volume, meaning areas with higher volume will have a greater weight.
 
@@ -1418,7 +1418,7 @@ type Vwma[T helper.Number] struct {
 ```
 
 <a name="NewVwma"></a>
-### func [NewVwma](<https://github.com/cinar/indicator/blob/v2/trend/vwma.go#L27>)
+### func [NewVwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L27>)
 
 ```go
 func NewVwma[T helper.Number]() *Vwma[T]
@@ -1427,7 +1427,7 @@ func NewVwma[T helper.Number]() *Vwma[T]
 NewVwma function initializes a new VWMA instance with the default parameters.
 
 <a name="Vwma[T].Compute"></a>
-### func \(\*Vwma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/vwma.go#L34>)
+### func \(\*Vwma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L34>)
 
 ```go
 func (v *Vwma[T]) Compute(closing, volume <-chan T) <-chan T
@@ -1436,7 +1436,7 @@ func (v *Vwma[T]) Compute(closing, volume <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the VWMA and the signal line.
 
 <a name="Vwma[T].IdlePeriod"></a>
-### func \(\*Vwma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/vwma.go#L49>)
+### func \(\*Vwma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L49>)
 
 ```go
 func (v *Vwma[T]) IdlePeriod() int
@@ -1445,7 +1445,7 @@ func (v *Vwma[T]) IdlePeriod() int
 IdlePeriod is the initial period that VWMA won't yield any results.
 
 <a name="Wma"></a>
-## type [Wma](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L17-L20>)
+## type [Wma](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L17-L20>)
 
 Wma represents the configuration parameters for calculating the Weighted Moving Average \(WMA\). It calculates a moving average by putting more weight on recent data and less on past data.
 
@@ -1461,7 +1461,7 @@ type Wma[T helper.Number] struct {
 ```
 
 <a name="NewWmaWith"></a>
-### func [NewWmaWith](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L23>)
+### func [NewWmaWith](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L23>)
 
 ```go
 func NewWmaWith[T helper.Number](period int) *Wma[T]
@@ -1470,7 +1470,7 @@ func NewWmaWith[T helper.Number](period int) *Wma[T]
 NewWmaWith function initializes a new WMA instance with the given parameters.
 
 <a name="Wma[T].Compute"></a>
-### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L30>)
+### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L30>)
 
 ```go
 func (w *Wma[T]) Compute(values <-chan T) <-chan T
@@ -1479,7 +1479,7 @@ func (w *Wma[T]) Compute(values <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the WMA and the signal line.
 
 <a name="Wma[T].IdlePeriod"></a>
-### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L55>)
+### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L55>)
 
 ```go
 func (w *Wma[T]) IdlePeriod() int
@@ -1488,7 +1488,7 @@ func (w *Wma[T]) IdlePeriod() int
 IdlePeriod is the initial period that WMA won't yield any results.
 
 <a name="Wma[T].String"></a>
-### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/v2/trend/wma.go#L60>)
+### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L60>)
 
 ```go
 func (w *Wma[T]) String() string

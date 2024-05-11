@@ -6,7 +6,20 @@
 (command -v gosec) || go install github.com/securego/gosec/v2/cmd/gosec@latest
 (command -v markdownfmt) || go install github.com/shurcooL/markdownfmt@latest
 
-PACKAGES=(asset helper momentum strategy trend volatility volume)
+PACKAGES=(
+	asset
+	helper
+	momentum
+	strategy
+	strategy/trend
+	strategy/volatility
+	strategy/momentum
+	strategy/compound
+	trend
+	volatility
+	volume
+)
+
 PACKAGE_FILES=("${PACKAGES[@]/#/./}")
 PACKAGE_FILES=("${PACKAGE_FILES[@]/%//...}")
 
@@ -22,8 +35,8 @@ staticcheck ./...
 for package in "${PACKAGES[@]}";
 do
     echo Package "$package"
-    gomarkdoc --repository.default-branch v2 --output "$package"/README.md ./"$package"
+    gomarkdoc --output "$package"/README.md ./"$package"
 done
 
-# markdownfmt -w README.md
+markdownfmt -w README.md
 

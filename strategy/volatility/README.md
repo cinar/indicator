@@ -3,7 +3,7 @@
 # volatility
 
 ```go
-import "github.com/cinar/indicator/strategy/volatility"
+import "github.com/cinar/indicator/v2/strategy/volatility"
 ```
 
 Package volatility contains the volatility strategy functions.
@@ -13,7 +13,7 @@ This package belongs to the Indicator project. Indicator is a Golang module that
 ### License
 
 ```
-Copyright (c) 2021-2023 Onur Cinar.
+Copyright (c) 2021-2024 Onur Cinar.
 The source code is provided under GNU AGPLv3 License.
 https://github.com/cinar/indicator
 ```
@@ -30,10 +30,16 @@ The information provided on this project is strictly for informational purposes 
   - [func \(b \*BollingerBandsStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#BollingerBandsStrategy.Compute>)
   - [func \(\*BollingerBandsStrategy\) Name\(\) string](<#BollingerBandsStrategy.Name>)
   - [func \(b \*BollingerBandsStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#BollingerBandsStrategy.Report>)
+- [type SuperTrendStrategy](<#SuperTrendStrategy>)
+  - [func NewSuperTrendStrategy\(\) \*SuperTrendStrategy](<#NewSuperTrendStrategy>)
+  - [func NewSuperTrendStrategyWith\(superTrend \*volatility.SuperTrend\[float64\]\) \*SuperTrendStrategy](<#NewSuperTrendStrategyWith>)
+  - [func \(s \*SuperTrendStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#SuperTrendStrategy.Compute>)
+  - [func \(s \*SuperTrendStrategy\) Name\(\) string](<#SuperTrendStrategy.Name>)
+  - [func \(s \*SuperTrendStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SuperTrendStrategy.Report>)
 
 
 <a name="AllStrategies"></a>
-## func [AllStrategies](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/volatility.go#L24>)
+## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/strategy/volatility/volatility.go#L28>)
 
 ```go
 func AllStrategies() []strategy.Strategy
@@ -42,7 +48,7 @@ func AllStrategies() []strategy.Strategy
 AllStrategies returns a slice containing references to all available volatility strategies.
 
 <a name="BollingerBandsStrategy"></a>
-## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/bollinger_bands_strategy.go#L17-L22>)
+## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L17-L22>)
 
 BollingerBandsStrategy represents the configuration parameters for calculating the Bollinger Bands strategy. A closing value crossing above the upper band suggets a Buy signal, while crossing below the lower band indivates a Sell signal.
 
@@ -56,7 +62,7 @@ type BollingerBandsStrategy struct {
 ```
 
 <a name="NewBollingerBandsStrategy"></a>
-### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/bollinger_bands_strategy.go#L25>)
+### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L25>)
 
 ```go
 func NewBollingerBandsStrategy() *BollingerBandsStrategy
@@ -65,7 +71,7 @@ func NewBollingerBandsStrategy() *BollingerBandsStrategy
 NewBollingerBandsStrategy function initializes a new Bollinger Bands strategy instance.
 
 <a name="BollingerBandsStrategy.Compute"></a>
-### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/bollinger_bands_strategy.go#L37>)
+### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L37>)
 
 ```go
 func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -74,7 +80,7 @@ func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="BollingerBandsStrategy.Name"></a>
-### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/bollinger_bands_strategy.go#L32>)
+### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L32>)
 
 ```go
 func (*BollingerBandsStrategy) Name() string
@@ -83,10 +89,67 @@ func (*BollingerBandsStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BollingerBandsStrategy.Report"></a>
-### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/v2/strategy/volatility/bollinger_bands_strategy.go#L69>)
+### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L69>)
 
 ```go
 func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="SuperTrendStrategy"></a>
+## type [SuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L19-L22>)
+
+SuperTrendStrategy represents the configuration parameters for calculating the Super Trend strategy. A closing value crossing above the Super Trend suggets a Buy signal, while crossing below the Super Trend indivates a Sell signal.
+
+```go
+type SuperTrendStrategy struct {
+    // SuperTrend represents the configuration parameters for calculating the Super Trend.
+    SuperTrend *volatility.SuperTrend[float64]
+}
+```
+
+<a name="NewSuperTrendStrategy"></a>
+### func [NewSuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L25>)
+
+```go
+func NewSuperTrendStrategy() *SuperTrendStrategy
+```
+
+NewSuperTrendStrategy function initializes a new Super Trend strategy instance.
+
+<a name="NewSuperTrendStrategyWith"></a>
+### func [NewSuperTrendStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L30>)
+
+```go
+func NewSuperTrendStrategyWith(superTrend *volatility.SuperTrend[float64]) *SuperTrendStrategy
+```
+
+NewSuperTrendStrategyWith function initializes a new Super Trend strategy with the given Super Trend instance.
+
+<a name="SuperTrendStrategy.Compute"></a>
+### func \(\*SuperTrendStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L42>)
+
+```go
+func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="SuperTrendStrategy.Name"></a>
+### func \(\*SuperTrendStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L37>)
+
+```go
+func (s *SuperTrendStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="SuperTrendStrategy.Report"></a>
+### func \(\*SuperTrendStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L77>)
+
+```go
+func (s *SuperTrendStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

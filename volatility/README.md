@@ -169,7 +169,7 @@ const (
 ```
 
 <a name="AccelerationBands"></a>
-## type [AccelerationBands](<https://github.com/cinar/indicator/blob/v2/volatility/acceleration_bands.go#L27-L30>)
+## type [AccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L27-L30>)
 
 AccelerationBands represents the configuration parameters for calculating the Acceleration Bands.
 
@@ -194,7 +194,7 @@ type AccelerationBands[T helper.Number] struct {
 ```
 
 <a name="NewAccelerationBands"></a>
-### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/v2/volatility/acceleration_bands.go#L33>)
+### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L33>)
 
 ```go
 func NewAccelerationBands[T helper.Number]() *AccelerationBands[T]
@@ -203,7 +203,7 @@ func NewAccelerationBands[T helper.Number]() *AccelerationBands[T]
 NewAccelerationBands function initializes a new Acceleration Bands instance with the default parameters.
 
 <a name="AccelerationBands[T].Compute"></a>
-### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/acceleration_bands.go#L40>)
+### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L40>)
 
 ```go
 func (a *AccelerationBands[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -212,7 +212,7 @@ func (a *AccelerationBands[T]) Compute(high, low, closing <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Acceleration Bands over the specified period.
 
 <a name="AccelerationBands[T].IdlePeriod"></a>
-### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/acceleration_bands.go#L86>)
+### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L86>)
 
 ```go
 func (a *AccelerationBands[T]) IdlePeriod() int
@@ -221,7 +221,7 @@ func (a *AccelerationBands[T]) IdlePeriod() int
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 
 <a name="Atr"></a>
-## type [Atr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L32-L35>)
+## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L32-L35>)
 
 Atr represents the configuration parameters for calculating the Average True Range \(ATR\). It is a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
@@ -247,7 +247,7 @@ type Atr[T helper.Number] struct {
 ```
 
 <a name="NewAtr"></a>
-### func [NewAtr](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L38>)
+### func [NewAtr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L38>)
 
 ```go
 func NewAtr[T helper.Number]() *Atr[T]
@@ -256,7 +256,7 @@ func NewAtr[T helper.Number]() *Atr[T]
 NewAtr function initializes a new ATR instance with the default parameters.
 
 <a name="NewAtrWithMa"></a>
-### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L48>)
+### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L48>)
 
 ```go
 func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
@@ -265,7 +265,7 @@ func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
 NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
 
 <a name="NewAtrWithPeriod"></a>
-### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L43>)
+### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L43>)
 
 ```go
 func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
@@ -274,7 +274,7 @@ func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
 NewAtrWithPeriod function initializes a new ATR instance with the given period.
 
 <a name="Atr[T].Compute"></a>
-### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L55>)
+### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L55>)
 
 ```go
 func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -283,7 +283,7 @@ func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the ATR over the specified period.
 
 <a name="Atr[T].IdlePeriod"></a>
-### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/atr.go#L66>)
+### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L66>)
 
 ```go
 func (a *Atr[T]) IdlePeriod() int
@@ -292,7 +292,7 @@ func (a *Atr[T]) IdlePeriod() int
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 
 <a name="BollingerBandWidth"></a>
-## type [BollingerBandWidth](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_band_width.go#L24-L27>)
+## type [BollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L24-L27>)
 
 BollingerBandWidth represents the configuration parameters for calculating the Bollinger Band Width. It measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
 
@@ -317,7 +317,7 @@ type BollingerBandWidth[T helper.Number] struct {
 ```
 
 <a name="NewBollingerBandWidth"></a>
-### func [NewBollingerBandWidth](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_band_width.go#L30>)
+### func [NewBollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L30>)
 
 ```go
 func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T]
@@ -326,7 +326,7 @@ func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T]
 NewBollingerBandWidth function initializes a new Bollinger Band Width instance with the default parameters.
 
 <a name="BollingerBandWidth[T].Compute"></a>
-### func \(\*BollingerBandWidth\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_band_width.go#L37>)
+### func \(\*BollingerBandWidth\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L37>)
 
 ```go
 func (b *BollingerBandWidth[T]) Compute(c <-chan T) <-chan T
@@ -335,7 +335,7 @@ func (b *BollingerBandWidth[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Bollinger Band Width.
 
 <a name="BollingerBandWidth[T].IdlePeriod"></a>
-### func \(\*BollingerBandWidth\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_band_width.go#L47>)
+### func \(\*BollingerBandWidth\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L47>)
 
 ```go
 func (b *BollingerBandWidth[T]) IdlePeriod() int
@@ -344,7 +344,7 @@ func (b *BollingerBandWidth[T]) IdlePeriod() int
 IdlePeriod is the initial period that Bollinger Band Width won't yield any results.
 
 <a name="BollingerBands"></a>
-## type [BollingerBands](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_bands.go#L29-L32>)
+## type [BollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L29-L32>)
 
 BollingerBands represents the configuration parameters for calculating the Bollinger Bands. It is a technical analysis tool used to gauge a market's volatility and identify overbought and oversold conditions. Returns the upper band, the middle band, and the lower band.
 
@@ -369,7 +369,7 @@ type BollingerBands[T helper.Number] struct {
 ```
 
 <a name="NewBollingerBands"></a>
-### func [NewBollingerBands](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_bands.go#L35>)
+### func [NewBollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L35>)
 
 ```go
 func NewBollingerBands[T helper.Number]() *BollingerBands[T]
@@ -378,7 +378,7 @@ func NewBollingerBands[T helper.Number]() *BollingerBands[T]
 NewBollingerBands function initializes a new Bollinger Bands instance with the default parameters.
 
 <a name="BollingerBands[T].Compute"></a>
-### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_bands.go#L42>)
+### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L42>)
 
 ```go
 func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -387,7 +387,7 @@ func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the Bollinger Bands over the specified period.
 
 <a name="BollingerBands[T].IdlePeriod"></a>
-### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/bollinger_bands.go#L74>)
+### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L74>)
 
 ```go
 func (b *BollingerBands[T]) IdlePeriod() int
@@ -396,7 +396,7 @@ func (b *BollingerBands[T]) IdlePeriod() int
 IdlePeriod is the initial period that Bollinger Bands won't yield any results.
 
 <a name="ChandelierExit"></a>
-## type [ChandelierExit](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L30-L36>)
+## type [ChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L30-L36>)
 
 ChandelierExit represents the configuration parameters for calculating the Chandelier Exit. It sets a trailing stop\-loss based on the Average True Value \(ATR\).
 
@@ -423,7 +423,7 @@ type ChandelierExit[T helper.Number] struct {
 ```
 
 <a name="NewChandelierExit"></a>
-### func [NewChandelierExit](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L39>)
+### func [NewChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L39>)
 
 ```go
 func NewChandelierExit[T helper.Number]() *ChandelierExit[T]
@@ -432,7 +432,7 @@ func NewChandelierExit[T helper.Number]() *ChandelierExit[T]
 NewChandelierExit function initializes a new Chandelier Exit instance with the default parameters.
 
 <a name="ChandelierExit[T].Compute"></a>
-### func \(\*ChandelierExit\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L47>)
+### func \(\*ChandelierExit\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L47>)
 
 ```go
 func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T)
@@ -441,7 +441,7 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Chandelier Exit over the specified period.
 
 <a name="ChandelierExit[T].IdlePeriod"></a>
-### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/chandelier_exit.go#L74>)
+### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L74>)
 
 ```go
 func (c *ChandelierExit[T]) IdlePeriod() int
@@ -450,7 +450,7 @@ func (c *ChandelierExit[T]) IdlePeriod() int
 IdlePeriod is the initial period that Chandelier Exit won't yield any results.
 
 <a name="DonchianChannel"></a>
-## type [DonchianChannel](<https://github.com/cinar/indicator/blob/v2/volatility/donchian_channel.go#L30-L36>)
+## type [DonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L30-L36>)
 
 DonchianChannel represents the configuration parameters for calculating the Donchian Channel \(DC\). It calculates three lines generated by moving average calculations that comprise an indicator formed by upper and lower bands around a midrange or median band. The upper band marks the highest price of an asset while the lower band marks the lowest price of an asset, and the area between the upper and lower bands represents the Donchian Channel.
 
@@ -478,7 +478,7 @@ type DonchianChannel[T helper.Number] struct {
 ```
 
 <a name="NewDonchianChannel"></a>
-### func [NewDonchianChannel](<https://github.com/cinar/indicator/blob/v2/volatility/donchian_channel.go#L39>)
+### func [NewDonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L39>)
 
 ```go
 func NewDonchianChannel[T helper.Number]() *DonchianChannel[T]
@@ -487,7 +487,7 @@ func NewDonchianChannel[T helper.Number]() *DonchianChannel[T]
 NewDonchianChannel function initializes a new Donchian Channel instance with the default parameters.
 
 <a name="NewDonchianChannelWithPeriod"></a>
-### func [NewDonchianChannelWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/donchian_channel.go#L44>)
+### func [NewDonchianChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L44>)
 
 ```go
 func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[T]
@@ -496,7 +496,7 @@ func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[
 NewDonchianChannelWithPeriod function initializes a new Donchian Channel instance with the given period.
 
 <a name="DonchianChannel[T].Compute"></a>
-### func \(\*DonchianChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/donchian_channel.go#L52>)
+### func \(\*DonchianChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L52>)
 
 ```go
 func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -505,7 +505,7 @@ func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the Donchian Channel over the specified period.
 
 <a name="DonchianChannel[T].IdlePeriod"></a>
-### func \(\*DonchianChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/donchian_channel.go#L74>)
+### func \(\*DonchianChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L74>)
 
 ```go
 func (d *DonchianChannel[T]) IdlePeriod() int
@@ -514,7 +514,7 @@ func (d *DonchianChannel[T]) IdlePeriod() int
 IdlePeriod is the initial period that Donchian Channel won't yield any results.
 
 <a name="KeltnerChannel"></a>
-## type [KeltnerChannel](<https://github.com/cinar/indicator/blob/v2/volatility/keltner_channel.go#L29-L35>)
+## type [KeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L29-L35>)
 
 KeltnerChannel represents the configuration parameters for calculating the Keltner Channel \(KC\). It provides volatility\-based bands that are placed on either side of an asset's price and can aid in determining the direction of a trend.
 
@@ -542,7 +542,7 @@ type KeltnerChannel[T helper.Number] struct {
 ```
 
 <a name="NewKeltnerChannel"></a>
-### func [NewKeltnerChannel](<https://github.com/cinar/indicator/blob/v2/volatility/keltner_channel.go#L38>)
+### func [NewKeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L38>)
 
 ```go
 func NewKeltnerChannel[T helper.Number]() *KeltnerChannel[T]
@@ -551,7 +551,7 @@ func NewKeltnerChannel[T helper.Number]() *KeltnerChannel[T]
 NewKeltnerChannel function initializes a new Keltner Channel instance with the default parameters.
 
 <a name="NewKeltnerChannelWithPeriod"></a>
-### func [NewKeltnerChannelWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/keltner_channel.go#L43>)
+### func [NewKeltnerChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L43>)
 
 ```go
 func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T]
@@ -560,7 +560,7 @@ func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T]
 NewKeltnerChannelWithPeriod function initializes a new Keltner Channel instance with the given period.
 
 <a name="KeltnerChannel[T].Compute"></a>
-### func \(\*KeltnerChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/keltner_channel.go#L51>)
+### func \(\*KeltnerChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L51>)
 
 ```go
 func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -569,7 +569,7 @@ func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Keltner Channel over the specified period.
 
 <a name="KeltnerChannel[T].IdlePeriod"></a>
-### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/keltner_channel.go#L79>)
+### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L79>)
 
 ```go
 func (k *KeltnerChannel[T]) IdlePeriod() int
@@ -578,7 +578,7 @@ func (k *KeltnerChannel[T]) IdlePeriod() int
 IdlePeriod is the initial period that Keltner Channel won't yield any results.
 
 <a name="MovingStd"></a>
-## type [MovingStd](<https://github.com/cinar/indicator/blob/v2/volatility/moving_std.go#L17-L20>)
+## type [MovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L17-L20>)
 
 MovingStd represents the configuration parameters for calculating the Moving Standard Deviation over the specified period.
 
@@ -594,7 +594,7 @@ type MovingStd[T helper.Number] struct {
 ```
 
 <a name="NewMovingStd"></a>
-### func [NewMovingStd](<https://github.com/cinar/indicator/blob/v2/volatility/moving_std.go#L23>)
+### func [NewMovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L23>)
 
 ```go
 func NewMovingStd[T helper.Number]() *MovingStd[T]
@@ -603,7 +603,7 @@ func NewMovingStd[T helper.Number]() *MovingStd[T]
 NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
 
 <a name="NewMovingStdWithPeriod"></a>
-### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/moving_std.go#L28>)
+### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L28>)
 
 ```go
 func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T]
@@ -612,7 +612,7 @@ func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T]
 NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.
 
 <a name="MovingStd[T].Compute"></a>
-### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/moving_std.go#L35>)
+### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L35>)
 
 ```go
 func (m *MovingStd[T]) Compute(c <-chan T) <-chan T
@@ -621,7 +621,7 @@ func (m *MovingStd[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Standard Deviation over the specified period.
 
 <a name="MovingStd[T].IdlePeriod"></a>
-### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/moving_std.go#L67>)
+### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L67>)
 
 ```go
 func (m *MovingStd[T]) IdlePeriod() int
@@ -630,7 +630,7 @@ func (m *MovingStd[T]) IdlePeriod() int
 IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
 
 <a name="Po"></a>
-## type [Po](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L28-L37>)
+## type [Po](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L28-L37>)
 
 Po represents the configuration parameters for calculating the Projection Oscillator \(PO\). It uses the linear regression slope, along with highs and lows. Period defines the moving window to calculates the PO.
 
@@ -654,7 +654,7 @@ type Po[T helper.Number] struct {
 ```
 
 <a name="NewPo"></a>
-### func [NewPo](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L40>)
+### func [NewPo](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L40>)
 
 ```go
 func NewPo[T helper.Number]() *Po[T]
@@ -663,7 +663,7 @@ func NewPo[T helper.Number]() *Po[T]
 NewPo function initializes a new PO instance with the default parameters.
 
 <a name="NewPoWithPeriod"></a>
-### func [NewPoWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L45>)
+### func [NewPoWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L45>)
 
 ```go
 func NewPoWithPeriod[T helper.Number](period int) *Po[T]
@@ -672,7 +672,7 @@ func NewPoWithPeriod[T helper.Number](period int) *Po[T]
 NewPoWithPeriod function initializes a new PO instance with the given period.
 
 <a name="Po[T].Compute"></a>
-### func \(\*Po\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L54>)
+### func \(\*Po\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L54>)
 
 ```go
 func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -681,7 +681,7 @@ func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the PO over the specified period.
 
 <a name="Po[T].IdlePeriod"></a>
-### func \(\*Po\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/po.go#L114>)
+### func \(\*Po\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L114>)
 
 ```go
 func (p *Po[T]) IdlePeriod() int
@@ -690,7 +690,7 @@ func (p *Po[T]) IdlePeriod() int
 IdlePeriod is the initial period that PO won't yield any results.
 
 <a name="SuperTrend"></a>
-## type [SuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L39-L42>)
+## type [SuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L39-L42>)
 
 SuperTrend represents the configuration parameters for calculating the Super Trend.
 
@@ -722,7 +722,7 @@ type SuperTrend[T helper.Number] struct {
 ```
 
 <a name="NewSuperTrend"></a>
-### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L45>)
+### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L45>)
 
 ```go
 func NewSuperTrend[T helper.Number]() *SuperTrend[T]
@@ -731,7 +731,7 @@ func NewSuperTrend[T helper.Number]() *SuperTrend[T]
 NewSuperTrend function initializes a new Super Trend instance with the default parameters.
 
 <a name="NewSuperTrendWithMa"></a>
-### func [NewSuperTrendWithMa](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L64>)
+### func [NewSuperTrendWithMa](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L64>)
 
 ```go
 func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T]
@@ -740,7 +740,7 @@ func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTr
 NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance and multiplier.
 
 <a name="NewSuperTrendWithPeriod"></a>
-### func [NewSuperTrendWithPeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L55>)
+### func [NewSuperTrendWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L55>)
 
 ```go
 func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T]
@@ -749,7 +749,7 @@ func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTr
 NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
 
 <a name="SuperTrend[T].Compute"></a>
-### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L72>)
+### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L72>)
 
 ```go
 func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -758,7 +758,7 @@ func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function calculates the Super Trend, using separate channels for highs, lows, and closings.
 
 <a name="SuperTrend[T].IdlePeriod"></a>
-### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/super_trend.go#L162>)
+### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L162>)
 
 ```go
 func (s *SuperTrend[T]) IdlePeriod() int
@@ -767,7 +767,7 @@ func (s *SuperTrend[T]) IdlePeriod() int
 IdlePeriod is the initial period that Super Trend won't yield any results.
 
 <a name="UlcerIndex"></a>
-## type [UlcerIndex](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L30-L33>)
+## type [UlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L30-L33>)
 
 UlcerIndex represents the configuration parameters for calculating the Ulcer Index \(UI\). It measures downside risk. The index increases in value as the price moves farther away from a recent high and falls as the price rises to new highs.
 
@@ -793,7 +793,7 @@ type UlcerIndex[T helper.Number] struct {
 ```
 
 <a name="NewUlcerIndex"></a>
-### func [NewUlcerIndex](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L36>)
+### func [NewUlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L36>)
 
 ```go
 func NewUlcerIndex[T helper.Number]() *UlcerIndex[T]
@@ -802,7 +802,7 @@ func NewUlcerIndex[T helper.Number]() *UlcerIndex[T]
 NewUlcerIndex function initializes a new Ulcer Index instance with the default parameters.
 
 <a name="UlcerIndex[T].Compute"></a>
-### func \(\*UlcerIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L43>)
+### func \(\*UlcerIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L43>)
 
 ```go
 func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T
@@ -811,7 +811,7 @@ func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Ulcer Index over the specified period.
 
 <a name="UlcerIndex[T].IdlePeriod"></a>
-### func \(\*UlcerIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/v2/volatility/ulcer_index.go#L78>)
+### func \(\*UlcerIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L78>)
 
 ```go
 func (u *UlcerIndex[T]) IdlePeriod() int

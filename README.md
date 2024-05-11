@@ -13,13 +13,12 @@ Indicator is a Golang module providing a comprehensive set of technical analysis
 > -	Operating on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the `v1 version`.
 > -	Having each indicator and strategy fully configurable with no preset values.
 > -	Supporting all numeric formats using Golang generics.
-
+>
 > [!WARNING] Not everything has been fully ported from `v1 version` to `v2 version`. Any indicator or strategy without a link to documentation is not currently implemented in the `v2 version`. Your contributions are highly welcomed. Feel free to contribute to the project and help us expand the library.
 >
 > You can find the [v1 version](https://github.com/cinar/indicator) of the library in the `v1` branch.
-
-> [!NOTE]
-> I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+>
+> [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
 ----------------------
@@ -33,13 +32,13 @@ The following list of indicators are currently supported by this package:
 -	[Balance of Power (BoP)](trend/README.md#type-bop)
 -	Chande Forecast Oscillator (CFO)
 -	[Community Channel Index (CCI)](trend/README.md#type-cci)
--   [Hull Moving Average (HMA)](trend/README.md#type-hma)
+-	[Hull Moving Average (HMA)](trend/README.md#type-hma)
 -	[Double Exponential Moving Average (DEMA)](trend/README.md#type-dema)
 -	[Exponential Moving Average (EMA)](trend/README.md#type-ema)
 -	[Mass Index (MI)](trend/README.md#type-massindex)
 -	[Moving Average Convergence Divergence (MACD)](trend/README.md#type-macd)
--   [Moving Least Square (MLS)](trend/README.md#type-mls)
--   [Moving Linear Regression (MLR)](trend/README.md#type-mlr)
+-	[Moving Least Square (MLS)](trend/README.md#type-mls)
+-	[Moving Linear Regression (MLR)](trend/README.md#type-mlr)
 -	[Moving Max](trend/README.md#type-movingmax)
 -	[Moving Min](trend/README.md#type-movingmin)
 -	[Moving Sum](trend/README.md#type-movingsum)
@@ -54,7 +53,7 @@ The following list of indicators are currently supported by this package:
 -	[Typical Price](trend/README.md#type-typicalprice)
 -	[Volume Weighted Moving Average (VWMA)](trend/README.md#type-vwma)
 -	Vortex Indicator
--   [Weighted Moving Average (WMA)](trend/README.md#type-wma)
+-	[Weighted Moving Average (WMA)](trend/README.md#type-wma)
 
 ### 🚀 Momentum Indicators
 
@@ -79,7 +78,7 @@ The following list of indicators are currently supported by this package:
 -	[Keltner Channel (KC)](volatility/README.md#type-keltnerchannel)
 -	[Moving Standard Deviation (Std)](volatility/README.md#type-movingstd)
 -	[Projection Oscillator (PO)](volatility/README.md#type-po)
--   [Super Trend](volatility/README.md#type-supertrend)
+-	[Super Trend](volatility/README.md#type-supertrend)
 -	[Ulcer Index (UI)](volatility/README.md#type-ulcerindex)
 
 ### 📢 Volume Indicators
@@ -124,7 +123,7 @@ The following list of strategies are currently supported by this package:
 ### 🚀 Momentum Strategies
 
 -	[Awesome Oscillator Strategy](strategy/momentum/README.md#type-awesomeoscillatorstrategy)
--   [RSI Strategy](strategy/momentum/README.md#type-rsistrategy)
+-	[RSI Strategy](strategy/momentum/README.md#type-rsistrategy)
 -	Williams R Strategy
 
 ### 🎢 Volatility Strategies
@@ -148,8 +147,8 @@ Compound strategies merge multiple strategies to produce integrated recommendati
 -	[All Strategy](strategy/README.md#type-allstrategy)
 -	[Or Strategy](strategy/README.md#type-orstrategy)
 -	[Majority Strategy](strategy/README.md#type-majoritystrategy)
--   [MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
--   [Split Strategy](strategy/README.md#type-splitstrategy)
+-	[MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
+-	[Split Strategy](strategy/README.md#type-splitstrategy)
 
 🗃 Repositories
 --------------
@@ -268,4 +267,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
