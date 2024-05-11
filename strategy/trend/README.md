@@ -51,6 +51,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(d \*DemaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DemaStrategy.Compute>)
   - [func \(\*DemaStrategy\) Name\(\) string](<#DemaStrategy.Name>)
   - [func \(d \*DemaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DemaStrategy.Report>)
+- [type GoldenCrossStrategy](<#GoldenCrossStrategy>)
+  - [func NewGoldenCrossStrategy\(\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategy>)
+  - [func NewGoldenCrossStrategyWith\(fastPeriod, slowPeriod int\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategyWith>)
+  - [func \(t \*GoldenCrossStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#GoldenCrossStrategy.Compute>)
+  - [func \(\*GoldenCrossStrategy\) Name\(\) string](<#GoldenCrossStrategy.Name>)
+  - [func \(t \*GoldenCrossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#GoldenCrossStrategy.Report>)
 - [type KdjStrategy](<#KdjStrategy>)
   - [func NewKdjStrategy\(\) \*KdjStrategy](<#NewKdjStrategy>)
   - [func \(kdj \*KdjStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KdjStrategy.Compute>)
@@ -101,6 +107,18 @@ const (
 
     // DefaultDemaStrategyPeriod2 is the second DEMA period.
     DefaultDemaStrategyPeriod2 = 35
+)
+```
+
+<a name="DefaultGoldenCrossStrategyFastPeriod"></a>
+
+```go
+const (
+    // DefaultGoldenCrossStrategyFastPeriod is the default golden cross strategy fast period.
+    DefaultGoldenCrossStrategyFastPeriod = 50
+
+    // DefaultGoldenCrossStrategySlowPeriod is the default golden cross strategy slow period.
+    DefaultGoldenCrossStrategySlowPeriod = 200
 )
 ```
 
@@ -402,6 +420,66 @@ Name returns the name of the strategy.
 
 ```go
 func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="GoldenCrossStrategy"></a>
+## type [GoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L27-L33>)
+
+GoldenCrossStrategy defines the parameters used to calculate the Golden Cross trading strategy. This strategy uses two Exponential Moving Averages \(EMAs\) with different lengths to identify potential buy and sell signals. \- A buy signal is generated when the \*\*fastest\*\* EMA crosses above the \*\*slowest\*\* EMAs. \- A sell signal is generated when the fastest EMA crosses below the slowest EMAs. \- Otherwise, the strategy recommends holding the asset.
+
+```go
+type GoldenCrossStrategy struct {
+    // FastEma is the fastest EMA.
+    FastEma *trend.Ema[float64]
+
+    // SlowEma is the slowest EMA.
+    SlowEma *trend.Ema[float64]
+}
+```
+
+<a name="NewGoldenCrossStrategy"></a>
+### func [NewGoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L36>)
+
+```go
+func NewGoldenCrossStrategy() *GoldenCrossStrategy
+```
+
+NewGoldenCrossStrategy function initializes a new Golden Cross strategy instance with the default parameters.
+
+<a name="NewGoldenCrossStrategyWith"></a>
+### func [NewGoldenCrossStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L44>)
+
+```go
+func NewGoldenCrossStrategyWith(fastPeriod, slowPeriod int) *GoldenCrossStrategy
+```
+
+NewGoldenCrossStrategyWith function initializes a new Golden Cross strategy instance with the given periods.
+
+<a name="GoldenCrossStrategy.Compute"></a>
+### func \(\*GoldenCrossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L57>)
+
+```go
+func (t *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="GoldenCrossStrategy.Name"></a>
+### func \(\*GoldenCrossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L52>)
+
+```go
+func (*GoldenCrossStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="GoldenCrossStrategy.Report"></a>
+### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L86>)
+
+```go
+func (t *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
