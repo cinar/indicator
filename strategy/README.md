@@ -35,11 +35,11 @@ The information provided on this project is strictly for informational purposes 
 - [func Outcome\[T helper.Number\]\(values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#Outcome>)
 - [type Action](<#Action>)
   - [func \(a Action\) Annotation\(\) string](<#Action.Annotation>)
-- [type AllStrategy](<#AllStrategy>)
-  - [func NewAllStrategy\(name string\) \*AllStrategy](<#NewAllStrategy>)
-  - [func \(a \*AllStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AllStrategy.Compute>)
-  - [func \(a \*AllStrategy\) Name\(\) string](<#AllStrategy.Name>)
-  - [func \(a \*AllStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AllStrategy.Report>)
+- [type AndStrategy](<#AndStrategy>)
+  - [func NewAndStrategy\(name string\) \*AndStrategy](<#NewAndStrategy>)
+  - [func \(a \*AndStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AndStrategy.Compute>)
+  - [func \(a \*AndStrategy\) Name\(\) string](<#AndStrategy.Name>)
+  - [func \(a \*AndStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AndStrategy.Report>)
 - [type Backtest](<#Backtest>)
   - [func NewBacktest\(repository asset.Repository, outputDir string\) \*Backtest](<#NewBacktest>)
   - [func \(b \*Backtest\) Run\(\) error](<#Backtest.Run>)
@@ -194,13 +194,13 @@ func (a Action) Annotation() string
 
 Annotation returns a single character string representing the recommended action. It returns "S" for Sell, "B" for Buy, and an empty string for Hold.
 
-<a name="AllStrategy"></a>
-## type [AllStrategy](<https://github.com/cinar/indicator/blob/master/strategy/all_strategy.go#L15-L23>)
+<a name="AndStrategy"></a>
+## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L15-L23>)
 
-AllStrategy combines multiple strategies and emits actionable recommendations when \*\*all\*\* strategies in the group \*\*reach the same actionable conclusion\*\*. This can be a conservative approach, potentially delaying recommendations until full consensus is reached.
+AndStrategy combines multiple strategies and emits actionable recommendations when \*\*all\*\* strategies in the group \*\*reach the same actionable conclusion\*\*. This can be a conservative approach, potentially delaying recommendations until full consensus is reached.
 
 ```go
-type AllStrategy struct {
+type AndStrategy struct {
     Strategy
 
     // Strategies are the group of strategies that will be consulted to make an actionable recommendation.
@@ -209,38 +209,38 @@ type AllStrategy struct {
 }
 ```
 
-<a name="NewAllStrategy"></a>
-### func [NewAllStrategy](<https://github.com/cinar/indicator/blob/master/strategy/all_strategy.go#L26>)
+<a name="NewAndStrategy"></a>
+### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L26>)
 
 ```go
-func NewAllStrategy(name string) *AllStrategy
+func NewAndStrategy(name string) *AndStrategy
 ```
 
-NewAllStrategy function initializes an empty all strategies group with the given name.
+NewAndStrategy function initializes an empty and strategies group with the given name.
 
-<a name="AllStrategy.Compute"></a>
-### func \(\*AllStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/all_strategy.go#L39>)
+<a name="AndStrategy.Compute"></a>
+### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L39>)
 
 ```go
-func (a *AllStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
+func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
-<a name="AllStrategy.Name"></a>
-### func \(\*AllStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/all_strategy.go#L34>)
+<a name="AndStrategy.Name"></a>
+### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L34>)
 
 ```go
-func (a *AllStrategy) Name() string
+func (a *AndStrategy) Name() string
 ```
 
 Name returns the name of the strategy.
 
-<a name="AllStrategy.Report"></a>
-### func \(\*AllStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/all_strategy.go#L69>)
+<a name="AndStrategy.Report"></a>
+### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L69>)
 
 ```go
-func (a *AllStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

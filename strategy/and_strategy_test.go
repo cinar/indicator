@@ -13,24 +13,24 @@ import (
 	"github.com/cinar/indicator/v2/strategy"
 )
 
-func TestAllStrategy(t *testing.T) {
+func TestAndStrategy(t *testing.T) {
 	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/all.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/and.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	all := strategy.NewAllStrategy("All Strategy")
-	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
-	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
+	and := strategy.NewAndStrategy("And Strategy")
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
 
-	actual := all.Compute(snapshots)
+	actual := and.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -38,19 +38,19 @@ func TestAllStrategy(t *testing.T) {
 	}
 }
 
-func TestAllStrategyReport(t *testing.T) {
+func TestAndStrategyReport(t *testing.T) {
 	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	all := strategy.NewAllStrategy("All Strategy")
-	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
-	all.Strategies = append(all.Strategies, strategy.NewBuyAndHoldStrategy())
+	and := strategy.NewAndStrategy("And Strategy")
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
 
-	report := all.Report(snapshots)
+	report := and.Report(snapshots)
 
-	fileName := "all.html"
+	fileName := "and.html"
 	defer os.Remove(fileName)
 
 	err = report.WriteToFile(fileName)

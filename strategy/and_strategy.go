@@ -9,10 +9,10 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
-// AllStrategy combines multiple strategies and emits actionable recommendations when **all** strategies in
+// AndStrategy combines multiple strategies and emits actionable recommendations when **all** strategies in
 // the group **reach the same actionable conclusion**. This can be a conservative approach, potentially
 // delaying recommendations until full consensus is reached.
-type AllStrategy struct {
+type AndStrategy struct {
 	Strategy
 
 	// Strategies are the group of strategies that will be consulted to make an actionable recommendation.
@@ -22,21 +22,21 @@ type AllStrategy struct {
 	name string
 }
 
-// NewAllStrategy function initializes an empty all strategies group with the given name.
-func NewAllStrategy(name string) *AllStrategy {
-	return &AllStrategy{
+// NewAndStrategy function initializes an empty and strategies group with the given name.
+func NewAndStrategy(name string) *AndStrategy {
+	return &AndStrategy{
 		Strategies: []Strategy{},
 		name:       name,
 	}
 }
 
 // Name returns the name of the strategy.
-func (a *AllStrategy) Name() string {
+func (a *AndStrategy) Name() string {
 	return a.name
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (a *AllStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
 	sources := ActionSources(a.Strategies, snapshots)
@@ -44,7 +44,7 @@ func (a *AllStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
 	go func() {
 		defer close(result)
 
-		all := len(a.Strategies)
+		and := len(a.Strategies)
 
 		for {
 			buy, _, sell, ok := CountActions(sources)
@@ -52,9 +52,9 @@ func (a *AllStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
 				break
 			}
 
-			if sell == all {
+			if sell == and {
 				result <- Sell
-			} else if buy == all {
+			} else if buy == and {
 				result <- Buy
 			} else {
 				result <- Hold
@@ -66,7 +66,7 @@ func (a *AllStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
 }
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
-func (a *AllStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 
 	dates := asset.SnapshotsAsDates(snapshots[0])
