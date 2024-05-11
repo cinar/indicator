@@ -13,12 +13,14 @@ Indicator is a Golang module providing a comprehensive set of technical analysis
 > -	Operating on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the `v1 version`.
 > -	Having each indicator and strategy fully configurable with no preset values.
 > -	Supporting all numeric formats using Golang generics.
->
-> [!WARNING] Not everything has been fully ported from `v1 version` to `v2 version`. Any indicator or strategy without a link to documentation is not currently implemented in the `v2 version`. Your contributions are highly welcomed. Feel free to contribute to the project and help us expand the library.
+
+> [!WARNING] 
+> Not everything has been fully ported from `v1 version` to `v2 version`. Any indicator or strategy without a link to documentation is not currently implemented in the `v2 version`. Your contributions are highly welcomed. Feel free to contribute to the project and help us expand the library.
 >
 > You can find the [v1 version](https://github.com/cinar/indicator) of the library in the `v1` branch.
->
-> [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+
+> [!NOTE]
+> I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
 ----------------------
