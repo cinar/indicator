@@ -14,21 +14,21 @@ import (
 	"github.com/cinar/indicator/v2/strategy/trend"
 )
 
-func TestGoldenCrossStrategy(t *testing.T) {
+func TestTripleMovingAverageCrossoverStrategy(t *testing.T) {
 	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/golden_cross_strategy.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/triple_moving_average_crossover_strategy.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	vwma := trend.NewGoldenCrossStrategyWith(2, 5, 20)
-	actual := vwma.Compute(snapshots)
+	strategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
+	actual := strategy.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -36,17 +36,17 @@ func TestGoldenCrossStrategy(t *testing.T) {
 	}
 }
 
-func TestGoldenCrossStrategyReport(t *testing.T) {
+func TestTripleMovingAverageCrossoverStrategyReport(t *testing.T) {
 	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	vwma := trend.NewGoldenCrossStrategyWith(2, 5, 20)
+	strategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
 
-	report := vwma.Report(snapshots)
+	report := strategy.Report(snapshots)
 
-	fileName := "golden_cross_strategy.html"
+	fileName := "triple_moving_average_crossover_strategy.html"
 	defer os.Remove(fileName)
 
 	err = report.WriteToFile(fileName)

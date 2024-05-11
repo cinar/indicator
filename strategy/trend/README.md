@@ -51,12 +51,6 @@ The information provided on this project is strictly for informational purposes 
   - [func \(d \*DemaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DemaStrategy.Compute>)
   - [func \(\*DemaStrategy\) Name\(\) string](<#DemaStrategy.Name>)
   - [func \(d \*DemaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DemaStrategy.Report>)
-- [type GoldenCrossStrategy](<#GoldenCrossStrategy>)
-  - [func NewGoldenCrossStrategy\(\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategy>)
-  - [func NewGoldenCrossStrategyWith\(fastPeriod, mediumPeriod, slowPeriod int\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategyWith>)
-  - [func \(g \*GoldenCrossStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#GoldenCrossStrategy.Compute>)
-  - [func \(\*GoldenCrossStrategy\) Name\(\) string](<#GoldenCrossStrategy.Name>)
-  - [func \(g \*GoldenCrossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#GoldenCrossStrategy.Report>)
 - [type KdjStrategy](<#KdjStrategy>)
   - [func NewKdjStrategy\(\) \*KdjStrategy](<#NewKdjStrategy>)
   - [func \(kdj \*KdjStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KdjStrategy.Compute>)
@@ -78,6 +72,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*TrimaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TrimaStrategy.Compute>)
   - [func \(\*TrimaStrategy\) Name\(\) string](<#TrimaStrategy.Name>)
   - [func \(t \*TrimaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#TrimaStrategy.Report>)
+- [type TripleMovingAverageCrossoverStrategy](<#TripleMovingAverageCrossoverStrategy>)
+  - [func NewTripleMovingAverageCrossoverStrategy\(\) \*TripleMovingAverageCrossoverStrategy](<#NewTripleMovingAverageCrossoverStrategy>)
+  - [func NewTripleMovingAverageCrossoverStrategyWith\(fastPeriod, mediumPeriod, slowPeriod int\) \*TripleMovingAverageCrossoverStrategy](<#NewTripleMovingAverageCrossoverStrategyWith>)
+  - [func \(t \*TripleMovingAverageCrossoverStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TripleMovingAverageCrossoverStrategy.Compute>)
+  - [func \(\*TripleMovingAverageCrossoverStrategy\) Name\(\) string](<#TripleMovingAverageCrossoverStrategy.Name>)
+  - [func \(t \*TripleMovingAverageCrossoverStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#TripleMovingAverageCrossoverStrategy.Report>)
 - [type TrixStrategy](<#TrixStrategy>)
   - [func NewTrixStrategy\(\) \*TrixStrategy](<#NewTrixStrategy>)
   - [func \(t \*TrixStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TrixStrategy.Compute>)
@@ -104,21 +104,6 @@ const (
 )
 ```
 
-<a name="DefaultGoldenCrossStrategyFastPeriod"></a>
-
-```go
-const (
-    // DefaultGoldenCrossStrategyFastPeriod is the default golden cross strategy fast period.
-    DefaultGoldenCrossStrategyFastPeriod = 21
-
-    // DefaultGoldenCrossStrategyMediumPeriod is the default golden cross strategy medium period.
-    DefaultGoldenCrossStrategyMediumPeriod = 50
-
-    // DefaultGoldenCrossStrategySlowPeriod is the default golden cross strategy slow period.
-    DefaultGoldenCrossStrategySlowPeriod = 200
-)
-```
-
 <a name="DefaultTrimaStrategyShortPeriod"></a>
 
 ```go
@@ -128,6 +113,21 @@ const (
 
     // DefaultTrimaStrategyLongPeriod is the second TRIMA period.
     DefaultTrimaStrategyLongPeriod = 50
+)
+```
+
+<a name="DefaultTripleMovingAverageCrossoverStrategyFastPeriod"></a>
+
+```go
+const (
+    // DefaultTripleMovingAverageCrossoverStrategyFastPeriod is the default triple moving average crossover strategy fast period.
+    DefaultTripleMovingAverageCrossoverStrategyFastPeriod = 21
+
+    // DefaultTripleMovingAverageCrossoverStrategyMediumPeriod is the default triple moving average crossover strategy medium period.
+    DefaultTripleMovingAverageCrossoverStrategyMediumPeriod = 50
+
+    // DefaultTripleMovingAverageCrossoverStrategySlowPeriod is the default triple moving average crossover strategy slow period.
+    DefaultTripleMovingAverageCrossoverStrategySlowPeriod = 200
 )
 ```
 
@@ -406,69 +406,6 @@ func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
-<a name="GoldenCrossStrategy"></a>
-## type [GoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L30-L39>)
-
-GoldenCrossStrategy defines the parameters used to calculate the Golden Cross trading strategy. This strategy uses three Exponential Moving Averages \(EMAs\) with different lengths to identify potential buy and sell signals. \- A buy signal is generated when the \*\*fastest\*\* EMA crosses above both the \*\*medium\*\* and \*\*slowest\*\* EMAs. \- A sell signal is generated when the fastest EMA crosses below both the medium and slowest EMAs. \- Otherwise, the strategy recommends holding the asset.
-
-```go
-type GoldenCrossStrategy struct {
-    // FastEma is the fastest EMA.
-    FastEma *trend.Ema[float64]
-
-    // MediumEma is the meium EMA.
-    MediumEma *trend.Ema[float64]
-
-    // SlowEma is the slowest EMA.
-    SlowEma *trend.Ema[float64]
-}
-```
-
-<a name="NewGoldenCrossStrategy"></a>
-### func [NewGoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L42>)
-
-```go
-func NewGoldenCrossStrategy() *GoldenCrossStrategy
-```
-
-NewGoldenCrossStrategy function initializes a new Golden Cross strategy instance with the default parameters.
-
-<a name="NewGoldenCrossStrategyWith"></a>
-### func [NewGoldenCrossStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L51>)
-
-```go
-func NewGoldenCrossStrategyWith(fastPeriod, mediumPeriod, slowPeriod int) *GoldenCrossStrategy
-```
-
-NewGoldenCrossStrategyWith function initializes a new Golden Cross strategy instance with the given periods.
-
-<a name="GoldenCrossStrategy.Compute"></a>
-### func \(\*GoldenCrossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L65>)
-
-```go
-func (g *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-
-<a name="GoldenCrossStrategy.Name"></a>
-### func \(\*GoldenCrossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L60>)
-
-```go
-func (*GoldenCrossStrategy) Name() string
-```
-
-Name returns the name of the strategy.
-
-<a name="GoldenCrossStrategy.Report"></a>
-### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L94>)
-
-```go
-func (g *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
-```
-
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
-
 <a name="KdjStrategy"></a>
 ## type [KdjStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/kdj_strategy.go#L17-L22>)
 
@@ -680,6 +617,69 @@ Name returns the name of the strategy.
 
 ```go
 func (t *TrimaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="TripleMovingAverageCrossoverStrategy"></a>
+## type [TripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L31-L40>)
+
+TripleMovingAverageCrossoverStrategy defines the parameters used to calculate the Triple Moving Average Crossover trading strategy. This strategy uses three Exponential Moving Averages \(EMAs\) with different lengths to identify potential buy and sell signals. \- A buy signal is generated when the \*\*fastest\*\* EMA crosses above both the \*\*medium\*\* and \*\*slowest\*\* EMAs. \- A sell signal is generated when the fastest EMA crosses below both the medium and slowest EMAs. \- Otherwise, the strategy recommends holding the asset.
+
+```go
+type TripleMovingAverageCrossoverStrategy struct {
+    // FastEma is the fastest EMA.
+    FastEma *trend.Ema[float64]
+
+    // MediumEma is the meium EMA.
+    MediumEma *trend.Ema[float64]
+
+    // SlowEma is the slowest EMA.
+    SlowEma *trend.Ema[float64]
+}
+```
+
+<a name="NewTripleMovingAverageCrossoverStrategy"></a>
+### func [NewTripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L43>)
+
+```go
+func NewTripleMovingAverageCrossoverStrategy() *TripleMovingAverageCrossoverStrategy
+```
+
+NewTripleMovingAverageCrossoverStrategy function initializes a new Triple Moving Average Crossover strategy instance with the default parameters.
+
+<a name="NewTripleMovingAverageCrossoverStrategyWith"></a>
+### func [NewTripleMovingAverageCrossoverStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L52>)
+
+```go
+func NewTripleMovingAverageCrossoverStrategyWith(fastPeriod, mediumPeriod, slowPeriod int) *TripleMovingAverageCrossoverStrategy
+```
+
+NewTripleMovingAverageCrossoverStrategyWith function initializes a new Triple Moving Average Crossover strategy instance with the given periods.
+
+<a name="TripleMovingAverageCrossoverStrategy.Compute"></a>
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L66>)
+
+```go
+func (t *TripleMovingAverageCrossoverStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="TripleMovingAverageCrossoverStrategy.Name"></a>
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L61>)
+
+```go
+func (*TripleMovingAverageCrossoverStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="TripleMovingAverageCrossoverStrategy.Report"></a>
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L95>)
+
+```go
+func (t *TripleMovingAverageCrossoverStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

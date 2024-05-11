@@ -28,11 +28,11 @@ func AllStrategies() []strategy.Strategy {
 		NewBopStrategy(),
 		NewCciStrategy(),
 		NewDemaStrategy(),
-		NewGoldenCrossStrategy(),
 		NewKdjStrategy(),
 		NewMacdStrategy(),
 		NewQstickStrategy(),
 		NewTrimaStrategy(),
+		NewTripleMovingAverageCrossoverStrategy(),
 		NewVwmaStrategy(),
 	}
 }
