@@ -113,6 +113,7 @@ The following list of strategies are currently supported by this package:
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#type-demastrategy)
 -	Chande Forecast Oscillator Strategy
 -	[Community Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
+-	[Golden Cross Strategy](strategy/trend/README.md#type-goldencrossstrategy)
 -	[Random Index (KDJ) Strategy](strategy/trend/README.md#type-kdjstrategy)
 -	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#type-macdstrategy)
 -	[Qstick Strategy](strategy/trend/README.md#type-qstickstrategy)

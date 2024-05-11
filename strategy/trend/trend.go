@@ -28,6 +28,7 @@ func AllStrategies() []strategy.Strategy {
 		NewBopStrategy(),
 		NewCciStrategy(),
 		NewDemaStrategy(),
+		NewGoldenCrossStrategy(),
 		NewKdjStrategy(),
 		NewMacdStrategy(),
 		NewQstickStrategy(),
