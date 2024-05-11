@@ -118,6 +118,7 @@ The following list of strategies are currently supported by this package:
 -	[Qstick Strategy](strategy/trend/README.md#type-qstickstrategy)
 -	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#type-trimastrategy)
 -	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#type-trixstrategy)
+-	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#type-triplemovingaveragecrossoverstrategy)
 -	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#type-vwmastrategy)
 
 ### 🚀 Momentum Strategies
