@@ -58,3 +58,21 @@ func TestAndStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAllAndStrategies(t *testing.T) {
+	strategies := []strategy.Strategy{
+		strategy.NewBuyAndHoldStrategy(),
+		strategy.NewMajorityStrategyWith("", []strategy.Strategy{
+			strategy.NewBuyAndHoldStrategy(),
+		}),
+	}
+
+	allAndStrategies := strategy.AllAndStrategies(strategies)
+
+	expected := len(strategies)*len(strategies) - len(strategies)
+	actual := len(allAndStrategies)
+
+	if actual != expected {
+		t.Fatalf("actual=%d expected=%d", actual, expected)
+	}
+}

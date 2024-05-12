@@ -5,6 +5,8 @@
 package strategy
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -85,4 +87,22 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// AllAndStrategies performs a cartesian product operation on the given strategies, resulting in a collection
+// containing all and strategies formed by combining two strategies together.
+func AllAndStrategies(strategies []Strategy) []Strategy {
+	andStrategies := make([]Strategy, 0, len(strategies)*len(strategies))
+
+	for _, first := range strategies {
+		for _, second := range strategies {
+			if first != second {
+				andStrategy := NewAndStrategy(fmt.Sprintf("%s and %s", first.Name(), second.Name()))
+				andStrategy.Strategies = []Strategy{first, second}
+				andStrategies = append(andStrategies, andStrategy)
+			}
+		}
+	}
+
+	return andStrategies
 }

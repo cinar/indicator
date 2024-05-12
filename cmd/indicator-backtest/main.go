@@ -25,6 +25,7 @@ func main() {
 	var workers int
 	var lastDays int
 	var addSplits bool
+	var addAnds bool
 
 	fmt.Fprintln(os.Stderr, "Indicator Backtest")
 	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
@@ -37,6 +38,7 @@ func main() {
 	flag.IntVar(&workers, "workers", strategy.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", strategy.DefaultLastDays, "number of days to do backtest")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
+	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
 	flag.Parse()
 
 	flag.Parse()
@@ -55,6 +57,10 @@ func main() {
 
 	if addSplits {
 		backtest.Strategies = append(backtest.Strategies, strategy.AllSplitStrategies(backtest.Strategies)...)
+	}
+
+	if addAnds {
+		backtest.Strategies = append(backtest.Strategies, strategy.AllAndStrategies(backtest.Strategies)...)
 	}
 
 	err := backtest.Run()
