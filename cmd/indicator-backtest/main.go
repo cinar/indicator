@@ -24,6 +24,7 @@ func main() {
 	var outputDir string
 	var workers int
 	var lastDays int
+	var writeStrategyRerpots bool
 	var addSplits bool
 	var addAnds bool
 
@@ -37,6 +38,7 @@ func main() {
 	flag.StringVar(&outputDir, "output", ".", "output directory")
 	flag.IntVar(&workers, "workers", strategy.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", strategy.DefaultLastDays, "number of days to do backtest")
+	flag.BoolVar(&writeStrategyRerpots, "write-strategy-reports", strategy.DefaultWriteStrategyReports, "write individual strategy reports")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
 	flag.Parse()
@@ -48,6 +50,7 @@ func main() {
 	backtest := strategy.NewBacktest(repository, outputDir)
 	backtest.Workers = workers
 	backtest.LastDays = lastDays
+	backtest.WriteStrategyReports = writeStrategyRerpots
 	backtest.Names = append(backtest.Names, flag.Args()...)
 	backtest.Strategies = append(backtest.Strategies, compound.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, momentum.AllStrategies()...)

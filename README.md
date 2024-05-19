@@ -3,24 +3,26 @@
 Indicator Go
 ============
 
-Indicator is a Golang module providing a comprehensive set of technical analysis indicators, strategies, and a backtest framework.
+Indicator is a Golang module that provides a rich set of technical analysis indicators, strategies, and a framework for backtesting.
 
-> [!IMPORTANT]  
-> The [v2 version](https://github.com/cinar/indicator/tree/v2) is a complete rewrite of the library with the following goals:
->
-> -	Achieving and maintaining minimum of 90% code coverage.
-> -	Having test data in CSV format for each indicator and strategy for each validation.
-> -	Operating on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the `v1 version`.
-> -	Having each indicator and strategy fully configurable with no preset values.
-> -	Supporting all numeric formats using Golang generics.
+### Major improvements in v2:
 
-> [!WARNING] 
-> Not everything has been fully ported from `v1 version` to `v2 version`. Any indicator or strategy without a link to documentation is not currently implemented in the `v2 version`. Your contributions are highly welcomed. Feel free to contribute to the project and help us expand the library.
->
-> You can find the [v1 version](https://github.com/cinar/indicator) of the library in the `v1` branch.
+-	**Enhanced Code Quality:** A complete rewrite was undertaken to achieve and maintain at least 90% code coverage.
+-	**Improved Testability:** Each indicator and strategy have dedicated test data in CSV format for easier validation.
+-	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the v1 version.
+-	**Configurable Indicators and Strategies:** All indicators and strategies were designed to be fully configurable with no preset values.
+-	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
 
-> [!NOTE]
-> I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+### Migrating from v1 to v2:
+
+-	The porting process from v1 to v2 is ongoing. Indicators or strategies without documentation links are not currently implemented in v2.
+-	Contributions are welcome! Feel free to contribute to the project and help expand the library's capabilities.
+
+### Find the v1 library:
+
+You can find the previous version (v1) of the library in the [v1 branch](https://github.com/cinar/indicator/tree/v2) on GitHub.
+
+> [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
 ----------------------

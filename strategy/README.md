@@ -66,6 +66,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(s \*SplitStrategy\) Name\(\) string](<#SplitStrategy.Name>)
   - [func \(s \*SplitStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SplitStrategy.Report>)
 - [type Strategy](<#Strategy>)
+  - [func AllAndStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllAndStrategies>)
   - [func AllSplitStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllSplitStrategies>)
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
 
@@ -81,6 +82,9 @@ const (
 
     // DefaultLastDays is the default number of days backtest should go back.
     DefaultLastDays = 30
+
+    // DefaultWriteStrategyReports is the default state of writing individual strategy reports.
+    DefaultWriteStrategyReports = true
 )
 ```
 
@@ -195,7 +199,7 @@ func (a Action) Annotation() string
 Annotation returns a single character string representing the recommended action. It returns "S" for Sell, "B" for Buy, and an empty string for Hold.
 
 <a name="AndStrategy"></a>
-## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L15-L23>)
+## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L17-L25>)
 
 AndStrategy combines multiple strategies and emits actionable recommendations when \*\*all\*\* strategies in the group \*\*reach the same actionable conclusion\*\*. This can be a conservative approach, potentially delaying recommendations until full consensus is reached.
 
@@ -210,7 +214,7 @@ type AndStrategy struct {
 ```
 
 <a name="NewAndStrategy"></a>
-### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L26>)
+### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L28>)
 
 ```go
 func NewAndStrategy(name string) *AndStrategy
@@ -219,7 +223,7 @@ func NewAndStrategy(name string) *AndStrategy
 NewAndStrategy function initializes an empty and strategies group with the given name.
 
 <a name="AndStrategy.Compute"></a>
-### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L39>)
+### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L41>)
 
 ```go
 func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -228,7 +232,7 @@ func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="AndStrategy.Name"></a>
-### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L34>)
+### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L36>)
 
 ```go
 func (a *AndStrategy) Name() string
@@ -237,7 +241,7 @@ func (a *AndStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AndStrategy.Report"></a>
-### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L69>)
+### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L71>)
 
 ```go
 func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -246,7 +250,7 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="Backtest"></a>
-## type [Backtest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L41-L59>)
+## type [Backtest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L44-L65>)
 
 Backtest function rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy\-asset pairing.
 
@@ -264,12 +268,15 @@ type Backtest struct {
 
     // LastDays is the number of days backtest should go back.
     LastDays int
+
+    // WriteStrategyReports indicates whether the individual strategy reports should be generated.
+    WriteStrategyReports bool
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L83>)
+### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L89>)
 
 ```go
 func NewBacktest(repository asset.Repository, outputDir string) *Backtest
@@ -278,7 +285,7 @@ func NewBacktest(repository asset.Repository, outputDir string) *Backtest
 NewBacktest function initializes a new backtest instance.
 
 <a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L98>)
+### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L105>)
 
 ```go
 func (b *Backtest) Run() error
@@ -525,6 +532,15 @@ type Strategy interface {
     Report(snapshots <-chan *asset.Snapshot) *helper.Report
 }
 ```
+
+<a name="AllAndStrategies"></a>
+### func [AllAndStrategies](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L94>)
+
+```go
+func AllAndStrategies(strategies []Strategy) []Strategy
+```
+
+AllAndStrategies performs a cartesian product operation on the given strategies, resulting in a collection containing all and strategies formed by combining two strategies together.
 
 <a name="AllSplitStrategies"></a>
 ### func [AllSplitStrategies](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L98>)

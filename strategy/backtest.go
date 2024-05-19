@@ -27,6 +27,9 @@ const (
 
 	// DefaultLastDays is the default number of days backtest should go back.
 	DefaultLastDays = 30
+
+	// DefaultWriteStrategyReports is the default state of writing individual strategy reports.
+	DefaultWriteStrategyReports = true
 )
 
 //go:embed "backtest_report.tmpl"
@@ -56,6 +59,9 @@ type Backtest struct {
 
 	// LastDays is the number of days backtest should go back.
 	LastDays int
+
+	// WriteStrategyReports indicates whether the individual strategy reports should be generated.
+	WriteStrategyReports bool
 }
 
 // backtestResult encapsulates the outcome of running a strategy.
@@ -82,12 +88,13 @@ type backtestResult struct {
 // NewBacktest function initializes a new backtest instance.
 func NewBacktest(repository asset.Repository, outputDir string) *Backtest {
 	return &Backtest{
-		repository: repository,
-		outputDir:  outputDir,
-		Names:      []string{},
-		Strategies: []Strategy{},
-		Workers:    DefaultBacktestWorkers,
-		LastDays:   DefaultLastDays,
+		repository:           repository,
+		outputDir:            outputDir,
+		Names:                []string{},
+		Strategies:           []Strategy{},
+		Workers:              DefaultBacktestWorkers,
+		LastDays:             DefaultLastDays,
+		WriteStrategyReports: DefaultWriteStrategyReports,
 	}
 }
 
@@ -186,11 +193,7 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 		results := make([]*backtestResult, 0, len(b.Strategies))
 
 		for _, st := range b.Strategies {
-			snapshotCopies := helper.Duplicate(helper.SliceToChan(snapshotsSlice), 2)
-
-			actions, outcomes := ComputeWithOutcome(st, snapshotCopies[0])
-			report := st.Report(snapshotCopies[1])
-
+			actions, outcomes := ComputeWithOutcome(st, helper.SliceToChan(snapshotsSlice))
 			actionsSplice := helper.Duplicate(actions, 3)
 
 			actions = helper.Last(DenormalizeActions(actionsSplice[0]), 1)
@@ -198,10 +201,15 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 			outcomes = helper.Last(outcomes, 1)
 			transactions := helper.Last(CountTransactions(actionsSplice[2]), 1)
 
-			err := report.WriteToFile(path.Join(b.outputDir, b.strategyReportFileName(name, st.Name())))
-			if err != nil {
-				log.Printf("Unable to write report for %s (%v)", name, err)
-				continue
+			// Generate inidividual strategy report.
+			if b.WriteStrategyReports {
+				report := st.Report(helper.SliceToChan(snapshotsSlice))
+
+				err := report.WriteToFile(path.Join(b.outputDir, b.strategyReportFileName(name, st.Name())))
+				if err != nil {
+					log.Printf("Unable to write report for %s (%v)", name, err)
+					continue
+				}
 			}
 
 			results = append(results, &backtestResult{
