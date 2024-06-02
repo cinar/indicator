@@ -359,7 +359,7 @@ Example:
 ac := helper.SliceToChan([]int{2, 4, 6, 8, 10})
 bc := helper.SliceToChan([]int{2, 1, 3, 2, 5})
 
-divison := helper.Divide(ac, bc)
+division := helper.Divide(ac, bc)
 
 fmt.Println(helper.ChanToSlice(division)) // [1, 4, 2, 4, 2]
 ```
