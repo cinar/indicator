@@ -290,7 +290,7 @@ IdlePeriod is the initial period that Chaikin Oscillator won't yield any results
 <a name="IchimokuCloud"></a>
 ## type [IchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L40-L61>)
 
-IchimokuCloud represents the configuration parameter for calculating the Ichimoku Cloud. It is also known as the Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistence, identifies trend direction, gauges momentum, and provides trading signals.
+IchimokuCloud represents the configuration parameter for calculating the Ichimoku Cloud. It is also known as the Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistance, identifies trend direction, gauges momentum, and provides trading signals.
 
 ```
 Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2

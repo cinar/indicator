@@ -24,7 +24,7 @@ const (
 )
 
 // IchimokuCloud represents the configuration parameter for calculating the Ichimoku Cloud. It is also known as the
-// Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistence, identifies trend direction,
+// Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistance, identifies trend direction,
 // gauges momentum, and provides trading signals.
 //
 //	Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
