@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Backtest Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="box">
+                <h1 class="title">
+                    Backtest Report
+                </h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Strategy</th>
+                            <th>Action</th>
+                            <th>Since</th>
+                            <th>Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Results }}
+                        <tr>
+                            <td><a href="{{ .AssetName }}.html">{{ .AssetName }}</a></td>
+                            <td>{{ .StrategyName }}</td>
+                            <td>
+                                {{ if eq .Action -1 }}
+                                <span class="tag is-danger">Sell</span>
+                                {{ else if eq .Action 0 }}
+                                <span class="tag is-light">Hold</span>
+                                {{ else }}
+                                <span class="tag is-success">Buy</span>
+                                {{ end }}
+                            </td>
+                            <td>
+                                {{ .Since }}
+                            </td>
+                            <td>
+                                {{ if lt .Outcome 0.0  }}
+                                <span class="has-text-danger">˅ 
+                                {{ else if gt .Outcome 0.0 }}
+                                <span class="has-text-success">˄ 
+                                {{ else }}
+                                <span class="has-text-light">˄ 
+                                {{ end }}
+                                {{ printf "%.2f" .Outcome }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong><a href="https://github.com/cinar/indicator">Indicator</a></strong> Copyright (c) 2021-2023 Onur Cinar. The source code is provided under GNU AGPLv3 License. 
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

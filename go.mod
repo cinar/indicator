@@ -1,3 +1,3 @@
-module github.com/cinar/indicator
+module github.com/cinar/indicator/v2
 
-go 1.14
+go 1.20
