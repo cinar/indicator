@@ -37,3 +37,31 @@ func TestKama(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestKamaEmpty(t *testing.T) {
+	input := helper.SliceToChan([]float64{})
+	expected := helper.SliceToChan([]float64{})
+
+	kama := trend.NewKama[float64]()
+	actual := kama.Compute(input)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestKamaString(t *testing.T) {
+	expected := "KAMA(1,2,3)"
+
+	kama := trend.NewKama[float64]()
+	kama.ErPeriod = 1
+	kama.FastScPeriod = 2
+	kama.SlowScPeriod = 3
+
+	actual := kama.String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
