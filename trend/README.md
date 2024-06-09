@@ -56,7 +56,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(h \*Hma\[T\]\) String\(\) string](<#Hma[T].String>)
 - [type Kama](<#Kama>)
   - [func NewKama\[T helper.Number\]\(\) \*Kama\[T\]](<#NewKama>)
-  - [func \(k \*Kama\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Kama[T].Compute>)
+  - [func \(k \*Kama\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Kama[T].Compute>)
   - [func \(k \*Kama\[T\]\) IdlePeriod\(\) int](<#Kama[T].IdlePeriod>)
   - [func \(k \*Kama\[T\]\) String\(\) string](<#Kama[T].String>)
 - [type Kdj](<#Kdj>)
@@ -663,16 +663,16 @@ func (h *Hma[T]) String() string
 String is the string representation of the HMA.
 
 <a name="Kama"></a>
-## type [Kama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L38-L47>)
+## type [Kama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L39-L48>)
 
 Kama represents the parameters for calculating the Kaufman's Adaptive Moving Average \(KAMA\). It is a type of moving average that adapts to market noise or volatility. It tracks prices closely during periods of small price swings and low noise.
 
 ```
-Change = Abs(Close - Previous Close Period Ago)
-Volatility = MovingSum(Period, Abs(Close - Prior Close))
-Efficiency Ratio (ER) = Change / Volatility
+Direction = Abs(Close - Previous Close Period Ago)
+Volatility = MovingSum(Period, Abs(Close - Previous Close))
+Efficiency Ratio (ER) = Direction / Volatility
 Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
-KAMA = Prior KAMA + SC * (Price - Prior KAMA)
+KAMA = Previous KAMA + SC * (Price - Previous KAMA)
 ```
 
 Example:
@@ -696,7 +696,7 @@ type Kama[T helper.Number] struct {
 ```
 
 <a name="NewKama"></a>
-### func [NewKama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L50>)
+### func [NewKama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L51>)
 
 ```go
 func NewKama[T helper.Number]() *Kama[T]
@@ -705,16 +705,16 @@ func NewKama[T helper.Number]() *Kama[T]
 NewKama function initializes a new KAMA instance with the default parameters.
 
 <a name="Kama[T].Compute"></a>
-### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L59>)
+### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L60>)
 
 ```go
-func (k *Kama[T]) Compute(c <-chan T) <-chan T
+func (k *Kama[T]) Compute(closings <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the KAMA over the specified period.
 
 <a name="Kama[T].IdlePeriod"></a>
-### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L64>)
+### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L132>)
 
 ```go
 func (k *Kama[T]) IdlePeriod() int
@@ -723,7 +723,7 @@ func (k *Kama[T]) IdlePeriod() int
 IdlePeriod is the initial period that KAMA yield any results.
 
 <a name="Kama[T].String"></a>
-### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L69>)
+### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L137>)
 
 ```go
 func (k *Kama[T]) String() string

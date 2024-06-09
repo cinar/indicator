@@ -6,6 +6,7 @@ package trend
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -26,10 +27,10 @@ const (
 // closely during periods of small price swings and low noise.
 //
 //	Direction = Abs(Close - Previous Close Period Ago)
-//	Volatility = MovingSum(Period, Abs(Close - Prior Close))
+//	Volatility = MovingSum(Period, Abs(Close - Previous Close))
 //	Efficiency Ratio (ER) = Direction / Volatility
 //	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
-//	KAMA = Prior KAMA + SC * (Price - Prior KAMA)
+//	KAMA = Previous KAMA + SC * (Price - Previous KAMA)
 //
 // Example:
 //
@@ -56,33 +57,80 @@ func NewKama[T helper.Number]() *Kama[T] {
 }
 
 // Compute function takes a channel of numbers and computes the KAMA over the specified period.
-func (k *Kama[T]) Compute(c <-chan T) <-chan T {
-	closingsSplice := helper.Duplicate(c, 1)
+func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
+	closingsSplice := helper.Duplicate(closings, 3)
 
 	//	Direction = Abs(Close - Previous Close Period Ago)
 	directions := helper.Abs(
 		helper.Change(closingsSplice[0], k.ErPeriod),
 	)
 
-	/*
-		//	Volatility = MovingSum(Period, Abs(Close - Prior Close))
-		movingSum := NewMovingSumWithPeriod[T](k.ErPeriod)
-		volatilitys := movingSum.Compute(
-			helper.Abs(
-				helper.Change(closingsSplice[1], 1),
+	//	Volatility = MovingSum(Period, Abs(Close - Previous Close))
+	movingSum := NewMovingSumWithPeriod[T](k.ErPeriod)
+	volatilitys := movingSum.Compute(
+		helper.Abs(
+			helper.Change(closingsSplice[1], 1),
+		),
+	)
+
+	//	Efficiency Ratio (ER) = Direction / Volatility
+	ers := helper.Divide(directions, volatilitys)
+
+	//	Smoothing Constant (SC) = (ER * (2/(Slow + 1) - 2/(Fast + 1)) + (2/(Slow + 1)))^2
+	fastSc := T(2.0) / T(k.FastScPeriod+1)
+	slowSc := T(2.0) / T(k.SlowScPeriod+1)
+
+	log.Printf("fastSc=%v", fastSc)
+	log.Printf("slowSc=%v", slowSc)
+
+	scs := helper.Pow(
+		helper.IncrementBy(
+			helper.MultiplyBy(
+				ers,
+				(fastSc-slowSc),
 			),
-		)
+			slowSc,
+		),
+		2,
+	)
 
-		//	Efficiency Ratio (ER) = Direction / Volatility
-		ers := helper.Divide(directions, volatilitys)
-	*/
+	//	KAMA = Previous KAMA + SC * (Price - Previous KAMA)
+	closingsSplice[2] = helper.Skip(closingsSplice[2], k.ErPeriod-1)
 
-	return directions
+	kama := make(chan T)
+
+	go func() {
+		defer close(kama)
+		defer helper.Drain(scs)
+		defer helper.Drain(closingsSplice[2])
+
+		prevKama, ok := <-closingsSplice[2]
+		if !ok {
+			return
+		}
+
+		for {
+			closing, ok := <-closingsSplice[2]
+			if !ok {
+				break
+			}
+
+			sc, ok := <-scs
+			if !ok {
+				break
+			}
+
+			prevKama = prevKama + sc*(closing-prevKama)
+			kama <- prevKama
+		}
+	}()
+
+	return kama
 }
 
 // IdlePeriod is the initial period that KAMA yield any results.
 func (k *Kama[T]) IdlePeriod() int {
-	return 0
+	return k.ErPeriod
 }
 
 // String is the string representation of the KAMA.
