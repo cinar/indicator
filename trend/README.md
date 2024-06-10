@@ -120,6 +120,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewTrix\[T helper.Number\]\(\) \*Trix\[T\]](<#NewTrix>)
   - [func \(t \*Trix\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Trix[T].Compute>)
   - [func \(t \*Trix\[T\]\) IdlePeriod\(\) int](<#Trix[T].IdlePeriod>)
+- [type Tsi](<#Tsi>)
+  - [func NewTsi\[T helper.Number\]\(\) \*Tsi\[T\]](<#NewTsi>)
+  - [func NewTsiWith\[T helper.Number\]\(firstSmoothingPeriod, secondSmoothingPeriod int\) \*Tsi\[T\]](<#NewTsiWith>)
+  - [func \(t \*Tsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Tsi[T].Compute>)
+  - [func \(t \*Tsi\[T\]\) IdlePeriod\(\) int](<#Tsi[T].IdlePeriod>)
+  - [func \(t \*Tsi\[T\]\) String\(\) string](<#Tsi[T].String>)
 - [type TypicalPrice](<#TypicalPrice>)
   - [func NewTypicalPrice\[T helper.Number\]\(\) \*TypicalPrice\[T\]](<#NewTypicalPrice>)
   - [func \(\*TypicalPrice\[T\]\) Compute\(high, low, closing \<\-chan T\) \<\-chan T](<#TypicalPrice[T].Compute>)
@@ -224,6 +230,18 @@ const (
 
     // DefaultMassIndexPeriod3 is the period for the third MovingSum.
     DefaultMassIndexPeriod3 = 25
+)
+```
+
+<a name="DefaultTsiFirstSmoothingPeriod"></a>
+
+```go
+const (
+    // DefaultTsiFirstSmoothingPeriod is the default first smoothing period of 25.
+    DefaultTsiFirstSmoothingPeriod = 25
+
+    // DefaultTsiSecondSmoothingPeriod is the default second smoothing period of 13.
+    DefaultTsiSecondSmoothingPeriod = 13
 )
 ```
 
@@ -1468,6 +1486,79 @@ func (t *Trix[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that TRIX won't yield any results.
+
+<a name="Tsi"></a>
+## type [Tsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L32-L38>)
+
+Tsi represents the parameters needed to calculate the True Strength Index \(TSI\). It is a technical momentum oscillator used in financial analysis. The TSI helps identify trends and potential trend reversals.
+
+```
+PCDS = Ema(13, Ema(25, (Current - Prior)))
+APCDS = Ema(13, Ema(25, Abs(Current - Prior)))
+TSI = (PCDS / APCDS) * 100
+```
+
+Example:
+
+```
+tsi := trend.NewTsi[float64]()
+result := tsi.Compute(closings)
+```
+
+```go
+type Tsi[T helper.Number] struct {
+    // FirstSmoothing is the first smoothing moving average.
+    FirstSmoothing Ma[T]
+
+    // SecondSmoothing is the second smoothing moving average.
+    SecondSmoothing Ma[T]
+}
+```
+
+<a name="NewTsi"></a>
+### func [NewTsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L41>)
+
+```go
+func NewTsi[T helper.Number]() *Tsi[T]
+```
+
+NewTsi function initializes a new TSI instance with the default parameters.
+
+<a name="NewTsiWith"></a>
+### func [NewTsiWith](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L49>)
+
+```go
+func NewTsiWith[T helper.Number](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T]
+```
+
+NewTsiWith function initializes a new TSI instance with the given parameters.
+
+<a name="Tsi[T].Compute"></a>
+### func \(\*Tsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L57>)
+
+```go
+func (t *Tsi[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the TSI over the specified period.
+
+<a name="Tsi[T].IdlePeriod"></a>
+### func \(\*Tsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L91>)
+
+```go
+func (t *Tsi[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that TSI yield any results.
+
+<a name="Tsi[T].String"></a>
+### func \(\*Tsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L96>)
+
+```go
+func (t *Tsi[T]) String() string
+```
+
+String is the string representation of the TSI.
 
 <a name="TypicalPrice"></a>
 ## type [TypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L16>)
