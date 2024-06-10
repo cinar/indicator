@@ -95,6 +95,13 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*TrixStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TrixStrategy.Compute>)
   - [func \(\*TrixStrategy\) Name\(\) string](<#TrixStrategy.Name>)
   - [func \(t \*TrixStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#TrixStrategy.Report>)
+- [type TsiStrategy](<#TsiStrategy>)
+  - [func NewTsiStrategy\(\) \*TsiStrategy](<#NewTsiStrategy>)
+  - [func NewTsiStrategyWith\(firstSmoothingPeriod, secondSmoothingPeriod, signalPeriod int\) \*TsiStrategy](<#NewTsiStrategyWith>)
+  - [func \(t \*TsiStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TsiStrategy.Compute>)
+  - [func \(t \*TsiStrategy\) IdlePeriod\(\) int](<#TsiStrategy.IdlePeriod>)
+  - [func \(t \*TsiStrategy\) Name\(\) string](<#TsiStrategy.Name>)
+  - [func \(t \*TsiStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#TsiStrategy.Report>)
 - [type VwmaStrategy](<#VwmaStrategy>)
   - [func NewVwmaStrategy\(\) \*VwmaStrategy](<#NewVwmaStrategy>)
   - [func \(v \*VwmaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#VwmaStrategy.Compute>)
@@ -152,6 +159,15 @@ const (
 
     // DefaultTripleMovingAverageCrossoverStrategySlowPeriod is the default triple moving average crossover strategy slow period.
     DefaultTripleMovingAverageCrossoverStrategySlowPeriod = 200
+)
+```
+
+<a name="DefaultTsiStrategySignalPeriod"></a>
+
+```go
+const (
+    // DefaultTsiStrategySignalPeriod is the default signal line period of 12.
+    DefaultTsiStrategySignalPeriod = 12
 )
 ```
 
@@ -871,6 +887,81 @@ Name returns the name of the strategy.
 
 ```go
 func (t *TrixStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="TsiStrategy"></a>
+## type [TsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L28-L34>)
+
+TsiStrategy represents the configuration parameters for calculating the TSI strategy. When the TSI is above zero and crossing above the signal line suggests a bullish trend, while TSI being below zero and crossing below the signal line indicates a bearish trend.
+
+```
+Signal Line = Ema(12, TSI)
+When TSI > 0, TSI > Signal Line, Buy.
+When TSI < 0, TSI < Signal Line, Sell.const
+```
+
+```go
+type TsiStrategy struct {
+    // Tsi represents the configuration parameters for calculating the True Strength Index (TSI).
+    Tsi *trend.Tsi[float64]
+
+    // Signal line is the moving average of the TSI.
+    Signal trend.Ma[float64]
+}
+```
+
+<a name="NewTsiStrategy"></a>
+### func [NewTsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L37>)
+
+```go
+func NewTsiStrategy() *TsiStrategy
+```
+
+NewTsiStrategy function initializes a new TSI strategy instance.
+
+<a name="NewTsiStrategyWith"></a>
+### func [NewTsiStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L46>)
+
+```go
+func NewTsiStrategyWith(firstSmoothingPeriod, secondSmoothingPeriod, signalPeriod int) *TsiStrategy
+```
+
+NewTsiStrategyWith function initializes a new TSI strategy instance with the given parameters.
+
+<a name="TsiStrategy.Compute"></a>
+### func \(\*TsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L66>)
+
+```go
+func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="TsiStrategy.IdlePeriod"></a>
+### func \(\*TsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L144>)
+
+```go
+func (t *TsiStrategy) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that TSI strategy yield any results.
+
+<a name="TsiStrategy.Name"></a>
+### func \(\*TsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L58>)
+
+```go
+func (t *TsiStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="TsiStrategy.Report"></a>
+### func \(\*TsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L96>)
+
+```go
+func (t *TsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

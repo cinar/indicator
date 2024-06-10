@@ -126,6 +126,7 @@ The following list of strategies are currently supported by this package:
 -	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#type-trimastrategy)
 -	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#type-trixstrategy)
 -	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#type-triplemovingaveragecrossoverstrategy)
+-	[True Strength Index (TSI) Strategy](strategy/trend/README.md#type-tsistrategy)
 -	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#type-vwmastrategy)
 
 ### 🚀 Momentum Strategies
