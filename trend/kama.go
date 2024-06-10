@@ -49,10 +49,19 @@ type Kama[T helper.Number] struct {
 
 // NewKama function initializes a new KAMA instance with the default parameters.
 func NewKama[T helper.Number]() *Kama[T] {
+	return NewKamaWith[T](
+		DefaultKamaErPeriod,
+		DefaultKamaFastScPeriod,
+		DefaultKamaSlowScPeriod,
+	)
+}
+
+// NewKamaWith function initializes a new KAMA instance with the given parameters.
+func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T] {
 	return &Kama[T]{
-		ErPeriod:     DefaultKamaErPeriod,
-		FastScPeriod: DefaultKamaFastScPeriod,
-		SlowScPeriod: DefaultKamaSlowScPeriod,
+		ErPeriod:     erPeriod,
+		FastScPeriod: fastScPeriod,
+		SlowScPeriod: slowScPeriod,
 	}
 }
 

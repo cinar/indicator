@@ -57,6 +57,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*GoldenCrossStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#GoldenCrossStrategy.Compute>)
   - [func \(\*GoldenCrossStrategy\) Name\(\) string](<#GoldenCrossStrategy.Name>)
   - [func \(t \*GoldenCrossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#GoldenCrossStrategy.Report>)
+- [type KamaStrategy](<#KamaStrategy>)
+  - [func NewKamaStrategy\(\) \*KamaStrategy](<#NewKamaStrategy>)
+  - [func NewKamaStrategyWith\(erPeriod, fastScPeriod, slowScPeriod int\) \*KamaStrategy](<#NewKamaStrategyWith>)
+  - [func \(k \*KamaStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KamaStrategy.Compute>)
+  - [func \(k \*KamaStrategy\) Name\(\) string](<#KamaStrategy.Name>)
+  - [func \(k \*KamaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#KamaStrategy.Report>)
 - [type KdjStrategy](<#KdjStrategy>)
   - [func NewKdjStrategy\(\) \*KdjStrategy](<#NewKdjStrategy>)
   - [func \(kdj \*KdjStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KdjStrategy.Compute>)
@@ -480,6 +486,63 @@ Name returns the name of the strategy.
 
 ```go
 func (t *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="KamaStrategy"></a>
+## type [KamaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L16-L19>)
+
+KamaStrategy represents the configuration parameters for calculating the KAMA strategy. A closing price crossing above the KAMA suggests a bullish trend, while crossing below the KAMA indicats a bearish trend.
+
+```go
+type KamaStrategy struct {
+    // Kama represents the configuration parameters for calculating the Kaufman's Adaptive Moving Average (KAMA).
+    Kama *trend.Kama[float64]
+}
+```
+
+<a name="NewKamaStrategy"></a>
+### func [NewKamaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L22>)
+
+```go
+func NewKamaStrategy() *KamaStrategy
+```
+
+NewKamaStrategy function initializes a new KAMA strategy instance.
+
+<a name="NewKamaStrategyWith"></a>
+### func [NewKamaStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L31>)
+
+```go
+func NewKamaStrategyWith(erPeriod, fastScPeriod, slowScPeriod int) *KamaStrategy
+```
+
+NewKamaStrategyWith function initializes a new KAMA strategy instance with the given parameters.
+
+<a name="KamaStrategy.Compute"></a>
+### func \(\*KamaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L47>)
+
+```go
+func (k *KamaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="KamaStrategy.Name"></a>
+### func \(\*KamaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L42>)
+
+```go
+func (k *KamaStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="KamaStrategy.Report"></a>
+### func \(\*KamaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L76>)
+
+```go
+func (k *KamaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
