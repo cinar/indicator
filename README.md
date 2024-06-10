@@ -55,6 +55,7 @@ The following list of indicators are currently supported by this package:
 -	[Triple Exponential Moving Average (TEMA)](trend/README.md#type-tema)
 -	[Triangular Moving Average (TRIMA)](trend/README.md#type-trima)
 -	[Triple Exponential Average (TRIX)](trend/README.md#type-trix)
+-	[True Strength Index (TSI)](trend/README.md#type-tsi)
 -	[Typical Price](trend/README.md#type-typicalprice)
 -	[Volume Weighted Moving Average (VWMA)](trend/README.md#type-vwma)
 -	Vortex Indicator
