@@ -115,10 +115,7 @@ func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
 				break
 			}
 
-			sc, ok := <-scs
-			if !ok {
-				break
-			}
+			sc := <-scs
 
 			prevKama = prevKama + sc*(closing-prevKama)
 			kama <- prevKama
