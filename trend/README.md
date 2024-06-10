@@ -54,6 +54,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(h \*Hma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Hma[T].Compute>)
   - [func \(h \*Hma\[T\]\) IdlePeriod\(\) int](<#Hma[T].IdlePeriod>)
   - [func \(h \*Hma\[T\]\) String\(\) string](<#Hma[T].String>)
+- [type Kama](<#Kama>)
+  - [func NewKama\[T helper.Number\]\(\) \*Kama\[T\]](<#NewKama>)
+  - [func \(k \*Kama\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Kama[T].Compute>)
+  - [func \(k \*Kama\[T\]\) IdlePeriod\(\) int](<#Kama[T].IdlePeriod>)
+  - [func \(k \*Kama\[T\]\) String\(\) string](<#Kama[T].String>)
 - [type Kdj](<#Kdj>)
   - [func NewKdj\[T helper.Number\]\(\) \*Kdj\[T\]](<#NewKdj>)
   - [func \(kdj \*Kdj\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].Compute>)
@@ -157,6 +162,21 @@ const (
 
     // DefaultEmaSmoothing is the default EMA smooting of 2.
     DefaultEmaSmoothing = 2
+)
+```
+
+<a name="DefaultKamaErPeriod"></a>
+
+```go
+const (
+    // DefaultKamaErPeriod is the default Efficiency Ratio (ER) period of 10.
+    DefaultKamaErPeriod = 10
+
+    // DefaultKamaFastScPeriod is the default Fast Smoothing Constant (SC) period of 2.
+    DefaultKamaFastScPeriod = 2
+
+    // DefaultKamaSlowScPeriod is the default Slow Smoothing Constant (SC) period of 30.
+    DefaultKamaSlowScPeriod = 30
 )
 ```
 
@@ -641,6 +661,75 @@ func (h *Hma[T]) String() string
 ```
 
 String is the string representation of the HMA.
+
+<a name="Kama"></a>
+## type [Kama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L39-L48>)
+
+Kama represents the parameters for calculating the Kaufman's Adaptive Moving Average \(KAMA\). It is a type of moving average that adapts to market noise or volatility. It tracks prices closely during periods of small price swings and low noise.
+
+```
+Direction = Abs(Close - Previous Close Period Ago)
+Volatility = MovingSum(Period, Abs(Close - Previous Close))
+Efficiency Ratio (ER) = Direction / Volatility
+Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
+KAMA = Previous KAMA + SC * (Price - Previous KAMA)
+```
+
+Example:
+
+```
+kama := trend.NewKama[float64]()
+result := kama.Compute(c)
+```
+
+```go
+type Kama[T helper.Number] struct {
+    // ErPeriod is the Efficiency Ratio time period.
+    ErPeriod int
+
+    // FastScPeriod is the Fast Smoothing Constant time period.
+    FastScPeriod int
+
+    // SlowScPeriod is the Slow Smoothing Constant time period.
+    SlowScPeriod int
+}
+```
+
+<a name="NewKama"></a>
+### func [NewKama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L51>)
+
+```go
+func NewKama[T helper.Number]() *Kama[T]
+```
+
+NewKama function initializes a new KAMA instance with the default parameters.
+
+<a name="Kama[T].Compute"></a>
+### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L60>)
+
+```go
+func (k *Kama[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the KAMA over the specified period.
+
+<a name="Kama[T].IdlePeriod"></a>
+### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L132>)
+
+```go
+func (k *Kama[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that KAMA yield any results.
+
+<a name="Kama[T].String"></a>
+### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L137>)
+
+```go
+func (k *Kama[T]) String() string
+```
+
+String is the string representation of the KAMA.
 
 <a name="Kdj"></a>
 ## type [Kdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L41-L53>)
