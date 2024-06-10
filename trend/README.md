@@ -56,6 +56,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(h \*Hma\[T\]\) String\(\) string](<#Hma[T].String>)
 - [type Kama](<#Kama>)
   - [func NewKama\[T helper.Number\]\(\) \*Kama\[T\]](<#NewKama>)
+  - [func NewKamaWith\[T helper.Number\]\(erPeriod, fastScPeriod, slowScPeriod int\) \*Kama\[T\]](<#NewKamaWith>)
   - [func \(k \*Kama\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Kama[T].Compute>)
   - [func \(k \*Kama\[T\]\) IdlePeriod\(\) int](<#Kama[T].IdlePeriod>)
   - [func \(k \*Kama\[T\]\) String\(\) string](<#Kama[T].String>)
@@ -704,8 +705,17 @@ func NewKama[T helper.Number]() *Kama[T]
 
 NewKama function initializes a new KAMA instance with the default parameters.
 
+<a name="NewKamaWith"></a>
+### func [NewKamaWith](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L60>)
+
+```go
+func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T]
+```
+
+NewKamaWith function initializes a new KAMA instance with the given parameters.
+
 <a name="Kama[T].Compute"></a>
-### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L60>)
+### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L69>)
 
 ```go
 func (k *Kama[T]) Compute(closings <-chan T) <-chan T
@@ -714,7 +724,7 @@ func (k *Kama[T]) Compute(closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the KAMA over the specified period.
 
 <a name="Kama[T].IdlePeriod"></a>
-### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L132>)
+### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L138>)
 
 ```go
 func (k *Kama[T]) IdlePeriod() int
@@ -723,7 +733,7 @@ func (k *Kama[T]) IdlePeriod() int
 IdlePeriod is the initial period that KAMA yield any results.
 
 <a name="Kama[T].String"></a>
-### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L137>)
+### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L143>)
 
 ```go
 func (k *Kama[T]) String() string
