@@ -35,6 +35,7 @@ func AllStrategies() []strategy.Strategy {
 		NewQstickStrategy(),
 		NewTrimaStrategy(),
 		NewTripleMovingAverageCrossoverStrategy(),
+		NewTsiStrategy(),
 		NewVwmaStrategy(),
 	}
 }
