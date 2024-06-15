@@ -58,6 +58,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewStochasticOscillator\[T helper.Number\]\(\) \*StochasticOscillator\[T\]](<#NewStochasticOscillator>)
   - [func \(s \*StochasticOscillator\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#StochasticOscillator[T].Compute>)
   - [func \(s \*StochasticOscillator\[T\]\) IdlePeriod\(\) int](<#StochasticOscillator[T].IdlePeriod>)
+- [type StochasticRsi](<#StochasticRsi>)
+  - [func NewStochasticRsi\[T helper.Number\]\(\) \*StochasticRsi\[T\]](<#NewStochasticRsi>)
+  - [func NewStochasticRsiWithPeriod\[T helper.Number\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
+  - [func \(s \*StochasticRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].Compute>)
+  - [func \(s \*StochasticRsi\[T\]\) IdlePeriod\(\) int](<#StochasticRsi[T].IdlePeriod>)
 - [type WilliamsR](<#WilliamsR>)
   - [func NewWilliamsR\[T helper.Number\]\(\) \*WilliamsR\[T\]](<#NewWilliamsR>)
   - [func \(w \*WilliamsR\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].Compute>)
@@ -165,6 +170,15 @@ const (
 const (
     // DefaultRsiPeriod is the default period for the Relative Strength Index (RSI).
     DefaultRsiPeriod = 14
+)
+```
+
+<a name="DefaultStochasticRsiPeriod"></a>
+
+```go
+const (
+    // DefaultStochasticRsiPeriod is the default period for the Stochastic Relative Strength Index (RSI).
+    DefaultStochasticRsiPeriod = 14
 )
 ```
 
@@ -644,6 +658,73 @@ func (s *StochasticOscillator[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Stochastic Oscillator won't yield any results.
+
+<a name="StochasticRsi"></a>
+## type [StochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L29-L38>)
+
+StochasticRsi represents the configuration parameter for calculating the Stochastic Relative Strength Index \(RSI\). It is a momentum indicator that focuses on the historical performance to evaluate overbought and oversold conditions.
+
+```
+RSI - Min(RSI)
+Stochastic RSI = -------------------------
+                   Max(RSI) - Min(RSI)
+```
+
+Example:
+
+```
+stochasticRsi := momentum.NewStochasticRsi[float64]()
+result := stochasticRsi.Compute(closings)
+```
+
+```go
+type StochasticRsi[T helper.Number] struct {
+    // Rsi is that RSI instance.
+    Rsi *Rsi[T]
+
+    // Min is the Moving Min instance.
+    Min *trend.MovingMin[T]
+
+    // Max is the Moving Max instance.
+    Max *trend.MovingMax[T]
+}
+```
+
+<a name="NewStochasticRsi"></a>
+### func [NewStochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L41>)
+
+```go
+func NewStochasticRsi[T helper.Number]() *StochasticRsi[T]
+```
+
+NewStochasticRsi function initializes a new Storchastic RSI instance with the default parameters.
+
+<a name="NewStochasticRsiWithPeriod"></a>
+### func [NewStochasticRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L46>)
+
+```go
+func NewStochasticRsiWithPeriod[T helper.Number](period int) *StochasticRsi[T]
+```
+
+NewStochasticRsiWithPeriod function initializes a new Stochastic RSI instance with the given period.
+
+<a name="StochasticRsi[T].Compute"></a>
+### func \(\*StochasticRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L55>)
+
+```go
+func (s *StochasticRsi[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of closings numbers and computes the Stochastic RSI.
+
+<a name="StochasticRsi[T].IdlePeriod"></a>
+### func \(\*StochasticRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L85>)
+
+```go
+func (s *StochasticRsi[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 
 <a name="WilliamsR"></a>
 ## type [WilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L29-L35>)

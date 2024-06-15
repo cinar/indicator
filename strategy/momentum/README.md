@@ -37,6 +37,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*RsiStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#RsiStrategy.Compute>)
   - [func \(r \*RsiStrategy\) Name\(\) string](<#RsiStrategy.Name>)
   - [func \(r \*RsiStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#RsiStrategy.Report>)
+- [type StochasticRsiStrategy](<#StochasticRsiStrategy>)
+  - [func NewStochasticRsiStrategy\(\) \*StochasticRsiStrategy](<#NewStochasticRsiStrategy>)
+  - [func NewStochasticRsiStrategyWith\(buyAt, sellAt float64\) \*StochasticRsiStrategy](<#NewStochasticRsiStrategyWith>)
+  - [func \(s \*StochasticRsiStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StochasticRsiStrategy.Compute>)
+  - [func \(s \*StochasticRsiStrategy\) Name\(\) string](<#StochasticRsiStrategy.Name>)
+  - [func \(s \*StochasticRsiStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#StochasticRsiStrategy.Report>)
 - [type TripleRsiStrategy](<#TripleRsiStrategy>)
   - [func NewTripleRsiStrategy\(\) \*TripleRsiStrategy](<#NewTripleRsiStrategy>)
   - [func NewTripleRsiStrategyWith\(period, smaPeriod, downDays int, buySignalAt, buyAt, sellAt float64\) \*TripleRsiStrategy](<#NewTripleRsiStrategyWith>)
@@ -57,6 +63,18 @@ const (
 
     // DefaultRsiStrategySellAt defines the default RSI level at which a Sell action is generated.
     DefaultRsiStrategySellAt = 70
+)
+```
+
+<a name="DefaultStochasticRsiStrategyBuyAt"></a>
+
+```go
+const (
+    // DefaultStochasticRsiStrategyBuyAt defines the default level at which a Buy action is generated.
+    DefaultStochasticRsiStrategyBuyAt = 0.8
+
+    // DefaultStochasticRsiStrategySellAt defines the default level at which a Sell action is generated.
+    DefaultStochasticRsiStrategySellAt = 0.2
 )
 ```
 
@@ -204,6 +222,69 @@ Name returns the name of the strategy.
 
 ```go
 func (r *RsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="StochasticRsiStrategy"></a>
+## type [StochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L25-L34>)
+
+StochasticRsiStrategy represents the configuration parameters for calculating the Stochastic RSI strategy.
+
+```go
+type StochasticRsiStrategy struct {
+    // StochasticRsi represents the configuration parameters for calculating the Stochastic RSI.
+    StochasticRsi *momentum.StochasticRsi[float64]
+
+    // BuyAt defines the level at which a Buy action is generated.
+    BuyAt float64
+
+    // SellAt defines the level at which a Sell action is generated.
+    SellAt float64
+}
+```
+
+<a name="NewStochasticRsiStrategy"></a>
+### func [NewStochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L37>)
+
+```go
+func NewStochasticRsiStrategy() *StochasticRsiStrategy
+```
+
+NewStochasticRsiStrategy function initializes a new Stochastic RSI strategy instance with the default parameters.
+
+<a name="NewStochasticRsiStrategyWith"></a>
+### func [NewStochasticRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L45>)
+
+```go
+func NewStochasticRsiStrategyWith(buyAt, sellAt float64) *StochasticRsiStrategy
+```
+
+NewStochasticRsiStrategyWith function initializes a new Stochastic RSI strategy instance with the given parameters.
+
+<a name="StochasticRsiStrategy.Compute"></a>
+### func \(\*StochasticRsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L59>)
+
+```go
+func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="StochasticRsiStrategy.Name"></a>
+### func \(\*StochasticRsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L54>)
+
+```go
+func (s *StochasticRsiStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="StochasticRsiStrategy.Report"></a>
+### func \(\*StochasticRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L84>)
+
+```go
+func (s *StochasticRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
