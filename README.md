@@ -71,6 +71,7 @@ The following list of indicators are currently supported by this package:
 -	[Relative Strength Index (RSI)](momentum/README.md#type-rsi)
 -	[Qstick](momentum/README.md#type-qstick)
 -	[Stochastic Oscillator](momentum/README.md#type-stochasticoscillator)
+-	[Stochastic RSI](momentum/README.md#type-stochasticrsi)
 -	[Williams R](momentum/README.md#type-williamsr)
 
 ### 🎢 Volatility Indicators
@@ -133,6 +134,7 @@ The following list of strategies are currently supported by this package:
 
 -	[Awesome Oscillator Strategy](strategy/momentum/README.md#type-awesomeoscillatorstrategy)
 -	[RSI Strategy](strategy/momentum/README.md#type-rsistrategy)
+-	[Stochastic RSI Strategy](strategy/momentum/README.md#type-stochasticrsistrategy)
 -	Williams R Strategy
 
 ### 🎢 Volatility Strategies

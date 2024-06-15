@@ -25,6 +25,7 @@ func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewAwesomeOscillatorStrategy(),
 		NewRsiStrategy(),
+		NewStochasticRsiStrategy(),
 		NewTripleRsiStrategy(),
 	}
 }
