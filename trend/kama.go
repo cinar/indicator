@@ -89,9 +89,6 @@ func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
 	fastSc := T(2.0) / T(k.FastScPeriod+1)
 	slowSc := T(2.0) / T(k.SlowScPeriod+1)
 
-	log.Printf("fastSc=%v", fastSc)
-	log.Printf("slowSc=%v", slowSc)
-
 	scs := helper.Pow(
 		helper.IncrementBy(
 			helper.MultiplyBy(
