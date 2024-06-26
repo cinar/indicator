@@ -6,7 +6,6 @@ package trend
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -88,9 +87,6 @@ func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
 	//	Smoothing Constant (SC) = (ER * (2/(Slow + 1) - 2/(Fast + 1)) + (2/(Slow + 1)))^2
 	fastSc := T(2.0) / T(k.FastScPeriod+1)
 	slowSc := T(2.0) / T(k.SlowScPeriod+1)
-
-	log.Printf("fastSc=%v", fastSc)
-	log.Printf("slowSc=%v", slowSc)
 
 	scs := helper.Pow(
 		helper.IncrementBy(
