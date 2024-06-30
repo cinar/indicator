@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
 	"github.com/cinar/indicator/v2/strategy/compound"
 	"github.com/cinar/indicator/v2/strategy/momentum"
@@ -27,6 +28,7 @@ func main() {
 	var writeStrategyRerpots bool
 	var addSplits bool
 	var addAnds bool
+	var dateFormat string
 
 	fmt.Fprintln(os.Stderr, "Indicator Backtest")
 	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
@@ -41,6 +43,7 @@ func main() {
 	flag.BoolVar(&writeStrategyRerpots, "write-strategy-reports", strategy.DefaultWriteStrategyReports, "write individual strategy reports")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
+	flag.StringVar(&dateFormat, "date-format", helper.DefaultReportDateFormat, "date format to use")
 	flag.Parse()
 
 	flag.Parse()
@@ -51,6 +54,7 @@ func main() {
 	backtest.Workers = workers
 	backtest.LastDays = lastDays
 	backtest.WriteStrategyReports = writeStrategyRerpots
+	backtest.DateFormat = dateFormat
 	backtest.Names = append(backtest.Names, flag.Args()...)
 	backtest.Strategies = append(backtest.Strategies, compound.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, momentum.AllStrategies()...)

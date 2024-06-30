@@ -62,6 +62,9 @@ type Backtest struct {
 
 	// WriteStrategyReports indicates whether the individual strategy reports should be generated.
 	WriteStrategyReports bool
+
+	// DateFormat is the date format that is used in the reports.
+	DateFormat string
 }
 
 // backtestResult encapsulates the outcome of running a strategy.
@@ -95,6 +98,7 @@ func NewBacktest(repository asset.Repository, outputDir string) *Backtest {
 		Workers:              DefaultBacktestWorkers,
 		LastDays:             DefaultLastDays,
 		WriteStrategyReports: DefaultWriteStrategyReports,
+		DateFormat:           helper.DefaultReportDateFormat,
 	}
 }
 
@@ -204,6 +208,7 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 			// Generate inidividual strategy report.
 			if b.WriteStrategyReports {
 				report := st.Report(helper.SliceToChan(snapshotsSlice))
+				report.DateFormat = b.DateFormat
 
 				err := report.WriteToFile(path.Join(b.outputDir, b.strategyReportFileName(name, st.Name())))
 				if err != nil {

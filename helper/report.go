@@ -17,6 +17,11 @@ import (
 //go:embed "report.tmpl"
 var reportTmpl string
 
+const (
+	// DefaultReportDateFormat is the default date format used in the report.
+	DefaultReportDateFormat = "2006-01-02"
+)
+
 // ReportColumn defines the interface that all report data columns must implement.
 // This interface ensures that different types of data columns can be used
 // consistently within the report generation process.
@@ -34,16 +39,6 @@ type ReportColumn interface {
 	Value() string
 }
 
-// reportModel struct holds the data that is exposed to the template renderer
-// for generating the report. It encapsulates all the information necessary
-// to render the report's content, including data, and annotations.
-type reportModel struct {
-	Title   string
-	Date    <-chan time.Time
-	Columns []ReportColumn
-	Views   [][]int
-}
-
 // Report generates an HTML file containing an interactive chart that
 // visually represents the provided data and annotations.
 //
@@ -51,7 +46,11 @@ type reportModel struct {
 // the data visually, interact with the chart elements, and view
 // the associated annotations.
 type Report struct {
-	model reportModel
+	Title      string
+	Date       <-chan time.Time
+	Columns    []ReportColumn
+	Views      [][]int
+	DateFormat string
 }
 
 // NewReport takes a channel of time as the time axis and returns a new
@@ -59,14 +58,13 @@ type Report struct {
 // add data and annotations and subsequently generate a report.
 func NewReport(title string, date <-chan time.Time) *Report {
 	return &Report{
-		model: reportModel{
-			Title:   title,
-			Date:    date,
-			Columns: []ReportColumn{},
-			Views: [][]int{
-				{},
-			},
+		Title:   title,
+		Date:    date,
+		Columns: []ReportColumn{},
+		Views: [][]int{
+			{},
 		},
+		DateFormat: DefaultReportDateFormat,
 	}
 }
 
@@ -74,22 +72,22 @@ func NewReport(title string, date <-chan time.Time) *Report {
 // identifier. This identifier can be used later to refer to the
 // chart and add columns to it.
 func (r *Report) AddChart() int {
-	r.model.Views = append(r.model.Views, []int{})
-	return len(r.model.Views) - 1
+	r.Views = append(r.Views, []int{})
+	return len(r.Views) - 1
 }
 
 // AddColumn adds a new data column to the specified charts. If no
 // chart is specified, it will be added to the main chart.
 func (r *Report) AddColumn(column ReportColumn, charts ...int) {
-	r.model.Columns = append(r.model.Columns, column)
-	columnID := len(r.model.Columns)
+	r.Columns = append(r.Columns, column)
+	columnID := len(r.Columns)
 
 	if len(charts) == 0 {
 		charts = append(charts, 0)
 	}
 
 	for _, chartID := range charts {
-		r.model.Views[chartID] = append(r.model.Views[chartID], columnID)
+		r.Views[chartID] = append(r.Views[chartID], columnID)
 	}
 }
 
@@ -102,7 +100,7 @@ func (r *Report) WriteToWriter(writer io.Writer) error {
 		return err
 	}
 
-	return tmpl.Execute(writer, r.model)
+	return tmpl.Execute(writer, r)
 }
 
 // WriteToFile writes the generated report content to a file with

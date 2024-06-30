@@ -102,7 +102,7 @@
 
             {{ range .Date }}
             data.addRow([
-                new Date("{{ .Format "2006-01-02" }}"),
+                new Date("{{ .Format $.DateFormat }}"),
                 {{ range $.Columns }}
                 {{ .Value }},
                 {{ end }}
