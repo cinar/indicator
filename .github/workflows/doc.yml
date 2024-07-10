@@ -1,0 +1,26 @@
+name: Doc update
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  docgen:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup
+      run: |
+		go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
+
+	- uses: actions/checkout@v2
+	- name: Clone repo
+	  run: |
+	    git config --global user.email 'sample@sample.com'
+		git config --global user.name 'sample'
+		git clone --branch main 
+		gomarkdoc --output helper/README.md ./helper
+		git diff .
