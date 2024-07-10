@@ -250,7 +250,7 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="Backtest"></a>
-## type [Backtest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L44-L68>)
+## type [Backtest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L44-L65>)
 
 Backtest function rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy\-asset pairing.
 
@@ -271,15 +271,12 @@ type Backtest struct {
 
     // WriteStrategyReports indicates whether the individual strategy reports should be generated.
     WriteStrategyReports bool
-
-    // DateFormat is the date format that is used in the reports.
-    DateFormat string
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L92>)
+### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L89>)
 
 ```go
 func NewBacktest(repository asset.Repository, outputDir string) *Backtest
@@ -288,7 +285,7 @@ func NewBacktest(repository asset.Repository, outputDir string) *Backtest
 NewBacktest function initializes a new backtest instance.
 
 <a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L109>)
+### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L105>)
 
 ```go
 func (b *Backtest) Run() error
