@@ -124,6 +124,15 @@ const (
 )
 ```
 
+<a name="DefaultReportDateFormat"></a>
+
+```go
+const (
+    // DefaultReportDateFormat is the default date format used in the report.
+    DefaultReportDateFormat = "2006-01-02"
+)
+```
+
 <a name="Abs"></a>
 ## func [Abs](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L15>)
 
@@ -1041,7 +1050,7 @@ type Number interface {
 ```
 
 <a name="Report"></a>
-## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L53-L55>)
+## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L48-L54>)
 
 Report generates an HTML file containing an interactive chart that visually represents the provided data and annotations.
 
@@ -1049,12 +1058,16 @@ The generated HTML file can be opened in a web browser to explore the data visua
 
 ```go
 type Report struct {
-    // contains filtered or unexported fields
+    Title      string
+    Date       <-chan time.Time
+    Columns    []ReportColumn
+    Views      [][]int
+    DateFormat string
 }
 ```
 
 <a name="NewReport"></a>
-### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L60>)
+### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L59>)
 
 ```go
 func NewReport(title string, date <-chan time.Time) *Report
@@ -1063,7 +1076,7 @@ func NewReport(title string, date <-chan time.Time) *Report
 NewReport takes a channel of time as the time axis and returns a new instance of the Report struct. This instance can later be used to add data and annotations and subsequently generate a report.
 
 <a name="Report.AddChart"></a>
-### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L76>)
+### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L74>)
 
 ```go
 func (r *Report) AddChart() int
@@ -1072,7 +1085,7 @@ func (r *Report) AddChart() int
 AddChart adds a new chart to the report and returns its unique identifier. This identifier can be used later to refer to the chart and add columns to it.
 
 <a name="Report.AddColumn"></a>
-### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L83>)
+### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L81>)
 
 ```go
 func (r *Report) AddColumn(column ReportColumn, charts ...int)
@@ -1081,7 +1094,7 @@ func (r *Report) AddColumn(column ReportColumn, charts ...int)
 AddColumn adds a new data column to the specified charts. If no chart is specified, it will be added to the main chart.
 
 <a name="Report.WriteToFile"></a>
-### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L111>)
+### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L109>)
 
 ```go
 func (r *Report) WriteToFile(fileName string) error
@@ -1090,7 +1103,7 @@ func (r *Report) WriteToFile(fileName string) error
 WriteToFile writes the generated report content to a file with the specified name. This allows users to conveniently save the report for later viewing or analysis.
 
 <a name="Report.WriteToWriter"></a>
-### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L99>)
+### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L97>)
 
 ```go
 func (r *Report) WriteToWriter(writer io.Writer) error
@@ -1099,7 +1112,7 @@ func (r *Report) WriteToWriter(writer io.Writer) error
 WriteToWriter writes the report content to the provided io.Writer. This allows the report to be sent to various destinations, such as a file, a network socket, or even the standard output.
 
 <a name="ReportColumn"></a>
-## type [ReportColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L23-L35>)
+## type [ReportColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L28-L40>)
 
 ReportColumn defines the interface that all report data columns must implement. This interface ensures that different types of data columns can be used consistently within the report generation process.
 

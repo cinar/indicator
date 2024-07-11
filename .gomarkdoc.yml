@@ -1,0 +1,4 @@
+excludeDirs: "./cmd/..."
+output: "{{.Dir}}/README.md"
+repository:
+  url: https://github.com/cinar/indicator

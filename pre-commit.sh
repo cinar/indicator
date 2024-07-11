@@ -31,12 +31,7 @@ gosec ./...
 
 revive -config=revive.toml ./...
 staticcheck ./...
-
-for package in "${PACKAGES[@]}";
-do
-    echo Package "$package"
-    gomarkdoc --output "$package"/README.md ./"$package"
-done
+gomarkdoc ./...
 
 markdownfmt -w README.md
 
