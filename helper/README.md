@@ -773,7 +773,7 @@ Example:
 
 ```
 input := helper.SliceToChan([]int{2, 4, 6, 8})
-output := helper.ChanToSlice(input, 4, 0))
+output := helper.Shift(input, 4, 0)
 fmt.Println(helper.ChanToSlice(output)) // [0, 0, 0, 0, 2, 4, 6, 8]
 ```
 
