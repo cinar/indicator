@@ -53,8 +53,15 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 
 	atr := NewAtrWithPeriod[T](c.Period)
 
-	maxHighs := max.Compute(highsSplice[0])
-	minLows := min.Compute(lowsSplice[0])
+	maxHighs := helper.Skip(
+		max.Compute(highsSplice[0]),
+		atr.IdlePeriod()-max.IdlePeriod(),
+	)
+
+	minLows := helper.Skip(
+		min.Compute(lowsSplice[0]),
+		atr.IdlePeriod()-min.IdlePeriod(),
+	)
 
 	atr3Splice := helper.Duplicate(
 		helper.MultiplyBy(
@@ -72,5 +79,5 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 
 // IdlePeriod is the initial period that Chandelier Exit won't yield any results.
 func (c *ChandelierExit[T]) IdlePeriod() int {
-	return c.Period - 1
+	return c.Period
 }
