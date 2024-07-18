@@ -1,0 +1,30 @@
+name: Doc update check
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  gomarkdoc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+         go-version: '1.22'
+         cache-dependency-path: '**/go.sum'
+
+    - name: Setup gomarkdoc
+      run: go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0
+
+    - name: Run gomarkdoc
+      run: |
+        diff=$(gomarkdoc ./... -c 2>&1)
+        if [ -n '$diff' ]; then
+          echo 'Docs are not updated. Please update docs with pre-commit.sh'
+          echo '$diff'
+          exit 1
+        fi
