@@ -62,7 +62,10 @@ func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 
 	//	Middle Line = EMA(period, closings)
 	middles := helper.Duplicate(
-		k.Ema.Compute(closingsSplice[1]),
+		helper.Skip(
+			k.Ema.Compute(closingsSplice[1]),
+			k.Atr.IdlePeriod()-k.Ema.IdlePeriod(),
+		),
 		3,
 	)
 

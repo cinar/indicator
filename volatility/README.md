@@ -226,7 +226,7 @@ IdlePeriod is the initial period that Acceleration Bands won't yield any results
 Atr represents the configuration parameters for calculating the Average True Range \(ATR\). It is a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
 ```
-TR = Max((High - Low), (High - Closing), (Closing - Low))
+TR = Max((High - Low), (High - Previous Closing), (Previous Closing - Low))
 ATR = MA TR
 ```
 
@@ -283,7 +283,7 @@ func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the ATR over the specified period.
 
 <a name="Atr[T].IdlePeriod"></a>
-### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L66>)
+### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L70>)
 
 ```go
 func (a *Atr[T]) IdlePeriod() int
@@ -441,7 +441,7 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Chandelier Exit over the specified period.
 
 <a name="ChandelierExit[T].IdlePeriod"></a>
-### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L74>)
+### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L81>)
 
 ```go
 func (c *ChandelierExit[T]) IdlePeriod() int
@@ -569,7 +569,7 @@ func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Keltner Channel over the specified period.
 
 <a name="KeltnerChannel[T].IdlePeriod"></a>
-### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L79>)
+### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L82>)
 
 ```go
 func (k *KeltnerChannel[T]) IdlePeriod() int
