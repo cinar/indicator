@@ -87,7 +87,7 @@ func (e *TiingoEndOfDay) ToSnapshot() *Snapshot {
 		High:   e.AdjHigh,
 		Low:    e.AdjLow,
 		Close:  e.AdjClose,
-		Volume: e.AdjVolume,
+		Volume: float64(e.AdjVolume),
 	}
 }
 

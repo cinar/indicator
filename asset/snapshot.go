@@ -34,7 +34,7 @@ type Snapshot struct {
 
 	// Volume represents the total trading activity for
 	// the asset during the snapshot period.
-	Volume int64
+	Volume float64
 }
 
 // SnapshotsAsDates extracts the date field from each snapshot in the provided
@@ -85,8 +85,8 @@ func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64 {
 // SnapshotsAsVolumes extracts the volume field from each snapshot in the provided
 // channel and returns a new channel containing only those volume values.The
 // original snapshots channel can no longer be directly used afterwards.
-func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan int64 {
-	return helper.Map(snapshots, func(snapshot *Snapshot) int64 {
+func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64 {
+	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.Volume
 	})
 }
