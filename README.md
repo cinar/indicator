@@ -9,20 +9,11 @@ Indicator is a Golang module that provides a rich set of technical analysis indi
 
 -	**Enhanced Code Quality:** A complete rewrite was undertaken to achieve and maintain at least 90% code coverage.
 -	**Improved Testability:** Each indicator and strategy have dedicated test data in CSV format for easier validation.
--	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the v1 version.
+-	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the [v1 version](https://github.com/cinar/indicator/tree/v1).
 -	**Configurable Indicators and Strategies:** All indicators and strategies were designed to be fully configurable with no preset values.
 -	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
 
-### Migrating from v1 to v2:
-
--	The porting process from v1 to v2 is ongoing. Indicators or strategies without documentation links are not currently implemented in v2.
--	Contributions are welcome! Feel free to contribute to the project and help expand the library's capabilities.
-
-### Find the v1 library:
-
-You can find the previous version (v1) of the library in the [v1 branch](https://github.com/cinar/indicator/tree/v2) on GitHub.
-
-> [!NOTE] I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
 👆 Indicators Provided
 ----------------------
