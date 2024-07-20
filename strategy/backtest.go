@@ -247,13 +247,15 @@ func (b *Backtest) worker(names <-chan string, bestResults chan<- *backtestResul
 // writeAssetReport generates a detailed report for the asset, summarizing the backtest results.
 func (b *Backtest) writeAssetReport(name string, results []*backtestResult) error {
 	type Model struct {
-		AssetName string
-		Results   []*backtestResult
+		AssetName   string
+		Results     []*backtestResult
+		GeneratedOn string
 	}
 
 	model := Model{
-		AssetName: name,
-		Results:   results,
+		AssetName:   name,
+		Results:     results,
+		GeneratedOn: time.Now().String(),
 	}
 
 	file, err := os.Create(filepath.Join(b.outputDir, fmt.Sprintf("%s.html", name)))
@@ -277,11 +279,13 @@ func (b *Backtest) writeAssetReport(name string, results []*backtestResult) erro
 // writeReport generates a detailed report for the backtest results.
 func (b *Backtest) writeReport(results []*backtestResult) error {
 	type Model struct {
-		Results []*backtestResult
+		Results     []*backtestResult
+		GeneratedOn string
 	}
 
 	model := Model{
-		Results: results,
+		Results:     results,
+		GeneratedOn: time.Now().String(),
 	}
 
 	file, err := os.Create(filepath.Join(b.outputDir, "index.html"))

@@ -46,11 +46,12 @@ type ReportColumn interface {
 // the data visually, interact with the chart elements, and view
 // the associated annotations.
 type Report struct {
-	Title      string
-	Date       <-chan time.Time
-	Columns    []ReportColumn
-	Views      [][]int
-	DateFormat string
+	Title       string
+	Date        <-chan time.Time
+	Columns     []ReportColumn
+	Views       [][]int
+	DateFormat  string
+	GeneratedOn string
 }
 
 // NewReport takes a channel of time as the time axis and returns a new
@@ -64,7 +65,8 @@ func NewReport(title string, date <-chan time.Time) *Report {
 		Views: [][]int{
 			{},
 		},
-		DateFormat: DefaultReportDateFormat,
+		DateFormat:  DefaultReportDateFormat,
+		GeneratedOn: time.Now().String(),
 	}
 }
 
