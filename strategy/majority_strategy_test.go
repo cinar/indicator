@@ -28,8 +28,7 @@ func TestMajorityStrategy(t *testing.T) {
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
 	majority := strategy.NewMajorityStrategy("Majority Strategy")
-	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy())
-	majority.Strategies = append(majority.Strategies, trend.NewMacdStrategy())
+	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy(), trend.NewMacdStrategy())
 
 	actual := majority.Compute(snapshots)
 
@@ -46,8 +45,7 @@ func TestMajorityStrategyReport(t *testing.T) {
 	}
 
 	majority := strategy.NewMajorityStrategy("Majority Strategy")
-	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy())
-	majority.Strategies = append(majority.Strategies, trend.NewMacdStrategy())
+	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy(), trend.NewMacdStrategy())
 
 	report := majority.Report(snapshots)
 
