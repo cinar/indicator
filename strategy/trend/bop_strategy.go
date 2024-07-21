@@ -47,7 +47,7 @@ func (b *BopStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 
 	bops := b.Bop.Compute(openings, highs, lows, closings)
 
-	return strategy.NormalizeActions(helper.Map(bops, func(bop float64) strategy.Action {
+	return helper.Map(bops, func(bop float64) strategy.Action {
 		if bop > 0 {
 			return strategy.Buy
 		}
@@ -57,7 +57,7 @@ func (b *BopStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 		}
 
 		return strategy.Hold
-	}))
+	})
 }
 
 // Report processes the provided asset snapshots and generates a

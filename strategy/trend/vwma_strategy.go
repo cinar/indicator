@@ -63,8 +63,6 @@ func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action 
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// VWMA starts only after the a full period.
 	actions = helper.Shift(actions, v.Vwma.Period-1, strategy.Hold)
 

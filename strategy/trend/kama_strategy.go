@@ -67,8 +67,6 @@ func (k *KamaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 	// KAMA starts only after a full period.
 	actions = helper.Shift(actions, k.Kama.IdlePeriod(), strategy.Hold)
 
-	actions = strategy.NormalizeActions(actions)
-
 	return actions
 }
 

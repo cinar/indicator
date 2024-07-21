@@ -55,8 +55,6 @@ func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-
 	// Awesome Oscillator starts only after the idle period.
 	actions = helper.Shift(actions, a.AwesomeOscillator.IdlePeriod(), strategy.Hold)
 
-	actions = strategy.NormalizeActions(actions)
-
 	return actions
 }
 

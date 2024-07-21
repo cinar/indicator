@@ -39,7 +39,7 @@ func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 
 	trixs := t.Trix.Compute(closings)
 
-	actions := strategy.NormalizeActions(helper.Map(trixs, func(trix float64) strategy.Action {
+	actions := helper.Map(trixs, func(trix float64) strategy.Action {
 		if trix > 0 {
 			return strategy.Buy
 		}
@@ -49,7 +49,7 @@ func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 		}
 
 		return strategy.Hold
-	}))
+	})
 
 	// TRIX starts only after a full period.
 	actions = helper.Shift(actions, t.Trix.IdlePeriod(), strategy.Hold)

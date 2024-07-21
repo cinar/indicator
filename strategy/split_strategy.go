@@ -68,7 +68,7 @@ func (s *SplitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action 
 		}
 	}()
 
-	return NormalizeActions(result)
+	return result
 }
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
