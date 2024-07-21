@@ -153,7 +153,7 @@ func (*AwesomeOscillatorStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AwesomeOscillatorStrategy.Report"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L64>)
+### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L62>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -281,7 +281,7 @@ func (s *StochasticRsiStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="StochasticRsiStrategy.Report"></a>
-### func \(\*StochasticRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L84>)
+### func \(\*StochasticRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_rsi_strategy.go#L83>)
 
 ```go
 func (s *StochasticRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

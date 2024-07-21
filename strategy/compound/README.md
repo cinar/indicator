@@ -111,7 +111,7 @@ func (m *MacdRsiStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="MacdRsiStrategy.Report"></a>
-### func \(\*MacdRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/compound/macd_rsi_strategy.go#L86>)
+### func \(\*MacdRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/compound/macd_rsi_strategy.go#L84>)
 
 ```go
 func (m *MacdRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

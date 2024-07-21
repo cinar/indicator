@@ -77,8 +77,6 @@ func (m *MacdRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strat
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	return actions
 }
 

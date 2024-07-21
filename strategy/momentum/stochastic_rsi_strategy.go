@@ -75,7 +75,6 @@ func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan
 
 	// Stochastic RSI starts only after the idle period.
 	actions = helper.Shift(actions, s.StochasticRsi.IdlePeriod(), strategy.Hold)
-	actions = strategy.NormalizeActions(actions)
 
 	return actions
 }

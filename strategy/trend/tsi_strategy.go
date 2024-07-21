@@ -87,7 +87,6 @@ func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.
 
 	// TSI and signal line start only after a full period.
 	actions = helper.Shift(actions, t.IdlePeriod(), strategy.Hold)
-	actions = strategy.NormalizeActions(actions)
 
 	return actions
 }

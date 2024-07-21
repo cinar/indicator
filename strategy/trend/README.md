@@ -282,7 +282,7 @@ func (*AroonStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AroonStrategy.Report"></a>
-### func \(\*AroonStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/aroon_strategy.go#L72>)
+### func \(\*AroonStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/aroon_strategy.go#L70>)
 
 ```go
 func (a *AroonStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -383,7 +383,7 @@ func (*CciStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="CciStrategy.Report"></a>
-### func \(\*CciStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/cci_strategy.go#L66>)
+### func \(\*CciStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/cci_strategy.go#L64>)
 
 ```go
 func (t *CciStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -438,7 +438,7 @@ func (*DemaStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="DemaStrategy.Report"></a>
-### func \(\*DemaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/dema_strategy.go#L95>)
+### func \(\*DemaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/dema_strategy.go#L93>)
 
 ```go
 func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -498,7 +498,7 @@ func (*GoldenCrossStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="GoldenCrossStrategy.Report"></a>
-### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L86>)
+### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/golden_cross_strategy.go#L83>)
 
 ```go
 func (t *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -555,7 +555,7 @@ func (k *KamaStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="KamaStrategy.Report"></a>
-### func \(\*KamaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L76>)
+### func \(\*KamaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L74>)
 
 ```go
 func (k *KamaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -605,7 +605,7 @@ func (*KdjStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="KdjStrategy.Report"></a>
-### func \(\*KdjStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/kdj_strategy.go#L74>)
+### func \(\*KdjStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/kdj_strategy.go#L72>)
 
 ```go
 func (kdj *KdjStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -665,7 +665,7 @@ func (m *MacdStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="MacdStrategy.Report"></a>
-### func \(\*MacdStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/macd_strategy.go#L88>)
+### func \(\*MacdStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/macd_strategy.go#L86>)
 
 ```go
 func (m *MacdStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -770,7 +770,7 @@ func (*TrimaStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="TrimaStrategy.Report"></a>
-### func \(\*TrimaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/trima_strategy.go#L86>)
+### func \(\*TrimaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/trima_strategy.go#L84>)
 
 ```go
 func (t *TrimaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -833,7 +833,7 @@ func (*TripleMovingAverageCrossoverStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="TripleMovingAverageCrossoverStrategy.Report"></a>
-### func \(\*TripleMovingAverageCrossoverStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L95>)
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/triple_moving_average_crossover_strategy.go#L92>)
 
 ```go
 func (t *TripleMovingAverageCrossoverStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -940,7 +940,7 @@ func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="TsiStrategy.IdlePeriod"></a>
-### func \(\*TsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L144>)
+### func \(\*TsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L143>)
 
 ```go
 func (t *TsiStrategy) IdlePeriod() int
@@ -958,7 +958,7 @@ func (t *TsiStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="TsiStrategy.Report"></a>
-### func \(\*TsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L96>)
+### func \(\*TsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/tsi_strategy.go#L95>)
 
 ```go
 func (t *TsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -1011,7 +1011,7 @@ func (*VwmaStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="VwmaStrategy.Report"></a>
-### func \(\*VwmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/vwma_strategy.go#L76>)
+### func \(\*VwmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/vwma_strategy.go#L74>)
 
 ```go
 func (v *VwmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

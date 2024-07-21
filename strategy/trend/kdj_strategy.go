@@ -61,8 +61,6 @@ func (kdj *KdjStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// KDJ starts only after a full period.
 	actions = helper.Shift(actions, kdj.Kdj.IdlePeriod(), strategy.Hold)
 

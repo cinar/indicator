@@ -73,8 +73,6 @@ func (t *TrimaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// TRIMA starts only after the a full periods for each EMA used.
 	actions = helper.Shift(actions, t.Long.IdlePeriod(), strategy.Hold)
 

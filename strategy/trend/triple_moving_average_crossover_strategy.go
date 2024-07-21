@@ -81,9 +81,6 @@ func (t *TripleMovingAverageCrossoverStrategy) Compute(c <-chan *asset.Snapshot)
 		return strategy.Hold
 	})
 
-	// Normalize actions
-	actions = strategy.NormalizeActions(actions)
-
 	// Generate a Hold signal during the idle period.
 	actions = helper.Shift(actions, t.SlowEma.IdlePeriod(), strategy.Hold)
 

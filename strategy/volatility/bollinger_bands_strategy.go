@@ -57,8 +57,6 @@ func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// Bollinger Bands starts only after a full period.
 	actions = helper.Shift(actions, b.BollingerBands.IdlePeriod(), strategy.Hold)
 
