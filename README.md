@@ -162,6 +162,7 @@ The following [repository implementations](asset/README.md#type-repository) are 
 -	[File System Repository](asset/README.md#type-filesystemrepository)
 -	[In Memory Repository](asset/README.md#type-inmemoryrepository)
 -	[Tiingo Repository](asset/README.md#type-tiingorepository)
+-	[Alpaca Markets Repository](https://github.com/cinar/indicatoralpaca)
 
 The [Sync function]() facilitates the synchronization of assets between designated source and target repositories by employing multi-worker concurrency for enhanced efficiency. This function serves the purpose of procuring the most recent snapshots from remote repositories and seamlessly transferring them to local repositories, such as file system repositories.
 
