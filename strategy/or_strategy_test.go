@@ -28,8 +28,7 @@ func TestOrStrategy(t *testing.T) {
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
 	or := strategy.NewOrStrategy("Or Strategy")
-	or.Strategies = append(or.Strategies, strategy.NewBuyAndHoldStrategy())
-	or.Strategies = append(or.Strategies, trend.NewMacdStrategy())
+	or.Strategies = append(or.Strategies, strategy.NewBuyAndHoldStrategy(), trend.NewMacdStrategy())
 
 	actual := or.Compute(snapshots)
 
@@ -46,8 +45,7 @@ func TestOrStrategyReport(t *testing.T) {
 	}
 
 	or := strategy.NewOrStrategy("Or Strategy")
-	or.Strategies = append(or.Strategies, strategy.NewBuyAndHoldStrategy())
-	or.Strategies = append(or.Strategies, trend.NewMacdStrategy())
+	or.Strategies = append(or.Strategies, strategy.NewBuyAndHoldStrategy(), trend.NewMacdStrategy())
 
 	report := or.Report(snapshots)
 

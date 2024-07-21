@@ -46,7 +46,7 @@ func NewQstick[T helper.Number]() *Qstick[T] {
 }
 
 // Compute function takes a channel of numbers and computes the Qstick.
-func (q *Qstick[T]) Compute(openings <-chan T, closings <-chan T) <-chan T {
+func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T {
 	qstick := helper.Subtract(closings, openings)
 	qstick = q.Sma.Compute(qstick)
 

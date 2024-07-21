@@ -87,7 +87,7 @@ func (e *TiingoEndOfDay) ToSnapshot() *Snapshot {
 		High:   e.AdjHigh,
 		Low:    e.AdjLow,
 		Close:  e.AdjClose,
-		Volume: e.AdjVolume,
+		Volume: float64(e.AdjVolume),
 	}
 }
 
@@ -136,7 +136,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 		date.Format("2006-01-02"),
 		r.apiKey)
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +196,7 @@ func (r *TiingoRepository) LastDate(name string) (time.Time, error) {
 
 	url := fmt.Sprintf("%s/tiingo/daily/%s?token=%s", r.BaseURL, name, r.apiKey)
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return lastDate, err
 	}

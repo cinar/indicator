@@ -47,7 +47,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(p \*Pvo\[T\]\) IdlePeriod\(\) int](<#Pvo[T].IdlePeriod>)
 - [type Qstick](<#Qstick>)
   - [func NewQstick\[T helper.Number\]\(\) \*Qstick\[T\]](<#NewQstick>)
-  - [func \(q \*Qstick\[T\]\) Compute\(openings \<\-chan T, closings \<\-chan T\) \<\-chan T](<#Qstick[T].Compute>)
+  - [func \(q \*Qstick\[T\]\) Compute\(openings, closings \<\-chan T\) \<\-chan T](<#Qstick[T].Compute>)
   - [func \(q \*Qstick\[T\]\) IdlePeriod\(\) int](<#Qstick[T].IdlePeriod>)
 - [type Rsi](<#Rsi>)
   - [func NewRsi\[T helper.Number\]\(\) \*Rsi\[T\]](<#NewRsi>)
@@ -528,7 +528,7 @@ NewQstick function initializes a new QStick instance.
 ### func \(\*Qstick\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L49>)
 
 ```go
-func (q *Qstick[T]) Compute(openings <-chan T, closings <-chan T) <-chan T
+func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the Qstick.

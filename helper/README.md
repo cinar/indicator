@@ -1050,7 +1050,7 @@ type Number interface {
 ```
 
 <a name="Report"></a>
-## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L48-L54>)
+## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L48-L55>)
 
 Report generates an HTML file containing an interactive chart that visually represents the provided data and annotations.
 
@@ -1058,16 +1058,17 @@ The generated HTML file can be opened in a web browser to explore the data visua
 
 ```go
 type Report struct {
-    Title      string
-    Date       <-chan time.Time
-    Columns    []ReportColumn
-    Views      [][]int
-    DateFormat string
+    Title       string
+    Date        <-chan time.Time
+    Columns     []ReportColumn
+    Views       [][]int
+    DateFormat  string
+    GeneratedOn string
 }
 ```
 
 <a name="NewReport"></a>
-### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L59>)
+### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L60>)
 
 ```go
 func NewReport(title string, date <-chan time.Time) *Report
@@ -1076,7 +1077,7 @@ func NewReport(title string, date <-chan time.Time) *Report
 NewReport takes a channel of time as the time axis and returns a new instance of the Report struct. This instance can later be used to add data and annotations and subsequently generate a report.
 
 <a name="Report.AddChart"></a>
-### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L74>)
+### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L76>)
 
 ```go
 func (r *Report) AddChart() int
@@ -1085,7 +1086,7 @@ func (r *Report) AddChart() int
 AddChart adds a new chart to the report and returns its unique identifier. This identifier can be used later to refer to the chart and add columns to it.
 
 <a name="Report.AddColumn"></a>
-### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L81>)
+### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L83>)
 
 ```go
 func (r *Report) AddColumn(column ReportColumn, charts ...int)
@@ -1094,7 +1095,7 @@ func (r *Report) AddColumn(column ReportColumn, charts ...int)
 AddColumn adds a new data column to the specified charts. If no chart is specified, it will be added to the main chart.
 
 <a name="Report.WriteToFile"></a>
-### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L109>)
+### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L111>)
 
 ```go
 func (r *Report) WriteToFile(fileName string) error
@@ -1103,7 +1104,7 @@ func (r *Report) WriteToFile(fileName string) error
 WriteToFile writes the generated report content to a file with the specified name. This allows users to conveniently save the report for later viewing or analysis.
 
 <a name="Report.WriteToWriter"></a>
-### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L97>)
+### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L99>)
 
 ```go
 func (r *Report) WriteToWriter(writer io.Writer) error

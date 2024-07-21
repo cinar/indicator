@@ -68,7 +68,7 @@ func setReflectValueFromFloat(value reflect.Value, stringValue string, bitSize i
 }
 
 // setReflectValueFromTime assigns the parsed unsigned float value to the specified variable.
-func setReflectValueFromTime(value reflect.Value, stringValue string, format string) error {
+func setReflectValueFromTime(value reflect.Value, stringValue, format string) error {
 	actualValue, err := time.Parse(format, stringValue)
 	if err == nil {
 		value.Set(reflect.ValueOf(actualValue))
@@ -78,7 +78,7 @@ func setReflectValueFromTime(value reflect.Value, stringValue string, format str
 }
 
 // setReflectValue assigns the parsed value to the specified variable.
-func setReflectValue(value reflect.Value, stringValue string, format string) error {
+func setReflectValue(value reflect.Value, stringValue, format string) error {
 	kind := value.Kind()
 
 	switch kind {

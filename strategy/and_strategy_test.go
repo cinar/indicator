@@ -27,8 +27,7 @@ func TestAndStrategy(t *testing.T) {
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
 	and := strategy.NewAndStrategy("And Strategy")
-	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
-	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy(), strategy.NewBuyAndHoldStrategy())
 
 	actual := and.Compute(snapshots)
 
@@ -45,8 +44,7 @@ func TestAndStrategyReport(t *testing.T) {
 	}
 
 	and := strategy.NewAndStrategy("And Strategy")
-	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
-	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy())
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy(), strategy.NewBuyAndHoldStrategy())
 
 	report := and.Report(snapshots)
 

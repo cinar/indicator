@@ -39,7 +39,7 @@ func (c *annotationReportColumn) Value() string {
 	value := <-c.values
 
 	if value != "" {
-		return fmt.Sprintf("\"%s\"", value)
+		return fmt.Sprintf("%q", value)
 	}
 
 	return "null"

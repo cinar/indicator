@@ -31,7 +31,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SnapshotsAsHighs\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsHighs>)
 - [func SnapshotsAsLows\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsLows>)
 - [func SnapshotsAsOpenings\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsOpenings>)
-- [func SnapshotsAsVolumes\(snapshots \<\-chan \*Snapshot\) \<\-chan int64](<#SnapshotsAsVolumes>)
+- [func SnapshotsAsVolumes\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsVolumes>)
 - [type FileSystemRepository](<#FileSystemRepository>)
   - [func NewFileSystemRepository\(base string\) \*FileSystemRepository](<#NewFileSystemRepository>)
   - [func \(r \*FileSystemRepository\) Append\(name string, snapshots \<\-chan \*Snapshot\) error](<#FileSystemRepository.Append>)
@@ -140,7 +140,7 @@ SnapshotsAsOpenings extracts the open field from each snapshot in the provided c
 ## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L88>)
 
 ```go
-func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan int64
+func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64
 ```
 
 SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.The original snapshots channel can no longer be directly used afterwards.
@@ -331,7 +331,7 @@ type Snapshot struct {
 
     // Volume represents the total trading activity for
     // the asset during the snapshot period.
-    Volume int64
+    Volume float64
 }
 ```
 
