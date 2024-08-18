@@ -1,0 +1,32 @@
+version: '3'
+output: 'prefixed'
+
+tasks:
+  default:
+    cmds:
+      - task: fmt
+      - task: lint
+      - task: test
+      - task: docs
+
+  action:
+    deps: [lint, test]
+
+  fmt:
+    cmds:
+      - go fix ./...
+
+  lint:
+    cmds:
+      - go vet ./...
+      - go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 ./...
+      - go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 ./...
+      - go run github.com/mgechev/revive@v1.3.4 -config=revive.toml ./...
+
+  test:
+    cmds:
+      - go test -cover -coverprofile=coverage.out ./...
+
+  docs:
+    cmds:
+      - go run github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0 ./...

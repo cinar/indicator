@@ -7,7 +7,6 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -18,25 +17,20 @@ jobs:
       with:
         go-version-file: ./go.mod
 
-    - name: Go vet
-      run: go vet ./...
-
-    - name: Run Gosec
-      uses: securego/gosec@master
+    - name: Setup cache
+      uses: actions/cache@v4
       with:
-        args: ./...
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
 
-    - name: Go fix
-      run: go fix ./...
-      
-    - name: Go build
-      run: go build -v ./...
-
-    - name: Go test
-      run: go test -v -coverprofile=coverage.out ./...
+    - name: Run task
+      run: go run github.com/go-task/task/v3/cmd/task@v3.38.0
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      
+      uses: codecov/codecov-action@v4.5.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
