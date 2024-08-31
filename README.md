@@ -152,6 +152,12 @@ Compound strategies merge multiple strategies to produce integrated recommendati
 -	[MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
 -	[Split Strategy](strategy/README.md#type-splitstrategy)
 
+### 🎁 Decorator Strategies
+
+Decorator strategies offer a way to alter the recommendations of other strategies.
+
+-   [No Loss Strategy](strategy/decorator/README.md#type-nolossstrategy)
+
 🗃 Repositories
 --------------
 
