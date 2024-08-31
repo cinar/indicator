@@ -24,12 +24,67 @@ The information provided on this project is strictly for informational purposes 
 
 ## Index
 
+- [type InverseStrategy](<#InverseStrategy>)
+  - [func NewInverseStrategy\(innerStrategy strategy.Strategy\) \*InverseStrategy](<#NewInverseStrategy>)
+  - [func \(i \*InverseStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#InverseStrategy.Compute>)
+  - [func \(i \*InverseStrategy\) Name\(\) string](<#InverseStrategy.Name>)
+  - [func \(i \*InverseStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#InverseStrategy.Report>)
 - [type NoLossStrategy](<#NoLossStrategy>)
   - [func NewNoLossStrategy\(innerStrategy strategy.Strategy\) \*NoLossStrategy](<#NewNoLossStrategy>)
   - [func \(n \*NoLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.Compute>)
   - [func \(n \*NoLossStrategy\) Name\(\) string](<#NoLossStrategy.Name>)
   - [func \(n \*NoLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NoLossStrategy.Report>)
 
+
+<a name="InverseStrategy"></a>
+## type [InverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L17-L22>)
+
+InverseStrategy reverses the advice of another strategy. For example, if the original strategy suggests buying an asset, InverseStrategy would recommend selling it.
+
+```go
+type InverseStrategy struct {
+    strategy.Strategy
+
+    // InnerStrategy is the inner strategy.
+    InnerStrategy strategy.Strategy
+}
+```
+
+<a name="NewInverseStrategy"></a>
+### func [NewInverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L25>)
+
+```go
+func NewInverseStrategy(innerStrategy strategy.Strategy) *InverseStrategy
+```
+
+NewInverseStrategy function initializes a new inverse strategy instance.
+
+<a name="InverseStrategy.Compute"></a>
+### func \(\*InverseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L37>)
+
+```go
+func (i *InverseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="InverseStrategy.Name"></a>
+### func \(\*InverseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L32>)
+
+```go
+func (i *InverseStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="InverseStrategy.Report"></a>
+### func \(\*InverseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L53>)
+
+```go
+func (i *InverseStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="NoLossStrategy"></a>
 ## type [NoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L17-L22>)
