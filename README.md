@@ -147,7 +147,6 @@ The following list of strategies are currently supported by this package:
 Compound strategies merge multiple strategies to produce integrated recommendations. They combine individual strategies' recommendations using various decision-making logic.
 
 -	[All Strategy](strategy/README.md#type-allstrategy)
--   [Inverse Strategy](strategy/README.md#type-inversestrategy)
 -	[Majority Strategy](strategy/README.md#type-majoritystrategy)
 -	[MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
 -	[Or Strategy](strategy/README.md#type-orstrategy)
