@@ -34,6 +34,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(n \*NoLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.Compute>)
   - [func \(n \*NoLossStrategy\) Name\(\) string](<#NoLossStrategy.Name>)
   - [func \(n \*NoLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NoLossStrategy.Report>)
+- [type StopLossStrategy](<#StopLossStrategy>)
+  - [func NewStopLossStrategy\(innerStrategy strategy.Strategy, percentage float64\) \*StopLossStrategy](<#NewStopLossStrategy>)
+  - [func \(s \*StopLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StopLossStrategy.Compute>)
+  - [func \(s \*StopLossStrategy\) Name\(\) string](<#StopLossStrategy.Name>)
+  - [func \(s \*StopLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#StopLossStrategy.Report>)
 
 
 <a name="InverseStrategy"></a>
@@ -132,6 +137,59 @@ Name returns the name of the strategy.
 
 ```go
 func (n *NoLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="StopLossStrategy"></a>
+## type [StopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L16-L24>)
+
+StopLossStrategy prevents a loss by recommending a sell action when the assets drops below the given threshold.
+
+```go
+type StopLossStrategy struct {
+    strategy.Strategy
+
+    // InnertStrategy is the inner strategy.
+    InnertStrategy strategy.Strategy
+
+    // Percentage is the loss threshold in percentage.
+    Percentage float64
+}
+```
+
+<a name="NewStopLossStrategy"></a>
+### func [NewStopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L27>)
+
+```go
+func NewStopLossStrategy(innerStrategy strategy.Strategy, percentage float64) *StopLossStrategy
+```
+
+NewStopLossStrategy function initializes a new stop loss strategy instance.
+
+<a name="StopLossStrategy.Compute"></a>
+### func \(\*StopLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L40>)
+
+```go
+func (s *StopLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="StopLossStrategy.Name"></a>
+### func \(\*StopLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L35>)
+
+```go
+func (s *StopLossStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="StopLossStrategy.Report"></a>
+### func \(\*StopLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L65>)
+
+```go
+func (s *StopLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

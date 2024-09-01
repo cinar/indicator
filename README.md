@@ -158,6 +158,7 @@ Decorator strategies offer a way to alter the recommendations of other strategie
 
 -   [Inverse Strategy](strategy/decorator/README.md#type-inversestrategy)
 -   [No Loss Strategy](strategy/decorator/README.md#type-nolossstrategy)
+-   [Stop Loss Strategy](strategy/decorator/README.md#type-stoplossstrategy)
 
 🗃 Repositories
 --------------
