@@ -30,3 +30,8 @@ tasks:
   docs:
     cmds:
       - go run github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0 ./...
+
+  build-tools:
+    cmds:
+      - go build -o indicator-backtest cmd/indicator-backtest/main.go
+      - go build -o indicator-sync cmd/indicator-sync/main.go
