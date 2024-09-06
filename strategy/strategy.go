@@ -43,16 +43,11 @@ func ComputeWithOutcome(s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-
 	snapshots := helper.Duplicate(c, 2)
 
 	actions := helper.Duplicate(s.Compute(snapshots[0]), 2)
+	closings := asset.SnapshotsAsClosings(snapshots[1])
 
-	openings := helper.Skip(asset.SnapshotsAsOpenings(snapshots[1]), 1)
+	outcomes := Outcome(closings, actions[1])
 
-	outcomes := helper.Echo(
-		Outcome(openings, actions[0]),
-		1,
-		1,
-	)
-
-	return actions[1], outcomes
+	return actions[0], outcomes
 }
 
 // AllStrategies returns a slice containing references to all available base strategies.
