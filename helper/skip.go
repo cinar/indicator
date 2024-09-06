@@ -17,7 +17,10 @@ func Skip[T any](c <-chan T, count int) <-chan T {
 
 	go func() {
 		for i := 0; i < count; i++ {
-			<-c
+			_, ok := <-c
+			if !ok {
+				break
+			}
 		}
 
 		Pipe(c, result)
