@@ -147,10 +147,18 @@ The following list of strategies are currently supported by this package:
 Compound strategies merge multiple strategies to produce integrated recommendations. They combine individual strategies' recommendations using various decision-making logic.
 
 -	[All Strategy](strategy/README.md#type-allstrategy)
--	[Or Strategy](strategy/README.md#type-orstrategy)
 -	[Majority Strategy](strategy/README.md#type-majoritystrategy)
 -	[MACD-RSI Strategy](strategy/compound/README.md#type-macdrsistrategy)
+-	[Or Strategy](strategy/README.md#type-orstrategy)
 -	[Split Strategy](strategy/README.md#type-splitstrategy)
+
+### 🎁 Decorator Strategies
+
+Decorator strategies offer a way to alter the recommendations of other strategies.
+
+-   [Inverse Strategy](strategy/decorator/README.md#type-inversestrategy)
+-   [No Loss Strategy](strategy/decorator/README.md#type-nolossstrategy)
+-   [Stop Loss Strategy](strategy/decorator/README.md#type-stoplossstrategy)
 
 🗃 Repositories
 --------------
