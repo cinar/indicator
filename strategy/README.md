@@ -89,7 +89,7 @@ const (
 ```
 
 <a name="ActionSources"></a>
-## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L67>)
+## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L62>)
 
 ```go
 func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action
@@ -555,7 +555,7 @@ func AllSplitStrategies(strategies []Strategy) []Strategy
 AllSplitStrategies performs a cartesian product operation on the given strategies, resulting in a collection containing all split strategies formed by combining individual buy and sell strategies.
 
 <a name="AllStrategies"></a>
-### func [AllStrategies](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L59>)
+### func [AllStrategies](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L54>)
 
 ```go
 func AllStrategies() []Strategy

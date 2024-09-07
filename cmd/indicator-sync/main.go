@@ -16,8 +16,10 @@ import (
 )
 
 func main() {
-	var tiingoKey string
-	var targetBase string
+	var sourceName string
+	var sourceConfig string
+	var targetName string
+	var targetConfig string
 	var minusDays int
 	var workers int
 	var delay int
@@ -28,29 +30,42 @@ func main() {
 	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
 	fmt.Fprintln(os.Stderr)
 
-	flag.StringVar(&tiingoKey, "key", "", "tiingo service api key")
-	flag.StringVar(&targetBase, "target", ".", "target repository base directory")
+	flag.StringVar(&sourceName, "source-name", "tiingo", "source repository type")
+	flag.StringVar(&sourceConfig, "source-config", "", "source repository config")
+	flag.StringVar(&targetName, "target-name", "filesystem", "target repository type")
+	flag.StringVar(&targetConfig, "target-config", "", "target repository config")
 	flag.IntVar(&minusDays, "days", 0, "lookback period in days for the new assets")
 	flag.IntVar(&workers, "workers", asset.DefaultSyncWorkers, "number of concurrent workers")
 	flag.IntVar(&delay, "delay", asset.DefaultSyncDelay, "delay between each get")
 	flag.Parse()
 
-	if tiingoKey == "" {
-		log.Fatal("Tiingo API key required")
+	source, err := asset.NewRepository(sourceName, sourceConfig)
+	if err != nil {
+		log.Fatalf("unable to initialize source: %v", err)
+	}
+
+	target, err := asset.NewRepository(targetName, targetConfig)
+	if err != nil {
+		log.Fatalf("unable to initialize target: %v", err)
 	}
 
 	defaultStartDate := time.Now().AddDate(0, 0, -minusDays)
 
-	source := asset.NewTiingoRepository(tiingoKey)
-	target := asset.NewFileSystemRepository(targetBase)
+	assets := flag.Args()
+	if len(assets) == 0 {
+		assets, err = source.Assets()
+		if err != nil {
+			log.Fatalf("unable to get assets: %v", err)
+		}
+	}
 
 	sync := asset.NewSync()
 	sync.Workers = workers
 	sync.Delay = delay
-	sync.Assets = flag.Args()
+	sync.Assets = assets
 
-	err := sync.Run(source, target, defaultStartDate)
+	err = sync.Run(source, target, defaultStartDate)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("unable to sync repositories: %v", err)
 	}
 }
