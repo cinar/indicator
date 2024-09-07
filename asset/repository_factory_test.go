@@ -10,6 +10,36 @@ import (
 	"github.com/cinar/indicator/v2/asset"
 )
 
+func TestNewRepositoryUnknown(t *testing.T) {
+	repository, err := asset.NewRepository("unknown", "")
+	if err == nil {
+		t.Fatalf("unknown repository: %T", repository)
+	}
+}
+
+func TestRegisterRepositoryBuilder(t *testing.T) {
+	builderName := "testbuilder"
+
+	repository, err := asset.NewRepository(builderName, "")
+	if err == nil {
+		t.Fatalf("testbuilder is: %T", repository)
+	}
+
+	asset.RegisterRepositoryBuilder(builderName, func(_ string) (asset.Repository, error) {
+		return asset.NewInMemoryRepository(), nil
+	})
+
+	repository, err = asset.NewRepository(builderName, "")
+	if err != nil {
+		t.Fatalf("testbuilder is not found: %v", err)
+	}
+
+	_, ok := repository.(*asset.InMemoryRepository)
+	if !ok {
+		t.Fatalf("testbuilder is: %T", repository)
+	}
+}
+
 func TestNewRepositoryMemory(t *testing.T) {
 	repository, err := asset.NewRepository(asset.InMemoryRepositoryBuilderName, "")
 	if err != nil {
