@@ -26,6 +26,7 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [Variables](<#variables>)
+- [func RegisterRepositoryBuilder\(name string, builder RepositoryBuilderFunc\)](<#RegisterRepositoryBuilder>)
 - [func SnapshotsAsClosings\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsClosings>)
 - [func SnapshotsAsDates\(snapshots \<\-chan \*Snapshot\) \<\-chan time.Time](<#SnapshotsAsDates>)
 - [func SnapshotsAsHighs\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsHighs>)
@@ -47,6 +48,8 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*InMemoryRepository\) GetSince\(name string, date time.Time\) \(\<\-chan \*Snapshot, error\)](<#InMemoryRepository.GetSince>)
   - [func \(r \*InMemoryRepository\) LastDate\(name string\) \(time.Time, error\)](<#InMemoryRepository.LastDate>)
 - [type Repository](<#Repository>)
+  - [func NewRepository\(name, config string\) \(Repository, error\)](<#NewRepository>)
+- [type RepositoryBuilderFunc](<#RepositoryBuilderFunc>)
 - [type Snapshot](<#Snapshot>)
 - [type Sync](<#Sync>)
   - [func NewSync\(\) \*Sync](<#NewSync>)
@@ -64,6 +67,21 @@ The information provided on this project is strictly for informational purposes 
 
 
 ## Constants
+
+<a name="InMemoryRepositoryBuilderName"></a>
+
+```go
+const (
+    // InMemoryRepositoryBuilderName is the name for the in memory repository builder.
+    InMemoryRepositoryBuilderName = "memory"
+
+    // FileSystemRepositoryBuilderName is the name for the file system repository builder.
+    FileSystemRepositoryBuilderName = "filesystem"
+
+    // TiingoRepositoryBuilderName is the name of the Tiingo repository builder.
+    TiingoRepositoryBuilderName = "tiingo"
+)
+```
 
 <a name="DefaultSyncWorkers"></a>
 
@@ -90,6 +108,15 @@ var ErrRepositoryAssetEmpty = errors.New("asset empty")
 ```go
 var ErrRepositoryAssetNotFound = errors.New("asset is not found")
 ```
+
+<a name="RegisterRepositoryBuilder"></a>
+## func [RegisterRepositoryBuilder](<https://github.com/cinar/indicator/blob/master/asset/repository_factory.go#L33>)
+
+```go
+func RegisterRepositoryBuilder(name string, builder RepositoryBuilderFunc)
+```
+
+RegisterRepositoryBuilder registers the given builder.
 
 <a name="SnapshotsAsClosings"></a>
 ## func [SnapshotsAsClosings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L79>)
@@ -301,6 +328,24 @@ type Repository interface {
     // given name.
     Append(name string, snapshots <-chan *Snapshot) error
 }
+```
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/cinar/indicator/blob/master/asset/repository_factory.go#L38>)
+
+```go
+func NewRepository(name, config string) (Repository, error)
+```
+
+NewRepository builds a new repository by the given name type and the configuration.
+
+<a name="RepositoryBuilderFunc"></a>
+## type [RepositoryBuilderFunc](<https://github.com/cinar/indicator/blob/master/asset/repository_factory.go#L23>)
+
+RepositoryBuilderFunc defines a function to build a new repository using the given configuration parameter.
+
+```go
+type RepositoryBuilderFunc func(config string) (Repository, error)
 ```
 
 <a name="Snapshot"></a>

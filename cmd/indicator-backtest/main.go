@@ -21,7 +21,8 @@ import (
 )
 
 func main() {
-	var repositoryDir string
+	var sourceName string
+	var sourceConfig string
 	var outputDir string
 	var workers int
 	var lastDays int
@@ -36,7 +37,8 @@ func main() {
 	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
 	fmt.Fprintln(os.Stderr)
 
-	flag.StringVar(&repositoryDir, "repository", ".", "file system repository directory")
+	flag.StringVar(&sourceName, "source-name", "filesystem", "source repository type")
+	flag.StringVar(&sourceConfig, "source-config", "", "source repository config")
 	flag.StringVar(&outputDir, "output", ".", "output directory")
 	flag.IntVar(&workers, "workers", strategy.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", strategy.DefaultLastDays, "number of days to do backtest")
@@ -46,11 +48,12 @@ func main() {
 	flag.StringVar(&dateFormat, "date-format", helper.DefaultReportDateFormat, "date format to use")
 	flag.Parse()
 
-	flag.Parse()
+	source, err := asset.NewRepository(sourceName, sourceConfig)
+	if err != nil {
+		log.Fatalf("unable to initialize source: %v", err)
+	}
 
-	repository := asset.NewFileSystemRepository(repositoryDir)
-
-	backtest := strategy.NewBacktest(repository, outputDir)
+	backtest := strategy.NewBacktest(source, outputDir)
 	backtest.Workers = workers
 	backtest.LastDays = lastDays
 	backtest.WriteStrategyReports = writeStrategyRerpots
@@ -70,8 +73,8 @@ func main() {
 		backtest.Strategies = append(backtest.Strategies, strategy.AllAndStrategies(backtest.Strategies)...)
 	}
 
-	err := backtest.Run()
+	err = backtest.Run()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("unable to run backtest: %v", err)
 	}
 }
