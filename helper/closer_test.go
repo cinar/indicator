@@ -11,7 +11,7 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
-func TestCloseAndLogErrorWithoutError(t *testing.T) {
+func TestCloseAndLogError(t *testing.T) {
 	file, err := os.CreateTemp(os.TempDir(), "closer")
 	if err != nil {
 		t.Fatal(err)
