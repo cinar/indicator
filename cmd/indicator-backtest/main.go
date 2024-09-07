@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
 	"github.com/cinar/indicator/v2/strategy/compound"
@@ -40,9 +41,9 @@ func main() {
 	flag.StringVar(&sourceName, "source-name", "filesystem", "source repository type")
 	flag.StringVar(&sourceConfig, "source-config", "", "source repository config")
 	flag.StringVar(&outputDir, "output", ".", "output directory")
-	flag.IntVar(&workers, "workers", strategy.DefaultBacktestWorkers, "number of concurrent workers")
-	flag.IntVar(&lastDays, "last", strategy.DefaultLastDays, "number of days to do backtest")
-	flag.BoolVar(&writeStrategyRerpots, "write-strategy-reports", strategy.DefaultWriteStrategyReports, "write individual strategy reports")
+	flag.IntVar(&workers, "workers", backtest.DefaultBacktestWorkers, "number of concurrent workers")
+	flag.IntVar(&lastDays, "last", backtest.DefaultLastDays, "number of days to do backtest")
+	flag.BoolVar(&writeStrategyRerpots, "write-strategy-reports", backtest.DefaultWriteStrategyReports, "write individual strategy reports")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
 	flag.StringVar(&dateFormat, "date-format", helper.DefaultReportDateFormat, "date format to use")
@@ -53,11 +54,13 @@ func main() {
 		log.Fatalf("unable to initialize source: %v", err)
 	}
 
-	backtest := strategy.NewBacktest(source, outputDir)
+	htmlReport := backtest.NewHTMLReport(outputDir)
+	htmlReport.WriteStrategyReports = writeStrategyRerpots
+	htmlReport.DateFormat = dateFormat
+
+	backtest := backtest.NewBacktest(source, htmlReport)
 	backtest.Workers = workers
 	backtest.LastDays = lastDays
-	backtest.WriteStrategyReports = writeStrategyRerpots
-	backtest.DateFormat = dateFormat
 	backtest.Names = append(backtest.Names, flag.Args()...)
 	backtest.Strategies = append(backtest.Strategies, compound.AllStrategies()...)
 	backtest.Strategies = append(backtest.Strategies, momentum.AllStrategies()...)
