@@ -65,8 +65,6 @@ func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan st
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// Super Trend starts only after a full period.
 	actions = helper.Shift(actions, s.SuperTrend.IdlePeriod(), strategy.Hold)
 

@@ -78,8 +78,6 @@ func (m *MacdStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 	// MACD starts only after a full period.
 	actions = helper.Shift(actions, m.Macd.IdlePeriod(), strategy.Hold)
 
-	actions = strategy.NormalizeActions(actions)
-
 	return actions
 }
 

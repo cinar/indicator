@@ -54,8 +54,6 @@ func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// CCI starts only after a full period.
 	actions = helper.Shift(actions, t.Cci.IdlePeriod(), strategy.Hold)
 

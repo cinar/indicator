@@ -81,8 +81,6 @@ func (d *DemaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action 
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// DEMA starts only after the a full periods for each EMA used.
 	actions = helper.Skip(actions, d.Dema2.IdlePeriod())
 	actions = helper.Shift(actions, d.Dema2.IdlePeriod(), strategy.Hold)

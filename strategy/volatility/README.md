@@ -89,7 +89,7 @@ func (*BollingerBandsStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BollingerBandsStrategy.Report"></a>
-### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L69>)
+### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L67>)
 
 ```go
 func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -146,7 +146,7 @@ func (s *SuperTrendStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="SuperTrendStrategy.Report"></a>
-### func \(\*SuperTrendStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L77>)
+### func \(\*SuperTrendStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L75>)
 
 ```go
 func (s *SuperTrendStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

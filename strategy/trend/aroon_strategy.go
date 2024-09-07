@@ -59,8 +59,6 @@ func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
 		return strategy.Hold
 	})
 
-	actions = strategy.NormalizeActions(actions)
-
 	// Aroon starts only after the a full period.
 	actions = helper.Shift(actions, a.Aroon.Period-1, strategy.Hold)
 
