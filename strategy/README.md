@@ -24,7 +24,6 @@ The information provided on this project is strictly for informational purposes 
 
 ## Index
 
-- [Constants](<#constants>)
 - [func ActionSources\(strategies \[\]Strategy, snapshots \<\-chan \*asset.Snapshot\) \[\]\<\-chan Action](<#ActionSources>)
 - [func ActionsToAnnotations\(ac \<\-chan Action\) \<\-chan string](<#ActionsToAnnotations>)
 - [func ComputeWithOutcome\(s Strategy, c \<\-chan \*asset.Snapshot\) \(\<\-chan Action, \<\-chan float64\)](<#ComputeWithOutcome>)
@@ -40,9 +39,6 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AndStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AndStrategy.Compute>)
   - [func \(a \*AndStrategy\) Name\(\) string](<#AndStrategy.Name>)
   - [func \(a \*AndStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AndStrategy.Report>)
-- [type Backtest](<#Backtest>)
-  - [func NewBacktest\(repository asset.Repository, outputDir string\) \*Backtest](<#NewBacktest>)
-  - [func \(b \*Backtest\) Run\(\) error](<#Backtest.Run>)
 - [type BuyAndHoldStrategy](<#BuyAndHoldStrategy>)
   - [func NewBuyAndHoldStrategy\(\) \*BuyAndHoldStrategy](<#NewBuyAndHoldStrategy>)
   - [func \(\*BuyAndHoldStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#BuyAndHoldStrategy.Compute>)
@@ -70,23 +66,6 @@ The information provided on this project is strictly for informational purposes 
   - [func AllSplitStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllSplitStrategies>)
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
 
-
-## Constants
-
-<a name="DefaultBacktestWorkers"></a>
-
-```go
-const (
-    // DefaultBacktestWorkers is the default number of backtest workers.
-    DefaultBacktestWorkers = 1
-
-    // DefaultLastDays is the default number of days backtest should go back.
-    DefaultLastDays = 30
-
-    // DefaultWriteStrategyReports is the default state of writing individual strategy reports.
-    DefaultWriteStrategyReports = true
-)
-```
 
 <a name="ActionSources"></a>
 ## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L62>)
@@ -248,53 +227,6 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
-
-<a name="Backtest"></a>
-## type [Backtest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L44-L68>)
-
-Backtest function rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy\-asset pairing.
-
-```go
-type Backtest struct {
-
-    // Names is the names of the assets to backtest.
-    Names []string
-
-    // Strategies is the list of strategies to apply.
-    Strategies []Strategy
-
-    // Workers is the number of concurrent workers.
-    Workers int
-
-    // LastDays is the number of days backtest should go back.
-    LastDays int
-
-    // WriteStrategyReports indicates whether the individual strategy reports should be generated.
-    WriteStrategyReports bool
-
-    // DateFormat is the date format that is used in the reports.
-    DateFormat string
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L92>)
-
-```go
-func NewBacktest(repository asset.Repository, outputDir string) *Backtest
-```
-
-NewBacktest function initializes a new backtest instance.
-
-<a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/strategy/backtest.go#L109>)
-
-```go
-func (b *Backtest) Run() error
-```
-
-Run executes a comprehensive performance evaluation of the designated strategies, applied to a specified collection of assets. In the absence of explicitly defined assets, encompasses all assets within the repository. Likewise, in the absence of explicitly defined strategies, encompasses all the registered strategies.
 
 <a name="BuyAndHoldStrategy"></a>
 ## type [BuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L16-L18>)

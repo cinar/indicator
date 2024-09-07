@@ -2,14 +2,14 @@
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
-package strategy_test
+package backtest_test
 
 import (
 	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
-	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/strategy/trend"
 )
 
@@ -23,7 +23,8 @@ func TestBacktest(t *testing.T) {
 
 	defer os.RemoveAll(outputDir)
 
-	backtest := strategy.NewBacktest(repository, outputDir)
+	htmlReport := backtest.NewHTMLReport(outputDir)
+	backtest := backtest.NewBacktest(repository, htmlReport)
 	backtest.Names = append(backtest.Names, "brk-b")
 	backtest.Strategies = append(backtest.Strategies, trend.NewApoStrategy())
 
@@ -43,7 +44,8 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 
 	defer os.RemoveAll(outputDir)
 
-	backtest := strategy.NewBacktest(repository, outputDir)
+	htmlReport := backtest.NewHTMLReport(outputDir)
+	backtest := backtest.NewBacktest(repository, htmlReport)
 
 	err = backtest.Run()
 	if err != nil {
@@ -61,7 +63,8 @@ func TestBacktestNonExistingAsset(t *testing.T) {
 
 	defer os.RemoveAll(outputDir)
 
-	backtest := strategy.NewBacktest(repository, outputDir)
+	htmlReport := backtest.NewHTMLReport(outputDir)
+	backtest := backtest.NewBacktest(repository, htmlReport)
 	backtest.Names = append(backtest.Names, "non_existing")
 
 	err = backtest.Run()
