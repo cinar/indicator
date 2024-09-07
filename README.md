@@ -177,7 +177,12 @@ The [Sync function]() facilitates the synchronization of assets between designat
 The `indicator-sync` command line tool also offers the capability of synchronizing data between the Tiingo Repository and the File System Repository. To illustrate its usage, consider the following example command:
 
 ```bash
-$ indicator-sync -key $TIINGO_KEY -target /home/user/assets -days 30
+$ indicator-sync \
+    -source-name tiingo \
+    -source-config $TIINGO_KEY \
+    -target-name filesystem \
+    -target-config /home/user/assets \
+    -days 30
 ```
 
 This command effectively retrieves the most recent snapshots for assets residing within the `/home/user/assets` directory from the Tiingo Repository. In the event that the local asset file is devoid of content, it automatically extends its reach to synchronize 30 days' worth of snapshots, ensuring a comprehensive and up-to-date repository.
@@ -201,7 +206,11 @@ if err != nil {
 The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. This capability encompasses the application of all currently recognized strategies, culminating in the generation of detailed reports within a designated output directory.
 
 ```bash
-$ indicator-backtest -repository /home/user/assets -output /home/user/reports -workers 1
+$ indicator-backtest \
+    -source-name filesystem \
+    -source-config /home/user/assets \
+    -output /home/user/reports \
+    -workers 1
 ```
 
 Usage
