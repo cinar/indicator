@@ -12,7 +12,7 @@ import (
 )
 
 // KamaStrategy represents the configuration parameters for calculating the KAMA strategy. A closing price crossing
-// above the KAMA suggests a bullish trend, while crossing below the KAMA indicats a bearish trend.
+// above the KAMA suggests a bullish trend, while crossing below the KAMA indicates a bearish trend.
 type KamaStrategy struct {
 	// Kama represents the configuration parameters for calculating the Kaufman's Adaptive Moving Average (KAMA).
 	Kama *trend.Kama[float64]
@@ -56,7 +56,7 @@ func (k *KamaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 			return strategy.Buy
 		}
 
-		// While crossing below the KAMA indicats a bearish trend.
+		// While crossing below the KAMA indicates a bearish trend.
 		if closing < kama {
 			return strategy.Sell
 		}
