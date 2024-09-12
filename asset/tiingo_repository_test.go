@@ -38,7 +38,7 @@ func TestTiingoRepositoryGet(t *testing.T) {
 		},
 	}
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		body, err := json.Marshal(data)
 		if err != nil {
 			t.Fatal(err)
@@ -79,7 +79,7 @@ func TestTiingoRepositoryGetNotReachable(t *testing.T) {
 func TestTiingoRepositoryGetInvalid(t *testing.T) {
 	response := ""
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		fmt.Fprint(w, response)
 	}))
 
@@ -123,7 +123,7 @@ func TestTiingoRepositoryLastDate(t *testing.T) {
 		Description:  "D",
 	}
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		body, err := json.Marshal(meta)
 		if err != nil {
 			t.Fatal(err)
@@ -149,7 +149,7 @@ func TestTiingoRepositoryLastDate(t *testing.T) {
 }
 
 func TestTiingoRepositoryLastDateInvalid(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, _ *http.Request) {
 	}))
 
 	repository := asset.NewTiingoRepository("1234")
