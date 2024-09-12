@@ -130,7 +130,7 @@ func TestSyncFailingTargetAssets(t *testing.T) {
 
 func TestSyncFailingTargetAppend(t *testing.T) {
 	source := &MockRepository{
-		GetSinceFunc: func(s string, t time.Time) (<-chan *asset.Snapshot, error) {
+		GetSinceFunc: func(_ string, _ time.Time) (<-chan *asset.Snapshot, error) {
 			return helper.SliceToChan([]*asset.Snapshot{}), nil
 		},
 	}
@@ -140,11 +140,11 @@ func TestSyncFailingTargetAppend(t *testing.T) {
 			return []string{"A"}, nil
 		},
 
-		LastDateFunc: func(s string) (time.Time, error) {
+		LastDateFunc: func(_ string) (time.Time, error) {
 			return time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC), nil
 		},
 
-		AppendFunc: func(s string, c <-chan *asset.Snapshot) error {
+		AppendFunc: func(_ string, _ <-chan *asset.Snapshot) error {
 			return errors.New("append error")
 		},
 	}
