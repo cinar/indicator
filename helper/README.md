@@ -47,12 +47,14 @@ The information provided on this project is strictly for informational purposes 
 - [func Field\[T, S any\]\(c \<\-chan \*S, name string\) \(\<\-chan T, error\)](<#Field>)
 - [func Filter\[T any\]\(c \<\-chan T, p func\(T\) bool\) \<\-chan T](<#Filter>)
 - [func First\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#First>)
+- [func Gcd\(values ...int\) int](<#Gcd>)
 - [func Head\[T Number\]\(c \<\-chan T, count int\) \<\-chan T](<#Head>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
 - [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
 - [func KeepNegatives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepNegatives>)
 - [func KeepPositives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepPositives>)
 - [func Last\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Last>)
+- [func Lcm\(values ...int\) int](<#Lcm>)
 - [func Map\[F, T any\]\(c \<\-chan F, f func\(F\) T\) \<\-chan T](<#Map>)
 - [func MapWithPrevious\[F, T any\]\(c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPrevious>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
@@ -479,6 +481,15 @@ func First[T any](c <-chan T, count int) <-chan T
 
 First takes a channel of values and returns a new channel containing the first N values.
 
+<a name="Gcd"></a>
+## func [Gcd](<https://github.com/cinar/indicator/blob/master/helper/gcd.go#L8>)
+
+```go
+func Gcd(values ...int) int
+```
+
+Gcd calculates the Greatest Common Divisor of the given numbers.
+
 <a name="Head"></a>
 ## func [Head](<https://github.com/cinar/indicator/blob/master/helper/head.go#L16>)
 
@@ -566,6 +577,15 @@ func Last[T any](c <-chan T, count int) <-chan T
 ```
 
 Last takes a channel of values and returns a new channel containing the last N values.
+
+<a name="Lcm"></a>
+## func [Lcm](<https://github.com/cinar/indicator/blob/master/helper/lcm.go#L8>)
+
+```go
+func Lcm(values ...int) int
+```
+
+Lcm calculates the Least Common Multiple of the given numbers.
 
 <a name="Map"></a>
 ## func [Map](<https://github.com/cinar/indicator/blob/master/helper/map.go#L17>)
