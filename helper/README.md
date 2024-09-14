@@ -38,6 +38,7 @@ The information provided on this project is strictly for informational purposes 
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
 - [func CloseAndLogError\(closer io.Closer, message string\)](<#CloseAndLogError>)
 - [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
+- [func DaysBetween\(from, to time.Time\) int](<#DaysBetween>)
 - [func DecrementBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DecrementBy>)
 - [func Divide\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Divide>)
 - [func DivideBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DivideBy>)
@@ -347,6 +348,15 @@ fmt.Println(<- s) // 2
 fmt.Println(<- s) // 3
 fmt.Println(<- s) // 4
 ```
+
+<a name="DaysBetween"></a>
+## func [DaysBetween](<https://github.com/cinar/indicator/blob/master/helper/days_between.go#L13>)
+
+```go
+func DaysBetween(from, to time.Time) int
+```
+
+DaysBetween calculates the days between the given two times.
 
 <a name="DecrementBy"></a>
 ## func [DecrementBy](<https://github.com/cinar/indicator/blob/master/helper/decrement_by.go#L16>)

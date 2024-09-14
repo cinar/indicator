@@ -216,10 +216,7 @@ func (h *HTMLReport) writeAssetReport(name string, results []*htmlReportResult) 
 
 	defer helper.CloseAndLogError(file, "unable to close asset report file")
 
-	tmpl, err := template.New("report").Parse(htmlAssetReportTmpl)
-	if err != nil {
-		return fmt.Errorf("unable to initialize asset report template: %w", err)
-	}
+	tmpl := template.Must(template.New("report").Parse(htmlAssetReportTmpl))
 
 	err = tmpl.Execute(file, model)
 	if err != nil {
@@ -248,10 +245,7 @@ func (h *HTMLReport) writeReport() error {
 
 	defer helper.CloseAndLogError(file, "unable to close main report file")
 
-	tmpl, err := template.New("report").Parse(htmlReportTmpl)
-	if err != nil {
-		return fmt.Errorf("unable to execute main report template: %w", err)
-	}
+	tmpl := template.Must(template.New("report").Parse(htmlReportTmpl))
 
 	err = tmpl.Execute(file, model)
 	if err != nil {
