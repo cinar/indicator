@@ -509,7 +509,7 @@ Report processes the provided asset snapshots and generates a report annotated w
 <a name="KamaStrategy"></a>
 ## type [KamaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/kama_strategy.go#L16-L19>)
 
-KamaStrategy represents the configuration parameters for calculating the KAMA strategy. A closing price crossing above the KAMA suggests a bullish trend, while crossing below the KAMA indicats a bearish trend.
+KamaStrategy represents the configuration parameters for calculating the KAMA strategy. A closing price crossing above the KAMA suggests a bullish trend, while crossing below the KAMA indicates a bearish trend.
 
 ```go
 type KamaStrategy struct {
