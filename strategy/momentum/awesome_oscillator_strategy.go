@@ -13,8 +13,6 @@ import (
 
 // AwesomeOscillatorStrategy represents the configuration parameters for calculating the Awesome Oscillator strategy.
 type AwesomeOscillatorStrategy struct {
-	strategy.Strategy
-
 	// AwesomeOscillator represents the configuration parameters for calculating the Awesome Oscillator.
 	AwesomeOscillator *momentum.AwesomeOscillator[float64]
 }

@@ -14,8 +14,6 @@ import (
 
 // StopLossStrategy prevents a loss by recommending a sell action when the assets drops below the given threshold.
 type StopLossStrategy struct {
-	strategy.Strategy
-
 	// InnertStrategy is the inner strategy.
 	InnertStrategy strategy.Strategy
 

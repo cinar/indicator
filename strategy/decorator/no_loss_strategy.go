@@ -15,8 +15,6 @@ import (
 // NoLossStrategy prevents selling an asset at a loss. It modifies the recommendations of another strategy to ensure
 // that the asset is only sold if its value is at or above the original purchase price.
 type NoLossStrategy struct {
-	strategy.Strategy
-
 	// InnertStrategy is the inner strategy.
 	InnertStrategy strategy.Strategy
 }

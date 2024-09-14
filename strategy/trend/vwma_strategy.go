@@ -20,8 +20,6 @@ const (
 // The VwmaStrategy function uses SMA and VWMA indicators to provide a BUY action when
 // VWMA is above SMA, and a SELL signal when VWMA is below SMA, a HOLD otherwse.
 type VwmaStrategy struct {
-	strategy.Strategy
-
 	// VWMA indicator.
 	Vwma *trend.Vwma[float64]
 

@@ -15,8 +15,6 @@ import (
 // A TRIX value crossing above the zero line suggests a bullish trend, while crossing
 // below the zero line indicates a bearish trend.
 type TrixStrategy struct {
-	strategy.Strategy
-
 	// Trix represents the configuration parameters for calculating the TRIX.
 	Trix *trend.Trix[float64]
 }

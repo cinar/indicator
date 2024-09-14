@@ -19,8 +19,6 @@ import (
 // A Qstick above zero indicates increasing buying pressure, while
 // a Qstick below zero indicates increasing selling pressure.
 type QstickStrategy struct {
-	strategy.Strategy
-
 	// Qstick represents the configuration parameters for calculating the Qstick.
 	Qstick *momentum.Qstick[float64]
 }

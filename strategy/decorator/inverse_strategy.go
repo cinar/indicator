@@ -15,8 +15,6 @@ import (
 // InverseStrategy reverses the advice of another strategy. For example, if the original strategy suggests buying an
 // asset, InverseStrategy would recommend selling it.
 type InverseStrategy struct {
-	strategy.Strategy
-
 	// InnerStrategy is the inner strategy.
 	InnerStrategy strategy.Strategy
 }

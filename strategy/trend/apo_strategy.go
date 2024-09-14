@@ -16,8 +16,6 @@ import (
 // indicates a bearish trend. Positive APO values signify an upward trend, while
 // negative values signify a downward trend.
 type ApoStrategy struct {
-	strategy.Strategy
-
 	// Apo represents the configuration parameters for calculating the
 	// Absolute Price Oscillator (APO).
 	Apo *trend.Apo[float64]

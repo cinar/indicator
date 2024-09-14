@@ -11,8 +11,6 @@ import (
 
 // MajorityStrategy emits actionable recommendations aligned with what the strategies in the group recommends.
 type MajorityStrategy struct {
-	Strategy
-
 	// Strategies are the group of strategies that will be consulted to make an actionable recommendation.
 	Strategies []Strategy
 
