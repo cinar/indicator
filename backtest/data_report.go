@@ -42,7 +42,7 @@ func NewDataReport() *DataReport {
 }
 
 // Begin is called when the backtest begins.
-func (d *DataReport) Begin(_ []string, _ []strategy.Strategy) error {
+func (*DataReport) Begin(_ []string, _ []strategy.Strategy) error {
 	return nil
 }
 
@@ -76,11 +76,11 @@ func (d *DataReport) Write(assetName string, currentStrategy strategy.Strategy, 
 }
 
 // AssetEnd is called when backtesting for the given asset ends.
-func (d *DataReport) AssetEnd(_ string) error {
+func (*DataReport) AssetEnd(_ string) error {
 	return nil
 }
 
 // End is called when the backtest ends.
-func (d *DataReport) End() error {
+func (*DataReport) End() error {
 	return nil
 }

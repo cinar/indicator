@@ -32,9 +32,9 @@ The information provided on this project is strictly for informational purposes 
 - [type DataReport](<#DataReport>)
   - [func NewDataReport\(\) \*DataReport](<#NewDataReport>)
   - [func \(d \*DataReport\) AssetBegin\(name string, strategies \[\]strategy.Strategy\) error](<#DataReport.AssetBegin>)
-  - [func \(d \*DataReport\) AssetEnd\(\_ string\) error](<#DataReport.AssetEnd>)
-  - [func \(d \*DataReport\) Begin\(\_ \[\]string, \_ \[\]strategy.Strategy\) error](<#DataReport.Begin>)
-  - [func \(d \*DataReport\) End\(\) error](<#DataReport.End>)
+  - [func \(\*DataReport\) AssetEnd\(\_ string\) error](<#DataReport.AssetEnd>)
+  - [func \(\*DataReport\) Begin\(\_ \[\]string, \_ \[\]strategy.Strategy\) error](<#DataReport.Begin>)
+  - [func \(\*DataReport\) End\(\) error](<#DataReport.End>)
   - [func \(d \*DataReport\) Write\(assetName string, currentStrategy strategy.Strategy, snapshots \<\-chan \*asset.Snapshot, actions \<\-chan strategy.Action, outcomes \<\-chan float64\) error](<#DataReport.Write>)
 - [type DataStrategyResult](<#DataStrategyResult>)
 - [type HTMLReport](<#HTMLReport>)
@@ -165,7 +165,7 @@ AssetBegin is called when backtesting for the given asset begins.
 ### func \(\*DataReport\) [AssetEnd](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L79>)
 
 ```go
-func (d *DataReport) AssetEnd(_ string) error
+func (*DataReport) AssetEnd(_ string) error
 ```
 
 AssetEnd is called when backtesting for the given asset ends.
@@ -174,7 +174,7 @@ AssetEnd is called when backtesting for the given asset ends.
 ### func \(\*DataReport\) [Begin](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L45>)
 
 ```go
-func (d *DataReport) Begin(_ []string, _ []strategy.Strategy) error
+func (*DataReport) Begin(_ []string, _ []strategy.Strategy) error
 ```
 
 Begin is called when the backtest begins.
@@ -183,7 +183,7 @@ Begin is called when the backtest begins.
 ### func \(\*DataReport\) [End](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L84>)
 
 ```go
-func (d *DataReport) End() error
+func (*DataReport) End() error
 ```
 
 End is called when the backtest ends.
