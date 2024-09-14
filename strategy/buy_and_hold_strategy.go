@@ -14,7 +14,6 @@ import (
 // a benchmark for evaluating the performance of alternative
 // strategies against a baseline of passive asset ownership.
 type BuyAndHoldStrategy struct {
-	Strategy
 }
 
 // NewBuyAndHoldStrategy function initializes a new buy and hold strategy instance.

@@ -15,8 +15,6 @@ import (
 // the group **reach the same actionable conclusion**. This can be a conservative approach, potentially
 // delaying recommendations until full consensus is reached.
 type AndStrategy struct {
-	Strategy
-
 	// Strategies are the group of strategies that will be consulted to make an actionable recommendation.
 	Strategies []Strategy
 

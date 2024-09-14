@@ -15,8 +15,6 @@ import (
 // Generates BUY action when j value crosses above both k and d values.
 // Generates SELL action when j value crosses below both k and d values.
 type KdjStrategy struct {
-	strategy.Strategy
-
 	// Kdj represents the configuration parameters for calculating the KDJ.
 	Kdj *trend.Kdj[float64]
 }

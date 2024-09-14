@@ -24,8 +24,6 @@ const (
 
 // MacdRsiStrategy represents the configuration parameters for calculating the MACD-RSI strategy.
 type MacdRsiStrategy struct {
-	strategy.Strategy
-
 	// MacdStrategy is the MACD strategy instance.
 	MacdStrategy *trend.MacdStrategy
 

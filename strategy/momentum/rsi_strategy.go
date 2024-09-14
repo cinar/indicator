@@ -23,8 +23,6 @@ const (
 
 // RsiStrategy represents the configuration parameters for calculating the RSI strategy.
 type RsiStrategy struct {
-	strategy.Strategy
-
 	// Rsi represents the configuration parameters for calculating the Relative Strength Index (RSI).
 	Rsi *momentum.Rsi[float64]
 

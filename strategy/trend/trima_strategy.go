@@ -23,8 +23,6 @@ const (
 // A bullish cross occurs when the short TRIMA moves above the long TRIMA.
 // A bearish cross occurs when the short TRIMA moves below the long TRIME.
 type TrimaStrategy struct {
-	strategy.Strategy
-
 	// Trima1 represents the configuration parameters for calculating the short TRIMA.
 	Short *trend.Trima[float64]
 

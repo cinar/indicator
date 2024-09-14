@@ -18,8 +18,6 @@ import (
 // bullish trend, while crossing below the signal line indicates a
 // bearish trend.
 type MacdStrategy struct {
-	strategy.Strategy
-
 	// Macd represents the configuration parameters for calculating the
 	// Moving Average Convergence Divergence (MACD).
 	Macd *trend.Macd[float64]

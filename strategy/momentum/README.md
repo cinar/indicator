@@ -112,21 +112,19 @@ func AllStrategies() []strategy.Strategy
 AllStrategies returns a slice containing references to all available momentum strategies.
 
 <a name="AwesomeOscillatorStrategy"></a>
-## type [AwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L15-L20>)
+## type [AwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L15-L18>)
 
 AwesomeOscillatorStrategy represents the configuration parameters for calculating the Awesome Oscillator strategy.
 
 ```go
 type AwesomeOscillatorStrategy struct {
-    strategy.Strategy
-
     // AwesomeOscillator represents the configuration parameters for calculating the Awesome Oscillator.
     AwesomeOscillator *momentum.AwesomeOscillator[float64]
 }
 ```
 
 <a name="NewAwesomeOscillatorStrategy"></a>
-### func [NewAwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L23>)
+### func [NewAwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L21>)
 
 ```go
 func NewAwesomeOscillatorStrategy() *AwesomeOscillatorStrategy
@@ -135,7 +133,7 @@ func NewAwesomeOscillatorStrategy() *AwesomeOscillatorStrategy
 NewAwesomeOscillatorStrategy function initializes a new Awesome Oscillator strategy with the default parameters.
 
 <a name="AwesomeOscillatorStrategy.Compute"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L35>)
+### func \(\*AwesomeOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L33>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -144,7 +142,7 @@ func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="AwesomeOscillatorStrategy.Name"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L30>)
+### func \(\*AwesomeOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L28>)
 
 ```go
 func (*AwesomeOscillatorStrategy) Name() string
@@ -153,7 +151,7 @@ func (*AwesomeOscillatorStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AwesomeOscillatorStrategy.Report"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L62>)
+### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/awesome_oscillator_strategy.go#L60>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -162,14 +160,12 @@ func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Rep
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="RsiStrategy"></a>
-## type [RsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L25-L36>)
+## type [RsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L25-L34>)
 
 RsiStrategy represents the configuration parameters for calculating the RSI strategy.
 
 ```go
 type RsiStrategy struct {
-    strategy.Strategy
-
     // Rsi represents the configuration parameters for calculating the Relative Strength Index (RSI).
     Rsi *momentum.Rsi[float64]
 
@@ -182,7 +178,7 @@ type RsiStrategy struct {
 ```
 
 <a name="NewRsiStrategy"></a>
-### func [NewRsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L39>)
+### func [NewRsiStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L37>)
 
 ```go
 func NewRsiStrategy() *RsiStrategy
@@ -191,7 +187,7 @@ func NewRsiStrategy() *RsiStrategy
 NewRsiStrategy function initializes a new RSI strategy instance with the default parameters.
 
 <a name="NewRsiStrategyWith"></a>
-### func [NewRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L47>)
+### func [NewRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L45>)
 
 ```go
 func NewRsiStrategyWith(buyAt, sellAt float64) *RsiStrategy
@@ -200,7 +196,7 @@ func NewRsiStrategyWith(buyAt, sellAt float64) *RsiStrategy
 NewRsiStrategyWith function initializes a new RSI strategy instance with the given parameters.
 
 <a name="RsiStrategy.Compute"></a>
-### func \(\*RsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L61>)
+### func \(\*RsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L59>)
 
 ```go
 func (r *RsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -209,7 +205,7 @@ func (r *RsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="RsiStrategy.Name"></a>
-### func \(\*RsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L56>)
+### func \(\*RsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L54>)
 
 ```go
 func (r *RsiStrategy) Name() string
@@ -218,7 +214,7 @@ func (r *RsiStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="RsiStrategy.Report"></a>
-### func \(\*RsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L85>)
+### func \(\*RsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/rsi_strategy.go#L83>)
 
 ```go
 func (r *RsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

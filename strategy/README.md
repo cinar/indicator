@@ -178,14 +178,12 @@ func (a Action) Annotation() string
 Annotation returns a single character string representing the recommended action. It returns "S" for Sell, "B" for Buy, and an empty string for Hold.
 
 <a name="AndStrategy"></a>
-## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L17-L25>)
+## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L17-L23>)
 
 AndStrategy combines multiple strategies and emits actionable recommendations when \*\*all\*\* strategies in the group \*\*reach the same actionable conclusion\*\*. This can be a conservative approach, potentially delaying recommendations until full consensus is reached.
 
 ```go
 type AndStrategy struct {
-    Strategy
-
     // Strategies are the group of strategies that will be consulted to make an actionable recommendation.
     Strategies []Strategy
     // contains filtered or unexported fields
@@ -193,7 +191,7 @@ type AndStrategy struct {
 ```
 
 <a name="NewAndStrategy"></a>
-### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L28>)
+### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L26>)
 
 ```go
 func NewAndStrategy(name string) *AndStrategy
@@ -202,7 +200,7 @@ func NewAndStrategy(name string) *AndStrategy
 NewAndStrategy function initializes an empty and strategies group with the given name.
 
 <a name="AndStrategy.Compute"></a>
-### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L41>)
+### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L39>)
 
 ```go
 func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -211,7 +209,7 @@ func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="AndStrategy.Name"></a>
-### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L36>)
+### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L34>)
 
 ```go
 func (a *AndStrategy) Name() string
@@ -220,7 +218,7 @@ func (a *AndStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AndStrategy.Report"></a>
-### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L71>)
+### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L69>)
 
 ```go
 func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -229,18 +227,17 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="BuyAndHoldStrategy"></a>
-## type [BuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L16-L18>)
+## type [BuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L16-L17>)
 
 BuyAndHoldStrategy defines an investment approach of acquiring and indefinitely retaining an asset. This strategy primarily serves as a benchmark for evaluating the performance of alternative strategies against a baseline of passive asset ownership.
 
 ```go
 type BuyAndHoldStrategy struct {
-    Strategy
 }
 ```
 
 <a name="NewBuyAndHoldStrategy"></a>
-### func [NewBuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L21>)
+### func [NewBuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L20>)
 
 ```go
 func NewBuyAndHoldStrategy() *BuyAndHoldStrategy
@@ -249,7 +246,7 @@ func NewBuyAndHoldStrategy() *BuyAndHoldStrategy
 NewBuyAndHoldStrategy function initializes a new buy and hold strategy instance.
 
 <a name="BuyAndHoldStrategy.Compute"></a>
-### func \(\*BuyAndHoldStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L32>)
+### func \(\*BuyAndHoldStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L31>)
 
 ```go
 func (*BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -258,7 +255,7 @@ func (*BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Acti
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="BuyAndHoldStrategy.Name"></a>
-### func \(\*BuyAndHoldStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L26>)
+### func \(\*BuyAndHoldStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L25>)
 
 ```go
 func (*BuyAndHoldStrategy) Name() string
@@ -267,7 +264,7 @@ func (*BuyAndHoldStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BuyAndHoldStrategy.Report"></a>
-### func \(\*BuyAndHoldStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L56>)
+### func \(\*BuyAndHoldStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L55>)
 
 ```go
 func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -276,14 +273,12 @@ func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="MajorityStrategy"></a>
-## type [MajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L13-L21>)
+## type [MajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L13-L19>)
 
 MajorityStrategy emits actionable recommendations aligned with what the strategies in the group recommends.
 
 ```go
 type MajorityStrategy struct {
-    Strategy
-
     // Strategies are the group of strategies that will be consulted to make an actionable recommendation.
     Strategies []Strategy
     // contains filtered or unexported fields
@@ -291,7 +286,7 @@ type MajorityStrategy struct {
 ```
 
 <a name="NewMajorityStrategy"></a>
-### func [NewMajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L24>)
+### func [NewMajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L22>)
 
 ```go
 func NewMajorityStrategy(name string) *MajorityStrategy
@@ -300,7 +295,7 @@ func NewMajorityStrategy(name string) *MajorityStrategy
 NewMajorityStrategy function initializes an empty majority strategies group with the given name.
 
 <a name="NewMajorityStrategyWith"></a>
-### func [NewMajorityStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L29>)
+### func [NewMajorityStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L27>)
 
 ```go
 func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrategy
@@ -309,7 +304,7 @@ func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrate
 NewMajorityStrategyWith function initializes a majority strategies group with the given name and strategies.
 
 <a name="MajorityStrategy.Compute"></a>
-### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L42>)
+### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L40>)
 
 ```go
 func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -318,7 +313,7 @@ func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Acti
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="MajorityStrategy.Name"></a>
-### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L37>)
+### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L35>)
 
 ```go
 func (a *MajorityStrategy) Name() string
@@ -327,7 +322,7 @@ func (a *MajorityStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="MajorityStrategy.Report"></a>
-### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L70>)
+### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L68>)
 
 ```go
 func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -336,14 +331,12 @@ func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="OrStrategy"></a>
-## type [OrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L14-L22>)
+## type [OrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L14-L20>)
 
 OrStrategy emits actionable recommendations when \*\*at least one\*\* strategy in the group recommends an action \*\*without any conflicting recommendations\*\* from other strategies.
 
 ```go
 type OrStrategy struct {
-    Strategy
-
     // Strategies are the group of strategies that will be consulted to make an actionable recommendation.
     Strategies []Strategy
     // contains filtered or unexported fields
@@ -351,7 +344,7 @@ type OrStrategy struct {
 ```
 
 <a name="NewOrStrategy"></a>
-### func [NewOrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L25>)
+### func [NewOrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L23>)
 
 ```go
 func NewOrStrategy(name string) *OrStrategy
@@ -360,7 +353,7 @@ func NewOrStrategy(name string) *OrStrategy
 NewOrStrategy function initializes an empty or strategies group with the given name.
 
 <a name="OrStrategy.Compute"></a>
-### func \(\*OrStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L38>)
+### func \(\*OrStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L36>)
 
 ```go
 func (a *OrStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
@@ -369,7 +362,7 @@ func (a *OrStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="OrStrategy.Name"></a>
-### func \(\*OrStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L33>)
+### func \(\*OrStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L31>)
 
 ```go
 func (a *OrStrategy) Name() string
@@ -378,7 +371,7 @@ func (a *OrStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="OrStrategy.Report"></a>
-### func \(\*OrStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L66>)
+### func \(\*OrStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L64>)
 
 ```go
 func (a *OrStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -469,7 +462,7 @@ type Strategy interface {
 ```
 
 <a name="AllAndStrategies"></a>
-### func [AllAndStrategies](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L94>)
+### func [AllAndStrategies](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L92>)
 
 ```go
 func AllAndStrategies(strategies []Strategy) []Strategy

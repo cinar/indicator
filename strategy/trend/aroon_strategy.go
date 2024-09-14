@@ -18,8 +18,6 @@ import (
 // Aroon Down, it suggests a bullish trend; when Aroon Down surpasses Aroon Up,
 // it indicates a bearish trend.
 type AroonStrategy struct {
-	strategy.Strategy
-
 	// Aroon represent the configuration for calculating the Aroon indicator.
 	Aroon *trend.Aroon[float64]
 }

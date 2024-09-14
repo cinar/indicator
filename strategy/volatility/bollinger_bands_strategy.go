@@ -15,8 +15,6 @@ import (
 // A closing value crossing above the upper band suggets a Buy signal, while crossing below the lower band
 // indivates a Sell signal.
 type BollingerBandsStrategy struct {
-	strategy.Strategy
-
 	// BollingerBands represents the configuration parameters for calculating the Bollinger Bands.
 	BollingerBands *volatility.BollingerBands[float64]
 }

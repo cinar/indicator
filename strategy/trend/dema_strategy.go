@@ -25,8 +25,6 @@ const (
 // A bullish cross occurs when DEMA with 5 days period moves above DEMA with 35 days period.
 // A bearish cross occurs when DEMA with 35 days period moves above DEMA With 5 days period.
 type DemaStrategy struct {
-	strategy.Strategy
-
 	// Dema1 represents the configuration parameters for
 	// calculating the first DEMA.
 	Dema1 *trend.Dema[float64]

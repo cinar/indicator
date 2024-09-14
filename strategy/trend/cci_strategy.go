@@ -15,8 +15,6 @@ import (
 // A CCI value crossing above the 100+ suggests a bullish trend, while crossing below
 // the 100- indicates a bearish trend.
 type CciStrategy struct {
-	strategy.Strategy
-
 	// Cci represents the configuration parameters for calculating the CCI.
 	Cci *trend.Cci[float64]
 }

@@ -16,8 +16,6 @@ import (
 // upward trend, while a negative value indicates a downward trend. A
 // BoP value of zero implies equilibrium between the two forces.
 type BopStrategy struct {
-	strategy.Strategy
-
 	// Bop represents the configuration parameters for calculating the
 	// Balance of Power (BoP).
 	Bop *trend.Bop[float64]

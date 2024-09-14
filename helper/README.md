@@ -37,6 +37,7 @@ The information provided on this project is strictly for informational purposes 
 - [func ChangeRatio\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangeRatio>)
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
 - [func CloseAndLogError\(closer io.Closer, message string\)](<#CloseAndLogError>)
+- [func CommonPeriod\(periods ...int\) int](<#CommonPeriod>)
 - [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
 - [func DaysBetween\(from, to time.Time\) int](<#DaysBetween>)
 - [func DecrementBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DecrementBy>)
@@ -75,6 +76,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
+- [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
 - [func Waitable\[T any\]\(wg \*sync.WaitGroup, c \<\-chan T\) \<\-chan T](<#Waitable>)
 - [type Bst](<#Bst>)
   - [func NewBst\[T Number\]\(\) \*Bst\[T\]](<#NewBst>)
@@ -321,6 +323,31 @@ func CloseAndLogError(closer io.Closer, message string)
 ```
 
 CloseAndLogError attempts to close the closer and logs any error.
+
+<a name="CommonPeriod"></a>
+## func [CommonPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L24>)
+
+```go
+func CommonPeriod(periods ...int) int
+```
+
+CommonPeriod calculates the smallest period at which all data channels can be synchronized
+
+Example:
+
+```
+// Synchronize channels with periods 4, 2, and 3.
+commonPeriod := helper.CommonPeriod(4, 2, 3) // commonPeriod = 4
+
+// Synchronize the first channel
+c1 := helper.Sync(commonPeriod, 4, c1)
+
+// Synchronize the second channel
+c2 := helper.Sync(commonPeriod, 2, c2)
+
+// Synchronize the third channel
+c3 := helper.Sync(commonPeriod, 3, c3)
+```
 
 <a name="Count"></a>
 ## func [Count](<https://github.com/cinar/indicator/blob/master/helper/count.go#L25>)
@@ -914,6 +941,15 @@ bc := helper.SliceToChan([]int{1, 2, 3, 4, 5})
 actual := helper.Subtract(ac, bc)
 fmt.Println(helper.ChanToSlice(actual)) // [1, 2, 3, 4, 5]
 ```
+
+<a name="SyncPeriod"></a>
+## func [SyncPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L29>)
+
+```go
+func SyncPeriod[T any](commonPeriod, period int, c <-chan T) <-chan T
+```
+
+SyncPeriod adjusts the given channel to match the given common period.
 
 <a name="Waitable"></a>
 ## func [Waitable](<https://github.com/cinar/indicator/blob/master/helper/waitable.go#L11>)

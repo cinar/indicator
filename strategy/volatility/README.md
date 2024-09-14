@@ -48,21 +48,19 @@ func AllStrategies() []strategy.Strategy
 AllStrategies returns a slice containing references to all available volatility strategies.
 
 <a name="BollingerBandsStrategy"></a>
-## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L17-L22>)
+## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L17-L20>)
 
 BollingerBandsStrategy represents the configuration parameters for calculating the Bollinger Bands strategy. A closing value crossing above the upper band suggets a Buy signal, while crossing below the lower band indivates a Sell signal.
 
 ```go
 type BollingerBandsStrategy struct {
-    strategy.Strategy
-
     // BollingerBands represents the configuration parameters for calculating the Bollinger Bands.
     BollingerBands *volatility.BollingerBands[float64]
 }
 ```
 
 <a name="NewBollingerBandsStrategy"></a>
-### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L25>)
+### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L23>)
 
 ```go
 func NewBollingerBandsStrategy() *BollingerBandsStrategy
@@ -71,7 +69,7 @@ func NewBollingerBandsStrategy() *BollingerBandsStrategy
 NewBollingerBandsStrategy function initializes a new Bollinger Bands strategy instance.
 
 <a name="BollingerBandsStrategy.Compute"></a>
-### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L37>)
+### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L35>)
 
 ```go
 func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -80,7 +78,7 @@ func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="BollingerBandsStrategy.Name"></a>
-### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L32>)
+### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L30>)
 
 ```go
 func (*BollingerBandsStrategy) Name() string
@@ -89,7 +87,7 @@ func (*BollingerBandsStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BollingerBandsStrategy.Report"></a>
-### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L67>)
+### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L65>)
 
 ```go
 func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

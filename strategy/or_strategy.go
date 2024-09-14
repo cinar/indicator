@@ -12,8 +12,6 @@ import (
 // OrStrategy emits actionable recommendations when **at least one** strategy in the group recommends an
 // action **without any conflicting recommendations** from other strategies.
 type OrStrategy struct {
-	Strategy
-
 	// Strategies are the group of strategies that will be consulted to make an actionable recommendation.
 	Strategies []Strategy
 
