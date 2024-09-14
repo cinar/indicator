@@ -154,7 +154,7 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 			actions, outcomes := strategy.ComputeWithOutcome(currentStrategy, snapshotsSplice[0])
 			err = b.report.Write(name, currentStrategy, snapshotsSplice[1], actions, outcomes)
 			if err != nil {
-				log.Printf("Unable to report write for %s: %v", name, err)
+				log.Printf("Unable to write report for %s: %v", name, err)
 			}
 		}
 
