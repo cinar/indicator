@@ -29,6 +29,14 @@ The information provided on this project is strictly for informational purposes 
 - [type Backtest](<#Backtest>)
   - [func NewBacktest\(repository asset.Repository, report Report\) \*Backtest](<#NewBacktest>)
   - [func \(b \*Backtest\) Run\(\) error](<#Backtest.Run>)
+- [type DataReport](<#DataReport>)
+  - [func NewDataReport\(\) \*DataReport](<#NewDataReport>)
+  - [func \(d \*DataReport\) AssetBegin\(name string, strategies \[\]strategy.Strategy\) error](<#DataReport.AssetBegin>)
+  - [func \(\*DataReport\) AssetEnd\(\_ string\) error](<#DataReport.AssetEnd>)
+  - [func \(\*DataReport\) Begin\(\_ \[\]string, \_ \[\]strategy.Strategy\) error](<#DataReport.Begin>)
+  - [func \(\*DataReport\) End\(\) error](<#DataReport.End>)
+  - [func \(d \*DataReport\) Write\(assetName string, currentStrategy strategy.Strategy, snapshots \<\-chan \*asset.Snapshot, actions \<\-chan strategy.Action, outcomes \<\-chan float64\) error](<#DataReport.Write>)
+- [type DataStrategyResult](<#DataStrategyResult>)
 - [type HTMLReport](<#HTMLReport>)
   - [func NewHTMLReport\(outputDir string\) \*HTMLReport](<#NewHTMLReport>)
   - [func \(h \*HTMLReport\) AssetBegin\(name string, strategies \[\]strategy.Strategy\) error](<#HTMLReport.AssetBegin>)
@@ -122,6 +130,96 @@ func (b *Backtest) Run() error
 ```
 
 Run executes a comprehensive performance evaluation of the designated strategies, applied to a specified collection of assets. In the absence of explicitly defined assets, encompasses all assets within the repository. Likewise, in the absence of explicitly defined strategies, encompasses all the registered strategies.
+
+<a name="DataReport"></a>
+## type [DataReport](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L32-L35>)
+
+DataReport is the bactest data report enablign programmatic access to the backtest results.
+
+```go
+type DataReport struct {
+    // Results are the backtest results for the assets.
+    Results map[string][]*DataStrategyResult
+}
+```
+
+<a name="NewDataReport"></a>
+### func [NewDataReport](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L38>)
+
+```go
+func NewDataReport() *DataReport
+```
+
+NewDataReport initializes a new data report instance.
+
+<a name="DataReport.AssetBegin"></a>
+### func \(\*DataReport\) [AssetBegin](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L50>)
+
+```go
+func (d *DataReport) AssetBegin(name string, strategies []strategy.Strategy) error
+```
+
+AssetBegin is called when backtesting for the given asset begins.
+
+<a name="DataReport.AssetEnd"></a>
+### func \(\*DataReport\) [AssetEnd](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L79>)
+
+```go
+func (*DataReport) AssetEnd(_ string) error
+```
+
+AssetEnd is called when backtesting for the given asset ends.
+
+<a name="DataReport.Begin"></a>
+### func \(\*DataReport\) [Begin](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L45>)
+
+```go
+func (*DataReport) Begin(_ []string, _ []strategy.Strategy) error
+```
+
+Begin is called when the backtest begins.
+
+<a name="DataReport.End"></a>
+### func \(\*DataReport\) [End](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L84>)
+
+```go
+func (*DataReport) End() error
+```
+
+End is called when the backtest ends.
+
+<a name="DataReport.Write"></a>
+### func \(\*DataReport\) [Write](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L56>)
+
+```go
+func (d *DataReport) Write(assetName string, currentStrategy strategy.Strategy, snapshots <-chan *asset.Snapshot, actions <-chan strategy.Action, outcomes <-chan float64) error
+```
+
+Write writes the given strategy actions and outomes to the report.
+
+<a name="DataStrategyResult"></a>
+## type [DataStrategyResult](<https://github.com/cinar/indicator/blob/master/backtest/data_report.go#L14-L29>)
+
+DataStrategyResult is the strategy result.
+
+```go
+type DataStrategyResult struct {
+    // Asset is the asset name.
+    Asset string
+
+    // Strategy is the strategy instnace.
+    Strategy strategy.Strategy
+
+    // Outcome is the strategy outcome.
+    Outcome float64
+
+    // Action is the final action recommended by the strategy.
+    Action strategy.Action
+
+    // Transactions are the action recommendations.
+    Transactions []strategy.Action
+}
+```
 
 <a name="HTMLReport"></a>
 ## type [HTMLReport](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L36-L53>)
