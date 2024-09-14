@@ -32,7 +32,7 @@ var htmlReportTmpl string
 //go:embed "html_asset_report.tmpl"
 var htmlAssetReportTmpl string
 
-// HTMLReport is the backtest HTML report interface.
+// HTMLReport is the backtest HTML report.
 type HTMLReport struct {
 	Report
 

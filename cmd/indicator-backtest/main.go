@@ -13,7 +13,6 @@ import (
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/backtest"
-	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
 	"github.com/cinar/indicator/v2/strategy/compound"
 	"github.com/cinar/indicator/v2/strategy/momentum"
@@ -22,15 +21,14 @@ import (
 )
 
 func main() {
-	var sourceName string
-	var sourceConfig string
-	var outputDir string
+	var repositoryName string
+	var repositoryConfig string
+	var reportName string
+	var reportConfig string
 	var workers int
 	var lastDays int
-	var writeStrategyRerpots bool
 	var addSplits bool
 	var addAnds bool
-	var dateFormat string
 
 	fmt.Fprintln(os.Stderr, "Indicator Backtest")
 	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
@@ -38,45 +36,45 @@ func main() {
 	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
 	fmt.Fprintln(os.Stderr)
 
-	flag.StringVar(&sourceName, "source-name", "filesystem", "source repository type")
-	flag.StringVar(&sourceConfig, "source-config", "", "source repository config")
-	flag.StringVar(&outputDir, "output", ".", "output directory")
+	flag.StringVar(&repositoryName, "repository-name", "filesystem", "repository name")
+	flag.StringVar(&repositoryConfig, "repository-config", "", "repository config")
+	flag.StringVar(&reportName, "report-name", "html", "report name")
+	flag.StringVar(&reportConfig, "report-config", ".", "report type")
 	flag.IntVar(&workers, "workers", backtest.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", backtest.DefaultLastDays, "number of days to do backtest")
-	flag.BoolVar(&writeStrategyRerpots, "write-strategy-reports", backtest.DefaultWriteStrategyReports, "write individual strategy reports")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
-	flag.StringVar(&dateFormat, "date-format", helper.DefaultReportDateFormat, "date format to use")
 	flag.Parse()
 
-	source, err := asset.NewRepository(sourceName, sourceConfig)
+	source, err := asset.NewRepository(repositoryName, repositoryConfig)
 	if err != nil {
 		log.Fatalf("unable to initialize source: %v", err)
 	}
 
-	htmlReport := backtest.NewHTMLReport(outputDir)
-	htmlReport.WriteStrategyReports = writeStrategyRerpots
-	htmlReport.DateFormat = dateFormat
+	report, err := backtest.NewReport(repositoryName, repositoryConfig)
+	if err != nil {
+		log.Fatalf("unable to initialize report: %v", err)
+	}
 
-	backtest := backtest.NewBacktest(source, htmlReport)
-	backtest.Workers = workers
-	backtest.LastDays = lastDays
-	backtest.Names = append(backtest.Names, flag.Args()...)
-	backtest.Strategies = append(backtest.Strategies, compound.AllStrategies()...)
-	backtest.Strategies = append(backtest.Strategies, momentum.AllStrategies()...)
-	backtest.Strategies = append(backtest.Strategies, strategy.AllStrategies()...)
-	backtest.Strategies = append(backtest.Strategies, trend.AllStrategies()...)
-	backtest.Strategies = append(backtest.Strategies, volatility.AllStrategies()...)
+	backtester := backtest.NewBacktest(source, report)
+	backtester.Workers = workers
+	backtester.LastDays = lastDays
+	backtester.Names = append(backtester.Names, flag.Args()...)
+	backtester.Strategies = append(backtester.Strategies, compound.AllStrategies()...)
+	backtester.Strategies = append(backtester.Strategies, momentum.AllStrategies()...)
+	backtester.Strategies = append(backtester.Strategies, strategy.AllStrategies()...)
+	backtester.Strategies = append(backtester.Strategies, trend.AllStrategies()...)
+	backtester.Strategies = append(backtester.Strategies, volatility.AllStrategies()...)
 
 	if addSplits {
-		backtest.Strategies = append(backtest.Strategies, strategy.AllSplitStrategies(backtest.Strategies)...)
+		backtester.Strategies = append(backtester.Strategies, strategy.AllSplitStrategies(backtester.Strategies)...)
 	}
 
 	if addAnds {
-		backtest.Strategies = append(backtest.Strategies, strategy.AllAndStrategies(backtest.Strategies)...)
+		backtester.Strategies = append(backtester.Strategies, strategy.AllAndStrategies(backtester.Strategies)...)
 	}
 
-	err = backtest.Run()
+	err = backtester.Run()
 	if err != nil {
 		log.Fatalf("unable to run backtest: %v", err)
 	}
