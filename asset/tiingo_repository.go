@@ -9,7 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -106,6 +106,9 @@ type TiingoRepository struct {
 
 	// BaseURL is the Tiingo API URL.
 	BaseURL string
+
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
 }
 
 // NewTiingoRepository initializes a file system repository with
@@ -115,6 +118,7 @@ func NewTiingoRepository(apiKey string) *TiingoRepository {
 		apiKey:  apiKey,
 		client:  &http.Client{},
 		BaseURL: "https://api.tiingo.com",
+		Logger:  slog.Default(),
 	}
 }
 
@@ -159,7 +163,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 
 		_, err = decoder.Token()
 		if err != nil {
-			log.Print(err)
+			r.Logger.Error("Unable to read token.", "error", err)
 			return
 		}
 
@@ -168,7 +172,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 
 			err = decoder.Decode(&data)
 			if err != nil {
-				log.Print(err)
+				r.Logger.Error("Unable to decode data.", "error", err)
 				break
 			}
 
@@ -177,13 +181,13 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 
 		_, err = decoder.Token()
 		if err != nil {
-			log.Printf("GetSince failed with %v", err)
+			r.Logger.Error("GetSince failed.", "error", err)
 			return
 		}
 
 		err = res.Body.Close()
 		if err != nil {
-			log.Print(err)
+			r.Logger.Error("Unable to close respose.", "error", err)
 		}
 	}()
 

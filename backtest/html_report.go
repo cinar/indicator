@@ -8,7 +8,7 @@ import (
 	// Go embed report template.
 	_ "embed"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"path"
 	"path/filepath"
@@ -50,6 +50,9 @@ type HTMLReport struct {
 
 	// DateFormat is the date format that is used in the reports.
 	DateFormat string
+
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
 }
 
 // htmlReportResult encapsulates the outcome of running a strategy.
@@ -80,6 +83,7 @@ func NewHTMLReport(outputDir string) *HTMLReport {
 		assetResults:         make(map[string][]*htmlReportResult),
 		WriteStrategyReports: DefaultWriteStrategyReports,
 		DateFormat:           helper.DefaultReportDateFormat,
+		Logger:               slog.Default(),
 	}
 }
 
@@ -168,7 +172,7 @@ func (h *HTMLReport) AssetEnd(name string) error {
 	bestResult := results[0]
 
 	// Report the best result for the current asset.
-	log.Printf("Best outcome for %s is %.2f%% with %s.", name, bestResult.Outcome, bestResult.StrategyName)
+	h.Logger.Info("Best outcome", "asset", name, "strategy", bestResult.StrategyName, "outcome", bestResult.Outcome)
 	h.bestResults = append(h.bestResults, bestResult)
 
 	// Write the asset report.

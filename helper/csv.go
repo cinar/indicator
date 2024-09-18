@@ -9,7 +9,7 @@ import (
 	"errors"
 	"io"
 	"io/fs"
-	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -44,6 +44,9 @@ type Csv[T any] struct {
 	// columns are the mappings between the CSV columns and
 	// the corresponding struct fields.
 	columns []csvColumn
+
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
 }
 
 // NewCsv function initializes a new CSV instance. The parameter
@@ -51,6 +54,7 @@ type Csv[T any] struct {
 func NewCsv[T any](hasHeader bool) (*Csv[T], error) {
 	c := &Csv[T]{
 		hasHeader: hasHeader,
+		Logger:    slog.Default(),
 	}
 
 	// Row type must be a pointer to struct.
@@ -101,7 +105,7 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T {
 		if c.hasHeader {
 			err := c.updateColumnIndexes(csvReader)
 			if err != nil {
-				log.Printf("Update colum index failed with %v", err)
+				c.Logger.Error("Unable to update the column indexes.", "error", err)
 				return
 			}
 		}
@@ -113,7 +117,7 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T {
 			}
 
 			if err != nil {
-				log.Printf("Read row failed with %v", err)
+				c.Logger.Error("Unable to read row.", "error", err)
 				break
 			}
 
@@ -128,7 +132,7 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T {
 				err := setReflectValue(rowValue.Field(column.FieldIndex),
 					record[column.ColumnIndex], column.Format)
 				if err != nil {
-					log.Printf("set value failed with %v", err)
+					c.Logger.Error("Unable to set value.", "error", err)
 					return
 				}
 			}
@@ -150,13 +154,13 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error) {
 	}
 
 	wg := &sync.WaitGroup{}
-	rows := Waitable[*T](wg, c.ReadFromReader(file))
+	rows := Waitable(wg, c.ReadFromReader(file))
 
 	go func() {
 		wg.Wait()
 		err := file.Close()
 		if err != nil {
-			log.Printf("file close failed with %v", err)
+			c.Logger.Error("Unable to close file.", "error", err)
 		}
 	}()
 
