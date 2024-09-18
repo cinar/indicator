@@ -8,7 +8,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"time"
 
@@ -39,14 +39,18 @@ func main() {
 	flag.IntVar(&delay, "delay", asset.DefaultSyncDelay, "delay between each get")
 	flag.Parse()
 
+	logger := slog.Default()
+
 	source, err := asset.NewRepository(sourceName, sourceConfig)
 	if err != nil {
-		log.Fatalf("unable to initialize source: %v", err)
+		logger.Error("Unable to initialize source.", "error", err)
+		os.Exit(1)
 	}
 
 	target, err := asset.NewRepository(targetName, targetConfig)
 	if err != nil {
-		log.Fatalf("unable to initialize target: %v", err)
+		logger.Error("Unable to initialize target.", "error", err)
+		os.Exit(1)
 	}
 
 	defaultStartDate := time.Now().AddDate(0, 0, -minusDays)
@@ -55,7 +59,8 @@ func main() {
 	if len(assets) == 0 {
 		assets, err = source.Assets()
 		if err != nil {
-			log.Fatalf("unable to get assets: %v", err)
+			logger.Error("Unable to get assets.", "error", err)
+			os.Exit(1)
 		}
 	}
 
@@ -63,9 +68,11 @@ func main() {
 	sync.Workers = workers
 	sync.Delay = delay
 	sync.Assets = assets
+	sync.Logger = logger
 
 	err = sync.Run(source, target, defaultStartDate)
 	if err != nil {
-		log.Fatalf("unable to sync repositories: %v", err)
+		logger.Error("Unable to sync repositories.", "error", err)
+		os.Exit(1)
 	}
 }

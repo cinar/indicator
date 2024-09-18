@@ -381,7 +381,7 @@ type Snapshot struct {
 ```
 
 <a name="Sync"></a>
-## type [Sync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L25-L35>)
+## type [Sync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L25-L38>)
 
 Sync represents the configuration parameters for synchronizing assets between repositories.
 
@@ -396,11 +396,14 @@ type Sync struct {
     // Assets is the name of the assets to be synced. If it is empty, all assets in the target repository
     // will be synced instead.
     Assets []string
+
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
 }
 ```
 
 <a name="NewSync"></a>
-### func [NewSync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L38>)
+### func [NewSync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L41>)
 
 ```go
 func NewSync() *Sync
@@ -409,7 +412,7 @@ func NewSync() *Sync
 NewSync function initializes a new sync instance with the default parameters.
 
 <a name="Sync.Run"></a>
-### func \(\*Sync\) [Run](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L47>)
+### func \(\*Sync\) [Run](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L51>)
 
 ```go
 func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error
@@ -502,7 +505,7 @@ type TiingoMeta struct {
 ```
 
 <a name="TiingoRepository"></a>
-## type [TiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L98-L109>)
+## type [TiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L98-L112>)
 
 TiingoRepository provides access to financial market data, retrieving asset snapshots, by interacting with the Tiingo Stock & Financial Markets API. To use this repository, you'll need a valid API key from https://www.tiingo.com.
 
@@ -512,12 +515,15 @@ type TiingoRepository struct {
 
     // BaseURL is the Tiingo API URL.
     BaseURL string
+
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewTiingoRepository"></a>
-### func [NewTiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L113>)
+### func [NewTiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L116>)
 
 ```go
 func NewTiingoRepository(apiKey string) *TiingoRepository
@@ -526,7 +532,7 @@ func NewTiingoRepository(apiKey string) *TiingoRepository
 NewTiingoRepository initializes a file system repository with the given API key.
 
 <a name="TiingoRepository.Append"></a>
-### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L234>)
+### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L238>)
 
 ```go
 func (*TiingoRepository) Append(_ string, _ <-chan *Snapshot) error
@@ -535,7 +541,7 @@ func (*TiingoRepository) Append(_ string, _ <-chan *Snapshot) error
 Append adds the given snapshows to the asset with the given name.
 
 <a name="TiingoRepository.Assets"></a>
-### func \(\*TiingoRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L122>)
+### func \(\*TiingoRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L126>)
 
 ```go
 func (*TiingoRepository) Assets() ([]string, error)
@@ -544,7 +550,7 @@ func (*TiingoRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the repository.
 
 <a name="TiingoRepository.Get"></a>
-### func \(\*TiingoRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L127>)
+### func \(\*TiingoRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L131>)
 
 ```go
 func (r *TiingoRepository) Get(name string) (<-chan *Snapshot, error)
@@ -553,7 +559,7 @@ func (r *TiingoRepository) Get(name string) (<-chan *Snapshot, error)
 Get attempts to return a channel of snapshots for the asset with the given name.
 
 <a name="TiingoRepository.GetSince"></a>
-### func \(\*TiingoRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L132>)
+### func \(\*TiingoRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L136>)
 
 ```go
 func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -562,7 +568,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="TiingoRepository.LastDate"></a>
-### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L194>)
+### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L198>)
 
 ```go
 func (r *TiingoRepository) LastDate(name string) (time.Time, error)

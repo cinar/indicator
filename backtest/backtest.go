@@ -20,7 +20,7 @@ package backtest
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"sync"
 	"time"
 
@@ -58,6 +58,9 @@ type Backtest struct {
 
 	// LastDays is the number of days backtest should go back.
 	LastDays int
+
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
 }
 
 // NewBacktest function initializes a new backtest instance.
@@ -69,6 +72,7 @@ func NewBacktest(repository asset.Repository, report Report) *Backtest {
 		Strategies: []strategy.Strategy{},
 		Workers:    DefaultBacktestWorkers,
 		LastDays:   DefaultLastDays,
+		Logger:     slog.Default(),
 	}
 }
 
@@ -130,10 +134,10 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 	since := time.Now().AddDate(0, 0, -b.LastDays)
 
 	for name := range names {
-		log.Printf("Backtesting %s...", name)
+		b.Logger.Info("Backtesting started.", "asset", name)
 		snapshots, err := b.repository.GetSince(name, since)
 		if err != nil {
-			log.Printf("Unable to retrieve the snapshots for %s: %v", name, err)
+			b.Logger.Error("Unable to retrieve snapshots.", "asset", name, "error", err)
 			continue
 		}
 
@@ -143,7 +147,7 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 		// Backtesting asset has begun.
 		err = b.report.AssetBegin(name, b.Strategies)
 		if err != nil {
-			log.Printf("Unable to asset begin for %s: %v", name, err)
+			b.Logger.Error("Unable to begin asset.", "asset", name, "error", err)
 			continue
 		}
 
@@ -154,14 +158,14 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 			actions, outcomes := strategy.ComputeWithOutcome(currentStrategy, snapshotsSplice[0])
 			err = b.report.Write(name, currentStrategy, snapshotsSplice[1], actions, outcomes)
 			if err != nil {
-				log.Printf("Unable to write report for %s: %v", name, err)
+				b.Logger.Error("Unable to write report.", "asset", name, "error", err)
 			}
 		}
 
 		// Backtesting asset had ended
 		err = b.report.AssetEnd(name)
 		if err != nil {
-			log.Printf("Unable to asset end for %s: %v", name, err)
+			b.Logger.Error("Unable to end asset.", "asset", name, "error", err)
 		}
 	}
 }

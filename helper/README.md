@@ -37,6 +37,7 @@ The information provided on this project is strictly for informational purposes 
 - [func ChangeRatio\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangeRatio>)
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
 - [func CloseAndLogError\(closer io.Closer, message string\)](<#CloseAndLogError>)
+- [func CloseAndLogErrorWithLogger\(closer io.Closer, message string, logger \*slog.Logger\)](<#CloseAndLogErrorWithLogger>)
 - [func CommonPeriod\(periods ...int\) int](<#CommonPeriod>)
 - [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
 - [func DaysBetween\(from, to time.Time\) int](<#DaysBetween>)
@@ -53,6 +54,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Head\[T Number\]\(c \<\-chan T, count int\) \<\-chan T](<#Head>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
 - [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
+- [func JSONToChanWithLogger\[T any\]\(r io.Reader, logger \*slog.Logger\) \<\-chan T](<#JSONToChanWithLogger>)
 - [func KeepNegatives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepNegatives>)
 - [func KeepPositives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepPositives>)
 - [func Last\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Last>)
@@ -176,7 +178,7 @@ fmt.Println(actual) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 ```
 
 <a name="AppendOrWriteToCsvFile"></a>
-## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L287>)
+## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L291>)
 
 ```go
 func AppendOrWriteToCsvFile[T any](fileName string, hasHeader bool, rows <-chan *T) error
@@ -323,6 +325,15 @@ func CloseAndLogError(closer io.Closer, message string)
 ```
 
 CloseAndLogError attempts to close the closer and logs any error.
+
+<a name="CloseAndLogErrorWithLogger"></a>
+## func [CloseAndLogErrorWithLogger](<https://github.com/cinar/indicator/blob/master/helper/closer.go#L18>)
+
+```go
+func CloseAndLogErrorWithLogger(closer io.Closer, message string, logger *slog.Logger)
+```
+
+CloseAndLogErrorWithLogger attempts to close the closer and logs any error to the given logger.
 
 <a name="CommonPeriod"></a>
 ## func [CommonPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L24>)
@@ -562,7 +573,7 @@ fmt.Println(helper.ChanToSlice(actual)) // [2, 3, 4, 5]
 ```
 
 <a name="JSONToChan"></a>
-## func [JSONToChan](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L16>)
+## func [JSONToChan](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L14>)
 
 ```go
 func JSONToChan[T any](r io.Reader) <-chan T
@@ -570,7 +581,14 @@ func JSONToChan[T any](r io.Reader) <-chan T
 
 JSONToChan reads values from the specified reader in JSON format into a channel of values.
 
-Example:
+<a name="JSONToChanWithLogger"></a>
+## func [JSONToChanWithLogger](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L19>)
+
+```go
+func JSONToChanWithLogger[T any](r io.Reader, logger *slog.Logger) <-chan T
+```
+
+JSONToChanWithLogger reads values from the specified reader in JSON format into a channel of values.
 
 <a name="KeepNegatives"></a>
 ## func [KeepNegatives](<https://github.com/cinar/indicator/blob/master/helper/keep_negatives.go#L15>)
@@ -765,7 +783,7 @@ fmt.Println(helper.ChanToSlice(squared)) // [4, 9, 25, 100]
 ```
 
 <a name="ReadFromCsvFile"></a>
-## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L274>)
+## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L278>)
 
 ```go
 func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error)
@@ -1037,18 +1055,21 @@ type BstNode[T Number] struct {
 ```
 
 <a name="Csv"></a>
-## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L40-L47>)
+## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L40-L50>)
 
 Csv represents the configuration for CSV reader and writer.
 
 ```go
 type Csv[T any] struct {
+
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewCsv"></a>
-### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L51>)
+### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L54>)
 
 ```go
 func NewCsv[T any](hasHeader bool) (*Csv[T], error)
@@ -1057,7 +1078,7 @@ func NewCsv[T any](hasHeader bool) (*Csv[T], error)
 NewCsv function initializes a new CSV instance. The parameter hasHeader indicates whether the CSV contains a header row.
 
 <a name="Csv[T].AppendToFile"></a>
-### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L170>)
+### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L174>)
 
 ```go
 func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
@@ -1066,7 +1087,7 @@ func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
 AppendToFile appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist. In append mode, the function assumes that the existing file's column order matches the field order of the given row struct to ensure consistent data structure.
 
 <a name="Csv[T].ReadFromFile"></a>
-### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L146>)
+### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L150>)
 
 ```go
 func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
@@ -1075,7 +1096,7 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
 ReadFromFile parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel.
 
 <a name="Csv[T].ReadFromReader"></a>
-### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L91>)
+### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L95>)
 
 ```go
 func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
@@ -1084,7 +1105,7 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
 ReadFromReader parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel.
 
 <a name="Csv[T].WriteToFile"></a>
-### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L186>)
+### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L190>)
 
 ```go
 func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error

@@ -7,13 +7,16 @@ package helper
 import (
 	"encoding/json"
 	"io"
-	"log"
+	"log/slog"
 )
 
 // JSONToChan reads values from the specified reader in JSON format into a channel of values.
-//
-// Example:
 func JSONToChan[T any](r io.Reader) <-chan T {
+	return JSONToChanWithLogger[T](r, slog.Default())
+}
+
+// JSONToChanWithLogger reads values from the specified reader in JSON format into a channel of values.
+func JSONToChanWithLogger[T any](r io.Reader, logger *slog.Logger) <-chan T {
 	c := make(chan T)
 
 	go func() {
@@ -23,12 +26,12 @@ func JSONToChan[T any](r io.Reader) <-chan T {
 
 		token, err := decoder.Token()
 		if err != nil {
-			log.Print(err)
+			logger.Error("Unable to read token.", "error", err)
 			return
 		}
 
 		if token != json.Delim('[') {
-			log.Printf("expecting start of array got %v", token)
+			logger.Error("Expecting start of array.", "token", token)
 			return
 		}
 
@@ -37,7 +40,7 @@ func JSONToChan[T any](r io.Reader) <-chan T {
 
 			err = decoder.Decode(&value)
 			if err != nil {
-				log.Print(err)
+				logger.Error("Unable to decode value.", "error", err)
 				return
 			}
 
@@ -46,12 +49,12 @@ func JSONToChan[T any](r io.Reader) <-chan T {
 
 		token, err = decoder.Token()
 		if err != nil {
-			log.Print(err)
+			logger.Error("Unable to read token.", "error", err)
 			return
 		}
 
 		if token != json.Delim(']') {
-			log.Printf("expecting end of array got %v", token)
+			logger.Error("Expecting end of array.", "token", token)
 			return
 		}
 	}()

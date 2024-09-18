@@ -6,13 +6,18 @@ package helper
 
 import (
 	"io"
-	"log"
+	"log/slog"
 )
 
 // CloseAndLogError attempts to close the closer and logs any error.
 func CloseAndLogError(closer io.Closer, message string) {
+	CloseAndLogErrorWithLogger(closer, message, slog.Default())
+}
+
+// CloseAndLogErrorWithLogger attempts to close the closer and logs any error to the given logger.
+func CloseAndLogErrorWithLogger(closer io.Closer, message string, logger *slog.Logger) {
 	err := closer.Close()
 	if err != nil {
-		log.Printf("%s: %v", message, err)
+		logger.Error(message, "error", err)
 	}
 }

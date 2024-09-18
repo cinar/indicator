@@ -91,7 +91,7 @@ func RegisterReportBuilder(name string, builder ReportBuilderFunc)
 RegisterReportBuilder registers the given builder.
 
 <a name="Backtest"></a>
-## type [Backtest](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L43-L61>)
+## type [Backtest](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L43-L64>)
 
 Backtest function rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy\-asset pairing.
 
@@ -109,12 +109,15 @@ type Backtest struct {
 
     // LastDays is the number of days backtest should go back.
     LastDays int
+
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewBacktest"></a>
-### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L64>)
+### func [NewBacktest](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L67>)
 
 ```go
 func NewBacktest(repository asset.Repository, report Report) *Backtest
@@ -123,7 +126,7 @@ func NewBacktest(repository asset.Repository, report Report) *Backtest
 NewBacktest function initializes a new backtest instance.
 
 <a name="Backtest.Run"></a>
-### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L79>)
+### func \(\*Backtest\) [Run](<https://github.com/cinar/indicator/blob/master/backtest/backtest.go#L83>)
 
 ```go
 func (b *Backtest) Run() error
@@ -222,7 +225,7 @@ type DataStrategyResult struct {
 ```
 
 <a name="HTMLReport"></a>
-## type [HTMLReport](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L36-L53>)
+## type [HTMLReport](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L36-L56>)
 
 HTMLReport is the backtest HTML report.
 
@@ -235,12 +238,15 @@ type HTMLReport struct {
 
     // DateFormat is the date format that is used in the reports.
     DateFormat string
+
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewHTMLReport"></a>
-### func [NewHTMLReport](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L77>)
+### func [NewHTMLReport](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L80>)
 
 ```go
 func NewHTMLReport(outputDir string) *HTMLReport
@@ -249,7 +255,7 @@ func NewHTMLReport(outputDir string) *HTMLReport
 NewHTMLReport initializes a new HTML report instance.
 
 <a name="HTMLReport.AssetBegin"></a>
-### func \(\*HTMLReport\) [AssetBegin](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L100>)
+### func \(\*HTMLReport\) [AssetBegin](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L104>)
 
 ```go
 func (h *HTMLReport) AssetBegin(name string, strategies []strategy.Strategy) error
@@ -258,7 +264,7 @@ func (h *HTMLReport) AssetBegin(name string, strategies []strategy.Strategy) err
 AssetBegin is called when backtesting for the given asset begins.
 
 <a name="HTMLReport.AssetEnd"></a>
-### func \(\*HTMLReport\) [AssetEnd](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L155>)
+### func \(\*HTMLReport\) [AssetEnd](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L159>)
 
 ```go
 func (h *HTMLReport) AssetEnd(name string) error
@@ -267,7 +273,7 @@ func (h *HTMLReport) AssetEnd(name string) error
 AssetEnd is called when backtesting for the given asset ends.
 
 <a name="HTMLReport.Begin"></a>
-### func \(\*HTMLReport\) [Begin](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L87>)
+### func \(\*HTMLReport\) [Begin](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L91>)
 
 ```go
 func (h *HTMLReport) Begin(assetNames []string, _ []strategy.Strategy) error
@@ -276,7 +282,7 @@ func (h *HTMLReport) Begin(assetNames []string, _ []strategy.Strategy) error
 Begin is called when the backtest starts.
 
 <a name="HTMLReport.End"></a>
-### func \(\*HTMLReport\) [End](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L184>)
+### func \(\*HTMLReport\) [End](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L188>)
 
 ```go
 func (h *HTMLReport) End() error
@@ -285,7 +291,7 @@ func (h *HTMLReport) End() error
 End is called when the backtest ends.
 
 <a name="HTMLReport.Write"></a>
-### func \(\*HTMLReport\) [Write](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L112>)
+### func \(\*HTMLReport\) [Write](<https://github.com/cinar/indicator/blob/master/backtest/html_report.go#L116>)
 
 ```go
 func (h *HTMLReport) Write(assetName string, currentStrategy strategy.Strategy, snapshots <-chan *asset.Snapshot, actions <-chan strategy.Action, outcomes <-chan float64) error

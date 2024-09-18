@@ -8,7 +8,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -46,19 +46,24 @@ func main() {
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
 	flag.Parse()
 
+	logger := slog.Default()
+
 	source, err := asset.NewRepository(repositoryName, repositoryConfig)
 	if err != nil {
-		log.Fatalf("unable to initialize source: %v", err)
+		logger.Error("Unable to initialize source.", "error", err)
+		os.Exit(1)
 	}
 
 	report, err := backtest.NewReport(repositoryName, repositoryConfig)
 	if err != nil {
-		log.Fatalf("unable to initialize report: %v", err)
+		logger.Error("Unable to initialize report.", "error", err)
+		os.Exit(1)
 	}
 
 	backtester := backtest.NewBacktest(source, report)
 	backtester.Workers = workers
 	backtester.LastDays = lastDays
+	backtester.Logger = logger
 	backtester.Names = append(backtester.Names, flag.Args()...)
 	backtester.Strategies = append(backtester.Strategies, compound.AllStrategies()...)
 	backtester.Strategies = append(backtester.Strategies, momentum.AllStrategies()...)
@@ -76,6 +81,7 @@ func main() {
 
 	err = backtester.Run()
 	if err != nil {
-		log.Fatalf("unable to run backtest: %v", err)
+		logger.Error("Unable to run backtest.", "error", err)
+		os.Exit(1)
 	}
 }
