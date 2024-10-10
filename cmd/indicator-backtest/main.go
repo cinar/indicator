@@ -54,7 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	report, err := backtest.NewReport(repositoryName, repositoryConfig)
+	report, err := backtest.NewReport(reportName, reportConfig)
 	if err != nil {
 		logger.Error("Unable to initialize report.", "error", err)
 		os.Exit(1)
