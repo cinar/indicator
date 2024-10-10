@@ -23,9 +23,9 @@ type AndStrategy struct {
 }
 
 // NewAndStrategy function initializes an empty and strategies group with the given name.
-func NewAndStrategy(name string) *AndStrategy {
+func NewAndStrategy(name string, strategies ...Strategy) *AndStrategy {
 	return &AndStrategy{
-		Strategies: []Strategy{},
+		Strategies: strategies,
 		name:       name,
 	}
 }
