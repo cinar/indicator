@@ -20,9 +20,9 @@ type OrStrategy struct {
 }
 
 // NewOrStrategy function initializes an empty or strategies group with the given name.
-func NewOrStrategy(name string) *OrStrategy {
+func NewOrStrategy(name string, strategies ...Strategy) *OrStrategy {
 	return &OrStrategy{
-		Strategies: []Strategy{},
+		Strategies: strategies,
 		name:       name,
 	}
 }
