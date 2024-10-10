@@ -35,7 +35,7 @@ The information provided on this project is strictly for informational purposes 
 - [type Action](<#Action>)
   - [func \(a Action\) Annotation\(\) string](<#Action.Annotation>)
 - [type AndStrategy](<#AndStrategy>)
-  - [func NewAndStrategy\(name string\) \*AndStrategy](<#NewAndStrategy>)
+  - [func NewAndStrategy\(name string, strategies ...Strategy\) \*AndStrategy](<#NewAndStrategy>)
   - [func \(a \*AndStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AndStrategy.Compute>)
   - [func \(a \*AndStrategy\) Name\(\) string](<#AndStrategy.Name>)
   - [func \(a \*AndStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AndStrategy.Report>)
@@ -51,7 +51,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*MajorityStrategy\) Name\(\) string](<#MajorityStrategy.Name>)
   - [func \(a \*MajorityStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#MajorityStrategy.Report>)
 - [type OrStrategy](<#OrStrategy>)
-  - [func NewOrStrategy\(name string\) \*OrStrategy](<#NewOrStrategy>)
+  - [func NewOrStrategy\(name string, strategies ...Strategy\) \*OrStrategy](<#NewOrStrategy>)
   - [func \(a \*OrStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#OrStrategy.Compute>)
   - [func \(a \*OrStrategy\) Name\(\) string](<#OrStrategy.Name>)
   - [func \(a \*OrStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#OrStrategy.Report>)
@@ -194,7 +194,7 @@ type AndStrategy struct {
 ### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L26>)
 
 ```go
-func NewAndStrategy(name string) *AndStrategy
+func NewAndStrategy(name string, strategies ...Strategy) *AndStrategy
 ```
 
 NewAndStrategy function initializes an empty and strategies group with the given name.
@@ -347,7 +347,7 @@ type OrStrategy struct {
 ### func [NewOrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L23>)
 
 ```go
-func NewOrStrategy(name string) *OrStrategy
+func NewOrStrategy(name string, strategies ...Strategy) *OrStrategy
 ```
 
 NewOrStrategy function initializes an empty or strategies group with the given name.
