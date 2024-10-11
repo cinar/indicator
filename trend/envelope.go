@@ -28,10 +28,10 @@ type Envelope[T helper.Number] struct {
 }
 
 // NewEnvelope function initializes a new Envelope instance with the default parameters.
-func NewEnvelope[T helper.Number](ma Ma[T]) *Envelope[T] {
+func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T] {
 	return &Envelope[T]{
 		Ma:         ma,
-		Percentage: DefaultEnvelopePercentage,
+		Percentage: percentage,
 	}
 }
 
@@ -39,6 +39,7 @@ func NewEnvelope[T helper.Number](ma Ma[T]) *Envelope[T] {
 func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 	return NewEnvelope(
 		NewSmaWithPeriod[T](DefaultEnvelopePeriod),
+		DefaultEnvelopePercentage,
 	)
 }
 
@@ -46,6 +47,7 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 func NewEnvelopeWithEma[T helper.Number]() *Envelope[T] {
 	return NewEnvelope(
 		NewEmaWithPeriod[T](DefaultEnvelopePeriod),
+		DefaultEnvelopePercentage,
 	)
 }
 

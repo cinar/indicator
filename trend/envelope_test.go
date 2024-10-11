@@ -86,9 +86,7 @@ func TestEnvelopeWithEma(t *testing.T) {
 func TestEnvelopeString(t *testing.T) {
 	expected := "Envelope(SMA(1),2)"
 
-	envelope := trend.NewEnvelope(trend.NewSmaWithPeriod[float64](1))
-	envelope.Percentage = 2
-
+	envelope := trend.NewEnvelope(trend.NewSmaWithPeriod[float64](1), 2)
 	actual := envelope.String()
 
 	if actual != expected {

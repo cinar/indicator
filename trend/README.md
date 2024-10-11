@@ -50,7 +50,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(e \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
   - [func \(e \*Ema\[T\]\) String\(\) string](<#Ema[T].String>)
 - [type Envelope](<#Envelope>)
-  - [func NewEnvelope\[T helper.Number\]\(ma Ma\[T\]\) \*Envelope\[T\]](<#NewEnvelope>)
+  - [func NewEnvelope\[T helper.Number\]\(ma Ma\[T\], percentage T\) \*Envelope\[T\]](<#NewEnvelope>)
   - [func NewEnvelopeWithEma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithEma>)
   - [func NewEnvelopeWithSma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithSma>)
   - [func \(e \*Envelope\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Envelope[T].Compute>)
@@ -665,13 +665,13 @@ type Envelope[T helper.Number] struct {
 ### func [NewEnvelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L31>)
 
 ```go
-func NewEnvelope[T helper.Number](ma Ma[T]) *Envelope[T]
+func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T]
 ```
 
 NewEnvelope function initializes a new Envelope instance with the default parameters.
 
 <a name="NewEnvelopeWithEma"></a>
-### func [NewEnvelopeWithEma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L46>)
+### func [NewEnvelopeWithEma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L47>)
 
 ```go
 func NewEnvelopeWithEma[T helper.Number]() *Envelope[T]
@@ -689,7 +689,7 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T]
 NewEnvelopeWithSma function initalizes a new Envelope instance using SMA.
 
 <a name="Envelope[T].Compute"></a>
-### func \(\*Envelope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L53>)
+### func \(\*Envelope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L55>)
 
 ```go
 func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -698,7 +698,7 @@ func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the Envelope over the specified period.
 
 <a name="Envelope[T].IdlePeriod"></a>
-### func \(\*Envelope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L73>)
+### func \(\*Envelope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L75>)
 
 ```go
 func (e *Envelope[T]) IdlePeriod() int
@@ -707,7 +707,7 @@ func (e *Envelope[T]) IdlePeriod() int
 IdlePeriod is the initial period that Envelope yield any results.
 
 <a name="Envelope[T].String"></a>
-### func \(\*Envelope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L78>)
+### func \(\*Envelope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L80>)
 
 ```go
 func (e *Envelope[T]) String() string
