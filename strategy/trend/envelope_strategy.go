@@ -47,6 +47,8 @@ func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan stra
 		2,
 	)
 
+	closingsSplice[1] = helper.Skip(closingsSplice[1], e.Envelope.IdlePeriod())
+
 	uppers, middles, lowers := e.Envelope.Compute(closingsSplice[0])
 	go helper.Drain(middles)
 
@@ -89,32 +91,27 @@ func (e *EnvelopeStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	)
 
 	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshotsSplice[1]), 2)
-	closingsSplice[1] = helper.Skip(closingsSplice[1], t.IdlePeriod())
+	closingsSplice[0] = helper.Skip(closingsSplice[0], e.Envelope.IdlePeriod())
 
-	tsisSplice := helper.Duplicate(t.Tsi.Compute(closingsSplice[0]), 2)
-	tsisSplice[0] = helper.Skip(tsisSplice[0], t.Signal.IdlePeriod())
+	uppers, middles, lowers := e.Envelope.Compute(closingsSplice[1])
 
-	signals := t.Signal.Compute(tsisSplice[1])
-
-	actions, outcomes := strategy.ComputeWithOutcome(t, snapshotsSplice[2])
-	actions = helper.Skip(actions, t.IdlePeriod())
-	outcomes = helper.Skip(outcomes, t.IdlePeriod())
+	actions, outcomes := strategy.ComputeWithOutcome(e, snapshotsSplice[2])
+	actions = helper.Skip(actions, e.Envelope.IdlePeriod())
+	outcomes = helper.Skip(outcomes, e.Envelope.IdlePeriod())
 
 	annotations := strategy.ActionsToAnnotations(actions)
 	outcomes = helper.MultiplyBy(outcomes, 100)
 
-	report := helper.NewReport(t.Name(), dates)
+	report := helper.NewReport(e.Name(), dates)
 	report.AddChart()
-	report.AddChart()
 
-	report.AddColumn(helper.NewNumericReportColumn("Close", closingsSplice[1]))
+	report.AddColumn(helper.NewNumericReportColumn("Close", closingsSplice[0]))
+	report.AddColumn(helper.NewNumericReportColumn("Upper", uppers))
+	report.AddColumn(helper.NewNumericReportColumn("Middle", middles))
+	report.AddColumn(helper.NewNumericReportColumn("Lower", lowers))
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations))
 
-	report.AddColumn(helper.NewNumericReportColumn("TSI", tsisSplice[0]), 1)
-	report.AddColumn(helper.NewNumericReportColumn("Signal", signals), 1)
-
-	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
-
-	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
 }
