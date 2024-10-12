@@ -51,6 +51,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(d \*DemaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DemaStrategy.Compute>)
   - [func \(\*DemaStrategy\) Name\(\) string](<#DemaStrategy.Name>)
   - [func \(d \*DemaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DemaStrategy.Report>)
+- [type EnvelopeStrategy](<#EnvelopeStrategy>)
+  - [func NewEnvelopeStrategy\(\) \*EnvelopeStrategy](<#NewEnvelopeStrategy>)
+  - [func NewEnvelopeStrategyWith\(envelope \*trend.Envelope\[float64\]\) \*EnvelopeStrategy](<#NewEnvelopeStrategyWith>)
+  - [func \(e \*EnvelopeStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#EnvelopeStrategy.Compute>)
+  - [func \(e \*EnvelopeStrategy\) Name\(\) string](<#EnvelopeStrategy.Name>)
+  - [func \(e \*EnvelopeStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#EnvelopeStrategy.Report>)
 - [type GoldenCrossStrategy](<#GoldenCrossStrategy>)
   - [func NewGoldenCrossStrategy\(\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategy>)
   - [func NewGoldenCrossStrategyWith\(fastPeriod, slowPeriod int\) \*GoldenCrossStrategy](<#NewGoldenCrossStrategyWith>)
@@ -432,6 +438,63 @@ Name returns the name of the strategy.
 
 ```go
 func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="EnvelopeStrategy"></a>
+## type [EnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L19-L22>)
+
+EnvelopeStrategy represents the configuration parameters for calculating the Envelope strategy. When the closing is above the upper band suggests a Sell recommendation, and when the closing is below the lower band suggests a buy recommendation.
+
+```go
+type EnvelopeStrategy struct {
+    // Envelope is the envelope indicator instance.
+    Envelope *trend.Envelope[float64]
+}
+```
+
+<a name="NewEnvelopeStrategy"></a>
+### func [NewEnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L25>)
+
+```go
+func NewEnvelopeStrategy() *EnvelopeStrategy
+```
+
+NewEnvelopeStrategy function initializes a new Envelope strategy with the default parameters.
+
+<a name="NewEnvelopeStrategyWith"></a>
+### func [NewEnvelopeStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L32>)
+
+```go
+func NewEnvelopeStrategyWith(envelope *trend.Envelope[float64]) *EnvelopeStrategy
+```
+
+NewEnvelopeStrategyWith function initializes a new Envelope strategy with the given Envelope instance.
+
+<a name="EnvelopeStrategy.Compute"></a>
+### func \(\*EnvelopeStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L44>)
+
+```go
+func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="EnvelopeStrategy.Name"></a>
+### func \(\*EnvelopeStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L39>)
+
+```go
+func (e *EnvelopeStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="EnvelopeStrategy.Report"></a>
+### func \(\*EnvelopeStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/envelope_strategy.go#L76>)
+
+```go
+func (e *EnvelopeStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

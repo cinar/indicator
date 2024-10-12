@@ -49,6 +49,13 @@ The information provided on this project is strictly for informational purposes 
   - [func \(e \*Ema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Ema[T].Compute>)
   - [func \(e \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
   - [func \(e \*Ema\[T\]\) String\(\) string](<#Ema[T].String>)
+- [type Envelope](<#Envelope>)
+  - [func NewEnvelope\[T helper.Number\]\(ma Ma\[T\], percentage T\) \*Envelope\[T\]](<#NewEnvelope>)
+  - [func NewEnvelopeWithEma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithEma>)
+  - [func NewEnvelopeWithSma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithSma>)
+  - [func \(e \*Envelope\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Envelope[T].Compute>)
+  - [func \(e \*Envelope\[T\]\) IdlePeriod\(\) int](<#Envelope[T].IdlePeriod>)
+  - [func \(e \*Envelope\[T\]\) String\(\) string](<#Envelope[T].String>)
 - [type Hma](<#Hma>)
   - [func NewHmaWithPeriod\[T helper.Number\]\(period int\) \*Hma\[T\]](<#NewHmaWithPeriod>)
   - [func \(h \*Hma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Hma[T].Compute>)
@@ -169,6 +176,18 @@ const (
 
     // DefaultEmaSmoothing is the default EMA smooting of 2.
     DefaultEmaSmoothing = 2
+)
+```
+
+<a name="DefaultEnvelopePercentage"></a>
+
+```go
+const (
+    // DefaultEnvelopePercentage is the default envelope percentage of 20%.
+    DefaultEnvelopePercentage = 20
+
+    // DefaultEnvelopePeriod is the default envelope period of 20.
+    DefaultEnvelopePeriod = 20
 )
 ```
 
@@ -626,6 +645,75 @@ func (e *Ema[T]) String() string
 ```
 
 String is the string representation of the EMA.
+
+<a name="Envelope"></a>
+## type [Envelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L22-L28>)
+
+Envelope represents the parameters neededd to calcualte the Envelope.
+
+```go
+type Envelope[T helper.Number] struct {
+    // Ma is the moving average used.
+    Ma  Ma[T]
+
+    // Percentage is the envelope percentage.
+    Percentage T
+}
+```
+
+<a name="NewEnvelope"></a>
+### func [NewEnvelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L31>)
+
+```go
+func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T]
+```
+
+NewEnvelope function initializes a new Envelope instance with the default parameters.
+
+<a name="NewEnvelopeWithEma"></a>
+### func [NewEnvelopeWithEma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L47>)
+
+```go
+func NewEnvelopeWithEma[T helper.Number]() *Envelope[T]
+```
+
+NewEnvelopeWithEma function initializes a new Envelope instance using EMA.
+
+<a name="NewEnvelopeWithSma"></a>
+### func [NewEnvelopeWithSma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L39>)
+
+```go
+func NewEnvelopeWithSma[T helper.Number]() *Envelope[T]
+```
+
+NewEnvelopeWithSma function initalizes a new Envelope instance using SMA.
+
+<a name="Envelope[T].Compute"></a>
+### func \(\*Envelope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L55>)
+
+```go
+func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T)
+```
+
+Compute function takes a channel of numbers and computes the Envelope over the specified period.
+
+<a name="Envelope[T].IdlePeriod"></a>
+### func \(\*Envelope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L75>)
+
+```go
+func (e *Envelope[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Envelope yield any results.
+
+<a name="Envelope[T].String"></a>
+### func \(\*Envelope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L80>)
+
+```go
+func (e *Envelope[T]) String() string
+```
+
+String is the string representation of the Envelope.
 
 <a name="Hma"></a>
 ## type [Hma](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L21-L30>)
