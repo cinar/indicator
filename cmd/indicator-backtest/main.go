@@ -18,6 +18,7 @@ import (
 	"github.com/cinar/indicator/v2/strategy/momentum"
 	"github.com/cinar/indicator/v2/strategy/trend"
 	"github.com/cinar/indicator/v2/strategy/volatility"
+	"github.com/cinar/indicator/v2/strategy/volume"
 )
 
 func main() {
@@ -70,6 +71,7 @@ func main() {
 	backtester.Strategies = append(backtester.Strategies, strategy.AllStrategies()...)
 	backtester.Strategies = append(backtester.Strategies, trend.AllStrategies()...)
 	backtester.Strategies = append(backtester.Strategies, volatility.AllStrategies()...)
+	backtester.Strategies = append(backtester.Strategies, volume.AllStrategies()...)
 
 	if addSplits {
 		backtester.Strategies = append(backtester.Strategies, strategy.AllSplitStrategies(backtester.Strategies)...)

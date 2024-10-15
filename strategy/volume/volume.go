@@ -24,5 +24,7 @@ import (
 
 // AllStrategies returns a slice containing references to all available volume strategies.
 func AllStrategies() []strategy.Strategy {
-	return []strategy.Strategy{}
+	return []strategy.Strategy{
+		NewMoneyFlowIndexStrategy(),
+	}
 }
