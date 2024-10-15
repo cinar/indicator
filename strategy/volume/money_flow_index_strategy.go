@@ -54,7 +54,7 @@ func NewMoneyFlowIndexStrategyWith(sellAt, buyAt float64) *MoneyFlowIndexStrateg
 
 // Name returns the name of the strategy.
 func (m *MoneyFlowIndexStrategy) Name() string {
-	return fmt.Sprintf("Money Flow Index Strategy (%f)", m.SellAt)
+	return fmt.Sprintf("Money Flow Index Strategy (%f,%f)", m.SellAt, m.BuyAt)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
