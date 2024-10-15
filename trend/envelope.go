@@ -39,7 +39,7 @@ func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T] {
 func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 	return NewEnvelope(
 		NewSmaWithPeriod[T](DefaultEnvelopePeriod),
-		DefaultEnvelopePercentage,
+		T(DefaultEnvelopePercentage),
 	)
 }
 
@@ -47,7 +47,7 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 func NewEnvelopeWithEma[T helper.Number]() *Envelope[T] {
 	return NewEnvelope(
 		NewEmaWithPeriod[T](DefaultEnvelopePeriod),
-		DefaultEnvelopePercentage,
+		T(DefaultEnvelopePercentage),
 	)
 }
 
@@ -60,12 +60,12 @@ func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T) 
 
 	upper := helper.MultiplyBy(
 		middleSplice[0],
-		1+(e.Percentage/100),
+		1+(e.Percentage/100.0),
 	)
 
 	lower := helper.MultiplyBy(
 		middleSplice[2],
-		1-(e.Percentage/100),
+		1-(e.Percentage/100.0),
 	)
 
 	return upper, middleSplice[1], lower

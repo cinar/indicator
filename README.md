@@ -111,6 +111,7 @@ The following list of strategies are currently supported by this package:
 -	Chande Forecast Oscillator Strategy
 -	[Community Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#type-demastrategy)
+-   [Envelope Strategy](strategy/trend/README.md#type-envelope)
 -	[Golden Cross Strategy](strategy/trend/README.md#type-goldencrossstrategy)
 -	[Kaufman's Adaptive Moving Average (KAMA) Strategy](strategy/trend/README.md#type-kamastrategy)
 -	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#type-macdstrategy)
@@ -139,7 +140,7 @@ The following list of strategies are currently supported by this package:
 -	Chaikin Money Flow Strategy
 -	Ease of Movement Strategy
 -	Force Index Strategy
--	Money Flow Index Strategy
+-	[Money Flow Index Strategy](strategy/volume/README.md#type-moneyflowindexstrategy)
 -	Negative Volume Index Strategy
 -	Volume Weighted Average Price Strategy
 
