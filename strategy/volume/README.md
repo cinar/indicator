@@ -26,6 +26,12 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [func AllStrategies\(\) \[\]strategy.Strategy](<#AllStrategies>)
+- [type ChaikinMoneyFlowStrategy](<#ChaikinMoneyFlowStrategy>)
+  - [func NewChaikinMoneyFlowStrategy\(\) \*ChaikinMoneyFlowStrategy](<#NewChaikinMoneyFlowStrategy>)
+  - [func NewChaikinMoneyFlowStrategyWith\(period int\) \*ChaikinMoneyFlowStrategy](<#NewChaikinMoneyFlowStrategyWith>)
+  - [func \(c \*ChaikinMoneyFlowStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ChaikinMoneyFlowStrategy.Compute>)
+  - [func \(c \*ChaikinMoneyFlowStrategy\) Name\(\) string](<#ChaikinMoneyFlowStrategy.Name>)
+  - [func \(c \*ChaikinMoneyFlowStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#ChaikinMoneyFlowStrategy.Report>)
 - [type MoneyFlowIndexStrategy](<#MoneyFlowIndexStrategy>)
   - [func NewMoneyFlowIndexStrategy\(\) \*MoneyFlowIndexStrategy](<#NewMoneyFlowIndexStrategy>)
   - [func NewMoneyFlowIndexStrategyWith\(sellAt, buyAt float64\) \*MoneyFlowIndexStrategy](<#NewMoneyFlowIndexStrategyWith>)
@@ -56,6 +62,63 @@ func AllStrategies() []strategy.Strategy
 ```
 
 AllStrategies returns a slice containing references to all available volume strategies.
+
+<a name="ChaikinMoneyFlowStrategy"></a>
+## type [ChaikinMoneyFlowStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L18-L21>)
+
+ChaikinMoneyFlowStrategy represents the configuration parameters for calculating the Chaikin Money Flow strategy. Recommends a Sell action when it crosses above 0, and recommends a Buy action when it crosses below 0.
+
+```go
+type ChaikinMoneyFlowStrategy struct {
+    // ChaikinMoneyFlow is the Chaikin Money Flow indicator instance.
+    ChaikinMoneyFlow *volume.Cmf[float64]
+}
+```
+
+<a name="NewChaikinMoneyFlowStrategy"></a>
+### func [NewChaikinMoneyFlowStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L25>)
+
+```go
+func NewChaikinMoneyFlowStrategy() *ChaikinMoneyFlowStrategy
+```
+
+NewChaikinMoneyFlowStrategy function initializes a new Money Flow Index strategy instance with the default parameters.
+
+<a name="NewChaikinMoneyFlowStrategyWith"></a>
+### func [NewChaikinMoneyFlowStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L33>)
+
+```go
+func NewChaikinMoneyFlowStrategyWith(period int) *ChaikinMoneyFlowStrategy
+```
+
+NewChaikinMoneyFlowStrategyWith function initializes a new Money Flow Index strategy instance with the given parameters.
+
+<a name="ChaikinMoneyFlowStrategy.Compute"></a>
+### func \(\*ChaikinMoneyFlowStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L45>)
+
+```go
+func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="ChaikinMoneyFlowStrategy.Name"></a>
+### func \(\*ChaikinMoneyFlowStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L40>)
+
+```go
+func (c *ChaikinMoneyFlowStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="ChaikinMoneyFlowStrategy.Report"></a>
+### func \(\*ChaikinMoneyFlowStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L74>)
+
+```go
+func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="MoneyFlowIndexStrategy"></a>
 ## type [MoneyFlowIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/money_flow_index_strategy.go#L26-L35>)
