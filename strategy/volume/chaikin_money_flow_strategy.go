@@ -14,13 +14,13 @@ import (
 )
 
 // ChaikinMoneyFlowStrategy represents the configuration parameters for calculating the Chaikin Money Flow strategy.
-// Recommends a Sell action when it crosses above 0, and recommends a Buy action when it crosses below 0.
+// Recommends a Buy action when it crosses above 0, and recommends a Sell action when it crosses below 0.
 type ChaikinMoneyFlowStrategy struct {
 	// ChaikinMoneyFlow is the Chaikin Money Flow indicator instance.
 	ChaikinMoneyFlow *volume.Cmf[float64]
 }
 
-// NewChaikinMoneyFlowStrategy function initializes a new Money Flow Index strategy instance with the
+// NewChaikinMoneyFlowStrategy function initializes a new Chaikin Money Flow strategy instance with the
 // default parameters.
 func NewChaikinMoneyFlowStrategy() *ChaikinMoneyFlowStrategy {
 	return NewChaikinMoneyFlowStrategyWith(
@@ -28,7 +28,7 @@ func NewChaikinMoneyFlowStrategy() *ChaikinMoneyFlowStrategy {
 	)
 }
 
-// NewChaikinMoneyFlowStrategyWith function initializes a new Money Flow Index strategy instance with the
+// NewChaikinMoneyFlowStrategyWith function initializes a new Chaikin Money Flow strategy instance with the
 // given parameters.
 func NewChaikinMoneyFlowStrategyWith(period int) *ChaikinMoneyFlowStrategy {
 	return &ChaikinMoneyFlowStrategy{
@@ -53,11 +53,11 @@ func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-c
 	cmfs := c.ChaikinMoneyFlow.Compute(highs, lows, closings, volumes)
 
 	actions := helper.Map(cmfs, func(cmf float64) strategy.Action {
-		if cmf < 0 {
+		if cmf > 0 {
 			return strategy.Buy
 		}
 
-		if cmf > 0 {
+		if cmf < 0 {
 			return strategy.Sell
 		}
 

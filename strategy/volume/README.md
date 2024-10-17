@@ -66,7 +66,7 @@ AllStrategies returns a slice containing references to all available volume stra
 <a name="ChaikinMoneyFlowStrategy"></a>
 ## type [ChaikinMoneyFlowStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L18-L21>)
 
-ChaikinMoneyFlowStrategy represents the configuration parameters for calculating the Chaikin Money Flow strategy. Recommends a Sell action when it crosses above 0, and recommends a Buy action when it crosses below 0.
+ChaikinMoneyFlowStrategy represents the configuration parameters for calculating the Chaikin Money Flow strategy. Recommends a Buy action when it crosses above 0, and recommends a Sell action when it crosses below 0.
 
 ```go
 type ChaikinMoneyFlowStrategy struct {
@@ -82,7 +82,7 @@ type ChaikinMoneyFlowStrategy struct {
 func NewChaikinMoneyFlowStrategy() *ChaikinMoneyFlowStrategy
 ```
 
-NewChaikinMoneyFlowStrategy function initializes a new Money Flow Index strategy instance with the default parameters.
+NewChaikinMoneyFlowStrategy function initializes a new Chaikin Money Flow strategy instance with the default parameters.
 
 <a name="NewChaikinMoneyFlowStrategyWith"></a>
 ### func [NewChaikinMoneyFlowStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L33>)
@@ -91,7 +91,7 @@ NewChaikinMoneyFlowStrategy function initializes a new Money Flow Index strategy
 func NewChaikinMoneyFlowStrategyWith(period int) *ChaikinMoneyFlowStrategy
 ```
 
-NewChaikinMoneyFlowStrategyWith function initializes a new Money Flow Index strategy instance with the given parameters.
+NewChaikinMoneyFlowStrategyWith function initializes a new Chaikin Money Flow strategy instance with the given parameters.
 
 <a name="ChaikinMoneyFlowStrategy.Compute"></a>
 ### func \(\*ChaikinMoneyFlowStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L45>)
