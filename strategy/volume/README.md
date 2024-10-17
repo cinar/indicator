@@ -100,7 +100,7 @@ NewChaikinMoneyFlowStrategyWith function initializes a new Chaikin Money Flow st
 func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="ChaikinMoneyFlowStrategy.Name"></a>
 ### func \(\*ChaikinMoneyFlowStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L40>)
@@ -109,7 +109,7 @@ Compute processes the provided asset snapshots and generates a stream of actiona
 func (c *ChaikinMoneyFlowStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name function returns the name of the strategy.
 
 <a name="ChaikinMoneyFlowStrategy.Report"></a>
 ### func \(\*ChaikinMoneyFlowStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/chaikin_money_flow_strategy.go#L74>)
@@ -118,7 +118,7 @@ Name returns the name of the strategy.
 func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="MoneyFlowIndexStrategy"></a>
 ## type [MoneyFlowIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/money_flow_index_strategy.go#L26-L35>)

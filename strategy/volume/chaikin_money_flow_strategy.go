@@ -36,12 +36,12 @@ func NewChaikinMoneyFlowStrategyWith(period int) *ChaikinMoneyFlowStrategy {
 	}
 }
 
-// Name returns the name of the strategy.
+// Name function returns the name of the strategy.
 func (c *ChaikinMoneyFlowStrategy) Name() string {
 	return fmt.Sprintf("Chaikin Money Flow Strategy (%d)", c.ChaikinMoneyFlow.IdlePeriod()+1)
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+// Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
 func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
 	snapshotsSplice := helper.Duplicate(snapshots, 4)
 
@@ -70,7 +70,7 @@ func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-c
 	return actions
 }
 
-// Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+// Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
 func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report {
 	//
 	// snapshots[0] -> dates
