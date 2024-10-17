@@ -54,7 +54,7 @@ func NewMoneyFlowIndexStrategyWith(sellAt, buyAt float64) *MoneyFlowIndexStrateg
 
 // Name returns the name of the strategy.
 func (m *MoneyFlowIndexStrategy) Name() string {
-	return fmt.Sprintf("Money Flow Index Strategy (%f,%f)", m.SellAt, m.BuyAt)
+	return fmt.Sprintf("Money Flow Index Strategy (%.2f,%.2f)", m.SellAt, m.BuyAt)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
@@ -93,7 +93,7 @@ func (m *MoneyFlowIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 	// snapshots[1] -> highs       |
 	// snapshots[2] -> lows        |
 	// snapshots[3] -> closings[0] -> closings
-	//                 closings[1] -> superTrend
+	//                 closings[1] -> money flow index
 	// snapshots[4] -> volumes
 	// snapshots[5] -> actions     -> annotations
 	//              -> outcomes
