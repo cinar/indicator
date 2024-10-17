@@ -141,7 +141,7 @@ The following list of strategies are currently supported by this package:
 -	Ease of Movement Strategy
 -	Force Index Strategy
 -	[Money Flow Index Strategy](strategy/volume/README.md#type-moneyflowindexstrategy)
--	Negative Volume Index Strategy
+-	[Negative Volume Index Strategy](strategy/volume/README.md#type-negativevolumeindexstrategy)
 -	Volume Weighted Average Price Strategy
 
 ### 🧪 Compound Strategies

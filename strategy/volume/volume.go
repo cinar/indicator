@@ -27,5 +27,6 @@ func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewChaikinMoneyFlowStrategy(),
 		NewMoneyFlowIndexStrategy(),
+		NewNegativeVolumeIndexStrategy(),
 	}
 }

@@ -38,6 +38,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(m \*MoneyFlowIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#MoneyFlowIndexStrategy.Compute>)
   - [func \(m \*MoneyFlowIndexStrategy\) Name\(\) string](<#MoneyFlowIndexStrategy.Name>)
   - [func \(m \*MoneyFlowIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#MoneyFlowIndexStrategy.Report>)
+- [type NegativeVolumeIndexStrategy](<#NegativeVolumeIndexStrategy>)
+  - [func NewNegativeVolumeIndexStrategy\(\) \*NegativeVolumeIndexStrategy](<#NewNegativeVolumeIndexStrategy>)
+  - [func NewNegativeVolumeIndexStrategyWith\(emaPeriod int\) \*NegativeVolumeIndexStrategy](<#NewNegativeVolumeIndexStrategyWith>)
+  - [func \(n \*NegativeVolumeIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NegativeVolumeIndexStrategy.Compute>)
+  - [func \(n \*NegativeVolumeIndexStrategy\) Name\(\) string](<#NegativeVolumeIndexStrategy.Name>)
+  - [func \(n \*NegativeVolumeIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NegativeVolumeIndexStrategy.Report>)
 
 
 ## Constants
@@ -51,6 +57,15 @@ const (
 
     // DefaultMoneyFlowIndexStrategyBuyAt is the default buy at of 20.
     DefaultMoneyFlowIndexStrategyBuyAt = 20
+)
+```
+
+<a name="DefaultNegativeVolumeIndexStrategyEmaPeriod"></a>
+
+```go
+const (
+    // DefaultNegativeVolumeIndexStrategyEmaPeriod is the default EMA period of 255.
+    DefaultNegativeVolumeIndexStrategyEmaPeriod = 255
 )
 ```
 
@@ -179,6 +194,66 @@ Name returns the name of the strategy.
 
 ```go
 func (m *MoneyFlowIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="NegativeVolumeIndexStrategy"></a>
+## type [NegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L25-L31>)
+
+NegativeVolumeIndexStrategy represents the configuration parameters for calculating the Negative Volume Index strategy. Recommends a Buy action when it crosses below its EMA, recommends a Sell action when it crosses above its EMA, and recommends a Hold action otherwise.
+
+```go
+type NegativeVolumeIndexStrategy struct {
+    // NegativeVolumeIndex is the Negative Volume Index indicator instance.
+    NegativeVolumeIndex *volume.Nvi[float64]
+
+    // NegativeVolumeIndexEma is the Negative Volume Index EMA instance.
+    NegativeVolumeIndexEma *trend.Ema[float64]
+}
+```
+
+<a name="NewNegativeVolumeIndexStrategy"></a>
+### func [NewNegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L35>)
+
+```go
+func NewNegativeVolumeIndexStrategy() *NegativeVolumeIndexStrategy
+```
+
+NewNegativeVolumeIndexStrategy function initializes a new Negative Volume Index strategy instance with the default parameters.
+
+<a name="NewNegativeVolumeIndexStrategyWith"></a>
+### func [NewNegativeVolumeIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L43>)
+
+```go
+func NewNegativeVolumeIndexStrategyWith(emaPeriod int) *NegativeVolumeIndexStrategy
+```
+
+NewNegativeVolumeIndexStrategyWith function initializes a new Negative Volume Index strategy instance with the given parameters.
+
+<a name="NegativeVolumeIndexStrategy.Compute"></a>
+### func \(\*NegativeVolumeIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L56>)
+
+```go
+func (n *NegativeVolumeIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="NegativeVolumeIndexStrategy.Name"></a>
+### func \(\*NegativeVolumeIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L51>)
+
+```go
+func (n *NegativeVolumeIndexStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="NegativeVolumeIndexStrategy.Report"></a>
+### func \(\*NegativeVolumeIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/negative_volume_index_strategy.go#L93>)
+
+```go
+func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
