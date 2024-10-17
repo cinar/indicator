@@ -27,7 +27,7 @@ func TestNegativeVolumeIndexStrategy(t *testing.T) {
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	nvis := volume.NewNegativeVolumeIndexStrategy()
+	nvis := volume.NewNegativeVolumeIndexStrategyWith(12)
 	actual := nvis.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
