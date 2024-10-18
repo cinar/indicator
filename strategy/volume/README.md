@@ -32,6 +32,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*ChaikinMoneyFlowStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ChaikinMoneyFlowStrategy.Compute>)
   - [func \(c \*ChaikinMoneyFlowStrategy\) Name\(\) string](<#ChaikinMoneyFlowStrategy.Name>)
   - [func \(c \*ChaikinMoneyFlowStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#ChaikinMoneyFlowStrategy.Report>)
+- [type ForceIndexStrategy](<#ForceIndexStrategy>)
+  - [func NewForceIndexStrategy\(\) \*ForceIndexStrategy](<#NewForceIndexStrategy>)
+  - [func NewForceIndexStrategyWith\(period int\) \*ForceIndexStrategy](<#NewForceIndexStrategyWith>)
+  - [func \(f \*ForceIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ForceIndexStrategy.Compute>)
+  - [func \(f \*ForceIndexStrategy\) Name\(\) string](<#ForceIndexStrategy.Name>)
+  - [func \(f \*ForceIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#ForceIndexStrategy.Report>)
 - [type MoneyFlowIndexStrategy](<#MoneyFlowIndexStrategy>)
   - [func NewMoneyFlowIndexStrategy\(\) \*MoneyFlowIndexStrategy](<#NewMoneyFlowIndexStrategy>)
   - [func NewMoneyFlowIndexStrategyWith\(sellAt, buyAt float64\) \*MoneyFlowIndexStrategy](<#NewMoneyFlowIndexStrategyWith>)
@@ -134,6 +140,63 @@ func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *hel
 ```
 
 Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="ForceIndexStrategy"></a>
+## type [ForceIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L18-L21>)
+
+ForceIndexStrategy represents the configuration parameters for calculating the Force Index strategy. It recommends a Buy action when it crosses above zero, and a Sell action when it crosses below zero.
+
+```go
+type ForceIndexStrategy struct {
+    // ForceIndex is the Force Index instance.
+    ForceIndex *volume.Fi[float64]
+}
+```
+
+<a name="NewForceIndexStrategy"></a>
+### func [NewForceIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L24>)
+
+```go
+func NewForceIndexStrategy() *ForceIndexStrategy
+```
+
+NewForceIndexStrategy function initializes a new Force Index strategy instance with the default parameters.
+
+<a name="NewForceIndexStrategyWith"></a>
+### func [NewForceIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L31>)
+
+```go
+func NewForceIndexStrategyWith(period int) *ForceIndexStrategy
+```
+
+NewForceIndexStrategyWith function initializes a new Force Index strategy instance with the given parameters.
+
+<a name="ForceIndexStrategy.Compute"></a>
+### func \(\*ForceIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L43>)
+
+```go
+func (f *ForceIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="ForceIndexStrategy.Name"></a>
+### func \(\*ForceIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L38>)
+
+```go
+func (f *ForceIndexStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="ForceIndexStrategy.Report"></a>
+### func \(\*ForceIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/force_index_strategy.go#L70>)
+
+```go
+func (f *ForceIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="MoneyFlowIndexStrategy"></a>
 ## type [MoneyFlowIndexStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/money_flow_index_strategy.go#L26-L35>)
