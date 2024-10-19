@@ -29,5 +29,6 @@ func AllStrategies() []strategy.Strategy {
 		NewForceIndexStrategy(),
 		NewMoneyFlowIndexStrategy(),
 		NewNegativeVolumeIndexStrategy(),
+		NewVolumeWeightedAveragePriceStrategy(),
 	}
 }
