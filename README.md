@@ -1,8 +1,8 @@
 [![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
 
-<div style="text-align: center;">
+<p align="center">
     <img src="logo.png" />
-</div>
+</p>
 
 Indicator Go
 ============
