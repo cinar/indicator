@@ -32,6 +32,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*ChaikinMoneyFlowStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ChaikinMoneyFlowStrategy.Compute>)
   - [func \(c \*ChaikinMoneyFlowStrategy\) Name\(\) string](<#ChaikinMoneyFlowStrategy.Name>)
   - [func \(c \*ChaikinMoneyFlowStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#ChaikinMoneyFlowStrategy.Report>)
+- [type EaseOfMovementStrategy](<#EaseOfMovementStrategy>)
+  - [func NewEaseOfMovementStrategy\(\) \*EaseOfMovementStrategy](<#NewEaseOfMovementStrategy>)
+  - [func NewEaseOfMovementStrategyWith\(period int\) \*EaseOfMovementStrategy](<#NewEaseOfMovementStrategyWith>)
+  - [func \(e \*EaseOfMovementStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#EaseOfMovementStrategy.Compute>)
+  - [func \(e \*EaseOfMovementStrategy\) Name\(\) string](<#EaseOfMovementStrategy.Name>)
+  - [func \(e \*EaseOfMovementStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#EaseOfMovementStrategy.Report>)
 - [type ForceIndexStrategy](<#ForceIndexStrategy>)
   - [func NewForceIndexStrategy\(\) \*ForceIndexStrategy](<#NewForceIndexStrategy>)
   - [func NewForceIndexStrategyWith\(period int\) \*ForceIndexStrategy](<#NewForceIndexStrategyWith>)
@@ -143,6 +149,63 @@ Name function returns the name of the strategy.
 
 ```go
 func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
+```
+
+Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="EaseOfMovementStrategy"></a>
+## type [EaseOfMovementStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L18-L21>)
+
+EaseOfMovementStrategy represents the configuration parameters for calculating the Ease of Movement strategy. Recommends a Buy action when it crosses above 0, and recommends a Sell action when it crosses below 0.
+
+```go
+type EaseOfMovementStrategy struct {
+    // EaseOfMovement is the Ease of Movement indicator instance.
+    EaseOfMovement *volume.Emv[float64]
+}
+```
+
+<a name="NewEaseOfMovementStrategy"></a>
+### func [NewEaseOfMovementStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L25>)
+
+```go
+func NewEaseOfMovementStrategy() *EaseOfMovementStrategy
+```
+
+NewEaseOfMovementStrategy function initializes a new Ease of Movement strategy instance with the default parameters.
+
+<a name="NewEaseOfMovementStrategyWith"></a>
+### func [NewEaseOfMovementStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L33>)
+
+```go
+func NewEaseOfMovementStrategyWith(period int) *EaseOfMovementStrategy
+```
+
+NewEaseOfMovementStrategyWith function initializes a new Ease of Movement strategy instance with the given parameters.
+
+<a name="EaseOfMovementStrategy.Compute"></a>
+### func \(\*EaseOfMovementStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L45>)
+
+```go
+func (e *EaseOfMovementStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="EaseOfMovementStrategy.Name"></a>
+### func \(\*EaseOfMovementStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L40>)
+
+```go
+func (e *EaseOfMovementStrategy) Name() string
+```
+
+Name function returns the name of the strategy.
+
+<a name="EaseOfMovementStrategy.Report"></a>
+### func \(\*EaseOfMovementStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/ease_of_movement_strategy.go#L73>)
+
+```go
+func (e *EaseOfMovementStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.

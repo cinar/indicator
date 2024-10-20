@@ -138,7 +138,7 @@ The following list of strategies are currently supported by this package:
 ### 📢 Volume Strategies
 
 -	[Chaikin Money Flow Strategy](strategy/volume/README.md#type-chaikinmoneyflowstrategy)
--	Ease of Movement Strategy
+-	[Ease of Movement Strategy](strategy/volume/README.md#type-easeofmovementstrategy)
 -	[Force Index Strategy](strategy/volume/README.md#type-forceindexstrategy)
 -	[Money Flow Index Strategy](strategy/volume/README.md#type-moneyflowindexstrategy)
 -	[Negative Volume Index Strategy](strategy/volume/README.md#type-negativevolumeindexstrategy)

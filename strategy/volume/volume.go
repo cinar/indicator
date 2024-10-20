@@ -26,6 +26,7 @@ import (
 func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewChaikinMoneyFlowStrategy(),
+		NewEaseOfMovementStrategy(),
 		NewForceIndexStrategy(),
 		NewMoneyFlowIndexStrategy(),
 		NewNegativeVolumeIndexStrategy(),
