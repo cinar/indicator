@@ -123,7 +123,7 @@
  </defs>
  <g class="layer">
   <title>Layer 1</title>
-  <rect fill="#ffffff" height="197.33" id="svg_10" stroke="#ffffff" stroke-width="5" width="800" x="0.67" y="3.33"/>
+  <rect fill="#ffffff" height="197.33" id="svg_10" stroke="#ffffff" stroke-width="5" width="800" x="2" y="0.67"/>
   <text fill="#000000" font-family="Helvetica" font-size="18" id="svg_1" stroke="#000000" stroke-width="0" text-anchor="middle" x="398.3" xml:space="preserve" y="22.5">Corporate Sponsors</text>
   <text fill="#000000" font-family="Helvetica" font-size="18" id="svg_2" stroke="#000000" stroke-width="0" text-anchor="middle" x="398.3" xml:space="preserve" y="135">Individual Sponsors</text>
   <use id="svg_5" transform="matrix(0.822066 0 0 0.822066 275.947 34.9473)" xlink:href="#svg_4"/>
