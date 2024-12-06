@@ -236,6 +236,13 @@ import (
 )
 ```
 
+💖 Our Sponsors
+---------------
+
+Indicator is a community-supported project. The following companies, organizations, and individuals help make our work possible.  Become [a sponsor](https://github.com/sponsors/cinar) and help us continue to grow!
+
+![Our Sponsors](./sponsors.svg)
+
 Contributing to the Project
 ---------------------------
 
