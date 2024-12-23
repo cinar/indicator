@@ -56,12 +56,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(n \*NegativeVolumeIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NegativeVolumeIndexStrategy.Compute>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Name\(\) string](<#NegativeVolumeIndexStrategy.Name>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NegativeVolumeIndexStrategy.Report>)
-- [type VolumeWeightedAveragePriceStrategy](<#VolumeWeightedAveragePriceStrategy>)
-  - [func NewVolumeWeightedAveragePriceStrategy\(\) \*VolumeWeightedAveragePriceStrategy](<#NewVolumeWeightedAveragePriceStrategy>)
-  - [func NewVolumeWeightedAveragePriceStrategyWith\(period int\) \*VolumeWeightedAveragePriceStrategy](<#NewVolumeWeightedAveragePriceStrategyWith>)
-  - [func \(v \*VolumeWeightedAveragePriceStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#VolumeWeightedAveragePriceStrategy.Compute>)
-  - [func \(v \*VolumeWeightedAveragePriceStrategy\) Name\(\) string](<#VolumeWeightedAveragePriceStrategy.Name>)
-  - [func \(v \*VolumeWeightedAveragePriceStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#VolumeWeightedAveragePriceStrategy.Report>)
+- [type WeightedAveragePriceStrategy](<#WeightedAveragePriceStrategy>)
+  - [func NewWeightedAveragePriceStrategy\(\) \*WeightedAveragePriceStrategy](<#NewWeightedAveragePriceStrategy>)
+  - [func NewWeightedAveragePriceStrategyWith\(period int\) \*WeightedAveragePriceStrategy](<#NewWeightedAveragePriceStrategyWith>)
+  - [func \(v \*WeightedAveragePriceStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#WeightedAveragePriceStrategy.Compute>)
+  - [func \(v \*WeightedAveragePriceStrategy\) Name\(\) string](<#WeightedAveragePriceStrategy.Name>)
+  - [func \(v \*WeightedAveragePriceStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#WeightedAveragePriceStrategy.Report>)
 
 
 ## Constants
@@ -390,59 +390,59 @@ func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.R
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
-<a name="VolumeWeightedAveragePriceStrategy"></a>
-## type [VolumeWeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L19-L22>)
+<a name="WeightedAveragePriceStrategy"></a>
+## type [WeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L19-L22>)
 
-VolumeWeightedAveragePriceStrategy represents the configuration parameters for calculating the Volume Weighted Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
+WeightedAveragePriceStrategy represents the configuration parameters for calculating the Volume Weighted Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
 
 ```go
-type VolumeWeightedAveragePriceStrategy struct {
+type WeightedAveragePriceStrategy struct {
     // VolumeWeightedAveragePrice is the Volume Weighted Average Price indicator instance.
     VolumeWeightedAveragePrice *volume.Vwap[float64]
 }
 ```
 
-<a name="NewVolumeWeightedAveragePriceStrategy"></a>
-### func [NewVolumeWeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L26>)
+<a name="NewWeightedAveragePriceStrategy"></a>
+### func [NewWeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L26>)
 
 ```go
-func NewVolumeWeightedAveragePriceStrategy() *VolumeWeightedAveragePriceStrategy
+func NewWeightedAveragePriceStrategy() *WeightedAveragePriceStrategy
 ```
 
-NewVolumeWeightedAveragePriceStrategy function initializes a new Volume Weighted Average Price strategy instance with the default parameters.
+NewWeightedAveragePriceStrategy function initializes a new Volume Weighted Average Price strategy instance with the default parameters.
 
-<a name="NewVolumeWeightedAveragePriceStrategyWith"></a>
-### func [NewVolumeWeightedAveragePriceStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L34>)
+<a name="NewWeightedAveragePriceStrategyWith"></a>
+### func [NewWeightedAveragePriceStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L34>)
 
 ```go
-func NewVolumeWeightedAveragePriceStrategyWith(period int) *VolumeWeightedAveragePriceStrategy
+func NewWeightedAveragePriceStrategyWith(period int) *WeightedAveragePriceStrategy
 ```
 
-NewVolumeWeightedAveragePriceStrategyWith function initializes a new Volume Weighted Average Price strategy instance with the given parameters.
+NewWeightedAveragePriceStrategyWith function initializes a new Volume Weighted Average Price strategy instance with the given parameters.
 
-<a name="VolumeWeightedAveragePriceStrategy.Compute"></a>
-### func \(\*VolumeWeightedAveragePriceStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L46>)
+<a name="WeightedAveragePriceStrategy.Compute"></a>
+### func \(\*WeightedAveragePriceStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L46>)
 
 ```go
-func (v *VolumeWeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
 Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
-<a name="VolumeWeightedAveragePriceStrategy.Name"></a>
-### func \(\*VolumeWeightedAveragePriceStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L41>)
+<a name="WeightedAveragePriceStrategy.Name"></a>
+### func \(\*WeightedAveragePriceStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L41>)
 
 ```go
-func (v *VolumeWeightedAveragePriceStrategy) Name() string
+func (v *WeightedAveragePriceStrategy) Name() string
 ```
 
 Name returns the name of the strategy.
 
-<a name="VolumeWeightedAveragePriceStrategy.Report"></a>
-### func \(\*VolumeWeightedAveragePriceStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/volume_weighted_average_price_strategy.go#L78>)
+<a name="WeightedAveragePriceStrategy.Report"></a>
+### func \(\*WeightedAveragePriceStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L78>)
 
 ```go
-func (v *VolumeWeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+func (v *WeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
