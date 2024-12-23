@@ -38,3 +38,12 @@ func TestSmma(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestSmmaString(t *testing.T) {
+	expected := "SMMA(10)"
+	actual := trend.NewSmmaWithPeriod[float64](10).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -33,17 +33,14 @@ type Smma[T helper.Number] struct {
 
 // NewSmma function initializes a new SMMA instance with the default parameters.
 func NewSmma[T helper.Number]() *Smma[T] {
-	return &Smma[T]{
-		Period: DefaultSmmaPeriod,
-	}
+	return NewSmmaWithPeriod[T](DefaultSmmaPeriod)
 }
 
 // NewSmmaWithPeriod function initializes a new SMMA instance with the given period.
 func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T] {
-	smma := NewSmma[T]()
-	smma.Period = period
-
-	return smma
+	return &Smma[T]{
+		Period: period,
+	}
 }
 
 // Compute function takes a channel of numbers and computes the SMMA over the specified period.
