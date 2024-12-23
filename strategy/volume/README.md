@@ -393,12 +393,12 @@ Report processes the provided asset snapshots and generates a report annotated w
 <a name="WeightedAveragePriceStrategy"></a>
 ## type [WeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L19-L22>)
 
-WeightedAveragePriceStrategy represents the configuration parameters for calculating the Volume Weighted Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
+WeightedAveragePriceStrategy represents the configuration parameters for calculating the Weighted Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
 
 ```go
 type WeightedAveragePriceStrategy struct {
-    // VolumeWeightedAveragePrice is the Volume Weighted Average Price indicator instance.
-    VolumeWeightedAveragePrice *volume.Vwap[float64]
+    // WeightedAveragePrice is the Weighted Average Price indicator instance.
+    WeightedAveragePrice *volume.Vwap[float64]
 }
 ```
 
@@ -409,7 +409,7 @@ type WeightedAveragePriceStrategy struct {
 func NewWeightedAveragePriceStrategy() *WeightedAveragePriceStrategy
 ```
 
-NewWeightedAveragePriceStrategy function initializes a new Volume Weighted Average Price strategy instance with the default parameters.
+NewWeightedAveragePriceStrategy function initializes a new Weighted Average Price strategy instance with the default parameters.
 
 <a name="NewWeightedAveragePriceStrategyWith"></a>
 ### func [NewWeightedAveragePriceStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L34>)
@@ -418,7 +418,7 @@ NewWeightedAveragePriceStrategy function initializes a new Volume Weighted Avera
 func NewWeightedAveragePriceStrategyWith(period int) *WeightedAveragePriceStrategy
 ```
 
-NewWeightedAveragePriceStrategyWith function initializes a new Volume Weighted Average Price strategy instance with the given parameters.
+NewWeightedAveragePriceStrategyWith function initializes a new Weighted Average Price strategy instance with the given parameters.
 
 <a name="WeightedAveragePriceStrategy.Compute"></a>
 ### func \(\*WeightedAveragePriceStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/weighted_average_price_strategy.go#L46>)
