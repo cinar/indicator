@@ -57,7 +57,7 @@ func (s *Smma[T]) Compute(c <-chan T) <-chan T {
 		result <- before
 
 		for n := range c {
-			before = ((before*T(s.Period) - 1) + n) / T(s.Period)
+			before = ((before * (T(s.Period) - 1)) + n) / T(s.Period)
 			result <- before
 		}
 	}()
