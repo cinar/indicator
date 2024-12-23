@@ -27,7 +27,7 @@ func TestVolumeWeightedAveragePriceStrategy(t *testing.T) {
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	vwaps := volume.NewVolumeWeightedAveragePriceStrategy()
+	vwaps := volume.NewWeightedAveragePriceStrategy()
 	actual := vwaps.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
@@ -42,7 +42,7 @@ func TestVolumeWeightedAveragePriceStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	vwaps := volume.NewVolumeWeightedAveragePriceStrategy()
+	vwaps := volume.NewWeightedAveragePriceStrategy()
 	report := vwaps.Report(snapshots)
 
 	fileName := "volume_weighted_average_price_strategy.html"

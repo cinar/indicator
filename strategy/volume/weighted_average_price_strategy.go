@@ -13,37 +13,37 @@ import (
 	"github.com/cinar/indicator/v2/volume"
 )
 
-// VolumeWeightedAveragePriceStrategy represents the configuration parameters for calculating the Volume Weighted
+// WeightedAveragePriceStrategy represents the configuration parameters for calculating the Weighted
 // Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell
 // action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
-type VolumeWeightedAveragePriceStrategy struct {
-	// VolumeWeightedAveragePrice is the Volume Weighted Average Price indicator instance.
-	VolumeWeightedAveragePrice *volume.Vwap[float64]
+type WeightedAveragePriceStrategy struct {
+	// WeightedAveragePrice is the Weighted Average Price indicator instance.
+	WeightedAveragePrice *volume.Vwap[float64]
 }
 
-// NewVolumeWeightedAveragePriceStrategy function initializes a new Volume Weighted Average Price strategy
+// NewWeightedAveragePriceStrategy function initializes a new Weighted Average Price strategy
 // instance with the default parameters.
-func NewVolumeWeightedAveragePriceStrategy() *VolumeWeightedAveragePriceStrategy {
-	return NewVolumeWeightedAveragePriceStrategyWith(
+func NewWeightedAveragePriceStrategy() *WeightedAveragePriceStrategy {
+	return NewWeightedAveragePriceStrategyWith(
 		volume.DefaultVwapPeriod,
 	)
 }
 
-// NewVolumeWeightedAveragePriceStrategyWith function initializes a new Volume Weighted Average Price strategy
+// NewWeightedAveragePriceStrategyWith function initializes a new Weighted Average Price strategy
 // instance with the given parameters.
-func NewVolumeWeightedAveragePriceStrategyWith(period int) *VolumeWeightedAveragePriceStrategy {
-	return &VolumeWeightedAveragePriceStrategy{
-		VolumeWeightedAveragePrice: volume.NewVwapWithPeriod[float64](period),
+func NewWeightedAveragePriceStrategyWith(period int) *WeightedAveragePriceStrategy {
+	return &WeightedAveragePriceStrategy{
+		WeightedAveragePrice: volume.NewVwapWithPeriod[float64](period),
 	}
 }
 
 // Name returns the name of the strategy.
-func (v *VolumeWeightedAveragePriceStrategy) Name() string {
-	return fmt.Sprintf("Volume Weighted Average Price Strategy (%d)", v.VolumeWeightedAveragePrice.IdlePeriod()+1)
+func (v *WeightedAveragePriceStrategy) Name() string {
+	return fmt.Sprintf("Weighted Average Price Strategy (%d)", v.WeightedAveragePrice.IdlePeriod()+1)
 }
 
 // Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (v *VolumeWeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
 	snapshotsSplice := helper.Duplicate(snapshots, 2)
 
 	closingsSplice := helper.Duplicate(
@@ -53,8 +53,8 @@ func (v *VolumeWeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Sna
 
 	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[1])
 
-	vwaps := v.VolumeWeightedAveragePrice.Compute(closingsSplice[1], volumes)
-	closingsSplice[0] = helper.Skip(closingsSplice[0], v.VolumeWeightedAveragePrice.IdlePeriod())
+	vwaps := v.WeightedAveragePrice.Compute(closingsSplice[1], volumes)
+	closingsSplice[0] = helper.Skip(closingsSplice[0], v.WeightedAveragePrice.IdlePeriod())
 
 	actions := helper.Operate(closingsSplice[0], vwaps, func(closing, vwap float64) strategy.Action {
 		if vwap > closing {
@@ -68,14 +68,14 @@ func (v *VolumeWeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Sna
 		return strategy.Hold
 	})
 
-	// Volume Weighted Average Price starts only after a full period.
-	actions = helper.Shift(actions, v.VolumeWeightedAveragePrice.IdlePeriod(), strategy.Hold)
+	// Weighted Average Price starts only after a full period.
+	actions = helper.Shift(actions, v.WeightedAveragePrice.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
-func (v *VolumeWeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+func (v *WeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	//
 	// snapshots[0] -> dates
 	// snapshots[1] -> closings[0] -> closings
@@ -86,7 +86,7 @@ func (v *VolumeWeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *h
 	//
 	snapshots := helper.Duplicate(c, 4)
 
-	dates := helper.Skip(asset.SnapshotsAsDates(snapshots[0]), v.VolumeWeightedAveragePrice.IdlePeriod())
+	dates := helper.Skip(asset.SnapshotsAsDates(snapshots[0]), v.WeightedAveragePrice.IdlePeriod())
 
 	closingsSplice := helper.Duplicate(
 		asset.SnapshotsAsClosings(snapshots[1]),
@@ -94,13 +94,13 @@ func (v *VolumeWeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *h
 	)
 	volumes := asset.SnapshotsAsVolumes(snapshots[2])
 
-	vwaps := v.VolumeWeightedAveragePrice.Compute(closingsSplice[0], volumes)
+	vwaps := v.WeightedAveragePrice.Compute(closingsSplice[0], volumes)
 
-	closingsSplice[1] = helper.Skip(closingsSplice[1], v.VolumeWeightedAveragePrice.IdlePeriod())
+	closingsSplice[1] = helper.Skip(closingsSplice[1], v.WeightedAveragePrice.IdlePeriod())
 
 	actions, outcomes := strategy.ComputeWithOutcome(v, snapshots[3])
-	actions = helper.Skip(actions, v.VolumeWeightedAveragePrice.IdlePeriod())
-	outcomes = helper.Skip(outcomes, v.VolumeWeightedAveragePrice.IdlePeriod())
+	actions = helper.Skip(actions, v.WeightedAveragePrice.IdlePeriod())
+	outcomes = helper.Skip(outcomes, v.WeightedAveragePrice.IdlePeriod())
 
 	annotations := strategy.ActionsToAnnotations(actions)
 	outcomes = helper.MultiplyBy(outcomes, 100)
