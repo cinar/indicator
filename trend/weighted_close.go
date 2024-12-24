@@ -25,7 +25,7 @@ func NewWeightedClose[T helper.Number]() *WeightedClose[T] {
 }
 
 // Compute function takes a channel of numbers and computes the Weighted Close over the specified period.
-func (w *WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T {
+func (*WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T {
 	return helper.Operate3(highs, lows, closes, func(high, low, close T) T {
 		// Weighted Close = (High + Low + (Close * 2)) / 4
 		return (high + low + (close * 2)) / 4
