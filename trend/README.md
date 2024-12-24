@@ -1475,7 +1475,7 @@ func NewSmma[T helper.Number]() *Smma[T]
 NewSmma function initializes a new SMMA instance with the default parameters.
 
 <a name="NewSmmaWithPeriod"></a>
-### func [NewSmmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L42>)
+### func [NewSmmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L40>)
 
 ```go
 func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T]
@@ -1484,7 +1484,7 @@ func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T]
 NewSmmaWithPeriod function initializes a new SMMA instance with the given period.
 
 <a name="Smma[T].Compute"></a>
-### func \(\*Smma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L50>)
+### func \(\*Smma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L47>)
 
 ```go
 func (s *Smma[T]) Compute(c <-chan T) <-chan T
@@ -1493,7 +1493,7 @@ func (s *Smma[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the SMMA over the specified period.
 
 <a name="Smma[T].IdlePeriod"></a>
-### func \(\*Smma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L72>)
+### func \(\*Smma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L69>)
 
 ```go
 func (s *Smma[T]) IdlePeriod() int
@@ -1502,7 +1502,7 @@ func (s *Smma[T]) IdlePeriod() int
 IdlePeriod is the initial period that SMMA yield any results.
 
 <a name="Smma[T].String"></a>
-### func \(\*Smma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L77>)
+### func \(\*Smma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L74>)
 
 ```go
 func (s *Smma[T]) String() string
