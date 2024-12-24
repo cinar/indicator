@@ -33,6 +33,7 @@ func AllStrategies() []strategy.Strategy {
 		NewKdjStrategy(),
 		NewMacdStrategy(),
 		NewQstickStrategy(),
+		NewSmmaStrategy(),
 		NewTrimaStrategy(),
 		NewTripleMovingAverageCrossoverStrategy(),
 		NewTsiStrategy(),

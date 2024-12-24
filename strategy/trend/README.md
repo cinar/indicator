@@ -85,6 +85,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(q \*QstickStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#QstickStrategy.Compute>)
   - [func \(\*QstickStrategy\) Name\(\) string](<#QstickStrategy.Name>)
   - [func \(q \*QstickStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#QstickStrategy.Report>)
+- [type SmmaStrategy](<#SmmaStrategy>)
+  - [func NewSmmaStrategy\(\) \*SmmaStrategy](<#NewSmmaStrategy>)
+  - [func NewSmmaStrategyWith\(shortPeriod, longPeriod int\) \*SmmaStrategy](<#NewSmmaStrategyWith>)
+  - [func \(s \*SmmaStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#SmmaStrategy.Compute>)
+  - [func \(s \*SmmaStrategy\) Name\(\) string](<#SmmaStrategy.Name>)
+  - [func \(s \*SmmaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SmmaStrategy.Report>)
 - [type TrimaStrategy](<#TrimaStrategy>)
   - [func NewTrimaStrategy\(\) \*TrimaStrategy](<#NewTrimaStrategy>)
   - [func \(t \*TrimaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#TrimaStrategy.Compute>)
@@ -138,6 +144,18 @@ const (
 
     // DefaultGoldenCrossStrategySlowPeriod is the default golden cross strategy slow period.
     DefaultGoldenCrossStrategySlowPeriod = 200
+)
+```
+
+<a name="DefaultSmmaStrategyShortPeriod"></a>
+
+```go
+const (
+    // DefaultSmmaStrategyShortPeriod is the default short-term SMMA period of 20.
+    DefaultSmmaStrategyShortPeriod = 20
+
+    // DefaultSmmaStrategyLongPeriod is the default short-term SMMA period of 50.
+    DefaultSmmaStrategyLongPeriod = 50
 )
 ```
 
@@ -768,6 +786,68 @@ Name returns the name of the strategy.
 
 ```go
 func (q *QstickStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="SmmaStrategy"></a>
+## type [SmmaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L28-L36>)
+
+SmmaStrategy represents the configuration parameters for calculating the Smooted Moving Averge \(SMMA\) strategy. A short\-term SMMA crossing above the long\-term SMMA suggests a bullish trend, while crossing below the long\-term SMMA indicates a bearish trend.
+
+```go
+type SmmaStrategy struct {
+    // ShortSmma represents the configuration parameters for calculating the
+    // short-term Smooted Moving Averge (SMMA).
+    ShortSmma *trend.Smma[float64]
+
+    // LongSmma represents the configuration parameters for calculating the
+    // long-term Smooted Moving Averge (SMMA).
+    LongSmma *trend.Smma[float64]
+}
+```
+
+<a name="NewSmmaStrategy"></a>
+### func [NewSmmaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L39>)
+
+```go
+func NewSmmaStrategy() *SmmaStrategy
+```
+
+NewSmmaStrategy function initializes a new SMMA strategy instance.
+
+<a name="NewSmmaStrategyWith"></a>
+### func [NewSmmaStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L47>)
+
+```go
+func NewSmmaStrategyWith(shortPeriod, longPeriod int) *SmmaStrategy
+```
+
+NewSmmaStrategyWith function initializes a new SMMA strategy instance with the given parameters.
+
+<a name="SmmaStrategy.Compute"></a>
+### func \(\*SmmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L63>)
+
+```go
+func (s *SmmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="SmmaStrategy.Name"></a>
+### func \(\*SmmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L55>)
+
+```go
+func (s *SmmaStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="SmmaStrategy.Report"></a>
+### func \(\*SmmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/smma_strategy.go#L95>)
+
+```go
+func (s *SmmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

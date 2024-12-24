@@ -122,6 +122,7 @@ The following list of strategies are currently supported by this package:
 -	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#type-macdstrategy)
 -	[Qstick Strategy](strategy/trend/README.md#type-qstickstrategy)
 -	[Random Index (KDJ) Strategy](strategy/trend/README.md#type-kdjstrategy)
+-   [Smoothed Moving Average (SMMA) Strategy](strategy/trend/README.md#type-smmastrategy)
 -	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#type-trimastrategy)
 -	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#type-trixstrategy)
 -	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#type-triplemovingaveragecrossoverstrategy)
