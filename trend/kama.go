@@ -92,7 +92,7 @@ func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
 		helper.IncrementBy(
 			helper.MultiplyBy(
 				ers,
-				(fastSc-slowSc),
+				fastSc-slowSc,
 			),
 			slowSc,
 		),

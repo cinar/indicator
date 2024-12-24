@@ -5,7 +5,6 @@
 package volume_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -46,7 +45,7 @@ func TestChaikinMoneyFlowStrategyReport(t *testing.T) {
 	report := cmfs.Report(snapshots)
 
 	fileName := "chaikin_money_flow_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

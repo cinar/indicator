@@ -33,9 +33,7 @@ type Cci[T helper.Number] struct {
 
 // NewCci function initializes a new CCI instance with the default parameters.
 func NewCci[T helper.Number]() *Cci[T] {
-	return &Cci[T]{
-		Period: DefaultCciPeriod,
-	}
+	return NewCciWithPeriod[T](DefaultCciPeriod)
 }
 
 // NewCciWithPeriod function initializes a new CCI instance with the given period.

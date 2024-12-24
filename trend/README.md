@@ -343,7 +343,7 @@ const (
 ```
 
 <a name="Apo"></a>
-## type [Apo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L41-L53>)
+## type [Apo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L42-L54>)
 
 Apo represents the configuration parameters for calculating the Absolute Price Oscillator \(APO\). An APO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive APO values signify an upward trend, while negative values signify a downward trend.
 
@@ -380,7 +380,7 @@ type Apo[T helper.Number] struct {
 ```
 
 <a name="NewApo"></a>
-### func [NewApo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L57>)
+### func [NewApo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L58>)
 
 ```go
 func NewApo[T helper.Number]() *Apo[T]
@@ -389,7 +389,7 @@ func NewApo[T helper.Number]() *Apo[T]
 NewApo function initializes a new APO instance with the default parameters.
 
 <a name="Apo[T].Compute"></a>
-### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L68>)
+### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L69>)
 
 ```go
 func (apo *Apo[T]) Compute(c <-chan T) <-chan T
@@ -508,7 +508,7 @@ func NewCci[T helper.Number]() *Cci[T]
 NewCci function initializes a new CCI instance with the default parameters.
 
 <a name="NewCciWithPeriod"></a>
-### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L42>)
+### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L40>)
 
 ```go
 func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
@@ -517,7 +517,7 @@ func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
 NewCciWithPeriod function initializes a new CCI instance with the given period.
 
 <a name="Cci[T].Compute"></a>
-### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L49>)
+### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L47>)
 
 ```go
 func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -526,7 +526,7 @@ func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the CCI and the signal line.
 
 <a name="Cci[T].IdlePeriod"></a>
-### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L92>)
+### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L90>)
 
 ```go
 func (c *Cci[T]) IdlePeriod() int
@@ -1189,7 +1189,7 @@ func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
 NewMovingMaxWithPeriod function initializes a new Moving Max instance with the given period.
 
 <a name="MovingMax[T].Compute"></a>
-### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L33>)
+### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L32>)
 
 ```go
 func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
@@ -1198,7 +1198,7 @@ func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Max over the specified period.
 
 <a name="MovingMax[T].IdlePeriod"></a>
-### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L49>)
+### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L48>)
 
 ```go
 func (m *MovingMax[T]) IdlePeriod() int
@@ -1239,7 +1239,7 @@ func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
 NewMovingMinWithPeriod function initializes a new Moving Min instance with the given period.
 
 <a name="MovingMin[T].Compute"></a>
-### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L33>)
+### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L32>)
 
 ```go
 func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
@@ -1248,7 +1248,7 @@ func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Min over the specified period.
 
 <a name="MovingMin[T].IdlePeriod"></a>
-### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L49>)
+### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L48>)
 
 ```go
 func (m *MovingMin[T]) IdlePeriod() int

@@ -5,7 +5,6 @@
 package volume_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -46,7 +45,7 @@ func TestMoneyFlowIndexStrategyReport(t *testing.T) {
 	report := mfis.Report(snapshots)
 
 	fileName := "money_flow_index_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

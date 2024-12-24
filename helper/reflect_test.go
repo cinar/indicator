@@ -328,7 +328,7 @@ func TestSetReflectValueFromNotFloat32(t *testing.T) {
 func TestSetReflectValueFromFloat64(t *testing.T) {
 	actual := float64(0)
 	value := reflect.ValueOf(&actual).Elem()
-	expected := float64(10.20)
+	expected := 10.20
 
 	err := setReflectValue(value, "10.20", "")
 	if err != nil {
@@ -427,7 +427,7 @@ func TestGetReflectValueFromBool(t *testing.T) {
 }
 
 func TestGetReflectValueFromInt(t *testing.T) {
-	input := int(10)
+	input := 10
 	value := reflect.ValueOf(&input).Elem()
 	expected := "10"
 
@@ -592,7 +592,7 @@ func TestGetReflectValueFromFloat32(t *testing.T) {
 }
 
 func TestGetReflectValueFromFloat64(t *testing.T) {
-	input := float64(10.20)
+	input := 10.20
 	value := reflect.ValueOf(&input).Elem()
 	expected := "10.2"
 

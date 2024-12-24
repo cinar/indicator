@@ -5,7 +5,6 @@
 package strategy_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -54,7 +53,7 @@ func TestSplitStrategyReport(t *testing.T) {
 	report := split.Report(snapshots)
 
 	fileName := "split.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

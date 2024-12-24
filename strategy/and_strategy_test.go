@@ -5,7 +5,6 @@
 package strategy_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -49,7 +48,7 @@ func TestAndStrategyReport(t *testing.T) {
 	report := and.Report(snapshots)
 
 	fileName := "and.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

@@ -21,7 +21,7 @@ func TestTiingoRepositoryAssets(t *testing.T) {
 	repository := asset.NewTiingoRepository("1234")
 
 	_, err := repository.Assets()
-	if err != errors.ErrUnsupported {
+	if !errors.Is(err, errors.ErrUnsupported) {
 		t.Fatal(err)
 	}
 }
@@ -80,7 +80,10 @@ func TestTiingoRepositoryGetInvalid(t *testing.T) {
 	response := ""
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		fmt.Fprint(w, response)
+		_, err := fmt.Fprint(w, response)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}))
 
 	repository := asset.NewTiingoRepository("1234")
@@ -175,7 +178,7 @@ func TestTiingoRepositoryAppend(t *testing.T) {
 	repository := asset.NewTiingoRepository("1234")
 
 	err := repository.Append("A", nil)
-	if err != errors.ErrUnsupported {
+	if !errors.Is(err, errors.ErrUnsupported) {
 		t.Fatal(err)
 	}
 }

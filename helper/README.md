@@ -68,6 +68,8 @@ The information provided on this project is strictly for informational purposes 
 - [func Pipe\[T any\]\(f \<\-chan T, t chan\<\- T\)](<#Pipe>)
 - [func Pow\[T Number\]\(c \<\-chan T, y T\) \<\-chan T](<#Pow>)
 - [func ReadFromCsvFile\[T any\]\(fileName string, hasHeader bool\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
+- [func Remove\(t \*testing.T, name string\)](<#Remove>)
+- [func RemoveAll\(t \*testing.T, path string\)](<#RemoveAll>)
 - [func RoundDigit\[T Number\]\(n T, d int\) T](<#RoundDigit>)
 - [func RoundDigits\[T Number\]\(c \<\-chan T, d int\) \<\-chan T](<#RoundDigits>)
 - [func Seq\[T Number\]\(from, to, increment T\) \<\-chan T](<#Seq>)
@@ -791,6 +793,24 @@ func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error)
 
 ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename, maps the data to corresponding struct fields, and delivers it through the channel.
 
+<a name="Remove"></a>
+## func [Remove](<https://github.com/cinar/indicator/blob/master/helper/remove.go#L13>)
+
+```go
+func Remove(t *testing.T, name string)
+```
+
+Remove removes the file with the given name.
+
+<a name="RemoveAll"></a>
+## func [RemoveAll](<https://github.com/cinar/indicator/blob/master/helper/remove.go#L21>)
+
+```go
+func RemoveAll(t *testing.T, path string)
+```
+
+RemoveAll removes the files with the given path.
+
 <a name="RoundDigit"></a>
 ## func [RoundDigit](<https://github.com/cinar/indicator/blob/master/helper/round_digit.go#L15>)
 
@@ -1237,7 +1257,7 @@ type ReportColumn interface {
 func NewAnnotationReportColumn(values <-chan string) ReportColumn
 ```
 
-NewAnnotationReportColumn returns a new instance of a annotation column for a report.
+NewAnnotationReportColumn returns a new instance of an annotation column for a report.
 
 <a name="NewNumericReportColumn"></a>
 ### func [NewNumericReportColumn](<https://github.com/cinar/indicator/blob/master/helper/numeric_report_column.go#L17>)

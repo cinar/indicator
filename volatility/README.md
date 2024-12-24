@@ -150,6 +150,15 @@ const (
 )
 ```
 
+<a name="DefaultMovingStdPeriod"></a>
+
+```go
+const (
+    // DefaultMovingStdPeriod is the default time period for Moving Standard Deviation.
+    DefaultMovingStdPeriod = 1
+)
+```
+
 <a name="DefaultPoPeriod"></a>
 
 ```go
@@ -169,7 +178,7 @@ const (
 ```
 
 <a name="AccelerationBands"></a>
-## type [AccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L27-L30>)
+## type [AccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L28-L31>)
 
 AccelerationBands represents the configuration parameters for calculating the Acceleration Bands.
 
@@ -194,7 +203,7 @@ type AccelerationBands[T helper.Number] struct {
 ```
 
 <a name="NewAccelerationBands"></a>
-### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L33>)
+### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L34>)
 
 ```go
 func NewAccelerationBands[T helper.Number]() *AccelerationBands[T]
@@ -203,7 +212,7 @@ func NewAccelerationBands[T helper.Number]() *AccelerationBands[T]
 NewAccelerationBands function initializes a new Acceleration Bands instance with the default parameters.
 
 <a name="AccelerationBands[T].Compute"></a>
-### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L40>)
+### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L41>)
 
 ```go
 func (a *AccelerationBands[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -212,7 +221,7 @@ func (a *AccelerationBands[T]) Compute(high, low, closing <-chan T) (<-chan T, <
 Compute function takes a channel of numbers and computes the Acceleration Bands over the specified period.
 
 <a name="AccelerationBands[T].IdlePeriod"></a>
-### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L86>)
+### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L87>)
 
 ```go
 func (a *AccelerationBands[T]) IdlePeriod() int
@@ -296,7 +305,7 @@ IdlePeriod is the initial period that Acceleration Bands won't yield any results
 
 BollingerBandWidth represents the configuration parameters for calculating the Bollinger Band Width. It measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
 
-During a period of rising price volatity the band width widens, and during a period of low market volatity band width contracts.
+During a period of rising price volatity the bandwidth widens, and during a period of low market volatity bandwidth contracts.
 
 ```
 Band Width = (Upper Band - Lower Band) / Middle BollingerBandWidth
@@ -578,7 +587,7 @@ func (k *KeltnerChannel[T]) IdlePeriod() int
 IdlePeriod is the initial period that Keltner Channel won't yield any results.
 
 <a name="MovingStd"></a>
-## type [MovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L17-L20>)
+## type [MovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L22-L25>)
 
 MovingStd represents the configuration parameters for calculating the Moving Standard Deviation over the specified period.
 
@@ -594,7 +603,7 @@ type MovingStd[T helper.Number] struct {
 ```
 
 <a name="NewMovingStd"></a>
-### func [NewMovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L23>)
+### func [NewMovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L28>)
 
 ```go
 func NewMovingStd[T helper.Number]() *MovingStd[T]
@@ -603,7 +612,7 @@ func NewMovingStd[T helper.Number]() *MovingStd[T]
 NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
 
 <a name="NewMovingStdWithPeriod"></a>
-### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L28>)
+### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L33>)
 
 ```go
 func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T]
@@ -612,7 +621,7 @@ func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T]
 NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.
 
 <a name="MovingStd[T].Compute"></a>
-### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L35>)
+### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L40>)
 
 ```go
 func (m *MovingStd[T]) Compute(c <-chan T) <-chan T
@@ -621,7 +630,7 @@ func (m *MovingStd[T]) Compute(c <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the Moving Standard Deviation over the specified period.
 
 <a name="MovingStd[T].IdlePeriod"></a>
-### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L67>)
+### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L72>)
 
 ```go
 func (m *MovingStd[T]) IdlePeriod() int

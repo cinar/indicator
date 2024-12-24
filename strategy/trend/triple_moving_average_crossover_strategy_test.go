@@ -5,7 +5,6 @@
 package trend_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -27,8 +26,8 @@ func TestTripleMovingAverageCrossoverStrategy(t *testing.T) {
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	strategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
-	actual := strategy.Compute(snapshots)
+	tmacStrategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
+	actual := tmacStrategy.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -42,12 +41,12 @@ func TestTripleMovingAverageCrossoverStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	strategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
+	tmacStrategy := trend.NewTripleMovingAverageCrossoverStrategyWith(2, 5, 20)
 
-	report := strategy.Report(snapshots)
+	report := tmacStrategy.Report(snapshots)
 
 	fileName := "triple_moving_average_crossover_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

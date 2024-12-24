@@ -15,8 +15,8 @@ func TestMovingMax(t *testing.T) {
 	input := helper.SliceToChan([]int{-10, 20, -4, -5, 1, 5, 8, 10, -20, 4})
 	expected := helper.SliceToChan([]int{20, 20, 5, 8, 10, 10, 10})
 
-	max := trend.NewMovingMaxWithPeriod[int](4)
-	actual := max.Compute(input)
+	movingMax := trend.NewMovingMaxWithPeriod[int](4)
+	actual := movingMax.Compute(input)
 
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {

@@ -7,7 +7,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"log/slog"
 	"os"
 	"time"
@@ -24,11 +24,12 @@ func main() {
 	var workers int
 	var delay int
 
-	fmt.Fprintln(os.Stderr, "Indicator Sync")
-	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
-	fmt.Fprintln(os.Stderr, "The source code is provided under GNU AGPLv3 License.")
-	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
-	fmt.Fprintln(os.Stderr)
+	stdErr := log.New(os.Stderr, "", 0)
+	stdErr.Println("Indicator Sync")
+	stdErr.Println("Copyright (c) 2021-2024 Onur Cinar.")
+	stdErr.Println("The source code is provided under GNU AGPLv3 License.")
+	stdErr.Println("https://github.com/cinar/indicator")
+	stdErr.Println()
 
 	flag.StringVar(&sourceName, "source-name", "tiingo", "source repository type")
 	flag.StringVar(&sourceConfig, "source-config", "", "source repository config")

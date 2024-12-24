@@ -5,7 +5,6 @@
 package trend_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -27,8 +26,8 @@ func TestGoldenCrossStrategy(t *testing.T) {
 
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
-	strategy := trend.NewGoldenCrossStrategyWith(5, 20)
-	actual := strategy.Compute(snapshots)
+	gcs := trend.NewGoldenCrossStrategyWith(5, 20)
+	actual := gcs.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -42,12 +41,12 @@ func TestGoldenCrossStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	strategy := trend.NewGoldenCrossStrategyWith(5, 20)
+	gcs := trend.NewGoldenCrossStrategyWith(5, 20)
 
-	report := strategy.Report(snapshots)
+	report := gcs.Report(snapshots)
 
 	fileName := "golden_cross_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

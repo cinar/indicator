@@ -6,7 +6,6 @@ package asset_test
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"reflect"
 	"testing"
@@ -133,7 +132,7 @@ func TestFileSystemRepositoryAppend(t *testing.T) {
 	}
 
 	name := "test_file_system_repository_append"
-	defer os.Remove(path.Join(repositoryBase, fmt.Sprintf("%s.csv", name)))
+	defer helper.Remove(t, path.Join(repositoryBase, fmt.Sprintf("%s.csv", name)))
 
 	err = repository.Append(name, expected)
 	if err != nil {

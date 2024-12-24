@@ -5,7 +5,6 @@
 package decorator_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -29,9 +28,9 @@ func TestInverseStrategy(t *testing.T) {
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
 	innerStrategy := trend.NewMacdStrategy()
-	strategy := decorator.NewInverseStrategy(innerStrategy)
+	inverseStrategy := decorator.NewInverseStrategy(innerStrategy)
 
-	actual := strategy.Compute(snapshots)
+	actual := inverseStrategy.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -46,12 +45,12 @@ func TestInverseStrategyReport(t *testing.T) {
 	}
 
 	innerStrategy := trend.NewMacdStrategy()
-	strategy := decorator.NewInverseStrategy(innerStrategy)
+	inverseStrategy := decorator.NewInverseStrategy(innerStrategy)
 
-	report := strategy.Report(snapshots)
+	report := inverseStrategy.Report(snapshots)
 
 	fileName := "inverse_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

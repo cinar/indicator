@@ -5,7 +5,6 @@
 package momentum_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -47,7 +46,7 @@ func TestRsiStrategyReport(t *testing.T) {
 	report := rsi.Report(snapshots)
 
 	fileName := "rsi_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

@@ -140,7 +140,7 @@ Report processes the provided asset snapshots and generates a report annotated w
 <a name="StopLossStrategy"></a>
 ## type [StopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L16-L22>)
 
-StopLossStrategy prevents a loss by recommending a sell action when the assets drops below the given threshold.
+StopLossStrategy prevents a loss by recommending a sell action when the assets drop below the given threshold.
 
 ```go
 type StopLossStrategy struct {
