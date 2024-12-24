@@ -39,5 +39,6 @@ func AllStrategies() []strategy.Strategy {
 		NewTripleMovingAverageCrossoverStrategy(),
 		NewTsiStrategy(),
 		NewVwmaStrategy(),
+		NewWeightedCloseStrategy(),
 	}
 }

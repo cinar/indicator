@@ -125,6 +125,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(v \*VwmaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#VwmaStrategy.Compute>)
   - [func \(\*VwmaStrategy\) Name\(\) string](<#VwmaStrategy.Name>)
   - [func \(v \*VwmaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#VwmaStrategy.Report>)
+- [type WeightedCloseStrategy](<#WeightedCloseStrategy>)
+  - [func NewWeightedCloseStrategy\(\) \*WeightedCloseStrategy](<#NewWeightedCloseStrategy>)
+  - [func NewWeightedCloseStrategyWith\(maPeriod int\) \*WeightedCloseStrategy](<#NewWeightedCloseStrategyWith>)
+  - [func \(w \*WeightedCloseStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#WeightedCloseStrategy.Compute>)
+  - [func \(w \*WeightedCloseStrategy\) Name\(\) string](<#WeightedCloseStrategy.Name>)
+  - [func \(w \*WeightedCloseStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#WeightedCloseStrategy.Report>)
 
 
 ## Constants
@@ -222,6 +228,15 @@ const (
 const (
     // DefaultVwmaStrategyPeriod is the default VWMA period.
     DefaultVwmaStrategyPeriod = 20
+)
+```
+
+<a name="DefaultWeightedCloseStrategyMaPeriod"></a>
+
+```go
+const (
+    // DefaultWeightedCloseStrategyMaPeriod is the default Moving Average period of 20.
+    DefaultWeightedCloseStrategyMaPeriod = 20
 )
 ```
 
@@ -1220,6 +1235,66 @@ Name returns the name of the strategy.
 
 ```go
 func (v *VwmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="WeightedCloseStrategy"></a>
+## type [WeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L25-L31>)
+
+WeightedCloseStrategy represents the configuration parameters for calculating the Weighted Close strategy. A weighted close crossing above the moving average suggests a bullish trend, while crossing below the moving average indicates a bearish trend.
+
+```go
+type WeightedCloseStrategy struct {
+    // WeightedClose represents the configuration parameters for calculating the weighted close.
+    WeightedClose *trend.WeightedClose[float64]
+
+    // Ma represents the configuration parameters for calculating the moving average.
+    Ma  trend.Ma[float64]
+}
+```
+
+<a name="NewWeightedCloseStrategy"></a>
+### func [NewWeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L34>)
+
+```go
+func NewWeightedCloseStrategy() *WeightedCloseStrategy
+```
+
+NewWeightedCloseStrategy function initializes a new Weighted Close strategy instance.
+
+<a name="NewWeightedCloseStrategyWith"></a>
+### func [NewWeightedCloseStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L42>)
+
+```go
+func NewWeightedCloseStrategyWith(maPeriod int) *WeightedCloseStrategy
+```
+
+NewWeightedCloseStrategyWith function initializes a new Weighted Close strategy instance with the given parameters.
+
+<a name="WeightedCloseStrategy.Compute"></a>
+### func \(\*WeightedCloseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L57>)
+
+```go
+func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="WeightedCloseStrategy.Name"></a>
+### func \(\*WeightedCloseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L50>)
+
+```go
+func (w *WeightedCloseStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="WeightedCloseStrategy.Report"></a>
+### func \(\*WeightedCloseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/weighted_close_strategy.go#L91>)
+
+```go
+func (w *WeightedCloseStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

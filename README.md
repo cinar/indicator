@@ -56,6 +56,7 @@ The following list of indicators are currently supported by this package:
 -	[Typical Price](trend/README.md#type-typicalprice)
 -	[Volume Weighted Moving Average (VWMA)](trend/README.md#type-vwma)
 -	Vortex Indicator
+-   [Weighted Close](trend/README.md#type-weightedclose)
 -	[Weighted Moving Average (WMA)](trend/README.md#type-wma)
 
 ### 🚀 Momentum Indicators
@@ -129,6 +130,7 @@ The following list of strategies are currently supported by this package:
 -	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#type-triplemovingaveragecrossoverstrategy)
 -	[True Strength Index (TSI) Strategy](strategy/trend/README.md#type-tsistrategy)
 -	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#type-vwmastrategy)
+-   [Weighted Close Strategy](strategy/trend/README.md#type-weightedclosestrategy)
 
 ### 🚀 Momentum Strategies
 
