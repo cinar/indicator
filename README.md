@@ -110,6 +110,7 @@ The following list of strategies are currently supported by this package:
 
 ### 📈 Trend Strategies
 
+-   [Alligator Strategy](strategy/trend/README.md#type-alligatorstrategy)
 -	[Absolute Price Oscillator (APO) Strategy](strategy/trend/README.md#type-apostrategy)
 -	[Aroon Strategy](strategy/trend/README.md#type-aroonstrategy)
 -	[Balance of Power (BoP) Strategy](strategy/trend/README.md#type-bopstrategy)

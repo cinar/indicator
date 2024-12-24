@@ -803,7 +803,7 @@ func Remove(t *testing.T, name string)
 Remove removes the file with the given name.
 
 <a name="RemoveAll"></a>
-## func [RemoveAll](<https://github.com/cinar/indicator/blob/master/helper/remove.go#L21>)
+## func [RemoveAll](<https://github.com/cinar/indicator/blob/master/helper/remove.go#L23>)
 
 ```go
 func RemoveAll(t *testing.T, path string)
