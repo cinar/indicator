@@ -148,7 +148,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(v \*Vwma\[T\]\) IdlePeriod\(\) int](<#Vwma[T].IdlePeriod>)
 - [type WeightedClose](<#WeightedClose>)
   - [func NewWeightedClose\[T helper.Number\]\(\) \*WeightedClose\[T\]](<#NewWeightedClose>)
-  - [func \(w \*WeightedClose\[T\]\) Compute\(highs, lows, closes \<\-chan T\) \<\-chan T](<#WeightedClose[T].Compute>)
+  - [func \(\*WeightedClose\[T\]\) Compute\(highs, lows, closes \<\-chan T\) \<\-chan T](<#WeightedClose[T].Compute>)
   - [func \(\*WeightedClose\[T\]\) IdlePeriod\(\) int](<#WeightedClose[T].IdlePeriod>)
   - [func \(\*WeightedClose\[T\]\) String\(\) string](<#WeightedClose[T].String>)
 - [type Wma](<#Wma>)
@@ -1847,7 +1847,7 @@ NewWeightedClose function initializes a new Weighted Close instance with the def
 ### func \(\*WeightedClose\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L28>)
 
 ```go
-func (w *WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T
+func (*WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the Weighted Close over the specified period.

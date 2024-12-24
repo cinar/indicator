@@ -74,6 +74,7 @@ The following list of indicators are currently supported by this package:
 
 ### 🎢 Volatility Indicators
 
+-   [%B](volatility/README.md#type-percentb)
 -	[Acceleration Bands](volatility/README.md#type-accelerationbands)
 -	[Actual True Range (ATR)](volatility/README.md#type-atr)
 -	[Bollinger Band Width](volatility/README.md#type-bollingerbandwidth)
