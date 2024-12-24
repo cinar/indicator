@@ -41,6 +41,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(b \*BollingerBandWidth\[T\]\) IdlePeriod\(\) int](<#BollingerBandWidth[T].IdlePeriod>)
 - [type BollingerBands](<#BollingerBands>)
   - [func NewBollingerBands\[T helper.Number\]\(\) \*BollingerBands\[T\]](<#NewBollingerBands>)
+  - [func NewBollingerBandsWithPeriod\[T helper.Number\]\(period int\) \*BollingerBands\[T\]](<#NewBollingerBandsWithPeriod>)
   - [func \(b \*BollingerBands\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#BollingerBands[T].Compute>)
   - [func \(b \*BollingerBands\[T\]\) IdlePeriod\(\) int](<#BollingerBands[T].IdlePeriod>)
 - [type ChandelierExit](<#ChandelierExit>)
@@ -62,6 +63,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewMovingStdWithPeriod\[T helper.Number\]\(period int\) \*MovingStd\[T\]](<#NewMovingStdWithPeriod>)
   - [func \(m \*MovingStd\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingStd[T].Compute>)
   - [func \(m \*MovingStd\[T\]\) IdlePeriod\(\) int](<#MovingStd[T].IdlePeriod>)
+- [type PercentB](<#PercentB>)
+  - [func NewPercentB\[T helper.Number\]\(\) \*PercentB\[T\]](<#NewPercentB>)
+  - [func NewPercentBWithPeriod\[T helper.Number\]\(period int\) \*PercentB\[T\]](<#NewPercentBWithPeriod>)
+  - [func \(p \*PercentB\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#PercentB[T].Compute>)
+  - [func \(p \*PercentB\[T\]\) IdlePeriod\(\) int](<#PercentB[T].IdlePeriod>)
+  - [func \(p \*PercentB\[T\]\) String\(\) string](<#PercentB[T].String>)
 - [type Po](<#Po>)
   - [func NewPo\[T helper.Number\]\(\) \*Po\[T\]](<#NewPo>)
   - [func NewPoWithPeriod\[T helper.Number\]\(period int\) \*Po\[T\]](<#NewPoWithPeriod>)
@@ -386,8 +393,17 @@ func NewBollingerBands[T helper.Number]() *BollingerBands[T]
 
 NewBollingerBands function initializes a new Bollinger Bands instance with the default parameters.
 
+<a name="NewBollingerBandsWithPeriod"></a>
+### func [NewBollingerBandsWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L40>)
+
+```go
+func NewBollingerBandsWithPeriod[T helper.Number](period int) *BollingerBands[T]
+```
+
+NewBollingerBandsWithPeriod function initializes a new Bollinger Bands instance with the given period.
+
 <a name="BollingerBands[T].Compute"></a>
-### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L42>)
+### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L47>)
 
 ```go
 func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -396,7 +412,7 @@ func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
 Compute function takes a channel of numbers and computes the Bollinger Bands over the specified period.
 
 <a name="BollingerBands[T].IdlePeriod"></a>
-### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L74>)
+### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L79>)
 
 ```go
 func (b *BollingerBands[T]) IdlePeriod() int
@@ -637,6 +653,67 @@ func (m *MovingStd[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
+
+<a name="PercentB"></a>
+## type [PercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L16-L19>)
+
+PercentB represents the parameters for calculating the %B indicator.
+
+```
+%B = (Close - Lower Band) / (Upper Band - Lower Band)
+```
+
+```go
+type PercentB[T helper.Number] struct {
+    // BollingerBands
+    BollingerBands *BollingerBands[T]
+}
+```
+
+<a name="NewPercentB"></a>
+### func [NewPercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L22>)
+
+```go
+func NewPercentB[T helper.Number]() *PercentB[T]
+```
+
+NewPercentB function initializes a new %B instance with the default parameters.
+
+<a name="NewPercentBWithPeriod"></a>
+### func [NewPercentBWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L27>)
+
+```go
+func NewPercentBWithPeriod[T helper.Number](period int) *PercentB[T]
+```
+
+NewPercentBWithPeriod function initializes a new %B instance with the given period.
+
+<a name="PercentB[T].Compute"></a>
+### func \(\*PercentB\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L34>)
+
+```go
+func (p *PercentB[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the %B over the specified period.
+
+<a name="PercentB[T].IdlePeriod"></a>
+### func \(\*PercentB\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L53>)
+
+```go
+func (p *PercentB[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that %B yield any results.
+
+<a name="PercentB[T].String"></a>
+### func \(\*PercentB\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L58>)
+
+```go
+func (p *PercentB[T]) String() string
+```
+
+String is the string representation of the %B.
 
 <a name="Po"></a>
 ## type [Po](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L28-L37>)
