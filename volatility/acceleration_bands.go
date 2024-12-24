@@ -9,6 +9,7 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
+//goland:noinspection GoUnnecessarilyExportedIdentifiers
 const (
 	// DefaultAccelerationBandsPeriod is the default period for the Acceleration Bands.
 	DefaultAccelerationBandsPeriod = 20

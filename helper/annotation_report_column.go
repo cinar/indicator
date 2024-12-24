@@ -12,7 +12,7 @@ type annotationReportColumn struct {
 	values <-chan string
 }
 
-// NewAnnotationReportColumn returns a new instance of a annotation column for a report.
+// NewAnnotationReportColumn returns a new instance of an annotation column for a report.
 func NewAnnotationReportColumn(values <-chan string) ReportColumn {
 	return &annotationReportColumn{
 		values: values,

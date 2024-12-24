@@ -5,6 +5,7 @@
 package backtest_test
 
 import (
+	"github.com/cinar/indicator/v2/helper"
 	"os"
 	"testing"
 
@@ -16,19 +17,19 @@ import (
 func TestBacktest(t *testing.T) {
 	repository := asset.NewFileSystemRepository("testdata/repository")
 
-	outputDir, err := os.MkdirTemp("", "backtest")
+	outputDir, err := os.MkdirTemp("", "bt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	defer os.RemoveAll(outputDir)
+	defer helper.RemoveAll(t, outputDir)
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
-	backtest := backtest.NewBacktest(repository, htmlReport)
-	backtest.Names = append(backtest.Names, "brk-b")
-	backtest.Strategies = append(backtest.Strategies, trend.NewApoStrategy())
+	bt := backtest.NewBacktest(repository, htmlReport)
+	bt.Names = append(bt.Names, "brk-b")
+	bt.Strategies = append(bt.Strategies, trend.NewApoStrategy())
 
-	err = backtest.Run()
+	err = bt.Run()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,12 +43,12 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer os.RemoveAll(outputDir)
+	defer helper.RemoveAll(t, outputDir)
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
-	backtest := backtest.NewBacktest(repository, htmlReport)
+	bt := backtest.NewBacktest(repository, htmlReport)
 
-	err = backtest.Run()
+	err = bt.Run()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,13 +62,13 @@ func TestBacktestNonExistingAsset(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer os.RemoveAll(outputDir)
+	defer helper.RemoveAll(t, outputDir)
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
-	backtest := backtest.NewBacktest(repository, htmlReport)
-	backtest.Names = append(backtest.Names, "non_existing")
+	bt := backtest.NewBacktest(repository, htmlReport)
+	bt.Names = append(bt.Names, "non_existing")
 
-	err = backtest.Run()
+	err = bt.Run()
 	if err != nil {
 		t.Fatal(err)
 	}

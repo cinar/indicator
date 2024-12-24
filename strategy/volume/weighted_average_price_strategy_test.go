@@ -5,7 +5,6 @@
 package volume_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -46,7 +45,7 @@ func TestVolumeWeightedAveragePriceStrategyReport(t *testing.T) {
 	report := vwaps.Report(snapshots)
 
 	fileName := "volume_weighted_average_price_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

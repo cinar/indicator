@@ -12,7 +12,7 @@ import (
 	"github.com/cinar/indicator/v2/strategy"
 )
 
-// StopLossStrategy prevents a loss by recommending a sell action when the assets drops below the given threshold.
+// StopLossStrategy prevents a loss by recommending a sell action when the assets drop below the given threshold.
 type StopLossStrategy struct {
 	// InnertStrategy is the inner strategy.
 	InnertStrategy strategy.Strategy

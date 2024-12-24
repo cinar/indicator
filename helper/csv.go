@@ -276,12 +276,12 @@ func (c *Csv[T]) writeHeaderToCsvWriter(csvWriter *csv.Writer) error {
 // ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename,
 // maps the data to corresponding struct fields, and delivers it through the channel.
 func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error) {
-	csv, err := NewCsv[T](hasHeader)
+	c, err := NewCsv[T](hasHeader)
 	if err != nil {
 		return nil, err
 	}
 
-	return csv.ReadFromFile(fileName)
+	return c.ReadFromFile(fileName)
 }
 
 // AppendOrWriteToCsvFile writes the provided rows of data to the specified file, appending to
@@ -289,7 +289,7 @@ func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error) 
 // function assumes that the existing file's column order matches the field order of the
 // given row struct to ensure consistent data structure.
 func AppendOrWriteToCsvFile[T any](fileName string, hasHeader bool, rows <-chan *T) error {
-	csv, err := NewCsv[T](hasHeader)
+	c, err := NewCsv[T](hasHeader)
 	if err != nil {
 		return err
 	}
@@ -300,8 +300,8 @@ func AppendOrWriteToCsvFile[T any](fileName string, hasHeader bool, rows <-chan 
 			return err
 		}
 	} else if stat.Size() > 0 {
-		return csv.AppendToFile(fileName, rows)
+		return c.AppendToFile(fileName, rows)
 	}
 
-	return csv.WriteToFile(fileName, rows)
+	return c.WriteToFile(fileName, rows)
 }

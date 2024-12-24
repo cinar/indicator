@@ -5,7 +5,6 @@
 package strategy_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -50,7 +49,7 @@ func TestMajorityStrategyReport(t *testing.T) {
 	report := majority.Report(snapshots)
 
 	fileName := "majority.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

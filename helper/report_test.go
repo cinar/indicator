@@ -5,7 +5,6 @@
 package helper_test
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -42,7 +41,7 @@ func TestReportWriteToFile(t *testing.T) {
 	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
 
 	fileName := "report.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

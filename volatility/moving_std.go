@@ -10,6 +10,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultMovingStdPeriod is the default time period for Moving Standard Deviation.
+	DefaultMovingStdPeriod = 1
+)
+
 // MovingStd represents the configuration parameters for calculating the Moving Standard Deviation
 // over the specified period.
 //
@@ -21,7 +26,7 @@ type MovingStd[T helper.Number] struct {
 
 // NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
 func NewMovingStd[T helper.Number]() *MovingStd[T] {
-	return NewMovingStdWithPeriod[T](1)
+	return NewMovingStdWithPeriod[T](DefaultMovingStdPeriod)
 }
 
 // NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.

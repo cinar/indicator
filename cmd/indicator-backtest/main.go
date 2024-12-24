@@ -7,7 +7,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"log/slog"
 	"os"
 
@@ -31,11 +31,12 @@ func main() {
 	var addSplits bool
 	var addAnds bool
 
-	fmt.Fprintln(os.Stderr, "Indicator Backtest")
-	fmt.Fprintln(os.Stderr, "Copyright (c) 2021-2024 Onur Cinar.")
-	fmt.Fprintln(os.Stderr, "The source code is provided under GNU AGPLv3 License.")
-	fmt.Fprintln(os.Stderr, "https://github.com/cinar/indicator")
-	fmt.Fprintln(os.Stderr)
+	stdErr := log.New(os.Stderr, "", 0)
+	stdErr.Println("Indicator Backtest")
+	stdErr.Println("Copyright (c) 2021-2024 Onur Cinar.")
+	stdErr.Println("The source code is provided under GNU AGPLv3 License.")
+	stdErr.Println("https://github.com/cinar/indicator")
+	stdErr.Println()
 
 	flag.StringVar(&repositoryName, "repository-name", "filesystem", "repository name")
 	flag.StringVar(&repositoryConfig, "repository-config", "", "repository config")

@@ -6,7 +6,6 @@ package helper_test
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 
@@ -216,7 +215,7 @@ func TestCsvWriteToFile(t *testing.T) {
 	}
 
 	fileName := "test_csv_write_to_file.csv"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = csv.WriteToFile(fileName, helper.SliceToChan(input))
 	if err != nil {
@@ -258,7 +257,7 @@ func TestCsvAppendToFile(t *testing.T) {
 	}
 
 	fileName := "test_csv_append_to_file.csv"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = csv.WriteToFile(fileName, helper.SliceToChan(input[:1]))
 	if err != nil {
@@ -334,7 +333,7 @@ func TestCsvWriteToFileInvalidField(t *testing.T) {
 	}
 
 	fileName := "test_csv_write_to_file_invalid_field.csv"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = csv.WriteToFile(fileName, rows)
 	if err == nil {
@@ -354,7 +353,7 @@ func TestAppendOrWriteToCsvFile(t *testing.T) {
 	}
 
 	fileName := "test_append_or_write_to_csv_file.csv"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err := helper.AppendOrWriteToCsvFile(fileName, true, helper.SliceToChan(input[:1]))
 	if err != nil {

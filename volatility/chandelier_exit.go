@@ -48,19 +48,19 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 	highsSplice := helper.Duplicate(highs, 2)
 	lowsSplice := helper.Duplicate(lows, 2)
 
-	max := trend.NewMovingMaxWithPeriod[T](c.Period)
-	min := trend.NewMovingMinWithPeriod[T](c.Period)
+	movingMax := trend.NewMovingMaxWithPeriod[T](c.Period)
+	movingMin := trend.NewMovingMinWithPeriod[T](c.Period)
 
 	atr := NewAtrWithPeriod[T](c.Period)
 
 	maxHighs := helper.Skip(
-		max.Compute(highsSplice[0]),
-		atr.IdlePeriod()-max.IdlePeriod(),
+		movingMax.Compute(highsSplice[0]),
+		atr.IdlePeriod()-movingMax.IdlePeriod(),
 	)
 
 	minLows := helper.Skip(
-		min.Compute(lowsSplice[0]),
-		atr.IdlePeriod()-min.IdlePeriod(),
+		movingMin.Compute(lowsSplice[0]),
+		atr.IdlePeriod()-movingMin.IdlePeriod(),
 	)
 
 	atr3Splice := helper.Duplicate(

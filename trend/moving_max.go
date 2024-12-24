@@ -22,10 +22,9 @@ func NewMovingMax[T helper.Number]() *MovingMax[T] {
 
 // NewMovingMaxWithPeriod function initializes a new Moving Max instance with the given period.
 func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T] {
-	max := NewMovingMax[T]()
-	max.Period = period
-
-	return max
+	return &MovingMax[T]{
+		Period: period,
+	}
 }
 
 // Compute function takes a channel of numbers and computes the

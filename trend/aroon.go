@@ -43,14 +43,11 @@ func NewAroon[T helper.Number]() *Aroon[T] {
 // Compute function takes a channel of numbers and computes the Aroon
 // over the specified period.
 func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T) {
-	max := NewMovingMax[T]()
-	max.Period = a.Period
+	movingMax := NewMovingMaxWithPeriod[T](a.Period)
+	movingMin := NewMovingMinWithPeriod[T](a.Period)
 
-	min := NewMovingMin[T]()
-	min.Period = a.Period
-
-	sinceLastHigh := helper.Since[T, T](max.Compute(high))
-	sinceLastLow := helper.Since[T, T](min.Compute(low))
+	sinceLastHigh := helper.Since[T, T](movingMax.Compute(high))
+	sinceLastLow := helper.Since[T, T](movingMin.Compute(low))
 
 	// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
 	aroonUp := helper.MultiplyBy(sinceLastHigh, -1)

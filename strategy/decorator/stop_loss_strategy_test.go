@@ -5,7 +5,6 @@
 package decorator_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -29,9 +28,9 @@ func TestStopLossStrategy(t *testing.T) {
 	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
 
 	innerStrategy := trend.NewAroonStrategy()
-	strategy := decorator.NewStopLossStrategy(innerStrategy, 0.02)
+	stopLossStrategy := decorator.NewStopLossStrategy(innerStrategy, 0.02)
 
-	actual := strategy.Compute(snapshots)
+	actual := stopLossStrategy.Compute(snapshots)
 
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
@@ -46,12 +45,12 @@ func TestStopLossStrategyReport(t *testing.T) {
 	}
 
 	innerStrategy := trend.NewAroonStrategy()
-	strategy := decorator.NewStopLossStrategy(innerStrategy, 0.02)
+	stopLossStrategy := decorator.NewStopLossStrategy(innerStrategy, 0.02)
 
-	report := strategy.Report(snapshots)
+	report := stopLossStrategy.Report(snapshots)
 
 	fileName := "stop_loss_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

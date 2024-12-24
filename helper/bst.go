@@ -77,7 +77,7 @@ func (b *Bst[T]) Min() T {
 		return T(0)
 	}
 
-	node, _ := minNode(b.root)
+	node, _ := getMinNode(b.root)
 	return node.value
 }
 
@@ -87,7 +87,7 @@ func (b *Bst[T]) Max() T {
 		return T(0)
 	}
 
-	node, _ := maxNode(b.root)
+	node, _ := getMaxNode(b.root)
 	return node.value
 }
 
@@ -118,13 +118,13 @@ func (b *Bst[T]) searchNode(value T) (*BstNode[T], *BstNode[T]) {
 // and rebalances the tree.
 func (b *Bst[T]) removeNode(node, parent *BstNode[T]) {
 	if node.left != nil && node.right != nil {
-		min, minParent := minNode(node.right)
+		minNode, minParent := getMinNode(node.right)
 		if minParent == nil {
 			minParent = node
 		}
 
-		b.removeNode(min, minParent)
-		node.value = min.value
+		b.removeNode(minNode, minParent)
+		node.value = minNode.value
 	} else {
 		var child *BstNode[T]
 
@@ -144,8 +144,8 @@ func (b *Bst[T]) removeNode(node, parent *BstNode[T]) {
 	}
 }
 
-// minNode functions returns the node with the minimum value and its parent node.
-func minNode[T Number](root *BstNode[T]) (*BstNode[T], *BstNode[T]) {
+// getMinNode functions returns the node with the minimum value and its parent node.
+func getMinNode[T Number](root *BstNode[T]) (*BstNode[T], *BstNode[T]) {
 	var parent *BstNode[T]
 	node := root
 
@@ -157,8 +157,8 @@ func minNode[T Number](root *BstNode[T]) (*BstNode[T], *BstNode[T]) {
 	return node, parent
 }
 
-// maxNode functions returns the node with the maximum value and its parent node.
-func maxNode[T Number](root *BstNode[T]) (*BstNode[T], *BstNode[T]) {
+// getMaxNode functions returns the node with the maximum value and its parent node.
+func getMaxNode[T Number](root *BstNode[T]) (*BstNode[T], *BstNode[T]) {
 	var parent *BstNode[T]
 	node := root
 

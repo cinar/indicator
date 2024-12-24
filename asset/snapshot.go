@@ -39,7 +39,7 @@ type Snapshot struct {
 
 // SnapshotsAsDates extracts the date field from each snapshot in the provided
 // channel and returns a new channel containing only those date values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsDates(snapshots <-chan *Snapshot) <-chan time.Time {
 	return helper.Map(snapshots, func(snapshot *Snapshot) time.Time {
 		return snapshot.Date
@@ -48,7 +48,7 @@ func SnapshotsAsDates(snapshots <-chan *Snapshot) <-chan time.Time {
 
 // SnapshotsAsOpenings extracts the open field from each snapshot in the provided
 // channel and returns a new channel containing only those open values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsOpenings(snapshots <-chan *Snapshot) <-chan float64 {
 	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.Open
@@ -57,7 +57,7 @@ func SnapshotsAsOpenings(snapshots <-chan *Snapshot) <-chan float64 {
 
 // SnapshotsAsHighs extracts the high field from each snapshot in the provided
 // channel and returns a new channel containing only those high values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsHighs(snapshots <-chan *Snapshot) <-chan float64 {
 	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.High
@@ -66,7 +66,7 @@ func SnapshotsAsHighs(snapshots <-chan *Snapshot) <-chan float64 {
 
 // SnapshotsAsLows extracts the low field from each snapshot in the provided
 // channel and returns a new channel containing only those low values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsLows(snapshots <-chan *Snapshot) <-chan float64 {
 	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.Low
@@ -75,7 +75,7 @@ func SnapshotsAsLows(snapshots <-chan *Snapshot) <-chan float64 {
 
 // SnapshotsAsClosings extracts the close field from each snapshot in the provided
 // channel and returns a new channel containing only those close values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64 {
 	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.Close
@@ -84,7 +84,7 @@ func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64 {
 
 // SnapshotsAsVolumes extracts the volume field from each snapshot in the provided
 // channel and returns a new channel containing only those volume values.The
-// original snapshots channel can no longer be directly used afterwards.
+// original snapshots channel can no longer be directly used afterward.
 func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64 {
 	return helper.Map(snapshots, func(snapshot *Snapshot) float64 {
 		return snapshot.Volume

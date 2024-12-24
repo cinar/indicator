@@ -12,8 +12,8 @@ import (
 // It measures the percentage difference between the upper band and the lower band. It decreases as
 // Bollinger Bands narrows and increases as Bollinger Bands widens.
 //
-// During a period of rising price volatity the band width widens, and during a period of low market
-// volatity band width contracts.
+// During a period of rising price volatity the bandwidth widens, and during a period of low market
+// volatity bandwidth contracts.
 //
 //	Band Width = (Upper Band - Lower Band) / Middle BollingerBandWidth
 //

@@ -21,3 +21,7 @@ indicator-sync
 
 # Go workspace file
 go.work
+
+# GoLand project
+.idea
+

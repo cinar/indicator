@@ -61,7 +61,7 @@ func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action 
 		return strategy.Hold
 	})
 
-	// VWMA starts only after the a full period.
+	// VWMA starts only after a full period.
 	actions = helper.Shift(actions, v.Vwma.Period-1, strategy.Hold)
 
 	return actions
@@ -110,7 +110,7 @@ func (v *VwmaStrategy) calculateSmaAndVwma(c <-chan *asset.Snapshot) (<-chan flo
 	snapshots := helper.Duplicate(c, 2)
 
 	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshots[0]), 2)
-	volume := helper.Map(snapshots[1], func(s *asset.Snapshot) float64 { return float64(s.Volume) })
+	volume := asset.SnapshotsAsVolumes(snapshots[1])
 
 	smas := v.Sma.Compute(closings[0])
 	vwmas := v.Vwma.Compute(closings[1], volume)

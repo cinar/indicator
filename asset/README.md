@@ -125,7 +125,7 @@ RegisterRepositoryBuilder registers the given builder.
 func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsClosings extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsClosings extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="SnapshotsAsDates"></a>
 ## func [SnapshotsAsDates](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L43>)
@@ -134,7 +134,7 @@ SnapshotsAsClosings extracts the close field from each snapshot in the provided 
 func SnapshotsAsDates(snapshots <-chan *Snapshot) <-chan time.Time
 ```
 
-SnapshotsAsDates extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsDates extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="SnapshotsAsHighs"></a>
 ## func [SnapshotsAsHighs](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L61>)
@@ -143,7 +143,7 @@ SnapshotsAsDates extracts the date field from each snapshot in the provided chan
 func SnapshotsAsHighs(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsHighs extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsHighs extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="SnapshotsAsLows"></a>
 ## func [SnapshotsAsLows](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L70>)
@@ -152,7 +152,7 @@ SnapshotsAsHighs extracts the high field from each snapshot in the provided chan
 func SnapshotsAsLows(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsLows extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsLows extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="SnapshotsAsOpenings"></a>
 ## func [SnapshotsAsOpenings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L52>)
@@ -161,7 +161,7 @@ SnapshotsAsLows extracts the low field from each snapshot in the provided channe
 func SnapshotsAsOpenings(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsOpenings extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsOpenings extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="SnapshotsAsVolumes"></a>
 ## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L88>)
@@ -170,7 +170,7 @@ SnapshotsAsOpenings extracts the open field from each snapshot in the provided c
 func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.The original snapshots channel can no longer be directly used afterwards.
+SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="FileSystemRepository"></a>
 ## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L20-L23>)

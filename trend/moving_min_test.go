@@ -15,8 +15,8 @@ func TestMovingMin(t *testing.T) {
 	input := helper.SliceToChan([]int{-10, 20, -4, -5, 1, 5, 8, 10, -20, 4})
 	expected := helper.SliceToChan([]int{-10, -5, -5, -5, 1, -20, -20})
 
-	min := trend.NewMovingMinWithPeriod[int](4)
-	actual := min.Compute(input)
+	movingMin := trend.NewMovingMinWithPeriod[int](4)
+	actual := movingMin.Compute(input)
 
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {

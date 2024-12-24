@@ -22,10 +22,9 @@ func NewMovingMin[T helper.Number]() *MovingMin[T] {
 
 // NewMovingMinWithPeriod function initializes a new Moving Min instance with the given period.
 func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T] {
-	min := NewMovingMin[T]()
-	min.Period = period
-
-	return min
+	return &MovingMin[T]{
+		Period: period,
+	}
 }
 
 // Compute function takes a channel of numbers and computes the

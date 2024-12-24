@@ -44,14 +44,14 @@ func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T {
 	closingsSplice := helper.Duplicate(closings, 2)
 
 	//	High Closings = Max(period, Closings)
-	max := trend.NewMovingMaxWithPeriod[T](u.Period)
+	movingMax := trend.NewMovingMaxWithPeriod[T](u.Period)
 	highsSplice := helper.Duplicate(
-		max.Compute(closingsSplice[0]),
+		movingMax.Compute(closingsSplice[0]),
 		2,
 	)
 
 	//	Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
-	closingsSplice[1] = helper.Skip(closingsSplice[1], max.Period-1)
+	closingsSplice[1] = helper.Skip(closingsSplice[1], movingMax.Period-1)
 
 	percentageDrawdown := helper.MultiplyBy(
 		helper.Divide(

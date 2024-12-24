@@ -5,7 +5,6 @@
 package trend_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -47,7 +46,7 @@ func TestMacdStrategyReport(t *testing.T) {
 	report := macd.Report(snapshots)
 
 	fileName := "macd_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {

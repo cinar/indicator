@@ -5,7 +5,6 @@
 package volatility_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -47,7 +46,7 @@ func TestSuperTrendStrategyReport(t *testing.T) {
 	report := superTrend.Report(snapshots)
 
 	fileName := "super_trend_strategy.html"
-	defer os.Remove(fileName)
+	defer helper.Remove(t, fileName)
 
 	err = report.WriteToFile(fileName)
 	if err != nil {
