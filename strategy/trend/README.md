@@ -26,6 +26,12 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [func AllStrategies\(\) \[\]strategy.Strategy](<#AllStrategies>)
+- [type AlligatorStrategy](<#AlligatorStrategy>)
+  - [func NewAlligatorStrategy\(\) \*AlligatorStrategy](<#NewAlligatorStrategy>)
+  - [func NewAlligatorStrategyWith\(jawPeriod, teethPeriod, lipPeriod int\) \*AlligatorStrategy](<#NewAlligatorStrategyWith>)
+  - [func \(a \*AlligatorStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#AlligatorStrategy.Compute>)
+  - [func \(a \*AlligatorStrategy\) Name\(\) string](<#AlligatorStrategy.Name>)
+  - [func \(a \*AlligatorStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AlligatorStrategy.Report>)
 - [type ApoStrategy](<#ApoStrategy>)
   - [func NewApoStrategy\(\) \*ApoStrategy](<#NewApoStrategy>)
   - [func \(a \*ApoStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ApoStrategy.Compute>)
@@ -123,6 +129,21 @@ The information provided on this project is strictly for informational purposes 
 
 ## Constants
 
+<a name="DefaultAlligatorStrategyJawPeriod"></a>
+
+```go
+const (
+    // DefaultAlligatorStrategyJawPeriod is the default jaw period of 13.
+    DefaultAlligatorStrategyJawPeriod = 13
+
+    // DefaultAlligatorStrategyTeethPeriod is the default teeth period of 8.
+    DefaultAlligatorStrategyTeethPeriod = 8
+
+    // DefaultAlligatorStrategyLipPeriod is the default lip period of 5.
+    DefaultAlligatorStrategyLipPeriod = 5
+)
+```
+
 <a name="DefaultDemaStrategyPeriod1"></a>
 
 ```go
@@ -212,6 +233,69 @@ func AllStrategies() []strategy.Strategy
 ```
 
 AllStrategies returns a slice containing references to all available trend strategies.
+
+<a name="AlligatorStrategy"></a>
+## type [AlligatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L30-L39>)
+
+AlligatorStrategy represents the configuration parameters for calculating the Alligator strategy. It is a technical indicator to help identify the presence and the direction of the trend. It uses three Smooted Moving Averges \(SMMAs\).
+
+```go
+type AlligatorStrategy struct {
+    // Jaw represents the slowest moving aveage.
+    Jaw *trend.Smma[float64]
+
+    // Teeth represents the medium moving average.
+    Teeth *trend.Smma[float64]
+
+    // Lip represents the fastest moving average.
+    Lip *trend.Smma[float64]
+}
+```
+
+<a name="NewAlligatorStrategy"></a>
+### func [NewAlligatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L42>)
+
+```go
+func NewAlligatorStrategy() *AlligatorStrategy
+```
+
+NewAlligatorStrategy function initializes a new Alligator strategy instance.
+
+<a name="NewAlligatorStrategyWith"></a>
+### func [NewAlligatorStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L51>)
+
+```go
+func NewAlligatorStrategyWith(jawPeriod, teethPeriod, lipPeriod int) *AlligatorStrategy
+```
+
+NewAlligatorStrategyWith function initializes a new Alligator strategy instance with the given parameters.
+
+<a name="AlligatorStrategy.Compute"></a>
+### func \(\*AlligatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L69>)
+
+```go
+func (a *AlligatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="AlligatorStrategy.Name"></a>
+### func \(\*AlligatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L60>)
+
+```go
+func (a *AlligatorStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="AlligatorStrategy.Report"></a>
+### func \(\*AlligatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/alligator_strategy.go#L101>)
+
+```go
+func (a *AlligatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="ApoStrategy"></a>
 ## type [ApoStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/apo_strategy.go#L18-L22>)
