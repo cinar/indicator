@@ -665,10 +665,56 @@ PercentB represents the parameters for calculating the %B indicator.
 
 ```go
 type PercentB[T helper.Number] struct {
-    // BollingerBands
+    // BollingerBands is the underlying Bollinger Bands indicator used for calculations.
     BollingerBands *BollingerBands[T]
 }
 ```
+
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/volatility"
+)
+
+func main() {
+	// Closing prices
+	closes := helper.SliceToChan([]float64{
+		318.600006, 315.839996, 316.149994, 310.570007, 307.779999,
+		305.820007, 305.98999, 306.390015, 311.450012, 312.329987,
+		309.290009, 301.910004, 300, 300.029999, 302,
+		307.820007, 302.690002, 306.48999, 305.549988, 303.429993,
+	})
+
+	// Initialize the %B indicator
+	percentB := volatility.NewPercentB[float64]()
+
+	// Compute %B
+	result := percentB.Compute(closes)
+
+	// Round digits
+	result = helper.RoundDigits(result, 2)
+
+	fmt.Println(helper.ChanToSlice(result))
+}
+```
+
+#### Output
+
+```
+[0.3]
+```
+
+</p>
+</details>
 
 <a name="NewPercentB"></a>
 ### func [NewPercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L22>)

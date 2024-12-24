@@ -14,7 +14,7 @@ import (
 //
 //	%B = (Close - Lower Band) / (Upper Band - Lower Band)
 type PercentB[T helper.Number] struct {
-	// BollingerBands
+	// BollingerBands is the underlying Bollinger Bands indicator used for calculations.
 	BollingerBands *BollingerBands[T]
 }
 

@@ -5,11 +5,34 @@
 package volatility_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/volatility"
 )
+
+func ExamplePercentB() {
+	// Closing prices
+	closes := helper.SliceToChan([]float64{
+		318.600006, 315.839996, 316.149994, 310.570007, 307.779999,
+		305.820007, 305.98999, 306.390015, 311.450012, 312.329987,
+		309.290009, 301.910004, 300, 300.029999, 302,
+		307.820007, 302.690002, 306.48999, 305.549988, 303.429993,
+	})
+
+	// Initialize the %B indicator
+	percentB := volatility.NewPercentB[float64]()
+
+	// Compute %B
+	result := percentB.Compute(closes)
+
+	// Round digits
+	result = helper.RoundDigits(result, 2)
+
+	fmt.Println(helper.ChanToSlice(result))
+	// Output: [0.3]
+}
 
 func TestPercentB(t *testing.T) {
 	type Data struct {
