@@ -19,7 +19,7 @@ func TestPpo(t *testing.T) {
 		Histogram float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/ppo.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/ppo.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -19,7 +19,7 @@ func TestSuperTrend(t *testing.T) {
 		SuperTrend float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/super_trend.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/super_trend.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

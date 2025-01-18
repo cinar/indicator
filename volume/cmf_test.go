@@ -20,7 +20,7 @@ func TestCmf(t *testing.T) {
 		Cmf    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[CmfData]("testdata/cmf.csv", true)
+	input, err := helper.ReadFromCsvFile[CmfData]("testdata/cmf.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

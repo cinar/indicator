@@ -34,7 +34,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SnapshotsAsOpenings\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsOpenings>)
 - [func SnapshotsAsVolumes\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsVolumes>)
 - [type FileSystemRepository](<#FileSystemRepository>)
-  - [func NewFileSystemRepository\(base string\) \*FileSystemRepository](<#NewFileSystemRepository>)
+  - [func NewFileSystemRepository\(base string, csvOptions ...helper.CsvOption\[Snapshot\]\) \*FileSystemRepository](<#NewFileSystemRepository>)
   - [func \(r \*FileSystemRepository\) Append\(name string, snapshots \<\-chan \*Snapshot\) error](<#FileSystemRepository.Append>)
   - [func \(r \*FileSystemRepository\) Assets\(\) \(\[\]string, error\)](<#FileSystemRepository.Assets>)
   - [func \(r \*FileSystemRepository\) Get\(name string\) \(\<\-chan \*Snapshot, error\)](<#FileSystemRepository.Get>)
@@ -183,7 +183,7 @@ func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64
 SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.The original snapshots channel can no longer be directly used afterward.
 
 <a name="FileSystemRepository"></a>
-## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L20-L23>)
+## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L20-L26>)
 
 FileSystemRepository stores and retrieves asset snapshots using the local file system.
 
@@ -194,16 +194,16 @@ type FileSystemRepository struct {
 ```
 
 <a name="NewFileSystemRepository"></a>
-### func [NewFileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L27>)
+### func [NewFileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L30>)
 
 ```go
-func NewFileSystemRepository(base string) *FileSystemRepository
+func NewFileSystemRepository(base string, csvOptions ...helper.CsvOption[Snapshot]) *FileSystemRepository
 ```
 
-NewFileSystemRepository initializes a file system repository with the given base directory.
+NewFileSystemRepository initializes a file system repository with the given base directory and the CSV options.
 
 <a name="FileSystemRepository.Append"></a>
-### func \(\*FileSystemRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L92>)
+### func \(\*FileSystemRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L96>)
 
 ```go
 func (r *FileSystemRepository) Append(name string, snapshots <-chan *Snapshot) error
@@ -212,7 +212,7 @@ func (r *FileSystemRepository) Append(name string, snapshots <-chan *Snapshot) e
 Append adds the given snapshows to the asset with the given name.
 
 <a name="FileSystemRepository.Assets"></a>
-### func \(\*FileSystemRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L34>)
+### func \(\*FileSystemRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L38>)
 
 ```go
 func (r *FileSystemRepository) Assets() ([]string, error)
@@ -221,7 +221,7 @@ func (r *FileSystemRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the repository.
 
 <a name="FileSystemRepository.Get"></a>
-### func \(\*FileSystemRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L56>)
+### func \(\*FileSystemRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L60>)
 
 ```go
 func (r *FileSystemRepository) Get(name string) (<-chan *Snapshot, error)
@@ -230,7 +230,7 @@ func (r *FileSystemRepository) Get(name string) (<-chan *Snapshot, error)
 Get attempts to return a channel of snapshots for the asset with the given name.
 
 <a name="FileSystemRepository.GetSince"></a>
-### func \(\*FileSystemRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L61>)
+### func \(\*FileSystemRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L65>)
 
 ```go
 func (r *FileSystemRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -239,7 +239,7 @@ func (r *FileSystemRepository) GetSince(name string, date time.Time) (<-chan *Sn
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="FileSystemRepository.LastDate"></a>
-### func \(\*FileSystemRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L75>)
+### func \(\*FileSystemRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L79>)
 
 ```go
 func (r *FileSystemRepository) LastDate(name string) (time.Time, error)
@@ -476,7 +476,7 @@ Snapshot captures a single observation of an asset's price at a specific moment.
 ```go
 type Snapshot struct {
     // Date represents the specific timestamp.
-    Date time.Time `format:"2006-01-02"`
+    Date time.Time
 
     // Open represents the opening price for the
     // snapshot period.

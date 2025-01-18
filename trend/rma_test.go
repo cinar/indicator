@@ -17,7 +17,7 @@ func TestRma(t *testing.T) {
 		Rma   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/rma.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/rma.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

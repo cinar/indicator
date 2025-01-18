@@ -17,7 +17,7 @@ func TestTrix(t *testing.T) {
 		Trix  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/trix.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/trix.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

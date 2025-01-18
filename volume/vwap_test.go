@@ -18,7 +18,7 @@ func TestVwap(t *testing.T) {
 		Vwap   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[VwapData]("testdata/vwap.csv", true)
+	input, err := helper.ReadFromCsvFile[VwapData]("testdata/vwap.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

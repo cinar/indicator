@@ -15,12 +15,12 @@ import (
 )
 
 func TestStopLossStrategy(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/stop_loss_strategy.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/stop_loss_strategy.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func TestStopLossStrategy(t *testing.T) {
 }
 
 func TestStopLossStrategyReport(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
