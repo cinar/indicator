@@ -50,6 +50,16 @@ The information provided on this project is strictly for informational purposes 
 - [type Repository](<#Repository>)
   - [func NewRepository\(name, config string\) \(Repository, error\)](<#NewRepository>)
 - [type RepositoryBuilderFunc](<#RepositoryBuilderFunc>)
+- [type SQLRepository](<#SQLRepository>)
+  - [func NewSQLRepository\(dbDriver, dbURL string, dialect SQLRepositoryDialect\) \(\*SQLRepository, error\)](<#NewSQLRepository>)
+  - [func \(s \*SQLRepository\) Append\(name string, snapshots \<\-chan \*Snapshot\) error](<#SQLRepository.Append>)
+  - [func \(s \*SQLRepository\) Assets\(\) \(\[\]string, error\)](<#SQLRepository.Assets>)
+  - [func \(s \*SQLRepository\) Close\(\) error](<#SQLRepository.Close>)
+  - [func \(s \*SQLRepository\) Drop\(\) error](<#SQLRepository.Drop>)
+  - [func \(s \*SQLRepository\) Get\(name string\) \(\<\-chan \*Snapshot, error\)](<#SQLRepository.Get>)
+  - [func \(s \*SQLRepository\) GetSince\(name string, date time.Time\) \(\<\-chan \*Snapshot, error\)](<#SQLRepository.GetSince>)
+  - [func \(s \*SQLRepository\) LastDate\(name string\) \(time.Time, error\)](<#SQLRepository.LastDate>)
+- [type SQLRepositoryDialect](<#SQLRepositoryDialect>)
 - [type Snapshot](<#Snapshot>)
 - [type Sync](<#Sync>)
   - [func NewSync\(\) \*Sync](<#NewSync>)
@@ -346,6 +356,116 @@ RepositoryBuilderFunc defines a function to build a new repository using the giv
 
 ```go
 type RepositoryBuilderFunc func(config string) (Repository, error)
+```
+
+<a name="SQLRepository"></a>
+## type [SQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L17-L35>)
+
+SQLRepository provides a SQL backed storage facility for financial market data.
+
+```go
+type SQLRepository struct {
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewSQLRepository"></a>
+### func [NewSQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L38>)
+
+```go
+func NewSQLRepository(dbDriver, dbURL string, dialect SQLRepositoryDialect) (*SQLRepository, error)
+```
+
+NewSQLRepository takes a database driver, URL, and dialect for the asset repository and connects to it.
+
+<a name="SQLRepository.Append"></a>
+### func \(\*SQLRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L170>)
+
+```go
+func (s *SQLRepository) Append(name string, snapshots <-chan *Snapshot) error
+```
+
+Append adds the given snapshots to the asset with the given name.
+
+<a name="SQLRepository.Assets"></a>
+### func \(\*SQLRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L87>)
+
+```go
+func (s *SQLRepository) Assets() ([]string, error)
+```
+
+Assets returns the names of all assets in the respository.
+
+<a name="SQLRepository.Close"></a>
+### func \(\*SQLRepository\) [Close](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L82>)
+
+```go
+func (s *SQLRepository) Close() error
+```
+
+Close closes the database connection.
+
+<a name="SQLRepository.Drop"></a>
+### func \(\*SQLRepository\) [Drop](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L193>)
+
+```go
+func (s *SQLRepository) Drop() error
+```
+
+Drop drops the snapshots table.
+
+<a name="SQLRepository.Get"></a>
+### func \(\*SQLRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L112>)
+
+```go
+func (s *SQLRepository) Get(name string) (<-chan *Snapshot, error)
+```
+
+Get attempts to return a channel of snapshots for the asset with the given name.
+
+<a name="SQLRepository.GetSince"></a>
+### func \(\*SQLRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L117>)
+
+```go
+func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
+```
+
+GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
+
+<a name="SQLRepository.LastDate"></a>
+### func \(\*SQLRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L152>)
+
+```go
+func (s *SQLRepository) LastDate(name string) (time.Time, error)
+```
+
+LastDate returns the date of the last snapshot for the asset with the given name.
+
+<a name="SQLRepositoryDialect"></a>
+## type [SQLRepositoryDialect](<https://github.com/cinar/indicator/blob/master/asset/sql_repository_dialect.go#L8-L26>)
+
+SQLRepositoryDialect defines the SQL dialect for the SQL repository.
+
+```go
+type SQLRepositoryDialect interface {
+    // CreateTable returns the SQL statement to create the repository table.
+    CreateTable() string
+
+    // DropTable returns the SQL statement to drop the repository table.
+    DropTable() string
+
+    // Assets returns the SQL statement to get the names of all assets in the respository.
+    Assets() string
+
+    // GetSince returns the SQL statement to query snapshots for the asset with the given name since the given date.
+    GetSince() string
+
+    // LastDate returns the SQL statement to query for the last date for the asset with the given name.
+    LastDate() string
+
+    // Appends returns the SQL statement to add the given snapshots to the asset with the given name.
+    Append() string
+}
 ```
 
 <a name="Snapshot"></a>

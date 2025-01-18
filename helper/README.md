@@ -38,6 +38,8 @@ The information provided on this project is strictly for informational purposes 
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
 - [func CloseAndLogError\(closer io.Closer, message string\)](<#CloseAndLogError>)
 - [func CloseAndLogErrorWithLogger\(closer io.Closer, message string, logger \*slog.Logger\)](<#CloseAndLogErrorWithLogger>)
+- [func CloseDatabaseRows\(rows \*sql.Rows\)](<#CloseDatabaseRows>)
+- [func CloseDatabaseWithError\(db \*sql.DB, err error\) error](<#CloseDatabaseWithError>)
 - [func CommonPeriod\(periods ...int\) int](<#CommonPeriod>)
 - [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
 - [func DaysBetween\(from, to time.Time\) int](<#DaysBetween>)
@@ -336,6 +338,24 @@ func CloseAndLogErrorWithLogger(closer io.Closer, message string, logger *slog.L
 ```
 
 CloseAndLogErrorWithLogger attempts to close the closer and logs any error to the given logger.
+
+<a name="CloseDatabaseRows"></a>
+## func [CloseDatabaseRows](<https://github.com/cinar/indicator/blob/master/helper/database.go#L31>)
+
+```go
+func CloseDatabaseRows(rows *sql.Rows)
+```
+
+CloseDatabaseRows closes the database rows.
+
+<a name="CloseDatabaseWithError"></a>
+## func [CloseDatabaseWithError](<https://github.com/cinar/indicator/blob/master/helper/database.go#L14>)
+
+```go
+func CloseDatabaseWithError(db *sql.DB, err error) error
+```
+
+CloseDatabaseWithError closes the database after an error.
 
 <a name="CommonPeriod"></a>
 ## func [CommonPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L24>)
