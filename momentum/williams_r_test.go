@@ -19,7 +19,7 @@ func TestWilliamsR(t *testing.T) {
 		WilliamsR float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/williams_r.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/williams_r.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

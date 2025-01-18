@@ -20,7 +20,7 @@ func TestBop(t *testing.T) {
 		Bop   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[BopData]("testdata/bop.csv", true)
+	input, err := helper.ReadFromCsvFile[BopData]("testdata/bop.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestUlcerIndex(t *testing.T) {
 		UlcerIndex float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/ulcer_index.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/ulcer_index.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

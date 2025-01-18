@@ -40,7 +40,7 @@ func TestPercentB(t *testing.T) {
 		PercentB float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/percent_b.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/percent_b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

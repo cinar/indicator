@@ -17,7 +17,7 @@ func TestWma(t *testing.T) {
 		Wma   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/wma.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/wma.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

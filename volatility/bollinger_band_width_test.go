@@ -17,7 +17,7 @@ func TestBollingerBandWidth(t *testing.T) {
 		Width float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/bollinger_band_width.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/bollinger_band_width.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

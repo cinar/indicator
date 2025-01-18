@@ -18,7 +18,7 @@ func TestMassIndex(t *testing.T) {
 		MassIndex float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/mass_index.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/mass_index.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

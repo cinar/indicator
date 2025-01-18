@@ -18,7 +18,7 @@ func TestFi(t *testing.T) {
 		Fi     float64
 	}
 
-	input, err := helper.ReadFromCsvFile[FiData]("testdata/fi.csv", true)
+	input, err := helper.ReadFromCsvFile[FiData]("testdata/fi.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

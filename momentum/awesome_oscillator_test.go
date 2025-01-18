@@ -18,7 +18,7 @@ func TestAwesomeOscillator(t *testing.T) {
 		Ao   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/awesome_oscillator.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/awesome_oscillator.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

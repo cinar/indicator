@@ -18,7 +18,7 @@ func TestVpt(t *testing.T) {
 		Vpt    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[VptData]("testdata/vpt.csv", true)
+	input, err := helper.ReadFromCsvFile[VptData]("testdata/vpt.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -21,7 +21,7 @@ func TestKeltnerChannel(t *testing.T) {
 		Lower  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/keltner_channel.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/keltner_channel.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

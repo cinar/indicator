@@ -18,7 +18,7 @@ func TestQstick(t *testing.T) {
 		Qstick float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/qstick.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/qstick.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

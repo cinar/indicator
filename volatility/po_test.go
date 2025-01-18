@@ -19,7 +19,7 @@ func TestPo(t *testing.T) {
 		Po    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/po.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/po.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestStochasticRsi(t *testing.T) {
 		StochasticRsi float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/stochastic_rsi.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/stochastic_rsi.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestHma(t *testing.T) {
 		Hma   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/hma.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/hma.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

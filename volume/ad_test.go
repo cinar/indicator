@@ -20,7 +20,7 @@ func TestAd(t *testing.T) {
 		Ad     float64
 	}
 
-	input, err := helper.ReadFromCsvFile[AdData]("testdata/ad.csv", true)
+	input, err := helper.ReadFromCsvFile[AdData]("testdata/ad.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -18,7 +18,7 @@ func TestObv(t *testing.T) {
 		Obv    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[ObvData]("testdata/obv.csv", true)
+	input, err := helper.ReadFromCsvFile[ObvData]("testdata/obv.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

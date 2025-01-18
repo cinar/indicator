@@ -17,7 +17,7 @@ func TestTema(t *testing.T) {
 		Tema  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/tema.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/tema.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

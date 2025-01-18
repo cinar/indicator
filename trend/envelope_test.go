@@ -19,7 +19,7 @@ func TestEnvelopeWithSma(t *testing.T) {
 		Lower  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/envelope_sma.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/envelope_sma.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func TestEnvelopeWithEma(t *testing.T) {
 		Lower  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/envelope_ema.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/envelope_ema.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

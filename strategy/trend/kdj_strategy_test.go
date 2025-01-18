@@ -14,12 +14,12 @@ import (
 )
 
 func TestKdjStrategy(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/kdj_strategy.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/kdj_strategy.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func TestKdjStrategy(t *testing.T) {
 }
 
 func TestKdjStrategyReport(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
