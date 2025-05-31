@@ -101,7 +101,8 @@ The API returns an array of actions with the following structure:
 
 ```json
 {
-  "actions": [1, 0, 0]
+  "actions": [1, 0, 0],  // BUY, HOLD, HOLD
+  "outcome": 0.8  // 80% of the initial capital
 }
 ```
 
@@ -110,6 +111,8 @@ Actions are encoded as:
 - 1: BUY
 - 0: HOLD
 - -1: SELL
+
+Outcome is the final outcome of the strategy, in percentage to the initial capital.
 
 ### Testing
 

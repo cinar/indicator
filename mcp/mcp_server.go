@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
+	"github.com/cinar/indicator/v2/strategy"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -82,8 +84,37 @@ func handleBacktest(ctx context.Context, request mcp.CallToolRequest, args Backt
 		return mcp.NewToolResultError(fmt.Sprintf("Failed to process strategy: %v", err)), nil
 	}
 
-	// TODO: return the results as a JSON object
-	return mcp.NewToolResultText(fmt.Sprintf("%v", results[0])), nil
+	if len(results) == 0 || len(results[0].Transactions) == 0 {
+		return mcp.NewToolResultError("no transaction data available"), nil
+	}
+
+	// Convert strategy.Action to numeric values (1=BUY, 0=HOLD, -1=SELL)
+	actions := make([]int, len(results[0].Transactions))
+	for i, action := range results[0].Transactions {
+		switch action {
+		case strategy.Buy:
+			actions[i] = 1
+		case strategy.Sell:
+			actions[i] = -1
+			// strategy.Hold is 0 by default
+		}
+	}
+
+	// Create the response JSON
+	response := struct {
+		Actions []int   `json:"actions"`
+		Outcome float64 `json:"outcome"`
+	}{
+		Actions: actions,
+		Outcome: results[0].Outcome,
+	}
+
+	jsonData, err := json.Marshal(response)
+	if err != nil {
+		return mcp.NewToolResultError(fmt.Sprintf("failed to marshal response: %v", err)), nil
+	}
+
+	return mcp.NewToolResultText(string(jsonData)), nil
 }
 
 // GetAllStrategyTypes returns a slice of all available strategy types as strings
