@@ -11,18 +11,18 @@ import (
 )
 
 func TestMCPServer(t *testing.T) {
-	t.Run("mcp test", func(t *testing.T) {
-		client, err := client.NewInProcessClient(RunMCPServer())
-		if err != nil {
-			t.Fatalf("Failed to create client: %v", err)
-		}
-		defer client.Close()
+	client, err := client.NewInProcessClient(RunMCPServer())
+	if err != nil {
+		t.Fatalf("Failed to create client: %v", err)
+	}
+	defer client.Close()
 
-		// Start the client
-		if err := client.Start(context.Background()); err != nil {
-			t.Fatalf("Failed to start client: %v", err)
-		}
+	// Start the client
+	if err := client.Start(context.Background()); err != nil {
+		t.Fatalf("Failed to start client: %v", err)
+	}
 
+	t.Run("Initialize", func(t *testing.T) {
 		// Initialize
 		initRequest := mcp.InitializeRequest{}
 		initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
@@ -42,12 +42,16 @@ func TestMCPServer(t *testing.T) {
 				result.ServerInfo.Name,
 			)
 		}
+	})
 
+	t.Run("Ping", func(t *testing.T) {
 		// Test Ping
 		if err := client.Ping(context.Background()); err != nil {
 			t.Errorf("Ping failed: %v", err)
 		}
+	})
 
+	t.Run("ListTools", func(t *testing.T) {
 		// Test ListTools
 		toolsRequest := mcp.ListToolsRequest{}
 		toolListResult, err := client.ListTools(context.Background(), toolsRequest)
@@ -60,7 +64,9 @@ func TestMCPServer(t *testing.T) {
 		if toolListResult.Tools[0].Name != "backtest" {
 			t.Errorf("Expected tool name 'backtest'")
 		}
+	})
 
+	t.Run("CallTool", func(t *testing.T) {
 		request := mcp.CallToolRequest{}
 		request.Params.Name = "backtest"
 		request.Params.Arguments = map[string]any{
