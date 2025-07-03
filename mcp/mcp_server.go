@@ -10,7 +10,8 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
-// RunMCPServer starts the MCP server for the backtest functionality
+// RunMCPServer starts the MCP server for the backtest functionality.
+// It configures the server with the necessary tools and handlers for running backtests.
 func RunMCPServer() *server.MCPServer {
 	// Create a new MCP server
 	s := server.NewMCPServer(
@@ -71,7 +72,16 @@ func RunMCPServer() *server.MCPServer {
 	return s
 }
 
-// handleBacktest processes the backtest request and returns the actions
+// handleBacktest processes a backtest request by executing the specified strategy
+// with the provided OHLCV data. It returns the transaction actions and the
+// outcome of the backtest as a JSON string.
+//
+// The function takes a context and a tool call request, along with the parsed
+// strategy request containing the strategy type and data. It runs the backtest,
+// converts the resulting actions to a numeric format (1 for Buy, -1 for Sell, 0 for Hold),
+// and marshals the response into a JSON object.
+//
+// If the backtest fails or no transactions are generated, it returns a tool result error.
 func handleBacktest(_ context.Context, _ mcp.CallToolRequest, args StrategyRequest) (*mcp.CallToolResult, error) {
 	results, err := runBacktest(args.Strategy, args.Data)
 	if err != nil {
@@ -111,7 +121,9 @@ func handleBacktest(_ context.Context, _ mcp.CallToolRequest, args StrategyReque
 	return mcp.NewToolResultText(string(jsonData)), nil
 }
 
-// GetAllStrategyTypes returns a slice of all available strategy types as strings
+// GetAllStrategyTypes returns a slice of all available strategy types as strings.
+// This list includes base, trend, momentum, and volume strategies, providing a
+// comprehensive set of options for backtesting.
 func GetAllStrategyTypes() []string {
 	return []string{
 		// Base strategies

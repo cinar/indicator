@@ -9,10 +9,13 @@ import (
 	"github.com/cinar/indicator/v2/strategy/volume"
 )
 
-// StrategyType represents the type of trading strategy
+// StrategyType defines the type of trading strategy to be used in a backtest.
+// It is represented as a string to allow for easy identification and selection.
 type StrategyType string
 
-// Constants for all supported strategy types
+// Constants for all supported strategy types.
+// This list includes a variety of strategies from different categories, such as
+// trend, momentum, and volume-based approaches.
 const (
 	// Base strategies
 	StrategyBuyAndHold StrategyType = "buy_and_hold"
@@ -51,7 +54,13 @@ const (
 	StrategyWeightedClose     StrategyType = "weighted_close"
 )
 
-// CreateStrategy creates a new strategy instance based on the specified type
+// CreateStrategy creates a new strategy instance based on the specified type.
+// It acts as a factory function, mapping a StrategyType to a concrete
+// implementation of the strategy.Strategy interface.
+//
+// This function is essential for dynamically selecting and initializing the
+// desired trading strategy at runtime. If an unsupported strategy type is
+// provided, it returns an error.
 func CreateStrategy(strategyType StrategyType) (strategy.Strategy, error) {
 	switch strategyType {
 	// Base strategies
