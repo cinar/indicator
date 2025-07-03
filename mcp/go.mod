@@ -1,4 +1,4 @@
-module backtest
+module github.com/cinar/indicator/mcp
 
 go 1.23
 
