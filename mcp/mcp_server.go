@@ -72,7 +72,7 @@ func RunMCPServer() *server.MCPServer {
 }
 
 // handleBacktest processes the backtest request and returns the actions
-func handleBacktest(ctx context.Context, _ mcp.CallToolRequest, args StrategyRequest) (*mcp.CallToolResult, error) {
+func handleBacktest(_ context.Context, _ mcp.CallToolRequest, args StrategyRequest) (*mcp.CallToolResult, error) {
 	results, err := runBacktest(args.Strategy, args.Data)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Failed to process strategy: %v", err)), nil
