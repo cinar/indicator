@@ -1,6 +1,6 @@
-# Market Condition Predictor (MCP)
+# Backtest MCP server
 
-MCP is a Go-based backtesting framework for financial market strategies. It provides a flexible way to test trading strategies against historical OHLCV (Open, High, Low, Close, Volume) market data.
+Backtest MCP server is a wrapper for the backtest tool of the indicator package.
 
 ## Features
 
@@ -40,7 +40,7 @@ MCP is a Go-based backtesting framework for financial market strategies. It prov
 To start the MCP server with HTTP interface:
 
 ```bash
-./backtest -http
+./backtest -transport=http
 ```
 
 The server will start on `http://localhost:8080/mcp`
@@ -50,7 +50,7 @@ The server will start on `http://localhost:8080/mcp`
 To run in standard I/O mode (for local usage or piping):
 
 ```bash
-./backtest
+./backtest [-transport=studio]
 ```
 
 ### API Usage
