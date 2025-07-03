@@ -10,12 +10,6 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
-// BacktestArgs represents the arguments for the backtest MCP tool
-type BacktestArgs struct {
-	Strategy StrategyType `json:"strategy"`
-	Data     OhlcvData    `json:"data"`
-}
-
 // RunMCPServer starts the MCP server for the backtest functionality
 func RunMCPServer() *server.MCPServer {
 	// Create a new MCP server
@@ -78,7 +72,7 @@ func RunMCPServer() *server.MCPServer {
 }
 
 // handleBacktest processes the backtest request and returns the actions
-func handleBacktest(ctx context.Context, _ mcp.CallToolRequest, args BacktestArgs) (*mcp.CallToolResult, error) {
+func handleBacktest(ctx context.Context, _ mcp.CallToolRequest, args StrategyRequest) (*mcp.CallToolResult, error) {
 	results, err := runBacktest(args.Strategy, args.Data)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Failed to process strategy: %v", err)), nil

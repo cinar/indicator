@@ -28,7 +28,7 @@ type OhlcvData struct {
 
 // Response represents the JSON response structure
 type Response struct {
-	Actions []strategy.Action `json:"action"`
+	Actions []strategy.Action `json:"actions"`
 }
 
 // runBacktest processes the OHLCV data using the specified strategy and returns the actions
@@ -52,12 +52,15 @@ func runBacktest(strategyType StrategyType, data OhlcvData) ([]*backtest.DataStr
 	}()
 
 	repository := asset.NewInMemoryRepository()
-	repository.Append("in_memory_asset", snapshots)
+	err := repository.Append("in_memory_asset", snapshots)
+	if err != nil {
+		return nil, fmt.Errorf("failed to append snapshots: %w", err)
+	}
 
 	// Create the strategy using the factory function
 	strat, err := CreateStrategy(strategyType)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create strategy: %w", err)
 	}
 
 	assets := []string{"in_memory_asset"}
@@ -80,12 +83,22 @@ func runBacktest(strategyType StrategyType, data OhlcvData) ([]*backtest.DataStr
 		return nil, err
 	}
 
+	// Duplicate the snapshots channel 3 ways to be used for:
+	// 1. Report generation (snapshotsSplice[0])
+	// 2. Strategy computation (snapshotsSplice[1])
+	// 3. Outcome calculation (snapshotsSplice[2])
 	snapshotsSplice := helper.Duplicate(snapshotsChan, 3)
+
+	// Compute strategy actions and duplicate the results 2 ways to be used for:
+	// 1. Report generation (actionsSplice[0])
+	// 2. Outcome calculation (actionsSplice[1])
 	actionsSplice := helper.Duplicate(
 		strategies[0].Compute(snapshotsSplice[1]),
 		2,
 	)
 
+	// Calculate outcomes using the third copy of snapshots (converted to closing prices)
+	// and the second copy of the computed actions
 	outcomes := strategy.Outcome(
 		asset.SnapshotsAsClosings(snapshotsSplice[2]),
 		actionsSplice[1],

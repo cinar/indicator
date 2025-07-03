@@ -19,7 +19,7 @@ Backtest MCP server is a wrapper for the backtest tool of the indicator package.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/indicator.git
+   git clone https://github.com/cinar/indicator.git
    cd indicator/mcp
    ```
 
@@ -50,7 +50,7 @@ The server will start on `http://localhost:8080/mcp`
 To run in standard I/O mode (for local usage or piping):
 
 ```bash
-./backtest [-transport=studio]
+./backtest [-transport=stdio]
 ```
 
 ### API Usage
