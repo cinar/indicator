@@ -54,10 +54,10 @@ func TestMCPServer(t *testing.T) {
 		if err != nil {
 			t.Errorf("ListTools failed: %v", err)
 		}
-		if toolListResult == nil || len((*toolListResult).Tools) == 0 {
+		if toolListResult == nil || len(toolListResult.Tools) == 0 {
 			t.Errorf("Expected one tool")
 		}
-		if (*toolListResult).Tools[0].Name != "backtest" {
+		if toolListResult.Tools[0].Name != "backtest" {
 			t.Errorf("Expected tool name 'backtest'")
 		}
 
@@ -77,19 +77,19 @@ func TestMCPServer(t *testing.T) {
 
 		result2, err2 := client.CallTool(context.Background(), request)
 		if err2 != nil {
-			t.Errorf("CallTool failed: %v", err2)
+			t.Fatalf("CallTool failed: %v", err2)
 		}
 
 		if result2 == nil {
-			t.Errorf("Expected a result")
+			t.Fatalf("Expected a result")
 		}
 
 		if result2.IsError {
-			t.Errorf("Expected no error")
+			t.Fatalf("Expected no error")
 		}
 
 		if len(result2.Content) != 1 {
-			t.Errorf("Expected 1 content item, got %d", len(result2.Content))
+			t.Fatalf("Expected 1 content item, got %d", len(result2.Content))
 		}
 
 		textContent, ok := result2.Content[0].(mcp.TextContent)
