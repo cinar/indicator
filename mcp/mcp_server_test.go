@@ -22,6 +22,13 @@ func TestMCPServer(t *testing.T) {
 		t.Fatalf("Failed to start client: %v", err)
 	}
 
+	testInitialize(t, client)
+	testPing(t, client)
+	testListTools(t, client)
+	testCallTool(t, client)
+}
+
+func testInitialize(t *testing.T, client *client.Client) {
 	t.Run("Initialize", func(t *testing.T) {
 		// Initialize
 		initRequest := mcp.InitializeRequest{}
@@ -43,14 +50,18 @@ func TestMCPServer(t *testing.T) {
 			)
 		}
 	})
+}
 
+func testPing(t *testing.T, client *client.Client) {
 	t.Run("Ping", func(t *testing.T) {
 		// Test Ping
 		if err := client.Ping(context.Background()); err != nil {
 			t.Errorf("Ping failed: %v", err)
 		}
 	})
+}
 
+func testListTools(t *testing.T, client *client.Client) {
 	t.Run("ListTools", func(t *testing.T) {
 		// Test ListTools
 		toolsRequest := mcp.ListToolsRequest{}
@@ -65,7 +76,9 @@ func TestMCPServer(t *testing.T) {
 			t.Errorf("Expected tool name 'backtest'")
 		}
 	})
+}
 
+func testCallTool(t *testing.T, client *client.Client) {
 	t.Run("CallTool", func(t *testing.T) {
 		request := mcp.CallToolRequest{}
 		request.Params.Name = "backtest"
