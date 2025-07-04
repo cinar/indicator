@@ -16,6 +16,7 @@ Indicator is a Golang module that provides a rich set of technical analysis indi
 -	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#func-slicetochan) and [helper.ChanToSlice](helper/README.md#func-chantoslice) are available. Alternatively, you can still use the [v1 version](https://github.com/cinar/indicator/tree/v1).
 -	**Configurable Indicators and Strategies:** All indicators and strategies were designed to be fully configurable with no preset values.
 -	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
+-   **MCP Support:** MCP (Multi-Client Protocol Server) support is integrated into the library, facilitating its use with various AI tools.
 
 I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
 
@@ -224,6 +225,11 @@ $ indicator-backtest \
     -output /home/user/reports \
     -workers 1
 ```
+
+☁️  MCP Server
+--------------
+
+The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time strategy execution and data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
 
 Usage
 -----
