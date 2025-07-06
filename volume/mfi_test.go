@@ -20,7 +20,7 @@ func TestMfi(t *testing.T) {
 		Mfi    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[MfiData]("testdata/mfi.csv", true)
+	input, err := helper.ReadFromCsvFile[MfiData]("testdata/mfi.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

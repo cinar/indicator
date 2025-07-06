@@ -19,7 +19,7 @@ func TestTypicalPrice(t *testing.T) {
 		TypicalPrice float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/typical_price.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/typical_price.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestApo(t *testing.T) {
 		Apo   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[ApoData]("testdata/apo.csv", true)
+	input, err := helper.ReadFromCsvFile[ApoData]("testdata/apo.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -13,12 +13,12 @@ import (
 )
 
 func TestAndStrategy(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/and.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/and.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +37,7 @@ func TestAndStrategy(t *testing.T) {
 }
 
 func TestAndStrategyReport(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

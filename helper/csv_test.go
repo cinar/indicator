@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -20,7 +21,7 @@ func TestCsv(t *testing.T) {
 
 	reader := strings.NewReader("Date,Asset,Open,Close\n\"2023-11-26 00:00:00\",\"SP500\",10.2,30.4\n")
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -40,7 +41,7 @@ func TestCsvNoHeader(t *testing.T) {
 
 	reader := strings.NewReader("10.2,30.4\n")
 
-	csv, err := helper.NewCsv[Row](false)
+	csv, err := helper.NewCsv[Row](helper.WithoutCsvHeader[Row]())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +63,7 @@ func TestCsvInvalidColumns(t *testing.T) {
 
 	reader := strings.NewReader("1,2\n1\n")
 
-	csv, err := helper.NewCsv[Row](false)
+	csv, err := helper.NewCsv[Row](helper.WithoutCsvHeader[Row]())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +87,7 @@ func TestCsvMissingHeader(t *testing.T) {
 
 	reader := strings.NewReader("")
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +106,7 @@ func TestCsvInvalidField(t *testing.T) {
 
 	reader := strings.NewReader("\"ABCD\",\"EFGH\"\n")
 
-	csv, err := helper.NewCsv[Row](false)
+	csv, err := helper.NewCsv[Row](helper.WithoutCsvHeader[Row]())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,7 +123,7 @@ func TestCsvNoStruct(t *testing.T) {
 		High  float64
 	}
 
-	_, err := helper.NewCsv[*Row](true)
+	_, err := helper.NewCsv[*Row]()
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -134,7 +135,7 @@ func TestCsvReadFromFile(t *testing.T) {
 		High  float64
 	}
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -157,7 +158,7 @@ func TestCsvReadFromMissingFile(t *testing.T) {
 		High  float64
 	}
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -174,7 +175,7 @@ func TestReadFromCsvFile(t *testing.T) {
 		High  float64
 	}
 
-	rows, err := helper.ReadFromCsvFile[Row]("testdata/with_header.csv", true)
+	rows, err := helper.ReadFromCsvFile[Row]("testdata/with_header.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -192,7 +193,7 @@ func TestReadFromCsvFileNoStruct(t *testing.T) {
 		High  float64
 	}
 
-	_, err := helper.ReadFromCsvFile[*Row]("testdata/with_header.csv", true)
+	_, err := helper.ReadFromCsvFile[*Row]("testdata/with_header.csv")
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -209,7 +210,7 @@ func TestCsvWriteToFile(t *testing.T) {
 		{Close: 30, High: 40},
 	}
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -222,7 +223,7 @@ func TestCsvWriteToFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	csv, err = helper.NewCsv[Row](true)
+	csv, err = helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -251,7 +252,7 @@ func TestCsvAppendToFile(t *testing.T) {
 		{Close: 30, High: 40},
 	}
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -264,7 +265,7 @@ func TestCsvAppendToFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	csv, err = helper.NewCsv[Row](true)
+	csv, err = helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -274,7 +275,7 @@ func TestCsvAppendToFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	csv, err = helper.NewCsv[Row](true)
+	csv, err = helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -303,7 +304,7 @@ func TestCsvWriteToInvalidFile(t *testing.T) {
 		{Close: 30, High: 40},
 	})
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -327,7 +328,7 @@ func TestCsvWriteToFileInvalidField(t *testing.T) {
 		{Close: 30, High: nil},
 	})
 
-	csv, err := helper.NewCsv[Row](true)
+	csv, err := helper.NewCsv[Row]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -355,17 +356,17 @@ func TestAppendOrWriteToCsvFile(t *testing.T) {
 	fileName := "test_append_or_write_to_csv_file.csv"
 	defer helper.Remove(t, fileName)
 
-	err := helper.AppendOrWriteToCsvFile(fileName, true, helper.SliceToChan(input[:1]))
+	err := helper.AppendOrWriteToCsvFile(fileName, helper.SliceToChan(input[:1]))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = helper.AppendOrWriteToCsvFile(fileName, true, helper.SliceToChan(input[1:]))
+	err = helper.AppendOrWriteToCsvFile(fileName, helper.SliceToChan(input[1:]))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	actual, err := helper.ReadFromCsvFile[Row](fileName, true)
+	actual, err := helper.ReadFromCsvFile[Row](fileName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -386,8 +387,33 @@ func TestAppendOrWriteToCsvFileNoStruct(t *testing.T) {
 
 	input := helper.SliceToChan([]**Row{})
 
-	err := helper.AppendOrWriteToCsvFile[*Row]("test_append_or_write_to_csv_file_no_struct.csv", true, input)
+	err := helper.AppendOrWriteToCsvFile[*Row]("test_append_or_write_to_csv_file_no_struct.csv", input)
 	if err == nil {
 		t.Fatal("expected error")
+	}
+}
+
+func TestCsvWithDefaultDateFormat(t *testing.T) {
+	type Row struct {
+		Date  time.Time
+		Close float64
+		High  float64
+	}
+
+	reader := strings.NewReader("Date,Asset,Open,Close\n\"2023-11-26 01:02:03\",\"SP500\",10.2,30.4\n")
+
+	csv, err := helper.NewCsv[Row](
+		helper.WithCsvDefaultDateTimeFormat[Row]("2006-01-02 15:04:05"),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	row := <-csv.ReadFromReader(reader)
+
+	expected := time.Date(2023, 11, 26, 1, 2, 3, 0, time.UTC)
+
+	if !row.Date.Equal(expected) {
+		t.Fatalf("actual %v expected %v", row.Date, expected)
 	}
 }

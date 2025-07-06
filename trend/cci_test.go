@@ -19,7 +19,7 @@ func TestCci(t *testing.T) {
 		Cci   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/cci.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/cci.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

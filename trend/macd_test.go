@@ -18,7 +18,7 @@ func TestMacd(t *testing.T) {
 		Signal float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/macd.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/macd.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -21,7 +21,7 @@ func TestKdj(t *testing.T) {
 		J     float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/kdj.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/kdj.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

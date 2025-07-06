@@ -69,7 +69,7 @@ func TestFileSystemRepositoryGetSince(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/since.csv", true)
+	expected, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/since.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

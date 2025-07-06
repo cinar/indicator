@@ -17,7 +17,7 @@ func TestTsi(t *testing.T) {
 		Tsi   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/tsi.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/tsi.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
