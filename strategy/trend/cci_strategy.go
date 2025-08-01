@@ -35,8 +35,8 @@ func (*CciStrategy) Name() string {
 func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 	snapshots := helper.Duplicate(c, 3)
 	highs := asset.SnapshotsAsHighs(snapshots[0])
-	lows := asset.SnapshotsAsHighs(snapshots[1])
-	closings := asset.SnapshotsAsHighs(snapshots[2])
+	lows := asset.SnapshotsAsLows(snapshots[1])
+	closings := asset.SnapshotsAsClosings(snapshots[2])
 
 	ccis := t.Cci.Compute(highs, lows, closings)
 
@@ -73,8 +73,8 @@ func (t *CciStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 
 	dates := asset.SnapshotsAsDates(snapshots[0])
 	highs := asset.SnapshotsAsHighs(snapshots[1])
-	lows := asset.SnapshotsAsHighs(snapshots[2])
-	closings := helper.Duplicate(asset.SnapshotsAsHighs(snapshots[3]), 2)
+	lows := asset.SnapshotsAsLows(snapshots[2])
+	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshots[3]), 2)
 
 	ccis := t.Cci.Compute(highs, lows, closings[1])
 	ccis = helper.Shift(ccis, t.Cci.IdlePeriod(), 0)
