@@ -44,7 +44,7 @@ func (r *Roc[T]) Compute(values <-chan T) <-chan T {
 
 		if window.IsFull() {
 			p, ok := window.Get()
-			if ok {
+			if ok && p != 0 {
 				result = (value - p) / p
 			}
 		}
