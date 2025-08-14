@@ -30,6 +30,9 @@ func NewRoc[T helper.Number]() *Roc[T] {
 
 // NewRocWithPeriod function initializes a new Roc instance with the given parameters.
 func NewRocWithPeriod[T helper.Number](period int) *Roc[T] {
+	if period <= 0 {
+		period = DefaultRocPeriod
+	}
 	return &Roc[T]{
 		Period: period,
 	}
