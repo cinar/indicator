@@ -18,18 +18,18 @@ const (
 // Roc represents the configuration parameters for calculating the Rate Of Change (ROC) indicator.
 //
 //	ROC = (Current Price - Price n periods ago) / Price n periods ago
-type Roc[T helper.Number] struct {
+type Roc[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewRoc function initializes a new Roc instance with the default parameters.
-func NewRoc[T helper.Number]() *Roc[T] {
+func NewRoc[T helper.Float]() *Roc[T] {
 	return NewRocWithPeriod[T](DefaultRocPeriod)
 }
 
 // NewRocWithPeriod function initializes a new Roc instance with the given parameters.
-func NewRocWithPeriod[T helper.Number](period int) *Roc[T] {
+func NewRocWithPeriod[T helper.Float](period int) *Roc[T] {
 	if period <= 0 {
 		period = DefaultRocPeriod
 	}
