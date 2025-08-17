@@ -1,7 +1,6 @@
 package trend
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -59,12 +58,13 @@ func TestRocFallbackPeriod(t *testing.T) {
 	}
 }
 
-func TestRocToString(t *testing.T) {
+func TestRocToStringAndIdlePeriod(t *testing.T) {
 	roc := NewRocWithPeriod[float64](0)
-	expected := "ROC(" + strconv.Itoa(DefaultRocPeriod) + ")"
-	actual := roc.String()
-
-	if actual != expected {
-		t.Fatal("expected string to be " + expected + " but got " + actual)
+	if roc.IdlePeriod() != DefaultRocPeriod {
+		t.Fatalf("unexpected IdlePeriod: %d", roc.IdlePeriod())
+	}
+	roc.Period = 3
+	if s := roc.String(); s != "ROC(3)" {
+		t.Fatalf("unexpected String(): %s", s)
 	}
 }
