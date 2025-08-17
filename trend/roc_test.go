@@ -1,6 +1,7 @@
 package trend
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -47,5 +48,23 @@ func TestRocTestdata(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestRocFallbackPeriod(t *testing.T) {
+	roc := NewRocWithPeriod[float64](-17)
+
+	if roc.Period != DefaultRocPeriod {
+		t.Fatal("expected period to be fallback to default value")
+	}
+}
+
+func TestRocToString(t *testing.T) {
+	roc := NewRocWithPeriod[float64](0)
+	expected := "ROC(" + strconv.Itoa(DefaultRocPeriod) + ")"
+	actual := roc.String()
+
+	if actual != expected {
+		t.Fatal("expected string to be " + expected + " but got " + actual)
 	}
 }

@@ -66,7 +66,7 @@ func (r *Roc[T]) IdlePeriod() int {
 	return r.Period
 }
 
-// String is the string representation of the WMA.
+// String is the string representation of the ROC.
 func (r *Roc[T]) String() string {
 	return fmt.Sprintf("ROC(%d)", r.Period)
 }
