@@ -24,7 +24,7 @@ const (
 	CsvFormatTag = "format"
 
 	// DefaultDateTimeFormat denotes the default format of a date and time column.
-	DefaultDateTimeFormat = "2006-01-02 15:04:05"
+	DefaultDateTimeFormat = "2006-01-02"
 )
 
 // csvColumn represents the mapping between the CSV column and
@@ -47,14 +47,46 @@ type Csv[T any] struct {
 
 	// Logger is the slog logger instance.
 	Logger *slog.Logger
+
+	// defaultDateTimeFormat is the default format for date and time columns.
+	defaultDateTimeFormat string
 }
 
-// NewCsv function initializes a new CSV instance. The parameter
-// hasHeader indicates whether the CSV contains a header row.
-func NewCsv[T any](hasHeader bool) (*Csv[T], error) {
+// CsvOption represents a functional option for configuring the CSV instance.
+type CsvOption[T any] func(*Csv[T])
+
+// WithoutCsvHeader disables the header row in the CSV.
+func WithoutCsvHeader[T any]() CsvOption[T] {
+	return func(c *Csv[T]) {
+		c.hasHeader = false
+	}
+}
+
+// WithCsvLogger sets the logger for the CSV instance.
+func WithCsvLogger[T any](logger *slog.Logger) CsvOption[T] {
+	return func(c *Csv[T]) {
+		c.Logger = logger
+	}
+}
+
+// WithCsvDefaultDateTimeFormat sets the default date and time format for the CSV instance.
+func WithCsvDefaultDateTimeFormat[T any](format string) CsvOption[T] {
+	return func(c *Csv[T]) {
+		c.defaultDateTimeFormat = format
+	}
+}
+
+// NewCsv creates a new CSV instance with the provided options.
+func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error) {
 	c := &Csv[T]{
-		hasHeader: hasHeader,
-		Logger:    slog.Default(),
+		hasHeader:             true,
+		Logger:                slog.Default(),
+		defaultDateTimeFormat: DefaultDateTimeFormat,
+	}
+
+	// Apply options to the CSV instance.
+	for _, option := range options {
+		option(c)
 	}
 
 	// Row type must be a pointer to struct.
@@ -75,7 +107,7 @@ func NewCsv[T any](hasHeader bool) (*Csv[T], error) {
 
 		format, ok := field.Tag.Lookup(CsvFormatTag)
 		if !ok {
-			format = DefaultDateTimeFormat
+			format = c.defaultDateTimeFormat
 		}
 
 		c.columns[i] = csvColumn{
@@ -275,8 +307,8 @@ func (c *Csv[T]) writeHeaderToCsvWriter(csvWriter *csv.Writer) error {
 
 // ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename,
 // maps the data to corresponding struct fields, and delivers it through the channel.
-func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error) {
-	c, err := NewCsv[T](hasHeader)
+func ReadFromCsvFile[T any](fileName string, options ...CsvOption[T]) (<-chan *T, error) {
+	c, err := NewCsv[T](options...)
 	if err != nil {
 		return nil, err
 	}
@@ -288,8 +320,8 @@ func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error) 
 // the existing file if it exists or creating a new one if it doesn't. In append mode, the
 // function assumes that the existing file's column order matches the field order of the
 // given row struct to ensure consistent data structure.
-func AppendOrWriteToCsvFile[T any](fileName string, hasHeader bool, rows <-chan *T) error {
-	c, err := NewCsv[T](hasHeader)
+func AppendOrWriteToCsvFile[T any](fileName string, rows <-chan *T, options ...CsvOption[T]) error {
+	c, err := NewCsv[T](options...)
 	if err != nil {
 		return err
 	}

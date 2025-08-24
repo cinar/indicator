@@ -109,6 +109,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewRmaWithPeriod\[T helper.Number\]\(period int\) \*Rma\[T\]](<#NewRmaWithPeriod>)
   - [func \(r \*Rma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Rma[T].Compute>)
   - [func \(r \*Rma\[T\]\) IdlePeriod\(\) int](<#Rma[T].IdlePeriod>)
+- [type Roc](<#Roc>)
+  - [func NewRoc\[T helper.Float\]\(\) \*Roc\[T\]](<#NewRoc>)
+  - [func NewRocWithPeriod\[T helper.Float\]\(period int\) \*Roc\[T\]](<#NewRocWithPeriod>)
+  - [func \(r \*Roc\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Roc[T].Compute>)
+  - [func \(r \*Roc\[T\]\) IdlePeriod\(\) int](<#Roc[T].IdlePeriod>)
+  - [func \(r \*Roc\[T\]\) String\(\) string](<#Roc[T].String>)
 - [type Sma](<#Sma>)
   - [func NewSma\[T helper.Number\]\(\) \*Sma\[T\]](<#NewSma>)
   - [func NewSmaWithPeriod\[T helper.Number\]\(period int\) \*Sma\[T\]](<#NewSmaWithPeriod>)
@@ -299,6 +305,15 @@ const (
 const (
     // DefaultRmaPeriod is the default RMA period.
     DefaultRmaPeriod = 20
+)
+```
+
+<a name="DefaultRocPeriod"></a>
+
+```go
+const (
+    // DefaultRocPeriod is the default ROC period.
+    DefaultRocPeriod = 9
 )
 ```
 
@@ -1377,6 +1392,67 @@ func (r *Rma[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that RMA won't yield any results.
+
+<a name="Roc"></a>
+## type [Roc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L21-L24>)
+
+Roc represents the configuration parameters for calculating the Rate Of Change \(ROC\) indicator.
+
+```
+ROC = (Current Price - Price n periods ago) / Price n periods ago
+```
+
+```go
+type Roc[T helper.Float] struct {
+    // Time period.
+    Period int
+}
+```
+
+<a name="NewRoc"></a>
+### func [NewRoc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L27>)
+
+```go
+func NewRoc[T helper.Float]() *Roc[T]
+```
+
+NewRoc function initializes a new Roc instance with the default parameters.
+
+<a name="NewRocWithPeriod"></a>
+### func [NewRocWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L32>)
+
+```go
+func NewRocWithPeriod[T helper.Float](period int) *Roc[T]
+```
+
+NewRocWithPeriod function initializes a new Roc instance with the given parameters.
+
+<a name="Roc[T].Compute"></a>
+### func \(\*Roc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L42>)
+
+```go
+func (r *Roc[T]) Compute(values <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the ROC and the signal line.
+
+<a name="Roc[T].IdlePeriod"></a>
+### func \(\*Roc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L65>)
+
+```go
+func (r *Roc[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that ROC won't yield any results.
+
+<a name="Roc[T].String"></a>
+### func \(\*Roc\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L70>)
+
+```go
+func (r *Roc[T]) String() string
+```
+
+String is the string representation of the ROC.
 
 <a name="Sma"></a>
 ## type [Sma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L26-L29>)

@@ -19,7 +19,7 @@ func TestAtr(t *testing.T) {
 		Atr   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/atr.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/atr.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestKama(t *testing.T) {
 		Kama  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/kama.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/kama.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

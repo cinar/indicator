@@ -19,7 +19,7 @@ func TestMfm(t *testing.T) {
 		Mfm   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[MfmData]("testdata/mfm.csv", true)
+	input, err := helper.ReadFromCsvFile[MfmData]("testdata/mfm.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

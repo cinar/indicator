@@ -19,7 +19,7 @@ func TestMls(t *testing.T) {
 		B float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/mls.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/mls.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

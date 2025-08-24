@@ -23,7 +23,7 @@ func TestIchimokuCloud(t *testing.T) {
 		LaggingLine    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/ichimoku_cloud.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/ichimoku_cloud.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

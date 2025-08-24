@@ -20,13 +20,17 @@ import (
 type FileSystemRepository struct {
 	// base is the root directory where asset snapshots are stored.
 	base string
+
+	// csvOptions are the CSV options used for reading and writing snapshots.
+	csvOptions []helper.CsvOption[Snapshot]
 }
 
 // NewFileSystemRepository initializes a file system repository with
-// the given base directory.
-func NewFileSystemRepository(base string) *FileSystemRepository {
+// the given base directory and the CSV options.
+func NewFileSystemRepository(base string, csvOptions ...helper.CsvOption[Snapshot]) *FileSystemRepository {
 	return &FileSystemRepository{
-		base: base,
+		base:       base,
+		csvOptions: csvOptions,
 	}
 }
 
@@ -54,7 +58,7 @@ func (r *FileSystemRepository) Assets() ([]string, error) {
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
 func (r *FileSystemRepository) Get(name string) (<-chan *Snapshot, error) {
-	return helper.ReadFromCsvFile[Snapshot](r.getCsvFileName(name), true)
+	return helper.ReadFromCsvFile[Snapshot](r.getCsvFileName(name), r.csvOptions...)
 }
 
 // GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
@@ -90,7 +94,7 @@ func (r *FileSystemRepository) LastDate(name string) (time.Time, error) {
 
 // Append adds the given snapshows to the asset with the given name.
 func (r *FileSystemRepository) Append(name string, snapshots <-chan *Snapshot) error {
-	return helper.AppendOrWriteToCsvFile(r.getCsvFileName(name), true, snapshots)
+	return helper.AppendOrWriteToCsvFile(r.getCsvFileName(name), snapshots, r.csvOptions...)
 }
 
 // getCsvFileName gets the CSV file name for the given asset name.

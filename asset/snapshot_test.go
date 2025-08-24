@@ -12,7 +12,7 @@ import (
 )
 
 func TestSnapshotsAs(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/repository/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -20,7 +20,7 @@ func TestStochasticOscillator(t *testing.T) {
 		D     float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/stochastic_oscillator.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/stochastic_oscillator.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

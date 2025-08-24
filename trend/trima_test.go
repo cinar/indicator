@@ -17,7 +17,7 @@ func TestTrimaWithOddPeriod(t *testing.T) {
 		Trima float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/trima_odd.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/trima_odd.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +46,7 @@ func TestTrimaWithEvenPeriod(t *testing.T) {
 		Trima float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/trima_even.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/trima_even.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
