@@ -11,13 +11,15 @@ import (
 func TestNewPringsSpecialKInitialization(t *testing.T) {
 	psk := NewPringsSpecialK[float64]()
 
-	if psk.Roc10 == nil || psk.Roc15 == nil || psk.Roc50 == nil || psk.Roc65 == nil ||
-		psk.Roc75 == nil || psk.Roc100 == nil || psk.Roc130 == nil || psk.Roc195 == nil {
+	if psk.Roc10 == nil || psk.Roc15 == nil || psk.Roc20 == nil || psk.Roc30 == nil ||
+		psk.Roc40 == nil || psk.Roc65 == nil || psk.Roc75 == nil || psk.Roc100 == nil ||
+		psk.Roc195 == nil || psk.Roc265 == nil || psk.Roc390 == nil || psk.Roc530 == nil {
 		t.Error("ROC pointers should be initialized")
 	}
-	if psk.Sma10 == nil || psk.Sma15 == nil || psk.Sma20 == nil || psk.Sma30 == nil ||
-		psk.Sma40 == nil || psk.Sma65 == nil || psk.Sma75 == nil || psk.Sma100 == nil ||
-		psk.Sma195 == nil || psk.Sma265 == nil || psk.Sma390 == nil || psk.Sma530 == nil {
+	if psk.Sma10Roc10 == nil || psk.Sma10Roc15 == nil || psk.Sma10Roc20 == nil ||
+		psk.Sma15Roc30 == nil || psk.Sma50Roc40 == nil || psk.Sma65Roc65 == nil ||
+		psk.Sma75Roc75 == nil || psk.Sma100Roc100 == nil || psk.Sma130Roc195 == nil ||
+		psk.Sma130Roc265 == nil || psk.Sma130Roc390 == nil || psk.Sma195Roc530 == nil {
 		t.Error("SMA pointers should be initialized")
 	}
 }
