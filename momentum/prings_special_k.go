@@ -5,6 +5,10 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
+// PringsSpecialK implements Martin Pring's Special K momentum indicator.
+// It composes multiple Rate-of-Change (ROC) series smoothed by Simple Moving Averages (SMA)
+// and outputs a weighted sum aligned to the slowest path so all terms are time-synchronized.
+// See Compute for the exact composition and weights.
 type PringsSpecialK[T helper.Float] struct {
 	Roc10  *trend.Roc[T]
 	Roc15  *trend.Roc[T]
