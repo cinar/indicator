@@ -21,6 +21,9 @@ type Wma[T helper.Number] struct {
 
 // NewWmaWith function initializes a new WMA instance with the given parameters.
 func NewWmaWith[T helper.Number](period int) *Wma[T] {
+	if period <= 0 {
+		panic("period must be greater than 0")
+	}
 	return &Wma[T]{
 		Period: period,
 	}
@@ -29,7 +32,7 @@ func NewWmaWith[T helper.Number](period int) *Wma[T] {
 // Compute function takes a channel of numbers and computes the WMA and the signal line.
 func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 	window := helper.NewRing[T](w.Period)
-
+	divisor := T(w.Period) * (T(w.Period) + T(1)) / T(2.0)
 	wmas := helper.Map(values, func(value T) T {
 		window.Put(value)
 
@@ -40,10 +43,11 @@ func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 		var sum T
 
 		for i := 0; i < w.Period; i++ {
-			sum += window.At(i) * T(i+1) / T(w.Period)
+			v := window.At(i)
+			sum += v * T(w.Period-i)
 		}
 
-		return sum / 2
+		return sum / divisor
 	})
 
 	wmas = helper.Skip(wmas, w.IdlePeriod())
