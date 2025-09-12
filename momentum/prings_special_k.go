@@ -68,6 +68,7 @@ func NewPringsSpecialK[T helper.Float]() *PringsSpecialK[T] {
 	}
 }
 
+// Compute function takes a channel of numbers and computes the Prings Special K.
 func (p *PringsSpecialK[T]) Compute(closings <-chan T) <-chan T {
 	c := helper.Duplicate(closings, 12)
 
