@@ -38,11 +38,13 @@ func NewDpo[T helper.Number]() *Dpo[T] {
 
 // NewDpoWithPeriod function initializes a new DPO instance with the given period.
 func NewDpoWithPeriod[T helper.Number](period int) *Dpo[T] {
-	dpo := NewDpo[T]()
-	dpo.Period = period
+	if period < 1 {
+		period = DefaultDpoPeriod
+	}
 
-	return dpo
-
+	return &Dpo[T]{
+		Period: period,
+	}
 }
 
 // Compute calculates the DPO indicator over the input price channel.
