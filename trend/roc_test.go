@@ -28,7 +28,7 @@ func TestRocTestdata(t *testing.T) {
 		Roc   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/roc.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/roc.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

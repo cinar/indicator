@@ -19,7 +19,7 @@ func TestWeightedClose(t *testing.T) {
 		WeightedClose float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/weighted_close.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/weighted_close.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

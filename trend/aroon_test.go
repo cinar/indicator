@@ -21,7 +21,7 @@ func TestAroon(t *testing.T) {
 
 	aroon := trend.NewAroon[float64]()
 
-	input, err := helper.ReadFromCsvFile[AroonData]("testdata/aroon.csv", true)
+	input, err := helper.ReadFromCsvFile[AroonData]("testdata/aroon.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

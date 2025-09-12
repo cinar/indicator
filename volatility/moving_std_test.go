@@ -17,7 +17,7 @@ func TestMovingStd(t *testing.T) {
 		Std   float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/moving_std.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/moving_std.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

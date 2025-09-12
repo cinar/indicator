@@ -14,7 +14,7 @@ import (
 // at a specific moment.
 type Snapshot struct {
 	// Date represents the specific timestamp.
-	Date time.Time `format:"2006-01-02"`
+	Date time.Time
 
 	// Open represents the opening price for the
 	// snapshot period.

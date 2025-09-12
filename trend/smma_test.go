@@ -17,7 +17,7 @@ func TestSmma(t *testing.T) {
 		Smma  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/smma.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/smma.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
