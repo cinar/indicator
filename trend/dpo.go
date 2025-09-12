@@ -14,31 +14,31 @@ import (
 const DefaultDpoPeriod = 20
 
 // Dpo computes the Detrended Price Oscillator.
-//
 // Formula (common approximation):
+// Let k = floor(period/2) + 1.
+// For time index t >= period-1+k:
 //
-//	k = period/2 + 1
-//	DPO = Price - SMA(Price shifted by k)
+//	DPO[t] = Price[t] - SMA[t - k]
 //
 // Example:
 //
-//	dpo := trend.NewDpo[float64]()
-//	dpo.Period = 20
+//	dpo := trend.NewDpoWithPeriod[float64](20)
 //	out := dpo.Compute(c)
-type Dpo[T helper.Number] struct {
+type Dpo[T helper.Float] struct {
+	// Period is the SMA window length. Must be >= 1. Typical default is 20.
 	Period int
 }
 
 // NewDpo creates a new DPO instance with default parameters.
-func NewDpo[T helper.Number]() *Dpo[T] {
+func NewDpo[T helper.Float]() *Dpo[T] {
 	return &Dpo[T]{
 		Period: DefaultDpoPeriod,
 	}
 }
 
 // NewDpoWithPeriod function initializes a new DPO instance with the given period.
-func NewDpoWithPeriod[T helper.Number](period int) *Dpo[T] {
-	if period < 1 {
+func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T] {
+	if period <= 1 {
 		period = DefaultDpoPeriod
 	}
 
@@ -49,16 +49,17 @@ func NewDpoWithPeriod[T helper.Number](period int) *Dpo[T] {
 
 // Compute calculates the DPO indicator over the input price channel.
 func (d *Dpo[T]) Compute(closing <-chan T) <-chan T {
-	closingSplice := helper.Duplicate(closing, 2)
+	k := d.Period/2 + 1
+	dup := helper.Duplicate(closing, 2)
 
 	// compute SMA on the first duplicated stream
 	sma := NewSma[T]()
 	sma.Period = d.Period
-	smaOut := sma.Compute(closingSplice[0])
+	smaOut := sma.Compute(dup[0])
 
 	// align the original price stream and the SMA stream according to DPO formula
-	skippedClosing := helper.Skip(closingSplice[1], d.IdlePeriod())
-	smaDelayed := helper.SkipLast(smaOut, d.Period/2+1)
+	skippedClosing := helper.Skip(dup[1], d.IdlePeriod())
+	smaDelayed := helper.SkipLast(smaOut, k)
 
 	// DPO = Price - shifted SMA
 	return helper.Operate(skippedClosing, smaDelayed, func(price, shiftedSma T) T {
@@ -66,7 +67,7 @@ func (d *Dpo[T]) Compute(closing <-chan T) <-chan T {
 	})
 }
 
-// IdlePeriod is the initial period that DPO yield any results.
+// IdlePeriod returns the number of leading samples to discard before the first DPO value is available.
 func (d *Dpo[T]) IdlePeriod() int {
 	return (d.Period - 1) + (d.Period/2 + 1)
 }
