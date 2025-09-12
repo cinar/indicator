@@ -21,7 +21,7 @@ func TestChaikinOscillator(t *testing.T) {
 		Co     float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/chaikin_oscillator.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/chaikin_oscillator.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

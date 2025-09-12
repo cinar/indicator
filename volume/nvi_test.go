@@ -18,7 +18,7 @@ func TestNvi(t *testing.T) {
 		Nvi    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[NviData]("testdata/nvi.csv", true)
+	input, err := helper.ReadFromCsvFile[NviData]("testdata/nvi.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

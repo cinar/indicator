@@ -18,7 +18,7 @@ func TestMlr(t *testing.T) {
 		R float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/mlr.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/mlr.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

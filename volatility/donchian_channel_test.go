@@ -19,7 +19,7 @@ func TestDonchianChannel(t *testing.T) {
 		Lower  float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/donchian_channel.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/donchian_channel.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

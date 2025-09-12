@@ -27,7 +27,7 @@ The information provided on this project is strictly for informational purposes 
 - [Constants](<#constants>)
 - [func Abs\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Abs>)
 - [func Add\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Add>)
-- [func AppendOrWriteToCsvFile\[T any\]\(fileName string, hasHeader bool, rows \<\-chan \*T\) error](<#AppendOrWriteToCsvFile>)
+- [func AppendOrWriteToCsvFile\[T any\]\(fileName string, rows \<\-chan \*T, options ...CsvOption\[T\]\) error](<#AppendOrWriteToCsvFile>)
 - [func Apply\[T Number\]\(c \<\-chan T, f func\(T\) T\) \<\-chan T](<#Apply>)
 - [func Buffered\[T any\]\(c \<\-chan T, size int\) \<\-chan T](<#Buffered>)
 - [func ChanToJSON\[T any\]\(c \<\-chan T, w io.Writer\) error](<#ChanToJSON>)
@@ -69,7 +69,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Operate3\[A any, B any, C any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, o func\(A, B, C\) R\) \<\-chan R](<#Operate3>)
 - [func Pipe\[T any\]\(f \<\-chan T, t chan\<\- T\)](<#Pipe>)
 - [func Pow\[T Number\]\(c \<\-chan T, y T\) \<\-chan T](<#Pow>)
-- [func ReadFromCsvFile\[T any\]\(fileName string, hasHeader bool\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
+- [func ReadFromCsvFile\[T any\]\(fileName string, options ...CsvOption\[T\]\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
 - [func Remove\(t \*testing.T, name string\)](<#Remove>)
 - [func RemoveAll\(t \*testing.T, path string\)](<#RemoveAll>)
 - [func RoundDigit\[T Number\]\(n T, d int\) T](<#RoundDigit>)
@@ -93,11 +93,15 @@ The information provided on this project is strictly for informational purposes 
   - [func \(b \*Bst\[T\]\) Remove\(value T\) bool](<#Bst[T].Remove>)
 - [type BstNode](<#BstNode>)
 - [type Csv](<#Csv>)
-  - [func NewCsv\[T any\]\(hasHeader bool\) \(\*Csv\[T\], error\)](<#NewCsv>)
+  - [func NewCsv\[T any\]\(options ...CsvOption\[T\]\) \(\*Csv\[T\], error\)](<#NewCsv>)
   - [func \(c \*Csv\[T\]\) AppendToFile\(fileName string, rows \<\-chan \*T\) error](<#Csv[T].AppendToFile>)
   - [func \(c \*Csv\[T\]\) ReadFromFile\(fileName string\) \(\<\-chan \*T, error\)](<#Csv[T].ReadFromFile>)
   - [func \(c \*Csv\[T\]\) ReadFromReader\(reader io.Reader\) \<\-chan \*T](<#Csv[T].ReadFromReader>)
   - [func \(c \*Csv\[T\]\) WriteToFile\(fileName string, rows \<\-chan \*T\) error](<#Csv[T].WriteToFile>)
+- [type CsvOption](<#CsvOption>)
+  - [func WithCsvDefaultDateTimeFormat\[T any\]\(format string\) CsvOption\[T\]](<#WithCsvDefaultDateTimeFormat>)
+  - [func WithCsvLogger\[T any\]\(logger \*slog.Logger\) CsvOption\[T\]](<#WithCsvLogger>)
+  - [func WithoutCsvHeader\[T any\]\(\) CsvOption\[T\]](<#WithoutCsvHeader>)
 - [type Float](<#Float>)
 - [type Integer](<#Integer>)
 - [type Number](<#Number>)
@@ -132,7 +136,7 @@ const (
     CsvFormatTag = "format"
 
     // DefaultDateTimeFormat denotes the default format of a date and time column.
-    DefaultDateTimeFormat = "2006-01-02 15:04:05"
+    DefaultDateTimeFormat = "2006-01-02"
 )
 ```
 
@@ -182,10 +186,10 @@ fmt.Println(actual) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 ```
 
 <a name="AppendOrWriteToCsvFile"></a>
-## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L291>)
+## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L323>)
 
 ```go
-func AppendOrWriteToCsvFile[T any](fileName string, hasHeader bool, rows <-chan *T) error
+func AppendOrWriteToCsvFile[T any](fileName string, rows <-chan *T, options ...CsvOption[T]) error
 ```
 
 AppendOrWriteToCsvFile writes the provided rows of data to the specified file, appending to the existing file if it exists or creating a new one if it doesn't. In append mode, the function assumes that the existing file's column order matches the field order of the given row struct to ensure consistent data structure.
@@ -805,10 +809,10 @@ fmt.Println(helper.ChanToSlice(squared)) // [4, 9, 25, 100]
 ```
 
 <a name="ReadFromCsvFile"></a>
-## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L278>)
+## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L310>)
 
 ```go
-func ReadFromCsvFile[T any](fileName string, hasHeader bool) (<-chan *T, error)
+func ReadFromCsvFile[T any](fileName string, options ...CsvOption[T]) (<-chan *T, error)
 ```
 
 ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename, maps the data to corresponding struct fields, and delivers it through the channel.
@@ -1095,7 +1099,7 @@ type BstNode[T Number] struct {
 ```
 
 <a name="Csv"></a>
-## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L40-L50>)
+## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L40-L53>)
 
 Csv represents the configuration for CSV reader and writer.
 
@@ -1109,16 +1113,16 @@ type Csv[T any] struct {
 ```
 
 <a name="NewCsv"></a>
-### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L54>)
+### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L80>)
 
 ```go
-func NewCsv[T any](hasHeader bool) (*Csv[T], error)
+func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error)
 ```
 
-NewCsv function initializes a new CSV instance. The parameter hasHeader indicates whether the CSV contains a header row.
+NewCsv creates a new CSV instance with the provided options.
 
 <a name="Csv[T].AppendToFile"></a>
-### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L174>)
+### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L206>)
 
 ```go
 func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
@@ -1127,7 +1131,7 @@ func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
 AppendToFile appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist. In append mode, the function assumes that the existing file's column order matches the field order of the given row struct to ensure consistent data structure.
 
 <a name="Csv[T].ReadFromFile"></a>
-### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L150>)
+### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L182>)
 
 ```go
 func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
@@ -1136,7 +1140,7 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
 ReadFromFile parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel.
 
 <a name="Csv[T].ReadFromReader"></a>
-### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L95>)
+### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L127>)
 
 ```go
 func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
@@ -1145,13 +1149,49 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
 ReadFromReader parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel.
 
 <a name="Csv[T].WriteToFile"></a>
-### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L190>)
+### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L222>)
 
 ```go
 func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error
 ```
 
 WriteToFile creates a new file with the given name and writes the provided rows of data to it, overwriting any existing content.
+
+<a name="CsvOption"></a>
+## type [CsvOption](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L56>)
+
+CsvOption represents a functional option for configuring the CSV instance.
+
+```go
+type CsvOption[T any] func(*Csv[T])
+```
+
+<a name="WithCsvDefaultDateTimeFormat"></a>
+### func [WithCsvDefaultDateTimeFormat](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L73>)
+
+```go
+func WithCsvDefaultDateTimeFormat[T any](format string) CsvOption[T]
+```
+
+WithCsvDefaultDateTimeFormat sets the default date and time format for the CSV instance.
+
+<a name="WithCsvLogger"></a>
+### func [WithCsvLogger](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L66>)
+
+```go
+func WithCsvLogger[T any](logger *slog.Logger) CsvOption[T]
+```
+
+WithCsvLogger sets the logger for the CSV instance.
+
+<a name="WithoutCsvHeader"></a>
+### func [WithoutCsvHeader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L59>)
+
+```go
+func WithoutCsvHeader[T any]() CsvOption[T]
+```
+
+WithoutCsvHeader disables the header row in the CSV.
 
 <a name="Float"></a>
 ## type [Float](<https://github.com/cinar/indicator/blob/master/helper/helper.go#L27-L29>)

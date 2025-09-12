@@ -20,7 +20,7 @@ func TestChandelierExit(t *testing.T) {
 		Short float64
 	}
 
-	input, err := helper.ReadFromCsvFile[Data]("testdata/chandelier_exit.csv", true)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/chandelier_exit.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

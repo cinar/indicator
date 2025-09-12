@@ -14,12 +14,12 @@ import (
 )
 
 func TestMacdStrategy(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/macd_strategy.csv", true)
+	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/macd_strategy.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func TestMacdStrategy(t *testing.T) {
 }
 
 func TestMacdStrategyReport(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv", true)
+	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

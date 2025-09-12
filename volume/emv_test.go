@@ -19,7 +19,7 @@ func TestEmv(t *testing.T) {
 		Emv    float64
 	}
 
-	input, err := helper.ReadFromCsvFile[EmvData]("testdata/emv.csv", true)
+	input, err := helper.ReadFromCsvFile[EmvData]("testdata/emv.csv")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -20,7 +20,7 @@ func TestReportWriteToFile(t *testing.T) {
 		Annotation string
 	}
 
-	input, err := helper.ReadFromCsvFile[Row]("testdata/report.csv", true)
+	input, err := helper.ReadFromCsvFile[Row]("testdata/report.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +58,7 @@ func TestReportWriteToFileFailed(t *testing.T) {
 		Annotation string
 	}
 
-	input, err := helper.ReadFromCsvFile[Row]("testdata/report.csv", true)
+	input, err := helper.ReadFromCsvFile[Row]("testdata/report.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
