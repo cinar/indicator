@@ -25,7 +25,8 @@ const DefaultDpoPeriod = 20
 //	dpo := trend.NewDpoWithPeriod[float64](20)
 //	out := dpo.Compute(c)
 type Dpo[T helper.Float] struct {
-	// period is the SMA window length. Must be >= 1. Typical default is 20.
+	// Period is the SMA window length. Typical default is 20.
+	// Note: values <= 1 are considered invalid and will be replaced with DefaultDpoPeriod by constructors.
 	period int
 }
 
@@ -36,7 +37,8 @@ func NewDpo[T helper.Float]() *Dpo[T] {
 	}
 }
 
-// NewDpoWithPeriod function initializes a new DPO instance with the given period.
+// NewDpoWithPeriod initializes a new DPO instance with the given period.
+// Periods <= 1 are clamped to DefaultDpoPeriod.
 func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T] {
 	if period <= 1 {
 		period = DefaultDpoPeriod
