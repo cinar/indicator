@@ -29,7 +29,7 @@ func NewWmaWith[T helper.Number](period int) *Wma[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the WMA and the signal line.
+// Compute computes the WMA over the input stream.
 func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 	window := helper.NewRing[T](w.Period)
 	divisor := T(w.Period) * (T(w.Period) + T(1)) / T(2.0)
