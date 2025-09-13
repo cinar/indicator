@@ -79,6 +79,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Sign\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sign>)
 - [func Since\[T comparable, R Number\]\(c \<\-chan T\) \<\-chan R](<#Since>)
 - [func Skip\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Skip>)
+- [func SkipLast\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#SkipLast>)
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
@@ -947,6 +948,23 @@ Example:
 c := helper.SliceToChan([]int{2, 4, 6, 8})
 actual := helper.Skip(c, 2)
 fmt.Println(helper.ChanToSlice(actual)) // [6, 8]
+```
+
+<a name="SkipLast"></a>
+## func [SkipLast](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L11>)
+
+```go
+func SkipLast[T any](c <-chan T, count int) <-chan T
+```
+
+SkipLast skips the specified number of elements from the end of the given channel.
+
+Example:
+
+```
+c := helper.SliceToChan([]int{2, 4, 6, 8})
+actual := helper.SkipLast(c, 2)
+fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
 ```
 
 <a name="SliceToChan"></a>

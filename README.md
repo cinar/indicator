@@ -34,6 +34,7 @@ The following list of indicators are currently supported by this package:
 -	[Community Channel Index (CCI)](trend/README.md#type-cci)
 -   [Envelope](trend/README.md#type-envelope)
 -	[Hull Moving Average (HMA)](trend/README.md#type-hma)
+-   [Detrended Price Oscillator (DPO)](trend/README.md#type-dpo)
 -	[Double Exponential Moving Average (DEMA)](trend/README.md#type-dema)
 -	[Exponential Moving Average (EMA)](trend/README.md#type-ema)
 -	[Kaufman's Adaptive Moving Average (KAMA)](trend/README.md#type-kama)
