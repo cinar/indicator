@@ -43,6 +43,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewDema\[T helper.Number\]\(\) \*Dema\[T\]](<#NewDema>)
   - [func \(d \*Dema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Dema[T].Compute>)
   - [func \(d \*Dema\[T\]\) IdlePeriod\(\) int](<#Dema[T].IdlePeriod>)
+- [type Dpo](<#Dpo>)
+  - [func NewDpo\[T helper.Float\]\(\) \*Dpo\[T\]](<#NewDpo>)
+  - [func NewDpoWithPeriod\[T helper.Float\]\(period int\) \*Dpo\[T\]](<#NewDpoWithPeriod>)
+  - [func \(d \*Dpo\[T\]\) Compute\(closing \<\-chan T\) \<\-chan T](<#Dpo[T].Compute>)
+  - [func \(d \*Dpo\[T\]\) IdlePeriod\(\) int](<#Dpo[T].IdlePeriod>)
+  - [func \(d \*Dpo\[T\]\) String\(\) string](<#Dpo[T].String>)
 - [type Ema](<#Ema>)
   - [func NewEma\[T helper.Number\]\(\) \*Ema\[T\]](<#NewEma>)
   - [func NewEmaWithPeriod\[T helper.Number\]\(period int\) \*Ema\[T\]](<#NewEmaWithPeriod>)
@@ -297,6 +303,12 @@ const (
     // DefaultCciPeriod is the default time period for CCI.
     DefaultCciPeriod = 20
 )
+```
+
+<a name="DefaultDpoPeriod"></a>DefaultDpoPeriod is the default period for DPO calculation.
+
+```go
+const DefaultDpoPeriod = 20
 ```
 
 <a name="DefaultRmaPeriod"></a>
@@ -611,6 +623,73 @@ func (d *Dema[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that DEMA won't yield any results.
+
+<a name="Dpo"></a>
+## type [Dpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L27-L31>)
+
+Dpo computes the Detrended Price Oscillator. Formula \(common approximation\): Let k = floor\(period/2\) \+ 1. For time index t \>= period\-1\+k:
+
+```
+DPO[t] = Price[t] - SMA[t - k]
+```
+
+Example:
+
+```
+dpo := trend.NewDpoWithPeriod[float64](20)
+out := dpo.Compute(c)
+```
+
+```go
+type Dpo[T helper.Float] struct {
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewDpo"></a>
+### func [NewDpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L34>)
+
+```go
+func NewDpo[T helper.Float]() *Dpo[T]
+```
+
+NewDpo creates a new DPO instance with default parameters.
+
+<a name="NewDpoWithPeriod"></a>
+### func [NewDpoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L42>)
+
+```go
+func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T]
+```
+
+NewDpoWithPeriod initializes a new DPO instance with the given period. Periods \<= 1 are clamped to DefaultDpoPeriod.
+
+<a name="Dpo[T].Compute"></a>
+### func \(\*Dpo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L53>)
+
+```go
+func (d *Dpo[T]) Compute(closing <-chan T) <-chan T
+```
+
+Compute calculates the DPO indicator over the input price channel.
+
+<a name="Dpo[T].IdlePeriod"></a>
+### func \(\*Dpo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L73>)
+
+```go
+func (d *Dpo[T]) IdlePeriod() int
+```
+
+IdlePeriod returns the number of leading samples to discard before the first DPO value is available.
+
+<a name="Dpo[T].String"></a>
+### func \(\*Dpo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L78>)
+
+```go
+func (d *Dpo[T]) String() string
+```
+
+String is the string representation of the DPO.
 
 <a name="Ema"></a>
 ## type [Ema](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L29-L35>)
