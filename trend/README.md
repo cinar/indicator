@@ -2051,16 +2051,16 @@ func NewWmaWith[T helper.Number](period int) *Wma[T]
 NewWmaWith function initializes a new WMA instance with the given parameters.
 
 <a name="Wma[T].Compute"></a>
-### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L30>)
+### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L33>)
 
 ```go
 func (w *Wma[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the WMA and the signal line.
+Compute computes the WMA over the input stream.
 
 <a name="Wma[T].IdlePeriod"></a>
-### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L55>)
+### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L59>)
 
 ```go
 func (w *Wma[T]) IdlePeriod() int
@@ -2069,7 +2069,7 @@ func (w *Wma[T]) IdlePeriod() int
 IdlePeriod is the initial period that WMA won't yield any results.
 
 <a name="Wma[T].String"></a>
-### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L60>)
+### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L64>)
 
 ```go
 func (w *Wma[T]) String() string
