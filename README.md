@@ -106,6 +106,7 @@ The following list of indicators are currently supported by this package:
 
 ### 💰 Asset Valuation
 -   [Future Value (FV)](valuation/README.md#Fv)
+-   [Net Present Value (NPV)](valuation/README.md#Npv)
 -   [Present Value (PV)](valuation/README.md#Pv)
 
 🧠 Strategies Provided

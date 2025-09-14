@@ -9,6 +9,7 @@ import "github.com/cinar/indicator/v2/valuation"
 ## Index
 
 - [func Fv\(pv, rate float64, years int\) float64](<#Fv>)
+- [func Npv\(rate float64, cfs \[\]float64\) float64](<#Npv>)
 - [func Pv\(fv, rate float64, years int\) float64](<#Pv>)
 
 
@@ -23,6 +24,19 @@ Fv calculates the Future Value \(FV\) of a Present Value \(PV\).
 
 ```
 Formula: FV = PV * (1 + rate)^years
+```
+
+<a name="Npv"></a>
+## func [Npv](<https://github.com/cinar/indicator/blob/master/valuation/npv.go#L12>)
+
+```go
+func Npv(rate float64, cfs []float64) float64
+```
+
+Npv calculates the Net Present Value \(NPV\) of a series of cash flows.
+
+```
+Formula: NPV = sum(CF_i / (1 + rate)^i) for i = 1 to n
 ```
 
 <a name="Pv"></a>
