@@ -54,6 +54,7 @@ The information provided on this project is strictly for informational purposes 
 - [func First\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#First>)
 - [func Gcd\(values ...int\) int](<#Gcd>)
 - [func Head\[T Number\]\(c \<\-chan T, count int\) \<\-chan T](<#Head>)
+- [func Highest\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#Highest>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
 - [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
 - [func JSONToChanWithLogger\[T any\]\(r io.Reader, logger \*slog.Logger\) \<\-chan T](<#JSONToChanWithLogger>)
@@ -61,8 +62,11 @@ The information provided on this project is strictly for informational purposes 
 - [func KeepPositives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepPositives>)
 - [func Last\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Last>)
 - [func Lcm\(values ...int\) int](<#Lcm>)
+- [func Lowest\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#Lowest>)
 - [func Map\[F, T any\]\(c \<\-chan F, f func\(F\) T\) \<\-chan T](<#Map>)
 - [func MapWithPrevious\[F, T any\]\(c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPrevious>)
+- [func MaxSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MaxSince>)
+- [func MinSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MinSince>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
 - [func MultiplyBy\[T Number\]\(c \<\-chan T, m T\) \<\-chan T](<#MultiplyBy>)
 - [func Operate\[A any, B any, R any\]\(ac \<\-chan A, bc \<\-chan B, o func\(A, B\) R\) \<\-chan R](<#Operate>)
@@ -81,10 +85,12 @@ The information provided on this project is strictly for informational purposes 
 - [func Skip\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Skip>)
 - [func SkipLast\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#SkipLast>)
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
+- [func SlicesReverse\[T any\]\(r \[\]T, i int, f func\(T\) bool\)](<#SlicesReverse>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
 - [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
 - [func Waitable\[T any\]\(wg \*sync.WaitGroup, c \<\-chan T\) \<\-chan T](<#Waitable>)
+- [func Window\[T any\]\(c \<\-chan T, f func\(\[\]T, int\) T, w int\) \<\-chan T](<#Window>)
 - [type Bst](<#Bst>)
   - [func NewBst\[T Number\]\(\) \*Bst\[T\]](<#NewBst>)
   - [func \(b \*Bst\[T\]\) Contains\(value T\) bool](<#Bst[T].Contains>)
@@ -582,6 +588,15 @@ actual := helper.Head(c, 2)
 fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
 ```
 
+<a name="Highest"></a>
+## func [Highest](<https://github.com/cinar/indicator/blob/master/helper/highest.go#L11>)
+
+```go
+func Highest[T Number](c <-chan T, w int) <-chan T
+```
+
+Highest returns a channel that emits the highest value within a sliding window of size w from the input channel c.
+
 <a name="IncrementBy"></a>
 ## func [IncrementBy](<https://github.com/cinar/indicator/blob/master/helper/increment_by.go#L16>)
 
@@ -669,6 +684,15 @@ func Lcm(values ...int) int
 
 Lcm calculates the Least Common Multiple of the given numbers.
 
+<a name="Lowest"></a>
+## func [Lowest](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L11>)
+
+```go
+func Lowest[T Number](c <-chan T, w int) <-chan T
+```
+
+Lowest returns a channel that emits the lowest value within a sliding window of size w from the input channel c.
+
 <a name="Map"></a>
 ## func [Map](<https://github.com/cinar/indicator/blob/master/helper/map.go#L17>)
 
@@ -702,6 +726,24 @@ sum := helper.MapWithPrevious(c, func(p, c int) int {
 	return p + c
 }, 0)
 ```
+
+<a name="MaxSince"></a>
+## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L14>)
+
+```go
+func MaxSince[T Number](c <-chan T, w int) <-chan T
+```
+
+MaxSince returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
+
+<a name="MinSince"></a>
+## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L13>)
+
+```go
+func MinSince[T Number](c <-chan T, w int) <-chan T
+```
+
+MinSince returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
 
 <a name="Multiply"></a>
 ## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L20>)
@@ -987,6 +1029,15 @@ fmt.Println(<- c)  // 6
 fmt.Println(<- c)  // 8
 ```
 
+<a name="SlicesReverse"></a>
+## func [SlicesReverse](<https://github.com/cinar/indicator/blob/master/helper/slices_reverse.go#L6>)
+
+```go
+func SlicesReverse[T any](r []T, i int, f func(T) bool)
+```
+
+SlicesReverse loops through a slice in reverse order starting from the given index. The given function is called for each element in the slice. If the function returns false, the loop is terminated.
+
 <a name="Sqrt"></a>
 ## func [Sqrt](<https://github.com/cinar/indicator/blob/master/helper/sqrt.go#L16>)
 
@@ -1039,6 +1090,15 @@ func Waitable[T any](wg *sync.WaitGroup, c <-chan T) <-chan T
 ```
 
 Waitable increments the wait group before reading from the channel and signals completion when the channel is closed.
+
+<a name="Window"></a>
+## func [Window](<https://github.com/cinar/indicator/blob/master/helper/window.go#L12>)
+
+```go
+func Window[T any](c <-chan T, f func([]T, int) T, w int) <-chan T
+```
+
+Window returns a channel that emits the passed function result within a sliding window of size w from the input channel c. Note: the slice is in the same order than in source channel but the 1st element may not be 0, use modulo window size if order is important.
 
 <a name="Bst"></a>
 ## type [Bst](<https://github.com/cinar/indicator/blob/master/helper/bst.go#L15-L17>)
