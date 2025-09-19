@@ -45,11 +45,11 @@ func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 
 	actions := helper.Operate3(uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
 		if closing > upper {
-			return strategy.Buy
+			return strategy.Sell
 		}
 
 		if lower > closing {
-			return strategy.Sell
+			return strategy.Buy
 		}
 
 		return strategy.Hold
