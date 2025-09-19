@@ -104,6 +104,11 @@ The following list of indicators are currently supported by this package:
 -	[Volume Price Trend (VPT)](volume/README.md#type-vpt)
 -	[Volume Weighted Average Price (VWAP)](volume/README.md#type-vwap)
 
+### 💰 Asset Valuation
+-   [Future Value (FV)](valuation/README.md#Fv)
+-   [Net Present Value (NPV)](valuation/README.md#Npv)
+-   [Present Value (PV)](valuation/README.md#Pv)
+
 🧠 Strategies Provided
 ----------------------
 
