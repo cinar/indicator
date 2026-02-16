@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2024 Onur Cinar.
+// Copyright (c) 2021-2026 Onur Cinar.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -26,7 +26,7 @@ func main() {
 
 	stdErr := log.New(os.Stderr, "", 0)
 	stdErr.Println("Indicator Sync")
-	stdErr.Println("Copyright (c) 2021-2024 Onur Cinar.")
+	stdErr.Println("Copyright (c) 2021-2026 Onur Cinar.")
 	stdErr.Println("The source code is provided under GNU AGPLv3 License.")
 	stdErr.Println("https://github.com/cinar/indicator")
 	stdErr.Println()
