@@ -56,6 +56,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(n \*NegativeVolumeIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NegativeVolumeIndexStrategy.Compute>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Name\(\) string](<#NegativeVolumeIndexStrategy.Name>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NegativeVolumeIndexStrategy.Report>)
+- [type PercentBandMFIStrategy](<#PercentBandMFIStrategy>)
+  - [func NewPercentBandMFIStrategy\(\) \*PercentBandMFIStrategy](<#NewPercentBandMFIStrategy>)
+  - [func NewPercentBandMFIStrategyWith\(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64\) \*PercentBandMFIStrategy](<#NewPercentBandMFIStrategyWith>)
+  - [func \(m \*PercentBandMFIStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#PercentBandMFIStrategy.Compute>)
+  - [func \(m \*PercentBandMFIStrategy\) Name\(\) string](<#PercentBandMFIStrategy.Name>)
+  - [func \(m \*PercentBandMFIStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#PercentBandMFIStrategy.Report>)
 - [type WeightedAveragePriceStrategy](<#WeightedAveragePriceStrategy>)
   - [func NewWeightedAveragePriceStrategy\(\) \*WeightedAveragePriceStrategy](<#NewWeightedAveragePriceStrategy>)
   - [func NewWeightedAveragePriceStrategyWith\(period int\) \*WeightedAveragePriceStrategy](<#NewWeightedAveragePriceStrategyWith>)
@@ -75,6 +81,24 @@ const (
 
     // DefaultMoneyFlowIndexStrategyBuyAt is the default buy at of 20.
     DefaultMoneyFlowIndexStrategyBuyAt = 20
+)
+```
+
+<a name="DefaultPercentBandMFIStrategyPercentBBuyAt"></a>
+
+```go
+const (
+    // DefaultPercentBandMFIStrategyPercentBBuyAt is the default buy for %B at of 0.8.
+    DefaultPercentBandMFIStrategyPercentBBuyAt = 0.8
+
+    // DefaultPercentBandMFIStrategyPercentBSellAt is the default sell for %B at of 0.2.
+    DefaultPercentBandMFIStrategyPercentBSellAt = 0.2
+
+    // DefaultPercentBandMFIStrategyMfiBuyAt is the default buy for MFI at of 80.
+    DefaultPercentBandMFIStrategyMfiBuyAt = 80
+
+    // DefaultPercentBandMFIStrategyMfiSellAt is the default sell for MFI at of 20.
+    DefaultPercentBandMFIStrategyMfiSellAt = 20
 )
 ```
 
@@ -386,6 +410,78 @@ Name returns the name of the strategy.
 
 ```go
 func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="PercentBandMFIStrategy"></a>
+## type [PercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L34-L52>)
+
+PercentBandMFIStrategy represents the configuration parameters for calculating the %B combined with MFI strategy. Recommends a Buy action when %B is above 0.8 and MFI is above 80, and recommends a Sell action when %B is below 0.2 and MFI is below 20.
+
+```go
+type PercentBandMFIStrategy struct {
+    // MoneyFlowIndex is the Money Flow Index indicator instance.
+    MoneyFlowIndex *volume.Mfi[float64]
+
+    // PercentB is the %B indicator instance.
+    PercentB *volatility.PercentB[float64]
+
+    // SellPercentBAt is the sell at value of %B.
+    SellPercentBAt float64
+
+    // BuyPercentBAt is the buy at value of %B.
+    BuyPercentBAt float64
+
+    // SellMfiAt is the sell at value of MFI.
+    SellMfiAt float64
+
+    // BuyMfiAt is the buy at value of MFI.
+    BuyMfiAt float64
+}
+```
+
+<a name="NewPercentBandMFIStrategy"></a>
+### func [NewPercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L55>)
+
+```go
+func NewPercentBandMFIStrategy() *PercentBandMFIStrategy
+```
+
+NewMoneyFlowIndexStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
+
+<a name="NewPercentBandMFIStrategyWith"></a>
+### func [NewPercentBandMFIStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L66>)
+
+```go
+func NewPercentBandMFIStrategyWith(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64) *PercentBandMFIStrategy
+```
+
+NewMoneyFlowIndexStrategyWith function initializes a new Money Flow Index strategy instance with the given parameters.
+
+<a name="PercentBandMFIStrategy.Compute"></a>
+### func \(\*PercentBandMFIStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L83>)
+
+```go
+func (m *PercentBandMFIStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="PercentBandMFIStrategy.Name"></a>
+### func \(\*PercentBandMFIStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L78>)
+
+```go
+func (m *PercentBandMFIStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="PercentBandMFIStrategy.Report"></a>
+### func \(\*PercentBandMFIStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L114>)
+
+```go
+func (m *PercentBandMFIStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

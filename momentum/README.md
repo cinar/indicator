@@ -66,6 +66,10 @@ The information provided on this project is strictly for informational purposes 
   - [func NewStochasticRsiWithPeriod\[T helper.Number\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
   - [func \(s \*StochasticRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].Compute>)
   - [func \(s \*StochasticRsi\[T\]\) IdlePeriod\(\) int](<#StochasticRsi[T].IdlePeriod>)
+- [type TdSequential](<#TdSequential>)
+  - [func NewTdSequential\[T helper.Number\]\(\) \*TdSequential\[T\]](<#NewTdSequential>)
+  - [func \(t \*TdSequential\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#TdSequential[T].Compute>)
+  - [func \(t \*TdSequential\[T\]\) IdlePeriod\(\) int](<#TdSequential[T].IdlePeriod>)
 - [type WilliamsR](<#WilliamsR>)
   - [func NewWilliamsR\[T helper.Number\]\(\) \*WilliamsR\[T\]](<#NewWilliamsR>)
   - [func \(w \*WilliamsR\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].Compute>)
@@ -155,6 +159,24 @@ const (
 
     // DefaultStochasticOscillatorPeriod is the default period for the Stochastic Oscillator.
     DefaultStochasticOscillatorPeriod = 3
+)
+```
+
+<a name="DefaultTdSequentialLookback"></a>
+
+```go
+const (
+    // DefaultTdSequentialLookback is the default lookback period for comparing closes.
+    DefaultTdSequentialLookback = 4
+
+    // DefaultTdSequentialCountdownLookback is the default lookback period for countdown comparison.
+    DefaultTdSequentialCountdownLookback = 2
+
+    // DefaultTdSequentialSetupPeriod is the default setup period (9).
+    DefaultTdSequentialSetupPeriod = 9
+
+    // DefaultTdSequentialCountdownPeriod is the default countdown period (13).
+    DefaultTdSequentialCountdownPeriod = 13
 )
 ```
 
@@ -781,6 +803,71 @@ func (s *StochasticRsi[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Stochasic RSI won't yield any results.
+
+<a name="TdSequential"></a>
+## type [TdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L41-L53>)
+
+TdSequential represents the configuration parameters for calculating the Tom DeMark's TD Sequential indicator. TD Sequential is a momentum indicator that identifies potential trend exhaustion and reversals.
+
+The indicator consists of two phases:
+
+```
+TD Setup: Counts 9 consecutive closes higher (sell) or lower (buy) than
+the close 4 bars ago.
+
+TD Countdown: After a completed setup, counts 13 closes higher (sell) or
+lower (buy) than the close 2 bars ago.
+```
+
+Example:
+
+```
+td := momentum.NewTdSequential[float64]()
+buySetup, sellSetup, buyCountdown, sellCountdown := td.Compute(closings)
+```
+
+```go
+type TdSequential[T helper.Number] struct {
+    // Lookback is the number of bars to look back for comparison in the setup phase.
+    Lookback int
+
+    // CountdownLookback is the number of bars to look back for comparison in the countdown phase.
+    CountdownLookback int
+
+    // SetupPeriod is the number of consecutive closes required to complete a setup.
+    SetupPeriod int
+
+    // CountdownPeriod is the number of closes required to complete a countdown.
+    CountdownPeriod int
+}
+```
+
+<a name="NewTdSequential"></a>
+### func [NewTdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L56>)
+
+```go
+func NewTdSequential[T helper.Number]() *TdSequential[T]
+```
+
+NewTdSequential function initializes a new TD Sequential instance with default parameters.
+
+<a name="TdSequential[T].Compute"></a>
+### func \(\*TdSequential\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L87>)
+
+```go
+func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T)
+```
+
+Compute function takes a channel of numbers and computes the TD Sequential indicator. Returns four channels: buySetup, sellSetup, buyCountdown, sellCountdown.
+
+<a name="TdSequential[T].IdlePeriod"></a>
+### func \(\*TdSequential\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L190>)
+
+```go
+func (t *TdSequential[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
 
 <a name="WilliamsR"></a>
 ## type [WilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L29-L35>)
