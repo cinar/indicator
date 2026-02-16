@@ -73,6 +73,7 @@ func (apo *Apo[T]) Compute(c <-chan T) <-chan T {
 	fastEma := NewEma[T]()
 	fastEma.Period = apo.FastPeriod
 	cs[0] = fastEma.Compute(cs[0])
+	cs[0] = helper.Skip(cs[0], apo.SlowPeriod - apo.FastPeriod)
 
 	slowEma := NewEma[T]()
 	slowEma.Period = apo.SlowPeriod
