@@ -279,7 +279,7 @@ License
 The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact me.
 
 ```
-Copyright (c) 2021-2024 Onur Cinar.    
+Copyright (c) 2021-2026 Onur Cinar.    
 The source code is provided under GNU AGPLv3 License.
 
 This program is free software: you can redistribute it and/or modify
@@ -299,7 +299,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The version `v1.x.x` is provided under MIT License.
 
 ```
-Copyright (c) 2021-2024 Onur Cinar.
+Copyright (c) 2021-2026 Onur Cinar.
 The source code is provided under MIT License.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
