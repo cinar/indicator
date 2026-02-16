@@ -71,6 +71,7 @@ The information provided on this project is strictly for informational purposes 
 - [func MultiplyBy\[T Number\]\(c \<\-chan T, m T\) \<\-chan T](<#MultiplyBy>)
 - [func Operate\[A any, B any, R any\]\(ac \<\-chan A, bc \<\-chan B, o func\(A, B\) R\) \<\-chan R](<#Operate>)
 - [func Operate3\[A any, B any, C any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, o func\(A, B, C\) R\) \<\-chan R](<#Operate3>)
+- [func Operate4\[A any, B any, C any, D any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, o func\(A, B, C, D\) R\) \<\-chan R](<#Operate4>)
 - [func Pipe\[T any\]\(f \<\-chan T, t chan\<\- T\)](<#Pipe>)
 - [func Pow\[T Number\]\(c \<\-chan T, y T\) \<\-chan T](<#Pow>)
 - [func ReadFromCsvFile\[T any\]\(fileName string, options ...CsvOption\[T\]\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
@@ -813,6 +814,23 @@ Example:
 ```
 add := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
   return a + b + c
+})
+```
+
+<a name="Operate4"></a>
+## func [Operate4](<https://github.com/cinar/indicator/blob/master/helper/operate4.go#L15>)
+
+```go
+func Operate4[A any, B any, C any, D any, R any](ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, o func(A, B, C, D) R) <-chan R
+```
+
+Operate4 applies the provided operate function to corresponding values from four numeric input channels and sends the resulting values to an output channel.
+
+Example:
+
+```
+add := helper.Operate4(ac, bc, cc, dc, func(a, b, c, d int) int {
+  return a + b + c + d
 })
 ```
 

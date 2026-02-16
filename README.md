@@ -73,6 +73,7 @@ The following list of indicators are currently supported by this package:
 -	[Qstick](momentum/README.md#type-qstick)
 -	[Stochastic Oscillator](momentum/README.md#type-stochasticoscillator)
 -	[Stochastic RSI](momentum/README.md#type-stochasticrsi)
+-	[TD Sequential](momentum/README.md#type-tdsequential)
 -	[Williams R](momentum/README.md#type-williamsr)
 
 ### 🎢 Volatility Indicators
