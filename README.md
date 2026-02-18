@@ -31,7 +31,7 @@ The following list of indicators are currently supported by this package:
 -	[Aroon Indicator](trend/README.md#type-aroon)
 -	[Balance of Power (BoP)](trend/README.md#type-bop)
 -	Chande Forecast Oscillator (CFO)
--	[Community Channel Index (CCI)](trend/README.md#type-cci)
+-	[Commodity Channel Index (CCI)](trend/README.md#type-cci)
 -   [Envelope](trend/README.md#type-envelope)
 -	[Hull Moving Average (HMA)](trend/README.md#type-hma)
 -   [Detrended Price Oscillator (DPO)](trend/README.md#type-dpo)
@@ -126,7 +126,7 @@ The following list of strategies are currently supported by this package:
 -	[Aroon Strategy](strategy/trend/README.md#type-aroonstrategy)
 -	[Balance of Power (BoP) Strategy](strategy/trend/README.md#type-bopstrategy)
 -	Chande Forecast Oscillator Strategy
--	[Community Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
+-	[Commodity Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#type-demastrategy)
 -   [Envelope Strategy](strategy/trend/README.md#type-envelope)
 -	[Golden Cross Strategy](strategy/trend/README.md#type-goldencrossstrategy)

@@ -507,7 +507,7 @@ Compute processes a channel of open, high, low, and close values, computing the 
 <a name="Cci"></a>
 ## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L29-L32>)
 
-Cci represents the configuration parameters for calculating the Community Channel Index \(CCI\). CCI is a momentum\-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
+Cci represents the configuration parameters for calculating the Commodity Channel Index \(CCI\). CCI is a momentum\-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
 
 ```
 Moving Average = Sma(Period, Typical Price)

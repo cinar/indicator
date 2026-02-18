@@ -13,7 +13,7 @@ const (
 	DefaultCciPeriod = 20
 )
 
-// Cci represents the configuration parameters for calculating the Community Channel Index (CCI). CCI is a
+// Cci represents the configuration parameters for calculating the Commodity Channel Index (CCI). CCI is a
 // momentum-based oscillator used to help determine when an investment vehicle is reaching a condition of
 // being overbought or oversold.
 //
