@@ -77,6 +77,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewKdj\[T helper.Number\]\(\) \*Kdj\[T\]](<#NewKdj>)
   - [func \(kdj \*Kdj\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].Compute>)
   - [func \(kdj \*Kdj\[T\]\) IdlePeriod\(\) int](<#Kdj[T].IdlePeriod>)
+- [type Kst](<#Kst>)
+  - [func NewKst\[T helper.Float\]\(\) \*Kst\[T\]](<#NewKst>)
+  - [func \(k \*Kst\[T\]\) Compute\(c \<\-chan T\) \(kstResult \<\-chan T, signalResult \<\-chan T\)](<#Kst[T].Compute>)
+  - [func \(k \*Kst\[T\]\) IdlePeriod\(\) int](<#Kst[T].IdlePeriod>)
+  - [func \(k \*Kst\[T\]\) String\(\) string](<#Kst[T].String>)
 - [type Ma](<#Ma>)
 - [type Macd](<#Macd>)
   - [func NewMacd\[T helper.Number\]\(\) \*Macd\[T\]](<#NewMacd>)
@@ -242,6 +247,39 @@ const (
 
     // DefaultKdjSma2Period is the default period for SMA of K.
     DefaultKdjSma2Period = 3
+)
+```
+
+<a name="DefaultKstRocPeriod1"></a>
+
+```go
+const (
+    // DefaultKstRocPeriod1 is the default first ROC period.
+    DefaultKstRocPeriod1 = 10
+
+    // DefaultKstRocPeriod2 is the default second ROC period.
+    DefaultKstRocPeriod2 = 15
+
+    // DefaultKstRocPeriod3 is the default third ROC period.
+    DefaultKstRocPeriod3 = 20
+
+    // DefaultKstRocPeriod4 is the default fourth ROC period.
+    DefaultKstRocPeriod4 = 30
+
+    // DefaultKstSmaPeriod1 is the default first SMA period for smoothing.
+    DefaultKstSmaPeriod1 = 10
+
+    // DefaultKstSmaPeriod2 is the default second SMA period for smoothing.
+    DefaultKstSmaPeriod2 = 10
+
+    // DefaultKstSmaPeriod3 is the default third SMA period for smoothing.
+    DefaultKstSmaPeriod3 = 10
+
+    // DefaultKstSmaPeriod4 is the default fourth SMA period for smoothing.
+    DefaultKstSmaPeriod4 = 15
+
+    // DefaultKstSignalPeriod is the default signal line period.
+    DefaultKstSignalPeriod = 9
 )
 ```
 
@@ -1026,6 +1064,104 @@ func (kdj *Kdj[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that KDJ won't yield any results.
+
+<a name="Kst"></a>
+## type [Kst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L69-L96>)
+
+Kst represents the configuration parameters for calculating the Know Sure Thing \(KST\) oscillator. KST is a momentum oscillator based on the smoothed rate\-of\-change for four different timeframes. A KST value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend.
+
+```
+RCMA1 = SMA(ROC(close, rocPeriod1), smaPeriod1)
+RCMA2 = SMA(ROC(close, rocPeriod2), smaPeriod2)
+RCMA3 = SMA(ROC(close, rocPeriod3), smaPeriod3)
+RCMA4 = SMA(ROC(close, rocPeriod4), smaPeriod4)
+KST = (RCMA1 × 1) + (RCMA2 × 2) + (RCMA3 × 3) + (RCMA4 × 4)
+Signal = SMA(KST, signalPeriod)
+```
+
+Example:
+
+```
+kst := trend.NewKst[float64]()
+kst.RocPeriod1 = 10
+kst.RocPeriod2 = 15
+kst.RocPeriod3 = 20
+kst.RocPeriod4 = 30
+kst.SmaPeriod1 = 10
+kst.SmaPeriod2 = 10
+kst.SmaPeriod3 = 10
+kst.SmaPeriod4 = 15
+kst.SignalPeriod = 9
+
+kstResult, signalResult := kst.Compute(c)
+```
+
+```go
+type Kst[T helper.Float] struct {
+    // RocPeriod1 is the first ROC period.
+    RocPeriod1 int
+
+    // RocPeriod2 is the second ROC period.
+    RocPeriod2 int
+
+    // RocPeriod3 is the third ROC period.
+    RocPeriod3 int
+
+    // RocPeriod4 is the fourth ROC period.
+    RocPeriod4 int
+
+    // SmaPeriod1 is the first SMA period for smoothing.
+    SmaPeriod1 int
+
+    // SmaPeriod2 is the second SMA period for smoothing.
+    SmaPeriod2 int
+
+    // SmaPeriod3 is the third SMA period for smoothing.
+    SmaPeriod3 int
+
+    // SmaPeriod4 is the fourth SMA period for smoothing.
+    SmaPeriod4 int
+
+    // SignalPeriod is the signal line period.
+    SignalPeriod int
+}
+```
+
+<a name="NewKst"></a>
+### func [NewKst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L99>)
+
+```go
+func NewKst[T helper.Float]() *Kst[T]
+```
+
+NewKst function initializes a new KST instance with default parameters.
+
+<a name="Kst[T].Compute"></a>
+### func \(\*Kst\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L115>)
+
+```go
+func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T)
+```
+
+Compute function takes a channel of numbers and computes the KST and the signal line.
+
+<a name="Kst[T].IdlePeriod"></a>
+### func \(\*Kst\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L171>)
+
+```go
+func (k *Kst[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that KST won't yield any results.
+
+<a name="Kst[T].String"></a>
+### func \(\*Kst\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L187>)
+
+```go
+func (k *Kst[T]) String() string
+```
+
+String is the string representation of the KST.
 
 <a name="Ma"></a>
 ## type [Ma](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L12-L21>)
