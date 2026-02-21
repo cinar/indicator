@@ -138,6 +138,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(s \*Smma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Smma[T].Compute>)
   - [func \(s \*Smma\[T\]\) IdlePeriod\(\) int](<#Smma[T].IdlePeriod>)
   - [func \(s \*Smma\[T\]\) String\(\) string](<#Smma[T].String>)
+- [type Stochastic](<#Stochastic>)
+  - [func NewStochastic\[T helper.Number\]\(\) \*Stochastic\[T\]](<#NewStochastic>)
+  - [func NewStochasticWithPeriod\[T helper.Number\]\(period int\) \*Stochastic\[T\]](<#NewStochasticWithPeriod>)
+  - [func \(s \*Stochastic\[T\]\) Compute\(values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Stochastic[T].Compute>)
+  - [func \(s \*Stochastic\[T\]\) IdlePeriod\(\) int](<#Stochastic[T].IdlePeriod>)
 - [type Tema](<#Tema>)
   - [func NewTema\[T helper.Number\]\(\) \*Tema\[T\]](<#NewTema>)
   - [func \(t \*Tema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Tema[T].Compute>)
@@ -310,6 +315,18 @@ const (
 
     // DefaultMassIndexPeriod3 is the period for the third MovingSum.
     DefaultMassIndexPeriod3 = 25
+)
+```
+
+<a name="DefaultStochasticPeriod"></a>
+
+```go
+const (
+    // DefaultStochasticPeriod is the default period for the Stochastic indicator.
+    DefaultStochasticPeriod = 10
+
+    // DefaultStochasticSmaPeriod is the default period for the SMA of %K.
+    DefaultStochasticSmaPeriod = 3
 )
 ```
 
@@ -1805,6 +1822,69 @@ func (s *Smma[T]) String() string
 ```
 
 String is the string representation of the SMMA.
+
+<a name="Stochastic"></a>
+## type [Stochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L30-L36>)
+
+Stochastic represents the configuration parameters for calculating the Stochastic indicator on a single input series. This is different from the Stochastic Oscillator which operates on high, low, and close. This generic version is useful for applying stochastic calculation to any series, such as MACD values in the Schaff Trend Cycle \(STC\).
+
+```
+K = (Value - Min(Value, period)) / (Max(Value, period) - Min(Value, period)) * 100
+D = SMA(K, dPeriod)
+```
+
+Example:
+
+```
+s := trend.NewStochastic[float64]()
+k, d := s.Compute(values)
+```
+
+```go
+type Stochastic[T helper.Number] struct {
+    // Period is the period for the min/max calculation.
+    Period int
+
+    // Sma is the SMA instance for %D calculation.
+    Sma *Sma[T]
+}
+```
+
+<a name="NewStochastic"></a>
+### func [NewStochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L39>)
+
+```go
+func NewStochastic[T helper.Number]() *Stochastic[T]
+```
+
+NewStochastic function initializes a new Stochastic instance with the default parameters.
+
+<a name="NewStochasticWithPeriod"></a>
+### func [NewStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L44>)
+
+```go
+func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T]
+```
+
+NewStochasticWithPeriod function initializes a new Stochastic instance with the given period.
+
+<a name="Stochastic[T].Compute"></a>
+### func \(\*Stochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L53>)
+
+```go
+func (s *Stochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T)
+```
+
+Compute function takes a channel of numbers and computes the Stochastic indicator. Returns %K and %D.
+
+<a name="Stochastic[T].IdlePeriod"></a>
+### func \(\*Stochastic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L87>)
+
+```go
+func (s *Stochastic[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Stochastic won't yield any results.
 
 <a name="Tema"></a>
 ## type [Tema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L18-L22>)
