@@ -38,6 +38,7 @@ The following list of indicators are currently supported by this package:
 -	[Double Exponential Moving Average (DEMA)](trend/README.md#type-dema)
 -	[Exponential Moving Average (EMA)](trend/README.md#type-ema)
 -	[Kaufman's Adaptive Moving Average (KAMA)](trend/README.md#type-kama)
+-	[Know Sure Thing (KST)](trend/README.md#type-kst)
 -	[Mass Index (MI)](trend/README.md#type-massindex)
 -	[Moving Average Convergence Divergence (MACD)](trend/README.md#type-macd)
 -	[Moving Least Square (MLS)](trend/README.md#type-mls)
