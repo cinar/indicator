@@ -49,6 +49,8 @@ The following list of indicators are currently supported by this package:
 -	Parabolic SAR
 -	[Random Index (KDJ)](trend/README.md#type-kdj)
 -	[Stochastic](trend/README.md#type-stochastic)
+-	[Slow Stochastic](trend/README.md#type-slowstochastic)
+-	[Schaff Trend Cycle (STC)](trend/README.md#type-stc)
 -	[Rolling Moving Average (RMA)](trend/README.md#type-rma)
 -	[Simple Moving Average (SMA)](trend/README.md#type-sma)
 -	[Since Change](helper/README.md#func-since)

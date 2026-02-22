@@ -28,6 +28,7 @@ The information provided on this project is strictly for informational purposes 
 - [type Apo](<#Apo>)
   - [func NewApo\[T helper.Number\]\(\) \*Apo\[T\]](<#NewApo>)
   - [func \(apo \*Apo\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Apo[T].Compute>)
+  - [func \(apo \*Apo\[T\]\) IdlePeriod\(\) int](<#Apo[T].IdlePeriod>)
 - [type Aroon](<#Aroon>)
   - [func NewAroon\[T helper.Number\]\(\) \*Aroon\[T\]](<#NewAroon>)
   - [func \(a \*Aroon\[T\]\) Compute\(high, low \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Aroon[T].Compute>)
@@ -126,6 +127,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*Roc\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Roc[T].Compute>)
   - [func \(r \*Roc\[T\]\) IdlePeriod\(\) int](<#Roc[T].IdlePeriod>)
   - [func \(r \*Roc\[T\]\) String\(\) string](<#Roc[T].String>)
+- [type SlowStochastic](<#SlowStochastic>)
+  - [func NewSlowStochastic\[T helper.Number\]\(\) \*SlowStochastic\[T\]](<#NewSlowStochastic>)
+  - [func NewSlowStochasticWithPeriod\[T helper.Number\]\(period, kPeriod, dPeriod int\) \*SlowStochastic\[T\]](<#NewSlowStochasticWithPeriod>)
+  - [func \(s \*SlowStochastic\[T\]\) Compute\(values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#SlowStochastic[T].Compute>)
+  - [func \(s \*SlowStochastic\[T\]\) IdlePeriod\(\) int](<#SlowStochastic[T].IdlePeriod>)
 - [type Sma](<#Sma>)
   - [func NewSma\[T helper.Number\]\(\) \*Sma\[T\]](<#NewSma>)
   - [func NewSmaWithPeriod\[T helper.Number\]\(period int\) \*Sma\[T\]](<#NewSmaWithPeriod>)
@@ -138,6 +144,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(s \*Smma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Smma[T].Compute>)
   - [func \(s \*Smma\[T\]\) IdlePeriod\(\) int](<#Smma[T].IdlePeriod>)
   - [func \(s \*Smma\[T\]\) String\(\) string](<#Smma[T].String>)
+- [type Stc](<#Stc>)
+  - [func NewStc\[T helper.Number\]\(\) \*Stc\[T\]](<#NewStc>)
+  - [func NewStcWithPeriod\[T helper.Number\]\(fastPeriod, slowPeriod, kPeriod, dPeriod int\) \*Stc\[T\]](<#NewStcWithPeriod>)
+  - [func \(s \*Stc\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Stc[T].Compute>)
+  - [func \(s \*Stc\[T\]\) IdlePeriod\(\) int](<#Stc[T].IdlePeriod>)
 - [type Stochastic](<#Stochastic>)
   - [func NewStochastic\[T helper.Number\]\(\) \*Stochastic\[T\]](<#NewStochastic>)
   - [func NewStochasticWithPeriod\[T helper.Number\]\(period int\) \*Stochastic\[T\]](<#NewStochasticWithPeriod>)
@@ -318,6 +329,39 @@ const (
 )
 ```
 
+<a name="DefaultSlowStochasticPeriod"></a>
+
+```go
+const (
+    // DefaultSlowStochasticPeriod is the default period for the Slow Stochastic indicator.
+    DefaultSlowStochasticPeriod = 10
+
+    // DefaultSlowStochasticKPeriod is the default period for the Fast %K SMA smoothing.
+    DefaultSlowStochasticKPeriod = 3
+
+    // DefaultSlowStochasticDPeriod is the default period for the Slow %D SMA.
+    DefaultSlowStochasticDPeriod = 3
+)
+```
+
+<a name="DefaultStcFastPeriod"></a>
+
+```go
+const (
+    // DefaultStcFastPeriod is the default fast EMA period for STC.
+    DefaultStcFastPeriod = 23
+
+    // DefaultStcSlowPeriod is the default slow EMA period for STC.
+    DefaultStcSlowPeriod = 50
+
+    // DefaultStcKPeriod is the default period for the Stochastic %K.
+    DefaultStcKPeriod = 10
+
+    // DefaultStcDPeriod is the default period for the Stochastic %D.
+    DefaultStcDPeriod = 3
+)
+```
+
 <a name="DefaultStochasticPeriod"></a>
 
 ```go
@@ -483,6 +527,15 @@ func (apo *Apo[T]) Compute(c <-chan T) <-chan T
 ```
 
 Compute function takes a channel of numbers and computes the APO over the specified period.
+
+<a name="Apo[T].IdlePeriod"></a>
+### func \(\*Apo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L86>)
+
+```go
+func (apo *Apo[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that APO won't yield any results.
 
 <a name="Aroon"></a>
 ## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L30-L33>)
@@ -1686,6 +1739,73 @@ func (r *Roc[T]) String() string
 
 String is the string representation of the ROC.
 
+<a name="SlowStochastic"></a>
+## type [SlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L32-L41>)
+
+SlowStochastic represents the configuration parameters for calculating the Slow Stochastic indicator. This applies additional smoothing to the Fast Stochastic values.
+
+```
+Fast %K = Stochastic(values, period)
+Slow %K = SMA(Fast %K, kPeriod)
+Slow %D = SMA(Slow %K, dPeriod)
+```
+
+Example:
+
+```
+s := trend.NewSlowStochastic[float64]()
+k, d := s.Compute(values)
+```
+
+```go
+type SlowStochastic[T helper.Number] struct {
+    // Period is the period for the min/max calculation.
+    Period int
+
+    // KPeriod is the period for smoothing Fast %K to get Slow %K.
+    KPeriod int
+
+    // DPeriod is the period for smoothing Slow %K to get Slow %D.
+    DPeriod int
+}
+```
+
+<a name="NewSlowStochastic"></a>
+### func [NewSlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L44>)
+
+```go
+func NewSlowStochastic[T helper.Number]() *SlowStochastic[T]
+```
+
+NewSlowStochastic function initializes a new SlowStochastic instance with the default parameters.
+
+<a name="NewSlowStochasticWithPeriod"></a>
+### func [NewSlowStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L53>)
+
+```go
+func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) *SlowStochastic[T]
+```
+
+NewSlowStochasticWithPeriod function initializes a new SlowStochastic instance with the given periods.
+
+<a name="SlowStochastic[T].Compute"></a>
+### func \(\*SlowStochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L63>)
+
+```go
+func (s *SlowStochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T)
+```
+
+Compute function takes a channel of numbers and computes the Slow Stochastic indicator. Returns Slow %K and Slow %D.
+
+<a name="SlowStochastic[T].IdlePeriod"></a>
+### func \(\*SlowStochastic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L101>)
+
+```go
+func (s *SlowStochastic[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Slow Stochastic won't yield any results.
+
 <a name="Sma"></a>
 ## type [Sma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L26-L29>)
 
@@ -1822,6 +1942,87 @@ func (s *Smma[T]) String() string
 ```
 
 String is the string representation of the SMMA.
+
+<a name="Stc"></a>
+## type [Stc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L43-L61>)
+
+Stc represents the configuration parameters for calculating the Schaff Trend Cycle \(STC\) indicator. It combines MACD with stochastic oscillators to identify trend direction and potential entry points.
+
+```
+EMA1 = EMA(values, fastPeriod)
+EMA2 = EMA(values, slowPeriod)
+MACD = EMA1 - EMA2
+
+%K = Stochastic %K of MACD with kPeriod
+%D = Stochastic %D of MACD with dPeriod
+
+STC = 100 * (MACD - %K) / (%D - %K)
+```
+
+Example:
+
+```
+stc := trend.NewStc[float64]()
+result := stc.Compute(closings)
+```
+
+```go
+type Stc[T helper.Number] struct {
+    // FastPeriod is the period for the fast EMA.
+    FastPeriod int
+
+    // SlowPeriod is the period for the slow EMA.
+    SlowPeriod int
+
+    // KPeriod is the period for the Stochastic %K.
+    KPeriod int
+
+    // DPeriod is the period for the Stochastic %D.
+    DPeriod int
+
+    // Apo is the APO instance for MACD calculation.
+    Apo *Apo[T]
+
+    // Stochastic is the Stochastic instance.
+    Stochastic *Stochastic[T]
+}
+```
+
+<a name="NewStc"></a>
+### func [NewStc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L64>)
+
+```go
+func NewStc[T helper.Number]() *Stc[T]
+```
+
+NewStc function initializes a new STC instance with the default parameters.
+
+<a name="NewStcWithPeriod"></a>
+### func [NewStcWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L74>)
+
+```go
+func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T]
+```
+
+NewStcWithPeriod function initializes a new STC instance with the given periods.
+
+<a name="Stc[T].Compute"></a>
+### func \(\*Stc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L93>)
+
+```go
+func (s *Stc[T]) Compute(c <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the STC indicator.
+
+<a name="Stc[T].IdlePeriod"></a>
+### func \(\*Stc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L138>)
+
+```go
+func (s *Stc[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that STC won't yield any results.
 
 <a name="Stochastic"></a>
 ## type [Stochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L30-L36>)
