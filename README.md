@@ -30,7 +30,7 @@ The following list of indicators are currently supported by this package:
 -	[Absolute Price Oscillator (APO)](trend/README.md#type-apo)
 -	[Aroon Indicator](trend/README.md#type-aroon)
 -	[Balance of Power (BoP)](trend/README.md#type-bop)
--	Chande Forecast Oscillator (CFO)
+-	[Chande Forecast Oscillator (CFO)](trend/README.md#cfo)
 -	[Commodity Channel Index (CCI)](trend/README.md#type-cci)
 -   [Envelope](trend/README.md#type-envelope)
 -	[Hull Moving Average (HMA)](trend/README.md#type-hma)
@@ -69,6 +69,7 @@ The following list of indicators are currently supported by this package:
 
 -	[Awesome Oscillator](momentum/README.md#type-awesomeoscillator)
 -	[Chaikin Oscillator](momentum/README.md#type-chaikinoscillator)
+-	[Connors RSI](momentum/README.md#type-connorsrsi)
 -	[Ichimoku Cloud](momentum/README.md#type-ichimokucloud)
 -	[Percentage Price Oscillator (PPO)](momentum/README.md#type-ppo)
 -	[Percentage Volume Oscillator (PVO)](momentum/README.md#type-pvo)
@@ -129,7 +130,7 @@ The following list of strategies are currently supported by this package:
 -	[Absolute Price Oscillator (APO) Strategy](strategy/trend/README.md#type-apostrategy)
 -	[Aroon Strategy](strategy/trend/README.md#type-aroonstrategy)
 -	[Balance of Power (BoP) Strategy](strategy/trend/README.md#type-bopstrategy)
--	Chande Forecast Oscillator Strategy
+-	[Chande Forecast Oscillator Strategy](strategy/trend/README.md#cfostrategy)
 -	[Commodity Channel Index (CCI) Strategy](strategy/trend/README.md#type-ccistrategy)
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#type-demastrategy)
 -   [Envelope Strategy](strategy/trend/README.md#type-envelope)

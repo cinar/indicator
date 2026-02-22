@@ -448,7 +448,7 @@ type PercentBandMFIStrategy struct {
 func NewPercentBandMFIStrategy() *PercentBandMFIStrategy
 ```
 
-NewMoneyFlowIndexStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
+NewPercentBandMFIStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
 
 <a name="NewPercentBandMFIStrategyWith"></a>
 ### func [NewPercentBandMFIStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L66>)
@@ -457,7 +457,7 @@ NewMoneyFlowIndexStrategy function initializes a new PercentBandMFI strategy ins
 func NewPercentBandMFIStrategyWith(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64) *PercentBandMFIStrategy
 ```
 
-NewMoneyFlowIndexStrategyWith function initializes a new Money Flow Index strategy instance with the given parameters.
+NewPercentBandMFIStrategyWith function initializes a new PercentBandMFI strategy instance with the given parameters.
 
 <a name="PercentBandMFIStrategy.Compute"></a>
 ### func \(\*PercentBandMFIStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L83>)

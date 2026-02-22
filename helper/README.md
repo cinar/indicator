@@ -72,6 +72,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Operate\[A any, B any, R any\]\(ac \<\-chan A, bc \<\-chan B, o func\(A, B\) R\) \<\-chan R](<#Operate>)
 - [func Operate3\[A any, B any, C any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, o func\(A, B, C\) R\) \<\-chan R](<#Operate3>)
 - [func Operate4\[A any, B any, C any, D any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, o func\(A, B, C, D\) R\) \<\-chan R](<#Operate4>)
+- [func PercentRank\[T Number\]\(c \<\-chan T, period int\) \<\-chan T](<#PercentRank>)
 - [func Pipe\[T any\]\(f \<\-chan T, t chan\<\- T\)](<#Pipe>)
 - [func Pow\[T Number\]\(c \<\-chan T, y T\) \<\-chan T](<#Pow>)
 - [func ReadFromCsvFile\[T any\]\(fileName string, options ...CsvOption\[T\]\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
@@ -87,6 +88,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SkipLast\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#SkipLast>)
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
 - [func SlicesReverse\[T any\]\(r \[\]T, i int, f func\(T\) bool\)](<#SlicesReverse>)
+- [func SortedPercentRank\[T Number\]\(c \<\-chan T, period int\) \<\-chan T](<#SortedPercentRank>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
 - [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
@@ -834,6 +836,15 @@ add := helper.Operate4(ac, bc, cc, dc, func(a, b, c, d int) int {
 })
 ```
 
+<a name="PercentRank"></a>
+## func [PercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L12>)
+
+```go
+func PercentRank[T Number](c <-chan T, period int) <-chan T
+```
+
+PercentRank returns a channel that emits the percentile rank of each value compared to the previous period\-1 values. The rank is between 0 and 100.
+
 <a name="Pipe"></a>
 ## func [Pipe](<https://github.com/cinar/indicator/blob/master/helper/pipe.go#L16>)
 
@@ -1055,6 +1066,15 @@ func SlicesReverse[T any](r []T, i int, f func(T) bool)
 ```
 
 SlicesReverse loops through a slice in reverse order starting from the given index. The given function is called for each element in the slice. If the function returns false, the loop is terminated.
+
+<a name="SortedPercentRank"></a>
+## func [SortedPercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L55>)
+
+```go
+func SortedPercentRank[T Number](c <-chan T, period int) <-chan T
+```
+
+SortedPercentRank returns a channel that emits the percentile rank by sorting the window values. This is more accurate but slower.
 
 <a name="Sqrt"></a>
 ## func [Sqrt](<https://github.com/cinar/indicator/blob/master/helper/sqrt.go#L16>)
