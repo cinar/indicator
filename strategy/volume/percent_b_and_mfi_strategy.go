@@ -51,7 +51,7 @@ type PercentBandMFIStrategy struct {
 	BuyMfiAt float64
 }
 
-// NewMoneyFlowIndexStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
+// NewPercentBandMFIStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
 func NewPercentBandMFIStrategy() *PercentBandMFIStrategy {
 	return NewPercentBandMFIStrategyWith(
 		DefaultPercentBandMFIStrategyPercentBBuyAt,
@@ -61,7 +61,7 @@ func NewPercentBandMFIStrategy() *PercentBandMFIStrategy {
 	)
 }
 
-// NewMoneyFlowIndexStrategyWith function initializes a new Money Flow Index strategy instance with the
+// NewPercentBandMFIStrategyWith function initializes a new PercentBandMFI strategy instance with the
 // given parameters.
 func NewPercentBandMFIStrategyWith(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64) *PercentBandMFIStrategy {
 	return &PercentBandMFIStrategy{

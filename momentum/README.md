@@ -33,6 +33,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewChaikinOscillator\[T helper.Number\]\(\) \*ChaikinOscillator\[T\]](<#NewChaikinOscillator>)
   - [func \(c \*ChaikinOscillator\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChaikinOscillator[T].Compute>)
   - [func \(c \*ChaikinOscillator\[T\]\) IdlePeriod\(\) int](<#ChaikinOscillator[T].IdlePeriod>)
+- [type ConnorsRsi](<#ConnorsRsi>)
+  - [func NewConnorsRsi\[T helper.Float\]\(\) \*ConnorsRsi\[T\]](<#NewConnorsRsi>)
+  - [func NewConnorsRsiWithPeriods\[T helper.Float\]\(rsiPeriod, streakRsiPeriod, percentRankPeriod int\) \*ConnorsRsi\[T\]](<#NewConnorsRsiWithPeriods>)
+  - [func \(c \*ConnorsRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#ConnorsRsi[T].Compute>)
+  - [func \(c \*ConnorsRsi\[T\]\) IdlePeriod\(\) int](<#ConnorsRsi[T].IdlePeriod>)
+  - [func \(c \*ConnorsRsi\[T\]\) String\(\) string](<#ConnorsRsi[T].String>)
 - [type IchimokuCloud](<#IchimokuCloud>)
   - [func NewIchimokuCloud\[T helper.Number\]\(\) \*IchimokuCloud\[T\]](<#NewIchimokuCloud>)
   - [func \(i \*IchimokuCloud\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#IchimokuCloud[T].Compute>)
@@ -66,6 +72,10 @@ The information provided on this project is strictly for informational purposes 
   - [func NewStochasticRsiWithPeriod\[T helper.Number\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
   - [func \(s \*StochasticRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].Compute>)
   - [func \(s \*StochasticRsi\[T\]\) IdlePeriod\(\) int](<#StochasticRsi[T].IdlePeriod>)
+- [type Streak](<#Streak>)
+  - [func NewStreak\[T helper.Float\]\(\) \*Streak\[T\]](<#NewStreak>)
+  - [func \(s \*Streak\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Streak[T].Compute>)
+  - [func \(s \*Streak\[T\]\) IdlePeriod\(\) int](<#Streak[T].IdlePeriod>)
 - [type TdSequential](<#TdSequential>)
   - [func NewTdSequential\[T helper.Number\]\(\) \*TdSequential\[T\]](<#NewTdSequential>)
   - [func \(t \*TdSequential\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#TdSequential[T].Compute>)
@@ -99,6 +109,19 @@ const (
 
     // DefaultChaikinOscillatorLongPeriod is the default long period for the Chaikin Oscillator.
     DefaultChaikinOscillatorLongPeriod = 10
+)
+```
+
+<a name="DefaultConnorsRsiRsiPeriod"></a>
+
+```go
+const (
+    // DefaultConnorsRsiRsiPeriod is the default RSI period.
+    DefaultConnorsRsiRsiPeriod = 3
+    // DefaultConnorsRsiStreakRsiPeriod is the default Streak RSI period.
+    DefaultConnorsRsiStreakRsiPeriod = 2
+    // DefaultConnorsRsiPercentRankPeriod is the default PercentRank period.
+    DefaultConnorsRsiPercentRankPeriod = 100
 )
 ```
 
@@ -325,6 +348,87 @@ func (c *ChaikinOscillator[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
+
+<a name="ConnorsRsi"></a>
+## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L35-L51>)
+
+ConnorsRsi represents the configuration parameters for calculating the Connors RSI. It is a momentum indicator that combines three components: 1. RSI of closing prices 2. RSI of up/down streak length 3. Percentile rank of the rate of change
+
+```
+CRSI = (RSI(3) + RSI(Streak, 2) + PercentRank(ROC, 100)) / 3
+```
+
+Example:
+
+```
+connorsRsi := momentum.NewConnorsRsi[float64]()
+result := connorsRsi.Compute(closings)
+```
+
+```go
+type ConnorsRsi[T helper.Float] struct {
+    // RsiPeriod is the period for the RSI on closing prices.
+    RsiPeriod int
+    // StreakRsiPeriod is the period for the RSI on streak length.
+    StreakRsiPeriod int
+    // PercentRankPeriod is the period for the PercentRank of ROC.
+    PercentRankPeriod int
+
+    // Rsi is the RSI instance for closing prices.
+    Rsi *Rsi[T]
+    // StreakRsi is the RSI instance for streak length.
+    StreakRsi *Rsi[T]
+    // Roc is the Rate of Change instance.
+    Roc *trend.Roc[T]
+    // Streak is the streak calculator instance.
+    Streak *Streak[T]
+}
+```
+
+<a name="NewConnorsRsi"></a>
+### func [NewConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L54>)
+
+```go
+func NewConnorsRsi[T helper.Float]() *ConnorsRsi[T]
+```
+
+NewConnorsRsi function initializes a new Connors RSI instance with the default parameters.
+
+<a name="NewConnorsRsiWithPeriods"></a>
+### func [NewConnorsRsiWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L63>)
+
+```go
+func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percentRankPeriod int) *ConnorsRsi[T]
+```
+
+NewConnorsRsiWithPeriods function initializes a new Connors RSI instance with the given periods.
+
+<a name="ConnorsRsi[T].Compute"></a>
+### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L86>)
+
+```go
+func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of closings numbers and computes the Connors RSI.
+
+<a name="ConnorsRsi[T].IdlePeriod"></a>
+### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L117>)
+
+```go
+func (c *ConnorsRsi[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Connors RSI won't yield any results.
+
+<a name="ConnorsRsi[T].String"></a>
+### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L124>)
+
+```go
+func (c *ConnorsRsi[T]) String() string
+```
+
+String is the string representation of the Connors RSI.
 
 <a name="IchimokuCloud"></a>
 ## type [IchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L40-L61>)
@@ -803,6 +907,42 @@ func (s *StochasticRsi[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Stochasic RSI won't yield any results.
+
+<a name="Streak"></a>
+## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L130>)
+
+Streak represents the configuration for calculating the up/down streak length. The streak is the number of consecutive days the price has closed up or down.
+
+```go
+type Streak[T helper.Float] struct{}
+```
+
+<a name="NewStreak"></a>
+### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L133>)
+
+```go
+func NewStreak[T helper.Float]() *Streak[T]
+```
+
+NewStreak function initializes a new Streak instance.
+
+<a name="Streak[T].Compute"></a>
+### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L139>)
+
+```go
+func (s *Streak[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of closings numbers and computes the streak length. Positive values indicate consecutive up closes, negative values indicate consecutive down closes.
+
+<a name="Streak[T].IdlePeriod"></a>
+### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L176>)
+
+```go
+func (s *Streak[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Streak won't yield any results.
 
 <a name="TdSequential"></a>
 ## type [TdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L41-L53>)
