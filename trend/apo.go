@@ -73,11 +73,16 @@ func (apo *Apo[T]) Compute(c <-chan T) <-chan T {
 	fastEma := NewEma[T]()
 	fastEma.Period = apo.FastPeriod
 	cs[0] = fastEma.Compute(cs[0])
-	cs[0] = helper.Skip(cs[0], apo.SlowPeriod - apo.FastPeriod)
+	cs[0] = helper.Skip(cs[0], apo.SlowPeriod-apo.FastPeriod)
 
 	slowEma := NewEma[T]()
 	slowEma.Period = apo.SlowPeriod
 	cs[1] = slowEma.Compute(cs[1])
 
 	return helper.Subtract(cs[0], cs[1])
+}
+
+// IdlePeriod is the initial period that APO won't yield any results.
+func (apo *Apo[T]) IdlePeriod() int {
+	return apo.SlowPeriod - 1
 }
