@@ -159,6 +159,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewStochasticWithPeriod\[T helper.Number\]\(period int\) \*Stochastic\[T\]](<#NewStochasticWithPeriod>)
   - [func \(s \*Stochastic\[T\]\) Compute\(values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Stochastic[T].Compute>)
   - [func \(s \*Stochastic\[T\]\) IdlePeriod\(\) int](<#Stochastic[T].IdlePeriod>)
+- [type T3](<#T3>)
+  - [func NewT3\[T helper.Float\]\(\) \*T3\[T\]](<#NewT3>)
+  - [func NewT3WithPeriodAndFactor\[T helper.Float\]\(period int, volumeFactor float64\) \*T3\[T\]](<#NewT3WithPeriodAndFactor>)
+  - [func \(t \*T3\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#T3[T].Compute>)
+  - [func \(t \*T3\[T\]\) IdlePeriod\(\) int](<#T3[T].IdlePeriod>)
+  - [func \(t \*T3\[T\]\) String\(\) string](<#T3[T].String>)
 - [type Tema](<#Tema>)
   - [func NewTema\[T helper.Number\]\(\) \*Tema\[T\]](<#NewTema>)
   - [func \(t \*Tema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Tema[T].Compute>)
@@ -376,6 +382,18 @@ const (
 
     // DefaultStochasticSmaPeriod is the default period for the SMA of %K.
     DefaultStochasticSmaPeriod = 3
+)
+```
+
+<a name="DefaultT3Period"></a>
+
+```go
+const (
+    // DefaultT3Period is the default period for the T3 Moving Average.
+    DefaultT3Period = 5
+
+    // DefaultT3VolumeFactor is the default volume factor for T3.
+    DefaultT3VolumeFactor = 0.7
 )
 ```
 
@@ -2159,6 +2177,88 @@ func (s *Stochastic[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Stochastic won't yield any results.
+
+<a name="T3"></a>
+## type [T3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L41-L50>)
+
+T3 represents the configuration parameters for calculating the Tillson T3 Moving Average. The T3 is a smooth moving average that chains multiple EMAs together with a volume factor for improved responsiveness.
+
+```
+T3 = c1*EMA6 + c2*EMA6(EMA6) + c3*EMA6(EMA6(EMA6)) + c4*EMA6(EMA6(EMA6(EMA6)))
+```
+
+where:
+
+```
+c1 = -a^3
+c2 = 3a^2
+c3 = -3a
+c4 = a^3
+a = volume factor
+```
+
+Example:
+
+```
+t3 := trend.NewT3[float64]()
+result := t3.Compute(closings)
+```
+
+```go
+type T3[T helper.Float] struct {
+    // Period is the period for the EMA calculations.
+    Period int
+
+    // VolumeFactor is the volume factor for the T3 calculation.
+    VolumeFactor T
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewT3"></a>
+### func [NewT3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L53>)
+
+```go
+func NewT3[T helper.Float]() *T3[T]
+```
+
+NewT3 function initializes a new T3 instance.
+
+<a name="NewT3WithPeriodAndFactor"></a>
+### func [NewT3WithPeriodAndFactor](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L59>)
+
+```go
+func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) *T3[T]
+```
+
+NewT3WithPeriodAndFactor function initializes a new T3 instance with specified period and volume factor.
+
+<a name="T3[T].Compute"></a>
+### func \(\*T3\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L77>)
+
+```go
+func (t *T3[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the T3 Moving Average.
+
+<a name="T3[T].IdlePeriod"></a>
+### func \(\*T3\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L110>)
+
+```go
+func (t *T3[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that T3 won't yield any results.
+
+<a name="T3[T].String"></a>
+### func \(\*T3\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L117>)
+
+```go
+func (t *T3[T]) String() string
+```
+
+String is the string representation of the T3.
 
 <a name="Tema"></a>
 ## type [Tema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L18-L22>)
