@@ -39,6 +39,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*ConnorsRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#ConnorsRsi[T].Compute>)
   - [func \(c \*ConnorsRsi\[T\]\) IdlePeriod\(\) int](<#ConnorsRsi[T].IdlePeriod>)
   - [func \(c \*ConnorsRsi\[T\]\) String\(\) string](<#ConnorsRsi[T].String>)
+- [type Fisher](<#Fisher>)
+  - [func NewFisher\[T helper.Float\]\(\) \*Fisher\[T\]](<#NewFisher>)
+  - [func \(f \*Fisher\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Fisher[T].Compute>)
+  - [func \(f \*Fisher\[T\]\) IdlePeriod\(\) int](<#Fisher[T].IdlePeriod>)
+  - [func \(f \*Fisher\[T\]\) String\(\) string](<#Fisher[T].String>)
 - [type IchimokuCloud](<#IchimokuCloud>)
   - [func NewIchimokuCloud\[T helper.Number\]\(\) \*IchimokuCloud\[T\]](<#NewIchimokuCloud>)
   - [func \(i \*IchimokuCloud\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#IchimokuCloud[T].Compute>)
@@ -63,6 +68,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewRsiWithPeriod\[T helper.Number\]\(period int\) \*Rsi\[T\]](<#NewRsiWithPeriod>)
   - [func \(r \*Rsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Rsi[T].Compute>)
   - [func \(r \*Rsi\[T\]\) IdlePeriod\(\) int](<#Rsi[T].IdlePeriod>)
+- [type Rvi](<#Rvi>)
+  - [func NewRvi\[T helper.Float\]\(\) \*Rvi\[T\]](<#NewRvi>)
+  - [func \(r \*Rvi\[T\]\) Compute\(opens, highs, lows, closings \<\-chan T\) \(rviResult \<\-chan T, signalResult \<\-chan T\)](<#Rvi[T].Compute>)
+  - [func \(r \*Rvi\[T\]\) IdlePeriod\(\) int](<#Rvi[T].IdlePeriod>)
+  - [func \(r \*Rvi\[T\]\) String\(\) string](<#Rvi[T].String>)
 - [type StochasticOscillator](<#StochasticOscillator>)
   - [func NewStochasticOscillator\[T helper.Number\]\(\) \*StochasticOscillator\[T\]](<#NewStochasticOscillator>)
   - [func \(s \*StochasticOscillator\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#StochasticOscillator[T].Compute>)
@@ -125,6 +135,18 @@ const (
 )
 ```
 
+<a name="DefaultFisherPeriod"></a>
+
+```go
+const (
+    // DefaultFisherPeriod is the default period for the Fisher Transform.
+    DefaultFisherPeriod = 10
+
+    // FisherClamp is the boundary value for clamping.
+    FisherClamp = 0.999
+)
+```
+
 <a name="DefaultIchimokuCloudConversionPeriod"></a>
 
 ```go
@@ -170,6 +192,24 @@ const (
 
     // DefaultPvoSignalPeriod is the default signal period for the Percentage Volume Oscillator.
     DefaultPvoSignalPeriod = 9
+)
+```
+
+<a name="DefaultRviPeriod"></a>
+
+```go
+const (
+    // DefaultRviPeriod is the default period for the Relative Vigor Index.
+    DefaultRviPeriod = 10
+
+    // DefaultRviSignalPeriod is the default signal line period for RVI.
+    DefaultRviSignalPeriod = 4
+
+    // RviFirPeriod is the FIR filter period (4 bars).
+    RviFirPeriod = 4
+
+    // RviFirSum is the sum of FIR weights (1+2+2+1 = 6).
+    RviFirSum = 6
 )
 ```
 
@@ -429,6 +469,74 @@ func (c *ConnorsRsi[T]) String() string
 ```
 
 String is the string representation of the Connors RSI.
+
+<a name="Fisher"></a>
+## type [Fisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L38-L47>)
+
+Fisher represents the configuration parameters for calculating the Fisher Transform. The Fisher Transform is a technical indicator that transforms prices into a normal distribution to identify price reversals.
+
+```
+x = 2 * ((close - min) / (max - min)) - 1
+Fisher = 0.5 * ln((1 + x) / (1 - x))
+```
+
+The clamped x value is bounded between \-0.999 and \+0.999 to prevent division by zero or logarithmic infinity errors.
+
+Example:
+
+```
+fisher := momentum.NewFisher[float64]()
+result := fisher.Compute(closings)
+```
+
+```go
+type Fisher[T helper.Float] struct {
+    // Period is the lookback period for min/max calculation.
+    Period int
+
+    // Max is the Moving Max instance.
+    Max *trend.MovingMax[T]
+
+    // Min is the Moving Min instance.
+    Min *trend.MovingMin[T]
+}
+```
+
+<a name="NewFisher"></a>
+### func [NewFisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L50>)
+
+```go
+func NewFisher[T helper.Float]() *Fisher[T]
+```
+
+NewFisher function initializes a new Fisher Transform instance.
+
+<a name="Fisher[T].Compute"></a>
+### func \(\*Fisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L59>)
+
+```go
+func (f *Fisher[T]) Compute(closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the Fisher Transform.
+
+<a name="Fisher[T].IdlePeriod"></a>
+### func \(\*Fisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L105>)
+
+```go
+func (f *Fisher[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Fisher Transform won't yield any results.
+
+<a name="Fisher[T].String"></a>
+### func \(\*Fisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L113>)
+
+```go
+func (f *Fisher[T]) String() string
+```
+
+String is the string representation of the Fisher Transform.
 
 <a name="IchimokuCloud"></a>
 ## type [IchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L40-L61>)
@@ -783,6 +891,75 @@ func (r *Rsi[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Relative Strength Index won't yield any results.
+
+<a name="Rvi"></a>
+## type [Rvi](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L45-L51>)
+
+Rvi represents the configuration parameters for calculating the Relative Vigor Index \(RVI\). The RVI is a momentum indicator that measures the strength of a trend by comparing close and open prices.
+
+The indicator uses a 4\-bar FIR filter with weights 1\-2\-2\-1:
+
+```
+Numerator = Close - Open
+Denominator = High - Low
+FIR(Numerator) = (1*Num[0] + 2*Num[1] + 2*Num[2] + 1*Num[3]) / 6
+FIR(Denominator) = (1*Den[0] + 2*Den[1] + 2*Den[2] + 1*Den[3]) / 6
+RVI = SMA(FIR(Numerator), period) / SMA(FIR(Denominator), period)
+Signal = SMA(RVI, signalPeriod)
+```
+
+Example:
+
+```
+rvi := momentum.NewRvi[float64]()
+rviResult, signalResult := rvi.Compute(opens, highs, lows, closings)
+```
+
+```go
+type Rvi[T helper.Float] struct {
+    // Period is the lookback period for the RVI.
+    Period int
+
+    // SignalPeriod is the signal line period.
+    SignalPeriod int
+}
+```
+
+<a name="NewRvi"></a>
+### func [NewRvi](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L54>)
+
+```go
+func NewRvi[T helper.Float]() *Rvi[T]
+```
+
+NewRvi function initializes a new RVI instance.
+
+<a name="Rvi[T].Compute"></a>
+### func \(\*Rvi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L90>)
+
+```go
+func (r *Rvi[T]) Compute(opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T)
+```
+
+Compute function takes channels of OHLC numbers and computes the Relative Vigor Index and its signal line.
+
+<a name="Rvi[T].IdlePeriod"></a>
+### func \(\*Rvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L136>)
+
+```go
+func (r *Rvi[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that RVI won't yield any results.
+
+<a name="Rvi[T].String"></a>
+### func \(\*Rvi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L145>)
+
+```go
+func (r *Rvi[T]) String() string
+```
+
+String is the string representation of the RVI.
 
 <a name="StochasticOscillator"></a>
 ## type [StochasticOscillator](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L31-L40>)
