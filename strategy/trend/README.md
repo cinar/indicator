@@ -52,6 +52,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*CciStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CciStrategy.Compute>)
   - [func \(\*CciStrategy\) Name\(\) string](<#CciStrategy.Name>)
   - [func \(t \*CciStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#CciStrategy.Report>)
+- [type CfoStrategy](<#CfoStrategy>)
+  - [func NewCfoStrategy\(\) \*CfoStrategy](<#NewCfoStrategy>)
+  - [func \(c \*CfoStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CfoStrategy.Compute>)
+  - [func \(\*CfoStrategy\) Name\(\) string](<#CfoStrategy.Name>)
+  - [func \(c \*CfoStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#CfoStrategy.Report>)
 - [type DemaStrategy](<#DemaStrategy>)
   - [func NewDemaStrategy\(\) \*DemaStrategy](<#NewDemaStrategy>)
   - [func \(d \*DemaStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DemaStrategy.Compute>)
@@ -502,6 +507,55 @@ Name returns the name of the strategy.
 
 ```go
 func (t *CciStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="CfoStrategy"></a>
+## type [CfoStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/cfo_strategy.go#L18-L22>)
+
+CfoStrategy represents the configuration parameters for calculating the CFO strategy. A CFO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive CFO values signify an upward trend, while negative values signify a downward trend.
+
+```go
+type CfoStrategy struct {
+    // Cfo represents the configuration parameters for calculating the
+    // Chande Forecast Oscillator (CFO).
+    Cfo *trend.Cfo[float64]
+}
+```
+
+<a name="NewCfoStrategy"></a>
+### func [NewCfoStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/cfo_strategy.go#L25>)
+
+```go
+func NewCfoStrategy() *CfoStrategy
+```
+
+NewCfoStrategy function initializes a new CFO strategy instance with the default parameters.
+
+<a name="CfoStrategy.Compute"></a>
+### func \(\*CfoStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/cfo_strategy.go#L38>)
+
+```go
+func (c *CfoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="CfoStrategy.Name"></a>
+### func \(\*CfoStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/cfo_strategy.go#L32>)
+
+```go
+func (*CfoStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="CfoStrategy.Report"></a>
+### func \(\*CfoStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/cfo_strategy.go#L71>)
+
+```go
+func (c *CfoStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
