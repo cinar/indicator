@@ -26,3 +26,5 @@ go.work
 # GoLand project
 .idea
 
+# GitHub conductor
+conductor

@@ -40,6 +40,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewCciWithPeriod\[T helper.Number\]\(period int\) \*Cci\[T\]](<#NewCciWithPeriod>)
   - [func \(c \*Cci\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Cci[T].Compute>)
   - [func \(c \*Cci\[T\]\) IdlePeriod\(\) int](<#Cci[T].IdlePeriod>)
+- [type Cfo](<#Cfo>)
+  - [func NewCfo\[T helper.Number\]\(\) \*Cfo\[T\]](<#NewCfo>)
+  - [func NewCfoWithPeriod\[T helper.Number\]\(period int\) \*Cfo\[T\]](<#NewCfoWithPeriod>)
+  - [func \(c \*Cfo\[T\]\) Compute\(closing \<\-chan T\) \<\-chan T](<#Cfo[T].Compute>)
+  - [func \(c \*Cfo\[T\]\) IdlePeriod\(\) int](<#Cfo[T].IdlePeriod>)
 - [type Dema](<#Dema>)
   - [func NewDema\[T helper.Number\]\(\) \*Dema\[T\]](<#NewDema>)
   - [func \(d \*Dema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Dema[T].Compute>)
@@ -404,6 +409,15 @@ const (
 )
 ```
 
+<a name="DefaultCfoPeriod"></a>
+
+```go
+const (
+    // DefaultCfoPeriod is the default CFO period of 14.
+    DefaultCfoPeriod = 14
+)
+```
+
 <a name="DefaultDpoPeriod"></a>DefaultDpoPeriod is the default period for DPO calculation.
 
 ```go
@@ -673,6 +687,65 @@ func (c *Cci[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that CCI won't yield any results.
+
+<a name="Cfo"></a>
+## type [Cfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L25-L28>)
+
+Cfo represents the configuration parameters for calculating the Chande Forecast Oscillator \(CFO\). CFO is a momentum indicator that measures the difference between a security's price and its linear regression forecast.
+
+```
+CFO = ((Price - Forecast) / Price) * 100
+```
+
+Example:
+
+```
+cfo := trend.NewCfo[float64]()
+result := cfo.Compute(c)
+```
+
+```go
+type Cfo[T helper.Number] struct {
+    // Mlr is the Moving Linear Regression instance.
+    Mlr *Mlr[T]
+}
+```
+
+<a name="NewCfo"></a>
+### func [NewCfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L31>)
+
+```go
+func NewCfo[T helper.Number]() *Cfo[T]
+```
+
+NewCfo function initializes a new CFO instance with the default parameters.
+
+<a name="NewCfoWithPeriod"></a>
+### func [NewCfoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L36>)
+
+```go
+func NewCfoWithPeriod[T helper.Number](period int) *Cfo[T]
+```
+
+NewCfoWithPeriod function initializes a new CFO instance with the given period.
+
+<a name="Cfo[T].Compute"></a>
+### func \(\*Cfo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L43>)
+
+```go
+func (c *Cfo[T]) Compute(closing <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the CFO.
+
+<a name="Cfo[T].IdlePeriod"></a>
+### func \(\*Cfo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L64>)
+
+```go
+func (c *Cfo[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that CFO won't yield any results.
 
 <a name="Dema"></a>
 ## type [Dema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L22-L30>)
