@@ -242,6 +242,74 @@ $ indicator-backtest \
     -workers 1
 ```
 
+🐳 Docker
+---------
+
+The easiest way to get started is using our Docker image. It handles everything - syncing market data from Tiingo and generating backtest reports - in a single command.
+
+### Quick Start
+
+```bash
+# Get your free Tiingo API key at: https://www.tiingo.com/
+
+# Run backtest for specific assets
+docker run -it --rm \
+  -v $(pwd)/output:/app/output \
+  ghcr.io/cinar/indicator:latest \
+  --api-key YOUR_TIINGO_API_KEY \
+  --days 365 \
+  --assets aapl msft googl
+
+# View results (macOS)
+open output/index.html
+
+# View results (Linux)
+xdg-open output/index.html
+```
+
+### Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--api-key` | Tiingo API key (required) | - |
+| `--days` | Days of historical data to fetch | 365 |
+| `--last` | Days to backtest | 365 |
+| `--assets` | Space-separated ticker symbols (default: all) | all |
+| `--output` | Output directory for reports | /app/output |
+
+### Examples
+
+```bash
+# Backtest all available assets for 1 year
+docker run -it --rm \
+  -v $(pwd)/reports:/app/output \
+  ghcr.io/cinar/indicator:latest \
+  --api-key YOUR_TIINGO_API_KEY
+
+# Backtest specific stocks for last 6 months, test last 30 days
+docker run -it --rm \
+  -v $(pwd)/reports:/app/output \
+  ghcr.io/cinar/indicator:latest \
+  --api-key YOUR_TIINGO_API_KEY \
+  --days 180 \
+  --last 30 \
+  --assets aapl msft googl amzn
+
+# Custom output directory
+docker run -it --rm \
+  -v /path/to/my/reports:/app/output \
+  ghcr.io/cinar/indicator:latest \
+  --api-key YOUR_TIINGO_API_KEY \
+  --output /app/output
+```
+
+### Build Locally
+
+```bash
+docker build -t indicator .
+docker run -it --rm -v $(pwd)/output:/app/output indicator --api-key YOUR_KEY
+```
+
 ☁️  MCP Server
 --------------
 
