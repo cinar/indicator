@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator)
+[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator) [![Docker](https://img.shields.io/docker/v/ghcr.io/cinar/indicator?sort=semver)](https://github.com/cinar/indicator/pkgs/container/indicator)
 
 <p align="center">
     <img src="logo.png" />
@@ -242,6 +242,11 @@ $ indicator-backtest \
     -workers 1
 ```
 
+☁️  MCP Server
+--------------
+
+The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time strategy execution and data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
+
 🐳 Docker
 ---------
 
@@ -310,11 +315,6 @@ docker build -t indicator .
 docker run -it --rm -v $(pwd)/output:/app/output indicator --api-key YOUR_KEY
 ```
 
-☁️  MCP Server
---------------
-
-The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time strategy execution and data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
-
 Usage
 -----
 
@@ -331,6 +331,15 @@ import (
     "github.com/cinar/indicator/v2"
 )
 ```
+
+🌐 Ecosystem
+------------
+
+Indicator Go is part of a broader ecosystem of technical analysis tools:
+
+- [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
+- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for live trading
+- [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration
 
 💖 Our Sponsors
 ---------------
