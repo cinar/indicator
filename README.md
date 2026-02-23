@@ -260,8 +260,11 @@ docker run -it --rm \
   --days 365 \
   --assets aapl msft googl
 
-# View results
+# View results (macOS)
 open output/index.html
+
+# View results (Linux)
+xdg-open output/index.html
 ```
 
 ### Options

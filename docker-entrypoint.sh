@@ -46,8 +46,12 @@ while [ $# -gt 0 ]; do
             shift 2
             ;;
         --assets)
-            ASSETS="$2"
-            shift 2
+            shift
+            ASSETS=""
+            while [ $# -gt 0 ] && [ "${1#-}" = "$1" ]; do
+                ASSETS="${ASSETS:+$ASSETS }$1"
+                shift
+            done
             ;;
         --output)
             OUTPUT="$2"
@@ -77,7 +81,7 @@ echo "Indicator Docker - Sync & Backtest"
 echo "=========================================="
 echo ""
 echo "Configuration:"
-echo "  API Key: ***${API_KEY:-none}"
+echo "  API Key: ***"
 echo "  Days: $DAYS"
 echo "  Backtest Period: $LAST days"
 echo "  Assets: ${ASSETS:-all}"

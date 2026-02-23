@@ -28,7 +28,12 @@ COPY --from=builder /build/indicator-backtest /app/
 
 RUN mkdir -p /app/data /app/output
 
+RUN addgroup -S indicator && adduser -S indicator -G indicator \
+    && chown -R indicator:indicator /app
+
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+USER indicator
 
 ENTRYPOINT ["docker-entrypoint.sh"]
