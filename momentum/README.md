@@ -39,6 +39,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*ConnorsRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#ConnorsRsi[T].Compute>)
   - [func \(c \*ConnorsRsi\[T\]\) IdlePeriod\(\) int](<#ConnorsRsi[T].IdlePeriod>)
   - [func \(c \*ConnorsRsi\[T\]\) String\(\) string](<#ConnorsRsi[T].String>)
+- [type ElderRay](<#ElderRay>)
+  - [func NewElderRay\[T helper.Number\]\(\) \*ElderRay\[T\]](<#NewElderRay>)
+  - [func NewElderRayWithPeriod\[T helper.Number\]\(period int\) \*ElderRay\[T\]](<#NewElderRayWithPeriod>)
+  - [func \(e \*ElderRay\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ElderRay[T].Compute>)
+  - [func \(e \*ElderRay\[T\]\) IdlePeriod\(\) int](<#ElderRay[T].IdlePeriod>)
+  - [func \(e \*ElderRay\[T\]\) String\(\) string](<#ElderRay[T].String>)
 - [type Fisher](<#Fisher>)
   - [func NewFisher\[T helper.Float\]\(\) \*Fisher\[T\]](<#NewFisher>)
   - [func \(f \*Fisher\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Fisher[T].Compute>)
@@ -240,6 +246,15 @@ const (
 
     // DefaultTdSequentialCountdownPeriod is the default countdown period (13).
     DefaultTdSequentialCountdownPeriod = 13
+)
+```
+
+<a name="DefaultElderRayPeriod"></a>
+
+```go
+const (
+    // DefaultElderRayPeriod is the default period for Elder-Ray Index.
+    DefaultElderRayPeriod = 13
 )
 ```
 
@@ -469,6 +484,75 @@ func (c *ConnorsRsi[T]) String() string
 ```
 
 String is the string representation of the Connors RSI.
+
+<a name="ElderRay"></a>
+## type [ElderRay](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L30-L33>)
+
+ElderRay represents the configuration parameters for calculating the Elder\-Ray Index. Developed by Alexander Elder, the Elder\-Ray Index measures buying and selling pressure in the market. It consists of two separate indicators: Bull Power and Bear Power.
+
+```
+Bull Power = High - n-period EMA
+Bear Power = Low - n-period EMA
+```
+
+Example:
+
+```
+er := momentum.NewElderRay[float64]()
+bullPower, bearPower := er.Compute(highs, lows, closings)
+```
+
+```go
+type ElderRay[T helper.Number] struct {
+    // Period is the time period.
+    Period int
+}
+```
+
+<a name="NewElderRay"></a>
+### func [NewElderRay](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L36>)
+
+```go
+func NewElderRay[T helper.Number]() *ElderRay[T]
+```
+
+NewElderRay function initializes a new Elder\-Ray Index instance with the default parameters.
+
+<a name="NewElderRayWithPeriod"></a>
+### func [NewElderRayWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L41>)
+
+```go
+func NewElderRayWithPeriod[T helper.Number](period int) *ElderRay[T]
+```
+
+NewElderRayWithPeriod function initializes a new Elder\-Ray Index instance with the given period.
+
+<a name="ElderRay[T].Compute"></a>
+### func \(\*ElderRay\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L49>)
+
+```go
+func (e *ElderRay[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T)
+```
+
+Compute function takes channels of highs, lows, and closings and computes the Elder\-Ray Index. Returns bullPower and bearPower channels.
+
+<a name="ElderRay[T].IdlePeriod"></a>
+### func \(\*ElderRay\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L63>)
+
+```go
+func (e *ElderRay[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Elder\-Ray Index won't yield any results.
+
+<a name="ElderRay[T].String"></a>
+### func \(\*ElderRay\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L68>)
+
+```go
+func (e *ElderRay[T]) String() string
+```
+
+String is the string representation of the Elder\-Ray Index.
 
 <a name="Fisher"></a>
 ## type [Fisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L38-L47>)

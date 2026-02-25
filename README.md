@@ -71,6 +71,7 @@ The following list of indicators are currently supported by this package:
 -	[Awesome Oscillator](momentum/README.md#type-awesomeoscillator)
 -	[Chaikin Oscillator](momentum/README.md#type-chaikinoscillator)
 -	[Connors RSI](momentum/README.md#type-connorsrsi)
+-	[Elder-Ray Index](momentum/README.md#ElderRay)
 -	[Fisher Transform](momentum/README.md#Fisher)
 -	[Ichimoku Cloud](momentum/README.md#type-ichimokucloud)
 -	[Percentage Price Oscillator (PPO)](momentum/README.md#type-ppo)
