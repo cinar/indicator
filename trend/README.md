@@ -1307,7 +1307,7 @@ func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T)
 Compute function takes a channel of numbers and computes the KST and the signal line.
 
 <a name="Kst[T].IdlePeriod"></a>
-### func \(\*Kst\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L171>)
+### func \(\*Kst\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L173>)
 
 ```go
 func (k *Kst[T]) IdlePeriod() int
@@ -1316,7 +1316,7 @@ func (k *Kst[T]) IdlePeriod() int
 IdlePeriod is the initial period that KST won't yield any results.
 
 <a name="Kst[T].String"></a>
-### func \(\*Kst\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L187>)
+### func \(\*Kst\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L189>)
 
 ```go
 func (k *Kst[T]) String() string

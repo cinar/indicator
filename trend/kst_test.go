@@ -24,9 +24,13 @@ func TestKstSimple(t *testing.T) {
 	kst := trend.NewKst[float64]()
 	actualKst, actualSignal := kst.Compute(input)
 
-	// Verify we get some output
-	kstSlice := helper.ChanToSlice(actualKst)
-	signalSlice := helper.ChanToSlice(actualSignal)
+	var kstSlice []float64
+	var signalSlice []float64
+
+	for v := range actualKst {
+		kstSlice = append(kstSlice, v)
+		signalSlice = append(signalSlice, <-actualSignal)
+	}
 
 	if len(kstSlice) == 0 {
 		t.Fatal("KST produced no output")
@@ -89,8 +93,13 @@ func TestKstWithNaNCheck(t *testing.T) {
 	kst := trend.NewKst[float64]()
 	actualKst, actualSignal := kst.Compute(input)
 
-	kstSlice := helper.ChanToSlice(actualKst)
-	signalSlice := helper.ChanToSlice(actualSignal)
+	var kstSlice []float64
+	var signalSlice []float64
+
+	for v := range actualKst {
+		kstSlice = append(kstSlice, v)
+		signalSlice = append(signalSlice, <-actualSignal)
+	}
 
 	// Check for NaN values
 	for i, v := range kstSlice {

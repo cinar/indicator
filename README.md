@@ -105,6 +105,7 @@ The following list of indicators are currently supported by this package:
 -	[Chaikin Money Flow (CMF)](volume/README.md#type-cmf)
 -	[Ease of Movement (EMV)](volume/README.md#type-emv)
 -	[Force Index (FI)](volume/README.md#type-fi)
+-	[Klinger Volume Oscillator (KVO)](volume/README.md#type-kvo)
 -	[Money Flow Index (MFI)](volume/README.md#type-mfi)
 -	[Money Flow Multiplier (MFM)](volume/README.md#type-mfm)
 -	[Money Flow Volume (MFV)](volume/README.md#type-mfv)
