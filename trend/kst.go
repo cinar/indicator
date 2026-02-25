@@ -161,10 +161,12 @@ func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T)
 		),
 	)
 
-	signal := NewSmaWithPeriod[T](k.SignalPeriod)
-	signalResult = signal.Compute(kst)
+	kstSplice := helper.Duplicate(kst, 2)
 
-	return kst, signalResult
+	signal := NewSmaWithPeriod[T](k.SignalPeriod)
+	signalResult = signal.Compute(kstSplice[0])
+
+	return helper.Skip(kstSplice[1], k.SignalPeriod-1), signalResult
 }
 
 // IdlePeriod is the initial period that KST won't yield any results.

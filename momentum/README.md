@@ -944,7 +944,7 @@ func (r *Rvi[T]) Compute(opens, highs, lows, closings <-chan T) (rviResult <-cha
 Compute function takes channels of OHLC numbers and computes the Relative Vigor Index and its signal line.
 
 <a name="Rvi[T].IdlePeriod"></a>
-### func \(\*Rvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L136>)
+### func \(\*Rvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L138>)
 
 ```go
 func (r *Rvi[T]) IdlePeriod() int
@@ -953,7 +953,7 @@ func (r *Rvi[T]) IdlePeriod() int
 IdlePeriod is the initial period that RVI won't yield any results.
 
 <a name="Rvi[T].String"></a>
-### func \(\*Rvi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L145>)
+### func \(\*Rvi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L147>)
 
 ```go
 func (r *Rvi[T]) String() string

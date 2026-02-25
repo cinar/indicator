@@ -1,0 +1,16 @@
+.git/
+.github/
+.devcontainer/
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+.idea/
+conductor/
+mcp/
+logo.png
+sponsors.svg

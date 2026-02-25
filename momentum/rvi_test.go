@@ -35,8 +35,13 @@ func TestRviSimple(t *testing.T) {
 	rvi := momentum.NewRvi[float64]()
 	rviResult, signalResult := rvi.Compute(openChan, highChan, lowChan, closeChan)
 
-	rviSlice := helper.ChanToSlice(rviResult)
-	signalSlice := helper.ChanToSlice(signalResult)
+	var rviSlice []float64
+	var signalSlice []float64
+
+	for v := range rviResult {
+		rviSlice = append(rviSlice, v)
+		signalSlice = append(signalSlice, <-signalResult)
+	}
 
 	if len(rviSlice) == 0 {
 		t.Fatal("RVI produced no output")

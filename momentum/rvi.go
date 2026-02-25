@@ -123,13 +123,15 @@ func (r *Rvi[T]) computeSimple(opens, highs, lows, closings <-chan T) (rviResult
 	smaDenominator := smaDen.Compute(denominatorFir)
 
 	// Divide: RVI = SMA(FIR(Numerator)) / SMA(FIR(Denominator))
-	rviResult = helper.Divide(smaNumerator, smaDenominator)
+	rvi := helper.Divide(smaNumerator, smaDenominator)
+
+	rviSplice := helper.Duplicate(rvi, 2)
 
 	// Compute signal line
 	signalSma := trend.NewSmaWithPeriod[T](r.SignalPeriod)
-	signalResult = signalSma.Compute(rviResult)
+	signalResult = signalSma.Compute(rviSplice[0])
 
-	return rviResult, signalResult
+	return helper.Skip(rviSplice[1], r.SignalPeriod-1), signalResult
 }
 
 // IdlePeriod is the initial period that RVI won't yield any results.

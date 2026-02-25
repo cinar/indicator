@@ -28,3 +28,6 @@ go.work
 
 # GitHub conductor
 conductor
+
+.gemini/
+gha-creds-*.json

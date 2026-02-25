@@ -44,6 +44,10 @@ The information provided on this project is strictly for informational purposes 
   - [func NewFiWithPeriod\[T helper.Number\]\(period int\) \*Fi\[T\]](<#NewFiWithPeriod>)
   - [func \(f \*Fi\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Fi[T].Compute>)
   - [func \(f \*Fi\[T\]\) IdlePeriod\(\) int](<#Fi[T].IdlePeriod>)
+- [type Kvo](<#Kvo>)
+  - [func NewKvo\[T helper.Number\]\(\) \*Kvo\[T\]](<#NewKvo>)
+  - [func \(k \*Kvo\[T\]\) Compute\(highs, lows, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Kvo[T].Compute>)
+  - [func \(k \*Kvo\[T\]\) IdlePeriod\(\) int](<#Kvo[T].IdlePeriod>)
 - [type Mfi](<#Mfi>)
   - [func NewMfi\[T helper.Number\]\(\) \*Mfi\[T\]](<#NewMfi>)
   - [func \(m \*Mfi\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].Compute>)
@@ -76,6 +80,21 @@ The information provided on this project is strictly for informational purposes 
 
 
 ## Constants
+
+<a name="DefaultKvoShortPeriod"></a>
+
+```go
+const (
+    // DefaultKvoShortPeriod is the default short period for the Klinger Volume Oscillator.
+    DefaultKvoShortPeriod = 34
+
+    // DefaultKvoLongPeriod is the default long period for the Klinger Volume Oscillator.
+    DefaultKvoLongPeriod = 55
+
+    // DefaultKvoSignalPeriod is the default signal period for the Klinger Volume Oscillator.
+    DefaultKvoSignalPeriod = 13
+)
+```
 
 <a name="DefaultCmfPeriod"></a>
 
@@ -367,6 +386,67 @@ func (f *Fi[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that FI won't yield any results.
+
+<a name="Kvo"></a>
+## type [Kvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L37-L46>)
+
+Kvo represents the configuration parameters for calculating the Klinger Volume Oscillator \(KVO\). It is a volume\-based oscillator that identifies long\-term money flow trends using EMA differences.
+
+```
+Trend = +1 if High > High[1] and Low >= Low[1]
+Trend = -1 if High <= High[1] and Low < Low[1]
+Trend = 0 otherwise
+VF = Volume * Trend
+KVO = EMA(VF, shortPeriod) - EMA(VF, longPeriod)
+Signal = EMA(KVO, signalPeriod)
+```
+
+Example:
+
+```
+kvo := volume.NewKvo[float64]()
+kvoResult, signalResult := kvo.Compute(highs, lows, volumes)
+```
+
+```go
+type Kvo[T helper.Number] struct {
+    // ShortEma is the short EMA instance.
+    ShortEma *trend.Ema[T]
+
+    // LongEma is the long EMA instance.
+    LongEma *trend.Ema[T]
+
+    // SignalEma is the signal EMA instance.
+    SignalEma *trend.Ema[T]
+}
+```
+
+<a name="NewKvo"></a>
+### func [NewKvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L49>)
+
+```go
+func NewKvo[T helper.Number]() *Kvo[T]
+```
+
+NewKvo function initializes a new KVO instance.
+
+<a name="Kvo[T].Compute"></a>
+### func \(\*Kvo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L59>)
+
+```go
+func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T)
+```
+
+Compute function takes channels of numbers and computes the Klinger Volume Oscillator. Returns kvo and signal.
+
+<a name="Kvo[T].IdlePeriod"></a>
+### func \(\*Kvo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L101>)
+
+```go
+func (k *Kvo[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that KVO won't yield any results.
 
 <a name="Mfi"></a>
 ## type [Mfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L29-L35>)
