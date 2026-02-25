@@ -1,0 +1,30 @@
+319	OPEN	Implement Hurst Exponent	enhancement	2026-02-22T02:12:26Z
+318	OPEN	Implement Ehlers MAMA and FAMA	enhancement	2026-02-22T02:12:24Z
+317	OPEN	Implement Zig Zag Indicator	enhancement	2026-02-22T02:12:23Z
+316	OPEN	Implement Stiffness Indicator	enhancement	2026-02-22T02:12:20Z
+315	OPEN	Implement Squeeze Momentum Indicator (LazyBear)	enhancement	2026-02-22T02:12:19Z
+312	OPEN	Implement Chande Kroll Stop	enhancement	2026-02-22T02:12:07Z
+311	OPEN	Implement Stochastic Momentum Index (SMI)	enhancement	2026-02-22T02:12:06Z
+310	OPEN	Implement Relative Vigor Index (RVI)	enhancement	2026-02-22T02:12:03Z
+308	OPEN	Implement Twiggs Money Flow (TMF)	enhancement	2026-02-22T02:12:00Z
+307	OPEN	Implement Trend Intensity Index (TII)	enhancement	2026-02-22T02:11:54Z
+306	OPEN	Implement Choppiness Index (CHOP)	enhancement	2026-02-22T02:11:52Z
+305	OPEN	Implement McGinley Dynamic	enhancement	2026-02-22T02:11:50Z
+304	OPEN	Implement Gann HiLo Activator	enhancement	2026-02-22T02:11:48Z
+303	OPEN	Implement Elder-Ray Index	enhancement	2026-02-22T02:11:46Z
+302	OPEN	Implement Pivot Points (Standard, Woodie, Camarilla, Fibonacci)	enhancement	2026-02-22T02:11:44Z
+291	OPEN	Continuous processing over realtime data		2025-11-19T10:55:14Z
+270	OPEN	No super trend indicator?		2025-04-12T15:13:25Z
+261	OPEN	Price Relative/Relative Strength	enhancement	2024-12-24T12:26:52Z
+259	OPEN	Gopalakrishnan Range Index	enhancement	2024-12-24T12:26:51Z
+258	OPEN	DecisionPoint Price Momentum Oscillator (PMO)	enhancement	2024-12-24T12:26:51Z
+257	OPEN	Coppock Curve	enhancement	2024-12-24T12:26:51Z
+255	OPEN	CMB Composite Index	enhancement	2024-12-24T12:26:50Z
+227	OPEN	Support for fee/commission as % when backtesting		2025-01-24T17:22:32Z
+180	OPEN	Wash sale protection in strategies	enhancement, good first issue	2024-07-20T18:30:22Z
+172	OPEN	Introduce workflow for doc		2024-07-10T16:52:07Z
+160	OPEN	Backtest to take LastDate as the reference point		2024-06-19T04:41:18Z
+114	OPEN	projectionOscillator returns values less than 0(minimum), and returns values grater than 100(maximum)		2022-11-28T07:54:17Z
+56	OPEN	Momentum: Ultimate Oscillator (UO)	enhancement, good first issue	2022-01-26T17:30:23Z
+49	OPEN	Trend: Average Directional Movement Index (ADX)	enhancement, good first issue	2022-01-26T17:26:04Z
+3	OPEN	Fibonacci Retracement		2021-06-13T03:49:37Z
