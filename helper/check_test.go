@@ -48,3 +48,27 @@ func TestCheckEquals(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestCheckEqualsMultiplePairs(t *testing.T) {
+	a1 := helper.SliceToChan([]int{1, 2})
+	b1 := helper.SliceToChan([]int{1, 2})
+	a2 := helper.SliceToChan([]int{3, 4, 5})
+	b2 := helper.SliceToChan([]int{3, 4, 5})
+
+	err := helper.CheckEquals(a1, b1, a2, b2)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestCheckEqualsMultiplePairsFail(t *testing.T) {
+	a1 := helper.SliceToChan([]int{1, 2})
+	b1 := helper.SliceToChan([]int{1, 2})
+	a2 := helper.SliceToChan([]int{3, 4, 5})
+	b2 := helper.SliceToChan([]int{3, 4, 6})
+
+	err := helper.CheckEquals(a1, b1, a2, b2)
+	if err == nil {
+		t.Fatal("expected error for mismatch in second pair")
+	}
+}

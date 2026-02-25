@@ -16,26 +16,30 @@ func CheckEquals[T comparable](inputs ...<-chan T) error {
 		return errors.New("not pairs")
 	}
 
-	i := 0
+	for i := 0; ; i++ {
+		allDone := true
 
-	for {
 		for j := 0; j < len(inputs); j += 2 {
 			actual, actualOk := <-inputs[j]
 			expected, expectedOk := <-inputs[j+1]
 
-			if !actualOk || !expectedOk {
-				if actualOk != expectedOk {
-					return fmt.Errorf("not ended the same actual %v expected %v", actualOk, expectedOk)
-				}
-
-				return nil
+			if actualOk != expectedOk {
+				return fmt.Errorf("not ended the same actual %v expected %v", actualOk, expectedOk)
 			}
+
+			if !actualOk {
+				continue
+			}
+
+			allDone = false
 
 			if !reflect.DeepEqual(actual, expected) {
 				return fmt.Errorf("index %d pair %d actual %v expected %v", i, j/2, actual, expected)
 			}
 		}
 
-		i++
+		if allDone {
+			return nil
+		}
 	}
 }

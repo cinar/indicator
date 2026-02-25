@@ -36,9 +36,14 @@ type Mfi[T helper.Number] struct {
 
 // NewMfi function initializes a new MFI instance with the default parameters.
 func NewMfi[T helper.Number]() *Mfi[T] {
+	return NewMfiWithPeriod[T](DefaultMfiPeriod)
+}
+
+// NewMfiWithPeriod function initializes a new MFI instance with the given period.
+func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T] {
 	return &Mfi[T]{
 		TypicalPrice: trend.NewTypicalPrice[T](),
-		Sum:          trend.NewMovingSumWithPeriod[T](DefaultMfiPeriod),
+		Sum:          trend.NewMovingSumWithPeriod[T](period),
 	}
 }
 

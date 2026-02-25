@@ -7,7 +7,7 @@ package helper
 // Seq generates a sequence of numbers starting with a specified value,
 // from, and incrementing by a specified amount, increment, until a
 // specified value, to, is reached or exceeded. The sequence includes
-// both from and to.
+// from, but not to.
 //
 // Example:
 //
