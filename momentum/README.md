@@ -686,7 +686,7 @@ func (i *IchimokuCloud[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-
 Compute function takes a channel of numbers and computes the Ichimoku Cloud. Returns conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingSpan
 
 <a name="IchimokuCloud[T].IdlePeriod"></a>
-### func \(\*IchimokuCloud\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L139>)
+### func \(\*IchimokuCloud\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L140>)
 
 ```go
 func (i *IchimokuCloud[T]) IdlePeriod() int

@@ -965,7 +965,7 @@ fmt.Println(helper.ChanToSlice(rounded)) // [10.12, 5.68, 6.78, 8.91]
 func Seq[T Number](from, to, increment T) <-chan T
 ```
 
-Seq generates a sequence of numbers starting with a specified value, from, and incrementing by a specified amount, increment, until a specified value, to, is reached or exceeded. The sequence includes both from and to.
+Seq generates a sequence of numbers starting with a specified value, from, and incrementing by a specified amount, increment, until a specified value, to, is reached or exceeded. The sequence includes from, but not to.
 
 Example:
 

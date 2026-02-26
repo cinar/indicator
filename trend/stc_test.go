@@ -12,7 +12,7 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
-func TestSlowStochastic(t *testing.T) {
+func TestStcSlowStochastic(t *testing.T) {
 	resultChan := make(chan float64, 10)
 	go func() {
 		values := []float64{
