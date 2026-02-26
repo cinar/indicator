@@ -39,6 +39,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*ConnorsRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#ConnorsRsi[T].Compute>)
   - [func \(c \*ConnorsRsi\[T\]\) IdlePeriod\(\) int](<#ConnorsRsi[T].IdlePeriod>)
   - [func \(c \*ConnorsRsi\[T\]\) String\(\) string](<#ConnorsRsi[T].String>)
+- [type CoppockCurve](<#CoppockCurve>)
+  - [func NewCoppockCurve\[T helper.Float\]\(\) \*CoppockCurve\[T\]](<#NewCoppockCurve>)
+  - [func NewCoppockCurveWithPeriods\[T helper.Float\]\(rocPeriod1, rocPeriod2, wmaPeriod int\) \*CoppockCurve\[T\]](<#NewCoppockCurveWithPeriods>)
+  - [func \(c \*CoppockCurve\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#CoppockCurve[T].Compute>)
+  - [func \(c \*CoppockCurve\[T\]\) IdlePeriod\(\) int](<#CoppockCurve[T].IdlePeriod>)
+  - [func \(c \*CoppockCurve\[T\]\) String\(\) string](<#CoppockCurve[T].String>)
 - [type ElderRay](<#ElderRay>)
   - [func NewElderRay\[T helper.Number\]\(\) \*ElderRay\[T\]](<#NewElderRay>)
   - [func NewElderRayWithPeriod\[T helper.Number\]\(period int\) \*ElderRay\[T\]](<#NewElderRayWithPeriod>)
@@ -138,6 +144,21 @@ const (
     DefaultConnorsRsiStreakRsiPeriod = 2
     // DefaultConnorsRsiPercentRankPeriod is the default PercentRank period.
     DefaultConnorsRsiPercentRankPeriod = 100
+)
+```
+
+<a name="DefaultCoppockCurveRocPeriod1"></a>
+
+```go
+const (
+    // DefaultCoppockCurveRocPeriod1 is the default first ROC period.
+    DefaultCoppockCurveRocPeriod1 = 14
+
+    // DefaultCoppockCurveRocPeriod2 is the default second ROC period.
+    DefaultCoppockCurveRocPeriod2 = 11
+
+    // DefaultCoppockCurveWmaPeriod is the default WMA period.
+    DefaultCoppockCurveWmaPeriod = 10
 )
 ```
 
@@ -484,6 +505,80 @@ func (c *ConnorsRsi[T]) String() string
 ```
 
 String is the string representation of the Connors RSI.
+
+<a name="CoppockCurve"></a>
+## type [CoppockCurve](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L35-L44>)
+
+CoppockCurve represents the configuration parameters for calculating the Coppock Curve oscillator. The Coppock Curve is a momentum indicator used to identify long\-term buying opportunities in equity indices.
+
+```
+Coppock Curve = WMA(ROC(14) + ROC(11), 10)
+```
+
+Example:
+
+```
+cc := momentum.NewCoppockCurve[float64]()
+result := cc.Compute(closings)
+```
+
+```go
+type CoppockCurve[T helper.Float] struct {
+    // RocPeriod1 is the first ROC period.
+    RocPeriod1 int
+
+    // RocPeriod2 is the second ROC period.
+    RocPeriod2 int
+
+    // WmaPeriod is the WMA period for smoothing.
+    WmaPeriod int
+}
+```
+
+<a name="NewCoppockCurve"></a>
+### func [NewCoppockCurve](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L47>)
+
+```go
+func NewCoppockCurve[T helper.Float]() *CoppockCurve[T]
+```
+
+NewCoppockCurve function initializes a new CoppockCurve instance with default parameters.
+
+<a name="NewCoppockCurveWithPeriods"></a>
+### func [NewCoppockCurveWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L56>)
+
+```go
+func NewCoppockCurveWithPeriods[T helper.Float](rocPeriod1, rocPeriod2, wmaPeriod int) *CoppockCurve[T]
+```
+
+NewCoppockCurveWithPeriods function initializes a new CoppockCurve instance with the given periods.
+
+<a name="CoppockCurve[T].Compute"></a>
+### func \(\*CoppockCurve\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L74>)
+
+```go
+func (c *CoppockCurve[T]) Compute(values <-chan T) <-chan T
+```
+
+Compute function takes a channel of closings and computes the Coppock Curve.
+
+<a name="CoppockCurve[T].IdlePeriod"></a>
+### func \(\*CoppockCurve\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L105>)
+
+```go
+func (c *CoppockCurve[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Coppock Curve won't yield any results.
+
+<a name="CoppockCurve[T].String"></a>
+### func \(\*CoppockCurve\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/coppock_curve.go#L116>)
+
+```go
+func (c *CoppockCurve[T]) String() string
+```
+
+String is the string representation of the Coppock Curve.
 
 <a name="ElderRay"></a>
 ## type [ElderRay](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L30-L33>)
