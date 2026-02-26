@@ -131,6 +131,7 @@ func (i *IchimokuCloud[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-
 	//	Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
 	laggingLine := helper.Shift(closings, i.LaggingPeriod, 0)
 	laggingLine = helper.Skip(laggingLine, i.LeadingMax.IdlePeriod())
+	laggingLine = helper.SkipLast(laggingLine, i.LaggingPeriod)
 
 	return conversionLineSplice[1], baseLineSplice[1], leadingSpanA, leadingSpanB, laggingLine
 }

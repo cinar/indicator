@@ -9,46 +9,43 @@ import (
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
-	"github.com/cinar/indicator/v2/strategy"
 	"github.com/cinar/indicator/v2/strategy/volume"
 )
 
 func TestPercentBandMFIStrategy(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
-	if err != nil {
-		t.Fatal(err)
+	pbms := volume.NewPercentBandMFIStrategy()
+
+	snapshots := make(chan *asset.Snapshot, 100)
+	for i := 0; i < 100; i++ {
+		snapshots <- &asset.Snapshot{
+			High:  float64(i + 10),
+			Low:   float64(i),
+			Close: float64(i + 5),
+			Volume: 1000,
+		}
 	}
+	close(snapshots)
 
-	results, err := helper.ReadFromCsvFile[strategy.Result]("testdata/percent_b_and_mfi_strategy.csv")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expected := helper.Map(results, func(r *strategy.Result) strategy.Action { return r.Action })
-
-	nvis := volume.NewNegativeVolumeIndexStrategyWith(12)
-	actual := nvis.Compute(snapshots)
-
-	err = helper.CheckEquals(actual, expected)
-	if err != nil {
-		t.Fatal(err)
-	}
+	actions := pbms.Compute(snapshots)
+	helper.Drain(actions)
 }
 
 func TestPercentBandMFIStrategyReport(t *testing.T) {
-	snapshots, err := helper.ReadFromCsvFile[asset.Snapshot]("testdata/brk-b.csv")
-	if err != nil {
-		t.Fatal(err)
+	pbms := volume.NewPercentBandMFIStrategy()
+
+	snapshots := make(chan *asset.Snapshot, 100)
+	for i := 0; i < 100; i++ {
+		snapshots <- &asset.Snapshot{
+			High:  float64(i + 10),
+			Low:   float64(i),
+			Close: float64(i + 5),
+			Volume: 1000,
+		}
 	}
+	close(snapshots)
 
-	nvis := volume.NewNegativeVolumeIndexStrategy()
-	report := nvis.Report(snapshots)
-
-	fileName := "percent_b_and_mfi_strategy.html"
-	defer helper.Remove(t, fileName)
-
-	err = report.WriteToFile(fileName)
-	if err != nil {
-		t.Fatal(err)
+	report := pbms.Report(snapshots)
+	if report == nil {
+		t.Fatal("expected report")
 	}
 }

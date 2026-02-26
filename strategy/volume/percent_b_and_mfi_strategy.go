@@ -140,13 +140,18 @@ func (m *PercentBandMFIStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 
 	mfis := m.MoneyFlowIndex.Compute(highs, lows, closingsSplice[0], volumes)
 	mfis = helper.Shift(mfis, m.PercentB.IdlePeriod()-m.MoneyFlowIndex.IdlePeriod(), 0)
+	mfis = helper.Buffered(mfis, 1000)
 	pb := m.PercentB.Compute(closingsSplice[2])
+	pb = helper.Buffered(pb, 1000)
 
 	closingsSplice[1] = helper.Skip(closingsSplice[1], m.PercentB.IdlePeriod())
+	closingsSplice[1] = helper.Buffered(closingsSplice[1], 1000)
 
 	actions, outcomes := strategy.ComputeWithOutcome(m, snapshots[5])
 	actions = helper.Skip(actions, m.PercentB.IdlePeriod())
+	actions = helper.Buffered(actions, 1000)
 	outcomes = helper.Skip(outcomes, m.PercentB.IdlePeriod())
+	outcomes = helper.Buffered(outcomes, 1000)
 
 	annotations := strategy.ActionsToAnnotations(actions)
 	outcomes = helper.MultiplyBy(outcomes, 100)

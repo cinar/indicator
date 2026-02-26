@@ -50,6 +50,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(k \*Kvo\[T\]\) IdlePeriod\(\) int](<#Kvo[T].IdlePeriod>)
 - [type Mfi](<#Mfi>)
   - [func NewMfi\[T helper.Number\]\(\) \*Mfi\[T\]](<#NewMfi>)
+  - [func NewMfiWithPeriod\[T helper.Number\]\(period int\) \*Mfi\[T\]](<#NewMfiWithPeriod>)
   - [func \(m \*Mfi\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].Compute>)
   - [func \(m \*Mfi\[T\]\) IdlePeriod\(\) int](<#Mfi[T].IdlePeriod>)
 - [type Mfm](<#Mfm>)
@@ -485,8 +486,17 @@ func NewMfi[T helper.Number]() *Mfi[T]
 
 NewMfi function initializes a new MFI instance with the default parameters.
 
+<a name="NewMfiWithPeriod"></a>
+### func [NewMfiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L43>)
+
+```go
+func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T]
+```
+
+NewMfiWithPeriod function initializes a new MFI instance with the given period.
+
 <a name="Mfi[T].Compute"></a>
-### func \(\*Mfi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L46>)
+### func \(\*Mfi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L51>)
 
 ```go
 func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
@@ -495,7 +505,7 @@ func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the MFI.
 
 <a name="Mfi[T].IdlePeriod"></a>
-### func \(\*Mfi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L96>)
+### func \(\*Mfi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L101>)
 
 ```go
 func (m *Mfi[T]) IdlePeriod() int
