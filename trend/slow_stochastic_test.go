@@ -11,68 +11,40 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
-func TestSlowStochasticIndicator(t *testing.T) {
-	// Value, K, D from stochastic.csv (Fast Stochastic)
-	// 111.00,100.00,100.00
-	// 109.00,75.00,91.67
-	// 112.00,100.00,91.67
-	// 113.00,100.00,91.67
-	// 115.00,100.00,100.00
-	// 114.00,87.50,95.83
-	// 116.00,100.00,95.83
-	// 118.00,100.00,95.83
-	// 117.00,88.89,96.30
-	// 119.00,100.00,96.30
-	// 120.00,100.00,96.30
-	// 118.00,75.00,91.67
-	// 121.00,100.00,91.67
-	// 122.00,100.00,91.67
-	// 120.00,75.00,91.67
-	// 123.00,100.00,91.67
-	// 125.00,100.00,91.67
-	// 124.00,87.50,95.83
-	// 126.00,100.00,95.83
-
+func TestSlowStochastic(t *testing.T) {
 	type Data struct {
-		Value float64
+		Close float64 `header:"Close"`
+		K     float64 `header:"K"`
+		D     float64 `header:"D"`
 	}
 
-	values := []float64{
-		111, 109, 112, 113, 115, 114, 116, 118, 117, 119, 120, 118, 121, 122, 120, 123, 125, 124, 126,
+	input, err := helper.ReadFromCsvFile[Data]("testdata/slow_stochastic.csv")
+	if err != nil {
+		t.Fatal(err)
 	}
 
-	input := helper.SliceToChan(values)
+	inputs := helper.Duplicate(input, 2)
+	closing := helper.Map(inputs[0], func(d *Data) float64 { return d.Close })
 
-	// Default parameters: Period=10, KPeriod=3, DPeriod=3.
-	// IdlePeriod = 10 + 3 + 3 - 3 = 13.
 	s := trend.NewSlowStochastic[float64]()
-
-	if s.IdlePeriod() != 13 {
-		t.Fatalf("expected idle period 13, got %d", s.IdlePeriod())
-	}
-
-	actualK, actualD := s.Compute(input)
+	actualK, actualD := s.Compute(closing)
 
 	actualK = helper.RoundDigits(actualK, 2)
 	actualD = helper.RoundDigits(actualD, 2)
 
-	// Since we don't have expected data easily, we just check if it produces values
-	// and if the values are within reasonable range (0-100).
-	count := 0
-	for k := range actualK {
-		d := <-actualD
-		if k < 0 || k > 100 {
-			t.Fatalf("k out of range: %v", k)
-		}
-		if d < 0 || d > 100 {
-			t.Fatalf("d out of range: %v", d)
-		}
-		count++
-	}
+	inputs[1] = helper.Skip(inputs[1], s.IdlePeriod())
 
-	expectedCount := len(values) - s.IdlePeriod()
-	if count != expectedCount {
-		t.Fatalf("expected %d values, got %d", expectedCount, count)
+	for data := range inputs[1] {
+		ak := <-actualK
+		ad := <-actualD
+
+		if ak != data.K {
+			t.Fatalf("K: actual %v expected %v", ak, data.K)
+		}
+
+		if ad != data.D {
+			t.Fatalf("D: actual %v expected %v", ad, data.D)
+		}
 	}
 }
 
