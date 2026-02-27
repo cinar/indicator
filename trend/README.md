@@ -98,6 +98,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewMassIndex\[T helper.Number\]\(\) \*MassIndex\[T\]](<#NewMassIndex>)
   - [func \(m \*MassIndex\[T\]\) Compute\(highs, lows \<\-chan T\) \<\-chan T](<#MassIndex[T].Compute>)
   - [func \(m \*MassIndex\[T\]\) IdlePeriod\(\) int](<#MassIndex[T].IdlePeriod>)
+- [type McGinleyDynamic](<#McGinleyDynamic>)
+  - [func NewMcGinleyDynamic\[T helper.Number\]\(\) \*McGinleyDynamic\[T\]](<#NewMcGinleyDynamic>)
+  - [func NewMcGinleyDynamicWithPeriod\[T helper.Number\]\(period int\) \*McGinleyDynamic\[T\]](<#NewMcGinleyDynamicWithPeriod>)
+  - [func \(m \*McGinleyDynamic\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#McGinleyDynamic[T].Compute>)
+  - [func \(m \*McGinleyDynamic\[T\]\) IdlePeriod\(\) int](<#McGinleyDynamic[T].IdlePeriod>)
+  - [func \(m \*McGinleyDynamic\[T\]\) String\(\) string](<#McGinleyDynamic[T].String>)
 - [type Mlr](<#Mlr>)
   - [func NewMlrWithPeriod\[T helper.Number\]\(period int\) \*Mlr\[T\]](<#NewMlrWithPeriod>)
   - [func \(m \*Mlr\[T\]\) Compute\(x, y \<\-chan T\) \<\-chan T](<#Mlr[T].Compute>)
@@ -440,6 +446,15 @@ const (
 
 ```go
 const DefaultDpoPeriod = 20
+```
+
+<a name="DefaultMcGinleyDynamicPeriod"></a>
+
+```go
+const (
+    // DefaultMcGinleyDynamicPeriod is the default period for the McGinley Dynamic.
+    DefaultMcGinleyDynamicPeriod = 14
+)
 ```
 
 <a name="DefaultRmaPeriod"></a>
@@ -1446,6 +1461,74 @@ func (m *MassIndex[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Mass Index won't yield any results.
+
+<a name="McGinleyDynamic"></a>
+## type [McGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L29-L32>)
+
+McGinleyDynamic represents the parameters for calculating the McGinley Dynamic. It is a technical analysis indicator that is an improvement over the Exponential Moving Average \(EMA\). It is designed to adjust for changes in market speed.
+
+```
+MD_today = MD_yesterday + (Close - MD_yesterday) / (Period * (Close / MD_yesterday)^4)
+```
+
+Example:
+
+```
+md := trend.NewMcGinleyDynamic[float64]()
+result := md.Compute(c)
+```
+
+```go
+type McGinleyDynamic[T helper.Number] struct {
+    // Period is the smoothing period.
+    Period int
+}
+```
+
+<a name="NewMcGinleyDynamic"></a>
+### func [NewMcGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L35>)
+
+```go
+func NewMcGinleyDynamic[T helper.Number]() *McGinleyDynamic[T]
+```
+
+NewMcGinleyDynamic function initializes a new McGinley Dynamic instance with the default parameters.
+
+<a name="NewMcGinleyDynamicWithPeriod"></a>
+### func [NewMcGinleyDynamicWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L40>)
+
+```go
+func NewMcGinleyDynamicWithPeriod[T helper.Number](period int) *McGinleyDynamic[T]
+```
+
+NewMcGinleyDynamicWithPeriod function initializes a new McGinley Dynamic instance with the given period.
+
+<a name="McGinleyDynamic[T].Compute"></a>
+### func \(\*McGinleyDynamic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L47>)
+
+```go
+func (m *McGinleyDynamic[T]) Compute(c <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the McGinley Dynamic over the specified period.
+
+<a name="McGinleyDynamic[T].IdlePeriod"></a>
+### func \(\*McGinleyDynamic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L82>)
+
+```go
+func (m *McGinleyDynamic[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that McGinley Dynamic yield any results.
+
+<a name="McGinleyDynamic[T].String"></a>
+### func \(\*McGinleyDynamic\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L87>)
+
+```go
+func (m *McGinleyDynamic[T]) String() string
+```
+
+String is the string representation of the McGinley Dynamic.
 
 <a name="Mlr"></a>
 ## type [Mlr](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L19-L22>)
