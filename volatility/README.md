@@ -48,6 +48,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewChandelierExit\[T helper.Number\]\(\) \*ChandelierExit\[T\]](<#NewChandelierExit>)
   - [func \(c \*ChandelierExit\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChandelierExit[T].Compute>)
   - [func \(c \*ChandelierExit\[T\]\) IdlePeriod\(\) int](<#ChandelierExit[T].IdlePeriod>)
+- [type Chop](<#Chop>)
+  - [func NewChop\[T helper.Number\]\(\) \*Chop\[T\]](<#NewChop>)
+  - [func NewChopWithPeriod\[T helper.Number\]\(period int\) \*Chop\[T\]](<#NewChopWithPeriod>)
+  - [func \(c \*Chop\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Chop[T].Compute>)
+  - [func \(c \*Chop\[T\]\) IdlePeriod\(\) int](<#Chop[T].IdlePeriod>)
+  - [func \(c \*Chop\[T\]\) String\(\) string](<#Chop[T].String>)
 - [type DonchianChannel](<#DonchianChannel>)
   - [func NewDonchianChannel\[T helper.Number\]\(\) \*DonchianChannel\[T\]](<#NewDonchianChannel>)
   - [func NewDonchianChannelWithPeriod\[T helper.Number\]\(period int\) \*DonchianChannel\[T\]](<#NewDonchianChannelWithPeriod>)
@@ -136,6 +142,15 @@ const (
 const (
     // DefaultBollingerBandsPeriod is the default period for the Bollinger Bands.
     DefaultBollingerBandsPeriod = 20
+)
+```
+
+<a name="DefaultChopPeriod"></a>
+
+```go
+const (
+    // DefaultChopPeriod is the default period for the Choppiness Index (CHOP).
+    DefaultChopPeriod = 14
 )
 ```
 
@@ -473,6 +488,67 @@ func (c *ChandelierExit[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Chandelier Exit won't yield any results.
+
+<a name="Chop"></a>
+## type [Chop](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L24-L27>)
+
+Chop represents the configuration parameters for calculating the Choppiness Index \(CHOP\). It is a technical analysis indicator that measures the market's trendiness or choppiness.
+
+```
+CHOP = 100 * LOG10( SUM(ATR(1), n) / (MAX(High, n) - MIN(Low, n)) ) / LOG10(n)
+```
+
+```go
+type Chop[T helper.Number] struct {
+    // Period is the period for the CHOP.
+    Period int
+}
+```
+
+<a name="NewChop"></a>
+### func [NewChop](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L30>)
+
+```go
+func NewChop[T helper.Number]() *Chop[T]
+```
+
+NewChop function initializes a new CHOP instance with the default parameters.
+
+<a name="NewChopWithPeriod"></a>
+### func [NewChopWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L35>)
+
+```go
+func NewChopWithPeriod[T helper.Number](period int) *Chop[T]
+```
+
+NewChopWithPeriod function initializes a new CHOP instance with the given period.
+
+<a name="Chop[T].Compute"></a>
+### func \(\*Chop\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L42>)
+
+```go
+func (c *Chop[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function takes channels of highs, lows, and closings, and computes the CHOP over the specified period.
+
+<a name="Chop[T].IdlePeriod"></a>
+### func \(\*Chop\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L81>)
+
+```go
+func (c *Chop[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that CHOP won't yield any results.
+
+<a name="Chop[T].String"></a>
+### func \(\*Chop\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L86>)
+
+```go
+func (c *Chop[T]) String() string
+```
+
+String function returns a string representation of the CHOP.
 
 <a name="DonchianChannel"></a>
 ## type [DonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L30-L36>)
