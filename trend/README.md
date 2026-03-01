@@ -127,6 +127,14 @@ The information provided on this project is strictly for informational purposes 
   - [func NewMovingSumWithPeriod\[T helper.Number\]\(period int\) \*MovingSum\[T\]](<#NewMovingSumWithPeriod>)
   - [func \(m \*MovingSum\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingSum[T].Compute>)
   - [func \(m \*MovingSum\[T\]\) IdlePeriod\(\) int](<#MovingSum[T].IdlePeriod>)
+- [type PivotPoint](<#PivotPoint>)
+  - [func NewPivotPoint\[T helper.Float\]\(\) \*PivotPoint\[T\]](<#NewPivotPoint>)
+  - [func NewPivotPointWithMethod\[T helper.Float\]\(method PivotPointMethod\) \*PivotPoint\[T\]](<#NewPivotPointWithMethod>)
+  - [func \(p \*PivotPoint\[T\]\) Compute\(opens, highs, lows, closings \<\-chan T\) \<\-chan PivotPointResult\[T\]](<#PivotPoint[T].Compute>)
+  - [func \(p \*PivotPoint\[T\]\) IdlePeriod\(\) int](<#PivotPoint[T].IdlePeriod>)
+  - [func \(p \*PivotPoint\[T\]\) String\(\) string](<#PivotPoint[T].String>)
+- [type PivotPointMethod](<#PivotPointMethod>)
+- [type PivotPointResult](<#PivotPointResult>)
 - [type Rma](<#Rma>)
   - [func NewRma\[T helper.Number\]\(\) \*Rma\[T\]](<#NewRma>)
   - [func NewRmaWithPeriod\[T helper.Number\]\(period int\) \*Rma\[T\]](<#NewRmaWithPeriod>)
@@ -1789,6 +1797,109 @@ func (m *MovingSum[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Moving Sum won't yield any results.
+
+<a name="PivotPoint"></a>
+## type [PivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L47-L50>)
+
+PivotPoint represents the configuration parameters for calculating Pivot Points. Pivot points are calculated based on the previous period's high, low, and close, and are used to predict support and resistance levels for the current period.
+
+```go
+type PivotPoint[T helper.Float] struct {
+    // Method is the pivot point calculation method.
+    Method PivotPointMethod
+}
+```
+
+<a name="NewPivotPoint"></a>
+### func [NewPivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L53>)
+
+```go
+func NewPivotPoint[T helper.Float]() *PivotPoint[T]
+```
+
+NewPivotPoint function initializes a new Pivot Point instance with the standard method.
+
+<a name="NewPivotPointWithMethod"></a>
+### func [NewPivotPointWithMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L58>)
+
+```go
+func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoint[T]
+```
+
+NewPivotPointWithMethod function initializes a new Pivot Point instance with the given method.
+
+<a name="PivotPoint[T].Compute"></a>
+### func \(\*PivotPoint\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L67>)
+
+```go
+func (p *PivotPoint[T]) Compute(opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T]
+```
+
+Compute function takes channels for open, high, low, and closing prices and returns a channel of PivotPointResult. It uses the values from the previous period to calculate levels for the current period.
+
+<a name="PivotPoint[T].IdlePeriod"></a>
+### func \(\*PivotPoint\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L150>)
+
+```go
+func (p *PivotPoint[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Pivot Point won't yield any results.
+
+<a name="PivotPoint[T].String"></a>
+### func \(\*PivotPoint\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L155>)
+
+```go
+func (p *PivotPoint[T]) String() string
+```
+
+String is the string representation of the Pivot Point instance.
+
+<a name="PivotPointMethod"></a>
+## type [PivotPointMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L14>)
+
+PivotPointMethod represents the method used for calculating pivot points.
+
+```go
+type PivotPointMethod int
+```
+
+<a name="PivotPointStandard"></a>
+
+```go
+const (
+    // PivotPointStandard is the standard pivot point calculation.
+    PivotPointStandard PivotPointMethod = iota
+
+    // PivotPointWoodie is the Woodie pivot point calculation.
+    PivotPointWoodie
+
+    // PivotPointCamarilla is the Camarilla pivot point calculation.
+    PivotPointCamarilla
+
+    // PivotPointFibonacci is the Fibonacci pivot point calculation.
+    PivotPointFibonacci
+)
+```
+
+<a name="PivotPointResult"></a>
+## type [PivotPointResult](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L32-L42>)
+
+PivotPointResult represents the result of the pivot point calculation, including the pivot point itself, and its associated resistance \(R\) and support \(S\) levels.
+
+```go
+type PivotPointResult[T helper.Float] struct {
+    P   T
+    R1  T
+    R2  T
+    R3  T
+    R4  T
+    S1  T
+    S2  T
+    S3  T
+    S4  T
+}
+```
 
 <a name="Rma"></a>
 ## type [Rma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L25-L28>)
