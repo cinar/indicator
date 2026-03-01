@@ -31,11 +31,6 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AwesomeOscillatorStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#AwesomeOscillatorStrategy.Compute>)
   - [func \(\*AwesomeOscillatorStrategy\) Name\(\) string](<#AwesomeOscillatorStrategy.Name>)
   - [func \(a \*AwesomeOscillatorStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AwesomeOscillatorStrategy.Report>)
-- [type IchimokuCloudStrategy](<#IchimokuCloudStrategy>)
-  - [func NewIchimokuCloudStrategy\(\) \*IchimokuCloudStrategy](<#NewIchimokuCloudStrategy>)
-  - [func \(i \*IchimokuCloudStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#IchimokuCloudStrategy.Compute>)
-  - [func \(\*IchimokuCloudStrategy\) Name\(\) string](<#IchimokuCloudStrategy.Name>)
-  - [func \(i \*IchimokuCloudStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#IchimokuCloudStrategy.Report>)
 - [type RsiStrategy](<#RsiStrategy>)
   - [func NewRsiStrategy\(\) \*RsiStrategy](<#NewRsiStrategy>)
   - [func NewRsiStrategyWith\(buyAt, sellAt float64\) \*RsiStrategy](<#NewRsiStrategyWith>)
@@ -160,54 +155,6 @@ Name returns the name of the strategy.
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
-```
-
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
-
-<a name="IchimokuCloudStrategy"></a>
-## type [IchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/ichimoku_cloud_strategy.go#L15-L18>)
-
-IchimokuCloudStrategy represents the configuration parameters for calculating the Ichimoku Cloud strategy.
-
-```go
-type IchimokuCloudStrategy struct {
-    // IchimokuCloud represents the configuration parameters for calculating the Ichimoku Cloud.
-    IchimokuCloud *momentum.IchimokuCloud[float64]
-}
-```
-
-<a name="NewIchimokuCloudStrategy"></a>
-### func [NewIchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/ichimoku_cloud_strategy.go#L21>)
-
-```go
-func NewIchimokuCloudStrategy() *IchimokuCloudStrategy
-```
-
-NewIchimokuCloudStrategy function initializes a new Ichimoku Cloud strategy with the default parameters.
-
-<a name="IchimokuCloudStrategy.Compute"></a>
-### func \(\*IchimokuCloudStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/ichimoku_cloud_strategy.go#L33>)
-
-```go
-func (i *IchimokuCloudStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-
-<a name="IchimokuCloudStrategy.Name"></a>
-### func \(\*IchimokuCloudStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/ichimoku_cloud_strategy.go#L28>)
-
-```go
-func (*IchimokuCloudStrategy) Name() string
-```
-
-Name returns the name of the strategy.
-
-<a name="IchimokuCloudStrategy.Report"></a>
-### func \(\*IchimokuCloudStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/ichimoku_cloud_strategy.go#L71>)
-
-```go
-func (i *IchimokuCloudStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
