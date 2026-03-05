@@ -6,7 +6,7 @@ package helper
 
 import "math"
 
-// Sqrt calculates the square root of each value in a channel of float64.
+// Sqrt calculates the square root of each value in a channel of type T.
 //
 // Example:
 //

@@ -5,7 +5,7 @@
 package helper
 
 // DivideBy divides each element in the input channel
-// of float64 values by the given divider and returns a
+// of type T values by the given divider and returns a
 // new channel containing the divided values.
 //
 // Example:

@@ -4,7 +4,7 @@
 
 package helper
 
-// KeepPositives processes a stream of float64 values, retaining positive
+// KeepPositives processes a stream of type T values, retaining positive
 // values unchanged and replacing negative values with zero.
 //
 // Example:

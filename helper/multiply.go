@@ -4,7 +4,7 @@
 
 package helper
 
-// Multiply takes two channels of float64 and multiples the values
+// Multiply takes two channels of type T and multiples the values
 // from the first channel with the values from the second channel.
 // It returns a new channel containing the results of
 // the multiplication.
