@@ -4,7 +4,7 @@
 
 package helper
 
-// Sign takes a channel of float64 values and returns their signs
+// Sign takes a channel of type T values and returns their signs
 // as -1 for negative, 0 for zero, and 1 for positive.
 //
 // Example:

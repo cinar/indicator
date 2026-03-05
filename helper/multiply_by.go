@@ -5,7 +5,7 @@
 package helper
 
 // MultiplyBy multiplies each element in the input channel
-// of float64 values by the given multiplier and returns a
+// of type T values by the given multiplier and returns a
 // new channel containing the multiplied values.
 //
 // Example:

@@ -6,7 +6,7 @@ package helper
 
 import "math"
 
-// Pow takes a channel of float64 values and returns the element-wise
+// Pow takes a channel of type T values and returns the element-wise
 // base-value exponential of y.
 //
 // Example:

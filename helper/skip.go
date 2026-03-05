@@ -5,7 +5,7 @@
 package helper
 
 // Skip skips the specified number of elements from the
-// given channel of float64.
+// given channel of type T.
 //
 // Example:
 //

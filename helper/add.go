@@ -4,7 +4,7 @@
 
 package helper
 
-// Add adds each pair of values from the two input channels of float64
+// Add adds each pair of values from the two input channels of type T
 // and returns a new channel containing the sums.
 //
 // Example:

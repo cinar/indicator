@@ -4,7 +4,7 @@
 
 package helper
 
-// ChanToSlice converts a channel of float64 to a slice of float64.
+// ChanToSlice converts a channel of type T to a slice of type T.
 //
 // Example:
 //

@@ -5,7 +5,7 @@
 package helper
 
 // Head retrieves the specified number of elements
-// from the given channel of float64 values and
+// from the given channel of type T values and
 // delivers them through a new channel.
 //
 // Example:

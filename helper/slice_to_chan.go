@@ -4,7 +4,7 @@
 
 package helper
 
-// SliceToChan converts a slice of float64 to a channel of float64.
+// SliceToChan converts a slice of type T to a channel of type T.
 //
 // Example:
 //

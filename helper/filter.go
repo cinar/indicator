@@ -6,7 +6,7 @@ package helper
 
 // Filter filters the items from the input channel based on the
 // provided predicate function. The predicate function takes a
-// float64 value as input and returns a boolean value indicating
+// value of type T as input and returns a boolean value indicating
 // whether the value should be included in the output channel.
 //
 // Example:
