@@ -712,7 +712,7 @@ func (*Obv[T]) Compute(closings, volumes <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the OBV.
 
 <a name="Obv[T].IdlePeriod"></a>
-### func \(\*Obv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L47>)
+### func \(\*Obv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L49>)
 
 ```go
 func (*Obv[T]) IdlePeriod() int

@@ -55,6 +55,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*TripleRsiStrategy\) IdlePeriod\(\) int](<#TripleRsiStrategy.IdlePeriod>)
   - [func \(t \*TripleRsiStrategy\) Name\(\) string](<#TripleRsiStrategy.Name>)
   - [func \(t \*TripleRsiStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#TripleRsiStrategy.Report>)
+- [type WilliamsRStrategy](<#WilliamsRStrategy>)
+  - [func NewWilliamsRStrategy\(\) \*WilliamsRStrategy](<#NewWilliamsRStrategy>)
+  - [func NewWilliamsRStrategyWith\(buyAt, sellAt float64\) \*WilliamsRStrategy](<#NewWilliamsRStrategyWith>)
+  - [func \(r \*WilliamsRStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#WilliamsRStrategy.Compute>)
+  - [func \(r \*WilliamsRStrategy\) Name\(\) string](<#WilliamsRStrategy.Name>)
+  - [func \(r \*WilliamsRStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#WilliamsRStrategy.Report>)
 
 
 ## Constants
@@ -104,6 +110,18 @@ const (
 
     // DefaultTripleRsiStrategySellAt defines the default RSI level at which a Sell action is generated.
     DefaultTripleRsiStrategySellAt = 50
+)
+```
+
+<a name="DefaultWilliamsRStrategyBuyAt"></a>
+
+```go
+const (
+    // DefaultWilliamsRStrategyBuyAt defines the default Williams R level at which a Buy action is generated.
+    DefaultWilliamsRStrategyBuyAt = -80.0
+
+    // DefaultWilliamsRStrategySellAt defines the default Williams R level at which a Sell action is generated.
+    DefaultWilliamsRStrategySellAt = -20.0
 )
 ```
 
@@ -421,6 +439,69 @@ Name returns the name of the strategy.
 
 ```go
 func (t *TripleRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="WilliamsRStrategy"></a>
+## type [WilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L25-L34>)
+
+WilliamsRStrategy represents the configuration parameters for calculating the Williams R strategy.
+
+```go
+type WilliamsRStrategy struct {
+    // WilliamsR represents the configuration parameters for calculating the Williams %R.
+    WilliamsR *momentum.WilliamsR[float64]
+
+    // BuyAt defines the Williams R level at which a Buy action is generated.
+    BuyAt float64
+
+    // SellAt defines the Williams R level at which a Sell action is generated.
+    SellAt float64
+}
+```
+
+<a name="NewWilliamsRStrategy"></a>
+### func [NewWilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L37>)
+
+```go
+func NewWilliamsRStrategy() *WilliamsRStrategy
+```
+
+NewWilliamsRStrategy function initializes a new Williams R strategy instance with the default parameters.
+
+<a name="NewWilliamsRStrategyWith"></a>
+### func [NewWilliamsRStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L45>)
+
+```go
+func NewWilliamsRStrategyWith(buyAt, sellAt float64) *WilliamsRStrategy
+```
+
+NewWilliamsRStrategyWith function initializes a new Williams R strategy instance with the given parameters.
+
+<a name="WilliamsRStrategy.Compute"></a>
+### func \(\*WilliamsRStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L59>)
+
+```go
+func (r *WilliamsRStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="WilliamsRStrategy.Name"></a>
+### func \(\*WilliamsRStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L54>)
+
+```go
+func (r *WilliamsRStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="WilliamsRStrategy.Report"></a>
+### func \(\*WilliamsRStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/williams_r_strategy.go#L87>)
+
+```go
+func (r *WilliamsRStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

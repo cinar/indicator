@@ -27,6 +27,10 @@ type Repository interface {
 - `SqlRepository`: Database-backed persistence for large datasets.
 - `TiingoRepository`: Remote API connector for fetching real-time data.
 
+## Model Consistency
+
+All price and volume fields in repository models (e.g., `TiingoEndOfDay`) must use `float64`. This ensures compatibility with crypto assets that provide fractional volumes, which would otherwise cause JSON unmarshaling errors if `int64` is used.
+
 ## Testing Pattern
 
 Test files use `asset_test` package and verify repository implementations against mock and real-world data sources.

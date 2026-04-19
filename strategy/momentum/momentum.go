@@ -28,5 +28,6 @@ func AllStrategies() []strategy.Strategy {
 		NewRsiStrategy(),
 		NewStochasticRsiStrategy(),
 		NewTripleRsiStrategy(),
+		NewWilliamsRStrategy(),
 	}
 }

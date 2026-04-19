@@ -182,3 +182,47 @@ func TestTiingoRepositoryAppend(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTiingoRepositoryGetFractionalVolume(t *testing.T) {
+	// JSON with fractional volume, which should fail to unmarshal into int64
+	jsonResponse := `[
+		{
+			"date": "2024-03-01T00:00:00.000Z",
+			"open": 61000.5,
+			"high": 62000.5,
+			"low": 60000.5,
+			"close": 61500.5,
+			"volume": 20297.44489644,
+			"adjOpen": 61000.5,
+			"adjHigh": 62000.5,
+			"adjLow": 60000.5,
+			"adjClose": 61500.5,
+			"adjVolume": 20297.44489644,
+			"divCash": 0.0,
+			"splitFactor": 1.0
+		}
+	]`
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = fmt.Fprint(w, jsonResponse)
+	}))
+	defer server.Close()
+
+	repository := asset.NewTiingoRepository("1234")
+	repository.BaseURL = server.URL
+
+	snapshots, err := repository.Get("btcusd")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	snapshot, ok := <-snapshots
+	if !ok {
+		t.Fatal("expected snapshot, but channel closed (probably due to unmarshal error)")
+	}
+
+	expectedVolume := 20297.44489644
+	if snapshot.Volume != expectedVolume {
+		t.Fatalf("actual volume %v expected %v", snapshot.Volume, expectedVolume)
+	}
+}

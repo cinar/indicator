@@ -12,7 +12,7 @@ import (
 
 func TestAllStrategies(t *testing.T) {
 	strategies := volume.AllStrategies()
-	if len(strategies) != 6 {
-		t.Fatalf("expected 6 strategies, got %d", len(strategies))
+	if len(strategies) != 7 {
+		t.Fatalf("expected 7 strategies, got %d", len(strategies))
 	}
 }
