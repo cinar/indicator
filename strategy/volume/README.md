@@ -56,6 +56,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(n \*NegativeVolumeIndexStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NegativeVolumeIndexStrategy.Compute>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Name\(\) string](<#NegativeVolumeIndexStrategy.Name>)
   - [func \(n \*NegativeVolumeIndexStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NegativeVolumeIndexStrategy.Report>)
+- [type ObvStrategy](<#ObvStrategy>)
+  - [func NewObvStrategy\(\) \*ObvStrategy](<#NewObvStrategy>)
+  - [func NewObvStrategyWith\(period int\) \*ObvStrategy](<#NewObvStrategyWith>)
+  - [func \(s \*ObvStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ObvStrategy.Compute>)
+  - [func \(s \*ObvStrategy\) Name\(\) string](<#ObvStrategy.Name>)
+  - [func \(s \*ObvStrategy\) Report\(snapshots \<\-chan \*asset.Snapshot\) \*helper.Report](<#ObvStrategy.Report>)
 - [type PercentBandMFIStrategy](<#PercentBandMFIStrategy>)
   - [func NewPercentBandMFIStrategy\(\) \*PercentBandMFIStrategy](<#NewPercentBandMFIStrategy>)
   - [func NewPercentBandMFIStrategyWith\(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64\) \*PercentBandMFIStrategy](<#NewPercentBandMFIStrategyWith>)
@@ -108,6 +114,15 @@ const (
 const (
     // DefaultNegativeVolumeIndexStrategyEmaPeriod is the default EMA period of 255.
     DefaultNegativeVolumeIndexStrategyEmaPeriod = 255
+)
+```
+
+<a name="DefaultObvStrategyPeriod"></a>
+
+```go
+const (
+    // DefaultObvStrategyPeriod is the default OBV strategy period.
+    DefaultObvStrategyPeriod = 10
 )
 ```
 
@@ -413,6 +428,66 @@ func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.R
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="ObvStrategy"></a>
+## type [ObvStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L24-L30>)
+
+ObvStrategy represents the configuration parameters for calculating the On\-Balance Volume \(OBV\) strategy. Recommends a Buy action when OBV crosses above its SMA, and recommends a Sell action when OBV crosses below its SMA.
+
+```go
+type ObvStrategy struct {
+    // Obv is the OBV indicator instance.
+    Obv *volume.Obv[float64]
+
+    // Sma is the SMA indicator instance.
+    Sma *trend.Sma[float64]
+}
+```
+
+<a name="NewObvStrategy"></a>
+### func [NewObvStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L33>)
+
+```go
+func NewObvStrategy() *ObvStrategy
+```
+
+NewObvStrategy function initializes a new OBV strategy instance with the default parameters.
+
+<a name="NewObvStrategyWith"></a>
+### func [NewObvStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L40>)
+
+```go
+func NewObvStrategyWith(period int) *ObvStrategy
+```
+
+NewObvStrategyWith function initializes a new OBV strategy instance with the given period.
+
+<a name="ObvStrategy.Compute"></a>
+### func \(\*ObvStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L53>)
+
+```go
+func (s *ObvStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="ObvStrategy.Name"></a>
+### func \(\*ObvStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L48>)
+
+```go
+func (s *ObvStrategy) Name() string
+```
+
+Name function returns the name of the strategy.
+
+<a name="ObvStrategy.Report"></a>
+### func \(\*ObvStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volume/obv_strategy.go#L86>)
+
+```go
+func (s *ObvStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
+```
+
+Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="PercentBandMFIStrategy"></a>
 ## type [PercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volume/percent_b_and_mfi_strategy.go#L34-L52>)
