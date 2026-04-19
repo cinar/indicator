@@ -6,8 +6,8 @@ package helper
 
 // Map applies the given transformation function to each element in the
 // input channel and returns a new channel containing the transformed
-// values. The transformation function takes a float64 value as input
-// and returns a float64 value as output.
+// values. The transformation function takes a value of type F as input
+// and returns a value of type T as output.
 //
 // Example:
 //

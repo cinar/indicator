@@ -6,7 +6,7 @@ package helper
 
 import "math"
 
-// Abs calculates the absolute value of each value in a channel of float64.
+// Abs calculates the absolute value of each value in a channel of type T.
 //
 // Example:
 //

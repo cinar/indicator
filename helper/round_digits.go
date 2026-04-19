@@ -4,7 +4,7 @@
 
 package helper
 
-// RoundDigits takes a channel of float64 numbers and rounds them to d
+// RoundDigits takes a channel of type T numbers and rounds them to d
 // decimal places.
 //
 // Example:

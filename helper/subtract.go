@@ -4,7 +4,7 @@
 
 package helper
 
-// Subtract takes two channels of float64 and subtracts the values
+// Subtract takes two channels of type T and subtracts the values
 // from the second channel from the first one. It returns a new
 // channel containing the results of the subtractions.
 //
