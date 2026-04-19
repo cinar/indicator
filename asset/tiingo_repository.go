@@ -55,7 +55,7 @@ type TiingoEndOfDay struct {
 	Close float64 `json:"close"`
 
 	// Volume is the total volume.
-	Volume int64 `json:"volume"`
+	Volume float64 `json:"volume"`
 
 	// AdjOpen is the adjusted opening price.
 	AdjOpen float64 `json:"adjOpen"`
@@ -70,7 +70,7 @@ type TiingoEndOfDay struct {
 	AdjClose float64 `json:"adjClose"`
 
 	// AdjVolume is the adjusted total volume.
-	AdjVolume int64 `json:"adjVolume"`
+	AdjVolume float64 `json:"adjVolume"`
 
 	// Dividend is the dividend paid out.
 	Dividend float64 `json:"divCash"`
@@ -87,7 +87,7 @@ func (e *TiingoEndOfDay) ToSnapshot() *Snapshot {
 		High:   e.AdjHigh,
 		Low:    e.AdjLow,
 		Close:  e.AdjClose,
-		Volume: float64(e.AdjVolume),
+		Volume: e.AdjVolume,
 	}
 }
 
