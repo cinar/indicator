@@ -15,6 +15,7 @@ Indicator is a Golang library for technical analysis, providing a wide range of 
 
 ## Development Standards
 
+- **Finding Tasks:** Use the `gh issue list` command to identify open issues. Issues labeled `good first issue` are typically self-contained indicator or strategy implementations.
 - **No External Dependencies:** This project aims to have no external dependencies. Do not add any new dependencies.
 - **Composition & Reusability:** Build and utilize reusable blocks, particularly those in the `helper/` package. Avoid re-implementing existing logic within a single indicator. For example, if an indicator uses a moving average, it should employ the existing implementation rather than duplicating the logic internally.
 - **Copyright Header:** Every file must start with the copyright notice:
