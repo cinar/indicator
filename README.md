@@ -1,4 +1,5 @@
-[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator) [![GHCR Version](https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github)](https://github.com/cinar/indicator/pkgs/container/indicator)
+[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator) [![GHCR Version](https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github)](https://github.com/cinar/indicator/pkgs/container/indicator) [![GitHub Stars](https://img.shields.io/github/stars/cinar/indicator?style=social)](https://github.com/cinar/indicator/stargazers)
+
 
 <p align="center">
     <img src="logo.png" />
@@ -7,7 +8,9 @@
 Indicator Go
 ============
 
-Indicator is a Golang module that provides a rich set of technical analysis indicators, strategies, and a framework for backtesting.
+Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting with real-time strategy execution.
+
+> An extensive technical analysis library for algorithmic trading - 80+ indicators, backtesting framework, and AI integration via MCP.
 
 ### Major improvements in v2:
 
