@@ -2,6 +2,10 @@
 
 Indicator is a Golang library for technical analysis, providing a wide range of indicators, strategies, and backtesting capabilities. It leverages Go 1.22+ generics and channels for streaming data processing.
 
+## Important Rules
+
+- Whenever I correct your behavior, establish a new architectural constraint, or express a coding preference (e.g., 'no dependencies'), you MUST immediately use your save_memory tool to persist this rule.
+
 ## Core Architecture
 
 - **Streaming:** Most indicators process data through channels (`<-chan T`), allowing for efficient, pipeline-based calculations.
