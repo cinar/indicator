@@ -167,7 +167,7 @@ const (
 func Abs[T Number](c <-chan T) <-chan T
 ```
 
-Abs calculates the absolute value of each value in a channel of float64.
+Abs calculates the absolute value of each value in a channel of type T.
 
 Example:
 
@@ -183,7 +183,7 @@ fmt.Println(helper.ChanToSlice(abs)) // [10, 20, 4, 5]
 func Add[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Add adds each pair of values from the two input channels of float64 and returns a new channel containing the sums.
+Add adds each pair of values from the two input channels of type T and returns a new channel containing the sums.
 
 Example:
 
@@ -212,7 +212,7 @@ AppendOrWriteToCsvFile writes the provided rows of data to the specified file, a
 func Apply[T Number](c <-chan T, f func(T) T) <-chan T
 ```
 
-Apply applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a float64 value as input and returns a float64 value as output.
+Apply applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a value of type T as input and returns a value of type T as output.
 
 Example:
 
@@ -261,7 +261,7 @@ fmt.Println(buffer.String())
 func ChanToSlice[T any](c <-chan T) []T
 ```
 
-ChanToSlice converts a channel of float64 to a slice of float64.
+ChanToSlice converts a channel of type T to a slice of type T.
 
 Example:
 
@@ -457,7 +457,7 @@ fmt.Println(helper.ChanToSlice(substractOne)) // [0, 1, 2, 3]
 func Divide[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Divide takes two channels of float64 and divides the values from the first channel with the values from the second one. It returns a new channel containing the results of the division.
+Divide takes two channels of type T and divides the values from the first channel with the values from the second one. It returns a new channel containing the results of the division.
 
 Example:
 
@@ -477,7 +477,7 @@ fmt.Println(helper.ChanToSlice(division)) // [1, 4, 2, 4, 2]
 func DivideBy[T Number](c <-chan T, d T) <-chan T
 ```
 
-DivideBy divides each element in the input channel of float64 values by the given divider and returns a new channel containing the divided values.
+DivideBy divides each element in the input channel of type T values by the given divider and returns a new channel containing the divided values.
 
 Example:
 
@@ -547,7 +547,7 @@ Field extracts a specific field from a channel of struct pointers and delivers i
 func Filter[T any](c <-chan T, p func(T) bool) <-chan T
 ```
 
-Filter filters the items from the input channel based on the provided predicate function. The predicate function takes a float64 value as input and returns a boolean value indicating whether the value should be included in the output channel.
+Filter filters the items from the input channel based on the provided predicate function. The predicate function takes a value of type T as input and returns a boolean value indicating whether the value should be included in the output channel.
 
 Example:
 
@@ -582,7 +582,7 @@ Gcd calculates the Greatest Common Divisor of the given numbers.
 func Head[T Number](c <-chan T, count int) <-chan T
 ```
 
-Head retrieves the specified number of elements from the given channel of float64 values and delivers them through a new channel.
+Head retrieves the specified number of elements from the given channel of type T values and delivers them through a new channel.
 
 Example:
 
@@ -643,7 +643,7 @@ JSONToChanWithLogger reads values from the specified reader in JSON format into 
 func KeepNegatives[T Number](c <-chan T) <-chan T
 ```
 
-KeepNegatives processes a stream of float64 values, retaining negative values unchanged and replacing positive values with zero.
+KeepNegatives processes a stream of type T values, retaining negative values unchanged and replacing positive values with zero.
 
 Example:
 
@@ -660,7 +660,7 @@ fmt.Println(helper.ChanToSlice(negatives)) // [-10, 0, 0, -5]
 func KeepPositives[T Number](c <-chan T) <-chan T
 ```
 
-KeepPositives processes a stream of float64 values, retaining positive values unchanged and replacing negative values with zero.
+KeepPositives processes a stream of type T values, retaining positive values unchanged and replacing negative values with zero.
 
 Example:
 
@@ -704,7 +704,7 @@ Lowest returns a channel that emits the lowest value within a sliding window of 
 func Map[F, T any](c <-chan F, f func(F) T) <-chan T
 ```
 
-Map applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a float64 value as input and returns a float64 value as output.
+Map applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a value of type F as input and returns a value of type T as output.
 
 Example:
 
@@ -756,7 +756,7 @@ MinSince returns a channel of T indicating since when \(number of previous value
 func Multiply[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Multiply takes two channels of float64 and multiples the values from the first channel with the values from the second channel. It returns a new channel containing the results of the multiplication.
+Multiply takes two channels of type T and multiples the values from the first channel with the values from the second channel. It returns a new channel containing the results of the multiplication.
 
 Example:
 
@@ -776,7 +776,7 @@ fmt.Println(helper.ChanToSlice(multiplication)) // [2, 4, 6, 8, 10]
 func MultiplyBy[T Number](c <-chan T, m T) <-chan T
 ```
 
-MultiplyBy multiplies each element in the input channel of float64 values by the given multiplier and returns a new channel containing the multiplied values.
+MultiplyBy multiplies each element in the input channel of type T values by the given multiplier and returns a new channel containing the multiplied values.
 
 Example:
 
@@ -888,7 +888,7 @@ fmt.println(helper.ChanToSlice(output)) // [2, 4, 6, 8]
 func Pow[T Number](c <-chan T, y T) <-chan T
 ```
 
-Pow takes a channel of float64 values and returns the element\-wise base\-value exponential of y.
+Pow takes a channel of type T values and returns the element\-wise base\-value exponential of y.
 
 Example:
 
@@ -948,7 +948,7 @@ fmt.Println(n) // 10.12
 func RoundDigits[T Number](c <-chan T, d int) <-chan T
 ```
 
-RoundDigits takes a channel of float64 numbers and rounds them to d decimal places.
+RoundDigits takes a channel of type T numbers and rounds them to d decimal places.
 
 Example:
 
@@ -1003,7 +1003,7 @@ fmt.Println(helper.ChanToSlice(output)) // [0, 0, 0, 0, 2, 4, 6, 8]
 func Sign[T Number](c <-chan T) <-chan T
 ```
 
-Sign takes a channel of float64 values and returns their signs as \-1 for negative, 0 for zero, and 1 for positive.
+Sign takes a channel of type T values and returns their signs as \-1 for negative, 0 for zero, and 1 for positive.
 
 Example:
 
@@ -1029,7 +1029,7 @@ Since counts the number of periods since the last change of value in a channel o
 func Skip[T any](c <-chan T, count int) <-chan T
 ```
 
-Skip skips the specified number of elements from the given channel of float64.
+Skip skips the specified number of elements from the given channel of type T.
 
 Example:
 
@@ -1063,7 +1063,7 @@ fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
 func SliceToChan[T any](slice []T) <-chan T
 ```
 
-SliceToChan converts a slice of float64 to a channel of float64.
+SliceToChan converts a slice of type T to a channel of type T.
 
 Example:
 
@@ -1101,7 +1101,7 @@ SortedPercentRank returns a channel that emits the percentile rank by sorting th
 func Sqrt[T Number](c <-chan T) <-chan T
 ```
 
-Sqrt calculates the square root of each value in a channel of float64.
+Sqrt calculates the square root of each value in a channel of type T.
 
 Example:
 
@@ -1118,7 +1118,7 @@ fmt.Println(helper.ChanToSlice(sqrt)) // [3, 9, 4, 10]
 func Subtract[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Subtract takes two channels of float64 and subtracts the values from the second channel from the first one. It returns a new channel containing the results of the subtractions.
+Subtract takes two channels of type T and subtracts the values from the second channel from the first one. It returns a new channel containing the results of the subtractions.
 
 Example:
 

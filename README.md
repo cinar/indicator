@@ -28,7 +28,6 @@ The following list of indicators are currently supported by this package:
 ### 📈 Trend Indicators
 
 -	[Absolute Price Oscillator (APO)](trend/README.md#Apo)
--   [Alligator Indicator](trend/README.md#Alligator)
 -	[Aroon Indicator](trend/README.md#Aroon)
 -	[Balance of Power (BoP)](trend/README.md#Bop)
 -	[Chande Forecast Oscillator (CFO)](trend/README.md#Cfo)
@@ -50,6 +49,7 @@ The following list of indicators are currently supported by this package:
 -	[Moving Sum](trend/README.md#MovingSum)
 -	[Pivot Point](trend/README.md#PivotPoint)
 -	[Random Index (KDJ)](trend/README.md#Kdj)
+-	[Rate of Change (ROC)](trend/README.md#Roc)
 -	[Stochastic](trend/README.md#Stochastic)
 -	[Slow Stochastic](trend/README.md#SlowStochastic)
 -	[Schaff Trend Cycle (STC)](trend/README.md#Stc)
@@ -76,15 +76,17 @@ The following list of indicators are currently supported by this package:
 -	[Elder-Ray Index](momentum/README.md#ElderRay)
 -	[Fisher Transform](momentum/README.md#Fisher)
 -	[Ichimoku Cloud](momentum/README.md#IchimokuCloud)
+-   [Martin Pring's Special K](momentum/README.md#PringsSpecialK)
 -	[Percentage Price Oscillator (PPO)](momentum/README.md#Ppo)
 -	[Percentage Volume Oscillator (PVO)](momentum/README.md#Pvo)
--   [Martin Pring's Special K](momentum/README.md#PringsSpecialK)
+-	[Qstick](momentum/README.md#Qstick)
 -	[Relative Strength Index (RSI)](momentum/README.md#Rsi)
 -	[Relative Vigor Index (RVI)](momentum/README.md#Rvi)
--	[Qstick](momentum/README.md#Qstick)
 -	[Stochastic Oscillator](momentum/README.md#StochasticOscillator)
 -	[Stochastic RSI](momentum/README.md#StochasticRsi)
 -	[TD Sequential](momentum/README.md#TdSequential)
+-	[Ultimate Oscillator](momentum/README.md#UltimateOscillator)
+-	[Williams R](momentum/README.md#WilliamsR)
 
 ### 🎢 Volatility Indicators
 
@@ -161,6 +163,7 @@ The following list of strategies are currently supported by this package:
 -	[RSI Strategy](strategy/momentum/README.md#RsiStrategy)
 -	[Stochastic RSI Strategy](strategy/momentum/README.md#StochasticRsiStrategy)
 -	[Triple RSI Strategy](strategy/momentum/README.md#TripleRsiStrategy)
+-	[Williams R Strategy](strategy/momentum/README.md#WilliamsRStrategy)
 
 ### 🎢 Volatility Strategies
 
@@ -174,6 +177,7 @@ The following list of strategies are currently supported by this package:
 -	[Force Index Strategy](strategy/volume/README.md#ForceIndexStrategy)
 -	[Money Flow Index Strategy](strategy/volume/README.md#MoneyFlowIndexStrategy)
 -	[Negative Volume Index Strategy](strategy/volume/README.md#NegativeVolumeIndexStrategy)
+-	[On-Balance Volume (OBV) Strategy](strategy/volume/README.md#ObvStrategy)
 -	[Percent Band and MFI Strategy](strategy/volume/README.md#PercentBandMFIStrategy)
 -	[Weighted Average Price Strategy](strategy/volume/README.md#WeightedAveragePriceStrategy)
 

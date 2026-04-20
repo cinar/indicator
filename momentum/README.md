@@ -102,6 +102,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewTdSequential\[T helper.Number\]\(\) \*TdSequential\[T\]](<#NewTdSequential>)
   - [func \(t \*TdSequential\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#TdSequential[T].Compute>)
   - [func \(t \*TdSequential\[T\]\) IdlePeriod\(\) int](<#TdSequential[T].IdlePeriod>)
+- [type UltimateOscillator](<#UltimateOscillator>)
+  - [func NewUltimateOscillator\[T helper.Number\]\(\) \*UltimateOscillator\[T\]](<#NewUltimateOscillator>)
+  - [func NewUltimateOscillatorWithPeriods\[T helper.Number\]\(shortPeriod, mediumPeriod, longPeriod int\) \*UltimateOscillator\[T\]](<#NewUltimateOscillatorWithPeriods>)
+  - [func \(u \*UltimateOscillator\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#UltimateOscillator[T].Compute>)
+  - [func \(u \*UltimateOscillator\[T\]\) IdlePeriod\(\) int](<#UltimateOscillator[T].IdlePeriod>)
+  - [func \(u \*UltimateOscillator\[T\]\) String\(\) string](<#UltimateOscillator[T].String>)
 - [type WilliamsR](<#WilliamsR>)
   - [func NewWilliamsR\[T helper.Number\]\(\) \*WilliamsR\[T\]](<#NewWilliamsR>)
   - [func \(w \*WilliamsR\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].Compute>)
@@ -267,6 +273,21 @@ const (
 
     // DefaultTdSequentialCountdownPeriod is the default countdown period (13).
     DefaultTdSequentialCountdownPeriod = 13
+)
+```
+
+<a name="DefaultUltimateOscillatorShortPeriod"></a>
+
+```go
+const (
+    // DefaultUltimateOscillatorShortPeriod is the default short period for the Ultimate Oscillator (UO).
+    DefaultUltimateOscillatorShortPeriod = 7
+
+    // DefaultUltimateOscillatorMediumPeriod is the default medium period for the Ultimate Oscillator (UO).
+    DefaultUltimateOscillatorMediumPeriod = 14
+
+    // DefaultUltimateOscillatorLongPeriod is the default long period for the Ultimate Oscillator (UO).
+    DefaultUltimateOscillatorLongPeriod = 28
 )
 ```
 
@@ -1364,6 +1385,85 @@ func (t *TdSequential[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
+
+<a name="UltimateOscillator"></a>
+## type [UltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L41-L50>)
+
+UltimateOscillator represents the configuration parameter for calculating the Ultimate Oscillator \(UO\). It was developed by Larry Williams in 1976 to measure the price momentum of an asset across multiple timeframes. By using the weighted average of three different timeframes the indicator has less volatility and fewer trade signals compared to other oscillators that rely on a single timeframe.
+
+```
+BP = Close - Minimum(Low, Prior Close)
+TR = Maximum(High, Prior Close) - Minimum(Low, Prior Close)
+Average7 = Sum(BP for 7 periods) / Sum(TR for 7 periods)
+Average14 = Sum(BP for 14 periods) / Sum(TR for 14 periods)
+Average28 = Sum(BP for 28 periods) / Sum(TR for 28 periods)
+UO = 100 * [(4 * Average7) + (2 * Average14) + Average28] / (4 + 2 + 1)
+```
+
+Example:
+
+```
+uo := momentum.NewUltimateOscillator[float64]()
+values := uo.Compute(highs, lows, closings)
+```
+
+```go
+type UltimateOscillator[T helper.Number] struct {
+    // ShortPeriod is the short period for the UO.
+    ShortPeriod int
+
+    // MediumPeriod is the medium period for the UO.
+    MediumPeriod int
+
+    // LongPeriod is the long period for the UO.
+    LongPeriod int
+}
+```
+
+<a name="NewUltimateOscillator"></a>
+### func [NewUltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L53>)
+
+```go
+func NewUltimateOscillator[T helper.Number]() *UltimateOscillator[T]
+```
+
+NewUltimateOscillator function initializes a new Ultimate Oscillator instance.
+
+<a name="NewUltimateOscillatorWithPeriods"></a>
+### func [NewUltimateOscillatorWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L62>)
+
+```go
+func NewUltimateOscillatorWithPeriods[T helper.Number](shortPeriod, mediumPeriod, longPeriod int) *UltimateOscillator[T]
+```
+
+NewUltimateOscillatorWithPeriods function initializes a new Ultimate Oscillator instance with the given periods.
+
+<a name="UltimateOscillator[T].Compute"></a>
+### func \(\*UltimateOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L71>)
+
+```go
+func (u *UltimateOscillator[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the Ultimate Oscillator.
+
+<a name="UltimateOscillator[T].IdlePeriod"></a>
+### func \(\*UltimateOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L140>)
+
+```go
+func (u *UltimateOscillator[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Ultimate Oscillator won't yield any results.
+
+<a name="UltimateOscillator[T].String"></a>
+### func \(\*UltimateOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L144>)
+
+```go
+func (u *UltimateOscillator[T]) String() string
+```
+
+
 
 <a name="WilliamsR"></a>
 ## type [WilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L29-L35>)
