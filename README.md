@@ -367,10 +367,16 @@ Contributing to the Project
 
 Anyone can contribute to Indicator library. Please make sure to read our [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) guide first. Follow the [How to Contribute to Indicator](./CONTRIBUTING.md) to contribute. Signining a [Contributor Agreement](./CLA.md) is also required to contribute to the project.
 
-Disclaimer
-----------
+⚠️ Risk Disclosure & Disclaimer
+-------------------------------
 
-The information provided on this project is strictly for informational purposes and is not to be construed as advice or solicitation to buy or sell any security.
+**Financial Risk:** Trading stocks, futures, and cryptocurrencies involves significant risk of loss and is not suitable for every investor. The use of leveraged instruments can lead to losses greater than the initial investment.
+
+**Not Financial Advice:** The information and tools provided in this project are strictly for educational and informational purposes and are not to be construed as advice or solicitation to buy or sell any security. They do NOT constitute financial, investment, or trading advice. Onur Cinar is not a financial advisor.
+
+**No Warranties:** This software is provided "AS IS," without warranty of any kind. Technical analysis indicators are based on historical data and do not guarantee future results. While we strive for 90%+ test coverage, software can contain bugs.
+
+**Limitation of Liability:** In no event shall the author or contributors be liable for any financial loss, data loss, or any other damages arising from the use of this library. Use at your own risk.
 
 License
 -------
