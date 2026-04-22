@@ -31,6 +31,7 @@ func AllStrategies() []strategy.Strategy {
 		NewCfoStrategy(),
 		NewDemaStrategy(),
 		NewGoldenCrossStrategy(),
+		NewHmaStrategy(),
 		NewKamaStrategy(),
 		NewKdjStrategy(),
 		NewMacdStrategy(),
