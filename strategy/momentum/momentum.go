@@ -26,6 +26,7 @@ func AllStrategies() []strategy.Strategy {
 		NewAwesomeOscillatorStrategy(),
 		NewIchimokuCloudStrategy(),
 		NewRsiStrategy(),
+		NewStochasticOscillatorStrategy(),
 		NewStochasticRsiStrategy(),
 		NewTripleRsiStrategy(),
 		NewWilliamsRStrategy(),
