@@ -173,6 +173,7 @@ The following list of strategies are currently supported by this package:
 ### 🎢 Volatility Strategies
 
 -	[Bollinger Bands Strategy](strategy/volatility/README.md#BollingerBandsStrategy)
+-	[Donchian Channel Breakout Strategy](strategy/volatility/README.md#DonchianChannelBreakoutStrategy)
 -	[Super Trend Strategy](strategy/volatility/README.md#SuperTrendStrategy)
 
 ### 📢 Volume Strategies
