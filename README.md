@@ -79,6 +79,7 @@ The following list of indicators are currently supported by this package:
 -	[Elder-Ray Index](momentum/README.md#ElderRay)
 -	[Fisher Transform](momentum/README.md#Fisher)
 -	[Ichimoku Cloud](momentum/README.md#IchimokuCloud)
+-	[Internal Bar Strength (IBS)](momentum/README.md#InternalBarStrength)
 -   [Martin Pring's Special K](momentum/README.md#PringsSpecialK)
 -	[Percentage Price Oscillator (PPO)](momentum/README.md#Ppo)
 -	[Percentage Volume Oscillator (PVO)](momentum/README.md#Pvo)
