@@ -28,6 +28,7 @@ import (
 func AllStrategies() []strategy.Strategy {
 	return []strategy.Strategy{
 		NewBollingerBandsStrategy(),
+		NewKeltnerChannelStrategy(),
 		NewDonchianChannelBreakoutStrategy(),
 		NewSuperTrendStrategy(),
 		NewSuperTrendStrategyWith(
