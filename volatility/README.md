@@ -86,6 +86,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewSuperTrendWithPeriod\[T helper.Number\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithPeriod>)
   - [func \(s \*SuperTrend\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#SuperTrend[T].Compute>)
   - [func \(s \*SuperTrend\[T\]\) IdlePeriod\(\) int](<#SuperTrend[T].IdlePeriod>)
+- [type TrueRange](<#TrueRange>)
+  - [func NewTrueRange\[T helper.Number\]\(\) \*TrueRange\[T\]](<#NewTrueRange>)
+  - [func \(tr \*TrueRange\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#TrueRange[T].Compute>)
+  - [func \(tr \*TrueRange\[T\]\) IdlePeriod\(\) int](<#TrueRange[T].IdlePeriod>)
+  - [func \(tr \*TrueRange\[T\]\) String\(\) string](<#TrueRange[T].String>)
 - [type UlcerIndex](<#UlcerIndex>)
   - [func NewUlcerIndex\[T helper.Number\]\(\) \*UlcerIndex\[T\]](<#NewUlcerIndex>)
   - [func \(u \*UlcerIndex\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#UlcerIndex[T].Compute>)
@@ -252,7 +257,7 @@ func (a *AccelerationBands[T]) IdlePeriod() int
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 
 <a name="Atr"></a>
-## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L32-L35>)
+## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L30-L33>)
 
 Atr represents the configuration parameters for calculating the Average True Range \(ATR\). It is a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
@@ -278,7 +283,7 @@ type Atr[T helper.Number] struct {
 ```
 
 <a name="NewAtr"></a>
-### func [NewAtr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L38>)
+### func [NewAtr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L36>)
 
 ```go
 func NewAtr[T helper.Number]() *Atr[T]
@@ -287,7 +292,7 @@ func NewAtr[T helper.Number]() *Atr[T]
 NewAtr function initializes a new ATR instance with the default parameters.
 
 <a name="NewAtrWithMa"></a>
-### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L48>)
+### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L46>)
 
 ```go
 func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
@@ -296,7 +301,7 @@ func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
 NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
 
 <a name="NewAtrWithPeriod"></a>
-### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L43>)
+### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L41>)
 
 ```go
 func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
@@ -305,7 +310,7 @@ func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
 NewAtrWithPeriod function initializes a new ATR instance with the given period.
 
 <a name="Atr[T].Compute"></a>
-### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L55>)
+### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L53>)
 
 ```go
 func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -314,7 +319,7 @@ func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
 Compute function takes a channel of numbers and computes the ATR over the specified period.
 
 <a name="Atr[T].IdlePeriod"></a>
-### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L70>)
+### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L62>)
 
 ```go
 func (a *Atr[T]) IdlePeriod() int
@@ -973,6 +978,62 @@ func (s *SuperTrend[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Super Trend won't yield any results.
+
+<a name="TrueRange"></a>
+## type [TrueRange](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L23>)
+
+TrueRange represents the parameters for calculating the True Range \(TR\). It evaluates the greatest distance covered by price in a single period, accounting for gaps.
+
+```
+TR = Max((High - Low), (High - Previous Closing), (Previous Closing - Low))
+```
+
+Example:
+
+```
+tr := volatility.NewTrueRange[float64]()
+result := tr.Compute(highs, lows, closings)
+```
+
+```go
+type TrueRange[T helper.Number] struct{}
+```
+
+<a name="NewTrueRange"></a>
+### func [NewTrueRange](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L26>)
+
+```go
+func NewTrueRange[T helper.Number]() *TrueRange[T]
+```
+
+NewTrueRange function initializes a new TrueRange instance.
+
+<a name="TrueRange[T].Compute"></a>
+### func \(\*TrueRange\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L31>)
+
+```go
+func (tr *TrueRange[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function takes channels of highs, lows, and closings and computes the True Range.
+
+<a name="TrueRange[T].IdlePeriod"></a>
+### func \(\*TrueRange\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L41>)
+
+```go
+func (tr *TrueRange[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that TrueRange won't yield any results.
+
+<a name="TrueRange[T].String"></a>
+### func \(\*TrueRange\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L46>)
+
+```go
+func (tr *TrueRange[T]) String() string
+```
+
+String is the string representation of the TrueRange.
 
 <a name="UlcerIndex"></a>
 ## type [UlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L30-L33>)

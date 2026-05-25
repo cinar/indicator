@@ -105,6 +105,7 @@ The following list of indicators are currently supported by this package:
 -	[Moving Standard Deviation (Std)](volatility/README.md#MovingStd)
 -	[Projection Oscillator (PO)](volatility/README.md#Po)
 -	[Super Trend](volatility/README.md#SuperTrend)
+-	[True Range (TR)](volatility/README.md#TrueRange)
 -	[Ulcer Index (UI)](volatility/README.md#UlcerIndex)
 
 ### 📢 Volume Indicators
