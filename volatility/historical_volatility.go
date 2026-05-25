@@ -6,7 +6,6 @@ package volatility
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -20,6 +19,8 @@ const (
 //
 //	HV = StdDev(R_t, n)
 //	where R_t = (P_t / P_(t-1)) - 1
+//
+// Refactored to utilize composition of helper.ChangeRatio and MovingStd.
 type HistoricalVolatility[T helper.Number] struct {
 	// Time period.
 	Period int
@@ -43,47 +44,8 @@ func NewHistoricalVolatilityWithPeriod[T helper.Number](period int) *HistoricalV
 
 // Compute function takes a channel of prices and computes the Historical Volatility over the specified period.
 func (h *HistoricalVolatility[T]) Compute(prices <-chan T) <-chan T {
-	result := make(chan T, cap(prices))
-
-	go func() {
-		defer close(result)
-
-		returns := helper.NewRing[T](h.Period)
-		sum := T(0)
-		previous, hasPrevious := T(0), false
-
-		for price := range prices {
-			if !hasPrevious {
-				previous = price
-				hasPrevious = true
-				continue
-			}
-
-			r := T(0)
-			if previous != 0 {
-				r = (price / previous) - 1
-			}
-
-			sum -= returns.Put(r)
-			sum += r
-
-			if returns.IsFull() {
-				mean := sum / T(h.Period)
-				sumSquaredDiff := T(0)
-
-				for i := 0; i < h.Period; i++ {
-					sumSquaredDiff += T(math.Pow(float64(returns.At(i)-mean), 2))
-				}
-
-				stdDev := T(math.Sqrt(float64(sumSquaredDiff / T(h.Period))))
-				result <- stdDev
-			}
-
-			previous = price
-		}
-	}()
-
-	return result
+	returns := helper.ChangeRatio(prices, 1)
+	return NewMovingStdWithPeriod[T](h.Period).Compute(returns)
 }
 
 // IdlePeriod is the initial period that Historical Volatility won't yield any results.
@@ -96,3 +58,4 @@ func (h *HistoricalVolatility[T]) IdlePeriod() int {
 func (h *HistoricalVolatility[T]) String() string {
 	return fmt.Sprintf("HV(%d)", h.Period)
 }
+

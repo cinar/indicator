@@ -35,30 +35,30 @@ func TestHistoricalVolatilityWithInvalidPeriod(t *testing.T) {
 	}
 }
 
-func TestHistoricalVolatilityCompute(t *testing.T) {
-	prices := helper.SliceToChan([]float64{100, 110, 121, 133.1, 146.41, 161.051})
+func TestHistoricalVolatility(t *testing.T) {
+	type Data struct {
+		Close float64 `header:"Close"`
+		Hv    float64 `header:"Hv"`
+	}
 
-	hv := volatility.NewHistoricalVolatilityWithPeriod[float64](2)
-	actuals := hv.Compute(prices)
-	actuals = helper.RoundDigits(actuals, 8)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/historical_volatility.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	expected := helper.SliceToChan([]float64{0, 0, 0})
-	err := helper.CheckEquals(actuals, expected)
+	inputs := helper.Duplicate(input, 2)
+	closings := helper.Map(inputs[0], func(d *Data) float64 { return d.Close })
+	expected := helper.Map(inputs[1], func(d *Data) float64 { return d.Hv })
+
+	hv := volatility.NewHistoricalVolatility[float64]()
+	actual := hv.Compute(closings)
+	actual = helper.RoundDigits(actual, 8)
+
+	expected = helper.Skip(expected, hv.IdlePeriod())
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func TestHistoricalVolatilityPreviousPriceZero(t *testing.T) {
-	prices := helper.SliceToChan([]float64{0, 5, 10, 20, 40})
-
-	hv := volatility.NewHistoricalVolatilityWithPeriod[float64](2)
-	actuals := hv.Compute(prices)
-	actuals = helper.RoundDigits(actuals, 8)
-
-	expected := helper.SliceToChan([]float64{0.5, 0})
-	err := helper.CheckEquals(actuals, expected)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
