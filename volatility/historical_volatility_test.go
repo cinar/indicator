@@ -39,17 +39,13 @@ func TestHistoricalVolatilityCompute(t *testing.T) {
 	prices := helper.SliceToChan([]float64{100, 110, 121, 133.1, 146.41, 161.051})
 
 	hv := volatility.NewHistoricalVolatilityWithPeriod[float64](2)
-	actuals := helper.ChanToSlice(hv.Compute(prices))
+	actuals := hv.Compute(prices)
+	actuals = helper.RoundDigits(actuals, 8)
 
-	expected := []float64{0, 0, 0}
-	if len(actuals) != len(expected) {
-		t.Fatalf("expected %d values, got %d", len(expected), len(actuals))
-	}
-
-	for i := range expected {
-		if actuals[i] != expected[i] {
-			t.Fatalf("at %d expected %v, got %v", i, expected[i], actuals[i])
-		}
+	expected := helper.SliceToChan([]float64{0, 0, 0})
+	err := helper.CheckEquals(actuals, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -57,16 +53,12 @@ func TestHistoricalVolatilityPreviousPriceZero(t *testing.T) {
 	prices := helper.SliceToChan([]float64{0, 5, 10, 20, 40})
 
 	hv := volatility.NewHistoricalVolatilityWithPeriod[float64](2)
-	actuals := helper.ChanToSlice(hv.Compute(prices))
+	actuals := hv.Compute(prices)
+	actuals = helper.RoundDigits(actuals, 8)
 
-	expected := []float64{0.5, 0}
-	if len(actuals) != len(expected) {
-		t.Fatalf("expected %d values, got %d", len(expected), len(actuals))
-	}
-
-	for i := range expected {
-		if actuals[i] != expected[i] {
-			t.Fatalf("at %d expected %v, got %v", i, expected[i], actuals[i])
-		}
+	expected := helper.SliceToChan([]float64{0.5, 0})
+	err := helper.CheckEquals(actuals, expected)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
