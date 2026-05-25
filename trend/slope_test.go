@@ -10,18 +10,33 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
-func TestSlopeSimple(t *testing.T) {
-	closing := helper.SliceToChan([]float64{10, 13, 17, 16, 20, 29})
-	expected := helper.SliceToChan([]float64{(16 - 10) / 3.0, (20 - 13) / 3.0, (29 - 17) / 3.0})
+func TestSlope(t *testing.T) {
+	type Data struct {
+		Close float64 `header:"Close"`
+		Slope float64 `header:"Slope"`
+	}
 
-	slope := NewSlopeWithPeriod[float64](3)
-	actual := slope.Compute(closing)
+	input, err := helper.ReadFromCsvFile[Data]("testdata/slope.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	err := helper.CheckEquals(actual, expected)
+	inputs := helper.Duplicate(input, 2)
+	closings := helper.Map(inputs[0], func(d *Data) float64 { return d.Close })
+	expected := helper.Map(inputs[1], func(d *Data) float64 { return d.Slope })
+
+	slope := NewSlope[float64]()
+	actual := slope.Compute(closings)
+	actual = helper.RoundDigits(actual, 8)
+
+	expected = helper.Skip(expected, slope.IdlePeriod())
+
+	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
+
 
 func TestSlopeFallbackPeriod(t *testing.T) {
 	slope := NewSlopeWithPeriod[float64](-17)

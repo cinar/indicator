@@ -19,6 +19,8 @@ const (
 // Rate of Change Slope indicator.
 //
 //	Slope = (Current Price - Price n periods ago) / n
+//
+// Refactored to utilize composition of helper.Change and helper.DivideBy.
 type Slope[T helper.Number] struct {
 	// Time period.
 	Period int
@@ -42,24 +44,7 @@ func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T] {
 
 // Compute function takes a channel of numbers and computes the Slope.
 func (s *Slope[T]) Compute(values <-chan T) <-chan T {
-	window := helper.NewRing[T](s.Period)
-
-	slopes := helper.Map(values, func(value T) T {
-		var result T
-
-		if window.IsFull() {
-			previous, ok := window.Get()
-			if ok {
-				result = (value - previous) / T(s.Period)
-			}
-		}
-
-		window.Put(value)
-
-		return result
-	})
-
-	return helper.Skip(slopes, s.IdlePeriod())
+	return helper.DivideBy(helper.Change(values, s.Period), T(s.Period))
 }
 
 // IdlePeriod is the initial period that Slope won't yield any results.
@@ -71,3 +56,4 @@ func (s *Slope[T]) IdlePeriod() int {
 func (s *Slope[T]) String() string {
 	return fmt.Sprintf("SLOPE(%d)", s.Period)
 }
+
