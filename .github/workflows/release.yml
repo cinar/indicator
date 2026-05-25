@@ -44,5 +44,4 @@ jobs:
           echo "New tag will be: $NEXT_TAG"
           
           # 4. Create release using official GitHub CLI
-          # Note: The '--draft' flag is used here so you can verify the release in your GitHub UI.
-          gh release create "$NEXT_TAG" --generate-notes --draft
+          gh release create "$NEXT_TAG" --generate-notes
