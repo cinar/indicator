@@ -5,7 +5,7 @@ The `momentum` package provides a collection of indicators for analyzing price m
 ## Key Indicators
 
 - **Key Indicators:** `AwesomeOscillator`, `ChaikinOscillator`, `StochasticOscillator`, `UltimateOscillator`, `Rsi` (Relative Strength Index), `Rvi` (Relative Vigor Index), `WilliamsR`.
-- **Specialized:** `ConnorsRSI`, `Fisher` (Fisher Transform), `IchimokuCloud`, `Ppo` (Percentage Price Oscillator), `Pvo` (Percentage Volume Oscillator), `Qstick`.
+- **Specialized:** `ConnorsRSI`, `Fisher` (Fisher Transform), `IchimokuCloud`, `InternalBarStrength` (Internal Bar Strength), `Ppo` (Percentage Price Oscillator), `Pvo` (Percentage Volume Oscillator), `Qstick`.
 - **Trends:** `PringsSpecialK`, `TdSequential`.
 
 ## Implementation Pattern
