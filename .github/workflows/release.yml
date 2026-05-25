@@ -1,0 +1,51 @@
+name: Weekly Release
+
+on:
+  schedule:
+    # Trigger every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allows manual trigger from the Actions UI
+  push:
+    branches:
+      - add-release-workflow # Temporary push trigger for testing
+
+permissions:
+  contents: write # Required for GitHub CLI to push tags and create releases
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Retrieve full tags and git history to calculate version
+
+      - name: Check Changes and Publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 1. Get the latest tag (defaults to v2.0.0 if none exists)
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v2.0.0")
+          echo "Latest tag: $LATEST_TAG"
+          
+          # 2. Check if there are any new commits since the latest tag
+          if git diff --quiet "$LATEST_TAG"..HEAD; then
+            echo "No new commits since $LATEST_TAG. Skipping release."
+            exit 0
+          fi
+          
+          # 3. Calculate next patch version using simple, standard shell parsing (no complex regex)
+          # e.g., v2.1.30 -> 2.1.30
+          VERSION_NUM=${LATEST_TAG#v}
+          MAJOR=$(echo "$VERSION_NUM" | cut -d. -f1)
+          MINOR=$(echo "$VERSION_NUM" | cut -d. -f2)
+          PATCH=$(echo "$VERSION_NUM" | cut -d. -f3)
+          
+          NEXT_PATCH=$((PATCH + 1))
+          NEXT_TAG="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
+          echo "New tag will be: $NEXT_TAG"
+          
+          # 4. Create release using official GitHub CLI
+          # Note: The '--draft' flag is used here so you can verify the release in your GitHub UI.
+          gh release create "$NEXT_TAG" --generate-notes --draft
