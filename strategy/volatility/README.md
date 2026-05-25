@@ -30,6 +30,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(b \*BollingerBandsStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#BollingerBandsStrategy.Compute>)
   - [func \(\*BollingerBandsStrategy\) Name\(\) string](<#BollingerBandsStrategy.Name>)
   - [func \(b \*BollingerBandsStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#BollingerBandsStrategy.Report>)
+- [type DonchianChannelBreakoutStrategy](<#DonchianChannelBreakoutStrategy>)
+  - [func NewDonchianChannelBreakoutStrategy\(\) \*DonchianChannelBreakoutStrategy](<#NewDonchianChannelBreakoutStrategy>)
+  - [func \(d \*DonchianChannelBreakoutStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DonchianChannelBreakoutStrategy.Compute>)
+  - [func \(\*DonchianChannelBreakoutStrategy\) Name\(\) string](<#DonchianChannelBreakoutStrategy.Name>)
+  - [func \(d \*DonchianChannelBreakoutStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DonchianChannelBreakoutStrategy.Report>)
 - [type SuperTrendStrategy](<#SuperTrendStrategy>)
   - [func NewSuperTrendStrategy\(\) \*SuperTrendStrategy](<#NewSuperTrendStrategy>)
   - [func NewSuperTrendStrategyWith\(superTrend \*volatility.SuperTrend\[float64\]\) \*SuperTrendStrategy](<#NewSuperTrendStrategyWith>)
@@ -91,6 +96,54 @@ Name returns the name of the strategy.
 
 ```go
 func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="DonchianChannelBreakoutStrategy"></a>
+## type [DonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L17-L20>)
+
+DonchianChannelBreakoutStrategy represents the configuration parameters for calculating the Donchian Channel Breakout strategy. A closing at or above the upper channel suggests a Buy signal, while a closing at or below the lower channel suggests a Sell signal.
+
+```go
+type DonchianChannelBreakoutStrategy struct {
+    // DonchianChannel represents the configuration parameters for calculating the Donchian Channel.
+    DonchianChannel *volatility.DonchianChannel[float64]
+}
+```
+
+<a name="NewDonchianChannelBreakoutStrategy"></a>
+### func [NewDonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L23>)
+
+```go
+func NewDonchianChannelBreakoutStrategy() *DonchianChannelBreakoutStrategy
+```
+
+NewDonchianChannelBreakoutStrategy function initializes a new Donchian Channel Breakout strategy instance.
+
+<a name="DonchianChannelBreakoutStrategy.Compute"></a>
+### func \(\*DonchianChannelBreakoutStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L35>)
+
+```go
+func (d *DonchianChannelBreakoutStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="DonchianChannelBreakoutStrategy.Name"></a>
+### func \(\*DonchianChannelBreakoutStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L30>)
+
+```go
+func (*DonchianChannelBreakoutStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="DonchianChannelBreakoutStrategy.Report"></a>
+### func \(\*DonchianChannelBreakoutStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L65>)
+
+```go
+func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
