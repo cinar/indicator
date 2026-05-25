@@ -102,6 +102,7 @@ The following list of indicators are currently supported by this package:
 -	[Chandelier Exit](volatility/README.md#ChandelierExit)
 -	[Choppiness Index (CHOP)](volatility/README.md#Chop)
 -	[Donchian Channel (DC)](volatility/README.md#DonchianChannel)
+-	[Historical Volatility (HV)](volatility/README.md#HistoricalVolatility)
 -	[Keltner Channel (KC)](volatility/README.md#KeltnerChannel)
 -	[Moving Standard Deviation (Std)](volatility/README.md#MovingStd)
 -	[Projection Oscillator (PO)](volatility/README.md#Po)
