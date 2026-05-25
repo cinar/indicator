@@ -59,6 +59,7 @@ The following list of indicators are currently supported by this package:
 -	[Rolling Moving Average (RMA)](trend/README.md#Rma)
 -	[Simple Moving Average (SMA)](trend/README.md#Sma)
 -	[Since Change](helper/README.md#Since)
+-	[Slope](trend/README.md#Slope)
 -   [Smoothed Moving Average (SMMA)](trend/README.md#Smma)
 -	[Triple Exponential Moving Average (TEMA)](trend/README.md#Tema)
 -	[Triangular Moving Average (TRIMA)](trend/README.md#Trima)

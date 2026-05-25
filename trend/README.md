@@ -146,6 +146,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*Roc\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Roc[T].Compute>)
   - [func \(r \*Roc\[T\]\) IdlePeriod\(\) int](<#Roc[T].IdlePeriod>)
   - [func \(r \*Roc\[T\]\) String\(\) string](<#Roc[T].String>)
+- [type Slope](<#Slope>)
+  - [func NewSlope\[T helper.Number\]\(\) \*Slope\[T\]](<#NewSlope>)
+  - [func NewSlopeWithPeriod\[T helper.Number\]\(period int\) \*Slope\[T\]](<#NewSlopeWithPeriod>)
+  - [func \(s \*Slope\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Slope[T].Compute>)
+  - [func \(s \*Slope\[T\]\) IdlePeriod\(\) int](<#Slope[T].IdlePeriod>)
+  - [func \(s \*Slope\[T\]\) String\(\) string](<#Slope[T].String>)
 - [type SlowStochastic](<#SlowStochastic>)
   - [func NewSlowStochastic\[T helper.Number\]\(\) \*SlowStochastic\[T\]](<#NewSlowStochastic>)
   - [func NewSlowStochasticWithPeriod\[T helper.Number\]\(period, kPeriod, dPeriod int\) \*SlowStochastic\[T\]](<#NewSlowStochasticWithPeriod>)
@@ -480,6 +486,15 @@ const (
 const (
     // DefaultRocPeriod is the default ROC period.
     DefaultRocPeriod = 9
+)
+```
+
+<a name="DefaultSlopePeriod"></a>
+
+```go
+const (
+    // DefaultSlopePeriod is the default Slope period.
+    DefaultSlopePeriod = 14
 )
 ```
 
@@ -2023,6 +2038,69 @@ func (r *Roc[T]) String() string
 ```
 
 String is the string representation of the ROC.
+
+<a name="Slope"></a>
+## type [Slope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L24-L27>)
+
+Slope represents the configuration parameters for calculating the Rate of Change Slope indicator.
+
+```
+Slope = (Current Price - Price n periods ago) / n
+```
+
+Refactored to utilize composition of helper.Change and helper.DivideBy.
+
+```go
+type Slope[T helper.Number] struct {
+    // Time period.
+    Period int
+}
+```
+
+<a name="NewSlope"></a>
+### func [NewSlope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L30>)
+
+```go
+func NewSlope[T helper.Number]() *Slope[T]
+```
+
+NewSlope function initializes a new Slope instance with the default parameters.
+
+<a name="NewSlopeWithPeriod"></a>
+### func [NewSlopeWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L35>)
+
+```go
+func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T]
+```
+
+NewSlopeWithPeriod function initializes a new Slope instance with the given parameters.
+
+<a name="Slope[T].Compute"></a>
+### func \(\*Slope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L46>)
+
+```go
+func (s *Slope[T]) Compute(values <-chan T) <-chan T
+```
+
+Compute function takes a channel of numbers and computes the Slope.
+
+<a name="Slope[T].IdlePeriod"></a>
+### func \(\*Slope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L51>)
+
+```go
+func (s *Slope[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Slope won't yield any results.
+
+<a name="Slope[T].String"></a>
+### func \(\*Slope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L56>)
+
+```go
+func (s *Slope[T]) String() string
+```
+
+String is the string representation of the Slope.
 
 <a name="SlowStochastic"></a>
 ## type [SlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L32-L41>)
