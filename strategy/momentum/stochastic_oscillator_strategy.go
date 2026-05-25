@@ -68,18 +68,30 @@ func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot)
 	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
 
 	k, d := s.StochasticOscillator.Compute(highs, lows, closings)
-	go helper.Drain(d)
 
-	actions := helper.Map(k, func(k float64) strategy.Action {
-		if k < s.BuyAt {
-			return strategy.Buy
+	var prevK, prevD float64
+	var hasPrev bool
+
+	actions := helper.Operate(k, d, func(kVal, dVal float64) strategy.Action {
+		if !hasPrev {
+			prevK = kVal
+			prevD = dVal
+			hasPrev = true
+			return strategy.Hold
 		}
 
-		if k > s.SellAt {
-			return strategy.Sell
+		action := strategy.Hold
+
+		if prevK <= prevD && kVal > dVal && kVal < s.BuyAt {
+			action = strategy.Buy
+		} else if prevK >= prevD && kVal < dVal && kVal > s.SellAt {
+			action = strategy.Sell
 		}
 
-		return strategy.Hold
+		prevK = kVal
+		prevD = dVal
+
+		return action
 	})
 
 	// Stochastic Oscillator starts only after the idle period.
@@ -87,6 +99,7 @@ func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot)
 
 	return actions
 }
+
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 func (s *StochasticOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
