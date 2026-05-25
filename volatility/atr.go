@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"math"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -53,13 +51,7 @@ func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T] {
 
 // Compute function takes a channel of numbers and computes the ATR over the specified period.
 func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	// Use previous closing by skipping highs and lows by one.
-	highs = helper.Skip(highs, 1)
-	lows = helper.Skip(lows, 1)
-
-	tr := helper.Operate3(highs, lows, closings, func(high, low, closing T) T {
-		return T(math.Max(float64(high-low), math.Max(float64(high-closing), float64(closing-low))))
-	})
+	tr := NewTrueRange[T]().Compute(highs, lows, closings)
 
 	atr := a.Ma.Compute(tr)
 
