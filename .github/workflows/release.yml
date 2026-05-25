@@ -5,9 +5,6 @@ on:
     # Trigger every Monday at 9:00 AM UTC
     - cron: '0 9 * * 1'
   workflow_dispatch: # Allows manual trigger from the Actions UI
-  push:
-    branches:
-      - add-release-workflow # Temporary push trigger for testing
 
 permissions:
   contents: write # Required for GitHub CLI to push tags and create releases
