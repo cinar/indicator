@@ -59,6 +59,12 @@ The information provided on this project is strictly for informational purposes 
   - [func NewDonchianChannelWithPeriod\[T helper.Number\]\(period int\) \*DonchianChannel\[T\]](<#NewDonchianChannelWithPeriod>)
   - [func \(d \*DonchianChannel\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#DonchianChannel[T].Compute>)
   - [func \(d \*DonchianChannel\[T\]\) IdlePeriod\(\) int](<#DonchianChannel[T].IdlePeriod>)
+- [type HistoricalVolatility](<#HistoricalVolatility>)
+  - [func NewHistoricalVolatility\[T helper.Number\]\(\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatility>)
+  - [func NewHistoricalVolatilityWithPeriod\[T helper.Number\]\(period int\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatilityWithPeriod>)
+  - [func \(h \*HistoricalVolatility\[T\]\) Compute\(prices \<\-chan T\) \<\-chan T](<#HistoricalVolatility[T].Compute>)
+  - [func \(h \*HistoricalVolatility\[T\]\) IdlePeriod\(\) int](<#HistoricalVolatility[T].IdlePeriod>)
+  - [func \(h \*HistoricalVolatility\[T\]\) String\(\) string](<#HistoricalVolatility[T].String>)
 - [type KeltnerChannel](<#KeltnerChannel>)
   - [func NewKeltnerChannel\[T helper.Number\]\(\) \*KeltnerChannel\[T\]](<#NewKeltnerChannel>)
   - [func NewKeltnerChannelWithPeriod\[T helper.Number\]\(period int\) \*KeltnerChannel\[T\]](<#NewKeltnerChannelWithPeriod>)
@@ -165,6 +171,15 @@ const (
 const (
     // DefaultDonchianChannelPeriod is the default period for the Donchian Channel.
     DefaultDonchianChannelPeriod = 20
+)
+```
+
+<a name="DefaultHistoricalVolatilityPeriod"></a>
+
+```go
+const (
+    // DefaultHistoricalVolatilityPeriod is the default period for Historical Volatility (HV).
+    DefaultHistoricalVolatilityPeriod = 21
 )
 ```
 
@@ -618,6 +633,70 @@ func (d *DonchianChannel[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Donchian Channel won't yield any results.
+
+<a name="HistoricalVolatility"></a>
+## type [HistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L24-L27>)
+
+HistoricalVolatility represents the configuration parameters for calculating Historical Volatility \(HV\).
+
+```
+HV = StdDev(R_t, n)
+where R_t = (P_t / P_(t-1)) - 1
+```
+
+Refactored to utilize composition of helper.ChangeRatio and MovingStd.
+
+```go
+type HistoricalVolatility[T helper.Number] struct {
+    // Time period.
+    Period int
+}
+```
+
+<a name="NewHistoricalVolatility"></a>
+### func [NewHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L30>)
+
+```go
+func NewHistoricalVolatility[T helper.Number]() *HistoricalVolatility[T]
+```
+
+NewHistoricalVolatility function initializes a new Historical Volatility instance with the default parameters.
+
+<a name="NewHistoricalVolatilityWithPeriod"></a>
+### func [NewHistoricalVolatilityWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L35>)
+
+```go
+func NewHistoricalVolatilityWithPeriod[T helper.Number](period int) *HistoricalVolatility[T]
+```
+
+NewHistoricalVolatilityWithPeriod function initializes a new Historical Volatility instance with the given period.
+
+<a name="HistoricalVolatility[T].Compute"></a>
+### func \(\*HistoricalVolatility\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L46>)
+
+```go
+func (h *HistoricalVolatility[T]) Compute(prices <-chan T) <-chan T
+```
+
+Compute function takes a channel of prices and computes the Historical Volatility over the specified period.
+
+<a name="HistoricalVolatility[T].IdlePeriod"></a>
+### func \(\*HistoricalVolatility\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L52>)
+
+```go
+func (h *HistoricalVolatility[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Historical Volatility won't yield any results.
+
+<a name="HistoricalVolatility[T].String"></a>
+### func \(\*HistoricalVolatility\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L58>)
+
+```go
+func (h *HistoricalVolatility[T]) String() string
+```
+
+String function returns a string representation of the Historical Volatility.
 
 <a name="KeltnerChannel"></a>
 ## type [KeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L29-L35>)
