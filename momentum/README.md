@@ -60,6 +60,11 @@ The information provided on this project is strictly for informational purposes 
   - [func NewIchimokuCloud\[T helper.Number\]\(\) \*IchimokuCloud\[T\]](<#NewIchimokuCloud>)
   - [func \(i \*IchimokuCloud\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#IchimokuCloud[T].Compute>)
   - [func \(i \*IchimokuCloud\[T\]\) IdlePeriod\(\) int](<#IchimokuCloud[T].IdlePeriod>)
+- [type InternalBarStrength](<#InternalBarStrength>)
+  - [func NewInternalBarStrength\[T helper.Number\]\(\) \*InternalBarStrength\[T\]](<#NewInternalBarStrength>)
+  - [func \(ibs \*InternalBarStrength\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#InternalBarStrength[T].Compute>)
+  - [func \(ibs \*InternalBarStrength\[T\]\) IdlePeriod\(\) int](<#InternalBarStrength[T].IdlePeriod>)
+  - [func \(ibs \*InternalBarStrength\[T\]\) String\(\) string](<#InternalBarStrength[T].String>)
 - [type Ppo](<#Ppo>)
   - [func NewPpo\[T helper.Number\]\(\) \*Ppo\[T\]](<#NewPpo>)
   - [func \(p \*Ppo\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Ppo[T].Compute>)
@@ -809,6 +814,62 @@ func (i *IchimokuCloud[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Ichimoku Cloud won't yield any results.
+
+<a name="InternalBarStrength"></a>
+## type [InternalBarStrength](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L21>)
+
+InternalBarStrength represents the parameters for calculating the Internal Bar Strength \(IBS\). It tracks price location within a daily high\-low range.
+
+```
+IBS = (Close - Low) / (High - Low)
+```
+
+Example:
+
+```
+ibs := momentum.NewInternalBarStrength[float64]()
+result := ibs.Compute(highs, lows, closings)
+```
+
+```go
+type InternalBarStrength[T helper.Number] struct{}
+```
+
+<a name="NewInternalBarStrength"></a>
+### func [NewInternalBarStrength](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L24>)
+
+```go
+func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T]
+```
+
+NewInternalBarStrength function initializes a new InternalBarStrength instance.
+
+<a name="InternalBarStrength[T].Compute"></a>
+### func \(\*InternalBarStrength\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L29>)
+
+```go
+func (ibs *InternalBarStrength[T]) Compute(highs, lows, closings <-chan T) <-chan T
+```
+
+Compute function takes channels of highs, lows, and closings and computes the IBS.
+
+<a name="InternalBarStrength[T].IdlePeriod"></a>
+### func \(\*InternalBarStrength\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L40>)
+
+```go
+func (ibs *InternalBarStrength[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that InternalBarStrength won't yield any results.
+
+<a name="InternalBarStrength[T].String"></a>
+### func \(\*InternalBarStrength\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L45>)
+
+```go
+func (ibs *InternalBarStrength[T]) String() string
+```
+
+String is the string representation of the InternalBarStrength.
 
 <a name="Ppo"></a>
 ## type [Ppo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L35-L44>)

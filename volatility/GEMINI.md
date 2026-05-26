@@ -5,7 +5,7 @@ The `volatility` package provides a collection of indicators for analyzing price
 ## Key Indicators
 
 - **Bands & Channels:** `AccelerationBands`, `BollingerBands`, `DonchianChannel`, `KeltnerChannel`.
-- **Indicators:** `Atr` (Average True Range), `BollingerBandWidth`, `ChandelierExit`, `MovingStd` (Moving Standard Deviation), `PercentB`.
+- **Indicators:** `Atr` (Average True Range), `BollingerBandWidth`, `ChandelierExit`, `MovingStd` (Moving Standard Deviation), `PercentB`, `TrueRange` (True Range).
 - **Oscillators:** `Po` (Price Oscillator), `SuperTrend`, `UlcerIndex`.
 
 ## Pattern
