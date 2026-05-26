@@ -74,6 +74,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(t \*GoldenCrossStrategy\) Compute\(c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#GoldenCrossStrategy.Compute>)
   - [func \(\*GoldenCrossStrategy\) Name\(\) string](<#GoldenCrossStrategy.Name>)
   - [func \(t \*GoldenCrossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#GoldenCrossStrategy.Report>)
+- [type HmaStrategy](<#HmaStrategy>)
+  - [func NewHmaStrategy\(\) \*HmaStrategy](<#NewHmaStrategy>)
+  - [func NewHmaStrategyWith\(period int\) \*HmaStrategy](<#NewHmaStrategyWith>)
+  - [func \(h \*HmaStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#HmaStrategy.Compute>)
+  - [func \(h \*HmaStrategy\) Name\(\) string](<#HmaStrategy.Name>)
+  - [func \(h \*HmaStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#HmaStrategy.Report>)
 - [type KamaStrategy](<#KamaStrategy>)
   - [func NewKamaStrategy\(\) \*KamaStrategy](<#NewKamaStrategy>)
   - [func NewKamaStrategyWith\(erPeriod, fastScPeriod, slowScPeriod int\) \*KamaStrategy](<#NewKamaStrategyWith>)
@@ -215,6 +221,15 @@ const (
 
     // DefaultTripleMovingAverageCrossoverStrategySlowPeriod is the default triple moving average crossover strategy slow period.
     DefaultTripleMovingAverageCrossoverStrategySlowPeriod = 200
+)
+```
+
+<a name="DefaultHmaStrategyPeriod"></a>
+
+```go
+const (
+    // DefaultHmaStrategyPeriod is the default period for the HMA strategy.
+    DefaultHmaStrategyPeriod = 9
 )
 ```
 
@@ -726,6 +741,63 @@ Name returns the name of the strategy.
 
 ```go
 func (t *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="HmaStrategy"></a>
+## type [HmaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L21-L24>)
+
+HmaStrategy represents the configuration parameters for calculating the HMA strategy. A closing price crossing above the HMA suggests a bullish trend, while crossing below the HMA indicates a bearish trend.
+
+```go
+type HmaStrategy struct {
+    // Hma represents the configuration parameters for calculating the Hull Moving Average.
+    Hma *trend.Hma[float64]
+}
+```
+
+<a name="NewHmaStrategy"></a>
+### func [NewHmaStrategy](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L27>)
+
+```go
+func NewHmaStrategy() *HmaStrategy
+```
+
+NewHmaStrategy function initializes a new HMA strategy instance with the default parameters.
+
+<a name="NewHmaStrategyWith"></a>
+### func [NewHmaStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L32>)
+
+```go
+func NewHmaStrategyWith(period int) *HmaStrategy
+```
+
+NewHmaStrategyWith function initializes a new HMA strategy instance with the given period.
+
+<a name="HmaStrategy.Compute"></a>
+### func \(\*HmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L44>)
+
+```go
+func (h *HmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="HmaStrategy.Name"></a>
+### func \(\*HmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L39>)
+
+```go
+func (h *HmaStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="HmaStrategy.Report"></a>
+### func \(\*HmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/trend/hma_strategy.go#L69>)
+
+```go
+func (h *HmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

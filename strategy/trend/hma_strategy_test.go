@@ -53,3 +53,21 @@ func TestHmaStrategyReport(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestHmaStrategyHold(t *testing.T) {
+	snapshots := helper.SliceToChan([]*asset.Snapshot{
+		{Close: 10},
+		{Close: 10},
+		{Close: 10},
+	})
+
+	h := trend.NewHmaStrategyWith(2)
+	actions := h.Compute(snapshots)
+
+	for action := range actions {
+		if action != strategy.Hold {
+			t.Fatalf("expected Hold action, got %v", action)
+		}
+	}
+}
+

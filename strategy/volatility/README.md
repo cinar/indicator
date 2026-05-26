@@ -35,6 +35,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(d \*DonchianChannelBreakoutStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DonchianChannelBreakoutStrategy.Compute>)
   - [func \(\*DonchianChannelBreakoutStrategy\) Name\(\) string](<#DonchianChannelBreakoutStrategy.Name>)
   - [func \(d \*DonchianChannelBreakoutStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DonchianChannelBreakoutStrategy.Report>)
+- [type KeltnerChannelStrategy](<#KeltnerChannelStrategy>)
+  - [func NewKeltnerChannelStrategy\(\) \*KeltnerChannelStrategy](<#NewKeltnerChannelStrategy>)
+  - [func \(k \*KeltnerChannelStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KeltnerChannelStrategy.Compute>)
+  - [func \(\*KeltnerChannelStrategy\) Name\(\) string](<#KeltnerChannelStrategy.Name>)
+  - [func \(k \*KeltnerChannelStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#KeltnerChannelStrategy.Report>)
 - [type SuperTrendStrategy](<#SuperTrendStrategy>)
   - [func NewSuperTrendStrategy\(\) \*SuperTrendStrategy](<#NewSuperTrendStrategy>)
   - [func NewSuperTrendStrategyWith\(superTrend \*volatility.SuperTrend\[float64\]\) \*SuperTrendStrategy](<#NewSuperTrendStrategyWith>)
@@ -144,6 +149,54 @@ Name returns the name of the strategy.
 
 ```go
 func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="KeltnerChannelStrategy"></a>
+## type [KeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L16-L19>)
+
+KeltnerChannelStrategy represents the configuration parameters for calculating the Keltner Channel strategy. A closing above the upper band suggests a Sell signal, while a closing below the lower band suggests a Buy signal.
+
+```go
+type KeltnerChannelStrategy struct {
+    // KeltnerChannel represents the configuration parameters for calculating the Keltner Channel.
+    KeltnerChannel *volatility.KeltnerChannel[float64]
+}
+```
+
+<a name="NewKeltnerChannelStrategy"></a>
+### func [NewKeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L22>)
+
+```go
+func NewKeltnerChannelStrategy() *KeltnerChannelStrategy
+```
+
+NewKeltnerChannelStrategy function initializes a new Keltner Channel strategy instance.
+
+<a name="KeltnerChannelStrategy.Compute"></a>
+### func \(\*KeltnerChannelStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L34>)
+
+```go
+func (k *KeltnerChannelStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="KeltnerChannelStrategy.Name"></a>
+### func \(\*KeltnerChannelStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L29>)
+
+```go
+func (*KeltnerChannelStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="KeltnerChannelStrategy.Report"></a>
+### func \(\*KeltnerChannelStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L65>)
+
+```go
+func (k *KeltnerChannelStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
