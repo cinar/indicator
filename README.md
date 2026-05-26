@@ -151,6 +151,7 @@ The following list of strategies are currently supported by this package:
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#DemaStrategy)
 -   [Envelope Strategy](strategy/trend/README.md#EnvelopeStrategy)
 -	[Golden Cross Strategy](strategy/trend/README.md#GoldenCrossStrategy)
+-	[Hull Moving Average (HMA) Strategy](strategy/trend/README.md#HmaStrategy)
 -	[Kaufman's Adaptive Moving Average (KAMA) Strategy](strategy/trend/README.md#KamaStrategy)
 -	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#MacdStrategy)
 -	[Qstick Strategy](strategy/trend/README.md#QstickStrategy)
