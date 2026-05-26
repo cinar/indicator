@@ -42,6 +42,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*RsiStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#RsiStrategy.Compute>)
   - [func \(r \*RsiStrategy\) Name\(\) string](<#RsiStrategy.Name>)
   - [func \(r \*RsiStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#RsiStrategy.Report>)
+- [type StochasticOscillatorStrategy](<#StochasticOscillatorStrategy>)
+  - [func NewStochasticOscillatorStrategy\(\) \*StochasticOscillatorStrategy](<#NewStochasticOscillatorStrategy>)
+  - [func NewStochasticOscillatorStrategyWith\(buyAt, sellAt float64\) \*StochasticOscillatorStrategy](<#NewStochasticOscillatorStrategyWith>)
+  - [func \(s \*StochasticOscillatorStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StochasticOscillatorStrategy.Compute>)
+  - [func \(s \*StochasticOscillatorStrategy\) Name\(\) string](<#StochasticOscillatorStrategy.Name>)
+  - [func \(s \*StochasticOscillatorStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#StochasticOscillatorStrategy.Report>)
 - [type StochasticRsiStrategy](<#StochasticRsiStrategy>)
   - [func NewStochasticRsiStrategy\(\) \*StochasticRsiStrategy](<#NewStochasticRsiStrategy>)
   - [func NewStochasticRsiStrategyWith\(buyAt, sellAt float64\) \*StochasticRsiStrategy](<#NewStochasticRsiStrategyWith>)
@@ -74,6 +80,18 @@ const (
 
     // DefaultRsiStrategySellAt defines the default RSI level at which a Sell action is generated.
     DefaultRsiStrategySellAt = 70
+)
+```
+
+<a name="DefaultStochasticOscillatorStrategyBuyAt"></a>
+
+```go
+const (
+    // DefaultStochasticOscillatorStrategyBuyAt defines the default K level at which a Buy action is generated.
+    DefaultStochasticOscillatorStrategyBuyAt = 20.0
+
+    // DefaultStochasticOscillatorStrategySellAt defines the default K level at which a Sell action is generated.
+    DefaultStochasticOscillatorStrategySellAt = 80.0
 )
 ```
 
@@ -289,6 +307,69 @@ Name returns the name of the strategy.
 
 ```go
 func (r *RsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="StochasticOscillatorStrategy"></a>
+## type [StochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L27-L36>)
+
+StochasticOscillatorStrategy represents the configuration parameters for calculating the Stochastic Oscillator strategy. When the K line is below the buy threshold, a Buy action is generated. When above the sell threshold, a Sell action is generated.
+
+```go
+type StochasticOscillatorStrategy struct {
+    // StochasticOscillator represents the configuration parameters for calculating the Stochastic Oscillator.
+    StochasticOscillator *momentum.StochasticOscillator[float64]
+
+    // BuyAt defines the K level at which a Buy action is generated.
+    BuyAt float64
+
+    // SellAt defines the K level at which a Sell action is generated.
+    SellAt float64
+}
+```
+
+<a name="NewStochasticOscillatorStrategy"></a>
+### func [NewStochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L40>)
+
+```go
+func NewStochasticOscillatorStrategy() *StochasticOscillatorStrategy
+```
+
+NewStochasticOscillatorStrategy function initializes a new Stochastic Oscillator strategy instance with the default parameters.
+
+<a name="NewStochasticOscillatorStrategyWith"></a>
+### func [NewStochasticOscillatorStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L49>)
+
+```go
+func NewStochasticOscillatorStrategyWith(buyAt, sellAt float64) *StochasticOscillatorStrategy
+```
+
+NewStochasticOscillatorStrategyWith function initializes a new Stochastic Oscillator strategy instance with the given parameters.
+
+<a name="StochasticOscillatorStrategy.Compute"></a>
+### func \(\*StochasticOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L63>)
+
+```go
+func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="StochasticOscillatorStrategy.Name"></a>
+### func \(\*StochasticOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L58>)
+
+```go
+func (s *StochasticOscillatorStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="StochasticOscillatorStrategy.Report"></a>
+### func \(\*StochasticOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/stochastic_oscillator_strategy.go#L105>)
+
+```go
+func (s *StochasticOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
