@@ -12,7 +12,7 @@ import (
 
 func TestAllStrategies(t *testing.T) {
 	strategies := momentum.AllStrategies()
-	if len(strategies) != 7 {
-		t.Fatalf("expected 7 strategies, got %d", len(strategies))
+	if len(strategies) != 8 {
+		t.Fatalf("expected 8 strategies, got %d", len(strategies))
 	}
 }
