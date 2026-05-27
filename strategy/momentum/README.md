@@ -31,6 +31,11 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AwesomeOscillatorStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#AwesomeOscillatorStrategy.Compute>)
   - [func \(\*AwesomeOscillatorStrategy\) Name\(\) string](<#AwesomeOscillatorStrategy.Name>)
   - [func \(a \*AwesomeOscillatorStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AwesomeOscillatorStrategy.Report>)
+- [type ElderRayStrategy](<#ElderRayStrategy>)
+  - [func NewElderRayStrategy\(\) \*ElderRayStrategy](<#NewElderRayStrategy>)
+  - [func \(e \*ElderRayStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ElderRayStrategy.Compute>)
+  - [func \(\*ElderRayStrategy\) Name\(\) string](<#ElderRayStrategy.Name>)
+  - [func \(e \*ElderRayStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#ElderRayStrategy.Report>)
 - [type IchimokuCloudStrategy](<#IchimokuCloudStrategy>)
   - [func NewIchimokuCloudStrategy\(\) \*IchimokuCloudStrategy](<#NewIchimokuCloudStrategy>)
   - [func \(i \*IchimokuCloudStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#IchimokuCloudStrategy.Compute>)
@@ -196,6 +201,54 @@ Name returns the name of the strategy.
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="ElderRayStrategy"></a>
+## type [ElderRayStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/elder_ray_strategy.go#L18-L21>)
+
+ElderRayStrategy represents the configuration parameters for calculating the Elder Ray strategy. Buy when EMA is rising and Bear Power is negative but rising. Sell when EMA is falling and Bull Power is positive but falling.
+
+```go
+type ElderRayStrategy struct {
+    // ElderRay represents the configuration parameters for calculating the Elder-Ray Index.
+    ElderRay *momentum.ElderRay[float64]
+}
+```
+
+<a name="NewElderRayStrategy"></a>
+### func [NewElderRayStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/elder_ray_strategy.go#L24>)
+
+```go
+func NewElderRayStrategy() *ElderRayStrategy
+```
+
+NewElderRayStrategy function initializes a new Elder Ray strategy instance with the default parameters.
+
+<a name="ElderRayStrategy.Compute"></a>
+### func \(\*ElderRayStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/elder_ray_strategy.go#L36>)
+
+```go
+func (e *ElderRayStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="ElderRayStrategy.Name"></a>
+### func \(\*ElderRayStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/elder_ray_strategy.go#L31>)
+
+```go
+func (*ElderRayStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="ElderRayStrategy.Report"></a>
+### func \(\*ElderRayStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/elder_ray_strategy.go#L82>)
+
+```go
+func (e *ElderRayStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
