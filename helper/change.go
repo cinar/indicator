@@ -20,7 +20,7 @@ func ChangeWithContext[T Number](ctx context.Context, c <-chan T, before int) <-
 	cs[0] = BufferedWithContext(ctx, cs[0], before)
 	cs[1] = SkipWithContext(ctx, cs[1], before)
 
-	return Subtract(cs[1], cs[0])
+	return SubtractWithContext(ctx, cs[1], cs[0])
 }
 
 // Change wraps ChangeWithContext for backwards compatibility.

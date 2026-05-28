@@ -5,9 +5,8 @@
 package trend
 
 import (
-	"fmt"
-
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )

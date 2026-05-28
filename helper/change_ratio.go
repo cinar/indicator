@@ -19,7 +19,7 @@ import (
 func ChangeRatioWithContext[T Number](ctx context.Context, c <-chan T, before int) <-chan T {
 	cs := DuplicateWithContext(ctx, c, 2)
 	cs[1] = BufferedWithContext(ctx, cs[1], before)
-	return Divide(Change(cs[0], before), cs[1])
+	return DivideWithContext(ctx, ChangeWithContext(ctx, cs[0], before), cs[1])
 }
 
 // ChangeRatio wraps ChangeRatioWithContext for backwards compatibility.
