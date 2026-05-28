@@ -494,7 +494,7 @@ func (c *ChaikinOscillator[T]) IdlePeriod() int
 IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
 
 <a name="ConnorsRsi"></a>
-## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L37-L53>)
+## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L36-L52>)
 
 ConnorsRsi represents the configuration parameters for calculating the Connors RSI. It is a momentum indicator that combines three components: 1. RSI of closing prices 2. RSI of up/down streak length 3. Percentile rank of the rate of change
 
@@ -530,7 +530,7 @@ type ConnorsRsi[T helper.Float] struct {
 ```
 
 <a name="NewConnorsRsi"></a>
-### func [NewConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L56>)
+### func [NewConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L55>)
 
 ```go
 func NewConnorsRsi[T helper.Float]() *ConnorsRsi[T]
@@ -539,7 +539,7 @@ func NewConnorsRsi[T helper.Float]() *ConnorsRsi[T]
 NewConnorsRsi function initializes a new Connors RSI instance with the default parameters.
 
 <a name="NewConnorsRsiWithPeriods"></a>
-### func [NewConnorsRsiWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L65>)
+### func [NewConnorsRsiWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L64>)
 
 ```go
 func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percentRankPeriod int) *ConnorsRsi[T]
@@ -548,7 +548,7 @@ func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percen
 NewConnorsRsiWithPeriods function initializes a new Connors RSI instance with the given periods.
 
 <a name="ConnorsRsi[T].Compute"></a>
-### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L183>)
+### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L182>)
 
 ```go
 func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T
@@ -559,7 +559,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ConnorsRsi[T].ComputeWithContext"></a>
-### func \(\*ConnorsRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L88>)
+### func \(\*ConnorsRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L87>)
 
 ```go
 func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -568,7 +568,7 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 ComputeWithContext function takes a channel of closings numbers and computes the Connors RSI.
 
 <a name="ConnorsRsi[T].IdlePeriod"></a>
-### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L117>)
+### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L116>)
 
 ```go
 func (c *ConnorsRsi[T]) IdlePeriod() int
@@ -577,7 +577,7 @@ func (c *ConnorsRsi[T]) IdlePeriod() int
 IdlePeriod is the initial period that Connors RSI won't yield any results.
 
 <a name="ConnorsRsi[T].String"></a>
-### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L124>)
+### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L123>)
 
 ```go
 func (c *ConnorsRsi[T]) String() string
@@ -1543,7 +1543,7 @@ func (s *StochasticRsi[T]) IdlePeriod() int
 IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 
 <a name="Streak"></a>
-## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L130>)
+## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L129>)
 
 Streak represents the configuration for calculating the up/down streak length. The streak is the number of consecutive days the price has closed up or down.
 
@@ -1552,7 +1552,7 @@ type Streak[T helper.Float] struct{}
 ```
 
 <a name="NewStreak"></a>
-### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L133>)
+### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L132>)
 
 ```go
 func NewStreak[T helper.Float]() *Streak[T]
@@ -1561,7 +1561,7 @@ func NewStreak[T helper.Float]() *Streak[T]
 NewStreak function initializes a new Streak instance.
 
 <a name="Streak[T].Compute"></a>
-### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L190>)
+### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L189>)
 
 ```go
 func (s *Streak[T]) Compute(closings <-chan T) <-chan T
@@ -1572,7 +1572,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Streak[T].ComputeWithContext"></a>
-### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L139>)
+### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L138>)
 
 ```go
 func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1581,7 +1581,7 @@ func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 ComputeWithContext function takes a channel of closings numbers and computes the streak length. Positive values indicate consecutive up closes, negative values indicate consecutive down closes.
 
 <a name="Streak[T].IdlePeriod"></a>
-### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L176>)
+### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L175>)
 
 ```go
 func (s *Streak[T]) IdlePeriod() int

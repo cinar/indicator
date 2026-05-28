@@ -2107,7 +2107,7 @@ func (m *MovingSum[T]) IdlePeriod() int
 IdlePeriod is the initial period that Moving Sum won't yield any results.
 
 <a name="PivotPoint"></a>
-## type [PivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L49-L52>)
+## type [PivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L48-L51>)
 
 PivotPoint represents the configuration parameters for calculating Pivot Points. Pivot points are calculated based on the previous period's high, low, and close, and are used to predict support and resistance levels for the current period.
 
@@ -2119,7 +2119,7 @@ type PivotPoint[T helper.Float] struct {
 ```
 
 <a name="NewPivotPoint"></a>
-### func [NewPivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L55>)
+### func [NewPivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L54>)
 
 ```go
 func NewPivotPoint[T helper.Float]() *PivotPoint[T]
@@ -2128,7 +2128,7 @@ func NewPivotPoint[T helper.Float]() *PivotPoint[T]
 NewPivotPoint function initializes a new Pivot Point instance with the standard method.
 
 <a name="NewPivotPointWithMethod"></a>
-### func [NewPivotPointWithMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L60>)
+### func [NewPivotPointWithMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L59>)
 
 ```go
 func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoint[T]
@@ -2137,7 +2137,7 @@ func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoin
 NewPivotPointWithMethod function initializes a new Pivot Point instance with the given method.
 
 <a name="PivotPoint[T].Compute"></a>
-### func \(\*PivotPoint\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L140>)
+### func \(\*PivotPoint\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L139>)
 
 ```go
 func (p *PivotPoint[T]) Compute(opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T]
@@ -2148,7 +2148,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="PivotPoint[T].ComputeWithContext"></a>
-### func \(\*PivotPoint\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L72>)
+### func \(\*PivotPoint\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L71>)
 
 ```go
 func (p *PivotPoint[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T]
@@ -2159,7 +2159,7 @@ ComputeWithContext function takes channels for open, high, low, and closing pric
 Note: We assume a synchronous upstream pipeline where all four input channels are driven by the same clock. Reading them in sequential selects prevents a permanent block, but cancellation may leave a tick half\-consumed.
 
 <a name="PivotPoint[T].IdlePeriod"></a>
-### func \(\*PivotPoint\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L196>)
+### func \(\*PivotPoint\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L195>)
 
 ```go
 func (p *PivotPoint[T]) IdlePeriod() int
@@ -2168,7 +2168,7 @@ func (p *PivotPoint[T]) IdlePeriod() int
 IdlePeriod is the initial period that Pivot Point won't yield any results.
 
 <a name="PivotPoint[T].String"></a>
-### func \(\*PivotPoint\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L201>)
+### func \(\*PivotPoint\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L200>)
 
 ```go
 func (p *PivotPoint[T]) String() string
@@ -2177,7 +2177,7 @@ func (p *PivotPoint[T]) String() string
 String is the string representation of the Pivot Point instance.
 
 <a name="PivotPointMethod"></a>
-## type [PivotPointMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L16>)
+## type [PivotPointMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L15>)
 
 PivotPointMethod represents the method used for calculating pivot points.
 
@@ -2204,7 +2204,7 @@ const (
 ```
 
 <a name="PivotPointResult"></a>
-## type [PivotPointResult](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L34-L44>)
+## type [PivotPointResult](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L33-L43>)
 
 PivotPointResult represents the result of the pivot point calculation, including the pivot point itself, and its associated resistance \(R\) and support \(S\) levels.
 
