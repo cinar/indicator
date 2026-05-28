@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -42,18 +40,19 @@ func (e *EnvelopeStrategy) Name() string {
 	return fmt.Sprintf("Envelope Strategy (%s)", e.Envelope.String())
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (e *EnvelopeStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(
+		asset.SnapshotsAsClosings(snapshots),
 		2,
 	)
 
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], e.Envelope.IdlePeriod())
+	closingsSplice[1] = helper.Skip(closingsSplice[1], e.Envelope.IdlePeriod())
 
-	uppers, middles, lowers := e.Envelope.ComputeWithContext(ctx, closingsSplice[0])
-	go helper.DrainWithContext(ctx, middles)
+	uppers, middles, lowers := e.Envelope.Compute(closingsSplice[0])
+	go helper.Drain(middles)
 
-	actions := helper.Operate3WithContext(ctx, uppers, lowers, closingsSplice[1], func(upper, lower, closing float64) strategy.Action {
+	actions := helper.Operate3(uppers, lowers, closingsSplice[1], func(upper, lower, closing float64) strategy.Action {
 		// When the closing is below the lower band suggests a buy recommendation.
 		if closing < lower {
 			return strategy.Buy
@@ -68,7 +67,7 @@ func (e *EnvelopeStrategy) ComputeWithContext(ctx context.Context, snapshots <-c
 	})
 
 	// Envelope start only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, e.Envelope.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, e.Envelope.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -115,11 +114,4 @@ func (e *EnvelopeStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return e.ComputeWithContext(context.Background(), snapshots)
 }

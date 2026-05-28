@@ -4,11 +4,7 @@
 
 package helper
 
-import (
-	"context"
-)
-
-// DivideWithContext takes two channels of type T and divides the values
+// Divide takes two channels of type T and divides the values
 // from the first channel with the values from the second one.
 // It returns a new channel containing the results of
 // the division.
@@ -21,15 +17,8 @@ import (
 //	division := helper.Divide(ac, bc)
 //
 //	fmt.Println(helper.ChanToSlice(division)) // [1, 4, 2, 4, 2]
-func DivideWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T {
-	return OperateWithContext(ctx, ac, bc, func(a, b T) T {
+func Divide[T Number](ac, bc <-chan T) <-chan T {
+	return Operate(ac, bc, func(a, b T) T {
 		return a / b
 	})
-}
-
-// Divide wraps DivideWithContext for backwards compatibility.
-//
-// Deprecated: Use DivideWithContext instead.
-func Divide[T Number](ac, bc <-chan T) <-chan T {
-	return DivideWithContext(context.Background(), ac, bc)
 }

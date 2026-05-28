@@ -4,67 +4,42 @@
 
 package helper
 
-import "context"
-
-// Operate3 wraps Operate3WithContext for backwards compatibility.
+// Operate3 applies the provided operate function to corresponding values from three
+// numeric input channels and sends the resulting values to an output channel.
 //
-// Deprecated: Use Operate3WithContext instead.
+// Example:
+//
+//	add := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
+//	  return a + b + c
+//	})
 func Operate3[A any, B any, C any, R any](ac <-chan A, bc <-chan B, cc <-chan C, o func(A, B, C) R) <-chan R {
-	return Operate3WithContext(context.Background(), ac, bc, cc, o)
-}
-
-// Operate3WithContext applies the provided operate function to corresponding values from three
-// numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
-func Operate3WithContext[A any, B any, C any, R any](ctx context.Context, ac <-chan A, bc <-chan B, cc <-chan C, o func(A, B, C) R) <-chan R {
 	rc := make(chan R)
 
 	go func() {
-		defer func() {
-			close(rc)
-			DrainWithContext(ctx, ac)
-			DrainWithContext(ctx, bc)
-			DrainWithContext(ctx, cc)
-		}()
+		defer close(rc)
 
 		for {
-			var an A
-			var bn B
-			var cn C
-			var ok bool
-
-			select {
-			case <-ctx.Done():
-				return
-			case an, ok = <-ac:
-				if !ok {
-					return
-				}
+			an, ok := <-ac
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case bn, ok = <-bc:
-				if !ok {
-					return
-				}
+			bn, ok := <-bc
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case cn, ok = <-cc:
-				if !ok {
-					return
-				}
+			cn, ok := <-cc
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case rc <- o(an, bn, cn):
-			}
+			rc <- o(an, bn, cn)
 		}
+
+		Drain(ac)
+		Drain(bc)
+		Drain(cc)
 	}()
 
 	return rc

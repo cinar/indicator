@@ -4,22 +4,12 @@
 
 package helper
 
-import (
-	"context"
-	"slices"
-)
+import "slices"
 
-// HighestWithContext returns a channel that emits the highest value
+// Highest returns a channel that emits the highest value
 // within a sliding window of size w from the input channel c.
-func HighestWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T {
-	return WindowWithContext(ctx, c, func(s []T, i int) T {
+func Highest[T Number](c <-chan T, w int) <-chan T {
+	return Window(c, func(s []T, i int) T {
 		return slices.Max(s)
 	}, w)
-}
-
-// Highest wraps HighestWithContext for backwards compatibility.
-//
-// Deprecated: Use HighestWithContext instead.
-func Highest[T Number](c <-chan T, w int) <-chan T {
-	return HighestWithContext(context.Background(), c, w)
 }

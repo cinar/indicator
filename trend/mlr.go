@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -30,17 +28,19 @@ func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the MLR r.
-func (m *Mlr[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) <-chan T {
-	xSplice := helper.DuplicateWithContext(ctx, x, 2)
+// Compute function takes a channel of numbers and computes the MLR r.
+func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T {
+	xSplice := helper.Duplicate(x, 2)
 
-	ms, bs := m.Mls.ComputeWithContext(ctx, xSplice[0], y)
+	ms, bs := m.Mls.Compute(xSplice[0], y)
 
-	xSplice[1] = helper.SkipWithContext(ctx, xSplice[1], m.Mls.IdlePeriod())
+	xSplice[1] = helper.Skip(xSplice[1], m.Mls.IdlePeriod())
 
-	r := helper.AddWithContext(ctx, helper.MultiplyWithContext(ctx, ms,
-		xSplice[1],
-	),
+	r := helper.Add(
+		helper.Multiply(
+			ms,
+			xSplice[1],
+		),
 		bs,
 	)
 
@@ -50,11 +50,4 @@ func (m *Mlr[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) <-chan T
 // IdlePeriod is the initial period that MLR won't yield any results.
 func (m *Mlr[T]) IdlePeriod() int {
 	return m.Mls.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T {
-	return m.ComputeWithContext(context.Background(), x, y)
 }

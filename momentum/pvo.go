@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -54,40 +52,46 @@ func NewPvo[T helper.Number]() *Pvo[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Percentage Volume Oscillator.
+// Compute function takes a channel of numbers and computes the Percentage Volume Oscillator.
 // Returns pvo, signal, histogram.
-func (p *Pvo[T]) ComputeWithContext(ctx context.Context, volumes <-chan T) (<-chan T, <-chan T, <-chan T) {
-	volumesSplice := helper.DuplicateWithContext(ctx, volumes,
+func (p *Pvo[T]) Compute(volumes <-chan T) (<-chan T, <-chan T, <-chan T) {
+	volumesSplice := helper.Duplicate(
+		volumes,
 		2,
 	)
 
-	shortEma := p.ShortEma.ComputeWithContext(ctx, volumesSplice[0])
+	shortEma := p.ShortEma.Compute(volumesSplice[0])
 
-	longEmaSplice := helper.DuplicateWithContext(ctx, p.LongEma.ComputeWithContext(ctx, volumesSplice[1]),
+	longEmaSplice := helper.Duplicate(
+		p.LongEma.Compute(volumesSplice[1]),
 		2,
 	)
 
-	shortEma = helper.SkipWithContext(ctx, shortEma, p.LongEma.IdlePeriod()-p.ShortEma.IdlePeriod())
+	shortEma = helper.Skip(shortEma, p.LongEma.IdlePeriod()-p.ShortEma.IdlePeriod())
 
 	//	PVO = ((EMA(shortPeriod, prices) - EMA(longPeriod, prices)) / EMA(longPeriod, prices)) * 100
-	pvoSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, shortEma, longEmaSplice[0]),
-		longEmaSplice[1],
-	),
-		100,
-	),
+	pvoSplice := helper.Duplicate(
+		helper.MultiplyBy(
+			helper.Divide(
+				helper.Subtract(shortEma, longEmaSplice[0]),
+				longEmaSplice[1],
+			),
+			100,
+		),
 		3,
 	)
 
 	//	Signal = EMA(9, PVO)
-	signalSplice := helper.DuplicateWithContext(ctx, p.SignalEma.ComputeWithContext(ctx, pvoSplice[0]),
+	signalSplice := helper.Duplicate(
+		p.SignalEma.Compute(pvoSplice[0]),
 		2,
 	)
 
-	pvoSplice[1] = helper.SkipWithContext(ctx, pvoSplice[1], p.SignalEma.IdlePeriod())
-	pvoSplice[2] = helper.SkipWithContext(ctx, pvoSplice[2], p.SignalEma.IdlePeriod())
+	pvoSplice[1] = helper.Skip(pvoSplice[1], p.SignalEma.IdlePeriod())
+	pvoSplice[2] = helper.Skip(pvoSplice[2], p.SignalEma.IdlePeriod())
 
 	//	Histogram = PVO - Signal
-	histogram := helper.SubtractWithContext(ctx, pvoSplice[1], signalSplice[0])
+	histogram := helper.Subtract(pvoSplice[1], signalSplice[0])
 
 	return pvoSplice[2], signalSplice[1], histogram
 }
@@ -95,11 +99,4 @@ func (p *Pvo[T]) ComputeWithContext(ctx context.Context, volumes <-chan T) (<-ch
 // IdlePeriod is the initial period that Percentage Volume Oscillator won't yield any results.
 func (p *Pvo[T]) IdlePeriod() int {
 	return p.LongEma.IdlePeriod() + p.SignalEma.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (p *Pvo[T]) Compute(volumes <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return p.ComputeWithContext(context.Background(), volumes)
 }

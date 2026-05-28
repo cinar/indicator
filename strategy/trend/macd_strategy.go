@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -54,14 +52,14 @@ func (m *MacdStrategy) Name() string {
 	)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a
+// Compute processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (m *MacdStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
+func (m *MacdStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosings(snapshots)
 
-	macds, signals := m.Macd.ComputeWithContext(ctx, closings)
+	macds, signals := m.Macd.Compute(closings)
 
-	actions := helper.OperateWithContext(ctx, macds, signals, func(macd, signal float64) strategy.Action {
+	actions := helper.Operate(macds, signals, func(macd, signal float64) strategy.Action {
 		// A MACD value crossing above signal line suggests a bullish trend.
 		if (macd > signal) && (macd < 0) {
 			return strategy.Buy
@@ -76,7 +74,7 @@ func (m *MacdStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan 
 	})
 
 	// MACD starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, m.Macd.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, m.Macd.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -116,11 +114,4 @@ func (m *MacdStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *MacdStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return m.ComputeWithContext(context.Background(), snapshots)
 }

@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -33,26 +31,30 @@ func NewTema[T helper.Number]() *Tema[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the TEMA
+// Compute function takes a channel of numbers and computes the TEMA
 // and the signal line.
-func (t *Tema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
-	ema1 := helper.DuplicateWithContext(ctx, t.Ema1.ComputeWithContext(ctx, c),
+func (t *Tema[T]) Compute(c <-chan T) <-chan T {
+	ema1 := helper.Duplicate(
+		t.Ema1.Compute(c),
 		2,
 	)
 
-	ema2 := helper.DuplicateWithContext(ctx, t.Ema2.ComputeWithContext(ctx, ema1[0]),
+	ema2 := helper.Duplicate(
+		t.Ema2.Compute(ema1[0]),
 		2,
 	)
 
-	ema1[1] = helper.SkipWithContext(ctx, ema1[1], t.Ema2.Period-1)
+	ema1[1] = helper.Skip(ema1[1], t.Ema2.Period-1)
 
-	ema3 := t.Ema3.ComputeWithContext(ctx, ema2[0])
-	ema1[1] = helper.SkipWithContext(ctx, ema1[1], t.Ema3.Period-1)
-	ema2[1] = helper.SkipWithContext(ctx, ema2[1], t.Ema3.Period-1)
+	ema3 := t.Ema3.Compute(ema2[0])
+	ema1[1] = helper.Skip(ema1[1], t.Ema3.Period-1)
+	ema2[1] = helper.Skip(ema2[1], t.Ema3.Period-1)
 
-	tema := helper.AddWithContext(ctx, helper.SubtractWithContext(ctx, helper.MultiplyByWithContext(ctx, ema1[1], 3),
-		helper.MultiplyByWithContext(ctx, ema2[1], 3),
-	),
+	tema := helper.Add(
+		helper.Subtract(
+			helper.MultiplyBy(ema1[1], 3),
+			helper.MultiplyBy(ema2[1], 3),
+		),
 		ema3,
 	)
 
@@ -63,8 +65,3 @@ func (t *Tema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 func (t *Tema[T]) IdlePeriod() int {
 	return t.Ema1.Period + t.Ema2.Period + t.Ema3.Period - 3
 }
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *Tema[T]) Compute(c <-chan T) <-chan T { return t.ComputeWithContext(context.Background(), c) }

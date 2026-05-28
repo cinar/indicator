@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -64,11 +62,11 @@ func (*TripleMovingAverageCrossoverStrategy) Name() string {
 	return "Triple Moving Average Crossover Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *TripleMovingAverageCrossoverStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *TripleMovingAverageCrossoverStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 	fastEmas, mediumEmas, slowEmas := t.calculateEmas(c)
 
-	actions := helper.Operate3WithContext(ctx, fastEmas, mediumEmas, slowEmas, func(fastEma, mediumEma, slowEma float64) strategy.Action {
+	actions := helper.Operate3(fastEmas, mediumEmas, slowEmas, func(fastEma, mediumEma, slowEma float64) strategy.Action {
 		// A buy signal is generated when the **fastest** EMA crosses above both the **medium** and **slowest** EMAs.
 		if (fastEma > mediumEma) && (fastEma > slowEma) {
 			return strategy.Buy
@@ -84,7 +82,7 @@ func (t *TripleMovingAverageCrossoverStrategy) ComputeWithContext(ctx context.Co
 	})
 
 	// Generate a Hold signal during the idle period.
-	actions = helper.ShiftWithContext(ctx, actions, t.SlowEma.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, t.SlowEma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -167,11 +165,4 @@ func (t *TripleMovingAverageCrossoverStrategy) calculateEmas(c <-chan *asset.Sna
 	slowEmas := t.SlowEma.Compute(closings[2])
 
 	return fastEmas, mediumEmas, slowEmas
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *TripleMovingAverageCrossoverStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	return t.ComputeWithContext(context.Background(), c)
 }

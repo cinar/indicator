@@ -4,21 +4,15 @@
 
 package helper
 
-import "context"
-
-// Buffered wraps BufferedWithContext for backwards compatibility.
+// Buffered takes a channel of any type and returns a new channel of the same type with
+// a buffer of the specified size. This allows the original channel to continue sending
+// data even if the receiving end is temporarily unavailable.
 //
-// Deprecated: Use BufferedWithContext instead.
+// Example:
 func Buffered[T any](c <-chan T, size int) <-chan T {
-	return BufferedWithContext(context.Background(), c, size)
-}
-
-// BufferedWithContext takes a channel of any type and returns a new channel of the same type with
-// a buffer of the specified size with context support.
-func BufferedWithContext[T any](ctx context.Context, c <-chan T, size int) <-chan T {
 	result := make(chan T, size)
 
-	go PipeWithContext(ctx, c, result)
+	go Pipe(c, result)
 
 	return result
 }

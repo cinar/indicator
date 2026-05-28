@@ -7,8 +7,6 @@ package strategy
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -37,8 +35,8 @@ func (a *AndStrategy) Name() string {
 	return a.name
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
 	sources := ActionSources(a.Strategies, snapshots)
@@ -105,11 +103,4 @@ func AllAndStrategies(strategies []Strategy) []Strategy {
 	}
 
 	return andStrategies
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
-	return a.ComputeWithContext(context.Background(), snapshots)
 }

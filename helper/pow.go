@@ -4,12 +4,9 @@
 
 package helper
 
-import (
-	"context"
-	"math"
-)
+import "math"
 
-// PowWithContext takes a channel of type T values and returns the element-wise
+// Pow takes a channel of type T values and returns the element-wise
 // base-value exponential of y.
 //
 // Example:
@@ -17,13 +14,8 @@ import (
 //	c := helper.SliceToChan([]int{2, 3, 5, 10})
 //	squared := helper.Pow(c, 2)
 //	fmt.Println(helper.ChanToSlice(squared)) // [4, 9, 25, 100]
-func PowWithContext[T Number](ctx context.Context, c <-chan T, y T) <-chan T {
-	return ApplyWithContext(ctx, c, func(n T) T {
+func Pow[T Number](c <-chan T, y T) <-chan T {
+	return Apply(c, func(n T) T {
 		return T(math.Pow(float64(n), float64(y)))
 	})
 }
-
-// Pow wraps PowWithContext for backwards compatibility.
-//
-// Deprecated: Use PowWithContext instead.
-func Pow[T Number](c <-chan T, y T) <-chan T { return PowWithContext(context.Background(), c, y) }

@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -58,18 +56,18 @@ func (*DemaStrategy) Name() string {
 	return "DEMA Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a
+// Compute processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (d *DemaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, c), 2)
+func (d *DemaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := helper.Duplicate(asset.SnapshotsAsClosings(c), 2)
 
-	demas1 := d.Dema1.ComputeWithContext(ctx, closings[0])
-	demas1 = helper.ShiftWithContext(ctx, demas1, d.Dema1.IdlePeriod(), 0)
+	demas1 := d.Dema1.Compute(closings[0])
+	demas1 = helper.Shift(demas1, d.Dema1.IdlePeriod(), 0)
 
-	demas2 := d.Dema2.ComputeWithContext(ctx, closings[1])
-	demas2 = helper.ShiftWithContext(ctx, demas2, d.Dema2.IdlePeriod(), 0)
+	demas2 := d.Dema2.Compute(closings[1])
+	demas2 = helper.Shift(demas2, d.Dema2.IdlePeriod(), 0)
 
-	actions := helper.OperateWithContext(ctx, demas1, demas2, func(dema1, dema2 float64) strategy.Action {
+	actions := helper.Operate(demas1, demas2, func(dema1, dema2 float64) strategy.Action {
 		if dema1 > dema2 {
 			return strategy.Buy
 		}
@@ -82,8 +80,8 @@ func (d *DemaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.S
 	})
 
 	// DEMA starts only after a full periods for each EMA used.
-	actions = helper.SkipWithContext(ctx, actions, d.Dema2.IdlePeriod())
-	actions = helper.ShiftWithContext(ctx, actions, d.Dema2.IdlePeriod(), strategy.Hold)
+	actions = helper.Skip(actions, d.Dema2.IdlePeriod())
+	actions = helper.Shift(actions, d.Dema2.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -126,11 +124,4 @@ func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (d *DemaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	return d.ComputeWithContext(context.Background(), c)
 }

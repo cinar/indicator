@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -66,9 +64,9 @@ func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kam
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the KAMA over the specified period, supporting context cancellation.
-func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 3)
+// Compute function takes a channel of numbers and computes the KAMA over the specified period.
+func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
+	closingsSplice := helper.Duplicate(closings, 3)
 
 	//	Direction = Abs(Close - Previous Close Period Ago)
 	directions := helper.Abs(
@@ -77,7 +75,7 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 
 	//	Volatility = MovingSum(Period, Abs(Close - Previous Close))
 	movingSum := NewMovingSumWithPeriod[T](k.ErPeriod)
-	volatilitys := movingSum.ComputeWithContext(ctx,
+	volatilitys := movingSum.Compute(
 		helper.Abs(
 			helper.Change(closingsSplice[1], 1),
 		),
@@ -102,66 +100,34 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	)
 
 	//	KAMA = Previous KAMA + SC * (Price - Previous KAMA)
-	closingsSplice[2] = helper.SkipWithContext(ctx, closingsSplice[2], k.ErPeriod-1)
+	closingsSplice[2] = helper.Skip(closingsSplice[2], k.ErPeriod-1)
 
 	kama := make(chan T)
 
 	go func() {
 		defer close(kama)
-		defer helper.DrainWithContext(ctx, scs)
-		defer helper.DrainWithContext(ctx, closingsSplice[2])
+		defer helper.Drain(scs)
+		defer helper.Drain(closingsSplice[2])
 
-		var prevKama T
-		var ok bool
-		select {
-		case <-ctx.Done():
+		prevKama, ok := <-closingsSplice[2]
+		if !ok {
 			return
-		case prevKama, ok = <-closingsSplice[2]:
-			if !ok {
-				return
-			}
 		}
 
 		for {
-			// Note: We assume a synchronous upstream pipeline where the inputs on closingsSplice[2] and scs are aligned.
-			// If cancellation happens between the two reads, the deferred DrainWithContext will consume the remaining items to avoid leaks.
-			var closing T
-			select {
-			case <-ctx.Done():
-				return
-			case closing, ok = <-closingsSplice[2]:
-				if !ok {
-					return
-				}
+			closing, ok := <-closingsSplice[2]
+			if !ok {
+				break
 			}
 
-			var sc T
-			select {
-			case <-ctx.Done():
-				return
-			case sc, ok = <-scs:
-				if !ok {
-					return
-				}
-			}
+			sc := <-scs
 
 			prevKama = prevKama + sc*(closing-prevKama)
-			select {
-			case <-ctx.Done():
-				return
-			case kama <- prevKama:
-			}
+			kama <- prevKama
 		}
 	}()
 
 	return kama
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (k *Kama[T]) Compute(closings <-chan T) <-chan T {
-	return k.ComputeWithContext(context.Background(), closings)
 }
 
 // IdlePeriod is the initial period that KAMA yield any results.

@@ -27,25 +27,22 @@ The information provided on this project is strictly for informational purposes 
 - [type InverseStrategy](<#InverseStrategy>)
   - [func NewInverseStrategy\(innerStrategy strategy.Strategy\) \*InverseStrategy](<#NewInverseStrategy>)
   - [func \(i \*InverseStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#InverseStrategy.Compute>)
-  - [func \(i \*InverseStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#InverseStrategy.ComputeWithContext>)
   - [func \(i \*InverseStrategy\) Name\(\) string](<#InverseStrategy.Name>)
   - [func \(i \*InverseStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#InverseStrategy.Report>)
 - [type NoLossStrategy](<#NoLossStrategy>)
   - [func NewNoLossStrategy\(innerStrategy strategy.Strategy\) \*NoLossStrategy](<#NewNoLossStrategy>)
   - [func \(n \*NoLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.Compute>)
-  - [func \(n \*NoLossStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.ComputeWithContext>)
   - [func \(n \*NoLossStrategy\) Name\(\) string](<#NoLossStrategy.Name>)
   - [func \(n \*NoLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NoLossStrategy.Report>)
 - [type StopLossStrategy](<#StopLossStrategy>)
   - [func NewStopLossStrategy\(innerStrategy strategy.Strategy, percentage float64\) \*StopLossStrategy](<#NewStopLossStrategy>)
   - [func \(s \*StopLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StopLossStrategy.Compute>)
-  - [func \(s \*StopLossStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StopLossStrategy.ComputeWithContext>)
   - [func \(s \*StopLossStrategy\) Name\(\) string](<#StopLossStrategy.Name>)
   - [func \(s \*StopLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#StopLossStrategy.Report>)
 
 
 <a name="InverseStrategy"></a>
-## type [InverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L19-L22>)
+## type [InverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L17-L20>)
 
 InverseStrategy reverses the advice of another strategy. For example, if the original strategy suggests buying an asset, InverseStrategy would recommend selling it.
 
@@ -57,7 +54,7 @@ type InverseStrategy struct {
 ```
 
 <a name="NewInverseStrategy"></a>
-### func [NewInverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L25>)
+### func [NewInverseStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L23>)
 
 ```go
 func NewInverseStrategy(innerStrategy strategy.Strategy) *InverseStrategy
@@ -66,27 +63,16 @@ func NewInverseStrategy(innerStrategy strategy.Strategy) *InverseStrategy
 NewInverseStrategy function initializes a new inverse strategy instance.
 
 <a name="InverseStrategy.Compute"></a>
-### func \(\*InverseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L77>)
+### func \(\*InverseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L35>)
 
 ```go
 func (i *InverseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="InverseStrategy.ComputeWithContext"></a>
-### func \(\*InverseStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L37>)
-
-```go
-func (i *InverseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="InverseStrategy.Name"></a>
-### func \(\*InverseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L32>)
+### func \(\*InverseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L30>)
 
 ```go
 func (i *InverseStrategy) Name() string
@@ -95,7 +81,7 @@ func (i *InverseStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="InverseStrategy.Report"></a>
-### func \(\*InverseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L53>)
+### func \(\*InverseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/inverse_strategy.go#L51>)
 
 ```go
 func (i *InverseStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -104,7 +90,7 @@ func (i *InverseStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="NoLossStrategy"></a>
-## type [NoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L19-L22>)
+## type [NoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L17-L20>)
 
 NoLossStrategy prevents selling an asset at a loss. It modifies the recommendations of another strategy to ensure that the asset is only sold if its value is at or above the original purchase price.
 
@@ -116,7 +102,7 @@ type NoLossStrategy struct {
 ```
 
 <a name="NewNoLossStrategy"></a>
-### func [NewNoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L25>)
+### func [NewNoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L23>)
 
 ```go
 func NewNoLossStrategy(innerStrategy strategy.Strategy) *NoLossStrategy
@@ -125,27 +111,16 @@ func NewNoLossStrategy(innerStrategy strategy.Strategy) *NoLossStrategy
 NewNoLossStrategy function initializes a new no loss strategy instance.
 
 <a name="NoLossStrategy.Compute"></a>
-### func \(\*NoLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L86>)
+### func \(\*NoLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L35>)
 
 ```go
 func (n *NoLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="NoLossStrategy.ComputeWithContext"></a>
-### func \(\*NoLossStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L37>)
-
-```go
-func (n *NoLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="NoLossStrategy.Name"></a>
-### func \(\*NoLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L32>)
+### func \(\*NoLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L30>)
 
 ```go
 func (n *NoLossStrategy) Name() string
@@ -154,7 +129,7 @@ func (n *NoLossStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="NoLossStrategy.Report"></a>
-### func \(\*NoLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L62>)
+### func \(\*NoLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L60>)
 
 ```go
 func (n *NoLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -163,7 +138,7 @@ func (n *NoLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="StopLossStrategy"></a>
-## type [StopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L18-L24>)
+## type [StopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L16-L22>)
 
 StopLossStrategy prevents a loss by recommending a sell action when the assets drop below the given threshold.
 
@@ -178,7 +153,7 @@ type StopLossStrategy struct {
 ```
 
 <a name="NewStopLossStrategy"></a>
-### func [NewStopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L27>)
+### func [NewStopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L25>)
 
 ```go
 func NewStopLossStrategy(innerStrategy strategy.Strategy, percentage float64) *StopLossStrategy
@@ -187,27 +162,16 @@ func NewStopLossStrategy(innerStrategy strategy.Strategy, percentage float64) *S
 NewStopLossStrategy function initializes a new stop loss strategy instance.
 
 <a name="StopLossStrategy.Compute"></a>
-### func \(\*StopLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L89>)
+### func \(\*StopLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L38>)
 
 ```go
 func (s *StopLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="StopLossStrategy.ComputeWithContext"></a>
-### func \(\*StopLossStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L40>)
-
-```go
-func (s *StopLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="StopLossStrategy.Name"></a>
-### func \(\*StopLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L35>)
+### func \(\*StopLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L33>)
 
 ```go
 func (s *StopLossStrategy) Name() string
@@ -216,7 +180,7 @@ func (s *StopLossStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="StopLossStrategy.Report"></a>
-### func \(\*StopLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L65>)
+### func \(\*StopLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L63>)
 
 ```go
 func (s *StopLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

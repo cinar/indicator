@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -45,33 +43,40 @@ func NewCciWithPeriod[T helper.Number](period int) *Cci[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the CCI and the signal line.
-func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the CCI and the signal line.
+func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T {
 	typicalPrice := NewTypicalPrice[T]()
 	sma1 := NewSmaWithPeriod[T](c.Period)
 	sma2 := NewSmaWithPeriod[T](c.Period)
 
 	tps := helper.Duplicate[T](
-		typicalPrice.ComputeWithContext(ctx, highs, lows, closings),
+		typicalPrice.Compute(highs, lows, closings),
 		3,
 	)
 
 	mas := helper.Duplicate[T](
-		sma1.ComputeWithContext(ctx, tps[0]),
+		sma1.Compute(tps[0]),
 		2,
 	)
 
-	tps[1] = helper.SkipWithContext(ctx, tps[1], sma1.Period-1)
-	tps[2] = helper.SkipWithContext(ctx, tps[2], sma1.Period-1)
+	tps[1] = helper.Skip(tps[1], sma1.Period-1)
+	tps[2] = helper.Skip(tps[2], sma1.Period-1)
 
-	md := sma2.ComputeWithContext(ctx, helper.AbsWithContext(ctx, helper.SubtractWithContext(ctx, tps[1], mas[0])))
+	md := sma2.Compute(
+		helper.Abs(
+			helper.Subtract(tps[1], mas[0]),
+		),
+	)
 
-	mas[1] = helper.SkipWithContext(ctx, mas[1], sma2.Period-1)
-	tps[2] = helper.SkipWithContext(ctx, tps[2], sma2.Period-1)
+	mas[1] = helper.Skip(mas[1], sma2.Period-1)
+	tps[2] = helper.Skip(tps[2], sma2.Period-1)
 
 	multiplier := 0.015
 
-	cci := helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, tps[2], mas[1]),
+	cci := helper.Divide(
+		helper.Subtract(
+			tps[2], mas[1],
+		),
 		helper.MultiplyBy[T](
 			md,
 			T(multiplier),
@@ -84,11 +89,4 @@ func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 // IdlePeriod is the initial period that CCI won't yield any results.
 func (c *Cci[T]) IdlePeriod() int {
 	return (c.Period * 2) - 2
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return c.ComputeWithContext(context.Background(), highs, lows, closings)
 }

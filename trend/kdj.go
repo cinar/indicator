@@ -4,11 +4,7 @@
 
 package trend
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 const (
 	// DefaultKdjMinMaxPeriod is the default period for moving min
@@ -73,35 +69,41 @@ func NewKdj[T helper.Number]() *Kdj[T] {
 	return kdj
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the KDJ
+// Compute function takes a channel of numbers and computes the KDJ
 // over the specified period. Returns K, D, J.
-func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T) {
-	highest := kdj.MovingMax.ComputeWithContext(ctx, high)
-	lowests := helper.DuplicateWithContext(ctx, kdj.MovingMin.ComputeWithContext(ctx, low),
+func (kdj *Kdj[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T) {
+	highest := kdj.MovingMax.Compute(high)
+	lowests := helper.Duplicate(
+		kdj.MovingMin.Compute(low),
 		2,
 	)
 
-	closing = helper.SkipWithContext(ctx, closing, kdj.MovingMax.Period-1)
+	closing = helper.Skip(closing, kdj.MovingMax.Period-1)
 
-	rsv := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closing, lowests[0]),
-		helper.SubtractWithContext(ctx, highest, lowests[1]),
-	),
+	rsv := helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(closing, lowests[0]),
+			helper.Subtract(highest, lowests[1]),
+		),
 		100,
 	)
 
-	ks := helper.DuplicateWithContext(ctx, kdj.Sma1.ComputeWithContext(ctx, rsv),
+	ks := helper.Duplicate(
+		kdj.Sma1.Compute(rsv),
 		3,
 	)
 
-	ds := helper.DuplicateWithContext(ctx, kdj.Sma2.ComputeWithContext(ctx, ks[0]),
+	ds := helper.Duplicate(
+		kdj.Sma2.Compute(ks[0]),
 		2,
 	)
 
-	ks[1] = helper.SkipWithContext(ctx, ks[1], kdj.Sma2.Period-1)
-	ks[2] = helper.SkipWithContext(ctx, ks[2], kdj.Sma2.Period-1)
+	ks[1] = helper.Skip(ks[1], kdj.Sma2.Period-1)
+	ks[2] = helper.Skip(ks[2], kdj.Sma2.Period-1)
 
-	j := helper.SubtractWithContext(ctx, helper.MultiplyByWithContext(ctx, ks[1], 3),
-		helper.MultiplyByWithContext(ctx, ds[0], 2),
+	j := helper.Subtract(
+		helper.MultiplyBy(ks[1], 3),
+		helper.MultiplyBy(ds[0], 2),
 	)
 
 	return ks[2], ds[1], j
@@ -110,11 +112,4 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 // IdlePeriod is the initial period that KDJ won't yield any results.
 func (kdj *Kdj[T]) IdlePeriod() int {
 	return kdj.MovingMax.Period + kdj.Sma1.Period + kdj.Sma2.Period - 3
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (kdj *Kdj[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return kdj.ComputeWithContext(context.Background(), high, low, closing)
 }

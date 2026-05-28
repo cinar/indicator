@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -52,8 +50,8 @@ func NewEmaWithPeriod[T helper.Number](period int) *Ema[T] {
 	return ema
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the EMA over the specified period, supporting context cancellation.
-func (e *Ema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the EMA over the specified period.
+func (e *Ema[T]) Compute(c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
@@ -63,51 +61,18 @@ func (e *Ema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 		sma := NewSma[T]()
 		sma.Period = e.Period
 
-		var before T
-		var ok bool
-		select {
-		case <-ctx.Done():
-			return
-		case before, ok = <-sma.ComputeWithContext(ctx, helper.HeadWithContext(ctx, c, e.Period)):
-			if !ok {
-				return
-			}
-		}
-
-		select {
-		case <-ctx.Done():
-			return
-		case result <- before:
-		}
+		before := <-sma.Compute(helper.Head(c, e.Period))
+		result <- before
 
 		multiplier := e.Smoothing / T(e.Period+1)
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case n, ok := <-c:
-				if !ok {
-					return
-				}
-				before = (n-before)*multiplier + before
-				select {
-				case <-ctx.Done():
-					return
-				case result <- before:
-				}
-			}
+		for n := range c {
+			before = (n-before)*multiplier + before
+			result <- before
 		}
 	}()
 
 	return result
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (e *Ema[T]) Compute(c <-chan T) <-chan T {
-	return e.ComputeWithContext(context.Background(), c)
 }
 
 // IdlePeriod is the initial period that EMA yield any results.

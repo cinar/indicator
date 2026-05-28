@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -53,18 +51,19 @@ func NewEnvelopeWithEma[T helper.Number]() *Envelope[T] {
 	)
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Envelope over the specified period, supporting context cancellation.
-func (e *Envelope[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T) {
-	middleSplice := helper.DuplicateWithContext(ctx, ComputeMaWithContext(ctx, e.Ma, closings),
+// Compute function takes a channel of numbers and computes the Envelope over the specified period.
+func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T) {
+	middleSplice := helper.Duplicate(
+		e.Ma.Compute(closings),
 		3,
 	)
 
-	upper := helper.MultiplyByWithContext(ctx,
+	upper := helper.MultiplyBy(
 		middleSplice[0],
 		1+(e.Percentage/100.0),
 	)
 
-	lower := helper.MultiplyByWithContext(ctx,
+	lower := helper.MultiplyBy(
 		middleSplice[2],
 		1-(e.Percentage/100.0),
 	)
@@ -80,11 +79,4 @@ func (e *Envelope[T]) IdlePeriod() int {
 // String is the string representation of the Envelope.
 func (e *Envelope[T]) String() string {
 	return fmt.Sprintf("Envelope(%s,%v)", e.Ma.String(), e.Percentage)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return e.ComputeWithContext(context.Background(), closings)
 }

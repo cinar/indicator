@@ -26,61 +26,49 @@ The information provided on this project is strictly for informational purposes 
 
 - [func ActionSources\(strategies \[\]Strategy, snapshots \<\-chan \*asset.Snapshot\) \[\]\<\-chan Action](<#ActionSources>)
 - [func ActionsToAnnotations\(ac \<\-chan Action\) \<\-chan string](<#ActionsToAnnotations>)
-- [func ActionsToAnnotationsWithContext\(ctx context.Context, ac \<\-chan Action\) \<\-chan string](<#ActionsToAnnotationsWithContext>)
-- [func ComputeStrategyWithContext\(ctx context.Context, s Strategy, c \<\-chan \*asset.Snapshot\) \<\-chan Action](<#ComputeStrategyWithContext>)
 - [func ComputeWithOutcome\(s Strategy, c \<\-chan \*asset.Snapshot\) \(\<\-chan Action, \<\-chan float64\)](<#ComputeWithOutcome>)
-- [func ComputeWithOutcomeWithContext\(ctx context.Context, s Strategy, c \<\-chan \*asset.Snapshot\) \(\<\-chan Action, \<\-chan float64\)](<#ComputeWithOutcomeWithContext>)
 - [func CountActions\(acs \[\]\<\-chan Action\) \(int, int, int, bool\)](<#CountActions>)
 - [func CountTransactions\(ac \<\-chan Action\) \<\-chan int](<#CountTransactions>)
 - [func DenormalizeActions\(ac \<\-chan Action\) \<\-chan Action](<#DenormalizeActions>)
-- [func DenormalizeActionsWithContext\(ctx context.Context, ac \<\-chan Action\) \<\-chan Action](<#DenormalizeActionsWithContext>)
 - [func NormalizeActions\(ac \<\-chan Action\) \<\-chan Action](<#NormalizeActions>)
-- [func NormalizeActionsWithContext\(ctx context.Context, ac \<\-chan Action\) \<\-chan Action](<#NormalizeActionsWithContext>)
 - [func Outcome\[T helper.Number\]\(values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#Outcome>)
-- [func OutcomeWithContext\[T helper.Number\]\(ctx context.Context, values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#OutcomeWithContext>)
 - [type Action](<#Action>)
   - [func \(a Action\) Annotation\(\) string](<#Action.Annotation>)
 - [type AndStrategy](<#AndStrategy>)
   - [func NewAndStrategy\(name string, strategies ...Strategy\) \*AndStrategy](<#NewAndStrategy>)
   - [func \(a \*AndStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AndStrategy.Compute>)
-  - [func \(a \*AndStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#AndStrategy.ComputeWithContext>)
   - [func \(a \*AndStrategy\) Name\(\) string](<#AndStrategy.Name>)
   - [func \(a \*AndStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AndStrategy.Report>)
 - [type BuyAndHoldStrategy](<#BuyAndHoldStrategy>)
   - [func NewBuyAndHoldStrategy\(\) \*BuyAndHoldStrategy](<#NewBuyAndHoldStrategy>)
-  - [func \(i \*BuyAndHoldStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#BuyAndHoldStrategy.Compute>)
-  - [func \(i \*BuyAndHoldStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#BuyAndHoldStrategy.ComputeWithContext>)
+  - [func \(\*BuyAndHoldStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#BuyAndHoldStrategy.Compute>)
   - [func \(\*BuyAndHoldStrategy\) Name\(\) string](<#BuyAndHoldStrategy.Name>)
   - [func \(b \*BuyAndHoldStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#BuyAndHoldStrategy.Report>)
 - [type MajorityStrategy](<#MajorityStrategy>)
   - [func NewMajorityStrategy\(name string\) \*MajorityStrategy](<#NewMajorityStrategy>)
   - [func NewMajorityStrategyWith\(name string, strategies \[\]Strategy\) \*MajorityStrategy](<#NewMajorityStrategyWith>)
   - [func \(a \*MajorityStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#MajorityStrategy.Compute>)
-  - [func \(a \*MajorityStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#MajorityStrategy.ComputeWithContext>)
   - [func \(a \*MajorityStrategy\) Name\(\) string](<#MajorityStrategy.Name>)
   - [func \(a \*MajorityStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#MajorityStrategy.Report>)
 - [type OrStrategy](<#OrStrategy>)
   - [func NewOrStrategy\(name string, strategies ...Strategy\) \*OrStrategy](<#NewOrStrategy>)
   - [func \(a \*OrStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#OrStrategy.Compute>)
-  - [func \(a \*OrStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#OrStrategy.ComputeWithContext>)
   - [func \(a \*OrStrategy\) Name\(\) string](<#OrStrategy.Name>)
   - [func \(a \*OrStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#OrStrategy.Report>)
 - [type Result](<#Result>)
 - [type SplitStrategy](<#SplitStrategy>)
   - [func NewSplitStrategy\(buyStrategy, sellStrategy Strategy\) \*SplitStrategy](<#NewSplitStrategy>)
   - [func \(s \*SplitStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#SplitStrategy.Compute>)
-  - [func \(s \*SplitStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan Action](<#SplitStrategy.ComputeWithContext>)
   - [func \(s \*SplitStrategy\) Name\(\) string](<#SplitStrategy.Name>)
   - [func \(s \*SplitStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SplitStrategy.Report>)
 - [type Strategy](<#Strategy>)
   - [func AllAndStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllAndStrategies>)
   - [func AllSplitStrategies\(strategies \[\]Strategy\) \[\]Strategy](<#AllSplitStrategies>)
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
-- [type StrategyWithContext](<#StrategyWithContext>)
 
 
 <a name="ActionSources"></a>
-## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L87>)
+## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L62>)
 
 ```go
 func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action
@@ -89,7 +77,7 @@ func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-
 ActionSources creates a slice of action channels, one for each strategy, where each channel emits actions computed by its corresponding strategy based on snapshots from the provided snapshot channel.
 
 <a name="ActionsToAnnotations"></a>
-## func [ActionsToAnnotations](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L60>)
+## func [ActionsToAnnotations](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L46>)
 
 ```go
 func ActionsToAnnotations(ac <-chan Action) <-chan string
@@ -97,28 +85,8 @@ func ActionsToAnnotations(ac <-chan Action) <-chan string
 
 ActionsToAnnotations takes a channel of action recommendations and returns a new channel containing corresponding annotations for those actions.
 
-Deprecated: Use ActionsToAnnotationsWithContext instead.
-
-<a name="ActionsToAnnotationsWithContext"></a>
-## func [ActionsToAnnotationsWithContext](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L50>)
-
-```go
-func ActionsToAnnotationsWithContext(ctx context.Context, ac <-chan Action) <-chan string
-```
-
-ActionsToAnnotationsWithContext takes a channel of action recommendations and returns a new channel containing corresponding annotations for those actions, supporting context cancellation.
-
-<a name="ComputeStrategyWithContext"></a>
-## func [ComputeStrategyWithContext](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L50>)
-
-```go
-func ComputeStrategyWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeStrategyWithContext processes snapshots with a strategy using context.
-
 <a name="ComputeWithOutcome"></a>
-## func [ComputeWithOutcome](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L74>)
+## func [ComputeWithOutcome](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L42>)
 
 ```go
 func ComputeWithOutcome(s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-chan float64)
@@ -126,19 +94,8 @@ func ComputeWithOutcome(s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-
 
 ComputeWithOutcome uses the given strategy to processes the provided asset snapshots and generates a stream of actionable recommendations and outcomes.
 
-Deprecated: Use ComputeWithOutcomeWithContext instead.
-
-<a name="ComputeWithOutcomeWithContext"></a>
-## func [ComputeWithOutcomeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L59>)
-
-```go
-func ComputeWithOutcomeWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-chan float64)
-```
-
-ComputeWithOutcomeWithContext uses the given strategy to processes the provided asset snapshots and generates a stream of actionable recommendations and outcomes, supporting context cancellation.
-
 <a name="CountActions"></a>
-## func [CountActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L109>)
+## func [CountActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L85>)
 
 ```go
 func CountActions(acs []<-chan Action) (int, int, int, bool)
@@ -147,7 +104,7 @@ func CountActions(acs []<-chan Action) (int, int, int, bool)
 CountActions taken a slice of Action channels, and counts them by their type.
 
 <a name="CountTransactions"></a>
-## func [CountTransactions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L134>)
+## func [CountTransactions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L110>)
 
 ```go
 func CountTransactions(ac <-chan Action) <-chan int
@@ -156,47 +113,25 @@ func CountTransactions(ac <-chan Action) <-chan int
 CountTransactions counts the number of recommended Buy and Sell actions.
 
 <a name="DenormalizeActions"></a>
-## func [DenormalizeActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L104>)
+## func [DenormalizeActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L72>)
 
 ```go
 func DenormalizeActions(ac <-chan Action) <-chan Action
 ```
 
-DenormalizeActions simplifies the representation of the action sequence.
-
-Deprecated: Use DenormalizeActionsWithContext instead.
-
-<a name="DenormalizeActionsWithContext"></a>
-## func [DenormalizeActionsWithContext](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L89>)
-
-```go
-func DenormalizeActionsWithContext(ctx context.Context, ac <-chan Action) <-chan Action
-```
-
-DenormalizeActionsWithContext simplifies the representation of the action sequence and facilitates subsequent processing by transforming the given channel of actions, supporting context cancellation.
+DenormalizeActions simplifies the representation of the action sequence and facilitates subsequent processing by transforming the given channel of actions. It retains Hold actions until the first Buy or Sell action appears. Subsequently, it replaces all remaining Hold actions with the preceding Buy or Sell action, effectively merging consecutive actions.
 
 <a name="NormalizeActions"></a>
-## func [NormalizeActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L83>)
+## func [NormalizeActions](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L55>)
 
 ```go
 func NormalizeActions(ac <-chan Action) <-chan Action
 ```
 
-NormalizeActions transforms the given channel of actions to ensure a consistent and predictable sequence.
-
-Deprecated: Use NormalizeActionsWithContext instead.
-
-<a name="NormalizeActionsWithContext"></a>
-## func [NormalizeActionsWithContext](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L66>)
-
-```go
-func NormalizeActionsWithContext(ctx context.Context, ac <-chan Action) <-chan Action
-```
-
-NormalizeActionsWithContext transforms the given channel of actions to ensure a consistent and predictable sequence, supporting context cancellation.
+NormalizeActions transforms the given channel of actions to ensure a consistent and predictable sequence. It eliminates consecutive occurrences of the same action \(Buy/Sell\), ensuring the order follows a pattern of Hold, Buy, Hold, Sell.
 
 <a name="Outcome"></a>
-## func [Outcome](<https://github.com/cinar/indicator/blob/master/strategy/outcome.go#L34>)
+## func [Outcome](<https://github.com/cinar/indicator/blob/master/strategy/outcome.go#L10>)
 
 ```go
 func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan float64
@@ -204,19 +139,8 @@ func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan flo
 
 Outcome simulates the potential result of executing the given actions based on the provided values.
 
-Deprecated: Use OutcomeWithContext instead.
-
-<a name="OutcomeWithContext"></a>
-## func [OutcomeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/outcome.go#L14>)
-
-```go
-func OutcomeWithContext[T helper.Number](ctx context.Context, values <-chan T, actions <-chan Action) <-chan float64
-```
-
-OutcomeWithContext simulates the potential result of executing the given actions based on the provided values, supporting context cancellation.
-
 <a name="Action"></a>
-## type [Action](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L15>)
+## type [Action](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L11>)
 
 Action represents the different action categories that a strategy can recommend.
 
@@ -245,7 +169,7 @@ const (
 ```
 
 <a name="Action.Annotation"></a>
-### func \(Action\) [Annotation](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L35>)
+### func \(Action\) [Annotation](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L31>)
 
 ```go
 func (a Action) Annotation() string
@@ -254,7 +178,7 @@ func (a Action) Annotation() string
 Annotation returns a single character string representing the recommended action. It returns "S" for Sell, "B" for Buy, and an empty string for Hold.
 
 <a name="AndStrategy"></a>
-## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L19-L25>)
+## type [AndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L17-L23>)
 
 AndStrategy combines multiple strategies and emits actionable recommendations when \*\*all\*\* strategies in the group \*\*reach the same actionable conclusion\*\*. This can be a conservative approach, potentially delaying recommendations until full consensus is reached.
 
@@ -267,7 +191,7 @@ type AndStrategy struct {
 ```
 
 <a name="NewAndStrategy"></a>
-### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L28>)
+### func [NewAndStrategy](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L26>)
 
 ```go
 func NewAndStrategy(name string, strategies ...Strategy) *AndStrategy
@@ -276,27 +200,16 @@ func NewAndStrategy(name string, strategies ...Strategy) *AndStrategy
 NewAndStrategy function initializes an empty and strategies group with the given name.
 
 <a name="AndStrategy.Compute"></a>
-### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L113>)
+### func \(\*AndStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L39>)
 
 ```go
 func (a *AndStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="AndStrategy.ComputeWithContext"></a>
-### func \(\*AndStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L41>)
-
-```go
-func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="AndStrategy.Name"></a>
-### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L36>)
+### func \(\*AndStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L34>)
 
 ```go
 func (a *AndStrategy) Name() string
@@ -305,7 +218,7 @@ func (a *AndStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="AndStrategy.Report"></a>
-### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L71>)
+### func \(\*AndStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L69>)
 
 ```go
 func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -314,7 +227,7 @@ func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="BuyAndHoldStrategy"></a>
-## type [BuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L18-L19>)
+## type [BuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L16-L17>)
 
 BuyAndHoldStrategy defines an investment approach of acquiring and indefinitely retaining an asset. This strategy primarily serves as a benchmark for evaluating the performance of alternative strategies against a baseline of passive asset ownership.
 
@@ -324,7 +237,7 @@ type BuyAndHoldStrategy struct {
 ```
 
 <a name="NewBuyAndHoldStrategy"></a>
-### func [NewBuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L22>)
+### func [NewBuyAndHoldStrategy](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L20>)
 
 ```go
 func NewBuyAndHoldStrategy() *BuyAndHoldStrategy
@@ -333,27 +246,16 @@ func NewBuyAndHoldStrategy() *BuyAndHoldStrategy
 NewBuyAndHoldStrategy function initializes a new buy and hold strategy instance.
 
 <a name="BuyAndHoldStrategy.Compute"></a>
-### func \(\*BuyAndHoldStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L81>)
+### func \(\*BuyAndHoldStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L31>)
 
 ```go
-func (i *BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
+func (*BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="BuyAndHoldStrategy.ComputeWithContext"></a>
-### func \(\*BuyAndHoldStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L33>)
-
-```go
-func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="BuyAndHoldStrategy.Name"></a>
-### func \(\*BuyAndHoldStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L27>)
+### func \(\*BuyAndHoldStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L25>)
 
 ```go
 func (*BuyAndHoldStrategy) Name() string
@@ -362,7 +264,7 @@ func (*BuyAndHoldStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BuyAndHoldStrategy.Report"></a>
-### func \(\*BuyAndHoldStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L57>)
+### func \(\*BuyAndHoldStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/buy_and_hold_strategy.go#L55>)
 
 ```go
 func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -371,7 +273,7 @@ func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="MajorityStrategy"></a>
-## type [MajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L15-L21>)
+## type [MajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L13-L19>)
 
 MajorityStrategy emits actionable recommendations aligned with what the strategies in the group recommends.
 
@@ -384,7 +286,7 @@ type MajorityStrategy struct {
 ```
 
 <a name="NewMajorityStrategy"></a>
-### func [NewMajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L24>)
+### func [NewMajorityStrategy](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L22>)
 
 ```go
 func NewMajorityStrategy(name string) *MajorityStrategy
@@ -393,7 +295,7 @@ func NewMajorityStrategy(name string) *MajorityStrategy
 NewMajorityStrategy function initializes an empty majority strategies group with the given name.
 
 <a name="NewMajorityStrategyWith"></a>
-### func [NewMajorityStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L29>)
+### func [NewMajorityStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L27>)
 
 ```go
 func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrategy
@@ -402,27 +304,16 @@ func NewMajorityStrategyWith(name string, strategies []Strategy) *MajorityStrate
 NewMajorityStrategyWith function initializes a majority strategies group with the given name and strategies.
 
 <a name="MajorityStrategy.Compute"></a>
-### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L94>)
+### func \(\*MajorityStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L40>)
 
 ```go
 func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="MajorityStrategy.ComputeWithContext"></a>
-### func \(\*MajorityStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L42>)
-
-```go
-func (a *MajorityStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="MajorityStrategy.Name"></a>
-### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L37>)
+### func \(\*MajorityStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L35>)
 
 ```go
 func (a *MajorityStrategy) Name() string
@@ -431,7 +322,7 @@ func (a *MajorityStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="MajorityStrategy.Report"></a>
-### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L70>)
+### func \(\*MajorityStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/majority_strategy.go#L68>)
 
 ```go
 func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -440,7 +331,7 @@ func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="OrStrategy"></a>
-## type [OrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L16-L22>)
+## type [OrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L14-L20>)
 
 OrStrategy emits actionable recommendations when \*\*at least one\*\* strategy in the group recommends an action \*\*without any conflicting recommendations\*\* from other strategies.
 
@@ -453,7 +344,7 @@ type OrStrategy struct {
 ```
 
 <a name="NewOrStrategy"></a>
-### func [NewOrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L25>)
+### func [NewOrStrategy](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L23>)
 
 ```go
 func NewOrStrategy(name string, strategies ...Strategy) *OrStrategy
@@ -462,27 +353,16 @@ func NewOrStrategy(name string, strategies ...Strategy) *OrStrategy
 NewOrStrategy function initializes an empty or strategies group with the given name.
 
 <a name="OrStrategy.Compute"></a>
-### func \(\*OrStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L90>)
+### func \(\*OrStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L36>)
 
 ```go
 func (a *OrStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="OrStrategy.ComputeWithContext"></a>
-### func \(\*OrStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L38>)
-
-```go
-func (a *OrStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="OrStrategy.Name"></a>
-### func \(\*OrStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L33>)
+### func \(\*OrStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L31>)
 
 ```go
 func (a *OrStrategy) Name() string
@@ -491,7 +371,7 @@ func (a *OrStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="OrStrategy.Report"></a>
-### func \(\*OrStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L66>)
+### func \(\*OrStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/or_strategy.go#L64>)
 
 ```go
 func (a *OrStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -511,7 +391,7 @@ type Result struct {
 ```
 
 <a name="SplitStrategy"></a>
-## type [SplitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L19-L25>)
+## type [SplitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L17-L23>)
 
 SplitStrategy leverages two separate strategies. It utilizes the first strategy to identify potential Buy opportunities, and the second strategy to identify potential Sell opportunities. When there is a conflicting recommendation, returns Hold.
 
@@ -526,7 +406,7 @@ type SplitStrategy struct {
 ```
 
 <a name="NewSplitStrategy"></a>
-### func [NewSplitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L28>)
+### func [NewSplitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L26>)
 
 ```go
 func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy
@@ -535,27 +415,16 @@ func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy
 NewSplitStrategy function initializes a new split strategy with the given parameters.
 
 <a name="SplitStrategy.Compute"></a>
-### func \(\*SplitStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L136>)
+### func \(\*SplitStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L39>)
 
 ```go
 func (s *SplitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="SplitStrategy.ComputeWithContext"></a>
-### func \(\*SplitStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L41>)
-
-```go
-func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="SplitStrategy.Name"></a>
-### func \(\*SplitStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L36>)
+### func \(\*SplitStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L34>)
 
 ```go
 func (s *SplitStrategy) Name() string
@@ -564,7 +433,7 @@ func (s *SplitStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="SplitStrategy.Report"></a>
-### func \(\*SplitStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L96>)
+### func \(\*SplitStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L75>)
 
 ```go
 func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -573,7 +442,7 @@ func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="Strategy"></a>
-## type [Strategy](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L29-L40>)
+## type [Strategy](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L27-L38>)
 
 Strategy defines a shared interface for trading strategies.
 
@@ -593,7 +462,7 @@ type Strategy interface {
 ```
 
 <a name="AllAndStrategies"></a>
-### func [AllAndStrategies](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L94>)
+### func [AllAndStrategies](<https://github.com/cinar/indicator/blob/master/strategy/and_strategy.go#L92>)
 
 ```go
 func AllAndStrategies(strategies []Strategy) []Strategy
@@ -602,7 +471,7 @@ func AllAndStrategies(strategies []Strategy) []Strategy
 AllAndStrategies performs a cartesian product operation on the given strategies, resulting in a collection containing all and strategies formed by combining two strategies together.
 
 <a name="AllSplitStrategies"></a>
-### func [AllSplitStrategies](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L119>)
+### func [AllSplitStrategies](<https://github.com/cinar/indicator/blob/master/strategy/split_strategy.go#L98>)
 
 ```go
 func AllSplitStrategies(strategies []Strategy) []Strategy
@@ -611,24 +480,12 @@ func AllSplitStrategies(strategies []Strategy) []Strategy
 AllSplitStrategies performs a cartesian product operation on the given strategies, resulting in a collection containing all split strategies formed by combining individual buy and sell strategies.
 
 <a name="AllStrategies"></a>
-### func [AllStrategies](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L79>)
+### func [AllStrategies](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L54>)
 
 ```go
 func AllStrategies() []Strategy
 ```
 
 AllStrategies returns a slice containing references to all available base strategies.
-
-<a name="StrategyWithContext"></a>
-## type [StrategyWithContext](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L44-L47>)
-
-StrategyWithContext defines a shared interface for trading strategies supporting context\-aware computations.
-
-```go
-type StrategyWithContext interface {
-    Strategy
-    ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
-}
-```
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

@@ -5,8 +5,6 @@
 package volume
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -44,14 +42,14 @@ func NewNvi[T helper.Number]() *Nvi[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the NVI.
-func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
-	closingRatios := helper.ChangeRatioWithContext(ctx, closings, 1)
-	volumeChanges := helper.ChangeWithContext(ctx, volumes, 1)
+// Compute function takes a channel of numbers and computes the NVI.
+func (n *Nvi[T]) Compute(closings, volumes <-chan T) <-chan T {
+	closingRatios := helper.ChangeRatio(closings, 1)
+	volumeChanges := helper.Change(volumes, 1)
 
 	previous := n.Initial
 
-	return helper.OperateWithContext(ctx, closingRatios, volumeChanges, func(closingRatio, volumeChange T) T {
+	return helper.Operate(closingRatios, volumeChanges, func(closingRatio, volumeChange T) T {
 		// If Volume is greather than Previous Volume:
 		//	NVI = Previous NVI
 		current := previous
@@ -70,11 +68,4 @@ func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 // IdlePeriod is the initial period that NVI won't yield any results.
 func (*Nvi[T]) IdlePeriod() int {
 	return 1
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (n *Nvi[T]) Compute(closings, volumes <-chan T) <-chan T {
-	return n.ComputeWithContext(context.Background(), closings, volumes)
 }

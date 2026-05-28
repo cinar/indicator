@@ -4,28 +4,29 @@
 
 package helper
 
-import "context"
-
-// Seq wraps SeqWithContext for backwards compatibility.
+// Seq generates a sequence of numbers starting with a specified value,
+// from, and incrementing by a specified amount, increment, until a
+// specified value, to, is reached or exceeded. The sequence includes
+// from, but not to.
 //
-// Deprecated: Use SeqWithContext instead.
+// Example:
+//
+//	s := Seq(1, 5, 1)
+//	defer close(s)
+//
+//	fmt.Println(<- s) // 1
+//	fmt.Println(<- s) // 2
+//	fmt.Println(<- s) // 3
+//	fmt.Println(<- s) // 4
 func Seq[T Number](from, to, increment T) <-chan T {
-	return SeqWithContext(context.Background(), from, to, increment)
-}
-
-// SeqWithContext generates a sequence of numbers, supporting context cancellation.
-func SeqWithContext[T Number](ctx context.Context, from, to, increment T) <-chan T {
 	c := make(chan T)
 
 	go func() {
-		defer close(c)
 		for i := from; i < to; i += increment {
-			select {
-			case <-ctx.Done():
-				return
-			case c <- i:
-			}
+			c <- i
 		}
+
+		close(c)
 	}()
 
 	return c

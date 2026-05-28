@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -22,18 +20,13 @@ func NewTypicalPrice[T helper.Number]() *TypicalPrice[T] {
 	return &TypicalPrice[T]{}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Typical Price and the signal line.
-func (i *TypicalPrice[T]) ComputeWithContext(ctx context.Context, high, low, closing <-chan T) <-chan T {
-	return helper.DivideByWithContext(ctx, helper.AddWithContext(ctx, helper.AddWithContext(ctx, high, low),
-		closing,
-	),
+// Compute function takes a channel of numbers and computes the Typical Price and the signal line.
+func (*TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T {
+	return helper.DivideBy(
+		helper.Add(
+			helper.Add(high, low),
+			closing,
+		),
 		3,
 	)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (i *TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T {
-	return i.ComputeWithContext(context.Background(), high, low, closing)
 }

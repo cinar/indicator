@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -61,20 +59,20 @@ func (s *StochasticOscillatorStrategy) Name() string {
 	return fmt.Sprintf("Stochastic Oscillator Strategy (%.0f,%.0f)", s.BuyAt, s.SellAt)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *StochasticOscillatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 3)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
 
-	k, d := s.StochasticOscillator.ComputeWithContext(ctx, highs, lows, closings)
+	k, d := s.StochasticOscillator.Compute(highs, lows, closings)
 
 	var prevK, prevD float64
 	var hasPrev bool
 
-	actions := helper.OperateWithContext(ctx, k, d, func(kVal, dVal float64) strategy.Action {
+	actions := helper.Operate(k, d, func(kVal, dVal float64) strategy.Action {
 		if !hasPrev {
 			prevK = kVal
 			prevD = dVal
@@ -97,10 +95,11 @@ func (s *StochasticOscillatorStrategy) ComputeWithContext(ctx context.Context, s
 	})
 
 	// Stochastic Oscillator starts only after the idle period.
-	actions = helper.ShiftWithContext(ctx, actions, s.StochasticOscillator.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, s.StochasticOscillator.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
+
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 func (s *StochasticOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
@@ -141,11 +140,4 @@ func (s *StochasticOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return s.ComputeWithContext(context.Background(), snapshots)
 }

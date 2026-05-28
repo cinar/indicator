@@ -4,11 +4,7 @@
 
 package volume
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 // Obv holds configuration parameters for calculating the On-Balance Volume (OBV). It is a technical trading momentum
 // indicator that uses volume flow to predict changes in asset price.
@@ -29,12 +25,12 @@ func NewObv[T helper.Number]() *Obv[T] {
 	return &Obv[T]{}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the OBV.
-func (i *Obv[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the OBV.
+func (*Obv[T]) Compute(closings, volumes <-chan T) <-chan T {
 	var previousClosing T
 	var previousObv T
 
-	return helper.OperateWithContext(ctx, closings, volumes, func(closing, volume T) T {
+	return helper.Operate(closings, volumes, func(closing, volume T) T {
 		currentObv := previousObv
 
 		if closing > previousClosing {
@@ -52,11 +48,4 @@ func (i *Obv[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 // IdlePeriod is the initial period that OBV won't yield any results.
 func (*Obv[T]) IdlePeriod() int {
 	return 0
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (i *Obv[T]) Compute(closings, volumes <-chan T) <-chan T {
-	return i.ComputeWithContext(context.Background(), closings, volumes)
 }

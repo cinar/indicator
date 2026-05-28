@@ -4,11 +4,7 @@
 
 package trend
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 const (
 	// DefaultCfoPeriod is the default CFO period of 14.
@@ -43,20 +39,23 @@ func NewCfoWithPeriod[T helper.Number](period int) *Cfo[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the CFO.
-func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T {
-	closingSplices := helper.DuplicateWithContext(ctx, closing, 3)
+// Compute function takes a channel of numbers and computes the CFO.
+func (c *Cfo[T]) Compute(closing <-chan T) <-chan T {
+	closingSplices := helper.Duplicate(closing, 3)
 
-	x := helper.CountWithContext(ctx, T(0), closingSplices[0])
-	forecast := c.Mlr.ComputeWithContext(ctx, x, closingSplices[1])
+	x := helper.Count(T(0), closingSplices[0])
+	forecast := c.Mlr.Compute(x, closingSplices[1])
 
-	closingPriceSplice := helper.DuplicateWithContext(ctx, helper.SkipWithContext(ctx, closingSplices[2], c.IdlePeriod()), 2)
+	closingPriceSplice := helper.Duplicate(helper.Skip(closingSplices[2], c.IdlePeriod()), 2)
 
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingPriceSplice[0],
-		forecast,
-	),
-		closingPriceSplice[1],
-	),
+	return helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(
+				closingPriceSplice[0],
+				forecast,
+			),
+			closingPriceSplice[1],
+		),
 		T(100),
 	)
 }
@@ -64,11 +63,4 @@ func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-cha
 // IdlePeriod is the initial period that CFO won't yield any results.
 func (c *Cfo[T]) IdlePeriod() int {
 	return c.Mlr.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *Cfo[T]) Compute(closing <-chan T) <-chan T {
-	return c.ComputeWithContext(context.Background(), closing)
 }

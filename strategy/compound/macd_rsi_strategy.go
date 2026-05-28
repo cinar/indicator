@@ -7,8 +7,6 @@ package compound
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -57,19 +55,19 @@ func (m *MacdRsiStrategy) Name() string {
 	)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (m *MacdRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (m *MacdRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 2)
 
 	macdActions := strategy.DenormalizeActions(
-		m.MacdStrategy.ComputeWithContext(ctx, snapshotsSplice[0]),
+		m.MacdStrategy.Compute(snapshotsSplice[0]),
 	)
 
 	rsiActions := strategy.DenormalizeActions(
-		m.RsiStrategy.ComputeWithContext(ctx, snapshotsSplice[1]),
+		m.RsiStrategy.Compute(snapshotsSplice[1]),
 	)
 
-	actions := helper.OperateWithContext(ctx, macdActions, rsiActions, func(macdAction, rsiAction strategy.Action) strategy.Action {
+	actions := helper.Operate(macdActions, rsiActions, func(macdAction, rsiAction strategy.Action) strategy.Action {
 		if macdAction == rsiAction {
 			return macdAction
 		}
@@ -121,11 +119,4 @@ func (m *MacdRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 3)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *MacdRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return m.ComputeWithContext(context.Background(), snapshots)
 }

@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -84,9 +82,10 @@ func greaterOrEqual[T helper.Number](a, b T) bool {
 	return float64(a) >= float64(b)
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the TD Sequential indicator, supporting context cancellation.
-func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T) {
-	closings = helper.BufferedWithContext(ctx, closings, t.Lookback+t.CountdownLookback)
+// Compute function takes a channel of numbers and computes the TD Sequential indicator.
+// Returns four channels: buySetup, sellSetup, buyCountdown, sellCountdown.
+func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T) {
+	closings = helper.Buffered(closings, t.Lookback+t.CountdownLookback)
 
 	buySetup := make(chan T)
 	sellSetup := make(chan T)
@@ -105,46 +104,13 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 		inSellCountdown := false
 		closeHistory := make([]T, 0, t.Lookback+t.CountdownLookback+1)
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
-			var current T
-			var ok bool
-			select {
-			case <-ctx.Done():
-				return
-			case current, ok = <-closings:
-				if !ok {
-					return
-				}
-			}
-
+		for current := range closings {
 			closeHistory = append(closeHistory, current)
 			if len(closeHistory) <= t.Lookback {
-				select {
-				case <-ctx.Done():
-					return
-				case buySetup <- 0:
-				}
-				select {
-				case <-ctx.Done():
-					return
-				case sellSetup <- 0:
-				}
-				select {
-				case <-ctx.Done():
-					return
-				case buyCountdown <- 0:
-				}
-				select {
-				case <-ctx.Done():
-					return
-				case sellCountdown <- 0:
-				}
+				buySetup <- 0
+				sellSetup <- 0
+				buyCountdown <- 0
+				sellCountdown <- 0
 				continue
 			}
 
@@ -210,37 +176,14 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 				inSellCountdown = false
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case buySetup <- currentBuySetup:
-			}
-			select {
-			case <-ctx.Done():
-				return
-			case sellSetup <- currentSellSetup:
-			}
-			select {
-			case <-ctx.Done():
-				return
-			case buyCountdown <- T(buyCountdownCount):
-			}
-			select {
-			case <-ctx.Done():
-				return
-			case sellCountdown <- T(sellCountdownCount):
-			}
+			buySetup <- currentBuySetup
+			sellSetup <- currentSellSetup
+			buyCountdown <- T(buyCountdownCount)
+			sellCountdown <- T(sellCountdownCount)
 		}
 	}()
 
 	return buySetup, sellSetup, buyCountdown, sellCountdown
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T) {
-	return t.ComputeWithContext(context.Background(), closings)
 }
 
 // IdlePeriod is the initial period that TD Sequential won't yield meaningful results.

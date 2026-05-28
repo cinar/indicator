@@ -4,38 +4,25 @@
 
 package helper
 
-import "context"
-
-// MapWithPrevious wraps MapWithPreviousWithContext for backwards compatibility.
+// MapWithPrevious applies a transformation function to each element in an input channel, creating a new channel
+// with the transformed values. It maintains a "memory" of the previous result, allowing the transformation
+// function to consider both the current element and the outcome of the previous transformation. This
+// enables functions that rely on accumulated state or sequential dependencies between elements.
 //
-// Deprecated: Use MapWithPreviousWithContext instead.
+// Example:
+//
+//	sum := helper.MapWithPrevious(c, func(p, c int) int {
+//		return p + c
+//	}, 0)
 func MapWithPrevious[F, T any](c <-chan F, f func(T, F) T, previous T) <-chan T {
-	return MapWithPreviousWithContext(context.Background(), c, f, previous)
-}
-
-// MapWithPreviousWithContext applies a transformation function to each element in an input channel, creating a new channel
-// with the transformed values, supporting context cancellation.
-func MapWithPreviousWithContext[F, T any](ctx context.Context, c <-chan F, f func(T, F) T, previous T) <-chan T {
 	mc := make(chan T)
 
 	go func() {
 		defer close(mc)
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case n, ok := <-c:
-				if !ok {
-					return
-				}
-				previous = f(previous, n)
-				select {
-				case <-ctx.Done():
-					return
-				case mc <- previous:
-				}
-			}
+		for n := range c {
+			previous = f(previous, n)
+			mc <- previous
 		}
 	}()
 

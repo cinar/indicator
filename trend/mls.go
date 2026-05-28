@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -36,51 +34,67 @@ func NewMlsWithPeriod[T helper.Number](period int) *Mls[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the MLS m and b.
-func (m *Mls[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) (<-chan T, <-chan T) {
-	xSplice := helper.DuplicateWithContext(ctx, x, 3)
-	ySplice := helper.DuplicateWithContext(ctx, y, 2)
+// Compute function takes a channel of numbers and computes the MLS m and b.
+func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T) {
+	xSplice := helper.Duplicate(x, 3)
+	ySplice := helper.Duplicate(y, 2)
 
-	sumXY := m.Sum.ComputeWithContext(ctx, helper.OperateWithContext(ctx, xSplice[0], ySplice[0], func(a, b T) T {
-		return a * b
-	}),
+	sumXY := m.Sum.Compute(
+		helper.Operate(xSplice[0], ySplice[0], func(a, b T) T {
+			return a * b
+		}),
 	)
 
-	sumXSplice := helper.DuplicateWithContext(ctx, m.Sum.ComputeWithContext(ctx, xSplice[1]),
+	sumXSplice := helper.Duplicate(
+		m.Sum.Compute(xSplice[1]),
 		4,
 	)
 
-	sumYSplice := helper.DuplicateWithContext(ctx, m.Sum.ComputeWithContext(ctx, ySplice[1]),
+	sumYSplice := helper.Duplicate(
+		m.Sum.Compute(ySplice[1]),
 		2,
 	)
 
-	sumX2 := m.Sum.ComputeWithContext(ctx, helper.PowWithContext(ctx, xSplice[2], 2))
+	sumX2 := m.Sum.Compute(
+		helper.Pow(xSplice[2], 2),
+	)
 
 	// m = (period * sumXY - sumX * sumY) / (period * sumX2 - sumX * sumX)
-	mSplice := helper.DuplicateWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, helper.MultiplyByWithContext(ctx, sumXY,
-		T(m.Sum.Period),
-	),
-		helper.MultiplyWithContext(ctx, sumXSplice[0],
-			sumYSplice[0],
-		),
-	),
-		helper.SubtractWithContext(ctx, helper.MultiplyByWithContext(ctx, sumX2,
-			T(m.Sum.Period),
-		),
-			helper.MultiplyWithContext(ctx, sumXSplice[1],
-				sumXSplice[2],
+	mSplice := helper.Duplicate(
+		helper.Divide(
+			helper.Subtract(
+				helper.MultiplyBy(
+					sumXY,
+					T(m.Sum.Period),
+				),
+				helper.Multiply(
+					sumXSplice[0],
+					sumYSplice[0],
+				),
+			),
+			helper.Subtract(
+				helper.MultiplyBy(
+					sumX2,
+					T(m.Sum.Period),
+				),
+				helper.Multiply(
+					sumXSplice[1],
+					sumXSplice[2],
+				),
 			),
 		),
-	),
 		2,
 	)
 
 	// b = (sumY - m * sumX) / period
-	b := helper.DivideByWithContext(ctx, helper.SubtractWithContext(ctx, sumYSplice[1],
-		helper.MultiplyWithContext(ctx, mSplice[1],
-			sumXSplice[3],
+	b := helper.DivideBy(
+		helper.Subtract(
+			sumYSplice[1],
+			helper.Multiply(
+				mSplice[1],
+				sumXSplice[3],
+			),
 		),
-	),
 		T(m.Sum.Period),
 	)
 
@@ -90,11 +104,4 @@ func (m *Mls[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) (<-chan 
 // IdlePeriod is the initial period that MLS won't yield any results.
 func (m *Mls[T]) IdlePeriod() int {
 	return m.Sum.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T) {
-	return m.ComputeWithContext(context.Background(), x, y)
 }

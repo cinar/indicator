@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -42,14 +40,14 @@ func (h *HmaStrategy) Name() string {
 	return h.Hma.String() + " Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (h *HmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots), 2)
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], h.Hma.IdlePeriod())
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (h *HmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshots), 2)
+	closingsSplice[1] = helper.Skip(closingsSplice[1], h.Hma.IdlePeriod())
 
-	hmas := h.Hma.ComputeWithContext(ctx, closingsSplice[0])
+	hmas := h.Hma.Compute(closingsSplice[0])
 
-	actions := helper.OperateWithContext(ctx, hmas, closingsSplice[1], func(hma, closing float64) strategy.Action {
+	actions := helper.Operate(hmas, closingsSplice[1], func(hma, closing float64) strategy.Action {
 		if closing > hma {
 			return strategy.Buy
 		}
@@ -62,7 +60,7 @@ func (h *HmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *
 	})
 
 	// HMA starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, h.Hma.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, h.Hma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -76,18 +74,17 @@ func (h *HmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	// snapshots[2] -> actions     -> annotations
 	//              -> outcomes
 	//
-	ctx := context.Background()
-	snapshotsSplice := helper.DuplicateWithContext(ctx, c, 3)
+	snapshotsSplice := helper.Duplicate(c, 3)
 
-	dates := asset.SnapshotsAsDatesWithContext(ctx, snapshotsSplice[0])
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[1]), 2)
+	dates := asset.SnapshotsAsDates(snapshotsSplice[0])
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshotsSplice[1]), 2)
 
-	hmas := h.Hma.ComputeWithContext(ctx, closingsSplice[0])
-	hmas = helper.ShiftWithContext(ctx, hmas, h.Hma.IdlePeriod(), 0)
+	hmas := h.Hma.Compute(closingsSplice[0])
+	hmas = helper.Shift(hmas, h.Hma.IdlePeriod(), 0)
 
-	actions, outcomes := strategy.ComputeWithOutcomeWithContext(ctx, h, snapshotsSplice[2])
+	actions, outcomes := strategy.ComputeWithOutcome(h, snapshotsSplice[2])
 	annotations := strategy.ActionsToAnnotations(actions)
-	outcomes = helper.MultiplyByWithContext(ctx, outcomes, 100)
+	outcomes = helper.MultiplyBy(outcomes, 100)
 
 	report := helper.NewReport(h.Name(), dates)
 	report.AddChart()
@@ -99,11 +96,4 @@ func (h *HmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (h *HmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return h.ComputeWithContext(context.Background(), snapshots)
 }

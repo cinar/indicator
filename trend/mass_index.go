@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -53,17 +51,20 @@ func NewMassIndex[T helper.Number]() *MassIndex[T] {
 	return mi
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Mass Index.
-func (m *MassIndex[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T {
-	ema1 := helper.DuplicateWithContext(ctx, m.Ema1.ComputeWithContext(ctx, helper.SubtractWithContext(ctx, highs, lows)),
+// Compute function takes a channel of numbers and computes the Mass Index.
+func (m *MassIndex[T]) Compute(highs, lows <-chan T) <-chan T {
+	ema1 := helper.Duplicate(
+		m.Ema1.Compute(
+			helper.Subtract(highs, lows),
+		),
 		2,
 	)
 
-	ema2 := m.Ema2.ComputeWithContext(ctx, ema1[0])
-	ema1[1] = helper.SkipWithContext(ctx, ema1[1], m.Ema2.Period-1)
+	ema2 := m.Ema2.Compute(ema1[0])
+	ema1[1] = helper.Skip(ema1[1], m.Ema2.Period-1)
 
-	ratio := helper.DivideWithContext(ctx, ema1[1], ema2)
-	mi := m.MovingSum.ComputeWithContext(ctx, ratio)
+	ratio := helper.Divide(ema1[1], ema2)
+	mi := m.MovingSum.Compute(ratio)
 
 	return mi
 }
@@ -71,11 +72,4 @@ func (m *MassIndex[T]) ComputeWithContext(ctx context.Context, highs, lows <-cha
 // IdlePeriod is the initial period that Mass Index won't yield any results.
 func (m *MassIndex[T]) IdlePeriod() int {
 	return m.Ema1.Period + m.Ema2.Period + m.MovingSum.Period - 3
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *MassIndex[T]) Compute(highs, lows <-chan T) <-chan T {
-	return m.ComputeWithContext(context.Background(), highs, lows)
 }

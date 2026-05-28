@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -57,13 +55,13 @@ func (r *RsiStrategy) Name() string {
 	return fmt.Sprintf("RSI Strategy %.0f-%.0f", r.BuyAt, r.SellAt)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (r *RsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (r *RsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosings(snapshots)
 
-	rsi := r.Rsi.ComputeWithContext(ctx, closings)
+	rsi := r.Rsi.Compute(closings)
 
-	actions := helper.MapWithContext(ctx, rsi, func(value float64) strategy.Action {
+	actions := helper.Map(rsi, func(value float64) strategy.Action {
 		if value <= r.BuyAt {
 			return strategy.Buy
 		}
@@ -76,7 +74,7 @@ func (r *RsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *
 	})
 
 	// RSI starts only after the idle period.
-	actions = helper.ShiftWithContext(ctx, actions, r.Rsi.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, r.Rsi.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -110,11 +108,4 @@ func (r *RsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (r *RsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return r.ComputeWithContext(context.Background(), snapshots)
 }

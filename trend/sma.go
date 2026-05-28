@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -42,12 +40,12 @@ func NewSmaWithPeriod[T helper.Number](period int) *Sma[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the SMA over the specified period.
-func (s *Sma[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the SMA over the specified period.
+func (s *Sma[T]) Compute(c <-chan T) <-chan T {
 	sum := NewMovingSum[T]()
 	sum.Period = s.Period
 
-	return helper.ApplyWithContext(ctx, sum.ComputeWithContext(ctx, c), func(sum T) T {
+	return helper.Apply(sum.Compute(c), func(sum T) T {
 		return sum / T(s.Period)
 	})
 }
@@ -61,8 +59,3 @@ func (s *Sma[T]) IdlePeriod() int {
 func (s *Sma[T]) String() string {
 	return fmt.Sprintf("SMA(%d)", s.Period)
 }
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *Sma[T]) Compute(c <-chan T) <-chan T { return s.ComputeWithContext(context.Background(), c) }

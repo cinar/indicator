@@ -4,11 +4,7 @@
 
 package trend
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 const (
 	// DefaultSlowStochasticPeriod is the default period for the Slow Stochastic indicator.
@@ -62,38 +58,41 @@ func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) 
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Slow Stochastic indicator.
+// Compute function takes a channel of numbers and computes the Slow Stochastic indicator.
 // Returns Slow %K and Slow %D.
-func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T) (<-chan T, <-chan T) {
+func (s *SlowStochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T) {
 	movingMin := NewMovingMinWithPeriod[T](s.Period)
 	movingMax := NewMovingMaxWithPeriod[T](s.Period)
 
-	values = helper.BufferedWithContext(ctx, values, s.Period)
-	inputs := helper.DuplicateWithContext(ctx, values, 3)
+	values = helper.Buffered(values, s.Period)
+	inputs := helper.Duplicate(values, 3)
 
-	lowestSplice := helper.DuplicateWithContext(ctx, movingMin.ComputeWithContext(ctx, inputs[0]),
+	lowestSplice := helper.Duplicate(
+		movingMin.Compute(inputs[0]),
 		2,
 	)
 
-	highest := movingMax.ComputeWithContext(ctx, inputs[1])
+	highest := movingMax.Compute(inputs[1])
 
-	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
+	skipped := helper.Skip(inputs[2], movingMin.IdlePeriod())
 
-	fastK := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
+	fastK := helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(skipped, lowestSplice[0]),
+			helper.Subtract(highest, lowestSplice[1]),
+		),
 		100,
 	)
 
 	slowKSma := NewSmaWithPeriod[T](s.KPeriod)
-	slowK := slowKSma.ComputeWithContext(ctx, fastK)
+	slowK := slowKSma.Compute(fastK)
 
-	slowKDuplicate := helper.DuplicateWithContext(ctx, slowK, 2)
+	slowKDuplicate := helper.Duplicate(slowK, 2)
 
 	slowDSma := NewSmaWithPeriod[T](s.DPeriod)
-	slowD := slowDSma.ComputeWithContext(ctx, slowKDuplicate[0])
+	slowD := slowDSma.Compute(slowKDuplicate[0])
 
-	slowKDuplicate[1] = helper.SkipWithContext(ctx, slowKDuplicate[1], s.DPeriod-1)
+	slowKDuplicate[1] = helper.Skip(slowKDuplicate[1], s.DPeriod-1)
 
 	return slowKDuplicate[1], slowD
 }
@@ -101,11 +100,4 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 // IdlePeriod is the initial period that Slow Stochastic won't yield any results.
 func (s *SlowStochastic[T]) IdlePeriod() int {
 	return s.Period + s.KPeriod + s.DPeriod - 3
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *SlowStochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T) {
-	return s.ComputeWithContext(context.Background(), values)
 }

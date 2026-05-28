@@ -4,11 +4,7 @@
 
 package trend
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 const (
 	// DefaultStochasticPeriod is the default period for the Stochastic indicator.
@@ -52,33 +48,37 @@ func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Stochastic indicator.
+// Compute function takes a channel of numbers and computes the Stochastic indicator.
 // Returns %K and %D.
-func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T) (<-chan T, <-chan T) {
+func (s *Stochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T) {
 	movingMin := NewMovingMinWithPeriod[T](s.Period)
 	movingMax := NewMovingMaxWithPeriod[T](s.Period)
 
-	values = helper.BufferedWithContext(ctx, values, s.Period)
-	inputs := helper.DuplicateWithContext(ctx, values, 3)
+	values = helper.Buffered(values, s.Period)
+	inputs := helper.Duplicate(values, 3)
 
-	lowestSplice := helper.DuplicateWithContext(ctx, movingMin.ComputeWithContext(ctx, inputs[0]),
+	lowestSplice := helper.Duplicate(
+		movingMin.Compute(inputs[0]),
 		2,
 	)
 
-	highest := movingMax.ComputeWithContext(ctx, inputs[1])
+	highest := movingMax.Compute(inputs[1])
 
-	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
+	skipped := helper.Skip(inputs[2], movingMin.IdlePeriod())
 
-	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	),
+	kSplice := helper.Duplicate(
+		helper.MultiplyBy(
+			helper.Divide(
+				helper.Subtract(skipped, lowestSplice[0]),
+				helper.Subtract(highest, lowestSplice[1]),
+			),
+			100,
+		),
 		2,
 	)
 
-	d := s.Sma.ComputeWithContext(ctx, kSplice[0])
-	kSplice[1] = helper.SkipWithContext(ctx, kSplice[1], s.Sma.IdlePeriod())
+	d := s.Sma.Compute(kSplice[0])
+	kSplice[1] = helper.Skip(kSplice[1], s.Sma.IdlePeriod())
 
 	return kSplice[1], d
 }
@@ -86,11 +86,4 @@ func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T)
 // IdlePeriod is the initial period that Stochastic won't yield any results.
 func (s *Stochastic[T]) IdlePeriod() int {
 	return s.Period + s.Sma.Period - 2
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *Stochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T) {
-	return s.ComputeWithContext(context.Background(), values)
 }

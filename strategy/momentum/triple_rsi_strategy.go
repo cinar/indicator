@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -104,23 +102,24 @@ func (t *TripleRsiStrategy) IdlePeriod() int {
 	return t.Sma.IdlePeriod()
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *TripleRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *TripleRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(
+		asset.SnapshotsAsClosings(snapshots),
 		3,
 	)
 
-	rsis := t.Rsi.ComputeWithContext(ctx, closingsSplice[0])
-	smas := t.Sma.ComputeWithContext(ctx, closingsSplice[1])
+	rsis := t.Rsi.Compute(closingsSplice[0])
+	smas := t.Sma.Compute(closingsSplice[1])
 	memory := helper.NewRing[float64](t.DownDays)
 
 	// Skip RSI results until SMA is ready.
-	rsis = helper.SkipWithContext(ctx, rsis, t.Sma.IdlePeriod()-t.Rsi.IdlePeriod())
+	rsis = helper.Skip(rsis, t.Sma.IdlePeriod()-t.Rsi.IdlePeriod())
 
 	// Skip closing values until SMA is ready.
-	closingsSplice[2] = helper.SkipWithContext(ctx, closingsSplice[2], t.Sma.IdlePeriod())
+	closingsSplice[2] = helper.Skip(closingsSplice[2], t.Sma.IdlePeriod())
 
-	actions := helper.Operate3WithContext(ctx, rsis, smas, closingsSplice[2], func(rsi, sma, closing float64) strategy.Action {
+	actions := helper.Operate3(rsis, smas, closingsSplice[2], func(rsi, sma, closing float64) strategy.Action {
 		memory.Put(rsi)
 
 		if !memory.IsFull() {
@@ -160,7 +159,7 @@ func (t *TripleRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-
 	})
 
 	// Shift actions until strategy is ready.
-	actions = helper.ShiftWithContext(ctx, actions, t.Sma.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, t.Sma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -203,11 +202,4 @@ func (t *TripleRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *TripleRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return t.ComputeWithContext(context.Background(), snapshots)
 }

@@ -7,8 +7,6 @@ package volume
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -54,21 +52,22 @@ func (n *NegativeVolumeIndexStrategy) Name() string {
 	return fmt.Sprintf("Negative Volume Index Strategy (%d)", n.NegativeVolumeIndexEma.Period)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (n *NegativeVolumeIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (n *NegativeVolumeIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 2)
 
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[0])
-	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[0])
+	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[1])
 
-	nvisSplice := helper.DuplicateWithContext(ctx, n.NegativeVolumeIndex.ComputeWithContext(ctx, closings, volumes),
+	nvisSplice := helper.Duplicate(
+		n.NegativeVolumeIndex.Compute(closings, volumes),
 		2,
 	)
 
-	nvisSplice[0] = helper.SkipWithContext(ctx, nvisSplice[0], n.NegativeVolumeIndexEma.IdlePeriod())
-	nviEmas := n.NegativeVolumeIndexEma.ComputeWithContext(ctx, nvisSplice[1])
+	nvisSplice[0] = helper.Skip(nvisSplice[0], n.NegativeVolumeIndexEma.IdlePeriod())
+	nviEmas := n.NegativeVolumeIndexEma.Compute(nvisSplice[1])
 
-	actions := helper.OperateWithContext(ctx, nvisSplice[0], nviEmas, func(nvi, nviEma float64) strategy.Action {
+	actions := helper.Operate(nvisSplice[0], nviEmas, func(nvi, nviEma float64) strategy.Action {
 		if nvi < nviEma {
 			return strategy.Buy
 		}
@@ -81,7 +80,8 @@ func (n *NegativeVolumeIndexStrategy) ComputeWithContext(ctx context.Context, sn
 	})
 
 	// Negative Volume Index starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions,
+	actions = helper.Shift(
+		actions,
 		n.NegativeVolumeIndex.IdlePeriod()+n.NegativeVolumeIndexEma.IdlePeriod(),
 		strategy.Hold,
 	)
@@ -141,11 +141,4 @@ func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.R
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (n *NegativeVolumeIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return n.ComputeWithContext(context.Background(), snapshots)
 }

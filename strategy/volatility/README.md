@@ -28,26 +28,22 @@ The information provided on this project is strictly for informational purposes 
 - [type BollingerBandsStrategy](<#BollingerBandsStrategy>)
   - [func NewBollingerBandsStrategy\(\) \*BollingerBandsStrategy](<#NewBollingerBandsStrategy>)
   - [func \(b \*BollingerBandsStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#BollingerBandsStrategy.Compute>)
-  - [func \(b \*BollingerBandsStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#BollingerBandsStrategy.ComputeWithContext>)
   - [func \(\*BollingerBandsStrategy\) Name\(\) string](<#BollingerBandsStrategy.Name>)
   - [func \(b \*BollingerBandsStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#BollingerBandsStrategy.Report>)
 - [type DonchianChannelBreakoutStrategy](<#DonchianChannelBreakoutStrategy>)
   - [func NewDonchianChannelBreakoutStrategy\(\) \*DonchianChannelBreakoutStrategy](<#NewDonchianChannelBreakoutStrategy>)
   - [func \(d \*DonchianChannelBreakoutStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DonchianChannelBreakoutStrategy.Compute>)
-  - [func \(d \*DonchianChannelBreakoutStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#DonchianChannelBreakoutStrategy.ComputeWithContext>)
   - [func \(\*DonchianChannelBreakoutStrategy\) Name\(\) string](<#DonchianChannelBreakoutStrategy.Name>)
   - [func \(d \*DonchianChannelBreakoutStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#DonchianChannelBreakoutStrategy.Report>)
 - [type KeltnerChannelStrategy](<#KeltnerChannelStrategy>)
   - [func NewKeltnerChannelStrategy\(\) \*KeltnerChannelStrategy](<#NewKeltnerChannelStrategy>)
   - [func \(k \*KeltnerChannelStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KeltnerChannelStrategy.Compute>)
-  - [func \(k \*KeltnerChannelStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KeltnerChannelStrategy.ComputeWithContext>)
   - [func \(\*KeltnerChannelStrategy\) Name\(\) string](<#KeltnerChannelStrategy.Name>)
   - [func \(k \*KeltnerChannelStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#KeltnerChannelStrategy.Report>)
 - [type SuperTrendStrategy](<#SuperTrendStrategy>)
   - [func NewSuperTrendStrategy\(\) \*SuperTrendStrategy](<#NewSuperTrendStrategy>)
   - [func NewSuperTrendStrategyWith\(superTrend \*volatility.SuperTrend\[float64\]\) \*SuperTrendStrategy](<#NewSuperTrendStrategyWith>)
   - [func \(s \*SuperTrendStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#SuperTrendStrategy.Compute>)
-  - [func \(s \*SuperTrendStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#SuperTrendStrategy.ComputeWithContext>)
   - [func \(s \*SuperTrendStrategy\) Name\(\) string](<#SuperTrendStrategy.Name>)
   - [func \(s \*SuperTrendStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#SuperTrendStrategy.Report>)
 
@@ -62,7 +58,7 @@ func AllStrategies() []strategy.Strategy
 AllStrategies returns a slice containing references to all available volatility strategies.
 
 <a name="BollingerBandsStrategy"></a>
-## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L19-L22>)
+## type [BollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L17-L20>)
 
 BollingerBandsStrategy represents the configuration parameters for calculating the Bollinger Bands strategy. A closing value crossing above the upper band suggets a Buy signal, while crossing below the lower band indivates a Sell signal.
 
@@ -74,7 +70,7 @@ type BollingerBandsStrategy struct {
 ```
 
 <a name="NewBollingerBandsStrategy"></a>
-### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L25>)
+### func [NewBollingerBandsStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L23>)
 
 ```go
 func NewBollingerBandsStrategy() *BollingerBandsStrategy
@@ -83,27 +79,16 @@ func NewBollingerBandsStrategy() *BollingerBandsStrategy
 NewBollingerBandsStrategy function initializes a new Bollinger Bands strategy instance.
 
 <a name="BollingerBandsStrategy.Compute"></a>
-### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L107>)
+### func \(\*BollingerBandsStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L35>)
 
 ```go
 func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="BollingerBandsStrategy.ComputeWithContext"></a>
-### func \(\*BollingerBandsStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L37>)
-
-```go
-func (b *BollingerBandsStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="BollingerBandsStrategy.Name"></a>
-### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L32>)
+### func \(\*BollingerBandsStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L30>)
 
 ```go
 func (*BollingerBandsStrategy) Name() string
@@ -112,7 +97,7 @@ func (*BollingerBandsStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="BollingerBandsStrategy.Report"></a>
-### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L66>)
+### func \(\*BollingerBandsStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/bollinger_bands_strategy.go#L65>)
 
 ```go
 func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -121,7 +106,7 @@ func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="DonchianChannelBreakoutStrategy"></a>
-## type [DonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L19-L22>)
+## type [DonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L17-L20>)
 
 DonchianChannelBreakoutStrategy represents the configuration parameters for calculating the Donchian Channel Breakout strategy. A closing at or above the upper channel suggests a Buy signal, while a closing at or below the lower channel suggests a Sell signal.
 
@@ -133,7 +118,7 @@ type DonchianChannelBreakoutStrategy struct {
 ```
 
 <a name="NewDonchianChannelBreakoutStrategy"></a>
-### func [NewDonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L25>)
+### func [NewDonchianChannelBreakoutStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L23>)
 
 ```go
 func NewDonchianChannelBreakoutStrategy() *DonchianChannelBreakoutStrategy
@@ -142,27 +127,16 @@ func NewDonchianChannelBreakoutStrategy() *DonchianChannelBreakoutStrategy
 NewDonchianChannelBreakoutStrategy function initializes a new Donchian Channel Breakout strategy instance.
 
 <a name="DonchianChannelBreakoutStrategy.Compute"></a>
-### func \(\*DonchianChannelBreakoutStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L107>)
+### func \(\*DonchianChannelBreakoutStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L35>)
 
 ```go
 func (d *DonchianChannelBreakoutStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="DonchianChannelBreakoutStrategy.ComputeWithContext"></a>
-### func \(\*DonchianChannelBreakoutStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L37>)
-
-```go
-func (d *DonchianChannelBreakoutStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="DonchianChannelBreakoutStrategy.Name"></a>
-### func \(\*DonchianChannelBreakoutStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L32>)
+### func \(\*DonchianChannelBreakoutStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L30>)
 
 ```go
 func (*DonchianChannelBreakoutStrategy) Name() string
@@ -171,7 +145,7 @@ func (*DonchianChannelBreakoutStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="DonchianChannelBreakoutStrategy.Report"></a>
-### func \(\*DonchianChannelBreakoutStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L66>)
+### func \(\*DonchianChannelBreakoutStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/donchian_channel_breakout_strategy.go#L65>)
 
 ```go
 func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -180,7 +154,7 @@ func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *help
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="KeltnerChannelStrategy"></a>
-## type [KeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L18-L21>)
+## type [KeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L16-L19>)
 
 KeltnerChannelStrategy represents the configuration parameters for calculating the Keltner Channel strategy. A closing above the upper band suggests a Sell signal, while a closing below the lower band suggests a Buy signal.
 
@@ -192,7 +166,7 @@ type KeltnerChannelStrategy struct {
 ```
 
 <a name="NewKeltnerChannelStrategy"></a>
-### func [NewKeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L24>)
+### func [NewKeltnerChannelStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L22>)
 
 ```go
 func NewKeltnerChannelStrategy() *KeltnerChannelStrategy
@@ -201,27 +175,16 @@ func NewKeltnerChannelStrategy() *KeltnerChannelStrategy
 NewKeltnerChannelStrategy function initializes a new Keltner Channel strategy instance.
 
 <a name="KeltnerChannelStrategy.Compute"></a>
-### func \(\*KeltnerChannelStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L110>)
+### func \(\*KeltnerChannelStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L34>)
 
 ```go
 func (k *KeltnerChannelStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="KeltnerChannelStrategy.ComputeWithContext"></a>
-### func \(\*KeltnerChannelStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L36>)
-
-```go
-func (k *KeltnerChannelStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="KeltnerChannelStrategy.Name"></a>
-### func \(\*KeltnerChannelStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L31>)
+### func \(\*KeltnerChannelStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L29>)
 
 ```go
 func (*KeltnerChannelStrategy) Name() string
@@ -230,7 +193,7 @@ func (*KeltnerChannelStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="KeltnerChannelStrategy.Report"></a>
-### func \(\*KeltnerChannelStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L67>)
+### func \(\*KeltnerChannelStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/keltner_channel_strategy.go#L65>)
 
 ```go
 func (k *KeltnerChannelStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
@@ -239,7 +202,7 @@ func (k *KeltnerChannelStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="SuperTrendStrategy"></a>
-## type [SuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L21-L24>)
+## type [SuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L19-L22>)
 
 SuperTrendStrategy represents the configuration parameters for calculating the Super Trend strategy. A closing value crossing above the Super Trend suggets a Buy signal, while crossing below the Super Trend indivates a Sell signal.
 
@@ -251,7 +214,7 @@ type SuperTrendStrategy struct {
 ```
 
 <a name="NewSuperTrendStrategy"></a>
-### func [NewSuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L27>)
+### func [NewSuperTrendStrategy](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L25>)
 
 ```go
 func NewSuperTrendStrategy() *SuperTrendStrategy
@@ -260,7 +223,7 @@ func NewSuperTrendStrategy() *SuperTrendStrategy
 NewSuperTrendStrategy function initializes a new Super Trend strategy instance.
 
 <a name="NewSuperTrendStrategyWith"></a>
-### func [NewSuperTrendStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L32>)
+### func [NewSuperTrendStrategyWith](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L30>)
 
 ```go
 func NewSuperTrendStrategyWith(superTrend *volatility.SuperTrend[float64]) *SuperTrendStrategy
@@ -269,27 +232,16 @@ func NewSuperTrendStrategyWith(superTrend *volatility.SuperTrend[float64]) *Supe
 NewSuperTrendStrategyWith function initializes a new Super Trend strategy with the given Super Trend instance.
 
 <a name="SuperTrendStrategy.Compute"></a>
-### func \(\*SuperTrendStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L118>)
+### func \(\*SuperTrendStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L42>)
 
 ```go
 func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="SuperTrendStrategy.ComputeWithContext"></a>
-### func \(\*SuperTrendStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L44>)
-
-```go
-func (s *SuperTrendStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
-```
-
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
 
 <a name="SuperTrendStrategy.Name"></a>
-### func \(\*SuperTrendStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L39>)
+### func \(\*SuperTrendStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L37>)
 
 ```go
 func (s *SuperTrendStrategy) Name() string
@@ -298,7 +250,7 @@ func (s *SuperTrendStrategy) Name() string
 Name returns the name of the strategy.
 
 <a name="SuperTrendStrategy.Report"></a>
-### func \(\*SuperTrendStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L76>)
+### func \(\*SuperTrendStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/volatility/super_trend_strategy.go#L75>)
 
 ```go
 func (s *SuperTrendStrategy) Report(c <-chan *asset.Snapshot) *helper.Report

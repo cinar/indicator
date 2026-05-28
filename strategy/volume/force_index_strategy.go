@@ -7,8 +7,6 @@ package volume
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -41,16 +39,16 @@ func (f *ForceIndexStrategy) Name() string {
 	return fmt.Sprintf("Force Index Strategy (%d)", f.ForceIndex.IdlePeriod()+1)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (f *ForceIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (f *ForceIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 2)
 
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[0])
-	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[0])
+	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[1])
 
-	fis := f.ForceIndex.ComputeWithContext(ctx, closings, volumes)
+	fis := f.ForceIndex.Compute(closings, volumes)
 
-	actions := helper.MapWithContext(ctx, fis, func(fi float64) strategy.Action {
+	actions := helper.Map(fis, func(fi float64) strategy.Action {
 		if fi > 0 {
 			return strategy.Buy
 		}
@@ -63,7 +61,7 @@ func (f *ForceIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <
 	})
 
 	// Force Index starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, f.ForceIndex.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, f.ForceIndex.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -110,11 +108,4 @@ func (f *ForceIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (f *ForceIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return f.ComputeWithContext(context.Background(), snapshots)
 }

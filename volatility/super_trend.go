@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -70,25 +68,28 @@ func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTr
 	}
 }
 
-// ComputeWithContext function calculates the Super Trend, using separate channels for highs, lows, and closings.
-func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
-	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
-	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+// Compute function calculates the Super Trend, using separate channels for highs, lows, and closings.
+func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	highsSplice := helper.Duplicate(highs, 2)
+	lowsSplice := helper.Duplicate(lows, 2)
+	closingsSplice := helper.Duplicate(closings, 2)
 
 	medians :=
-		helper.SkipWithContext(ctx, helper.DivideByWithContext(ctx, helper.AddWithContext(ctx, highsSplice[0], lowsSplice[0]),
-			2,
-		),
+		helper.Skip(
+			helper.DivideBy(
+				helper.Add(highsSplice[0], lowsSplice[0]),
+				2,
+			),
 			s.Atr.IdlePeriod(),
 		)
 
 	atrMultiples :=
-		helper.MultiplyByWithContext(ctx, s.Atr.ComputeWithContext(ctx, highsSplice[1], lowsSplice[1], closingsSplice[0]),
+		helper.MultiplyBy(
+			s.Atr.Compute(highsSplice[1], lowsSplice[1], closingsSplice[0]),
 			s.Multiplier,
 		)
 
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], s.Atr.IdlePeriod())
+	closingsSplice[1] = helper.Skip(closingsSplice[1], s.Atr.IdlePeriod())
 
 	first := true
 	upTrend := false
@@ -96,7 +97,7 @@ func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, clo
 	var finalUpperBand T
 	var finalLowerBand T
 
-	superTrend := helper.Operate3WithContext(ctx, medians, atrMultiples, closingsSplice[1], func(median, atrMultiple, closing T) T {
+	superTrend := helper.Operate3(medians, atrMultiples, closingsSplice[1], func(median, atrMultiple, closing T) T {
 		//	BasicUpperBands = (High + Low) / 2 + Multiplier * ATR
 		basicUpperBand := median + atrMultiple
 
@@ -160,11 +161,4 @@ func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, clo
 // IdlePeriod is the initial period that Super Trend won't yield any results.
 func (s *SuperTrend[T]) IdlePeriod() int {
 	return s.Atr.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return s.ComputeWithContext(context.Background(), highs, lows, closings)
 }

@@ -4,35 +4,26 @@
 
 package helper
 
-import "context"
-
-// Skip wraps SkipWithContext for backwards compatibility.
+// Skip skips the specified number of elements from the
+// given channel of type T.
 //
-// Deprecated: Use SkipWithContext instead.
+// Example:
+//
+//	c := helper.SliceToChan([]int{2, 4, 6, 8})
+//	actual := helper.Skip(c, 2)
+//	fmt.Println(helper.ChanToSlice(actual)) // [6, 8]
 func Skip[T any](c <-chan T, count int) <-chan T {
-	return SkipWithContext(context.Background(), c, count)
-}
-
-// SkipWithContext skips the specified number of elements from the
-// given channel of type T, supporting context cancellation.
-func SkipWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
 		for i := 0; i < count; i++ {
-			select {
-			case <-ctx.Done():
-				close(result)
-				return
-			case _, ok := <-c:
-				if !ok {
-					close(result)
-					return
-				}
+			_, ok := <-c
+			if !ok {
+				break
 			}
 		}
 
-		PipeWithContext(ctx, c, result)
+		Pipe(c, result)
 	}()
 
 	return result

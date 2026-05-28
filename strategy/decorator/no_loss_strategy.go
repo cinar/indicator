@@ -7,8 +7,6 @@ package decorator
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -33,15 +31,15 @@ func (n *NoLossStrategy) Name() string {
 	return fmt.Sprintf("No Loss Strategy (%s)", n.InnertStrategy.Name())
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (n *NoLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (n *NoLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 2)
 
-	innerActions := strategy.ComputeStrategyWithContext(ctx, n.InnertStrategy, snapshotsSplice[0])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[1])
+	innerActions := n.InnertStrategy.Compute(snapshotsSplice[0])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[1])
 	boughtAt := 0.0
 
-	return helper.OperateWithContext(ctx, innerActions, closings, func(action strategy.Action, closing float64) strategy.Action {
+	return helper.Operate(innerActions, closings, func(action strategy.Action, closing float64) strategy.Action {
 		// If action is Buy and the asset is not yet bought, buy it as recommended.
 		if action == strategy.Buy && boughtAt == 0.0 {
 			boughtAt = closing
@@ -78,11 +76,4 @@ func (n *NoLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (n *NoLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return n.ComputeWithContext(context.Background(), snapshots)
 }

@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -57,17 +55,17 @@ func (r *WilliamsRStrategy) Name() string {
 	return fmt.Sprintf("Williams R Strategy (%.0f,%.0f)", r.BuyAt, r.SellAt)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (r *WilliamsRStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (r *WilliamsRStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 3)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
 
-	wr := r.WilliamsR.ComputeWithContext(ctx, highs, lows, closings)
+	wr := r.WilliamsR.Compute(highs, lows, closings)
 
-	actions := helper.MapWithContext(ctx, wr, func(value float64) strategy.Action {
+	actions := helper.Map(wr, func(value float64) strategy.Action {
 		if value <= r.BuyAt {
 			return strategy.Buy
 		}
@@ -80,7 +78,7 @@ func (r *WilliamsRStrategy) ComputeWithContext(ctx context.Context, snapshots <-
 	})
 
 	// Williams R starts only after the idle period.
-	actions = helper.ShiftWithContext(ctx, actions, r.WilliamsR.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, r.WilliamsR.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -120,11 +118,4 @@ func (r *WilliamsRStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (r *WilliamsRStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return r.ComputeWithContext(context.Background(), snapshots)
 }

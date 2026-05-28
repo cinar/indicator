@@ -7,8 +7,6 @@ package volatility
 import (
 	"math"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -38,8 +36,8 @@ func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Moving Standard Deviation over the specified period, supporting context cancellation.
-func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the Moving Standard Deviation over the specified period.
+func (m *MovingStd[T]) Compute(c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	//	Std = Sqrt(1/Period * Sum(Pow(value - sma), 2))
@@ -49,44 +47,25 @@ func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 		ring := helper.NewRing[T](m.Period)
 		sum := T(0)
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case n, ok := <-c:
-				if !ok {
-					return
+		for n := range c {
+			sum -= ring.Put(n)
+			sum += n
+
+			if ring.IsFull() {
+				sma := sum / T(m.Period)
+				sum2 := T(0)
+
+				for i := 0; i < m.Period; i++ {
+					sum2 += T(math.Pow(float64(ring.At(i)-sma), 2))
 				}
-				sum -= ring.Put(n)
-				sum += n
 
-				if ring.IsFull() {
-					sma := sum / T(m.Period)
-					sum2 := T(0)
-
-					for i := 0; i < m.Period; i++ {
-						sum2 += T(math.Pow(float64(ring.At(i)-sma), 2))
-					}
-
-					std := T(math.Sqrt(float64(sum2 / T(m.Period))))
-					select {
-					case <-ctx.Done():
-						return
-					case result <- std:
-					}
-				}
+				std := T(math.Sqrt(float64(sum2 / T(m.Period))))
+				result <- std
 			}
 		}
 	}()
 
 	return result
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *MovingStd[T]) Compute(c <-chan T) <-chan T {
-	return m.ComputeWithContext(context.Background(), c)
 }
 
 // IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.

@@ -80,21 +80,11 @@ func TestPivotPointWoodie(t *testing.T) {
 	// First bar: H=318.600006, L=308.700012
 	// Second bar: O=319
 	// Woodie P = (318.600006 + 308.700012 + 2 * 319) / 4 = 316.3250045
-	// Woodie R3 = 318.600006 + 2 * (316.3250045 - 308.700012) = 333.85
-	// Woodie S3 = 308.700012 - 2 * (316.3250045 - 308.700012) = 293.450027
 
 	res := <-results
 
 	if helper.RoundDigit(res.P, 7) != 316.3250045 {
 		t.Fatalf("expected P 316.3250045, got %v", res.P)
-	}
-
-	if helper.RoundDigit(res.R3, 2) != 333.85 {
-		t.Fatalf("expected R3 333.85, got %v", res.R3)
-	}
-
-	if helper.RoundDigit(res.S3, 6) != 293.450027 {
-		t.Fatalf("expected S3 293.450027, got %v", res.S3)
 	}
 }
 

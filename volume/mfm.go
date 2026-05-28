@@ -4,11 +4,7 @@
 
 package volume
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 // Mfm holds configuration parameters for calculating the Money Flow Multiplier (MFM),
 // which adjusts volume based on the closing price's position within the high-low range:
@@ -31,27 +27,22 @@ func NewMfm[T helper.Number]() *Mfm[T] {
 	return &Mfm[T]{}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the MFM.
-func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
-	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
-	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+// Compute function takes a channel of numbers and computes the MFM.
+func (*Mfm[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	highsSplice := helper.Duplicate(highs, 2)
+	lowsSplice := helper.Duplicate(lows, 2)
+	closingsSplice := helper.Duplicate(closings, 2)
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[0], lowsSplice[0]),
-		helper.SubtractWithContext(ctx, highsSplice[0], closingsSplice[1]),
-	),
-		helper.SubtractWithContext(ctx, highsSplice[1], lowsSplice[1]),
+	return helper.Divide(
+		helper.Subtract(
+			helper.Subtract(closingsSplice[0], lowsSplice[0]),
+			helper.Subtract(highsSplice[0], closingsSplice[1]),
+		),
+		helper.Subtract(highsSplice[1], lowsSplice[1]),
 	)
 }
 
 // IdlePeriod is the initial period that MFM won't yield any results.
 func (*Mfm[T]) IdlePeriod() int {
 	return 0
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (i *Mfm[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return i.ComputeWithContext(context.Background(), highs, lows, closings)
 }

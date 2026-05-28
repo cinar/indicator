@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -63,13 +61,10 @@ func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoin
 	}
 }
 
-// ComputeWithContext function takes channels for open, high, low, and closing prices and
-// returns a channel of PivotPointResult, supporting context cancellation.
-//
-// Note: We assume a synchronous upstream pipeline where all four input channels
-// are driven by the same clock. Reading them in sequential selects prevents a
-// permanent block, but cancellation may leave a tick half-consumed.
-func (p *PivotPoint[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T] {
+// Compute function takes channels for open, high, low, and closing prices and
+// returns a channel of PivotPointResult. It uses the values from the previous
+// period to calculate levels for the current period.
+func (p *PivotPoint[T]) Compute(opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T] {
 	result := make(chan PivotPointResult[T], cap(closings))
 
 	go func() {
@@ -79,51 +74,17 @@ func (p *PivotPoint[T]) ComputeWithContext(ctx context.Context, opens, highs, lo
 		first := true
 
 		for {
-			var o, h, l, c T
-			var okO, okH, okL, okC bool
+			o, okO := <-opens
+			h, okH := <-highs
+			l, okL := <-lows
+			c, okC := <-closings
 
-			select {
-			case <-ctx.Done():
-				return
-			case o, okO = <-opens:
-				if !okO {
-					return
-				}
-			}
-
-			select {
-			case <-ctx.Done():
-				return
-			case h, okH = <-highs:
-				if !okH {
-					return
-				}
-			}
-
-			select {
-			case <-ctx.Done():
-				return
-			case l, okL = <-lows:
-				if !okL {
-					return
-				}
-			}
-
-			select {
-			case <-ctx.Done():
-				return
-			case c, okC = <-closings:
-				if !okC {
-					return
-				}
+			if !okO || !okH || !okL || !okC {
+				break
 			}
 
 			if !first {
-				select {
-				case <-ctx.Done():
-					return
-				case result <- p.calculate(prevH, prevL, prevC, o):
-				}
+				result <- p.calculate(prevH, prevL, prevC, o)
 			}
 
 			prevH, prevL, prevC = h, l, c
@@ -132,13 +93,6 @@ func (p *PivotPoint[T]) ComputeWithContext(ctx context.Context, opens, highs, lo
 	}()
 
 	return result
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (p *PivotPoint[T]) Compute(opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T] {
-	return p.ComputeWithContext(context.Background(), opens, highs, lows, closings)
 }
 
 // calculate calculates the pivot points using the specified method.
@@ -164,7 +118,7 @@ func (p *PivotPoint[T]) calculate(h, l, c, currO T) PivotPointResult[T] {
 		res.R2 = res.P + (h - l)
 		res.S2 = res.P - (h - l)
 		res.R3 = h + 2*(res.P-l)
-		res.S3 = l - 2*(res.P-l)
+		res.S3 = l - 2*(h-res.P)
 
 	case PivotPointCamarilla:
 		diff := h - l

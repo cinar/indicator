@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -54,40 +52,46 @@ func NewPpo[T helper.Number]() *Ppo[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Percentage Price Oscillator.
+// Compute function takes a channel of numbers and computes the Percentage Price Oscillator.
 // Returns ppo, signal, histogram.
-func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T) {
-	closingsSplice := helper.DuplicateWithContext(ctx, closings,
+func (p *Ppo[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T) {
+	closingsSplice := helper.Duplicate(
+		closings,
 		2,
 	)
 
-	shortEma := p.ShortEma.ComputeWithContext(ctx, closingsSplice[0])
+	shortEma := p.ShortEma.Compute(closingsSplice[0])
 
-	longEmaSplice := helper.DuplicateWithContext(ctx, p.LongEma.ComputeWithContext(ctx, closingsSplice[1]),
+	longEmaSplice := helper.Duplicate(
+		p.LongEma.Compute(closingsSplice[1]),
 		2,
 	)
 
-	shortEma = helper.SkipWithContext(ctx, shortEma, p.LongEma.IdlePeriod()-p.ShortEma.IdlePeriod())
+	shortEma = helper.Skip(shortEma, p.LongEma.IdlePeriod()-p.ShortEma.IdlePeriod())
 
 	//	PPO = ((EMA(shortPeriod, prices) - EMA(longPeriod, prices)) / EMA(longPeriod, prices)) * 100
-	ppoSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, shortEma, longEmaSplice[0]),
-		longEmaSplice[1],
-	),
-		100,
-	),
+	ppoSplice := helper.Duplicate(
+		helper.MultiplyBy(
+			helper.Divide(
+				helper.Subtract(shortEma, longEmaSplice[0]),
+				longEmaSplice[1],
+			),
+			100,
+		),
 		3,
 	)
 
 	//	Signal = EMA(9, PPO)
-	signalSplice := helper.DuplicateWithContext(ctx, p.SignalEma.ComputeWithContext(ctx, ppoSplice[0]),
+	signalSplice := helper.Duplicate(
+		p.SignalEma.Compute(ppoSplice[0]),
 		2,
 	)
 
-	ppoSplice[1] = helper.SkipWithContext(ctx, ppoSplice[1], p.SignalEma.IdlePeriod())
-	ppoSplice[2] = helper.SkipWithContext(ctx, ppoSplice[2], p.SignalEma.IdlePeriod())
+	ppoSplice[1] = helper.Skip(ppoSplice[1], p.SignalEma.IdlePeriod())
+	ppoSplice[2] = helper.Skip(ppoSplice[2], p.SignalEma.IdlePeriod())
 
 	//	Histogram = PPO - Signal
-	histogram := helper.SubtractWithContext(ctx, ppoSplice[1], signalSplice[0])
+	histogram := helper.Subtract(ppoSplice[1], signalSplice[0])
 
 	return ppoSplice[2], signalSplice[1], histogram
 }
@@ -95,11 +99,4 @@ func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-c
 // IdlePeriod is the initial period that Percentage Price Oscillator won't yield any results.
 func (p *Ppo[T]) IdlePeriod() int {
 	return p.LongEma.IdlePeriod() + p.SignalEma.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (p *Ppo[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return p.ComputeWithContext(context.Background(), closings)
 }

@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -31,22 +29,23 @@ func (*IchimokuCloudStrategy) Name() string {
 	return "Ichimoku Cloud Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (i *IchimokuCloudStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (i *IchimokuCloudStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 3)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
 
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+	closingsSplice := helper.Duplicate(closings, 2)
 
-	cl, bl, lsa, lsb, ll := i.IchimokuCloud.ComputeWithContext(ctx, highs, lows, closingsSplice[0])
+	cl, bl, lsa, lsb, ll := i.IchimokuCloud.Compute(highs, lows, closingsSplice[0])
 
 	// Lagging line is not used in the core logic, drain it to prevent blocking
-	go helper.DrainWithContext(ctx, ll)
+	go helper.Drain(ll)
 
-	actions := helper.Operate5WithContext(ctx, helper.SkipWithContext(ctx, closingsSplice[1], i.IchimokuCloud.IdlePeriod()),
+	actions := helper.Operate5(
+		helper.Skip(closingsSplice[1], i.IchimokuCloud.IdlePeriod()),
 		cl,
 		bl,
 		lsa,
@@ -65,7 +64,7 @@ func (i *IchimokuCloudStrategy) ComputeWithContext(ctx context.Context, snapshot
 	)
 
 	// Shift the actions to account for the idle period
-	return helper.ShiftWithContext(ctx, actions, i.IchimokuCloud.IdlePeriod(), strategy.Hold)
+	return helper.Shift(actions, i.IchimokuCloud.IdlePeriod(), strategy.Hold)
 }
 
 // Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
@@ -105,11 +104,4 @@ func (i *IchimokuCloudStrategy) Report(c <-chan *asset.Snapshot) *helper.Report 
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (i *IchimokuCloudStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return i.ComputeWithContext(context.Background(), snapshots)
 }

@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -72,35 +70,35 @@ func NewCoppockCurveWithPeriods[T helper.Float](rocPeriod1, rocPeriod2, wmaPerio
 	}
 }
 
-// ComputeWithContext function takes a channel of closings and computes the Coppock Curve.
-func (c *CoppockCurve[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T {
+// Compute function takes a channel of closings and computes the Coppock Curve.
+func (c *CoppockCurve[T]) Compute(values <-chan T) <-chan T {
 	maxRocPeriod := c.RocPeriod1
 	if c.RocPeriod2 > maxRocPeriod {
 		maxRocPeriod = c.RocPeriod2
 	}
 
-	values = helper.BufferedWithContext(ctx, values, maxRocPeriod)
-	valuesSplice := helper.DuplicateWithContext(ctx, values, 2)
+	values = helper.Buffered(values, maxRocPeriod)
+	valuesSplice := helper.Duplicate(values, 2)
 
 	roc1 := trend.NewRocWithPeriod[T](c.RocPeriod1)
-	roc1Values := helper.MultiplyByWithContext(ctx, roc1.ComputeWithContext(ctx, valuesSplice[0]), 100)
+	roc1Values := helper.MultiplyBy(roc1.Compute(valuesSplice[0]), 100)
 
 	roc2 := trend.NewRocWithPeriod[T](c.RocPeriod2)
-	roc2Values := helper.MultiplyByWithContext(ctx, roc2.ComputeWithContext(ctx, valuesSplice[1]), 100)
+	roc2Values := helper.MultiplyBy(roc2.Compute(valuesSplice[1]), 100)
 
 	// Align ROC streams. Both Compute calls return streams that have already skipped their own IdlePeriod.
 	// To align them to maxRocPeriod, we skip the remaining difference.
 	if c.RocPeriod1 < maxRocPeriod {
-		roc1Values = helper.SkipWithContext(ctx, roc1Values, maxRocPeriod-c.RocPeriod1)
+		roc1Values = helper.Skip(roc1Values, maxRocPeriod-c.RocPeriod1)
 	}
 	if c.RocPeriod2 < maxRocPeriod {
-		roc2Values = helper.SkipWithContext(ctx, roc2Values, maxRocPeriod-c.RocPeriod2)
+		roc2Values = helper.Skip(roc2Values, maxRocPeriod-c.RocPeriod2)
 	}
 
-	sumRocs := helper.AddWithContext(ctx, roc1Values, roc2Values)
+	sumRocs := helper.Add(roc1Values, roc2Values)
 
 	wma := trend.NewWmaWith[T](c.WmaPeriod)
-	return wma.ComputeWithContext(ctx, sumRocs)
+	return wma.Compute(sumRocs)
 }
 
 // IdlePeriod is the initial period that Coppock Curve won't yield any results.
@@ -117,11 +115,4 @@ func (c *CoppockCurve[T]) IdlePeriod() int {
 // String is the string representation of the Coppock Curve.
 func (c *CoppockCurve[T]) String() string {
 	return fmt.Sprintf("CoppockCurve(%d,%d,%d)", c.RocPeriod1, c.RocPeriod2, c.WmaPeriod)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *CoppockCurve[T]) Compute(values <-chan T) <-chan T {
-	return c.ComputeWithContext(context.Background(), values)
 }

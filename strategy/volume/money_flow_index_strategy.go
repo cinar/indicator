@@ -7,8 +7,6 @@ package volume
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -59,18 +57,18 @@ func (m *MoneyFlowIndexStrategy) Name() string {
 	return fmt.Sprintf("Money Flow Index Strategy (%.2f,%.2f)", m.SellAt, m.BuyAt)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (m *MoneyFlowIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 4)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (m *MoneyFlowIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 4)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
-	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[3])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
+	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[3])
 
-	mfis := m.MoneyFlowIndex.ComputeWithContext(ctx, highs, lows, closings, volumes)
+	mfis := m.MoneyFlowIndex.Compute(highs, lows, closings, volumes)
 
-	actions := helper.MapWithContext(ctx, mfis, func(mfi float64) strategy.Action {
+	actions := helper.Map(mfis, func(mfi float64) strategy.Action {
 		if mfi >= m.SellAt {
 			return strategy.Sell
 		}
@@ -83,7 +81,7 @@ func (m *MoneyFlowIndexStrategy) ComputeWithContext(ctx context.Context, snapsho
 	})
 
 	// Money Flow Index starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, m.MoneyFlowIndex.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, m.MoneyFlowIndex.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -136,11 +134,4 @@ func (m *MoneyFlowIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *MoneyFlowIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return m.ComputeWithContext(context.Background(), snapshots)
 }

@@ -4,11 +4,7 @@
 
 package helper
 
-import (
-	"context"
-)
-
-// DecrementByWithContext decrements each element in the input channel by the
+// DecrementBy decrements each element in the input channel by the
 // specified decrement value and returns a new channel containing
 // the decremented values.
 //
@@ -17,15 +13,8 @@ import (
 //	input := helper.SliceToChan([]int{1, 2, 3, 4})
 //	substractOne := helper.DecrementBy(input, 1)
 //	fmt.Println(helper.ChanToSlice(substractOne)) // [0, 1, 2, 3]
-func DecrementByWithContext[T Number](ctx context.Context, c <-chan T, d T) <-chan T {
-	return ApplyWithContext(ctx, c, func(n T) T {
+func DecrementBy[T Number](c <-chan T, d T) <-chan T {
+	return Apply(c, func(n T) T {
 		return n - d
 	})
-}
-
-// DecrementBy wraps DecrementByWithContext for backwards compatibility.
-//
-// Deprecated: Use DecrementByWithContext instead.
-func DecrementBy[T Number](c <-chan T, d T) <-chan T {
-	return DecrementByWithContext(context.Background(), c, d)
 }

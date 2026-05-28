@@ -4,78 +4,48 @@
 
 package helper
 
-import "context"
-
-// Operate4 wraps Operate4WithContext for backwards compatibility.
+// Operate4 applies the provided operate function to corresponding values from four
+// numeric input channels and sends the resulting values to an output channel.
 //
-// Deprecated: Use Operate4WithContext instead.
+// Example:
+//
+//	add := helper.Operate4(ac, bc, cc, dc, func(a, b, c, d int) int {
+//	  return a + b + c + d
+//	})
 func Operate4[A any, B any, C any, D any, R any](ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, o func(A, B, C, D) R) <-chan R {
-	return Operate4WithContext(context.Background(), ac, bc, cc, dc, o)
-}
-
-// Operate4WithContext applies the provided operate function to corresponding values from four
-// numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
-func Operate4WithContext[A any, B any, C any, D any, R any](ctx context.Context, ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, o func(A, B, C, D) R) <-chan R {
 	rc := make(chan R)
 
 	go func() {
-		defer func() {
-			close(rc)
-			DrainWithContext(ctx, ac)
-			DrainWithContext(ctx, bc)
-			DrainWithContext(ctx, cc)
-			DrainWithContext(ctx, dc)
-		}()
+		defer close(rc)
 
 		for {
-			var an A
-			var bn B
-			var cn C
-			var dn D
-			var ok bool
-
-			select {
-			case <-ctx.Done():
-				return
-			case an, ok = <-ac:
-				if !ok {
-					return
-				}
+			an, ok := <-ac
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case bn, ok = <-bc:
-				if !ok {
-					return
-				}
+			bn, ok := <-bc
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case cn, ok = <-cc:
-				if !ok {
-					return
-				}
+			cn, ok := <-cc
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case dn, ok = <-dc:
-				if !ok {
-					return
-				}
+			dn, ok := <-dc
+			if !ok {
+				break
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case rc <- o(an, bn, cn, dn):
-			}
+			rc <- o(an, bn, cn, dn)
 		}
+
+		Drain(ac)
+		Drain(bc)
+		Drain(cc)
+		Drain(dc)
 	}()
 
 	return rc

@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -38,9 +36,9 @@ func NewTrima[T helper.Number]() *Trima[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the TRIMA
+// Compute function takes a channel of numbers and computes the TRIMA
 // and the signal line.
-func (t *Trima[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+func (t *Trima[T]) Compute(c <-chan T) <-chan T {
 	period1, period2 := t.calculatePeriods()
 
 	sma1 := NewSma[T]()
@@ -49,7 +47,7 @@ func (t *Trima[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 	sma2 := NewSma[T]()
 	sma2.Period = period2
 
-	trima := sma1.ComputeWithContext(ctx, sma2.ComputeWithContext(ctx, c))
+	trima := sma1.Compute(sma2.Compute(c))
 
 	return trima
 }
@@ -75,8 +73,3 @@ func (t *Trima[T]) calculatePeriods() (int, int) {
 
 	return period1, period2
 }
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *Trima[T]) Compute(c <-chan T) <-chan T { return t.ComputeWithContext(context.Background(), c) }

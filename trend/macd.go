@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -52,19 +50,19 @@ func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T] 
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the MACD
+// Compute function takes a channel of numbers and computes the MACD
 // and the signal line.
-func (m *Macd[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T) {
-	snapshots := helper.DuplicateWithContext(ctx, c, 2)
+func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T) {
+	snapshots := helper.Duplicate(c, 2)
 
-	emas1 := m.Ema1.ComputeWithContext(ctx, snapshots[0])
-	emas1 = helper.SkipWithContext(ctx, emas1, m.Ema2.Period-m.Ema1.Period)
+	emas1 := m.Ema1.Compute(snapshots[0])
+	emas1 = helper.Skip(emas1, m.Ema2.Period-m.Ema1.Period)
 
-	emas2 := m.Ema2.ComputeWithContext(ctx, snapshots[1])
+	emas2 := m.Ema2.Compute(snapshots[1])
 
-	macds := helper.DuplicateWithContext(ctx, helper.SubtractWithContext(ctx, emas1, emas2), 2)
-	macds[0] = helper.SkipWithContext(ctx, macds[0], m.Ema3.Period-1)
-	signal := m.Ema3.ComputeWithContext(ctx, macds[1])
+	macds := helper.Duplicate(helper.Subtract(emas1, emas2), 2)
+	macds[0] = helper.Skip(macds[0], m.Ema3.Period-1)
+	signal := m.Ema3.Compute(macds[1])
 
 	return macds[0], signal
 }
@@ -72,11 +70,4 @@ func (m *Macd[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T,
 // IdlePeriod is the initial period that MACD won't yield any results.
 func (m *Macd[T]) IdlePeriod() int {
 	return m.Ema2.Period + m.Ema3.Period - 2
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T) {
-	return m.ComputeWithContext(context.Background(), c)
 }

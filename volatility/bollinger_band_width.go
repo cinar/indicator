@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -35,11 +33,12 @@ func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Bollinger Band Width.
-func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
-	upper, middle, lower := b.BollingerBands.ComputeWithContext(ctx, c)
+// Compute function takes a channel of numbers and computes the Bollinger Band Width.
+func (b *BollingerBandWidth[T]) Compute(c <-chan T) <-chan T {
+	upper, middle, lower := b.BollingerBands.Compute(c)
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower),
+	return helper.Divide(
+		helper.Subtract(upper, lower),
 		middle,
 	)
 }
@@ -47,11 +46,4 @@ func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan
 // IdlePeriod is the initial period that Bollinger Band Width won't yield any results.
 func (b *BollingerBandWidth[T]) IdlePeriod() int {
 	return b.BollingerBands.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (b *BollingerBandWidth[T]) Compute(c <-chan T) <-chan T {
-	return b.ComputeWithContext(context.Background(), c)
 }

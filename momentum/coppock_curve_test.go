@@ -38,12 +38,12 @@ func TestCoppockCurveRoc2Longer(t *testing.T) {
 
 	closings := helper.SliceToChan([]float64{10, 12, 11, 13, 15, 14, 16})
 	actuals := cc.Compute(closings)
-
+	
 	count := 0
 	for range actuals {
 		count++
 	}
-
+	
 	// Total 7, skip 4 = 3
 	if count != 3 {
 		t.Fatalf("expected 3 values, got %d", count)

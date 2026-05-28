@@ -25,49 +25,40 @@ The information provided on this project is strictly for informational purposes 
 ## Index
 
 - [Constants](<#constants>)
-- [func ComputeMaWithContext\[T helper.Number\]\(ctx context.Context, ma Ma\[T\], c \<\-chan T\) \<\-chan T](<#ComputeMaWithContext>)
 - [type Apo](<#Apo>)
   - [func NewApo\[T helper.Number\]\(\) \*Apo\[T\]](<#NewApo>)
   - [func \(apo \*Apo\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Apo[T].Compute>)
-  - [func \(apo \*Apo\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Apo[T].ComputeWithContext>)
   - [func \(apo \*Apo\[T\]\) IdlePeriod\(\) int](<#Apo[T].IdlePeriod>)
 - [type Aroon](<#Aroon>)
   - [func NewAroon\[T helper.Number\]\(\) \*Aroon\[T\]](<#NewAroon>)
   - [func \(a \*Aroon\[T\]\) Compute\(high, low \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Aroon[T].Compute>)
-  - [func \(a \*Aroon\[T\]\) ComputeWithContext\(ctx context.Context, high, low \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Aroon[T].ComputeWithContext>)
 - [type Bop](<#Bop>)
   - [func NewBop\[T helper.Number\]\(\) \*Bop\[T\]](<#NewBop>)
-  - [func \(i \*Bop\[T\]\) Compute\(opening, high, low, closing \<\-chan T\) \<\-chan T](<#Bop[T].Compute>)
-  - [func \(i \*Bop\[T\]\) ComputeWithContext\(ctx context.Context, opening, high, low, closing \<\-chan T\) \<\-chan T](<#Bop[T].ComputeWithContext>)
+  - [func \(\*Bop\[T\]\) Compute\(opening, high, low, closing \<\-chan T\) \<\-chan T](<#Bop[T].Compute>)
 - [type Cci](<#Cci>)
   - [func NewCci\[T helper.Number\]\(\) \*Cci\[T\]](<#NewCci>)
   - [func NewCciWithPeriod\[T helper.Number\]\(period int\) \*Cci\[T\]](<#NewCciWithPeriod>)
   - [func \(c \*Cci\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Cci[T].Compute>)
-  - [func \(c \*Cci\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#Cci[T].ComputeWithContext>)
   - [func \(c \*Cci\[T\]\) IdlePeriod\(\) int](<#Cci[T].IdlePeriod>)
 - [type Cfo](<#Cfo>)
   - [func NewCfo\[T helper.Number\]\(\) \*Cfo\[T\]](<#NewCfo>)
   - [func NewCfoWithPeriod\[T helper.Number\]\(period int\) \*Cfo\[T\]](<#NewCfoWithPeriod>)
   - [func \(c \*Cfo\[T\]\) Compute\(closing \<\-chan T\) \<\-chan T](<#Cfo[T].Compute>)
-  - [func \(c \*Cfo\[T\]\) ComputeWithContext\(ctx context.Context, closing \<\-chan T\) \<\-chan T](<#Cfo[T].ComputeWithContext>)
   - [func \(c \*Cfo\[T\]\) IdlePeriod\(\) int](<#Cfo[T].IdlePeriod>)
 - [type Dema](<#Dema>)
   - [func NewDema\[T helper.Number\]\(\) \*Dema\[T\]](<#NewDema>)
   - [func \(d \*Dema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Dema[T].Compute>)
-  - [func \(d \*Dema\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Dema[T].ComputeWithContext>)
   - [func \(d \*Dema\[T\]\) IdlePeriod\(\) int](<#Dema[T].IdlePeriod>)
 - [type Dpo](<#Dpo>)
   - [func NewDpo\[T helper.Float\]\(\) \*Dpo\[T\]](<#NewDpo>)
   - [func NewDpoWithPeriod\[T helper.Float\]\(period int\) \*Dpo\[T\]](<#NewDpoWithPeriod>)
   - [func \(d \*Dpo\[T\]\) Compute\(closing \<\-chan T\) \<\-chan T](<#Dpo[T].Compute>)
-  - [func \(d \*Dpo\[T\]\) ComputeWithContext\(ctx context.Context, closing \<\-chan T\) \<\-chan T](<#Dpo[T].ComputeWithContext>)
   - [func \(d \*Dpo\[T\]\) IdlePeriod\(\) int](<#Dpo[T].IdlePeriod>)
   - [func \(d \*Dpo\[T\]\) String\(\) string](<#Dpo[T].String>)
 - [type Ema](<#Ema>)
   - [func NewEma\[T helper.Number\]\(\) \*Ema\[T\]](<#NewEma>)
   - [func NewEmaWithPeriod\[T helper.Number\]\(period int\) \*Ema\[T\]](<#NewEmaWithPeriod>)
   - [func \(e \*Ema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Ema[T].Compute>)
-  - [func \(e \*Ema\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Ema[T].ComputeWithContext>)
   - [func \(e \*Ema\[T\]\) IdlePeriod\(\) int](<#Ema[T].IdlePeriod>)
   - [func \(e \*Ema\[T\]\) String\(\) string](<#Ema[T].String>)
 - [type Envelope](<#Envelope>)
@@ -75,86 +66,71 @@ The information provided on this project is strictly for informational purposes 
   - [func NewEnvelopeWithEma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithEma>)
   - [func NewEnvelopeWithSma\[T helper.Number\]\(\) \*Envelope\[T\]](<#NewEnvelopeWithSma>)
   - [func \(e \*Envelope\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Envelope[T].Compute>)
-  - [func \(e \*Envelope\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Envelope[T].ComputeWithContext>)
   - [func \(e \*Envelope\[T\]\) IdlePeriod\(\) int](<#Envelope[T].IdlePeriod>)
   - [func \(e \*Envelope\[T\]\) String\(\) string](<#Envelope[T].String>)
 - [type Hma](<#Hma>)
   - [func NewHmaWithPeriod\[T helper.Number\]\(period int\) \*Hma\[T\]](<#NewHmaWithPeriod>)
   - [func \(h \*Hma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Hma[T].Compute>)
-  - [func \(h \*Hma\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \<\-chan T](<#Hma[T].ComputeWithContext>)
   - [func \(h \*Hma\[T\]\) IdlePeriod\(\) int](<#Hma[T].IdlePeriod>)
   - [func \(h \*Hma\[T\]\) String\(\) string](<#Hma[T].String>)
 - [type Kama](<#Kama>)
   - [func NewKama\[T helper.Number\]\(\) \*Kama\[T\]](<#NewKama>)
   - [func NewKamaWith\[T helper.Number\]\(erPeriod, fastScPeriod, slowScPeriod int\) \*Kama\[T\]](<#NewKamaWith>)
   - [func \(k \*Kama\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Kama[T].Compute>)
-  - [func \(k \*Kama\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#Kama[T].ComputeWithContext>)
   - [func \(k \*Kama\[T\]\) IdlePeriod\(\) int](<#Kama[T].IdlePeriod>)
   - [func \(k \*Kama\[T\]\) String\(\) string](<#Kama[T].String>)
 - [type Kdj](<#Kdj>)
   - [func NewKdj\[T helper.Number\]\(\) \*Kdj\[T\]](<#NewKdj>)
   - [func \(kdj \*Kdj\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].Compute>)
-  - [func \(kdj \*Kdj\[T\]\) ComputeWithContext\(ctx context.Context, high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Kdj[T].ComputeWithContext>)
   - [func \(kdj \*Kdj\[T\]\) IdlePeriod\(\) int](<#Kdj[T].IdlePeriod>)
 - [type Kst](<#Kst>)
   - [func NewKst\[T helper.Float\]\(\) \*Kst\[T\]](<#NewKst>)
   - [func \(k \*Kst\[T\]\) Compute\(c \<\-chan T\) \(kstResult \<\-chan T, signalResult \<\-chan T\)](<#Kst[T].Compute>)
-  - [func \(k \*Kst\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \(kstResult \<\-chan T, signalResult \<\-chan T\)](<#Kst[T].ComputeWithContext>)
   - [func \(k \*Kst\[T\]\) IdlePeriod\(\) int](<#Kst[T].IdlePeriod>)
   - [func \(k \*Kst\[T\]\) String\(\) string](<#Kst[T].String>)
 - [type Ma](<#Ma>)
-- [type MaWithContext](<#MaWithContext>)
 - [type Macd](<#Macd>)
   - [func NewMacd\[T helper.Number\]\(\) \*Macd\[T\]](<#NewMacd>)
   - [func NewMacdWithPeriod\[T helper.Number\]\(period1, period2, period3 int\) \*Macd\[T\]](<#NewMacdWithPeriod>)
   - [func \(m \*Macd\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Macd[T].Compute>)
-  - [func \(m \*Macd\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Macd[T].ComputeWithContext>)
   - [func \(m \*Macd\[T\]\) IdlePeriod\(\) int](<#Macd[T].IdlePeriod>)
 - [type MassIndex](<#MassIndex>)
   - [func NewMassIndex\[T helper.Number\]\(\) \*MassIndex\[T\]](<#NewMassIndex>)
   - [func \(m \*MassIndex\[T\]\) Compute\(highs, lows \<\-chan T\) \<\-chan T](<#MassIndex[T].Compute>)
-  - [func \(m \*MassIndex\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows \<\-chan T\) \<\-chan T](<#MassIndex[T].ComputeWithContext>)
   - [func \(m \*MassIndex\[T\]\) IdlePeriod\(\) int](<#MassIndex[T].IdlePeriod>)
 - [type McGinleyDynamic](<#McGinleyDynamic>)
   - [func NewMcGinleyDynamic\[T helper.Number\]\(\) \*McGinleyDynamic\[T\]](<#NewMcGinleyDynamic>)
   - [func NewMcGinleyDynamicWithPeriod\[T helper.Number\]\(period int\) \*McGinleyDynamic\[T\]](<#NewMcGinleyDynamicWithPeriod>)
   - [func \(m \*McGinleyDynamic\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#McGinleyDynamic[T].Compute>)
-  - [func \(m \*McGinleyDynamic\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#McGinleyDynamic[T].ComputeWithContext>)
   - [func \(m \*McGinleyDynamic\[T\]\) IdlePeriod\(\) int](<#McGinleyDynamic[T].IdlePeriod>)
   - [func \(m \*McGinleyDynamic\[T\]\) String\(\) string](<#McGinleyDynamic[T].String>)
 - [type Mlr](<#Mlr>)
   - [func NewMlrWithPeriod\[T helper.Number\]\(period int\) \*Mlr\[T\]](<#NewMlrWithPeriod>)
   - [func \(m \*Mlr\[T\]\) Compute\(x, y \<\-chan T\) \<\-chan T](<#Mlr[T].Compute>)
-  - [func \(m \*Mlr\[T\]\) ComputeWithContext\(ctx context.Context, x, y \<\-chan T\) \<\-chan T](<#Mlr[T].ComputeWithContext>)
   - [func \(m \*Mlr\[T\]\) IdlePeriod\(\) int](<#Mlr[T].IdlePeriod>)
 - [type Mls](<#Mls>)
   - [func NewMlsWithPeriod\[T helper.Number\]\(period int\) \*Mls\[T\]](<#NewMlsWithPeriod>)
   - [func \(m \*Mls\[T\]\) Compute\(x, y \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Mls[T].Compute>)
-  - [func \(m \*Mls\[T\]\) ComputeWithContext\(ctx context.Context, x, y \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Mls[T].ComputeWithContext>)
   - [func \(m \*Mls\[T\]\) IdlePeriod\(\) int](<#Mls[T].IdlePeriod>)
 - [type MovingMax](<#MovingMax>)
   - [func NewMovingMax\[T helper.Number\]\(\) \*MovingMax\[T\]](<#NewMovingMax>)
   - [func NewMovingMaxWithPeriod\[T helper.Number\]\(period int\) \*MovingMax\[T\]](<#NewMovingMaxWithPeriod>)
   - [func \(m \*MovingMax\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingMax[T].Compute>)
-  - [func \(m \*MovingMax\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#MovingMax[T].ComputeWithContext>)
   - [func \(m \*MovingMax\[T\]\) IdlePeriod\(\) int](<#MovingMax[T].IdlePeriod>)
 - [type MovingMin](<#MovingMin>)
   - [func NewMovingMin\[T helper.Number\]\(\) \*MovingMin\[T\]](<#NewMovingMin>)
   - [func NewMovingMinWithPeriod\[T helper.Number\]\(period int\) \*MovingMin\[T\]](<#NewMovingMinWithPeriod>)
   - [func \(m \*MovingMin\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingMin[T].Compute>)
-  - [func \(m \*MovingMin\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#MovingMin[T].ComputeWithContext>)
   - [func \(m \*MovingMin\[T\]\) IdlePeriod\(\) int](<#MovingMin[T].IdlePeriod>)
 - [type MovingSum](<#MovingSum>)
   - [func NewMovingSum\[T helper.Number\]\(\) \*MovingSum\[T\]](<#NewMovingSum>)
   - [func NewMovingSumWithPeriod\[T helper.Number\]\(period int\) \*MovingSum\[T\]](<#NewMovingSumWithPeriod>)
   - [func \(m \*MovingSum\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingSum[T].Compute>)
-  - [func \(m \*MovingSum\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#MovingSum[T].ComputeWithContext>)
   - [func \(m \*MovingSum\[T\]\) IdlePeriod\(\) int](<#MovingSum[T].IdlePeriod>)
 - [type PivotPoint](<#PivotPoint>)
   - [func NewPivotPoint\[T helper.Float\]\(\) \*PivotPoint\[T\]](<#NewPivotPoint>)
   - [func NewPivotPointWithMethod\[T helper.Float\]\(method PivotPointMethod\) \*PivotPoint\[T\]](<#NewPivotPointWithMethod>)
   - [func \(p \*PivotPoint\[T\]\) Compute\(opens, highs, lows, closings \<\-chan T\) \<\-chan PivotPointResult\[T\]](<#PivotPoint[T].Compute>)
-  - [func \(p \*PivotPoint\[T\]\) ComputeWithContext\(ctx context.Context, opens, highs, lows, closings \<\-chan T\) \<\-chan PivotPointResult\[T\]](<#PivotPoint[T].ComputeWithContext>)
   - [func \(p \*PivotPoint\[T\]\) IdlePeriod\(\) int](<#PivotPoint[T].IdlePeriod>)
   - [func \(p \*PivotPoint\[T\]\) String\(\) string](<#PivotPoint[T].String>)
 - [type PivotPointMethod](<#PivotPointMethod>)
@@ -163,102 +139,85 @@ The information provided on this project is strictly for informational purposes 
   - [func NewRma\[T helper.Number\]\(\) \*Rma\[T\]](<#NewRma>)
   - [func NewRmaWithPeriod\[T helper.Number\]\(period int\) \*Rma\[T\]](<#NewRmaWithPeriod>)
   - [func \(r \*Rma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Rma[T].Compute>)
-  - [func \(r \*Rma\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Rma[T].ComputeWithContext>)
   - [func \(r \*Rma\[T\]\) IdlePeriod\(\) int](<#Rma[T].IdlePeriod>)
 - [type Roc](<#Roc>)
   - [func NewRoc\[T helper.Float\]\(\) \*Roc\[T\]](<#NewRoc>)
   - [func NewRocWithPeriod\[T helper.Float\]\(period int\) \*Roc\[T\]](<#NewRocWithPeriod>)
   - [func \(r \*Roc\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Roc[T].Compute>)
-  - [func \(r \*Roc\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \<\-chan T](<#Roc[T].ComputeWithContext>)
   - [func \(r \*Roc\[T\]\) IdlePeriod\(\) int](<#Roc[T].IdlePeriod>)
   - [func \(r \*Roc\[T\]\) String\(\) string](<#Roc[T].String>)
 - [type Slope](<#Slope>)
   - [func NewSlope\[T helper.Number\]\(\) \*Slope\[T\]](<#NewSlope>)
   - [func NewSlopeWithPeriod\[T helper.Number\]\(period int\) \*Slope\[T\]](<#NewSlopeWithPeriod>)
   - [func \(s \*Slope\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Slope[T].Compute>)
-  - [func \(s \*Slope\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \<\-chan T](<#Slope[T].ComputeWithContext>)
   - [func \(s \*Slope\[T\]\) IdlePeriod\(\) int](<#Slope[T].IdlePeriod>)
   - [func \(s \*Slope\[T\]\) String\(\) string](<#Slope[T].String>)
 - [type SlowStochastic](<#SlowStochastic>)
   - [func NewSlowStochastic\[T helper.Number\]\(\) \*SlowStochastic\[T\]](<#NewSlowStochastic>)
   - [func NewSlowStochasticWithPeriod\[T helper.Number\]\(period, kPeriod, dPeriod int\) \*SlowStochastic\[T\]](<#NewSlowStochasticWithPeriod>)
   - [func \(s \*SlowStochastic\[T\]\) Compute\(values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#SlowStochastic[T].Compute>)
-  - [func \(s \*SlowStochastic\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#SlowStochastic[T].ComputeWithContext>)
   - [func \(s \*SlowStochastic\[T\]\) IdlePeriod\(\) int](<#SlowStochastic[T].IdlePeriod>)
 - [type Sma](<#Sma>)
   - [func NewSma\[T helper.Number\]\(\) \*Sma\[T\]](<#NewSma>)
   - [func NewSmaWithPeriod\[T helper.Number\]\(period int\) \*Sma\[T\]](<#NewSmaWithPeriod>)
   - [func \(s \*Sma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Sma[T].Compute>)
-  - [func \(s \*Sma\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Sma[T].ComputeWithContext>)
   - [func \(s \*Sma\[T\]\) IdlePeriod\(\) int](<#Sma[T].IdlePeriod>)
   - [func \(s \*Sma\[T\]\) String\(\) string](<#Sma[T].String>)
 - [type Smma](<#Smma>)
   - [func NewSmma\[T helper.Number\]\(\) \*Smma\[T\]](<#NewSmma>)
   - [func NewSmmaWithPeriod\[T helper.Number\]\(period int\) \*Smma\[T\]](<#NewSmmaWithPeriod>)
   - [func \(s \*Smma\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Smma[T].Compute>)
-  - [func \(s \*Smma\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Smma[T].ComputeWithContext>)
   - [func \(s \*Smma\[T\]\) IdlePeriod\(\) int](<#Smma[T].IdlePeriod>)
   - [func \(s \*Smma\[T\]\) String\(\) string](<#Smma[T].String>)
 - [type Stc](<#Stc>)
   - [func NewStc\[T helper.Number\]\(\) \*Stc\[T\]](<#NewStc>)
   - [func NewStcWithPeriod\[T helper.Number\]\(fastPeriod, slowPeriod, kPeriod, dPeriod int\) \*Stc\[T\]](<#NewStcWithPeriod>)
   - [func \(s \*Stc\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Stc[T].Compute>)
-  - [func \(s \*Stc\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Stc[T].ComputeWithContext>)
   - [func \(s \*Stc\[T\]\) IdlePeriod\(\) int](<#Stc[T].IdlePeriod>)
 - [type Stochastic](<#Stochastic>)
   - [func NewStochastic\[T helper.Number\]\(\) \*Stochastic\[T\]](<#NewStochastic>)
   - [func NewStochasticWithPeriod\[T helper.Number\]\(period int\) \*Stochastic\[T\]](<#NewStochasticWithPeriod>)
   - [func \(s \*Stochastic\[T\]\) Compute\(values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Stochastic[T].Compute>)
-  - [func \(s \*Stochastic\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Stochastic[T].ComputeWithContext>)
   - [func \(s \*Stochastic\[T\]\) IdlePeriod\(\) int](<#Stochastic[T].IdlePeriod>)
 - [type T3](<#T3>)
   - [func NewT3\[T helper.Float\]\(\) \*T3\[T\]](<#NewT3>)
   - [func NewT3WithPeriodAndFactor\[T helper.Float\]\(period int, volumeFactor float64\) \*T3\[T\]](<#NewT3WithPeriodAndFactor>)
   - [func \(t \*T3\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#T3[T].Compute>)
-  - [func \(t \*T3\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#T3[T].ComputeWithContext>)
   - [func \(t \*T3\[T\]\) IdlePeriod\(\) int](<#T3[T].IdlePeriod>)
   - [func \(t \*T3\[T\]\) String\(\) string](<#T3[T].String>)
 - [type Tema](<#Tema>)
   - [func NewTema\[T helper.Number\]\(\) \*Tema\[T\]](<#NewTema>)
   - [func \(t \*Tema\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Tema[T].Compute>)
-  - [func \(t \*Tema\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Tema[T].ComputeWithContext>)
   - [func \(t \*Tema\[T\]\) IdlePeriod\(\) int](<#Tema[T].IdlePeriod>)
 - [type Trima](<#Trima>)
   - [func NewTrima\[T helper.Number\]\(\) \*Trima\[T\]](<#NewTrima>)
   - [func \(t \*Trima\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Trima[T].Compute>)
-  - [func \(t \*Trima\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Trima[T].ComputeWithContext>)
   - [func \(t \*Trima\[T\]\) IdlePeriod\(\) int](<#Trima[T].IdlePeriod>)
 - [type Trix](<#Trix>)
   - [func NewTrix\[T helper.Number\]\(\) \*Trix\[T\]](<#NewTrix>)
   - [func \(t \*Trix\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#Trix[T].Compute>)
-  - [func \(t \*Trix\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#Trix[T].ComputeWithContext>)
   - [func \(t \*Trix\[T\]\) IdlePeriod\(\) int](<#Trix[T].IdlePeriod>)
 - [type Tsi](<#Tsi>)
   - [func NewTsi\[T helper.Number\]\(\) \*Tsi\[T\]](<#NewTsi>)
   - [func NewTsiWith\[T helper.Number\]\(firstSmoothingPeriod, secondSmoothingPeriod int\) \*Tsi\[T\]](<#NewTsiWith>)
   - [func \(t \*Tsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Tsi[T].Compute>)
-  - [func \(t \*Tsi\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#Tsi[T].ComputeWithContext>)
   - [func \(t \*Tsi\[T\]\) IdlePeriod\(\) int](<#Tsi[T].IdlePeriod>)
   - [func \(t \*Tsi\[T\]\) String\(\) string](<#Tsi[T].String>)
 - [type TypicalPrice](<#TypicalPrice>)
   - [func NewTypicalPrice\[T helper.Number\]\(\) \*TypicalPrice\[T\]](<#NewTypicalPrice>)
-  - [func \(i \*TypicalPrice\[T\]\) Compute\(high, low, closing \<\-chan T\) \<\-chan T](<#TypicalPrice[T].Compute>)
-  - [func \(i \*TypicalPrice\[T\]\) ComputeWithContext\(ctx context.Context, high, low, closing \<\-chan T\) \<\-chan T](<#TypicalPrice[T].ComputeWithContext>)
+  - [func \(\*TypicalPrice\[T\]\) Compute\(high, low, closing \<\-chan T\) \<\-chan T](<#TypicalPrice[T].Compute>)
 - [type Vwma](<#Vwma>)
   - [func NewVwma\[T helper.Number\]\(\) \*Vwma\[T\]](<#NewVwma>)
   - [func \(v \*Vwma\[T\]\) Compute\(closing, volume \<\-chan T\) \<\-chan T](<#Vwma[T].Compute>)
-  - [func \(v \*Vwma\[T\]\) ComputeWithContext\(ctx context.Context, closing, volume \<\-chan T\) \<\-chan T](<#Vwma[T].ComputeWithContext>)
   - [func \(v \*Vwma\[T\]\) IdlePeriod\(\) int](<#Vwma[T].IdlePeriod>)
 - [type WeightedClose](<#WeightedClose>)
   - [func NewWeightedClose\[T helper.Number\]\(\) \*WeightedClose\[T\]](<#NewWeightedClose>)
-  - [func \(i \*WeightedClose\[T\]\) Compute\(highs, lows, closes \<\-chan T\) \<\-chan T](<#WeightedClose[T].Compute>)
-  - [func \(i \*WeightedClose\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closes \<\-chan T\) \<\-chan T](<#WeightedClose[T].ComputeWithContext>)
+  - [func \(\*WeightedClose\[T\]\) Compute\(highs, lows, closes \<\-chan T\) \<\-chan T](<#WeightedClose[T].Compute>)
   - [func \(\*WeightedClose\[T\]\) IdlePeriod\(\) int](<#WeightedClose[T].IdlePeriod>)
   - [func \(\*WeightedClose\[T\]\) String\(\) string](<#WeightedClose[T].String>)
 - [type Wma](<#Wma>)
   - [func NewWmaWith\[T helper.Number\]\(period int\) \*Wma\[T\]](<#NewWmaWith>)
   - [func \(w \*Wma\[T\]\) Compute\(values \<\-chan T\) \<\-chan T](<#Wma[T].Compute>)
-  - [func \(w \*Wma\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \<\-chan T](<#Wma[T].ComputeWithContext>)
   - [func \(w \*Wma\[T\]\) IdlePeriod\(\) int](<#Wma[T].IdlePeriod>)
   - [func \(w \*Wma\[T\]\) String\(\) string](<#Wma[T].String>)
 
@@ -584,17 +543,8 @@ const (
 )
 ```
 
-<a name="ComputeMaWithContext"></a>
-## func [ComputeMaWithContext](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L33>)
-
-```go
-func ComputeMaWithContext[T helper.Number](ctx context.Context, ma Ma[T], c <-chan T) <-chan T
-```
-
-ComputeMaWithContext computes moving average of a channel with context.
-
 <a name="Apo"></a>
-## type [Apo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L46-L58>)
+## type [Apo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L42-L54>)
 
 Apo represents the configuration parameters for calculating the Absolute Price Oscillator \(APO\). An APO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive APO values signify an upward trend, while negative values signify a downward trend.
 
@@ -631,7 +581,7 @@ type Apo[T helper.Number] struct {
 ```
 
 <a name="NewApo"></a>
-### func [NewApo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L62>)
+### func [NewApo](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L58>)
 
 ```go
 func NewApo[T helper.Number]() *Apo[T]
@@ -640,27 +590,16 @@ func NewApo[T helper.Number]() *Apo[T]
 NewApo function initializes a new APO instance with the default parameters.
 
 <a name="Apo[T].Compute"></a>
-### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L97>)
+### func \(\*Apo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L69>)
 
 ```go
 func (apo *Apo[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Apo[T].ComputeWithContext"></a>
-### func \(\*Apo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L73>)
-
-```go
-func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the APO over the specified period.
+Compute function takes a channel of numbers and computes the APO over the specified period.
 
 <a name="Apo[T].IdlePeriod"></a>
-### func \(\*Apo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L90>)
+### func \(\*Apo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/apo.go#L86>)
 
 ```go
 func (apo *Apo[T]) IdlePeriod() int
@@ -669,7 +608,7 @@ func (apo *Apo[T]) IdlePeriod() int
 IdlePeriod is the initial period that APO won't yield any results.
 
 <a name="Aroon"></a>
-## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L34-L37>)
+## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L30-L33>)
 
 Aroon represent the configuration for calculating the Aroon indicator. It is a technical analysis tool that gauges trend direction and strength in asset prices. It comprises two lines: Aroon Up and Aroon Down. Aroon Up measures uptrend strength, while Aroon Down measures downtrend strength. When Aroon Up exceeds Aroon Down, it suggests a bullish trend; when Aroon Down surpasses Aroon Up, it indicates a bearish trend.
 
@@ -695,7 +634,7 @@ type Aroon[T helper.Number] struct {
 ```
 
 <a name="NewAroon"></a>
-### func [NewAroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L41>)
+### func [NewAroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L37>)
 
 ```go
 func NewAroon[T helper.Number]() *Aroon[T]
@@ -704,27 +643,16 @@ func NewAroon[T helper.Number]() *Aroon[T]
 NewAroon function initializes a new Aroon instance with the default parameters.
 
 <a name="Aroon[T].Compute"></a>
-### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L76>)
+### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L45>)
 
 ```go
 func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Aroon[T].ComputeWithContext"></a>
-### func \(\*Aroon\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L49>)
-
-```go
-func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (<-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Aroon over the specified period.
+Compute function takes a channel of numbers and computes the Aroon over the specified period.
 
 <a name="Bop"></a>
-## type [Bop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L20>)
+## type [Bop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L16>)
 
 Bop gauges the strength of buying and selling forces using the Balance of Power \(BoP\) indicator. A positive BoP value suggests an upward trend, while a negative value indicates a downward trend. A BoP value of zero implies equilibrium between the two forces.
 
@@ -737,7 +665,7 @@ type Bop[T helper.Number] struct{}
 ```
 
 <a name="NewBop"></a>
-### func [NewBop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L24>)
+### func [NewBop](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L20>)
 
 ```go
 func NewBop[T helper.Number]() *Bop[T]
@@ -746,27 +674,16 @@ func NewBop[T helper.Number]() *Bop[T]
 NewBop function initializes a new BOP instance with the default parameters.
 
 <a name="Bop[T].Compute"></a>
-### func \(\*Bop\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L37>)
+### func \(\*Bop\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L26>)
 
 ```go
-func (i *Bop[T]) Compute(opening, high, low, closing <-chan T) <-chan T
+func (*Bop[T]) Compute(opening, high, low, closing <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Bop[T].ComputeWithContext"></a>
-### func \(\*Bop\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/bop.go#L30>)
-
-```go
-func (i *Bop[T]) ComputeWithContext(ctx context.Context, opening, high, low, closing <-chan T) <-chan T
-```
-
-ComputeWithContext processes a channel of open, high, low, and close values, computing the BOP for each entry.
+Compute processes a channel of open, high, low, and close values, computing the BOP for each entry.
 
 <a name="Cci"></a>
-## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L31-L34>)
+## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L29-L32>)
 
 Cci represents the configuration parameters for calculating the Commodity Channel Index \(CCI\). CCI is a momentum\-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
 
@@ -792,7 +709,7 @@ type Cci[T helper.Number] struct {
 ```
 
 <a name="NewCci"></a>
-### func [NewCci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L37>)
+### func [NewCci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L35>)
 
 ```go
 func NewCci[T helper.Number]() *Cci[T]
@@ -801,7 +718,7 @@ func NewCci[T helper.Number]() *Cci[T]
 NewCci function initializes a new CCI instance with the default parameters.
 
 <a name="NewCciWithPeriod"></a>
-### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L42>)
+### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L40>)
 
 ```go
 func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
@@ -810,27 +727,16 @@ func NewCciWithPeriod[T helper.Number](period int) *Cci[T]
 NewCciWithPeriod function initializes a new CCI instance with the given period.
 
 <a name="Cci[T].Compute"></a>
-### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L92>)
+### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L47>)
 
 ```go
 func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Cci[T].ComputeWithContext"></a>
-### func \(\*Cci\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L49>)
-
-```go
-func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the CCI and the signal line.
+Compute function takes a channel of numbers and computes the CCI and the signal line.
 
 <a name="Cci[T].IdlePeriod"></a>
-### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L85>)
+### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L90>)
 
 ```go
 func (c *Cci[T]) IdlePeriod() int
@@ -839,7 +745,7 @@ func (c *Cci[T]) IdlePeriod() int
 IdlePeriod is the initial period that CCI won't yield any results.
 
 <a name="Cfo"></a>
-## type [Cfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L29-L32>)
+## type [Cfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L25-L28>)
 
 Cfo represents the configuration parameters for calculating the Chande Forecast Oscillator \(CFO\). CFO is a momentum indicator that measures the difference between a security's price and its linear regression forecast.
 
@@ -862,7 +768,7 @@ type Cfo[T helper.Number] struct {
 ```
 
 <a name="NewCfo"></a>
-### func [NewCfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L35>)
+### func [NewCfo](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L31>)
 
 ```go
 func NewCfo[T helper.Number]() *Cfo[T]
@@ -871,7 +777,7 @@ func NewCfo[T helper.Number]() *Cfo[T]
 NewCfo function initializes a new CFO instance with the default parameters.
 
 <a name="NewCfoWithPeriod"></a>
-### func [NewCfoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L40>)
+### func [NewCfoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L36>)
 
 ```go
 func NewCfoWithPeriod[T helper.Number](period int) *Cfo[T]
@@ -880,27 +786,16 @@ func NewCfoWithPeriod[T helper.Number](period int) *Cfo[T]
 NewCfoWithPeriod function initializes a new CFO instance with the given period.
 
 <a name="Cfo[T].Compute"></a>
-### func \(\*Cfo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L72>)
+### func \(\*Cfo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L43>)
 
 ```go
 func (c *Cfo[T]) Compute(closing <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Cfo[T].ComputeWithContext"></a>
-### func \(\*Cfo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L47>)
-
-```go
-func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the CFO.
+Compute function takes a channel of numbers and computes the CFO.
 
 <a name="Cfo[T].IdlePeriod"></a>
-### func \(\*Cfo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L65>)
+### func \(\*Cfo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cfo.go#L64>)
 
 ```go
 func (c *Cfo[T]) IdlePeriod() int
@@ -909,7 +804,7 @@ func (c *Cfo[T]) IdlePeriod() int
 IdlePeriod is the initial period that CFO won't yield any results.
 
 <a name="Dema"></a>
-## type [Dema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L26-L34>)
+## type [Dema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L22-L30>)
 
 Dema represents the parameters for calculating the Double Exponential Moving Average \(DEMA\). A bullish cross occurs when DEMA with 5 days period moves above DEMA with 35 days period. A bearish cross occurs when DEMA with 35 days period moves above DEMA With 5 days period.
 
@@ -940,7 +835,7 @@ type Dema[T helper.Number] struct {
 ```
 
 <a name="NewDema"></a>
-### func [NewDema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L38>)
+### func [NewDema](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L34>)
 
 ```go
 func NewDema[T helper.Number]() *Dema[T]
@@ -949,27 +844,16 @@ func NewDema[T helper.Number]() *Dema[T]
 NewDema function initializes a new DEMA instance with the default parameters.
 
 <a name="Dema[T].Compute"></a>
-### func \(\*Dema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L65>)
+### func \(\*Dema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L43>)
 
 ```go
 func (d *Dema[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Dema[T].ComputeWithContext"></a>
-### func \(\*Dema\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L47>)
-
-```go
-func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the DEMA over the specified period.
+Compute function takes a channel of numbers and computes the DEMA over the specified period.
 
 <a name="Dema[T].IdlePeriod"></a>
-### func \(\*Dema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L58>)
+### func \(\*Dema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dema.go#L54>)
 
 ```go
 func (d *Dema[T]) IdlePeriod() int
@@ -978,7 +862,7 @@ func (d *Dema[T]) IdlePeriod() int
 IdlePeriod is the initial period that DEMA won't yield any results.
 
 <a name="Dpo"></a>
-## type [Dpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L29-L33>)
+## type [Dpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L27-L31>)
 
 Dpo computes the Detrended Price Oscillator. Formula \(common approximation\): Let k = floor\(period/2\) \+ 1. For time index t \>= period\-1\+k:
 
@@ -1000,7 +884,7 @@ type Dpo[T helper.Float] struct {
 ```
 
 <a name="NewDpo"></a>
-### func [NewDpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L36>)
+### func [NewDpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L34>)
 
 ```go
 func NewDpo[T helper.Float]() *Dpo[T]
@@ -1009,7 +893,7 @@ func NewDpo[T helper.Float]() *Dpo[T]
 NewDpo creates a new DPO instance with default parameters.
 
 <a name="NewDpoWithPeriod"></a>
-### func [NewDpoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L44>)
+### func [NewDpoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L42>)
 
 ```go
 func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T]
@@ -1018,27 +902,16 @@ func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T]
 NewDpoWithPeriod initializes a new DPO instance with the given period. Periods \<= 1 are clamped to DefaultDpoPeriod.
 
 <a name="Dpo[T].Compute"></a>
-### func \(\*Dpo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L87>)
+### func \(\*Dpo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L53>)
 
 ```go
 func (d *Dpo[T]) Compute(closing <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Dpo[T].ComputeWithContext"></a>
-### func \(\*Dpo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L55>)
-
-```go
-func (d *Dpo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T
-```
-
-ComputeWithContext calculates the DPO indicator over the input price channel.
+Compute calculates the DPO indicator over the input price channel.
 
 <a name="Dpo[T].IdlePeriod"></a>
-### func \(\*Dpo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L75>)
+### func \(\*Dpo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L73>)
 
 ```go
 func (d *Dpo[T]) IdlePeriod() int
@@ -1047,7 +920,7 @@ func (d *Dpo[T]) IdlePeriod() int
 IdlePeriod returns the number of leading samples to discard before the first DPO value is available.
 
 <a name="Dpo[T].String"></a>
-### func \(\*Dpo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L80>)
+### func \(\*Dpo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L78>)
 
 ```go
 func (d *Dpo[T]) String() string
@@ -1056,7 +929,7 @@ func (d *Dpo[T]) String() string
 String is the string representation of the DPO.
 
 <a name="Ema"></a>
-## type [Ema](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L31-L37>)
+## type [Ema](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L29-L35>)
 
 Ema represents the parameters for calculating the Exponential Moving Average.
 
@@ -1080,7 +953,7 @@ type Ema[T helper.Number] struct {
 ```
 
 <a name="NewEma"></a>
-### func [NewEma](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L40>)
+### func [NewEma](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L38>)
 
 ```go
 func NewEma[T helper.Number]() *Ema[T]
@@ -1089,7 +962,7 @@ func NewEma[T helper.Number]() *Ema[T]
 NewEma function initializes a new EMA instance with the default parameters.
 
 <a name="NewEmaWithPeriod"></a>
-### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L48>)
+### func [NewEmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L46>)
 
 ```go
 func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
@@ -1098,27 +971,16 @@ func NewEmaWithPeriod[T helper.Number](period int) *Ema[T]
 NewEmaWithPeriod function initializes a new EMA instance with the given period.
 
 <a name="Ema[T].Compute"></a>
-### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L109>)
+### func \(\*Ema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L54>)
 
 ```go
 func (e *Ema[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Ema[T].ComputeWithContext"></a>
-### func \(\*Ema\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L56>)
-
-```go
-func (e *Ema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the EMA over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the EMA over the specified period.
 
 <a name="Ema[T].IdlePeriod"></a>
-### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L114>)
+### func \(\*Ema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L79>)
 
 ```go
 func (e *Ema[T]) IdlePeriod() int
@@ -1127,7 +989,7 @@ func (e *Ema[T]) IdlePeriod() int
 IdlePeriod is the initial period that EMA yield any results.
 
 <a name="Ema[T].String"></a>
-### func \(\*Ema\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L119>)
+### func \(\*Ema\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/ema.go#L84>)
 
 ```go
 func (e *Ema[T]) String() string
@@ -1136,7 +998,7 @@ func (e *Ema[T]) String() string
 String is the string representation of the EMA.
 
 <a name="Envelope"></a>
-## type [Envelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L24-L30>)
+## type [Envelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L22-L28>)
 
 Envelope represents the parameters neededd to calcualte the Envelope.
 
@@ -1151,7 +1013,7 @@ type Envelope[T helper.Number] struct {
 ```
 
 <a name="NewEnvelope"></a>
-### func [NewEnvelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L33>)
+### func [NewEnvelope](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L31>)
 
 ```go
 func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T]
@@ -1160,7 +1022,7 @@ func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T]
 NewEnvelope function initializes a new Envelope instance with the default parameters.
 
 <a name="NewEnvelopeWithEma"></a>
-### func [NewEnvelopeWithEma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L49>)
+### func [NewEnvelopeWithEma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L47>)
 
 ```go
 func NewEnvelopeWithEma[T helper.Number]() *Envelope[T]
@@ -1169,7 +1031,7 @@ func NewEnvelopeWithEma[T helper.Number]() *Envelope[T]
 NewEnvelopeWithEma function initializes a new Envelope instance using EMA.
 
 <a name="NewEnvelopeWithSma"></a>
-### func [NewEnvelopeWithSma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L41>)
+### func [NewEnvelopeWithSma](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L39>)
 
 ```go
 func NewEnvelopeWithSma[T helper.Number]() *Envelope[T]
@@ -1178,27 +1040,16 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T]
 NewEnvelopeWithSma function initalizes a new Envelope instance using SMA.
 
 <a name="Envelope[T].Compute"></a>
-### func \(\*Envelope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L88>)
+### func \(\*Envelope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L55>)
 
 ```go
 func (e *Envelope[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Envelope[T].ComputeWithContext"></a>
-### func \(\*Envelope\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L57>)
-
-```go
-func (e *Envelope[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Envelope over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the Envelope over the specified period.
 
 <a name="Envelope[T].IdlePeriod"></a>
-### func \(\*Envelope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L76>)
+### func \(\*Envelope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L75>)
 
 ```go
 func (e *Envelope[T]) IdlePeriod() int
@@ -1207,7 +1058,7 @@ func (e *Envelope[T]) IdlePeriod() int
 IdlePeriod is the initial period that Envelope yield any results.
 
 <a name="Envelope[T].String"></a>
-### func \(\*Envelope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L81>)
+### func \(\*Envelope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/envelope.go#L80>)
 
 ```go
 func (e *Envelope[T]) String() string
@@ -1216,7 +1067,7 @@ func (e *Envelope[T]) String() string
 String is the string representation of the Envelope.
 
 <a name="Hma"></a>
-## type [Hma](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L23-L32>)
+## type [Hma](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L21-L30>)
 
 Hma represents the configuration parameters for calculating the Hull Moving Average \(HMA\). Developed by Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
 
@@ -1234,7 +1085,7 @@ type Hma[T helper.Number] struct {
 ```
 
 <a name="NewHmaWithPeriod"></a>
-### func [NewHmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L35>)
+### func [NewHmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L33>)
 
 ```go
 func NewHmaWithPeriod[T helper.Number](period int) *Hma[T]
@@ -1243,27 +1094,16 @@ func NewHmaWithPeriod[T helper.Number](period int) *Hma[T]
 NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
 
 <a name="Hma[T].Compute"></a>
-### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L80>)
+### func \(\*Hma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L42>)
 
 ```go
 func (h *Hma[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Hma[T].ComputeWithContext"></a>
-### func \(\*Hma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L44>)
-
-```go
-func (h *Hma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the HMA and the signal line.
+Compute function takes a channel of numbers and computes the HMA and the signal line.
 
 <a name="Hma[T].IdlePeriod"></a>
-### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L68>)
+### func \(\*Hma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L69>)
 
 ```go
 func (h *Hma[T]) IdlePeriod() int
@@ -1272,7 +1112,7 @@ func (h *Hma[T]) IdlePeriod() int
 IdlePeriod is the initial period that HMA won't yield any results.
 
 <a name="Hma[T].String"></a>
-### func \(\*Hma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L73>)
+### func \(\*Hma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/hma.go#L74>)
 
 ```go
 func (h *Hma[T]) String() string
@@ -1281,7 +1121,7 @@ func (h *Hma[T]) String() string
 String is the string representation of the HMA.
 
 <a name="Kama"></a>
-## type [Kama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L40-L49>)
+## type [Kama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L38-L47>)
 
 Kama represents the parameters for calculating the Kaufman's Adaptive Moving Average \(KAMA\). It is a type of moving average that adapts to market noise or volatility. It tracks prices closely during periods of small price swings and low noise.
 
@@ -1314,7 +1154,7 @@ type Kama[T helper.Number] struct {
 ```
 
 <a name="NewKama"></a>
-### func [NewKama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L52>)
+### func [NewKama](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L50>)
 
 ```go
 func NewKama[T helper.Number]() *Kama[T]
@@ -1323,7 +1163,7 @@ func NewKama[T helper.Number]() *Kama[T]
 NewKama function initializes a new KAMA instance with the default parameters.
 
 <a name="NewKamaWith"></a>
-### func [NewKamaWith](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L61>)
+### func [NewKamaWith](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L59>)
 
 ```go
 func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T]
@@ -1332,27 +1172,16 @@ func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kam
 NewKamaWith function initializes a new KAMA instance with the given parameters.
 
 <a name="Kama[T].Compute"></a>
-### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L163>)
+### func \(\*Kama\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L68>)
 
 ```go
 func (k *Kama[T]) Compute(closings <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Kama[T].ComputeWithContext"></a>
-### func \(\*Kama\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L70>)
-
-```go
-func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the KAMA over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the KAMA over the specified period.
 
 <a name="Kama[T].IdlePeriod"></a>
-### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L168>)
+### func \(\*Kama\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L134>)
 
 ```go
 func (k *Kama[T]) IdlePeriod() int
@@ -1361,7 +1190,7 @@ func (k *Kama[T]) IdlePeriod() int
 IdlePeriod is the initial period that KAMA yield any results.
 
 <a name="Kama[T].String"></a>
-### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L173>)
+### func \(\*Kama\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kama.go#L139>)
 
 ```go
 func (k *Kama[T]) String() string
@@ -1370,7 +1199,7 @@ func (k *Kama[T]) String() string
 String is the string representation of the KAMA.
 
 <a name="Kdj"></a>
-## type [Kdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L45-L57>)
+## type [Kdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L41-L53>)
 
 Kdj represents the configuration parameters for calculating the KDJ, also known as the Random Index. KDJ is calculated similar to the Stochastic Oscillator with the difference of having the J line. It is used to analyze the trend and entry points.
 
@@ -1409,7 +1238,7 @@ type Kdj[T helper.Number] struct {
 ```
 
 <a name="NewKdj"></a>
-### func [NewKdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L60>)
+### func [NewKdj](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L56>)
 
 ```go
 func NewKdj[T helper.Number]() *Kdj[T]
@@ -1418,27 +1247,16 @@ func NewKdj[T helper.Number]() *Kdj[T]
 NewKdj function initializes a new Kdj instance with the default parameters
 
 <a name="Kdj[T].Compute"></a>
-### func \(\*Kdj\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L118>)
+### func \(\*Kdj\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L74>)
 
 ```go
 func (kdj *Kdj[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Kdj[T].ComputeWithContext"></a>
-### func \(\*Kdj\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L78>)
-
-```go
-func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the KDJ over the specified period. Returns K, D, J.
+Compute function takes a channel of numbers and computes the KDJ over the specified period. Returns K, D, J.
 
 <a name="Kdj[T].IdlePeriod"></a>
-### func \(\*Kdj\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L111>)
+### func \(\*Kdj\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kdj.go#L113>)
 
 ```go
 func (kdj *Kdj[T]) IdlePeriod() int
@@ -1447,7 +1265,7 @@ func (kdj *Kdj[T]) IdlePeriod() int
 IdlePeriod is the initial period that KDJ won't yield any results.
 
 <a name="Kst"></a>
-## type [Kst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L71-L98>)
+## type [Kst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L69-L96>)
 
 Kst represents the configuration parameters for calculating the Know Sure Thing \(KST\) oscillator. KST is a momentum oscillator based on the smoothed rate\-of\-change for four different timeframes. A KST value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend.
 
@@ -1509,7 +1327,7 @@ type Kst[T helper.Float] struct {
 ```
 
 <a name="NewKst"></a>
-### func [NewKst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L101>)
+### func [NewKst](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L99>)
 
 ```go
 func NewKst[T helper.Float]() *Kst[T]
@@ -1518,27 +1336,16 @@ func NewKst[T helper.Float]() *Kst[T]
 NewKst function initializes a new KST instance with default parameters.
 
 <a name="Kst[T].Compute"></a>
-### func \(\*Kst\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L198>)
+### func \(\*Kst\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L115>)
 
 ```go
 func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Kst[T].ComputeWithContext"></a>
-### func \(\*Kst\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L117>)
-
-```go
-func (k *Kst[T]) ComputeWithContext(ctx context.Context, c <-chan T) (kstResult <-chan T, signalResult <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the KST and the signal line.
+Compute function takes a channel of numbers and computes the KST and the signal line.
 
 <a name="Kst[T].IdlePeriod"></a>
-### func \(\*Kst\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L172>)
+### func \(\*Kst\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L173>)
 
 ```go
 func (k *Kst[T]) IdlePeriod() int
@@ -1547,7 +1354,7 @@ func (k *Kst[T]) IdlePeriod() int
 IdlePeriod is the initial period that KST won't yield any results.
 
 <a name="Kst[T].String"></a>
-### func \(\*Kst\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L188>)
+### func \(\*Kst\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/kst.go#L189>)
 
 ```go
 func (k *Kst[T]) String() string
@@ -1556,7 +1363,7 @@ func (k *Kst[T]) String() string
 String is the string representation of the KST.
 
 <a name="Ma"></a>
-## type [Ma](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L14-L23>)
+## type [Ma](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L12-L21>)
 
 Ma represents the interface for the Moving Average \(MA\) indicators.
 
@@ -1573,20 +1380,8 @@ type Ma[T helper.Number] interface {
 }
 ```
 
-<a name="MaWithContext"></a>
-## type [MaWithContext](<https://github.com/cinar/indicator/blob/master/trend/ma.go#L27-L30>)
-
-MaWithContext represents the interface for the Moving Average \(MA\) indicators that support context\-aware computation.
-
-```go
-type MaWithContext[T helper.Number] interface {
-    ComputeWithContext(context.Context, <-chan T) <-chan T
-    // contains filtered or unexported methods
-}
-```
-
 <a name="Macd"></a>
-## type [Macd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L31-L35>)
+## type [Macd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L29-L33>)
 
 Macd represents the configuration parameters for calculating the Moving Average Convergence Divergence \(MACD\).
 
@@ -1606,7 +1401,7 @@ type Macd[T helper.Number] struct {
 ```
 
 <a name="NewMacd"></a>
-### func [NewMacd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L38>)
+### func [NewMacd](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L36>)
 
 ```go
 func NewMacd[T helper.Number]() *Macd[T]
@@ -1615,7 +1410,7 @@ func NewMacd[T helper.Number]() *Macd[T]
 NewMacd function initializes a new MACD instance with the default parameters.
 
 <a name="NewMacdWithPeriod"></a>
-### func [NewMacdWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L47>)
+### func [NewMacdWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L45>)
 
 ```go
 func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T]
@@ -1624,27 +1419,16 @@ func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T]
 NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
 
 <a name="Macd[T].Compute"></a>
-### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L80>)
+### func \(\*Macd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L55>)
 
 ```go
 func (m *Macd[T]) Compute(c <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Macd[T].ComputeWithContext"></a>
-### func \(\*Macd\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L57>)
-
-```go
-func (m *Macd[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the MACD and the signal line.
+Compute function takes a channel of numbers and computes the MACD and the signal line.
 
 <a name="Macd[T].IdlePeriod"></a>
-### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L73>)
+### func \(\*Macd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/macd.go#L71>)
 
 ```go
 func (m *Macd[T]) IdlePeriod() int
@@ -1653,7 +1437,7 @@ func (m *Macd[T]) IdlePeriod() int
 IdlePeriod is the initial period that MACD won't yield any results.
 
 <a name="MassIndex"></a>
-## type [MassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L34-L38>)
+## type [MassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L32-L36>)
 
 MassIndex represents the configuration parameters for calculating the Mass Index. It uses the high\-low range to identify trend reversals based on range expansions.
 
@@ -1675,7 +1459,7 @@ type MassIndex[T helper.Number] struct {
 ```
 
 <a name="NewMassIndex"></a>
-### func [NewMassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L42>)
+### func [NewMassIndex](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L40>)
 
 ```go
 func NewMassIndex[T helper.Number]() *MassIndex[T]
@@ -1684,27 +1468,16 @@ func NewMassIndex[T helper.Number]() *MassIndex[T]
 NewMassIndex function initializes a new APO instance with the default parameters.
 
 <a name="MassIndex[T].Compute"></a>
-### func \(\*MassIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L79>)
+### func \(\*MassIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L55>)
 
 ```go
 func (m *MassIndex[T]) Compute(highs, lows <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="MassIndex[T].ComputeWithContext"></a>
-### func \(\*MassIndex\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L57>)
-
-```go
-func (m *MassIndex[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Mass Index.
+Compute function takes a channel of numbers and computes the Mass Index.
 
 <a name="MassIndex[T].IdlePeriod"></a>
-### func \(\*MassIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L72>)
+### func \(\*MassIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mass_index.go#L73>)
 
 ```go
 func (m *MassIndex[T]) IdlePeriod() int
@@ -1713,7 +1486,7 @@ func (m *MassIndex[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mass Index won't yield any results.
 
 <a name="McGinleyDynamic"></a>
-## type [McGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L31-L34>)
+## type [McGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L29-L32>)
 
 McGinleyDynamic represents the parameters for calculating the McGinley Dynamic. It is a technical analysis indicator that is an improvement over the Exponential Moving Average \(EMA\). It is designed to adjust for changes in market speed.
 
@@ -1736,7 +1509,7 @@ type McGinleyDynamic[T helper.Number] struct {
 ```
 
 <a name="NewMcGinleyDynamic"></a>
-### func [NewMcGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L37>)
+### func [NewMcGinleyDynamic](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L35>)
 
 ```go
 func NewMcGinleyDynamic[T helper.Number]() *McGinleyDynamic[T]
@@ -1745,7 +1518,7 @@ func NewMcGinleyDynamic[T helper.Number]() *McGinleyDynamic[T]
 NewMcGinleyDynamic function initializes a new McGinley Dynamic instance with the default parameters.
 
 <a name="NewMcGinleyDynamicWithPeriod"></a>
-### func [NewMcGinleyDynamicWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L42>)
+### func [NewMcGinleyDynamicWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L40>)
 
 ```go
 func NewMcGinleyDynamicWithPeriod[T helper.Number](period int) *McGinleyDynamic[T]
@@ -1754,27 +1527,16 @@ func NewMcGinleyDynamicWithPeriod[T helper.Number](period int) *McGinleyDynamic[
 NewMcGinleyDynamicWithPeriod function initializes a new McGinley Dynamic instance with the given period.
 
 <a name="McGinleyDynamic[T].Compute"></a>
-### func \(\*McGinleyDynamic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L106>)
+### func \(\*McGinleyDynamic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L47>)
 
 ```go
 func (m *McGinleyDynamic[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="McGinleyDynamic[T].ComputeWithContext"></a>
-### func \(\*McGinleyDynamic\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L49>)
-
-```go
-func (m *McGinleyDynamic[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the McGinley Dynamic over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the McGinley Dynamic over the specified period.
 
 <a name="McGinleyDynamic[T].IdlePeriod"></a>
-### func \(\*McGinleyDynamic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L111>)
+### func \(\*McGinleyDynamic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L82>)
 
 ```go
 func (m *McGinleyDynamic[T]) IdlePeriod() int
@@ -1783,7 +1545,7 @@ func (m *McGinleyDynamic[T]) IdlePeriod() int
 IdlePeriod is the initial period that McGinley Dynamic yield any results.
 
 <a name="McGinleyDynamic[T].String"></a>
-### func \(\*McGinleyDynamic\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L116>)
+### func \(\*McGinleyDynamic\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/mcginley_dynamic.go#L87>)
 
 ```go
 func (m *McGinleyDynamic[T]) String() string
@@ -1792,7 +1554,7 @@ func (m *McGinleyDynamic[T]) String() string
 String is the string representation of the McGinley Dynamic.
 
 <a name="Mlr"></a>
-## type [Mlr](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L21-L24>)
+## type [Mlr](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L19-L22>)
 
 Mlr represents the configuration parameters for calculating the Moving Linear Regression.
 
@@ -1815,7 +1577,7 @@ type Mlr[T helper.Number] struct {
 ```
 
 <a name="NewMlrWithPeriod"></a>
-### func [NewMlrWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L27>)
+### func [NewMlrWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L25>)
 
 ```go
 func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T]
@@ -1824,24 +1586,13 @@ func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T]
 NewMlrWithPeriod function initializes a new MLR instance with the given period.
 
 <a name="Mlr[T].Compute"></a>
-### func \(\*Mlr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L58>)
+### func \(\*Mlr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L32>)
 
 ```go
 func (m *Mlr[T]) Compute(x, y <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Mlr[T].ComputeWithContext"></a>
-### func \(\*Mlr\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L34>)
-
-```go
-func (m *Mlr[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the MLR r.
+Compute function takes a channel of numbers and computes the MLR r.
 
 <a name="Mlr[T].IdlePeriod"></a>
 ### func \(\*Mlr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mlr.go#L51>)
@@ -1853,7 +1604,7 @@ func (m *Mlr[T]) IdlePeriod() int
 IdlePeriod is the initial period that MLR won't yield any results.
 
 <a name="Mls"></a>
-## type [Mls](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L27-L30>)
+## type [Mls](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L25-L28>)
 
 Mls represents the configuration parameters for calculating the Moving Least Square \(MLS\). It is a regression analysis to determine the line of best fit for the given set of data.
 
@@ -1881,7 +1632,7 @@ type Mls[T helper.Number] struct {
 ```
 
 <a name="NewMlsWithPeriod"></a>
-### func [NewMlsWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L33>)
+### func [NewMlsWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L31>)
 
 ```go
 func NewMlsWithPeriod[T helper.Number](period int) *Mls[T]
@@ -1890,27 +1641,16 @@ func NewMlsWithPeriod[T helper.Number](period int) *Mls[T]
 NewMlsWithPeriod function initializes a new MLS instance with the given period.
 
 <a name="Mls[T].Compute"></a>
-### func \(\*Mls\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L98>)
+### func \(\*Mls\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L38>)
 
 ```go
 func (m *Mls[T]) Compute(x, y <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Mls[T].ComputeWithContext"></a>
-### func \(\*Mls\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L40>)
-
-```go
-func (m *Mls[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) (<-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the MLS m and b.
+Compute function takes a channel of numbers and computes the MLS m and b.
 
 <a name="Mls[T].IdlePeriod"></a>
-### func \(\*Mls\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L91>)
+### func \(\*Mls\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/mls.go#L105>)
 
 ```go
 func (m *Mls[T]) IdlePeriod() int
@@ -1919,7 +1659,7 @@ func (m *Mls[T]) IdlePeriod() int
 IdlePeriod is the initial period that MLS won't yield any results.
 
 <a name="MovingMax"></a>
-## type [MovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L17-L20>)
+## type [MovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L13-L16>)
 
 MovingMax represents the configuration parameters for calculating the Moving Max over the specified period.
 
@@ -1933,7 +1673,7 @@ type MovingMax[T helper.Number] struct {
 ```
 
 <a name="NewMovingMax"></a>
-### func [NewMovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L23>)
+### func [NewMovingMax](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L19>)
 
 ```go
 func NewMovingMax[T helper.Number]() *MovingMax[T]
@@ -1942,7 +1682,7 @@ func NewMovingMax[T helper.Number]() *MovingMax[T]
 NewMovingMax function initializes a new Moving Max instance with the default parameters.
 
 <a name="NewMovingMaxWithPeriod"></a>
-### func [NewMovingMaxWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L28>)
+### func [NewMovingMaxWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L24>)
 
 ```go
 func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
@@ -1951,27 +1691,16 @@ func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
 NewMovingMaxWithPeriod function initializes a new Moving Max instance with the given period.
 
 <a name="MovingMax[T].Compute"></a>
-### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L59>)
+### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L32>)
 
 ```go
 func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="MovingMax[T].ComputeWithContext"></a>
-### func \(\*MovingMax\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L36>)
-
-```go
-func (m *MovingMax[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Moving Max over the specified period.
+Compute function takes a channel of numbers and computes the Moving Max over the specified period.
 
 <a name="MovingMax[T].IdlePeriod"></a>
-### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L52>)
+### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L48>)
 
 ```go
 func (m *MovingMax[T]) IdlePeriod() int
@@ -1980,7 +1709,7 @@ func (m *MovingMax[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Max won't yield any results.
 
 <a name="MovingMin"></a>
-## type [MovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L17-L20>)
+## type [MovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L13-L16>)
 
 MovingMin represents the configuration parameters for calculating the Moving Min over the specified period.
 
@@ -1994,7 +1723,7 @@ type MovingMin[T helper.Number] struct {
 ```
 
 <a name="NewMovingMin"></a>
-### func [NewMovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L23>)
+### func [NewMovingMin](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L19>)
 
 ```go
 func NewMovingMin[T helper.Number]() *MovingMin[T]
@@ -2003,7 +1732,7 @@ func NewMovingMin[T helper.Number]() *MovingMin[T]
 NewMovingMin function initializes a new Moving Min instance with the default parameters.
 
 <a name="NewMovingMinWithPeriod"></a>
-### func [NewMovingMinWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L28>)
+### func [NewMovingMinWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L24>)
 
 ```go
 func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
@@ -2012,27 +1741,16 @@ func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
 NewMovingMinWithPeriod function initializes a new Moving Min instance with the given period.
 
 <a name="MovingMin[T].Compute"></a>
-### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L59>)
+### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L32>)
 
 ```go
 func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="MovingMin[T].ComputeWithContext"></a>
-### func \(\*MovingMin\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L36>)
-
-```go
-func (m *MovingMin[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Moving Min over the specified period.
+Compute function takes a channel of numbers and computes the Moving Min over the specified period.
 
 <a name="MovingMin[T].IdlePeriod"></a>
-### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L52>)
+### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L48>)
 
 ```go
 func (m *MovingMin[T]) IdlePeriod() int
@@ -2041,7 +1759,7 @@ func (m *MovingMin[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Min won't yield any results.
 
 <a name="MovingSum"></a>
-## type [MovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L19-L22>)
+## type [MovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L15-L18>)
 
 MovingSum represents the configuration parameters for calculating the Moving Sum over the specified period.
 
@@ -2060,7 +1778,7 @@ type MovingSum[T helper.Number] struct {
 ```
 
 <a name="NewMovingSum"></a>
-### func [NewMovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L25>)
+### func [NewMovingSum](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L21>)
 
 ```go
 func NewMovingSum[T helper.Number]() *MovingSum[T]
@@ -2069,7 +1787,7 @@ func NewMovingSum[T helper.Number]() *MovingSum[T]
 NewMovingSum function initializes a new Moving Sum instance with the default parameters.
 
 <a name="NewMovingSumWithPeriod"></a>
-### func [NewMovingSumWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L30>)
+### func [NewMovingSumWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L26>)
 
 ```go
 func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T]
@@ -2078,27 +1796,16 @@ func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T]
 NewMovingSumWithPeriod function initializes a new Moving Sum instance with the given period.
 
 <a name="MovingSum[T].Compute"></a>
-### func \(\*MovingSum\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L60>)
+### func \(\*MovingSum\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L34>)
 
 ```go
 func (m *MovingSum[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="MovingSum[T].ComputeWithContext"></a>
-### func \(\*MovingSum\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L38>)
-
-```go
-func (m *MovingSum[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Moving Sum over the specified period.
+Compute function takes a channel of numbers and computes the Moving Sum over the specified period.
 
 <a name="MovingSum[T].IdlePeriod"></a>
-### func \(\*MovingSum\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L53>)
+### func \(\*MovingSum\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_sum.go#L49>)
 
 ```go
 func (m *MovingSum[T]) IdlePeriod() int
@@ -2107,7 +1814,7 @@ func (m *MovingSum[T]) IdlePeriod() int
 IdlePeriod is the initial period that Moving Sum won't yield any results.
 
 <a name="PivotPoint"></a>
-## type [PivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L49-L52>)
+## type [PivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L47-L50>)
 
 PivotPoint represents the configuration parameters for calculating Pivot Points. Pivot points are calculated based on the previous period's high, low, and close, and are used to predict support and resistance levels for the current period.
 
@@ -2119,7 +1826,7 @@ type PivotPoint[T helper.Float] struct {
 ```
 
 <a name="NewPivotPoint"></a>
-### func [NewPivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L55>)
+### func [NewPivotPoint](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L53>)
 
 ```go
 func NewPivotPoint[T helper.Float]() *PivotPoint[T]
@@ -2128,7 +1835,7 @@ func NewPivotPoint[T helper.Float]() *PivotPoint[T]
 NewPivotPoint function initializes a new Pivot Point instance with the standard method.
 
 <a name="NewPivotPointWithMethod"></a>
-### func [NewPivotPointWithMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L60>)
+### func [NewPivotPointWithMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L58>)
 
 ```go
 func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoint[T]
@@ -2137,29 +1844,16 @@ func NewPivotPointWithMethod[T helper.Float](method PivotPointMethod) *PivotPoin
 NewPivotPointWithMethod function initializes a new Pivot Point instance with the given method.
 
 <a name="PivotPoint[T].Compute"></a>
-### func \(\*PivotPoint\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L140>)
+### func \(\*PivotPoint\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L67>)
 
 ```go
 func (p *PivotPoint[T]) Compute(opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T]
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="PivotPoint[T].ComputeWithContext"></a>
-### func \(\*PivotPoint\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L72>)
-
-```go
-func (p *PivotPoint[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) <-chan PivotPointResult[T]
-```
-
-ComputeWithContext function takes channels for open, high, low, and closing prices and returns a channel of PivotPointResult, supporting context cancellation.
-
-Note: We assume a synchronous upstream pipeline where all four input channels are driven by the same clock. Reading them in sequential selects prevents a permanent block, but cancellation may leave a tick half\-consumed.
+Compute function takes channels for open, high, low, and closing prices and returns a channel of PivotPointResult. It uses the values from the previous period to calculate levels for the current period.
 
 <a name="PivotPoint[T].IdlePeriod"></a>
-### func \(\*PivotPoint\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L196>)
+### func \(\*PivotPoint\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L150>)
 
 ```go
 func (p *PivotPoint[T]) IdlePeriod() int
@@ -2168,7 +1862,7 @@ func (p *PivotPoint[T]) IdlePeriod() int
 IdlePeriod is the initial period that Pivot Point won't yield any results.
 
 <a name="PivotPoint[T].String"></a>
-### func \(\*PivotPoint\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L201>)
+### func \(\*PivotPoint\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L155>)
 
 ```go
 func (p *PivotPoint[T]) String() string
@@ -2177,7 +1871,7 @@ func (p *PivotPoint[T]) String() string
 String is the string representation of the Pivot Point instance.
 
 <a name="PivotPointMethod"></a>
-## type [PivotPointMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L16>)
+## type [PivotPointMethod](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L14>)
 
 PivotPointMethod represents the method used for calculating pivot points.
 
@@ -2204,7 +1898,7 @@ const (
 ```
 
 <a name="PivotPointResult"></a>
-## type [PivotPointResult](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L34-L44>)
+## type [PivotPointResult](<https://github.com/cinar/indicator/blob/master/trend/pivot_point.go#L32-L42>)
 
 PivotPointResult represents the result of the pivot point calculation, including the pivot point itself, and its associated resistance \(R\) and support \(S\) levels.
 
@@ -2223,7 +1917,7 @@ type PivotPointResult[T helper.Float] struct {
 ```
 
 <a name="Rma"></a>
-## type [Rma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L29-L32>)
+## type [Rma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L25-L28>)
 
 Rma represents the parameters for calculating Rolling Moving Average \(RMA\).
 
@@ -2249,7 +1943,7 @@ type Rma[T helper.Number] struct {
 ```
 
 <a name="NewRma"></a>
-### func [NewRma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L35>)
+### func [NewRma](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L31>)
 
 ```go
 func NewRma[T helper.Number]() *Rma[T]
@@ -2258,7 +1952,7 @@ func NewRma[T helper.Number]() *Rma[T]
 NewRma function initializes a new RMA instance with the default parameters.
 
 <a name="NewRmaWithPeriod"></a>
-### func [NewRmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L40>)
+### func [NewRmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L36>)
 
 ```go
 func NewRmaWithPeriod[T helper.Number](period int) *Rma[T]
@@ -2267,27 +1961,16 @@ func NewRmaWithPeriod[T helper.Number](period int) *Rma[T]
 NewRmaWithPeriod function initializes a new RMA instance with the given period.
 
 <a name="Rma[T].Compute"></a>
-### func \(\*Rma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L98>)
+### func \(\*Rma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L43>)
 
 ```go
 func (r *Rma[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Rma[T].ComputeWithContext"></a>
-### func \(\*Rma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L47>)
-
-```go
-func (r *Rma[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the RMA over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the RMA over the specified period.
 
 <a name="Rma[T].IdlePeriod"></a>
-### func \(\*Rma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L103>)
+### func \(\*Rma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/rma.go#L66>)
 
 ```go
 func (r *Rma[T]) IdlePeriod() int
@@ -2296,7 +1979,7 @@ func (r *Rma[T]) IdlePeriod() int
 IdlePeriod is the initial period that RMA won't yield any results.
 
 <a name="Roc"></a>
-## type [Roc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L23-L26>)
+## type [Roc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L21-L24>)
 
 Roc represents the configuration parameters for calculating the Rate Of Change \(ROC\) indicator.
 
@@ -2312,7 +1995,7 @@ type Roc[T helper.Float] struct {
 ```
 
 <a name="NewRoc"></a>
-### func [NewRoc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L29>)
+### func [NewRoc](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L27>)
 
 ```go
 func NewRoc[T helper.Float]() *Roc[T]
@@ -2321,7 +2004,7 @@ func NewRoc[T helper.Float]() *Roc[T]
 NewRoc function initializes a new Roc instance with the default parameters.
 
 <a name="NewRocWithPeriod"></a>
-### func [NewRocWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L34>)
+### func [NewRocWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L32>)
 
 ```go
 func NewRocWithPeriod[T helper.Float](period int) *Roc[T]
@@ -2330,27 +2013,16 @@ func NewRocWithPeriod[T helper.Float](period int) *Roc[T]
 NewRocWithPeriod function initializes a new Roc instance with the given parameters.
 
 <a name="Roc[T].Compute"></a>
-### func \(\*Roc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L79>)
+### func \(\*Roc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L42>)
 
 ```go
 func (r *Roc[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Roc[T].ComputeWithContext"></a>
-### func \(\*Roc\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L44>)
-
-```go
-func (r *Roc[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the ROC and the signal line.
+Compute function takes a channel of numbers and computes the ROC and the signal line.
 
 <a name="Roc[T].IdlePeriod"></a>
-### func \(\*Roc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L67>)
+### func \(\*Roc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L65>)
 
 ```go
 func (r *Roc[T]) IdlePeriod() int
@@ -2359,7 +2031,7 @@ func (r *Roc[T]) IdlePeriod() int
 IdlePeriod is the initial period that ROC won't yield any results.
 
 <a name="Roc[T].String"></a>
-### func \(\*Roc\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L72>)
+### func \(\*Roc\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/roc.go#L70>)
 
 ```go
 func (r *Roc[T]) String() string
@@ -2368,7 +2040,7 @@ func (r *Roc[T]) String() string
 String is the string representation of the ROC.
 
 <a name="Slope"></a>
-## type [Slope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L26-L29>)
+## type [Slope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L24-L27>)
 
 Slope represents the configuration parameters for calculating the Rate of Change Slope indicator.
 
@@ -2386,7 +2058,7 @@ type Slope[T helper.Number] struct {
 ```
 
 <a name="NewSlope"></a>
-### func [NewSlope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L32>)
+### func [NewSlope](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L30>)
 
 ```go
 func NewSlope[T helper.Number]() *Slope[T]
@@ -2395,7 +2067,7 @@ func NewSlope[T helper.Number]() *Slope[T]
 NewSlope function initializes a new Slope instance with the default parameters.
 
 <a name="NewSlopeWithPeriod"></a>
-### func [NewSlopeWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L37>)
+### func [NewSlopeWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L35>)
 
 ```go
 func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T]
@@ -2404,27 +2076,16 @@ func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T]
 NewSlopeWithPeriod function initializes a new Slope instance with the given parameters.
 
 <a name="Slope[T].Compute"></a>
-### func \(\*Slope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L65>)
+### func \(\*Slope\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L46>)
 
 ```go
 func (s *Slope[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Slope[T].ComputeWithContext"></a>
-### func \(\*Slope\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L48>)
-
-```go
-func (s *Slope[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Slope.
+Compute function takes a channel of numbers and computes the Slope.
 
 <a name="Slope[T].IdlePeriod"></a>
-### func \(\*Slope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L53>)
+### func \(\*Slope\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L51>)
 
 ```go
 func (s *Slope[T]) IdlePeriod() int
@@ -2433,7 +2094,7 @@ func (s *Slope[T]) IdlePeriod() int
 IdlePeriod is the initial period that Slope won't yield any results.
 
 <a name="Slope[T].String"></a>
-### func \(\*Slope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L58>)
+### func \(\*Slope\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/slope.go#L56>)
 
 ```go
 func (s *Slope[T]) String() string
@@ -2442,7 +2103,7 @@ func (s *Slope[T]) String() string
 String is the string representation of the Slope.
 
 <a name="SlowStochastic"></a>
-## type [SlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L36-L45>)
+## type [SlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L32-L41>)
 
 SlowStochastic represents the configuration parameters for calculating the Slow Stochastic indicator. This applies additional smoothing to the Fast Stochastic values.
 
@@ -2473,7 +2134,7 @@ type SlowStochastic[T helper.Number] struct {
 ```
 
 <a name="NewSlowStochastic"></a>
-### func [NewSlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L48>)
+### func [NewSlowStochastic](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L44>)
 
 ```go
 func NewSlowStochastic[T helper.Number]() *SlowStochastic[T]
@@ -2482,7 +2143,7 @@ func NewSlowStochastic[T helper.Number]() *SlowStochastic[T]
 NewSlowStochastic function initializes a new SlowStochastic instance with the default parameters.
 
 <a name="NewSlowStochasticWithPeriod"></a>
-### func [NewSlowStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L57>)
+### func [NewSlowStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L53>)
 
 ```go
 func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) *SlowStochastic[T]
@@ -2491,27 +2152,16 @@ func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) 
 NewSlowStochasticWithPeriod function initializes a new SlowStochastic instance with the given periods.
 
 <a name="SlowStochastic[T].Compute"></a>
-### func \(\*SlowStochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L109>)
+### func \(\*SlowStochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L63>)
 
 ```go
 func (s *SlowStochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="SlowStochastic[T].ComputeWithContext"></a>
-### func \(\*SlowStochastic\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L67>)
-
-```go
-func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T) (<-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Slow Stochastic indicator. Returns Slow %K and Slow %D.
+Compute function takes a channel of numbers and computes the Slow Stochastic indicator. Returns Slow %K and Slow %D.
 
 <a name="SlowStochastic[T].IdlePeriod"></a>
-### func \(\*SlowStochastic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L102>)
+### func \(\*SlowStochastic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/slow_stochastic.go#L101>)
 
 ```go
 func (s *SlowStochastic[T]) IdlePeriod() int
@@ -2520,7 +2170,7 @@ func (s *SlowStochastic[T]) IdlePeriod() int
 IdlePeriod is the initial period that Slow Stochastic won't yield any results.
 
 <a name="Sma"></a>
-## type [Sma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L28-L31>)
+## type [Sma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L26-L29>)
 
 Sma represents the parameters for calculating the Simple Moving Average.
 
@@ -2541,7 +2191,7 @@ type Sma[T helper.Number] struct {
 ```
 
 <a name="NewSma"></a>
-### func [NewSma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L34>)
+### func [NewSma](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L32>)
 
 ```go
 func NewSma[T helper.Number]() *Sma[T]
@@ -2550,7 +2200,7 @@ func NewSma[T helper.Number]() *Sma[T]
 NewSma function initializes a new SMA instance with the default parameters.
 
 <a name="NewSmaWithPeriod"></a>
-### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L39>)
+### func [NewSmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L37>)
 
 ```go
 func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
@@ -2559,27 +2209,16 @@ func NewSmaWithPeriod[T helper.Number](period int) *Sma[T]
 NewSmaWithPeriod function initializes a new SMA instance with the default parameters.
 
 <a name="Sma[T].Compute"></a>
-### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L68>)
+### func \(\*Sma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L44>)
 
 ```go
 func (s *Sma[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Sma[T].ComputeWithContext"></a>
-### func \(\*Sma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L46>)
-
-```go
-func (s *Sma[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the SMA over the specified period.
+Compute function takes a channel of numbers and computes the SMA over the specified period.
 
 <a name="Sma[T].IdlePeriod"></a>
-### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L56>)
+### func \(\*Sma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L54>)
 
 ```go
 func (s *Sma[T]) IdlePeriod() int
@@ -2588,7 +2227,7 @@ func (s *Sma[T]) IdlePeriod() int
 IdlePeriod is the initial period that SMA won't yield any results.
 
 <a name="Sma[T].String"></a>
-### func \(\*Sma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L61>)
+### func \(\*Sma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/sma.go#L59>)
 
 ```go
 func (s *Sma[T]) String() string
@@ -2597,7 +2236,7 @@ func (s *Sma[T]) String() string
 String is the string representation of the SMA.
 
 <a name="Smma"></a>
-## type [Smma](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L31-L34>)
+## type [Smma](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L29-L32>)
 
 Smma represents the parameters for calculating the Smoothed Moving Average \(SMMA\).
 
@@ -2623,7 +2262,7 @@ type Smma[T helper.Number] struct {
 ```
 
 <a name="NewSmma"></a>
-### func [NewSmma](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L37>)
+### func [NewSmma](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L35>)
 
 ```go
 func NewSmma[T helper.Number]() *Smma[T]
@@ -2632,7 +2271,7 @@ func NewSmma[T helper.Number]() *Smma[T]
 NewSmma function initializes a new SMMA instance with the default parameters.
 
 <a name="NewSmmaWithPeriod"></a>
-### func [NewSmmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L42>)
+### func [NewSmmaWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L40>)
 
 ```go
 func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T]
@@ -2641,27 +2280,16 @@ func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T]
 NewSmmaWithPeriod function initializes a new SMMA instance with the given period.
 
 <a name="Smma[T].Compute"></a>
-### func \(\*Smma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L99>)
+### func \(\*Smma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L47>)
 
 ```go
 func (s *Smma[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Smma[T].ComputeWithContext"></a>
-### func \(\*Smma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L49>)
-
-```go
-func (s *Smma[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the SMMA over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the SMMA over the specified period.
 
 <a name="Smma[T].IdlePeriod"></a>
-### func \(\*Smma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L104>)
+### func \(\*Smma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L69>)
 
 ```go
 func (s *Smma[T]) IdlePeriod() int
@@ -2670,7 +2298,7 @@ func (s *Smma[T]) IdlePeriod() int
 IdlePeriod is the initial period that SMMA yield any results.
 
 <a name="Smma[T].String"></a>
-### func \(\*Smma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L109>)
+### func \(\*Smma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/smma.go#L74>)
 
 ```go
 func (s *Smma[T]) String() string
@@ -2679,7 +2307,7 @@ func (s *Smma[T]) String() string
 String is the string representation of the SMMA.
 
 <a name="Stc"></a>
-## type [Stc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L45-L63>)
+## type [Stc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L43-L61>)
 
 Stc represents the configuration parameters for calculating the Schaff Trend Cycle \(STC\) indicator. It combines MACD with stochastic oscillators to identify trend direction and potential entry points.
 
@@ -2724,7 +2352,7 @@ type Stc[T helper.Number] struct {
 ```
 
 <a name="NewStc"></a>
-### func [NewStc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L66>)
+### func [NewStc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L64>)
 
 ```go
 func NewStc[T helper.Number]() *Stc[T]
@@ -2733,7 +2361,7 @@ func NewStc[T helper.Number]() *Stc[T]
 NewStc function initializes a new STC instance with the default parameters.
 
 <a name="NewStcWithPeriod"></a>
-### func [NewStcWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L76>)
+### func [NewStcWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L74>)
 
 ```go
 func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T]
@@ -2742,27 +2370,16 @@ func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod 
 NewStcWithPeriod function initializes a new STC instance with the given periods.
 
 <a name="Stc[T].Compute"></a>
-### func \(\*Stc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L142>)
+### func \(\*Stc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L93>)
 
 ```go
 func (s *Stc[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Stc[T].ComputeWithContext"></a>
-### func \(\*Stc\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L95>)
-
-```go
-func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the STC indicator.
+Compute function takes a channel of numbers and computes the STC indicator.
 
 <a name="Stc[T].IdlePeriod"></a>
-### func \(\*Stc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L135>)
+### func \(\*Stc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L138>)
 
 ```go
 func (s *Stc[T]) IdlePeriod() int
@@ -2771,7 +2388,7 @@ func (s *Stc[T]) IdlePeriod() int
 IdlePeriod is the initial period that STC won't yield any results.
 
 <a name="Stochastic"></a>
-## type [Stochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L34-L40>)
+## type [Stochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L30-L36>)
 
 Stochastic represents the configuration parameters for calculating the Stochastic indicator on a single input series. This is different from the Stochastic Oscillator which operates on high, low, and close. This generic version is useful for applying stochastic calculation to any series, such as MACD values in the Schaff Trend Cycle \(STC\).
 
@@ -2798,7 +2415,7 @@ type Stochastic[T helper.Number] struct {
 ```
 
 <a name="NewStochastic"></a>
-### func [NewStochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L43>)
+### func [NewStochastic](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L39>)
 
 ```go
 func NewStochastic[T helper.Number]() *Stochastic[T]
@@ -2807,7 +2424,7 @@ func NewStochastic[T helper.Number]() *Stochastic[T]
 NewStochastic function initializes a new Stochastic instance with the default parameters.
 
 <a name="NewStochasticWithPeriod"></a>
-### func [NewStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L48>)
+### func [NewStochasticWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L44>)
 
 ```go
 func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T]
@@ -2816,24 +2433,13 @@ func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T]
 NewStochasticWithPeriod function initializes a new Stochastic instance with the given period.
 
 <a name="Stochastic[T].Compute"></a>
-### func \(\*Stochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L94>)
+### func \(\*Stochastic\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L53>)
 
 ```go
 func (s *Stochastic[T]) Compute(values <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Stochastic[T].ComputeWithContext"></a>
-### func \(\*Stochastic\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L57>)
-
-```go
-func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T) (<-chan T, <-chan T)
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Stochastic indicator. Returns %K and %D.
+Compute function takes a channel of numbers and computes the Stochastic indicator. Returns %K and %D.
 
 <a name="Stochastic[T].IdlePeriod"></a>
 ### func \(\*Stochastic\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stochastic.go#L87>)
@@ -2845,7 +2451,7 @@ func (s *Stochastic[T]) IdlePeriod() int
 IdlePeriod is the initial period that Stochastic won't yield any results.
 
 <a name="T3"></a>
-## type [T3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L43-L52>)
+## type [T3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L41-L50>)
 
 T3 represents the configuration parameters for calculating the Tillson T3 Moving Average. The T3 is a smooth moving average that chains multiple EMAs together with a volume factor for improved responsiveness.
 
@@ -2882,7 +2488,7 @@ type T3[T helper.Float] struct {
 ```
 
 <a name="NewT3"></a>
-### func [NewT3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L55>)
+### func [NewT3](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L53>)
 
 ```go
 func NewT3[T helper.Float]() *T3[T]
@@ -2891,7 +2497,7 @@ func NewT3[T helper.Float]() *T3[T]
 NewT3 function initializes a new T3 instance.
 
 <a name="NewT3WithPeriodAndFactor"></a>
-### func [NewT3WithPeriodAndFactor](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L61>)
+### func [NewT3WithPeriodAndFactor](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L59>)
 
 ```go
 func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) *T3[T]
@@ -2900,27 +2506,16 @@ func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) 
 NewT3WithPeriodAndFactor function initializes a new T3 instance with specified period and volume factor.
 
 <a name="T3[T].Compute"></a>
-### func \(\*T3\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L123>)
+### func \(\*T3\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L77>)
 
 ```go
 func (t *T3[T]) Compute(closings <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="T3[T].ComputeWithContext"></a>
-### func \(\*T3\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L79>)
-
-```go
-func (t *T3[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the T3 Moving Average.
+Compute function takes a channel of numbers and computes the T3 Moving Average.
 
 <a name="T3[T].IdlePeriod"></a>
-### func \(\*T3\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L109>)
+### func \(\*T3\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L110>)
 
 ```go
 func (t *T3[T]) IdlePeriod() int
@@ -2929,7 +2524,7 @@ func (t *T3[T]) IdlePeriod() int
 IdlePeriod is the initial period that T3 won't yield any results.
 
 <a name="T3[T].String"></a>
-### func \(\*T3\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L116>)
+### func \(\*T3\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/t3.go#L117>)
 
 ```go
 func (t *T3[T]) String() string
@@ -2938,7 +2533,7 @@ func (t *T3[T]) String() string
 String is the string representation of the T3.
 
 <a name="Tema"></a>
-## type [Tema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L20-L24>)
+## type [Tema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L18-L22>)
 
 Tema represents the configuration parameters for calculating the Triple Exponential Moving Average \(TEMA\).
 
@@ -2958,7 +2553,7 @@ type Tema[T helper.Number] struct {
 ```
 
 <a name="NewTema"></a>
-### func [NewTema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L28>)
+### func [NewTema](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L26>)
 
 ```go
 func NewTema[T helper.Number]() *Tema[T]
@@ -2967,27 +2562,16 @@ func NewTema[T helper.Number]() *Tema[T]
 NewTema function initializes a new TEMA instance with the default parameters.
 
 <a name="Tema[T].Compute"></a>
-### func \(\*Tema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L70>)
+### func \(\*Tema\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L36>)
 
 ```go
 func (t *Tema[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Tema[T].ComputeWithContext"></a>
-### func \(\*Tema\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L38>)
-
-```go
-func (t *Tema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the TEMA and the signal line.
+Compute function takes a channel of numbers and computes the TEMA and the signal line.
 
 <a name="Tema[T].IdlePeriod"></a>
-### func \(\*Tema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L63>)
+### func \(\*Tema\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tema.go#L65>)
 
 ```go
 func (t *Tema[T]) IdlePeriod() int
@@ -2996,7 +2580,7 @@ func (t *Tema[T]) IdlePeriod() int
 IdlePeriod is the initial period that TEMA won't yield any results.
 
 <a name="Trima"></a>
-## type [Trima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L28-L31>)
+## type [Trima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L26-L29>)
 
 Trima represents the configuration parameters for calculating the Triangular Moving Average \(TRIMA\).
 
@@ -3020,7 +2604,7 @@ type Trima[T helper.Number] struct {
 ```
 
 <a name="NewTrima"></a>
-### func [NewTrima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L35>)
+### func [NewTrima](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L33>)
 
 ```go
 func NewTrima[T helper.Number]() *Trima[T]
@@ -3029,27 +2613,16 @@ func NewTrima[T helper.Number]() *Trima[T]
 NewTrima function initializes a new TRIMA instance with the default parameters.
 
 <a name="Trima[T].Compute"></a>
-### func \(\*Trima\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L82>)
+### func \(\*Trima\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L41>)
 
 ```go
 func (t *Trima[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Trima[T].ComputeWithContext"></a>
-### func \(\*Trima\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L43>)
-
-```go
-func (t *Trima[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the TRIMA and the signal line.
+Compute function takes a channel of numbers and computes the TRIMA and the signal line.
 
 <a name="Trima[T].IdlePeriod"></a>
-### func \(\*Trima\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L58>)
+### func \(\*Trima\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trima.go#L56>)
 
 ```go
 func (t *Trima[T]) IdlePeriod() int
@@ -3058,7 +2631,7 @@ func (t *Trima[T]) IdlePeriod() int
 IdlePeriod is the initial period that TRIMA won't yield any results.
 
 <a name="Trix"></a>
-## type [Trix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L31-L34>)
+## type [Trix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L29-L32>)
 
 Trix represents the configuration parameters for calculating the Triple Exponential Average \(TRIX\). TRIX indicator is an oscillator used to identify oversold and overbought markets, and it can also be used as a momentum indicator. Like many oscillators, TRIX oscillates around a zero line.
 
@@ -3084,7 +2657,7 @@ type Trix[T helper.Number] struct {
 ```
 
 <a name="NewTrix"></a>
-### func [NewTrix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L37>)
+### func [NewTrix](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L35>)
 
 ```go
 func NewTrix[T helper.Number]() *Trix[T]
@@ -3093,27 +2666,16 @@ func NewTrix[T helper.Number]() *Trix[T]
 NewTrix function initializes a new TRIX instance with the default parameters.
 
 <a name="Trix[T].Compute"></a>
-### func \(\*Trix\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L64>)
+### func \(\*Trix\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L42>)
 
 ```go
 func (t *Trix[T]) Compute(c <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Trix[T].ComputeWithContext"></a>
-### func \(\*Trix\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L44>)
-
-```go
-func (t *Trix[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the TRIX and the signal line.
+Compute function takes a channel of numbers and computes the TRIX and the signal line.
 
 <a name="Trix[T].IdlePeriod"></a>
-### func \(\*Trix\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L57>)
+### func \(\*Trix\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/trix.go#L59>)
 
 ```go
 func (t *Trix[T]) IdlePeriod() int
@@ -3122,7 +2684,7 @@ func (t *Trix[T]) IdlePeriod() int
 IdlePeriod is the initial period that TRIX won't yield any results.
 
 <a name="Tsi"></a>
-## type [Tsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L34-L40>)
+## type [Tsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L32-L38>)
 
 Tsi represents the parameters needed to calculate the True Strength Index \(TSI\). It is a technical momentum oscillator used in financial analysis. The TSI helps identify trends and potential trend reversals.
 
@@ -3150,7 +2712,7 @@ type Tsi[T helper.Number] struct {
 ```
 
 <a name="NewTsi"></a>
-### func [NewTsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L43>)
+### func [NewTsi](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L41>)
 
 ```go
 func NewTsi[T helper.Number]() *Tsi[T]
@@ -3159,7 +2721,7 @@ func NewTsi[T helper.Number]() *Tsi[T]
 NewTsi function initializes a new TSI instance with the default parameters.
 
 <a name="NewTsiWith"></a>
-### func [NewTsiWith](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L51>)
+### func [NewTsiWith](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L49>)
 
 ```go
 func NewTsiWith[T helper.Number](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T]
@@ -3168,27 +2730,16 @@ func NewTsiWith[T helper.Number](firstSmoothingPeriod, secondSmoothingPeriod int
 NewTsiWith function initializes a new TSI instance with the given parameters.
 
 <a name="Tsi[T].Compute"></a>
-### func \(\*Tsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L99>)
+### func \(\*Tsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L57>)
 
 ```go
 func (t *Tsi[T]) Compute(closings <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Tsi[T].ComputeWithContext"></a>
-### func \(\*Tsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L59>)
-
-```go
-func (t *Tsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the TSI over the specified period, supporting context cancellation.
+Compute function takes a channel of numbers and computes the TSI over the specified period.
 
 <a name="Tsi[T].IdlePeriod"></a>
-### func \(\*Tsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L84>)
+### func \(\*Tsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L91>)
 
 ```go
 func (t *Tsi[T]) IdlePeriod() int
@@ -3197,7 +2748,7 @@ func (t *Tsi[T]) IdlePeriod() int
 IdlePeriod is the initial period that TSI yield any results.
 
 <a name="Tsi[T].String"></a>
-### func \(\*Tsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L89>)
+### func \(\*Tsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/tsi.go#L96>)
 
 ```go
 func (t *Tsi[T]) String() string
@@ -3206,7 +2757,7 @@ func (t *Tsi[T]) String() string
 String is the string representation of the TSI.
 
 <a name="TypicalPrice"></a>
-## type [TypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L18>)
+## type [TypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L16>)
 
 TypicalPrice represents the configuration parameters for calculating the Typical Price. It is another approximation of average price for each period and can be used as a filter for moving average systems.
 
@@ -3219,7 +2770,7 @@ type TypicalPrice[T helper.Number] struct{}
 ```
 
 <a name="NewTypicalPrice"></a>
-### func [NewTypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L21>)
+### func [NewTypicalPrice](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L19>)
 
 ```go
 func NewTypicalPrice[T helper.Number]() *TypicalPrice[T]
@@ -3228,27 +2779,16 @@ func NewTypicalPrice[T helper.Number]() *TypicalPrice[T]
 NewTypicalPrice function initializes a new Typical Price instance with the default parameters.
 
 <a name="TypicalPrice[T].Compute"></a>
-### func \(\*TypicalPrice\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L37>)
+### func \(\*TypicalPrice\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L24>)
 
 ```go
-func (i *TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T
+func (*TypicalPrice[T]) Compute(high, low, closing <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="TypicalPrice[T].ComputeWithContext"></a>
-### func \(\*TypicalPrice\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/typical_price.go#L26>)
-
-```go
-func (i *TypicalPrice[T]) ComputeWithContext(ctx context.Context, high, low, closing <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Typical Price and the signal line.
+Compute function takes a channel of numbers and computes the Typical Price and the signal line.
 
 <a name="Vwma"></a>
-## type [Vwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L23-L26>)
+## type [Vwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L21-L24>)
 
 Vwma represents the configuration parameters for calculating the Volume Weighted Moving Average \(VWMA\) It averages the price data with an emphasis on volume, meaning areas with higher volume will have a greater weight.
 
@@ -3264,7 +2804,7 @@ type Vwma[T helper.Number] struct {
 ```
 
 <a name="NewVwma"></a>
-### func [NewVwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L29>)
+### func [NewVwma](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L27>)
 
 ```go
 func NewVwma[T helper.Number]() *Vwma[T]
@@ -3273,27 +2813,16 @@ func NewVwma[T helper.Number]() *Vwma[T]
 NewVwma function initializes a new VWMA instance with the default parameters.
 
 <a name="Vwma[T].Compute"></a>
-### func \(\*Vwma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L55>)
+### func \(\*Vwma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L34>)
 
 ```go
 func (v *Vwma[T]) Compute(closing, volume <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Vwma[T].ComputeWithContext"></a>
-### func \(\*Vwma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L36>)
-
-```go
-func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the VWMA and the signal line.
+Compute function takes a channel of numbers and computes the VWMA and the signal line.
 
 <a name="Vwma[T].IdlePeriod"></a>
-### func \(\*Vwma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L48>)
+### func \(\*Vwma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/vwma.go#L49>)
 
 ```go
 func (v *Vwma[T]) IdlePeriod() int
@@ -3302,7 +2831,7 @@ func (v *Vwma[T]) IdlePeriod() int
 IdlePeriod is the initial period that VWMA won't yield any results.
 
 <a name="WeightedClose"></a>
-## type [WeightedClose](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L21-L22>)
+## type [WeightedClose](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L19-L20>)
 
 WeightedClose represents the parameters for calculating the Weighted Close indicator.
 
@@ -3323,7 +2852,7 @@ type WeightedClose[T helper.Number] struct {
 ```
 
 <a name="NewWeightedClose"></a>
-### func [NewWeightedClose](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L25>)
+### func [NewWeightedClose](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L23>)
 
 ```go
 func NewWeightedClose[T helper.Number]() *WeightedClose[T]
@@ -3332,27 +2861,16 @@ func NewWeightedClose[T helper.Number]() *WeightedClose[T]
 NewWeightedClose function initializes a new Weighted Close instance with the default parameters.
 
 <a name="WeightedClose[T].Compute"></a>
-### func \(\*WeightedClose\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L50>)
+### func \(\*WeightedClose\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L28>)
 
 ```go
-func (i *WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T
+func (*WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="WeightedClose[T].ComputeWithContext"></a>
-### func \(\*WeightedClose\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L30>)
-
-```go
-func (i *WeightedClose[T]) ComputeWithContext(ctx context.Context, highs, lows, closes <-chan T) <-chan T
-```
-
-ComputeWithContext function takes a channel of numbers and computes the Weighted Close over the specified period.
+Compute function takes a channel of numbers and computes the Weighted Close over the specified period.
 
 <a name="WeightedClose[T].IdlePeriod"></a>
-### func \(\*WeightedClose\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L38>)
+### func \(\*WeightedClose\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L36>)
 
 ```go
 func (*WeightedClose[T]) IdlePeriod() int
@@ -3361,7 +2879,7 @@ func (*WeightedClose[T]) IdlePeriod() int
 IdlePeriod is the initial period that Weighted Close yield any results.
 
 <a name="WeightedClose[T].String"></a>
-### func \(\*WeightedClose\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L43>)
+### func \(\*WeightedClose\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/weighted_close.go#L41>)
 
 ```go
 func (*WeightedClose[T]) String() string
@@ -3370,7 +2888,7 @@ func (*WeightedClose[T]) String() string
 String is the string representation of the Weighted Close.
 
 <a name="Wma"></a>
-## type [Wma](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L19-L22>)
+## type [Wma](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L17-L20>)
 
 Wma represents the configuration parameters for calculating the Weighted Moving Average \(WMA\). It calculates a moving average by putting more weight on recent data and less on past data.
 
@@ -3386,7 +2904,7 @@ type Wma[T helper.Number] struct {
 ```
 
 <a name="NewWmaWith"></a>
-### func [NewWmaWith](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L25>)
+### func [NewWmaWith](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L23>)
 
 ```go
 func NewWmaWith[T helper.Number](period int) *Wma[T]
@@ -3395,27 +2913,16 @@ func NewWmaWith[T helper.Number](period int) *Wma[T]
 NewWmaWith function initializes a new WMA instance with the given parameters.
 
 <a name="Wma[T].Compute"></a>
-### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L73>)
+### func \(\*Wma\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L33>)
 
 ```go
 func (w *Wma[T]) Compute(values <-chan T) <-chan T
 ```
 
-Compute wraps ComputeWithContext for backwards compatibility.
-
-Deprecated: Use ComputeWithContext instead.
-
-<a name="Wma[T].ComputeWithContext"></a>
-### func \(\*Wma\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L35>)
-
-```go
-func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T
-```
-
-ComputeWithContext computes the WMA over the input stream.
+Compute computes the WMA over the input stream.
 
 <a name="Wma[T].IdlePeriod"></a>
-### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L61>)
+### func \(\*Wma\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L59>)
 
 ```go
 func (w *Wma[T]) IdlePeriod() int
@@ -3424,7 +2931,7 @@ func (w *Wma[T]) IdlePeriod() int
 IdlePeriod is the initial period that WMA won't yield any results.
 
 <a name="Wma[T].String"></a>
-### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L66>)
+### func \(\*Wma\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/wma.go#L64>)
 
 ```go
 func (w *Wma[T]) String() string

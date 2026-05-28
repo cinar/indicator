@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -45,14 +43,14 @@ func (k *KamaStrategy) Name() string {
 	return k.Kama.String()
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (k *KamaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots), 2)
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], k.Kama.IdlePeriod())
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (k *KamaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshots), 2)
+	closingsSplice[1] = helper.Skip(closingsSplice[1], k.Kama.IdlePeriod())
 
-	kamas := k.Kama.ComputeWithContext(ctx, closingsSplice[0])
+	kamas := k.Kama.Compute(closingsSplice[0])
 
-	actions := helper.OperateWithContext(ctx, kamas, closingsSplice[1], func(kama, closing float64) strategy.Action {
+	actions := helper.Operate(kamas, closingsSplice[1], func(kama, closing float64) strategy.Action {
 		// A closing price crossing above the KAMA suggests a bullish trend.
 		if closing > kama {
 			return strategy.Buy
@@ -67,7 +65,7 @@ func (k *KamaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan 
 	})
 
 	// KAMA starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, k.Kama.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, k.Kama.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -111,11 +109,4 @@ func (k *KamaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (k *KamaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return k.ComputeWithContext(context.Background(), snapshots)
 }

@@ -7,8 +7,6 @@ package volume
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -43,18 +41,18 @@ func (c *ChaikinMoneyFlowStrategy) Name() string {
 	return fmt.Sprintf("Chaikin Money Flow Strategy (%d)", c.ChaikinMoneyFlow.IdlePeriod()+1)
 }
 
-// ComputeWithContext function processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (c *ChaikinMoneyFlowStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 4)
+// Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 4)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
-	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[3])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
+	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[3])
 
-	cmfs := c.ChaikinMoneyFlow.ComputeWithContext(ctx, highs, lows, closings, volumes)
+	cmfs := c.ChaikinMoneyFlow.Compute(highs, lows, closings, volumes)
 
-	actions := helper.MapWithContext(ctx, cmfs, func(cmf float64) strategy.Action {
+	actions := helper.Map(cmfs, func(cmf float64) strategy.Action {
 		if cmf > 0 {
 			return strategy.Buy
 		}
@@ -67,7 +65,7 @@ func (c *ChaikinMoneyFlowStrategy) ComputeWithContext(ctx context.Context, snaps
 	})
 
 	// Chaikin Money Flow starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, c.ChaikinMoneyFlow.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, c.ChaikinMoneyFlow.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -120,11 +118,4 @@ func (c *ChaikinMoneyFlowStrategy) Report(snapshots <-chan *asset.Snapshot) *hel
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *ChaikinMoneyFlowStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return c.ComputeWithContext(context.Background(), snapshots)
 }

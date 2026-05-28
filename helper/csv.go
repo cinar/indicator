@@ -5,7 +5,6 @@
 package helper
 
 import (
-	"context"
 	"encoding/csv"
 	"errors"
 	"io"
@@ -126,13 +125,6 @@ func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error) {
 // maps the data to corresponding struct fields, and delivers
 // the resulting it through the channel.
 func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T {
-	return c.ReadFromReaderWithContext(context.Background(), reader)
-}
-
-// ReadFromReaderWithContext parses the CSV data from the provided reader,
-// maps the data to corresponding struct fields, and delivers
-// the resulting it through the channel, supporting context cancellation.
-func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader) <-chan *T {
 	rows := make(chan *T)
 
 	go func() {
@@ -151,12 +143,6 @@ func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader
 		}
 
 		for {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
 			record, err := csvReader.Read()
 			if err == io.EOF {
 				break
@@ -183,11 +169,7 @@ func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader
 				}
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case rows <- row:
-			}
+			rows <- row
 		}
 	}()
 
@@ -198,20 +180,13 @@ func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader
 // maps the data to corresponding struct fields, and delivers
 // the resulting rows through the channel.
 func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error) {
-	return c.ReadFromFileWithContext(context.Background(), fileName)
-}
-
-// ReadFromFileWithContext parses the CSV data from the provided file name,
-// maps the data to corresponding struct fields, and delivers
-// the resulting rows through the channel, supporting context cancellation.
-func (c *Csv[T]) ReadFromFileWithContext(ctx context.Context, fileName string) (<-chan *T, error) {
 	file, err := os.Open(filepath.Clean(fileName))
 	if err != nil {
 		return nil, err
 	}
 
 	wg := &sync.WaitGroup{}
-	rows := WaitableWithContext(ctx, wg, c.ReadFromReaderWithContext(ctx, file))
+	rows := Waitable(wg, c.ReadFromReader(file))
 
 	go func() {
 		wg.Wait()
@@ -225,22 +200,17 @@ func (c *Csv[T]) ReadFromFileWithContext(ctx context.Context, fileName string) (
 }
 
 // AppendToFile appends the provided rows of data to the end of the specified file, creating
-// the file if it doesn't exist.
+// the file if it doesn't exist.  In append mode, the function assumes that the existing
+// file's column order matches the field order of the given row struct to ensure consistent
+// data structure.
 func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error {
-	return c.AppendToFileWithContext(context.Background(), fileName, rows)
-}
-
-// AppendToFileWithContext appends the provided rows of data to the end of the specified file, creating
-// the file if it doesn't exist, supporting context cancellation.
-func (c *Csv[T]) AppendToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error {
 	file, err := os.OpenFile(filepath.Clean(fileName), os.O_APPEND|os.O_WRONLY, 0o600)
 	if err != nil {
 		return err
 	}
 
-	err = c.writeToWriterWithContext(ctx, file, false, rows)
+	err = c.writeToWriter(file, false, rows)
 	if err != nil {
-		_ = file.Close()
 		return err
 	}
 
@@ -250,20 +220,13 @@ func (c *Csv[T]) AppendToFileWithContext(ctx context.Context, fileName string, r
 // WriteToFile creates a new file with the given name and writes the provided rows
 // of data to it, overwriting any existing content.
 func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error {
-	return c.WriteToFileWithContext(context.Background(), fileName, rows)
-}
-
-// WriteToFileWithContext creates a new file with the given name and writes the provided rows
-// of data to it, overwriting any existing content, supporting context cancellation.
-func (c *Csv[T]) WriteToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error {
 	file, err := os.OpenFile(filepath.Clean(fileName), os.O_CREATE|os.O_WRONLY, 0o600)
 	if err != nil {
 		return err
 	}
 
-	err = c.writeToWriterWithContext(ctx, file, true, rows)
+	err = c.writeToWriter(file, true, rows)
 	if err != nil {
-		_ = file.Close()
 		return err
 	}
 
@@ -294,9 +257,9 @@ func (c *Csv[T]) updateColumnIndexes(csvReader *csv.Reader) error {
 	return nil
 }
 
-// writeToWriterWithContext writes the provided rows of data to the specified writer, with the option
-// to include or exclude headers for flexibility in data presentation, supporting context cancellation.
-func (c *Csv[T]) writeToWriterWithContext(ctx context.Context, writer io.Writer, writeHeader bool, rows <-chan *T) error {
+// writeToWriter writes the provided rows of data to the specified writer, with the option
+// to include or exclude headers for flexibility in data presentation.
+func (c *Csv[T]) writeToWriter(writer io.Writer, writeHeader bool, rows <-chan *T) error {
 	csvWriter := csv.NewWriter(writer)
 
 	if writeHeader {
@@ -308,24 +271,7 @@ func (c *Csv[T]) writeToWriterWithContext(ctx context.Context, writer io.Writer,
 
 	record := make([]string, len(c.columns))
 
-	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-		}
-
-		var row *T
-		var ok bool
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case row, ok = <-rows:
-			if !ok {
-				goto done
-			}
-		}
-
+	for row := range rows {
 		rowValue := reflect.ValueOf(row).Elem()
 
 		for i, column := range c.columns {
@@ -343,7 +289,6 @@ func (c *Csv[T]) writeToWriterWithContext(ctx context.Context, writer io.Writer,
 		}
 	}
 
-done:
 	csvWriter.Flush()
 
 	return csvWriter.Error()
@@ -360,34 +305,22 @@ func (c *Csv[T]) writeHeaderToCsvWriter(csvWriter *csv.Writer) error {
 	return csvWriter.Write(header)
 }
 
-// ReadFromCsvFile wraps ReadFromCsvFileWithContext for backwards compatibility.
-//
-// Deprecated: Use ReadFromCsvFileWithContext instead.
+// ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename,
+// maps the data to corresponding struct fields, and delivers it through the channel.
 func ReadFromCsvFile[T any](fileName string, options ...CsvOption[T]) (<-chan *T, error) {
-	return ReadFromCsvFileWithContext[T](context.Background(), fileName, options...)
-}
-
-// ReadFromCsvFileWithContext creates a CSV instance, parses CSV data from the provided filename,
-// maps the data to corresponding struct fields, and delivers it through the channel, supporting context cancellation.
-func ReadFromCsvFileWithContext[T any](ctx context.Context, fileName string, options ...CsvOption[T]) (<-chan *T, error) {
 	c, err := NewCsv[T](options...)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.ReadFromFileWithContext(ctx, fileName)
+	return c.ReadFromFile(fileName)
 }
 
-// AppendOrWriteToCsvFile wraps AppendOrWriteToCsvFileWithContext for backwards compatibility.
-//
-// Deprecated: Use AppendOrWriteToCsvFileWithContext instead.
+// AppendOrWriteToCsvFile writes the provided rows of data to the specified file, appending to
+// the existing file if it exists or creating a new one if it doesn't. In append mode, the
+// function assumes that the existing file's column order matches the field order of the
+// given row struct to ensure consistent data structure.
 func AppendOrWriteToCsvFile[T any](fileName string, rows <-chan *T, options ...CsvOption[T]) error {
-	return AppendOrWriteToCsvFileWithContext[T](context.Background(), fileName, rows, options...)
-}
-
-// AppendOrWriteToCsvFileWithContext writes the provided rows of data to the specified file, appending to
-// the existing file if it exists or creating a new one if it doesn't, supporting context cancellation.
-func AppendOrWriteToCsvFileWithContext[T any](ctx context.Context, fileName string, rows <-chan *T, options ...CsvOption[T]) error {
 	c, err := NewCsv[T](options...)
 	if err != nil {
 		return err
@@ -399,8 +332,8 @@ func AppendOrWriteToCsvFileWithContext[T any](ctx context.Context, fileName stri
 			return err
 		}
 	} else if stat.Size() > 0 {
-		return c.AppendToFileWithContext(ctx, fileName, rows)
+		return c.AppendToFile(fileName, rows)
 	}
 
-	return c.WriteToFileWithContext(ctx, fileName, rows)
+	return c.WriteToFile(fileName, rows)
 }

@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -31,11 +29,11 @@ func NewWmaWith[T helper.Number](period int) *Wma[T] {
 	}
 }
 
-// ComputeWithContext computes the WMA over the input stream.
-func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T {
+// Compute computes the WMA over the input stream.
+func (w *Wma[T]) Compute(values <-chan T) <-chan T {
 	window := helper.NewRing[T](w.Period)
 	divisor := T(w.Period) * (T(w.Period) + T(1)) / T(2.0)
-	wmas := helper.MapWithContext(ctx, values, func(value T) T {
+	wmas := helper.Map(values, func(value T) T {
 		window.Put(value)
 
 		if !window.IsFull() {
@@ -52,7 +50,7 @@ func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan
 		return sum / divisor
 	})
 
-	wmas = helper.SkipWithContext(ctx, wmas, w.IdlePeriod())
+	wmas = helper.Skip(wmas, w.IdlePeriod())
 
 	return wmas
 }
@@ -65,11 +63,4 @@ func (w *Wma[T]) IdlePeriod() int {
 // String is the string representation of the WMA.
 func (w *Wma[T]) String() string {
 	return fmt.Sprintf("WMA(%d)", w.Period)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (w *Wma[T]) Compute(values <-chan T) <-chan T {
-	return w.ComputeWithContext(context.Background(), values)
 }

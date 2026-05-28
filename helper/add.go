@@ -4,11 +4,7 @@
 
 package helper
 
-import (
-	"context"
-)
-
-// AddWithContext adds each pair of values from the two input channels of type T
+// Add adds each pair of values from the two input channels of type T
 // and returns a new channel containing the sums.
 //
 // Example:
@@ -19,13 +15,8 @@ import (
 //	actual := helper.ChanToSlice(helper.Add(ac, bc))
 //
 //	fmt.Println(actual) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-func AddWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T {
-	return OperateWithContext(ctx, ac, bc, func(a, b T) T {
+func Add[T Number](ac, bc <-chan T) <-chan T {
+	return Operate(ac, bc, func(a, b T) T {
 		return a + b
 	})
 }
-
-// Add wraps AddWithContext for backwards compatibility.
-//
-// Deprecated: Use AddWithContext instead.
-func Add[T Number](ac, bc <-chan T) <-chan T { return AddWithContext(context.Background(), ac, bc) }

@@ -5,8 +5,6 @@
 package volume
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -42,26 +40,24 @@ func NewVwapWithPeriod[T helper.Number](period int) *Vwap[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the VWAP.
-func (v *Vwap[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
-	volumesSplice := helper.DuplicateWithContext(ctx, volumes, 2)
+// Compute function takes a channel of numbers and computes the VWAP.
+func (v *Vwap[T]) Compute(closings, volumes <-chan T) <-chan T {
+	volumesSplice := helper.Duplicate(volumes, 2)
 
-	return helper.DivideWithContext(ctx, v.Sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closings,
-		volumesSplice[0],
-	),
-	),
-		v.Sum.ComputeWithContext(ctx, volumesSplice[1]),
+	return helper.Divide(
+		v.Sum.Compute(
+			helper.Multiply(
+				closings,
+				volumesSplice[0],
+			),
+		),
+		v.Sum.Compute(
+			volumesSplice[1],
+		),
 	)
 }
 
 // IdlePeriod is the initial period that VWAP won't yield any results.
 func (v *Vwap[T]) IdlePeriod() int {
 	return v.Sum.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (v *Vwap[T]) Compute(closings, volumes <-chan T) <-chan T {
-	return v.ComputeWithContext(context.Background(), closings, volumes)
 }

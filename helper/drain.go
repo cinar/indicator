@@ -4,25 +4,12 @@
 
 package helper
 
-import "context"
-
-// Drain wraps DrainWithContext for backwards compatibility.
-//
-// Deprecated: Use DrainWithContext instead.
+// Drain drains the given channel. It blocks the caller.
 func Drain[T any](c <-chan T) {
-	DrainWithContext(context.Background(), c)
-}
-
-// DrainWithContext drains the given channel with context support. It blocks the caller.
-func DrainWithContext[T any](ctx context.Context, c <-chan T) {
 	for {
-		select {
-		case <-ctx.Done():
-			return
-		case _, ok := <-c:
-			if !ok {
-				return
-			}
+		_, ok := <-c
+		if !ok {
+			break
 		}
 	}
 }

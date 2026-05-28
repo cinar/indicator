@@ -5,8 +5,6 @@
 package volume
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -42,22 +40,17 @@ func NewFiWithPeriod[T helper.Number](period int) *Fi[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the FI.
-func (f *Fi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
-	return f.Ema.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, helper.ChangeWithContext(ctx, closings, 1),
-		volumes,
-	),
+// Compute function takes a channel of numbers and computes the FI.
+func (f *Fi[T]) Compute(closings, volumes <-chan T) <-chan T {
+	return f.Ema.Compute(
+		helper.Multiply(
+			helper.Change(closings, 1),
+			volumes,
+		),
 	)
 }
 
 // IdlePeriod is the initial period that FI won't yield any results.
 func (f *Fi[T]) IdlePeriod() int {
 	return f.Ema.IdlePeriod() + 1
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (f *Fi[T]) Compute(closings, volumes <-chan T) <-chan T {
-	return f.ComputeWithContext(context.Background(), closings, volumes)
 }

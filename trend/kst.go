@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -112,9 +110,9 @@ func NewKst[T helper.Float]() *Kst[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the KST
+// Compute function takes a channel of numbers and computes the KST
 // and the signal line.
-func (k *Kst[T]) ComputeWithContext(ctx context.Context, c <-chan T) (kstResult <-chan T, signalResult <-chan T) {
+func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T) {
 	rocPeriods := []int{k.RocPeriod1, k.RocPeriod2, k.RocPeriod3, k.RocPeriod4}
 	smaPeriods := []int{k.SmaPeriod1, k.SmaPeriod2, k.SmaPeriod3, k.SmaPeriod4}
 
@@ -125,9 +123,9 @@ func (k *Kst[T]) ComputeWithContext(ctx context.Context, c <-chan T) (kstResult 
 		}
 	}
 
-	c = helper.BufferedWithContext(ctx, c, maxRocPeriod)
+	c = helper.Buffered(c, maxRocPeriod)
 
-	cs := helper.DuplicateWithContext(ctx, c, 4)
+	cs := helper.Duplicate(c, 4)
 
 	maxIdle := 0
 	idles := make([]int, 4)
@@ -141,31 +139,34 @@ func (k *Kst[T]) ComputeWithContext(ctx context.Context, c <-chan T) (kstResult 
 	rcma := make([]<-chan T, 4)
 	for i := 0; i < 4; i++ {
 		roc := NewRocWithPeriod[T](rocPeriods[i])
-		rcma[i] = roc.ComputeWithContext(ctx, cs[i])
+		rcma[i] = roc.Compute(cs[i])
 
 		sma := NewSmaWithPeriod[T](smaPeriods[i])
-		rcma[i] = sma.ComputeWithContext(ctx, rcma[i])
+		rcma[i] = sma.Compute(rcma[i])
 
 		skipCount := maxIdle - idles[i]
 		if skipCount > 0 {
-			rcma[i] = helper.SkipWithContext(ctx, rcma[i], skipCount)
+			rcma[i] = helper.Skip(rcma[i], skipCount)
 		}
 	}
 
-	kst := helper.AddWithContext(ctx, helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, rcma[0], T(1)),
-		helper.MultiplyByWithContext(ctx, rcma[1], T(2)),
-	),
-		helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, rcma[2], T(3)),
-			helper.MultiplyByWithContext(ctx, rcma[3], T(4)),
+	kst := helper.Add(
+		helper.Add(
+			helper.MultiplyBy(rcma[0], T(1)),
+			helper.MultiplyBy(rcma[1], T(2)),
+		),
+		helper.Add(
+			helper.MultiplyBy(rcma[2], T(3)),
+			helper.MultiplyBy(rcma[3], T(4)),
 		),
 	)
 
-	kstSplice := helper.DuplicateWithContext(ctx, kst, 2)
+	kstSplice := helper.Duplicate(kst, 2)
 
 	signal := NewSmaWithPeriod[T](k.SignalPeriod)
-	signalResult = signal.ComputeWithContext(ctx, kstSplice[0])
+	signalResult = signal.Compute(kstSplice[0])
 
-	return helper.SkipWithContext(ctx, kstSplice[1], k.SignalPeriod-1), signalResult
+	return helper.Skip(kstSplice[1], k.SignalPeriod-1), signalResult
 }
 
 // IdlePeriod is the initial period that KST won't yield any results.
@@ -190,11 +191,4 @@ func (k *Kst[T]) String() string {
 		k.RocPeriod1, k.RocPeriod2, k.RocPeriod3, k.RocPeriod4,
 		k.SmaPeriod1, k.SmaPeriod2, k.SmaPeriod3, k.SmaPeriod4,
 		k.SignalPeriod)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (k *Kst[T]) Compute(c <-chan T) (kstResult <-chan T, signalResult <-chan T) {
-	return k.ComputeWithContext(context.Background(), c)
 }

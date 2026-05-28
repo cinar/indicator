@@ -4,11 +4,7 @@
 
 package volume
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 // Mfv holds configuration parameters for calculating Money Flow Volume (MFV), a volume-based indicator that
 // incorporates the Money Flow Multiplier (MFM) to gauge the intensity of buying and selling pressure. MFV
@@ -34,9 +30,10 @@ func NewMfv[T helper.Number]() *Mfv[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the MFV.
-func (m *Mfv[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T {
-	return helper.MultiplyWithContext(ctx, m.Mfm.ComputeWithContext(ctx, highs, lows, closings),
+// Compute function takes a channel of numbers and computes the MFV.
+func (m *Mfv[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
+	return helper.Multiply(
+		m.Mfm.Compute(highs, lows, closings),
 		volumes,
 	)
 }
@@ -44,11 +41,4 @@ func (m *Mfv[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 // IdlePeriod is the initial period that MFV won't yield any results.
 func (*Mfv[T]) IdlePeriod() int {
 	return 0
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *Mfv[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
-	return m.ComputeWithContext(context.Background(), highs, lows, closings, volumes)
 }

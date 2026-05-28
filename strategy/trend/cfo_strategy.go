@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -35,20 +33,20 @@ func (*CfoStrategy) Name() string {
 	return "Cfo Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a
+// Compute processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (c *CfoStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
+func (c *CfoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosings(snapshots)
 
-	cfo := c.Cfo.ComputeWithContext(ctx, closings)
-	cfo = helper.BufferedWithContext(ctx, cfo, 2)
+	cfo := c.Cfo.Compute(closings)
+	cfo = helper.Buffered(cfo, 2)
 
-	inputs := helper.DuplicateWithContext(ctx, cfo, 2)
+	inputs := helper.Duplicate(cfo, 2)
 
 	// Skip the first value
-	inputs[1] = helper.SkipWithContext(ctx, inputs[1], 1)
+	inputs[1] = helper.Skip(inputs[1], 1)
 
-	actions := helper.OperateWithContext(ctx, inputs[0], inputs[1], func(b, c float64) strategy.Action {
+	actions := helper.Operate(inputs[0], inputs[1], func(b, c float64) strategy.Action {
 		// A CFO value crossing above zero suggests a bullish trend.
 		if c >= 0 && b < 0 {
 			return strategy.Buy
@@ -63,7 +61,7 @@ func (c *CfoStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *
 	})
 
 	// CFO starts only after the period.
-	actions = helper.ShiftWithContext(ctx, actions, c.Cfo.Mlr.IdlePeriod()+1, strategy.Hold)
+	actions = helper.Shift(actions, c.Cfo.Mlr.IdlePeriod()+1, strategy.Hold)
 
 	return actions
 }
@@ -92,11 +90,4 @@ func (c *CfoStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *CfoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return c.ComputeWithContext(context.Background(), snapshots)
 }

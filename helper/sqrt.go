@@ -4,25 +4,17 @@
 
 package helper
 
-import (
-	"context"
-	"math"
-)
+import "math"
 
-// SqrtWithContext calculates the square root of each value in a channel of type T.
+// Sqrt calculates the square root of each value in a channel of type T.
 //
 // Example:
 //
 //	c := helper.SliceToChan([]int{9, 81, 16, 100})
 //	sqrt := helper.Sqrt(c)
 //	fmt.Println(helper.ChanToSlice(sqrt)) // [3, 9, 4, 10]
-func SqrtWithContext[T Number](ctx context.Context, c <-chan T) <-chan T {
-	return ApplyWithContext(ctx, c, func(n T) T {
+func Sqrt[T Number](c <-chan T) <-chan T {
+	return Apply(c, func(n T) T {
 		return T(math.Sqrt(float64(n)))
 	})
 }
-
-// Sqrt wraps SqrtWithContext for backwards compatibility.
-//
-// Deprecated: Use SqrtWithContext instead.
-func Sqrt[T Number](c <-chan T) <-chan T { return SqrtWithContext(context.Background(), c) }

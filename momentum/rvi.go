@@ -7,8 +7,6 @@ package momentum
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -87,9 +85,9 @@ func computeFir[T helper.Float](c <-chan T) <-chan T {
 	return helper.Skip(result, RviFirPeriod-1)
 }
 
-// ComputeWithContext function takes channels of OHLC numbers and computes the
+// Compute function takes channels of OHLC numbers and computes the
 // Relative Vigor Index and its signal line.
-func (r *Rvi[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
+func (r *Rvi[T]) Compute(opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
 	return r.computeSimple(opens, highs, lows, closings)
 }
 
@@ -148,11 +146,4 @@ func (r *Rvi[T]) IdlePeriod() int {
 // String is the string representation of the RVI.
 func (r *Rvi[T]) String() string {
 	return fmt.Sprintf("RVI(%d,%d)", r.Period, r.SignalPeriod)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (r *Rvi[T]) Compute(opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
-	return r.ComputeWithContext(context.Background(), opens, highs, lows, closings)
 }

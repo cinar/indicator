@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -41,33 +39,37 @@ func NewUlcerIndex[T helper.Number]() *UlcerIndex[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Ulcer Index over the specified period.
-func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+// Compute function takes a channel of numbers and computes the Ulcer Index over the specified period.
+func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T {
+	closingsSplice := helper.Duplicate(closings, 2)
 
 	//	High Closings = Max(period, Closings)
 	movingMax := trend.NewMovingMaxWithPeriod[T](u.Period)
-	highsSplice := helper.DuplicateWithContext(ctx, movingMax.ComputeWithContext(ctx, closingsSplice[0]),
+	highsSplice := helper.Duplicate(
+		movingMax.Compute(closingsSplice[0]),
 		2,
 	)
 
 	//	Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], movingMax.Period-1)
+	closingsSplice[1] = helper.Skip(closingsSplice[1], movingMax.Period-1)
 
-	percentageDrawdown := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1], highsSplice[0]),
-		highsSplice[1],
-	),
+	percentageDrawdown := helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(closingsSplice[1], highsSplice[0]),
+			highsSplice[1],
+		),
 		100,
 	)
 
 	//	Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 	sma := trend.NewSmaWithPeriod[T](u.Period)
-	squaredAverage := helper.PowWithContext(ctx, sma.ComputeWithContext(ctx, percentageDrawdown),
+	squaredAverage := helper.Pow(
+		sma.Compute(percentageDrawdown),
 		2,
 	)
 
 	// Ulcer Index = Sqrt(Squared Average)
-	ulcerIndex := helper.SqrtWithContext(ctx, squaredAverage)
+	ulcerIndex := helper.Sqrt(squaredAverage)
 
 	return ulcerIndex
 }
@@ -75,11 +77,4 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 // IdlePeriod is the initial period that Ulcer Index won't yield any results.
 func (u *UlcerIndex[T]) IdlePeriod() int {
 	return (u.Period - 1) * 2
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T {
-	return u.ComputeWithContext(context.Background(), closings)
 }

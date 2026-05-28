@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 	"github.com/cinar/indicator/v2/volume"
@@ -51,19 +49,20 @@ func NewChaikinOscillator[T helper.Number]() *ChaikinOscillator[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Chaikin Oscillator.
-func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) (<-chan T, <-chan T) {
-	adSplice := helper.DuplicateWithContext(ctx, c.Ad.ComputeWithContext(ctx, highs, lows, closings, volumes),
+// Compute function takes a channel of numbers and computes the Chaikin Oscillator.
+func (c *ChaikinOscillator[T]) Compute(highs, lows, closings, volumes <-chan T) (<-chan T, <-chan T) {
+	adSplice := helper.Duplicate(
+		c.Ad.Compute(highs, lows, closings, volumes),
 		3,
 	)
 
-	shortEma := c.ShortEma.ComputeWithContext(ctx, adSplice[0])
-	longEma := c.LongEma.ComputeWithContext(ctx, adSplice[1])
+	shortEma := c.ShortEma.Compute(adSplice[0])
+	longEma := c.LongEma.Compute(adSplice[1])
 
-	shortEma = helper.SkipWithContext(ctx, shortEma, c.LongEma.IdlePeriod()-c.ShortEma.IdlePeriod())
+	shortEma = helper.Skip(shortEma, c.LongEma.IdlePeriod()-c.ShortEma.IdlePeriod())
 
-	co := helper.SubtractWithContext(ctx, shortEma, longEma)
-	adSplice[2] = helper.SkipWithContext(ctx, adSplice[2], c.LongEma.IdlePeriod())
+	co := helper.Subtract(shortEma, longEma)
+	adSplice[2] = helper.Skip(adSplice[2], c.LongEma.IdlePeriod())
 
 	return co, adSplice[2]
 }
@@ -71,11 +70,4 @@ func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
 func (c *ChaikinOscillator[T]) IdlePeriod() int {
 	return c.LongEma.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (c *ChaikinOscillator[T]) Compute(highs, lows, closings, volumes <-chan T) (<-chan T, <-chan T) {
-	return c.ComputeWithContext(context.Background(), highs, lows, closings, volumes)
 }

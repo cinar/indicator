@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -67,20 +65,20 @@ func (a *AlligatorStrategy) Name() string {
 	)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (a *AlligatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots), 3)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (a *AlligatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshots), 3)
 
-	jaws := a.Jaw.ComputeWithContext(ctx, closingsSplice[0])
-	teeths := a.Teeth.ComputeWithContext(ctx, closingsSplice[1])
-	lips := a.Lip.ComputeWithContext(ctx, closingsSplice[2])
+	jaws := a.Jaw.Compute(closingsSplice[0])
+	teeths := a.Teeth.Compute(closingsSplice[1])
+	lips := a.Lip.Compute(closingsSplice[2])
 
 	commonPeriod := helper.CommonPeriod(a.Jaw.Period, a.Teeth.Period, a.Lip.Period)
 	jaws = helper.SyncPeriod(commonPeriod, a.Jaw.Period, jaws)
 	teeths = helper.SyncPeriod(commonPeriod, a.Teeth.Period, teeths)
 	lips = helper.SyncPeriod(commonPeriod, a.Lip.Period, lips)
 
-	actions := helper.Operate3WithContext(ctx, jaws, teeths, lips, func(jaw, teeth, lip float64) strategy.Action {
+	actions := helper.Operate3(jaws, teeths, lips, func(jaw, teeth, lip float64) strategy.Action {
 		if lip > teeth && lip > jaw {
 			return strategy.Buy
 		}
@@ -93,7 +91,7 @@ func (a *AlligatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-
 	})
 
 	// Alligator strategy starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, commonPeriod, strategy.Hold)
+	actions = helper.Shift(actions, commonPeriod, strategy.Hold)
 
 	return actions
 }
@@ -145,11 +143,4 @@ func (a *AlligatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (a *AlligatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return a.ComputeWithContext(context.Background(), snapshots)
 }

@@ -4,11 +4,7 @@
 
 package helper
 
-import (
-	"context"
-)
-
-// MultiplyWithContext takes two channels of type T and multiples the values
+// Multiply takes two channels of type T and multiples the values
 // from the first channel with the values from the second channel.
 // It returns a new channel containing the results of
 // the multiplication.
@@ -21,15 +17,8 @@ import (
 //	multiplication := helper.Multiply(ac, bc)
 //
 //	fmt.Println(helper.ChanToSlice(multiplication)) // [2, 4, 6, 8, 10]
-func MultiplyWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T {
-	return OperateWithContext(ctx, ac, bc, func(a, b T) T {
+func Multiply[T Number](ac, bc <-chan T) <-chan T {
+	return Operate(ac, bc, func(a, b T) T {
 		return a * b
 	})
-}
-
-// Multiply wraps MultiplyWithContext for backwards compatibility.
-//
-// Deprecated: Use MultiplyWithContext instead.
-func Multiply[T Number](ac, bc <-chan T) <-chan T {
-	return MultiplyWithContext(context.Background(), ac, bc)
 }

@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -51,11 +49,11 @@ func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the ATR over the specified period, supporting context cancellation.
-func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
-	tr := NewTrueRange[T]().ComputeWithContext(ctx, highs, lows, closings)
+// Compute function takes a channel of numbers and computes the ATR over the specified period.
+func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	tr := NewTrueRange[T]().Compute(highs, lows, closings)
 
-	atr := trend.ComputeMaWithContext(ctx, a.Ma, tr)
+	atr := a.Ma.Compute(tr)
 
 	return atr
 }
@@ -64,11 +62,4 @@ func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 func (a *Atr[T]) IdlePeriod() int {
 	// Ma idle period and for using the previous closing.
 	return a.Ma.IdlePeriod() + 1
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return a.ComputeWithContext(context.Background(), highs, lows, closings)
 }

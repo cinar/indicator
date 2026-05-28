@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -64,16 +62,16 @@ func (t *TsiStrategy) Name() string {
 	)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *TsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosings(snapshots)
 
-	tsisSplice := helper.DuplicateWithContext(ctx, t.Tsi.ComputeWithContext(ctx, closings), 2)
+	tsisSplice := helper.Duplicate(t.Tsi.Compute(closings), 2)
 
-	tsisSplice[0] = helper.SkipWithContext(ctx, tsisSplice[0], t.Signal.IdlePeriod())
-	signals := trend.ComputeMaWithContext(ctx, t.Signal, tsisSplice[1])
+	tsisSplice[0] = helper.Skip(tsisSplice[0], t.Signal.IdlePeriod())
+	signals := t.Signal.Compute(tsisSplice[1])
 
-	actions := helper.OperateWithContext(ctx, tsisSplice[0], signals, func(tsi, signal float64) strategy.Action {
+	actions := helper.Operate(tsisSplice[0], signals, func(tsi, signal float64) strategy.Action {
 		// When the TSI is above zero and crossing above the signal line suggests a bullish trend.
 		if (tsi > 0) && (tsi > signal) {
 			return strategy.Buy
@@ -88,7 +86,7 @@ func (t *TsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *
 	})
 
 	// TSI and signal line start only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, t.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, t.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -144,11 +142,4 @@ func (t *TsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 // IdlePeriod is the initial period that TSI strategy yield any results.
 func (t *TsiStrategy) IdlePeriod() int {
 	return t.Tsi.IdlePeriod() + t.Signal.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return t.ComputeWithContext(context.Background(), snapshots)
 }

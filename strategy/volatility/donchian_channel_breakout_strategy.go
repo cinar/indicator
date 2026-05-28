@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -33,18 +31,19 @@ func (*DonchianChannelBreakoutStrategy) Name() string {
 	return "Donchian Channel Breakout Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (d *DonchianChannelBreakoutStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (d *DonchianChannelBreakoutStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := helper.Duplicate(
+		asset.SnapshotsAsClosings(snapshots),
 		2,
 	)
 
-	uppers, middles, lowers := d.DonchianChannel.ComputeWithContext(ctx, closings[0])
-	go helper.DrainWithContext(ctx, middles)
+	uppers, middles, lowers := d.DonchianChannel.Compute(closings[0])
+	go helper.Drain(middles)
 
-	closings[1] = helper.SkipWithContext(ctx, closings[1], d.DonchianChannel.IdlePeriod())
+	closings[1] = helper.Skip(closings[1], d.DonchianChannel.IdlePeriod())
 
-	actions := helper.Operate3WithContext(ctx, uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
+	actions := helper.Operate3(uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
 		if closing >= upper {
 			return strategy.Buy
 		}
@@ -57,7 +56,7 @@ func (d *DonchianChannelBreakoutStrategy) ComputeWithContext(ctx context.Context
 	})
 
 	// Donchian Channel starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, d.DonchianChannel.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, d.DonchianChannel.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -99,11 +98,4 @@ func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *help
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (d *DonchianChannelBreakoutStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return d.ComputeWithContext(context.Background(), snapshots)
 }

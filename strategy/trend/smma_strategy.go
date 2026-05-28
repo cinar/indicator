@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -61,18 +59,18 @@ func (s *SmmaStrategy) Name() string {
 	)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *SmmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots), 2)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *SmmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshots), 2)
 
-	shortSmmas := s.ShortSmma.ComputeWithContext(ctx, closingsSplice[0])
-	longSmmas := s.LongSmma.ComputeWithContext(ctx, closingsSplice[1])
+	shortSmmas := s.ShortSmma.Compute(closingsSplice[0])
+	longSmmas := s.LongSmma.Compute(closingsSplice[1])
 
 	commonPeriod := helper.CommonPeriod(s.ShortSmma.Period, s.LongSmma.Period)
 	shortSmmas = helper.SyncPeriod(commonPeriod, s.ShortSmma.Period, shortSmmas)
 	longSmmas = helper.SyncPeriod(commonPeriod, s.LongSmma.Period, longSmmas)
 
-	actions := helper.OperateWithContext(ctx, shortSmmas, longSmmas, func(shortSmma, longSmma float64) strategy.Action {
+	actions := helper.Operate(shortSmmas, longSmmas, func(shortSmma, longSmma float64) strategy.Action {
 		// A short-perios SMMA value crossing above long-period SMMA suggests a bullish trend.
 		if shortSmma > longSmma {
 			return strategy.Buy
@@ -87,7 +85,7 @@ func (s *SmmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan 
 	})
 
 	// SMMA strategy starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, commonPeriod, strategy.Hold)
+	actions = helper.Shift(actions, commonPeriod, strategy.Hold)
 
 	return actions
 }
@@ -135,11 +133,4 @@ func (s *SmmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *SmmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return s.ComputeWithContext(context.Background(), snapshots)
 }

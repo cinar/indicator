@@ -4,38 +4,24 @@
 
 package helper
 
-import "context"
-
-// Map wraps MapWithContext for backwards compatibility.
-//
-// Deprecated: Use MapWithContext instead.
-func Map[F, T any](c <-chan F, f func(F) T) <-chan T {
-	return MapWithContext(context.Background(), c, f)
-}
-
-// MapWithContext applies the given transformation function to each element in the
+// Map applies the given transformation function to each element in the
 // input channel and returns a new channel containing the transformed
-// values, supporting context cancellation.
-func MapWithContext[F, T any](ctx context.Context, c <-chan F, f func(F) T) <-chan T {
+// values. The transformation function takes a value of type F as input
+// and returns a value of type T as output.
+//
+// Example:
+//
+//	timesTwo := helper.Map(c, func(n int) int {
+//		return n * 2
+//	})
+func Map[F, T any](c <-chan F, f func(F) T) <-chan T {
 	mc := make(chan T)
 
 	go func() {
 		defer close(mc)
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case n, ok := <-c:
-				if !ok {
-					return
-				}
-				select {
-				case <-ctx.Done():
-					return
-				case mc <- f(n):
-				}
-			}
+		for n := range c {
+			mc <- f(n)
 		}
 	}()
 

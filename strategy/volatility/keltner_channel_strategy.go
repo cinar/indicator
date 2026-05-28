@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -32,20 +30,20 @@ func (*KeltnerChannelStrategy) Name() string {
 	return "Keltner Channel Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (k *KeltnerChannelStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 4)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (k *KeltnerChannelStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 4)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
 
-	uppers, middles, lowers := k.KeltnerChannel.ComputeWithContext(ctx, highs, lows, closings)
-	go helper.DrainWithContext(ctx, middles)
+	uppers, middles, lowers := k.KeltnerChannel.Compute(highs, lows, closings)
+	go helper.Drain(middles)
 
-	closings2 := helper.SkipWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[3]), k.KeltnerChannel.IdlePeriod())
+	closings2 := helper.Skip(asset.SnapshotsAsClosings(snapshotsSplice[3]), k.KeltnerChannel.IdlePeriod())
 
-	actions := helper.Operate3WithContext(ctx, uppers, lowers, closings2, func(upper, lower, closing float64) strategy.Action {
+	actions := helper.Operate3(uppers, lowers, closings2, func(upper, lower, closing float64) strategy.Action {
 		if closing > upper {
 			return strategy.Sell
 		}
@@ -58,7 +56,7 @@ func (k *KeltnerChannelStrategy) ComputeWithContext(ctx context.Context, snapsho
 	})
 
 	// Keltner Channel starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, k.KeltnerChannel.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, k.KeltnerChannel.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -102,11 +100,4 @@ func (k *KeltnerChannelStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (k *KeltnerChannelStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return k.ComputeWithContext(context.Background(), snapshots)
 }

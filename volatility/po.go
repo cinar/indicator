@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -52,50 +50,60 @@ func NewPoWithPeriod[T helper.Number](period int) *Po[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the PO over the specified period.
-func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
-	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
-	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+// Compute function takes a channel of numbers and computes the PO over the specified period.
+func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	highsSplice := helper.Duplicate(highs, 2)
+	lowsSplice := helper.Duplicate(lows, 2)
+	closingsSplice := helper.Duplicate(closings, 2)
 
-	xSplice := helper.DuplicateWithContext(ctx, helper.CountWithContext(ctx, T(1), closingsSplice[0]),
+	xSplice := helper.Duplicate(
+		helper.Count(T(1), closingsSplice[0]),
 		2,
 	)
 
 	// PL = Min(period, (high + MLS(period, x, high)))
-	plM, plB := p.mls.ComputeWithContext(ctx, xSplice[0], highsSplice[0])
-	go helper.DrainWithContext(ctx, plB)
+	plM, plB := p.mls.Compute(xSplice[0], highsSplice[0])
+	go helper.Drain(plB)
 
-	highsSplice[1] = helper.SkipWithContext(ctx, highsSplice[1], p.mls.IdlePeriod())
+	highsSplice[1] = helper.Skip(highsSplice[1], p.mls.IdlePeriod())
 
-	plSplice := helper.DuplicateWithContext(ctx, p.min.ComputeWithContext(ctx, helper.AddWithContext(ctx, highsSplice[1],
-		plM,
-	),
-	),
+	plSplice := helper.Duplicate(
+		p.min.Compute(
+			helper.Add(
+				highsSplice[1],
+				plM,
+			),
+		),
 		2,
 	)
 
 	// PH = Max(period, (low + MLS(period, x, low)))
-	phM, phB := p.mls.ComputeWithContext(ctx, xSplice[1], lowsSplice[0])
-	go helper.DrainWithContext(ctx, phB)
+	phM, phB := p.mls.Compute(xSplice[1], lowsSplice[0])
+	go helper.Drain(phB)
 
-	lowsSplice[1] = helper.SkipWithContext(ctx, lowsSplice[1], p.mls.IdlePeriod())
+	lowsSplice[1] = helper.Skip(lowsSplice[1], p.mls.IdlePeriod())
 
-	ph := p.max.ComputeWithContext(ctx, helper.AddWithContext(ctx, lowsSplice[1],
-		phM,
-	),
+	ph := p.max.Compute(
+		helper.Add(
+			lowsSplice[1],
+			phM,
+		),
 	)
 
 	// PO = 100 * (Closing - PL) / (PH - PL)
-	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], p.mls.IdlePeriod()+p.min.IdlePeriod())
+	closingsSplice[1] = helper.Skip(closingsSplice[1], p.mls.IdlePeriod()+p.min.IdlePeriod())
 
-	po := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1],
-		plSplice[0],
-	),
-		helper.SubtractWithContext(ctx, ph,
-			plSplice[1],
+	po := helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(
+				closingsSplice[1],
+				plSplice[0],
+			),
+			helper.Subtract(
+				ph,
+				plSplice[1],
+			),
 		),
-	),
 		T(100),
 	)
 
@@ -105,11 +113,4 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 // IdlePeriod is the initial period that PO won't yield any results.
 func (p *Po[T]) IdlePeriod() int {
 	return p.mls.IdlePeriod() + p.min.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return p.ComputeWithContext(context.Background(), highs, lows, closings)
 }

@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -51,17 +49,17 @@ func (*TrimaStrategy) Name() string {
 	return "TRIMA Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a
+// Compute processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (t *TrimaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, c), 2)
+func (t *TrimaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := helper.Duplicate(asset.SnapshotsAsClosings(c), 2)
 
-	shorts := t.Short.ComputeWithContext(ctx, closings[0])
-	longs := t.Long.ComputeWithContext(ctx, closings[1])
+	shorts := t.Short.Compute(closings[0])
+	longs := t.Long.Compute(closings[1])
 
-	shorts = helper.SkipWithContext(ctx, shorts, t.Long.IdlePeriod()-t.Short.IdlePeriod())
+	shorts = helper.Skip(shorts, t.Long.IdlePeriod()-t.Short.IdlePeriod())
 
-	actions := helper.OperateWithContext(ctx, shorts, longs, func(short, long float64) strategy.Action {
+	actions := helper.Operate(shorts, longs, func(short, long float64) strategy.Action {
 		if short > long {
 			return strategy.Buy
 		}
@@ -74,7 +72,7 @@ func (t *TrimaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.
 	})
 
 	// TRIMA starts only after a full periods for each EMA used.
-	actions = helper.ShiftWithContext(ctx, actions, t.Long.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, t.Long.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -118,11 +116,4 @@ func (t *TrimaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (t *TrimaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	return t.ComputeWithContext(context.Background(), c)
 }

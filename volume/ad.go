@@ -4,11 +4,7 @@
 
 package volume
 
-import (
-	"context"
-
-	"github.com/cinar/indicator/v2/helper"
-)
+import "github.com/cinar/indicator/v2/helper"
 
 // Ad holds configuration parameters for calculating Accumulation/Distribution (A/D). It is a cumulative
 // indicator that uses volume and price to assess whether an asset is being accumulated or distributed.
@@ -33,14 +29,14 @@ func NewAd[T helper.Number]() *Ad[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the A/D.
-func (a *Ad[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the A/D.
+func (a *Ad[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
 	//	MFM = ((Closing - Low) - (High - Closing)) / (High - Low)
 	//	MFV = MFM * Period Volume
-	mfvs := a.Mfv.ComputeWithContext(ctx, highs, lows, closings, volumes)
+	mfvs := a.Mfv.Compute(highs, lows, closings, volumes)
 
 	//	AD = Previous AD + CMFV
-	return helper.MapWithPreviousWithContext(ctx, mfvs, func(previous, current T) T {
+	return helper.MapWithPrevious(mfvs, func(previous, current T) T {
 		return previous + current
 	}, 0)
 }
@@ -48,11 +44,4 @@ func (a *Ad[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, v
 // IdlePeriod is the initial period that A/D won't yield any results.
 func (*Ad[T]) IdlePeriod() int {
 	return 0
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (a *Ad[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
-	return a.ComputeWithContext(context.Background(), highs, lows, closings, volumes)
 }

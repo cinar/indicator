@@ -7,8 +7,6 @@ package trend
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -44,9 +42,9 @@ func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Slope.
-func (s *Slope[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T {
-	return helper.DivideByWithContext(ctx, helper.ChangeWithContext(ctx, values, s.Period), T(s.Period))
+// Compute function takes a channel of numbers and computes the Slope.
+func (s *Slope[T]) Compute(values <-chan T) <-chan T {
+	return helper.DivideBy(helper.Change(values, s.Period), T(s.Period))
 }
 
 // IdlePeriod is the initial period that Slope won't yield any results.
@@ -59,9 +57,3 @@ func (s *Slope[T]) String() string {
 	return fmt.Sprintf("SLOPE(%d)", s.Period)
 }
 
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *Slope[T]) Compute(values <-chan T) <-chan T {
-	return s.ComputeWithContext(context.Background(), values)
-}

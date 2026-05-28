@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"math"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -40,24 +38,27 @@ func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the HMA and the signal line.
-func (h *Hma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T {
-	valuesSplice := helper.DuplicateWithContext(ctx, values, 2)
+// Compute function takes a channel of numbers and computes the HMA and the signal line.
+func (h *Hma[T]) Compute(values <-chan T) <-chan T {
+	valuesSplice := helper.Duplicate(values, 2)
 
 	//	WMA1 = WMA(period/2 , values)
-	wmas1 := h.wma1.ComputeWithContext(ctx, valuesSplice[0])
+	wmas1 := h.wma1.Compute(valuesSplice[0])
 
 	//	WMA2 = WMA(period, values)
-	wmas2 := h.wma2.ComputeWithContext(ctx, valuesSplice[1])
+	wmas2 := h.wma2.Compute(valuesSplice[1])
 
-	wmas1 = helper.SkipWithContext(ctx, wmas1, h.wma2.IdlePeriod()-h.wma1.IdlePeriod())
+	wmas1 = helper.Skip(wmas1, h.wma2.IdlePeriod()-h.wma1.IdlePeriod())
 
 	// WMA3 = WMA(sqrt(period), (2 * WMA1) - WMA2)
-	wmas3 := h.wma3.ComputeWithContext(ctx, helper.SubtractWithContext(ctx, helper.MultiplyByWithContext(ctx, wmas1,
-		2,
-	),
-		wmas2,
-	),
+	wmas3 := h.wma3.Compute(
+		helper.Subtract(
+			helper.MultiplyBy(
+				wmas1,
+				2,
+			),
+			wmas2,
+		),
 	)
 
 	// HMA = WMA3
@@ -72,11 +73,4 @@ func (h *Hma[T]) IdlePeriod() int {
 // String is the string representation of the HMA.
 func (h *Hma[T]) String() string {
 	return fmt.Sprintf("HMA(%d)", h.wma2.Period)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (h *Hma[T]) Compute(values <-chan T) <-chan T {
-	return h.ComputeWithContext(context.Background(), values)
 }

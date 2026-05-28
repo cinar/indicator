@@ -4,28 +4,24 @@
 
 package helper
 
-import "context"
-
-// SliceToChan wraps SliceToChanWithContext for backwards compatibility.
+// SliceToChan converts a slice of type T to a channel of type T.
 //
-// Deprecated: Use SliceToChanWithContext instead.
+// Example:
+//
+//	slice := []float64{2, 4, 6, 8}
+//	c := helper.SliceToChan(slice)
+//	fmt.Println(<- c)  // 2
+//	fmt.Println(<- c)  // 4
+//	fmt.Println(<- c)  // 6
+//	fmt.Println(<- c)  // 8
 func SliceToChan[T any](slice []T) <-chan T {
-	return SliceToChanWithContext(context.Background(), slice)
-}
-
-// SliceToChanWithContext converts a slice of type T to a channel of type T, supporting context cancellation.
-func SliceToChanWithContext[T any](ctx context.Context, slice []T) <-chan T {
 	c := make(chan T)
 
 	go func() {
 		defer close(c)
 
 		for _, n := range slice {
-			select {
-			case <-ctx.Done():
-				return
-			case c <- n:
-			}
+			c <- n
 		}
 	}()
 

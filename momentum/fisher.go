@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"math"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -57,39 +55,39 @@ func NewFisher[T helper.Float]() *Fisher[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Fisher Transform.
-func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+// Compute function takes a channel of numbers and computes the Fisher Transform.
+func (f *Fisher[T]) Compute(closings <-chan T) <-chan T {
 	// Collect input to slice first to allow multiple independent channels
 	values := helper.ChanToSlice(closings)
 
 	// Create three independent channels from the slice
-	input1 := helper.SliceToChanWithContext(ctx, values)
-	input2 := helper.SliceToChanWithContext(ctx, values)
-	input3 := helper.SliceToChanWithContext(ctx, values)
+	input1 := helper.SliceToChan(values)
+	input2 := helper.SliceToChan(values)
+	input3 := helper.SliceToChan(values)
 
 	// Compute min and max
-	minValues := f.Min.ComputeWithContext(ctx, input1)
-	maxValues := f.Max.ComputeWithContext(ctx, input2)
+	minValues := f.Min.Compute(input1)
+	maxValues := f.Max.Compute(input2)
 
 	// Align close values with min/max outputs
-	alignedClosings := helper.SkipWithContext(ctx, input3, f.Period-1)
+	alignedClosings := helper.Skip(input3, f.Period-1)
 
 	// Compute: range = max - min
-	rangeValues := helper.SubtractWithContext(ctx, maxValues, minValues)
+	rangeValues := helper.Subtract(maxValues, minValues)
 
 	// Compute: close - min
-	closeMinusMin := helper.SubtractWithContext(ctx, alignedClosings, minValues)
+	closeMinusMin := helper.Subtract(alignedClosings, minValues)
 
 	// Compute: normalized = (close - min) / (max - min)
-	normalized := helper.DivideWithContext(ctx, closeMinusMin, rangeValues)
+	normalized := helper.Divide(closeMinusMin, rangeValues)
 
 	// Compute: x = 2 * normalized - 1
-	x := helper.MapWithContext(ctx, normalized, func(v T) T {
+	x := helper.Map(normalized, func(v T) T {
 		return 2*v - T(1)
 	})
 
 	// Clamp x to [-FisherClamp, FisherClamp] and compute Fisher
-	result := helper.MapWithContext(ctx, x, func(v T) T {
+	result := helper.Map(x, func(v T) T {
 		fx := float64(v)
 		if fx > FisherClamp {
 			fx = FisherClamp
@@ -114,11 +112,4 @@ func (f *Fisher[T]) IdlePeriod() int {
 // String is the string representation of the Fisher Transform.
 func (f *Fisher[T]) String() string {
 	return fmt.Sprintf("Fisher(%d)", f.Period)
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (f *Fisher[T]) Compute(closings <-chan T) <-chan T {
-	return f.ComputeWithContext(context.Background(), closings)
 }

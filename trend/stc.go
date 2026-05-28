@@ -5,8 +5,6 @@
 package trend
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -91,42 +89,47 @@ func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod 
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the STC indicator.
-func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
-	c = helper.BufferedWithContext(ctx, c, s.SlowPeriod)
-	macd := s.Apo.ComputeWithContext(ctx, c)
+// Compute function takes a channel of numbers and computes the STC indicator.
+func (s *Stc[T]) Compute(c <-chan T) <-chan T {
+	c = helper.Buffered(c, s.SlowPeriod)
+	macd := s.Apo.Compute(c)
 
-	macd = helper.BufferedWithContext(ctx, macd, s.Stochastic.Period)
-	inputs := helper.DuplicateWithContext(ctx, macd, 4)
+	macd = helper.Buffered(macd, s.Stochastic.Period)
+	inputs := helper.Duplicate(macd, 4)
 
 	movingMin := NewMovingMinWithPeriod[T](s.Stochastic.Period)
 	movingMax := NewMovingMaxWithPeriod[T](s.Stochastic.Period)
 
-	lowestSplice := helper.DuplicateWithContext(ctx, movingMin.ComputeWithContext(ctx, inputs[0]),
+	lowestSplice := helper.Duplicate(
+		movingMin.Compute(inputs[0]),
 		2,
 	)
 
-	highest := movingMax.ComputeWithContext(ctx, inputs[1])
+	highest := movingMax.Compute(inputs[1])
 
-	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
+	skipped := helper.Skip(inputs[2], movingMin.IdlePeriod())
 
-	kValues := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
+	kValues := helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(skipped, lowestSplice[0]),
+			helper.Subtract(highest, lowestSplice[1]),
+		),
 		100,
 	)
 
-	kDuplicate := helper.DuplicateWithContext(ctx, kValues, 2)
+	kDuplicate := helper.Duplicate(kValues, 2)
 
-	d := s.Stochastic.Sma.ComputeWithContext(ctx, kDuplicate[0])
+	d := s.Stochastic.Sma.Compute(kDuplicate[0])
 
-	kValues = helper.SkipWithContext(ctx, kDuplicate[1], s.Stochastic.Sma.IdlePeriod())
+	kValues = helper.Skip(kDuplicate[1], s.Stochastic.Sma.IdlePeriod())
 
-	macdForStc := helper.SkipWithContext(ctx, inputs[3], s.Stochastic.IdlePeriod())
+	macdForStc := helper.Skip(inputs[3], s.Stochastic.IdlePeriod())
 
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, macdForStc, kValues),
-		helper.SubtractWithContext(ctx, d, kValues),
-	),
+	return helper.MultiplyBy(
+		helper.Divide(
+			helper.Subtract(macdForStc, kValues),
+			helper.Subtract(d, kValues),
+		),
 		100,
 	)
 }
@@ -135,8 +138,3 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 func (s *Stc[T]) IdlePeriod() int {
 	return s.Apo.IdlePeriod() + s.Stochastic.IdlePeriod()
 }
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (s *Stc[T]) Compute(c <-chan T) <-chan T { return s.ComputeWithContext(context.Background(), c) }

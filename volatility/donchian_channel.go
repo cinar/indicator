@@ -5,8 +5,6 @@
 package volatility
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -50,19 +48,22 @@ func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Donchian Channel over the specified period.
-func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T, <-chan T) {
-	closings := helper.DuplicateWithContext(ctx, c, 2)
+// Compute function takes a channel of numbers and computes the Donchian Channel over the specified period.
+func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
+	closings := helper.Duplicate(c, 2)
 
-	uppers := helper.DuplicateWithContext(ctx, d.Max.ComputeWithContext(ctx, closings[0]),
+	uppers := helper.Duplicate(
+		d.Max.Compute(closings[0]),
 		2,
 	)
 
-	lowers := helper.DuplicateWithContext(ctx, d.Min.ComputeWithContext(ctx, closings[1]),
+	lowers := helper.Duplicate(
+		d.Min.Compute(closings[1]),
 		2,
 	)
 
-	middle := helper.DivideByWithContext(ctx, helper.AddWithContext(ctx, uppers[0], lowers[0]),
+	middle := helper.DivideBy(
+		helper.Add(uppers[0], lowers[0]),
 		2,
 	)
 
@@ -72,11 +73,4 @@ func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, c <-chan T)
 // IdlePeriod is the initial period that Donchian Channel won't yield any results.
 func (d *DonchianChannel[T]) IdlePeriod() int {
 	return d.Max.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return d.ComputeWithContext(context.Background(), c)
 }

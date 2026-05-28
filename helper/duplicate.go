@@ -4,18 +4,18 @@
 
 package helper
 
-import "context"
-
-// Duplicate wraps DuplicateWithContext for backwards compatibility.
+// Duplicate duplicates a given receive-only channel by reading each value coming out of
+// that channel and sending them on requested number of new output channels.
 //
-// Deprecated: Use DuplicateWithContext instead.
+// Example:
+//
+//	expected := helper.SliceToChan([]float64{-10, 20, -4, -5})
+//	outputs := helper.Duplicates[float64](helper.SliceToChan(expected), 2)
+//
+//	fmt.Println(helper.ChanToSlice(outputs[0])) // [-10, 20, -4, -5]
+//	fmt.Println(helper.ChanToSlice(outputs[1])) // [-10, 20, -4, -5]
 func Duplicate[T any](input <-chan T, count int) []<-chan T {
-	return DuplicateWithContext(context.Background(), input, count)
-}
-
-// DuplicateWithContext duplicates a given receive-only channel by reading each value coming out of
-// that channel and sending them on requested number of new output channels, supporting context cancellation.
-func DuplicateWithContext[T any](ctx context.Context, input <-chan T, count int) []<-chan T {
+	// TODO(cinar): Find a way to cast as a directional channel array.
 	outputs := make([]chan T, count)
 	result := make([]<-chan T, count)
 
@@ -29,21 +29,9 @@ func DuplicateWithContext[T any](ctx context.Context, input <-chan T, count int)
 			defer close(output)
 		}
 
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case n, ok := <-input:
-				if !ok {
-					return
-				}
-				for _, output := range outputs {
-					select {
-					case <-ctx.Done():
-						return
-					case output <- n:
-					}
-				}
+		for n := range input {
+			for _, output := range outputs {
+				output <- n
 			}
 		}
 	}()

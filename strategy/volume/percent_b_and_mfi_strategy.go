@@ -7,8 +7,6 @@ package volume
 import (
 	"fmt"
 
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -81,20 +79,20 @@ func (m *PercentBandMFIStrategy) Name() string {
 	return fmt.Sprintf("PercentB (%.2f,%.2f) and MFI Strategy (%.2f,%.2f)", m.SellPercentBAt, m.BuyPercentBAt, m.SellMfiAt, m.BuyMfiAt)
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (m *PercentBandMFIStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 4)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (m *PercentBandMFIStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 4)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2]), 2)
-	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[3])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshotsSplice[2]), 2)
+	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[3])
 
-	mfis := m.MoneyFlowIndex.ComputeWithContext(ctx, highs, lows, closings[0], volumes)
-	mfis = helper.ShiftWithContext(ctx, mfis, m.PercentB.IdlePeriod()-m.MoneyFlowIndex.IdlePeriod(), 0)
-	pb := m.PercentB.ComputeWithContext(ctx, closings[1])
+	mfis := m.MoneyFlowIndex.Compute(highs, lows, closings[0], volumes)
+	mfis = helper.Shift(mfis, m.PercentB.IdlePeriod()-m.MoneyFlowIndex.IdlePeriod(), 0)
+	pb := m.PercentB.Compute(closings[1])
 
-	actions := helper.OperateWithContext(ctx, pb, mfis, func(b, mfi float64) strategy.Action {
+	actions := helper.Operate(pb, mfis, func(b, mfi float64) strategy.Action {
 		if b > m.BuyPercentBAt && mfi > m.BuyMfiAt {
 			return strategy.Buy
 		}
@@ -107,7 +105,7 @@ func (m *PercentBandMFIStrategy) ComputeWithContext(ctx context.Context, snapsho
 	})
 
 	// strategy starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, m.PercentB.IdlePeriod(), strategy.Hold)
+	actions = helper.Shift(actions, m.PercentB.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -171,11 +169,4 @@ func (m *PercentBandMFIStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 3)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (m *PercentBandMFIStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return m.ComputeWithContext(context.Background(), snapshots)
 }

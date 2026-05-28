@@ -4,11 +4,7 @@
 
 package helper
 
-import (
-	"context"
-)
-
-// SubtractWithContext takes two channels of type T and subtracts the values
+// Subtract takes two channels of type T and subtracts the values
 // from the second channel from the first one. It returns a new
 // channel containing the results of the subtractions.
 //
@@ -18,15 +14,8 @@ import (
 //	bc := helper.SliceToChan([]int{1, 2, 3, 4, 5})
 //	actual := helper.Subtract(ac, bc)
 //	fmt.Println(helper.ChanToSlice(actual)) // [1, 2, 3, 4, 5]
-func SubtractWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T {
-	return OperateWithContext(ctx, ac, bc, func(a, b T) T {
+func Subtract[T Number](ac, bc <-chan T) <-chan T {
+	return Operate(ac, bc, func(a, b T) T {
 		return a - b
 	})
-}
-
-// Subtract wraps SubtractWithContext for backwards compatibility.
-//
-// Deprecated: Use SubtractWithContext instead.
-func Subtract[T Number](ac, bc <-chan T) <-chan T {
-	return SubtractWithContext(context.Background(), ac, bc)
 }

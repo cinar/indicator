@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -48,20 +46,23 @@ func NewAwesomeOscillator[T helper.Number]() *AwesomeOscillator[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the AwesomeOscillator.
-func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T {
-	medianSplice := helper.DuplicateWithContext(ctx, helper.DivideByWithContext(ctx, helper.AddWithContext(ctx, highs, lows),
-		2,
-	),
+// Compute function takes a channel of numbers and computes the AwesomeOscillator.
+func (a *AwesomeOscillator[T]) Compute(highs, lows <-chan T) <-chan T {
+	medianSplice := helper.Duplicate(
+		helper.DivideBy(
+			helper.Add(highs, lows),
+			2,
+		),
 		2,
 	)
 
-	shortSma := a.ShortSma.ComputeWithContext(ctx, medianSplice[0])
-	longSma := a.LongSma.ComputeWithContext(ctx, medianSplice[1])
+	shortSma := a.ShortSma.Compute(medianSplice[0])
+	longSma := a.LongSma.Compute(medianSplice[1])
 
-	shortSma = helper.SkipWithContext(ctx, shortSma, a.LongSma.IdlePeriod()-a.ShortSma.IdlePeriod())
+	shortSma = helper.Skip(shortSma, a.LongSma.IdlePeriod()-a.ShortSma.IdlePeriod())
 
-	return helper.SubtractWithContext(ctx, shortSma,
+	return helper.Subtract(
+		shortSma,
 		longSma,
 	)
 }
@@ -69,11 +70,4 @@ func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Awesome Oscillator won't yield any results.
 func (a *AwesomeOscillator[T]) IdlePeriod() int {
 	return a.LongSma.IdlePeriod()
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (a *AwesomeOscillator[T]) Compute(highs, lows <-chan T) <-chan T {
-	return a.ComputeWithContext(context.Background(), highs, lows)
 }

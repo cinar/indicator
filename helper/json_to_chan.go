@@ -5,33 +5,18 @@
 package helper
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 	"log/slog"
 )
 
-// JSONToChan wraps JSONToChanWithContext for backwards compatibility.
-//
-// Deprecated: Use JSONToChanWithContext instead.
+// JSONToChan reads values from the specified reader in JSON format into a channel of values.
 func JSONToChan[T any](r io.Reader) <-chan T {
-	return JSONToChanWithContext[T](context.Background(), r)
+	return JSONToChanWithLogger[T](r, slog.Default())
 }
 
-// JSONToChanWithContext reads values from the specified reader in JSON format into a channel of values, supporting context cancellation.
-func JSONToChanWithContext[T any](ctx context.Context, r io.Reader) <-chan T {
-	return JSONToChanWithLoggerWithContext[T](ctx, r, slog.Default())
-}
-
-// JSONToChanWithLogger wraps JSONToChanWithLoggerWithContext for backwards compatibility.
-//
-// Deprecated: Use JSONToChanWithLoggerWithContext instead.
+// JSONToChanWithLogger reads values from the specified reader in JSON format into a channel of values.
 func JSONToChanWithLogger[T any](r io.Reader, logger *slog.Logger) <-chan T {
-	return JSONToChanWithLoggerWithContext[T](context.Background(), r, logger)
-}
-
-// JSONToChanWithLoggerWithContext reads values from the specified reader in JSON format into a channel of values with logger and context.
-func JSONToChanWithLoggerWithContext[T any](ctx context.Context, r io.Reader, logger *slog.Logger) <-chan T {
 	c := make(chan T)
 
 	go func() {
@@ -51,12 +36,6 @@ func JSONToChanWithLoggerWithContext[T any](ctx context.Context, r io.Reader, lo
 		}
 
 		for decoder.More() {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
 			var value T
 
 			err = decoder.Decode(&value)
@@ -65,11 +44,7 @@ func JSONToChanWithLoggerWithContext[T any](ctx context.Context, r io.Reader, lo
 				return
 			}
 
-			select {
-			case <-ctx.Done():
-				return
-			case c <- value:
-			}
+			c <- value
 		}
 
 		token, err = decoder.Token()

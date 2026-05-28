@@ -5,8 +5,6 @@
 package momentum
 
 import (
-	"context"
-
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -34,29 +32,30 @@ func (*ElderRayStrategy) Name() string {
 	return "Elder Ray Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (e *ElderRayStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (e *ElderRayStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.Duplicate(snapshots, 3)
 
-	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
-	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
-	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2]), 2)
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshotsSplice[2]), 2)
 
-	bullPower, bearPower := e.ElderRay.ComputeWithContext(ctx, highs, lows, closingsSplice[0])
+	bullPower, bearPower := e.ElderRay.Compute(highs, lows, closingsSplice[0])
 
-	bullSplice := helper.DuplicateWithContext(ctx, bullPower, 2)
-	bearSplice := helper.DuplicateWithContext(ctx, bearPower, 2)
+	bullSplice := helper.Duplicate(bullPower, 2)
+	bearSplice := helper.Duplicate(bearPower, 2)
 
-	bullChange := helper.ChangeWithContext(ctx, bullSplice[0], 1)
-	bearChange := helper.ChangeWithContext(ctx, bearSplice[0], 1)
+	bullChange := helper.Change(bullSplice[0], 1)
+	bearChange := helper.Change(bearSplice[0], 1)
 
-	bullCurrent := helper.SkipWithContext(ctx, bullSplice[1], 1)
-	bearCurrent := helper.SkipWithContext(ctx, bearSplice[1], 1)
+	bullCurrent := helper.Skip(bullSplice[1], 1)
+	bearCurrent := helper.Skip(bearSplice[1], 1)
 
 	ema := trend.NewEmaWithPeriod[float64](e.ElderRay.Period)
-	emaChange := helper.ChangeWithContext(ctx, ema.ComputeWithContext(ctx, closingsSplice[1]), 1)
+	emaChange := helper.Change(ema.Compute(closingsSplice[1]), 1)
 
-	actions := helper.Operate5WithContext(ctx, bullCurrent, bullChange,
+	actions := helper.Operate5(
+		bullCurrent, bullChange,
 		bearCurrent, bearChange,
 		emaChange,
 		func(bull, dBull, bear, dBear, dEma float64) strategy.Action {
@@ -74,7 +73,7 @@ func (e *ElderRayStrategy) ComputeWithContext(ctx context.Context, snapshots <-c
 		})
 
 	// IdlePeriod + 1 for the Change(1) step
-	actions = helper.ShiftWithContext(ctx, actions, e.ElderRay.IdlePeriod()+1, strategy.Hold)
+	actions = helper.Shift(actions, e.ElderRay.IdlePeriod()+1, strategy.Hold)
 
 	return actions
 }
@@ -117,11 +116,4 @@ func (e *ElderRayStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
-}
-
-// Compute wraps ComputeWithContext for backwards compatibility.
-//
-// Deprecated: Use ComputeWithContext instead.
-func (e *ElderRayStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return e.ComputeWithContext(context.Background(), snapshots)
 }
