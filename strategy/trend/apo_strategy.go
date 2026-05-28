@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -33,20 +35,20 @@ func (*ApoStrategy) Name() string {
 	return "Apo Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (a *ApoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosings(snapshots)
+func (a *ApoStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 
-	apo := a.Apo.Compute(closings)
-	apo = helper.Buffered(apo, 2)
+	apo := a.Apo.ComputeWithContext(ctx, closings)
+	apo = helper.BufferedWithContext(ctx, apo, 2)
 
-	inputs := helper.Duplicate(apo, 2)
+	inputs := helper.DuplicateWithContext(ctx, apo, 2)
 
 	// Skip the first value
-	inputs[1] = helper.Skip(inputs[1], 1)
+	inputs[1] = helper.SkipWithContext(ctx, inputs[1], 1)
 
-	actions := helper.Operate(inputs[0], inputs[1], func(b, c float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, inputs[0], inputs[1], func(b, c float64) strategy.Action {
 		// An APO value crossing above zero suggests a bullish trend.
 		if c >= 0 && b < 0 {
 			return strategy.Buy
@@ -61,7 +63,7 @@ func (a *ApoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.
 	})
 
 	// APO starts only after the slow period.
-	actions = helper.Shift(actions, a.Apo.SlowPeriod, strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, a.Apo.SlowPeriod, strategy.Hold)
 
 	return actions
 }
@@ -96,4 +98,11 @@ func (a *ApoStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (a *ApoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return a.ComputeWithContext(context.Background(), snapshots)
 }

@@ -7,6 +7,8 @@ package volatility
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -42,10 +44,10 @@ func NewHistoricalVolatilityWithPeriod[T helper.Number](period int) *HistoricalV
 	}
 }
 
-// Compute function takes a channel of prices and computes the Historical Volatility over the specified period.
-func (h *HistoricalVolatility[T]) Compute(prices <-chan T) <-chan T {
-	returns := helper.ChangeRatio(prices, 1)
-	return NewMovingStdWithPeriod[T](h.Period).Compute(returns)
+// ComputeWithContext function takes a channel of prices and computes the Historical Volatility over the specified period.
+func (h *HistoricalVolatility[T]) ComputeWithContext(ctx context.Context, prices <-chan T) <-chan T {
+	returns := helper.ChangeRatioWithContext(ctx, prices, 1)
+	return NewMovingStdWithPeriod[T](h.Period).ComputeWithContext(ctx, returns)
 }
 
 // IdlePeriod is the initial period that Historical Volatility won't yield any results.
@@ -59,3 +61,9 @@ func (h *HistoricalVolatility[T]) String() string {
 	return fmt.Sprintf("HV(%d)", h.Period)
 }
 
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (h *HistoricalVolatility[T]) Compute(prices <-chan T) <-chan T {
+	return h.ComputeWithContext(context.Background(), prices)
+}

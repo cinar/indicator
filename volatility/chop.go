@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -38,33 +40,33 @@ func NewChopWithPeriod[T helper.Number](period int) *Chop[T] {
 	}
 }
 
-// Compute function takes channels of highs, lows, and closings, and computes the CHOP over the specified period.
-func (c *Chop[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	highs2 := helper.Duplicate(highs, 2)
-	lows2 := helper.Duplicate(lows, 2)
+// ComputeWithContext function takes channels of highs, lows, and closings, and computes the CHOP over the specified period.
+func (c *Chop[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+	highs2 := helper.DuplicateWithContext(ctx, highs, 2)
+	lows2 := helper.DuplicateWithContext(ctx, lows, 2)
 
 	// TR calculation
 	// Use previous closing by skipping highs and lows by one.
-	trHighs := helper.Skip(highs2[0], 1)
-	trLows := helper.Skip(lows2[0], 1)
+	trHighs := helper.SkipWithContext(ctx, highs2[0], 1)
+	trLows := helper.SkipWithContext(ctx, lows2[0], 1)
 
-	tr := helper.Operate3(trHighs, trLows, closings, func(high, low, closing T) T {
+	tr := helper.Operate3WithContext(ctx, trHighs, trLows, closings, func(high, low, closing T) T {
 		return T(math.Max(float64(high-low), math.Max(float64(high-closing), float64(closing-low))))
 	})
 
-	sumTr := trend.NewMovingSumWithPeriod[T](c.Period).Compute(tr)
+	sumTr := trend.NewMovingSumWithPeriod[T](c.Period).ComputeWithContext(ctx, tr)
 
 	// MAX(High, n) and MIN(Low, n)
 	// They should be aligned with the TR bars (starting from bar 1).
-	rangeHighs := helper.Skip(highs2[1], 1)
-	rangeLows := helper.Skip(lows2[1], 1)
+	rangeHighs := helper.SkipWithContext(ctx, highs2[1], 1)
+	rangeLows := helper.SkipWithContext(ctx, lows2[1], 1)
 
-	maxHigh := trend.NewMovingMaxWithPeriod[T](c.Period).Compute(rangeHighs)
-	minLow := trend.NewMovingMinWithPeriod[T](c.Period).Compute(rangeLows)
+	maxHigh := trend.NewMovingMaxWithPeriod[T](c.Period).ComputeWithContext(ctx, rangeHighs)
+	minLow := trend.NewMovingMinWithPeriod[T](c.Period).ComputeWithContext(ctx, rangeLows)
 
 	log10n := math.Log10(float64(c.Period))
 
-	chop := helper.Operate3(sumTr, maxHigh, minLow, func(sum, max, min T) T {
+	chop := helper.Operate3WithContext(ctx, sumTr, maxHigh, minLow, func(sum, max, min T) T {
 		diff := float64(max - min)
 		if diff == 0 {
 			return 0
@@ -85,4 +87,11 @@ func (c *Chop[T]) IdlePeriod() int {
 // String function returns a string representation of the CHOP.
 func (c *Chop[T]) String() string {
 	return fmt.Sprintf("CHOP(%d)", c.Period)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (c *Chop[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	return c.ComputeWithContext(context.Background(), highs, lows, closings)
 }

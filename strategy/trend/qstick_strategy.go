@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -35,20 +37,20 @@ func (*QstickStrategy) Name() string {
 	return "Qstick Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (q *QstickStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshots := helper.Duplicate(c, 2)
-	openings := asset.SnapshotsAsOpenings(snapshots[0])
-	closings := asset.SnapshotsAsClosings(snapshots[1])
+func (q *QstickStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 2)
+	openings := asset.SnapshotsAsOpeningsWithContext(ctx, snapshots[0])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots[1])
 
-	qstick := q.Qstick.Compute(openings, closings)
-	qstick = helper.Buffered(qstick, 2)
+	qstick := q.Qstick.ComputeWithContext(ctx, openings, closings)
+	qstick = helper.BufferedWithContext(ctx, qstick, 2)
 
-	qsticks := helper.Duplicate(qstick, 2)
-	qsticks[1] = helper.Skip(qsticks[1], 1)
+	qsticks := helper.DuplicateWithContext(ctx, qstick, 2)
+	qsticks[1] = helper.SkipWithContext(ctx, qsticks[1], 1)
 
-	actions := helper.Operate(qsticks[0], qsticks[1], func(b, c float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, qsticks[0], qsticks[1], func(b, c float64) strategy.Action {
 		// A Qstick above zero indicates increasing buying pressure.
 		if c >= 0 && b < 0 {
 			return strategy.Buy
@@ -63,7 +65,7 @@ func (q *QstickStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Actio
 	})
 
 	// Qstick starts only after a full period.
-	actions = helper.Shift(actions, q.Qstick.Sma.Period, strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, q.Qstick.Sma.Period, strategy.Hold)
 
 	return actions
 }
@@ -105,4 +107,11 @@ func (q *QstickStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (q *QstickStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return q.ComputeWithContext(context.Background(), c)
 }

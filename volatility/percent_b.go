@@ -7,6 +7,8 @@ package volatility
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -30,20 +32,20 @@ func NewPercentBWithPeriod[T helper.Number](period int) *PercentB[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the %B over the specified period.
-func (p *PercentB[T]) Compute(closings <-chan T) <-chan T {
-	closingsSplice := helper.Duplicate(closings, 2)
+// ComputeWithContext function takes a channel of numbers and computes the %B over the specified period.
+func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
 
 	// Compute the Bollinger Bands
-	upperBands, middleBands, lowerBands := p.BollingerBands.Compute(closingsSplice[0])
+	upperBands, middleBands, lowerBands := p.BollingerBands.ComputeWithContext(ctx, closingsSplice[0])
 
 	// Skip closings until the Bollinger Bands are available
-	closingsSplice[1] = helper.Skip(closingsSplice[1], p.BollingerBands.IdlePeriod())
+	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], p.BollingerBands.IdlePeriod())
 
 	// Drain the middle bands
-	go helper.Drain(middleBands)
+	go helper.DrainWithContext(ctx, middleBands)
 
-	return helper.Operate3(upperBands, lowerBands, closingsSplice[1], func(upperBand, lowerBand, closing T) T {
+	return helper.Operate3WithContext(ctx, upperBands, lowerBands, closingsSplice[1], func(upperBand, lowerBand, closing T) T {
 		// %B = (Close - Lower Band) / (Upper Band - Lower Band)
 		return (closing - lowerBand) / (upperBand - lowerBand)
 	})
@@ -57,4 +59,11 @@ func (p *PercentB[T]) IdlePeriod() int {
 // String is the string representation of the %B.
 func (p *PercentB[T]) String() string {
 	return fmt.Sprintf("%%B(%d)", p.BollingerBands.Period)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (p *PercentB[T]) Compute(closings <-chan T) <-chan T {
+	return p.ComputeWithContext(context.Background(), closings)
 }

@@ -4,28 +4,38 @@
 
 package helper
 
-// Head retrieves the specified number of elements
-// from the given channel of type T values and
-// delivers them through a new channel.
+import "context"
+
+// Head wraps HeadWithContext for backwards compatibility.
 //
-// Example:
-//
-//	c := helper.SliceToChan([]int{2, 4, 6, 8})
-//	actual := helper.Head(c, 2)
-//	fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
+// Deprecated: Use HeadWithContext instead.
 func Head[T Number](c <-chan T, count int) <-chan T {
+	return HeadWithContext(context.Background(), c, count)
+}
+
+// HeadWithContext retrieves the specified number of elements
+// from the given channel of type T values and
+// delivers them through a new channel, supporting context cancellation.
+func HeadWithContext[T Number](ctx context.Context, c <-chan T, count int) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
 		defer close(result)
 
 		for i := 0; i < count; i++ {
-			n, ok := <-c
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-c:
+				if !ok {
+					return
+				}
+				select {
+				case <-ctx.Done():
+					return
+				case result <- n:
+				}
 			}
-
-			result <- n
 		}
 	}()
 

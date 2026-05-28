@@ -5,6 +5,8 @@
 package volatility
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -31,19 +33,18 @@ func (*BollingerBandsStrategy) Name() string {
 	return "Bollinger Bands Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := helper.Duplicate(
-		asset.SnapshotsAsClosings(snapshots),
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (b *BollingerBandsStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
 		2,
 	)
 
-	uppers, middles, lowers := b.BollingerBands.Compute(closings[0])
-	go helper.Drain(middles)
+	uppers, middles, lowers := b.BollingerBands.ComputeWithContext(ctx, closings[0])
+	go helper.DrainWithContext(ctx, middles)
 
-	closings[1] = helper.Skip(closings[1], b.BollingerBands.IdlePeriod())
+	closings[1] = helper.SkipWithContext(ctx, closings[1], b.BollingerBands.IdlePeriod())
 
-	actions := helper.Operate3(uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
+	actions := helper.Operate3WithContext(ctx, uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
 		if closing > upper {
 			return strategy.Sell
 		}
@@ -56,7 +57,7 @@ func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 	})
 
 	// Bollinger Bands starts only after a full period.
-	actions = helper.Shift(actions, b.BollingerBands.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, b.BollingerBands.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -98,4 +99,11 @@ func (b *BollingerBandsStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (b *BollingerBandsStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return b.ComputeWithContext(context.Background(), snapshots)
 }

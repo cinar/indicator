@@ -5,6 +5,8 @@
 package volatility
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -43,36 +45,32 @@ func NewChandelierExit[T helper.Number]() *ChandelierExit[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the Chandelier Exit over the specified period.
-func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T) {
-	highsSplice := helper.Duplicate(highs, 2)
-	lowsSplice := helper.Duplicate(lows, 2)
+// ComputeWithContext function takes a channel of numbers and computes the Chandelier Exit over the specified period.
+func (c *ChandelierExit[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T) {
+	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
+	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
 
 	movingMax := trend.NewMovingMaxWithPeriod[T](c.Period)
 	movingMin := trend.NewMovingMinWithPeriod[T](c.Period)
 
 	atr := NewAtrWithPeriod[T](c.Period)
 
-	maxHighs := helper.Skip(
-		movingMax.Compute(highsSplice[0]),
+	maxHighs := helper.SkipWithContext(ctx, movingMax.ComputeWithContext(ctx, highsSplice[0]),
 		atr.IdlePeriod()-movingMax.IdlePeriod(),
 	)
 
-	minLows := helper.Skip(
-		movingMin.Compute(lowsSplice[0]),
+	minLows := helper.SkipWithContext(ctx, movingMin.ComputeWithContext(ctx, lowsSplice[0]),
 		atr.IdlePeriod()-movingMin.IdlePeriod(),
 	)
 
-	atr3Splice := helper.Duplicate(
-		helper.MultiplyBy(
-			atr.Compute(highsSplice[1], lowsSplice[1], closings),
-			c.Multiplier,
-		),
+	atr3Splice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, atr.ComputeWithContext(ctx, highsSplice[1], lowsSplice[1], closings),
+		c.Multiplier,
+	),
 		2,
 	)
 
-	ceLong := helper.Subtract(maxHighs, atr3Splice[0])
-	ceShort := helper.Add(minLows, atr3Splice[1])
+	ceLong := helper.SubtractWithContext(ctx, maxHighs, atr3Splice[0])
+	ceShort := helper.AddWithContext(ctx, minLows, atr3Splice[1])
 
 	return ceLong, ceShort
 }
@@ -80,4 +78,11 @@ func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 // IdlePeriod is the initial period that Chandelier Exit won't yield any results.
 func (c *ChandelierExit[T]) IdlePeriod() int {
 	return c.Period
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T) {
+	return c.ComputeWithContext(context.Background(), highs, lows, closings)
 }

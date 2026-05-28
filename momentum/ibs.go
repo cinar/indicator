@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -25,9 +27,9 @@ func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T] {
 	return &InternalBarStrength[T]{}
 }
 
-// Compute function takes channels of highs, lows, and closings and computes the IBS.
-func (ibs *InternalBarStrength[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	return helper.Operate3(highs, lows, closings, func(high, low, closing T) T {
+// ComputeWithContext function takes channels of highs, lows, and closings and computes the IBS.
+func (ibs *InternalBarStrength[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		denom := high - low
 		if denom == 0 {
 			return 0
@@ -44,4 +46,11 @@ func (ibs *InternalBarStrength[T]) IdlePeriod() int {
 // String is the string representation of the InternalBarStrength.
 func (ibs *InternalBarStrength[T]) String() string {
 	return "IBS"
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (ibs *InternalBarStrength[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	return ibs.ComputeWithContext(context.Background(), highs, lows, closings)
 }

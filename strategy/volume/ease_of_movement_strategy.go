@@ -7,6 +7,8 @@ package volume
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -41,17 +43,17 @@ func (e *EaseOfMovementStrategy) Name() string {
 	return fmt.Sprintf("Ease of Movement Strategy (%d)", e.EaseOfMovement.IdlePeriod()+1)
 }
 
-// Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (e *EaseOfMovementStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 3)
+// ComputeWithContext function processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (e *EaseOfMovementStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
 
-	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
-	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
-	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[2])
 
-	emvs := e.EaseOfMovement.Compute(highs, lows, volumes)
+	emvs := e.EaseOfMovement.ComputeWithContext(ctx, highs, lows, volumes)
 
-	actions := helper.Map(emvs, func(emv float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, emvs, func(emv float64) strategy.Action {
 		if emv > 0 {
 			return strategy.Buy
 		}
@@ -64,7 +66,7 @@ func (e *EaseOfMovementStrategy) Compute(snapshots <-chan *asset.Snapshot) <-cha
 	})
 
 	// Ease of Movement starts only after a full period.
-	actions = helper.Shift(actions, e.EaseOfMovement.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, e.EaseOfMovement.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -116,4 +118,11 @@ func (e *EaseOfMovementStrategy) Report(snapshots <-chan *asset.Snapshot) *helpe
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (e *EaseOfMovementStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return e.ComputeWithContext(context.Background(), snapshots)
 }

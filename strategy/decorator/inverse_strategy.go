@@ -7,6 +7,8 @@ package decorator
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -31,9 +33,9 @@ func (i *InverseStrategy) Name() string {
 	return fmt.Sprintf("Inverse Strategy (%s)", i.InnerStrategy.Name())
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (i *InverseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return helper.Map(i.InnerStrategy.Compute(snapshots), func(action strategy.Action) strategy.Action {
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (i *InverseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return helper.MapWithContext(ctx, strategy.ComputeStrategyWithContext(ctx, i.InnerStrategy, snapshots), func(action strategy.Action) strategy.Action {
 		switch action {
 		case strategy.Buy:
 			return strategy.Sell
@@ -67,4 +69,11 @@ func (i *InverseStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (i *InverseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return i.ComputeWithContext(context.Background(), snapshots)
 }

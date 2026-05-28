@@ -4,14 +4,18 @@
 
 package strategy
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
 
-// Outcome simulates the potential result of executing the given actions based on the provided values.
-func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan float64 {
+	"github.com/cinar/indicator/v2/helper"
+)
+
+// OutcomeWithContext simulates the potential result of executing the given actions based on the provided values, supporting context cancellation.
+func OutcomeWithContext[T helper.Number](ctx context.Context, values <-chan T, actions <-chan Action) <-chan float64 {
 	balance := 1.0
 	shares := 0.0
 
-	return helper.Operate(values, actions, func(value T, action Action) float64 {
+	return helper.OperateWithContext(ctx, values, actions, func(value T, action Action) float64 {
 		if balance > 0 && action == Buy {
 			shares = balance / float64(value)
 			balance = 0
@@ -22,4 +26,11 @@ func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan flo
 
 		return balance + (shares * float64(value)) - 1.0
 	})
+}
+
+// Outcome simulates the potential result of executing the given actions based on the provided values.
+//
+// Deprecated: Use OutcomeWithContext instead.
+func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan float64 {
+	return OutcomeWithContext(context.Background(), values, actions)
 }

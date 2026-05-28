@@ -4,7 +4,11 @@
 
 package helper
 
-// IncrementBy increments each element in the input channel by the
+import (
+	"context"
+)
+
+// IncrementByWithContext increments each element in the input channel by the
 // specified increment value and returns a new channel containing
 // the incremented values.
 //
@@ -13,8 +17,15 @@ package helper
 //	input := []int{1, 2, 3, 4}
 //	actual := helper.IncrementBy(helper.SliceToChan(input), 1)
 //	fmt.Println(helper.ChanToSlice(actual)) // [2, 3, 4, 5]
-func IncrementBy[T Number](c <-chan T, i T) <-chan T {
-	return Apply(c, func(n T) T {
+func IncrementByWithContext[T Number](ctx context.Context, c <-chan T, i T) <-chan T {
+	return ApplyWithContext(ctx, c, func(n T) T {
 		return n + i
 	})
+}
+
+// IncrementBy wraps IncrementByWithContext for backwards compatibility.
+//
+// Deprecated: Use IncrementByWithContext instead.
+func IncrementBy[T Number](c <-chan T, i T) <-chan T {
+	return IncrementByWithContext(context.Background(), c, i)
 }

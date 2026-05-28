@@ -5,6 +5,8 @@
 package volume
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -47,52 +49,37 @@ func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the MFI.
-func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the MFI.
+func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T {
 	//	Raw Money Flow = Typical Price * Volume
-	rawMoneyFlowSplice := helper.Duplicate(
-		helper.Multiply(
-			m.TypicalPrice.Compute(highs, lows, closings),
-			volumes,
-		),
+	rawMoneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, m.TypicalPrice.ComputeWithContext(ctx, highs, lows, closings),
+		volumes,
+	),
 		2,
 	)
 
-	moneyFlowSplice := helper.Duplicate(
-		helper.Multiply(
-			helper.Sign(
-				helper.Change(rawMoneyFlowSplice[0], 1),
-			),
-			helper.Skip(rawMoneyFlowSplice[1], 1),
-		),
+	moneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, helper.SignWithContext(ctx, helper.ChangeWithContext(ctx, rawMoneyFlowSplice[0], 1)),
+		helper.SkipWithContext(ctx, rawMoneyFlowSplice[1], 1),
+	),
 		2,
 	)
 
 	// Money Ratio = Positive Money Flow / Negative Money Flow
-	moneyRatio := helper.Divide(
-		m.Sum.Compute(
-			helper.KeepPositives(moneyFlowSplice[0]),
+	moneyRatio := helper.DivideWithContext(ctx, m.Sum.ComputeWithContext(ctx, helper.KeepPositivesWithContext(ctx, moneyFlowSplice[0])),
+		m.Sum.ComputeWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.KeepNegativesWithContext(ctx, moneyFlowSplice[1]),
+			-1,
 		),
-		m.Sum.Compute(
-			helper.MultiplyBy(
-				helper.KeepNegatives(moneyFlowSplice[1]),
-				-1,
-			),
 		),
 	)
 
 	// Money Flow Index = 100 - (100 / (1 + Money Ratio))
-	return helper.IncrementBy(
-		helper.MultiplyBy(
-			helper.Pow(
-				helper.IncrementBy(
-					moneyRatio,
-					1,
-				),
-				-1,
-			),
-			-100,
-		),
+	return helper.IncrementByWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.PowWithContext(ctx, helper.IncrementByWithContext(ctx, moneyRatio,
+		1,
+	),
+		-1,
+	),
+		-100,
+	),
 		100,
 	)
 }
@@ -100,4 +87,11 @@ func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
 // IdlePeriod is the initial period that MFI won't yield any results.
 func (m *Mfi[T]) IdlePeriod() int {
 	return m.Sum.IdlePeriod() + 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T {
+	return m.ComputeWithContext(context.Background(), highs, lows, closings, volumes)
 }
