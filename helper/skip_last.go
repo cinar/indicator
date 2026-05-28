@@ -1,31 +1,47 @@
+// Copyright (c) 2021-2026 Onur Cinar.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
 package helper
 
-// SkipLast skips the specified number of elements
-// from the end of the given channel.
+import "context"
+
+// SkipLast wraps SkipLastWithContext for backwards compatibility.
 //
-// Example:
-//
-//	c := helper.SliceToChan([]int{2, 4, 6, 8})
-//	actual := helper.SkipLast(c, 2)
-//	fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
+// Deprecated: Use SkipLastWithContext instead.
 func SkipLast[T any](c <-chan T, count int) <-chan T {
+	return SkipLastWithContext(context.Background(), c, count)
+}
+
+// SkipLastWithContext skips the specified number of elements
+// from the end of the given channel, supporting context cancellation.
+func SkipLastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
 		defer close(result)
 
-		// Buffer to hold the last "count" elements
 		buf := make([]T, 0, count)
 
-		for v := range c {
-			buf = append(buf, v)
-			if len(buf) > count {
-				// send the oldest value
-				result <- buf[0]
-				buf = buf[1:]
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case v, ok := <-c:
+				if !ok {
+					return
+				}
+				buf = append(buf, v)
+				if len(buf) > count {
+					select {
+					case <-ctx.Done():
+						return
+					case result <- buf[0]:
+					}
+					buf = buf[1:]
+				}
 			}
 		}
-		// drop the last `count` elements automatically
 	}()
 
 	return result

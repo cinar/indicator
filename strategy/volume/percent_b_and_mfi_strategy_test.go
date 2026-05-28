@@ -18,9 +18,9 @@ func TestPercentBandMFIStrategy(t *testing.T) {
 	snapshots := make(chan *asset.Snapshot, 100)
 	for i := 0; i < 100; i++ {
 		snapshots <- &asset.Snapshot{
-			High:  float64(i + 10),
-			Low:   float64(i),
-			Close: float64(i + 5),
+			High:   float64(i + 10),
+			Low:    float64(i),
+			Close:  float64(i + 5),
 			Volume: 1000,
 		}
 	}
@@ -36,9 +36,9 @@ func TestPercentBandMFIStrategyReport(t *testing.T) {
 	snapshots := make(chan *asset.Snapshot, 100)
 	for i := 0; i < 100; i++ {
 		snapshots <- &asset.Snapshot{
-			High:  float64(i + 10),
-			Low:   float64(i),
-			Close: float64(i + 5),
+			High:   float64(i + 10),
+			Low:    float64(i),
+			Close:  float64(i + 5),
 			Volume: 1000,
 		}
 	}

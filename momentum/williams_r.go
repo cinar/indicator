@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -42,22 +44,19 @@ func NewWilliamsR[T helper.Number]() *WilliamsR[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the Williams R.
-func (w *WilliamsR[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	highestSplice := helper.Duplicate(
-		w.Max.Compute(highs),
+// ComputeWithContext function takes a channel of numbers and computes the Williams R.
+func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+	highestSplice := helper.DuplicateWithContext(ctx, w.Max.ComputeWithContext(ctx, highs),
 		2,
 	)
 
-	lowest := w.Min.Compute(lows)
+	lowest := w.Min.ComputeWithContext(ctx, lows)
 
-	closings = helper.Skip(closings, w.Max.IdlePeriod())
+	closings = helper.SkipWithContext(ctx, closings, w.Max.IdlePeriod())
 
-	return helper.MultiplyBy(
-		helper.Divide(
-			helper.Subtract(highestSplice[0], closings),
-			helper.Subtract(highestSplice[1], lowest),
-		),
+	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, highestSplice[0], closings),
+		helper.SubtractWithContext(ctx, highestSplice[1], lowest),
+	),
 		-100,
 	)
 }
@@ -65,4 +64,11 @@ func (w *WilliamsR[T]) Compute(highs, lows, closings <-chan T) <-chan T {
 // IdlePeriod is the initial period that Williams R won't yield any results.
 func (w *WilliamsR[T]) IdlePeriod() int {
 	return w.Max.IdlePeriod()
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (w *WilliamsR[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	return w.ComputeWithContext(context.Background(), highs, lows, closings)
 }

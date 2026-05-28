@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -38,17 +40,13 @@ func NewTrix[T helper.Number]() *Trix[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the TRIX and the signal line.
-func (t *Trix[T]) Compute(c <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the TRIX and the signal line.
+func (t *Trix[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	ema1 := NewEmaWithPeriod[T](t.Period)
 	ema2 := NewEmaWithPeriod[T](t.Period)
 	ema3 := NewEmaWithPeriod[T](t.Period)
 
-	emas := ema3.Compute(
-		ema2.Compute(
-			ema1.Compute(c),
-		),
-	)
+	emas := ema3.ComputeWithContext(ctx, ema2.ComputeWithContext(ctx, ema1.ComputeWithContext(ctx, c)))
 
 	trix := helper.ChangeRatio[T](emas, 1)
 
@@ -59,3 +57,8 @@ func (t *Trix[T]) Compute(c <-chan T) <-chan T {
 func (t *Trix[T]) IdlePeriod() int {
 	return (t.Period * 3) - 3 + 1
 }
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *Trix[T]) Compute(c <-chan T) <-chan T { return t.ComputeWithContext(context.Background(), c) }

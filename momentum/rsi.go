@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -41,39 +43,28 @@ func NewRsiWithPeriod[T helper.Number](period int) *Rsi[T] {
 	}
 }
 
-// Compute function takes a channel of closings numbers and computes the Relative Strength Index.
-func (r *Rsi[T]) Compute(closings <-chan T) <-chan T {
-	changesSplice := helper.Duplicate(
-		helper.Change(closings, 1),
+// ComputeWithContext function takes a channel of closings numbers and computes the Relative Strength Index.
+func (r *Rsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	changesSplice := helper.DuplicateWithContext(ctx, helper.ChangeWithContext(ctx, closings, 1),
 		2,
 	)
 
-	averageGains := r.Rma.Compute(
-		helper.KeepPositives(changesSplice[0]),
-	)
+	averageGains := r.Rma.ComputeWithContext(ctx, helper.KeepPositivesWithContext(ctx, changesSplice[0]))
 
-	averageLosses := helper.MultiplyBy(
-		r.Rma.Compute(
-			helper.KeepNegatives(changesSplice[1]),
-		),
+	averageLosses := helper.MultiplyByWithContext(ctx, r.Rma.ComputeWithContext(ctx, helper.KeepNegativesWithContext(ctx, changesSplice[1])),
 		-1,
 	)
 
-	rs := helper.Divide(
-		averageGains,
+	rs := helper.DivideWithContext(ctx, averageGains,
 		averageLosses,
 	)
 
 	// RSI = 100 - (100 / (1 + RS))
-	rsi := helper.IncrementBy(
-		// - (100 / (1 + RS))
-		helper.MultiplyBy(
-			// 100 / (1 + RS)
-			helper.MultiplyBy(
-				// 1 / (1 + RS)
-				helper.Pow(
-					// 1 + RS
-					helper.IncrementBy(rs, 1),
+	rsi := helper.IncrementByWithContext(ctx, // - (100 / (1 + RS))
+		helper.MultiplyByWithContext(ctx, // 100 / (1 + RS)
+			helper.MultiplyByWithContext(ctx, // 1 / (1 + RS)
+				helper.PowWithContext(ctx, // 1 + RS
+					helper.IncrementByWithContext(ctx, rs, 1),
 					-1,
 				),
 				100,
@@ -89,4 +80,11 @@ func (r *Rsi[T]) Compute(closings <-chan T) <-chan T {
 // IdlePeriod is the initial period that Relative Strength Index won't yield any results.
 func (r *Rsi[T]) IdlePeriod() int {
 	return r.Rma.IdlePeriod() + 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (r *Rsi[T]) Compute(closings <-chan T) <-chan T {
+	return r.ComputeWithContext(context.Background(), closings)
 }

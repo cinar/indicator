@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -31,21 +33,21 @@ func (*KdjStrategy) Name() string {
 	return "KDJ Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (kdj *KdjStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshots := helper.Duplicate(c, 3)
-	highs := asset.SnapshotsAsHighs(snapshots[0])
-	lows := asset.SnapshotsAsLows(snapshots[1])
-	closings := asset.SnapshotsAsClosings(snapshots[2])
+func (kdj *KdjStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 3)
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshots[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshots[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots[2])
 
-	k, d, j := kdj.Kdj.Compute(highs, lows, closings)
-	js := helper.Duplicate(j, 2)
+	k, d, j := kdj.Kdj.ComputeWithContext(ctx, highs, lows, closings)
+	js := helper.DuplicateWithContext(ctx, j, 2)
 
-	jk := helper.Subtract(js[0], k)
-	jd := helper.Subtract(js[1], d)
+	jk := helper.SubtractWithContext(ctx, js[0], k)
+	jd := helper.SubtractWithContext(ctx, js[1], d)
 
-	actions := helper.Operate(jk, jd, func(a, b float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, jk, jd, func(a, b float64) strategy.Action {
 		// Generates BUY action when j value crosses above both k and d values.
 		if a > 0 && b > 0 {
 			return strategy.Buy
@@ -60,7 +62,7 @@ func (kdj *KdjStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
 	})
 
 	// KDJ starts only after a full period.
-	actions = helper.Shift(actions, kdj.Kdj.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, kdj.Kdj.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -106,4 +108,11 @@ func (kdj *KdjStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (kdj *KdjStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return kdj.ComputeWithContext(context.Background(), c)
 }

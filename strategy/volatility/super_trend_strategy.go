@@ -7,6 +7,8 @@ package volatility
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -38,22 +40,21 @@ func (s *SuperTrendStrategy) Name() string {
 	return fmt.Sprintf("Super Trend Strategy (%s, %.1f)", s.SuperTrend.Atr.Ma.String(), s.SuperTrend.Multiplier)
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 3)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *SuperTrendStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
 
-	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
-	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
-	closingsSplice := helper.Duplicate(
-		asset.SnapshotsAsClosings(snapshotsSplice[2]),
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2]),
 		2,
 	)
 
-	superTrends := s.SuperTrend.Compute(highs, lows, closingsSplice[0])
+	superTrends := s.SuperTrend.ComputeWithContext(ctx, highs, lows, closingsSplice[0])
 
-	closingsSplice[1] = helper.Skip(closingsSplice[1], s.SuperTrend.IdlePeriod())
+	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], s.SuperTrend.IdlePeriod())
 
-	actions := helper.Operate(superTrends, closingsSplice[1], func(superTrend, closing float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, superTrends, closingsSplice[1], func(superTrend, closing float64) strategy.Action {
 		if superTrend < closing {
 			return strategy.Buy
 		}
@@ -66,7 +67,7 @@ func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan st
 	})
 
 	// Super Trend starts only after a full period.
-	actions = helper.Shift(actions, s.SuperTrend.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, s.SuperTrend.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -109,4 +110,11 @@ func (s *SuperTrendStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *SuperTrendStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return s.ComputeWithContext(context.Background(), snapshots)
 }

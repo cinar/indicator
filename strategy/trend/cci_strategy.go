@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -31,16 +33,16 @@ func (*CciStrategy) Name() string {
 	return "CCI Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshots := helper.Duplicate(c, 3)
-	highs := asset.SnapshotsAsHighs(snapshots[0])
-	lows := asset.SnapshotsAsLows(snapshots[1])
-	closings := asset.SnapshotsAsClosings(snapshots[2])
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *CciStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 3)
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshots[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshots[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots[2])
 
-	ccis := t.Cci.Compute(highs, lows, closings)
+	ccis := t.Cci.ComputeWithContext(ctx, highs, lows, closings)
 
-	actions := helper.Map(ccis, func(cci float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, ccis, func(cci float64) strategy.Action {
 		if cci >= 100 {
 			return strategy.Buy
 		}
@@ -53,7 +55,7 @@ func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
 	})
 
 	// CCI starts only after a full period.
-	actions = helper.Shift(actions, t.Cci.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, t.Cci.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -94,4 +96,11 @@ func (t *CciStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return t.ComputeWithContext(context.Background(), c)
 }

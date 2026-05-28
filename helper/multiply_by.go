@@ -4,7 +4,11 @@
 
 package helper
 
-// MultiplyBy multiplies each element in the input channel
+import (
+	"context"
+)
+
+// MultiplyByWithContext multiplies each element in the input channel
 // of type T values by the given multiplier and returns a
 // new channel containing the multiplied values.
 //
@@ -13,8 +17,15 @@ package helper
 //	c := helper.SliceToChan([]int{1, 2, 3, 4})
 //	twoTimes := helper.MultiplyBy(c, 2)
 //	fmt.Println(helper.ChanToSlice(twoTimes)) // [2, 4, 6, 8]
-func MultiplyBy[T Number](c <-chan T, m T) <-chan T {
-	return Apply(c, func(n T) T {
+func MultiplyByWithContext[T Number](ctx context.Context, c <-chan T, m T) <-chan T {
+	return ApplyWithContext(ctx, c, func(n T) T {
 		return n * m
 	})
+}
+
+// MultiplyBy wraps MultiplyByWithContext for backwards compatibility.
+//
+// Deprecated: Use MultiplyByWithContext instead.
+func MultiplyBy[T Number](c <-chan T, m T) <-chan T {
+	return MultiplyByWithContext(context.Background(), c, m)
 }

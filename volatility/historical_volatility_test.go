@@ -61,4 +61,3 @@ func TestHistoricalVolatility(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-
