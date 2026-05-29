@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -29,16 +31,16 @@ func (*AwesomeOscillatorStrategy) Name() string {
 	return "Awesome Oscillator Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 2)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (a *AwesomeOscillatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
-	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
 
-	ao := a.AwesomeOscillator.Compute(highs, lows)
+	ao := a.AwesomeOscillator.ComputeWithContext(ctx, highs, lows)
 
-	actions := helper.Map(ao, func(value float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, ao, func(value float64) strategy.Action {
 		if value < 0 {
 			return strategy.Sell
 		}
@@ -51,7 +53,7 @@ func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-
 	})
 
 	// Awesome Oscillator starts only after the idle period.
-	actions = helper.Shift(actions, a.AwesomeOscillator.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, a.AwesomeOscillator.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -89,4 +91,11 @@ func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Rep
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return a.ComputeWithContext(context.Background(), snapshots)
 }

@@ -37,7 +37,6 @@ func TestSlope(t *testing.T) {
 	}
 }
 
-
 func TestSlopeFallbackPeriod(t *testing.T) {
 	slope := NewSlopeWithPeriod[float64](-17)
 

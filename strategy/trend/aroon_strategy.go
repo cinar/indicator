@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -35,17 +37,17 @@ func (*AroonStrategy) Name() string {
 	return "Aroon Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshots := helper.Duplicate(c, 2)
+func (a *AroonStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 2)
 
-	highs := asset.SnapshotsAsHighs(snapshots[0])
-	lows := asset.SnapshotsAsLows(snapshots[1])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshots[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshots[1])
 
-	ups, downs := a.Aroon.Compute(highs, lows)
+	ups, downs := a.Aroon.ComputeWithContext(ctx, highs, lows)
 
-	actions := helper.Operate(ups, downs, func(up, down float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, ups, downs, func(up, down float64) strategy.Action {
 		if up > down {
 			return strategy.Buy
 		}
@@ -58,7 +60,7 @@ func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
 	})
 
 	// Aroon starts only after a full period.
-	actions = helper.Shift(actions, a.Aroon.Period-1, strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, a.Aroon.Period-1, strategy.Hold)
 
 	return actions
 }
@@ -101,4 +103,11 @@ func (a *AroonStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return a.ComputeWithContext(context.Background(), c)
 }

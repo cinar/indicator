@@ -5,6 +5,7 @@
 package momentum
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -82,31 +83,29 @@ func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percen
 	}
 }
 
-// Compute function takes a channel of closings numbers and computes the Connors RSI.
-func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T {
-	cs := helper.Duplicate(closings, 3)
+// ComputeWithContext function takes a channel of closings numbers and computes the Connors RSI.
+func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	cs := helper.DuplicateWithContext(ctx, closings, 3)
 
-	cs[0] = helper.Buffered(cs[0], 100)
-	cs[1] = helper.Buffered(cs[1], 100)
-	cs[2] = helper.Buffered(cs[2], 100)
+	cs[0] = helper.BufferedWithContext(ctx, cs[0], 100)
+	cs[1] = helper.BufferedWithContext(ctx, cs[1], 100)
+	cs[2] = helper.BufferedWithContext(ctx, cs[2], 100)
 
 	// Component 1: RSI on closing prices
-	rsis := c.Rsi.Compute(cs[0])
+	rsis := c.Rsi.ComputeWithContext(ctx, cs[0])
 
 	// Component 2: RSI on streak length
-	streaks := c.Streak.Compute(cs[1])
-	streakRsis := c.StreakRsi.Compute(streaks)
+	streaks := c.Streak.ComputeWithContext(ctx, cs[1])
+	streakRsis := c.StreakRsi.ComputeWithContext(ctx, streaks)
 
 	// Component 3: PercentRank of ROC
-	rocs := c.Roc.Compute(cs[2])
-	percentRanks := helper.PercentRank(rocs, c.PercentRankPeriod)
+	rocs := c.Roc.ComputeWithContext(ctx, cs[2])
+	percentRanks := helper.PercentRankWithContext(ctx, rocs, c.PercentRankPeriod)
 
 	// Combine: average of three components
-	result := helper.MultiplyBy(
-		helper.Add(
-			helper.Add(rsis, streakRsis),
-			percentRanks,
-		),
+	result := helper.MultiplyByWithContext(ctx, helper.AddWithContext(ctx, helper.AddWithContext(ctx, rsis, streakRsis),
+		percentRanks,
+	),
 		T(1)/T(3),
 	)
 
@@ -134,14 +133,14 @@ func NewStreak[T helper.Float]() *Streak[T] {
 	return &Streak[T]{}
 }
 
-// Compute function takes a channel of closings numbers and computes the streak length.
+// ComputeWithContext function takes a channel of closings numbers and computes the streak length.
 // Positive values indicate consecutive up closes, negative values indicate consecutive down closes.
-func (s *Streak[T]) Compute(closings <-chan T) <-chan T {
+func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
 	// Get the change
-	changes := helper.Change(closings, 1)
+	changes := helper.ChangeWithContext(ctx, closings, 1)
 
 	// Calculate streak based on direction
-	result := helper.Map(changes, func(change T) T {
+	result := helper.MapWithContext(ctx, changes, func(change T) T {
 		if change > T(0) {
 			return T(1)
 		} else if change < T(0) {
@@ -151,7 +150,7 @@ func (s *Streak[T]) Compute(closings <-chan T) <-chan T {
 	})
 
 	// Now calculate cumulative streak
-	cumulative := helper.MapWithPrevious(result, func(prev, curr T) T {
+	cumulative := helper.MapWithPreviousWithContext(ctx, result, func(prev, curr T) T {
 		if curr > T(0) {
 			// Price went up - increment if previous was positive, else start at 1
 			if prev > T(0) {
@@ -175,4 +174,18 @@ func (s *Streak[T]) Compute(closings <-chan T) <-chan T {
 // IdlePeriod is the initial period that Streak won't yield any results.
 func (s *Streak[T]) IdlePeriod() int {
 	return 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T {
+	return c.ComputeWithContext(context.Background(), closings)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *Streak[T]) Compute(closings <-chan T) <-chan T {
+	return s.ComputeWithContext(context.Background(), closings)
 }

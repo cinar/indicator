@@ -4,7 +4,11 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 // Dema represents the parameters for calculating the Double Exponential Moving Average (DEMA).
 // A bullish cross occurs when DEMA with 5 days period moves above DEMA with 35 days period.
@@ -38,19 +42,24 @@ func NewDema[T helper.Number]() *Dema[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the DEMA
+// ComputeWithContext function takes a channel of numbers and computes the DEMA
 // over the specified period.
-func (d *Dema[T]) Compute(c <-chan T) <-chan T {
-	ema1 := helper.Duplicate(d.Ema1.Compute(c), 2)
-	ema2 := d.Ema2.Compute(ema1[1])
+func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+	ema1 := helper.DuplicateWithContext(ctx, d.Ema1.ComputeWithContext(ctx, c), 2)
+	ema2 := d.Ema2.ComputeWithContext(ctx, ema1[1])
 
-	doubleEma1 := helper.MultiplyBy(ema1[0], 2)
-	doubleEma1 = helper.Buffered(doubleEma1, d.Ema2.Period)
+	doubleEma1 := helper.MultiplyByWithContext(ctx, ema1[0], 2)
+	doubleEma1 = helper.BufferedWithContext(ctx, doubleEma1, d.Ema2.Period)
 
-	return helper.Subtract(doubleEma1, ema2)
+	return helper.SubtractWithContext(ctx, doubleEma1, ema2)
 }
 
 // IdlePeriod is the initial period that DEMA won't yield any results.
 func (d *Dema[T]) IdlePeriod() int {
 	return d.Ema1.Period + d.Ema2.Period - 2
 }
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (d *Dema[T]) Compute(c <-chan T) <-chan T { return d.ComputeWithContext(context.Background(), c) }

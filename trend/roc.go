@@ -7,6 +7,8 @@ package trend
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -38,11 +40,11 @@ func NewRocWithPeriod[T helper.Float](period int) *Roc[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the ROC and the signal line.
-func (r *Roc[T]) Compute(values <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the ROC and the signal line.
+func (r *Roc[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan T {
 	window := helper.NewRing[T](r.Period)
 
-	rocs := helper.Map(values, func(value T) T {
+	rocs := helper.MapWithContext(ctx, values, func(value T) T {
 		var result T
 
 		if window.IsFull() {
@@ -56,7 +58,7 @@ func (r *Roc[T]) Compute(values <-chan T) <-chan T {
 		return result
 	})
 
-	rocs = helper.Skip(rocs, r.IdlePeriod())
+	rocs = helper.SkipWithContext(ctx, rocs, r.IdlePeriod())
 
 	return rocs
 }
@@ -69,4 +71,11 @@ func (r *Roc[T]) IdlePeriod() int {
 // String is the string representation of the ROC.
 func (r *Roc[T]) String() string {
 	return fmt.Sprintf("ROC(%d)", r.Period)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (r *Roc[T]) Compute(values <-chan T) <-chan T {
+	return r.ComputeWithContext(context.Background(), values)
 }

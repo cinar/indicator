@@ -4,7 +4,11 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 // MovingSum represents the configuration parameters for calculating the Moving Sum over the specified period.
 //
@@ -29,23 +33,30 @@ func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the
+// ComputeWithContext function takes a channel of numbers and computes the
 // Moving Sum over the specified period.
-func (m *MovingSum[T]) Compute(c <-chan T) <-chan T {
-	cs := helper.Duplicate(c, 2)
-	cs[1] = helper.Shift(cs[1], m.Period, 0)
+func (m *MovingSum[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+	cs := helper.DuplicateWithContext(ctx, c, 2)
+	cs[1] = helper.ShiftWithContext(ctx, cs[1], m.Period, 0)
 
 	sum := T(0)
 
-	sums := helper.Operate(cs[0], cs[1], func(c, b T) T {
+	sums := helper.OperateWithContext(ctx, cs[0], cs[1], func(c, b T) T {
 		sum = sum + c - b
 		return sum
 	})
 
-	return helper.Skip(sums, m.Period-1)
+	return helper.SkipWithContext(ctx, sums, m.Period-1)
 }
 
 // IdlePeriod is the initial period that Moving Sum won't yield any results.
 func (m *MovingSum[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (m *MovingSum[T]) Compute(c <-chan T) <-chan T {
+	return m.ComputeWithContext(context.Background(), c)
 }

@@ -7,6 +7,8 @@ package volatility
 import (
 	"math"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -27,12 +29,12 @@ func NewTrueRange[T helper.Number]() *TrueRange[T] {
 	return &TrueRange[T]{}
 }
 
-// Compute function takes channels of highs, lows, and closings and computes the True Range.
-func (tr *TrueRange[T]) Compute(highs, lows, closings <-chan T) <-chan T {
-	highs = helper.Skip(highs, 1)
-	lows = helper.Skip(lows, 1)
+// ComputeWithContext function takes channels of highs, lows, and closings and computes the True Range.
+func (tr *TrueRange[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+	highs = helper.SkipWithContext(ctx, highs, 1)
+	lows = helper.SkipWithContext(ctx, lows, 1)
 
-	return helper.Operate3(highs, lows, closings, func(high, low, closing T) T {
+	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		return T(math.Max(float64(high-low), math.Max(float64(high-closing), float64(closing-low))))
 	})
 }
@@ -45,4 +47,11 @@ func (tr *TrueRange[T]) IdlePeriod() int {
 // String is the string representation of the TrueRange.
 func (tr *TrueRange[T]) String() string {
 	return "TR"
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (tr *TrueRange[T]) Compute(highs, lows, closings <-chan T) <-chan T {
+	return tr.ComputeWithContext(context.Background(), highs, lows, closings)
 }

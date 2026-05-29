@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -43,8 +45,8 @@ func NewMcGinleyDynamicWithPeriod[T helper.Number](period int) *McGinleyDynamic[
 	}
 }
 
-// Compute function takes a channel of numbers and computes the McGinley Dynamic over the specified period.
-func (m *McGinleyDynamic[T]) Compute(c <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the McGinley Dynamic over the specified period, supporting context cancellation.
+func (m *McGinleyDynamic[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
@@ -53,29 +55,56 @@ func (m *McGinleyDynamic[T]) Compute(c <-chan T) <-chan T {
 		var before float64
 		first := true
 
-		for n := range c {
-			val := float64(n)
-			if first {
-				before = val
-				first = false
-				result <- T(before)
-				continue
-			}
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-c:
+				if !ok {
+					return
+				}
+				val := float64(n)
+				if first {
+					before = val
+					first = false
+					select {
+					case <-ctx.Done():
+						return
+					case result <- T(before):
+					}
+					continue
+				}
 
-			if before == 0 {
-				before = val
-				result <- T(before)
-				continue
-			}
+				if before == 0 {
+					before = val
+					select {
+					case <-ctx.Done():
+						return
+					case result <- T(before):
+					}
+					continue
+				}
 
-			// MD_today = MD_yesterday + (Close - MD_yesterday) / (Period * (Close / MD_yesterday)^4)
-			ratio := val / before
-			before = before + (val-before)/(float64(m.Period)*math.Pow(ratio, 4))
-			result <- T(before)
+				// MD_today = MD_yesterday + (Close - MD_yesterday) / (Period * (Close / MD_yesterday)^4)
+				ratio := val / before
+				before = before + (val-before)/(float64(m.Period)*math.Pow(ratio, 4))
+				select {
+				case <-ctx.Done():
+					return
+				case result <- T(before):
+				}
+			}
 		}
 	}()
 
 	return result
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (m *McGinleyDynamic[T]) Compute(c <-chan T) <-chan T {
+	return m.ComputeWithContext(context.Background(), c)
 }
 
 // IdlePeriod is the initial period that McGinley Dynamic yield any results.

@@ -5,6 +5,8 @@
 package volume
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -54,19 +56,19 @@ func NewKvo[T helper.Number]() *Kvo[T] {
 	}
 }
 
-// Compute function takes channels of numbers and computes the Klinger Volume Oscillator.
+// ComputeWithContext function takes channels of numbers and computes the Klinger Volume Oscillator.
 // Returns kvo and signal.
-func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T) {
-	highsSplice := helper.Duplicate(highs, 2)
-	lowsSplice := helper.Duplicate(lows, 2)
+func (k *Kvo[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-chan T) (<-chan T, <-chan T) {
+	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
+	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
 
-	previousHighs := helper.Shift(highsSplice[0], 1, 0)
-	previousLows := helper.Shift(lowsSplice[0], 1, 0)
+	previousHighs := helper.ShiftWithContext(ctx, highsSplice[0], 1, 0)
+	previousLows := helper.ShiftWithContext(ctx, lowsSplice[0], 1, 0)
 
 	highsCopy := highsSplice[1]
 	lowsCopy := lowsSplice[1]
 
-	vf := helper.Operate5(highsCopy, previousHighs, lowsCopy, previousLows, volumes, func(high, prevHigh, low, prevLow, volume T) T {
+	vf := helper.Operate5WithContext(ctx, highsCopy, previousHighs, lowsCopy, previousLows, volumes, func(high, prevHigh, low, prevLow, volume T) T {
 		var trend T
 
 		if high > prevHigh && low >= prevLow {
@@ -80,19 +82,19 @@ func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T) {
 		return volume * trend
 	})
 
-	vfSplice := helper.Duplicate(helper.Skip(vf, 1), 2)
+	vfSplice := helper.DuplicateWithContext(ctx, helper.SkipWithContext(ctx, vf, 1), 2)
 
-	shortEma := k.ShortEma.Compute(vfSplice[0])
-	longEma := k.LongEma.Compute(vfSplice[1])
+	shortEma := k.ShortEma.ComputeWithContext(ctx, vfSplice[0])
+	longEma := k.LongEma.ComputeWithContext(ctx, vfSplice[1])
 
-	shortEma = helper.Skip(shortEma, k.LongEma.IdlePeriod()-k.ShortEma.IdlePeriod())
+	shortEma = helper.SkipWithContext(ctx, shortEma, k.LongEma.IdlePeriod()-k.ShortEma.IdlePeriod())
 
-	kvo := helper.Subtract(shortEma, longEma)
+	kvo := helper.SubtractWithContext(ctx, shortEma, longEma)
 
-	kvoSplice := helper.Duplicate(kvo, 2)
+	kvoSplice := helper.DuplicateWithContext(ctx, kvo, 2)
 
-	signal := k.SignalEma.Compute(kvoSplice[0])
-	kvoResult := helper.Skip(kvoSplice[1], k.SignalEma.IdlePeriod())
+	signal := k.SignalEma.ComputeWithContext(ctx, kvoSplice[0])
+	kvoResult := helper.SkipWithContext(ctx, kvoSplice[1], k.SignalEma.IdlePeriod())
 
 	return kvoResult, signal
 }
@@ -100,4 +102,11 @@ func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T) {
 // IdlePeriod is the initial period that KVO won't yield any results.
 func (k *Kvo[T]) IdlePeriod() int {
 	return k.LongEma.IdlePeriod() + k.SignalEma.IdlePeriod() + 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T) {
+	return k.ComputeWithContext(context.Background(), highs, lows, volumes)
 }
