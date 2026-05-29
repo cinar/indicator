@@ -30,6 +30,13 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AccelerationBands\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#AccelerationBands[T].Compute>)
   - [func \(a \*AccelerationBands\[T\]\) ComputeWithContext\(ctx context.Context, high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#AccelerationBands[T].ComputeWithContext>)
   - [func \(a \*AccelerationBands\[T\]\) IdlePeriod\(\) int](<#AccelerationBands[T].IdlePeriod>)
+- [type AnnualizedHistoricalVolatility](<#AnnualizedHistoricalVolatility>)
+  - [func NewAnnualizedHistoricalVolatility\[T helper.Number\]\(\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatility>)
+  - [func NewAnnualizedHistoricalVolatilityWithPeriod\[T helper.Number\]\(period int\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatilityWithPeriod>)
+  - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) Compute\(prices \<\-chan T\) \<\-chan T](<#AnnualizedHistoricalVolatility[T].Compute>)
+  - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) ComputeWithContext\(ctx context.Context, prices \<\-chan T\) \<\-chan T](<#AnnualizedHistoricalVolatility[T].ComputeWithContext>)
+  - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) IdlePeriod\(\) int](<#AnnualizedHistoricalVolatility[T].IdlePeriod>)
+  - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) String\(\) string](<#AnnualizedHistoricalVolatility[T].String>)
 - [type Atr](<#Atr>)
   - [func NewAtr\[T helper.Number\]\(\) \*Atr\[T\]](<#NewAtr>)
   - [func NewAtrWithMa\[T helper.Number\]\(ma trend.Ma\[T\]\) \*Atr\[T\]](<#NewAtrWithMa>)
@@ -119,6 +126,19 @@ The information provided on this project is strictly for informational purposes 
 
 
 ## Constants
+
+<a name="DefaultAnnualizedHistoricalVolatilityPeriod"></a>
+
+```go
+const (
+    // DefaultAnnualizedHistoricalVolatilityPeriod is the default period for
+    // Annualized Historical Volatility (AHV).
+    DefaultAnnualizedHistoricalVolatilityPeriod = 21
+
+    // DefaultTradingDaysPerYear is the standard number of trading days in a year.
+    DefaultTradingDaysPerYear = 252
+)
+```
 
 <a name="DefaultChandelierExitPeriod"></a>
 
@@ -296,6 +316,81 @@ func (a *AccelerationBands[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
+
+<a name="AnnualizedHistoricalVolatility"></a>
+## type [AnnualizedHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L30-L36>)
+
+AnnualizedHistoricalVolatility represents the configuration parameters for calculating Annualized Historical Volatility \(AHV\). It annualizes the Historical Volatility by multiplying it by the square root of the number of trading days per year.
+
+```
+AHV = HV × √TradingDaysPerYear
+```
+
+```go
+type AnnualizedHistoricalVolatility[T helper.Number] struct {
+    // Hv is the underlying Historical Volatility indicator.
+    Hv  *HistoricalVolatility[T]
+
+    // TradingDaysPerYear is the number of trading days in a year (default: 252).
+    TradingDaysPerYear int
+}
+```
+
+<a name="NewAnnualizedHistoricalVolatility"></a>
+### func [NewAnnualizedHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L40>)
+
+```go
+func NewAnnualizedHistoricalVolatility[T helper.Number]() *AnnualizedHistoricalVolatility[T]
+```
+
+NewAnnualizedHistoricalVolatility function initializes a new Annualized Historical Volatility instance with the default parameters.
+
+<a name="NewAnnualizedHistoricalVolatilityWithPeriod"></a>
+### func [NewAnnualizedHistoricalVolatilityWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L46>)
+
+```go
+func NewAnnualizedHistoricalVolatilityWithPeriod[T helper.Number](period int) *AnnualizedHistoricalVolatility[T]
+```
+
+NewAnnualizedHistoricalVolatilityWithPeriod function initializes a new Annualized Historical Volatility instance with the given period.
+
+<a name="AnnualizedHistoricalVolatility[T].Compute"></a>
+### func \(\*AnnualizedHistoricalVolatility\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L73>)
+
+```go
+func (a *AnnualizedHistoricalVolatility[T]) Compute(prices <-chan T) <-chan T
+```
+
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="AnnualizedHistoricalVolatility[T].ComputeWithContext"></a>
+### func \(\*AnnualizedHistoricalVolatility\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L55>)
+
+```go
+func (a *AnnualizedHistoricalVolatility[T]) ComputeWithContext(ctx context.Context, prices <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of prices and computes the Annualized Historical Volatility over the specified period.
+
+<a name="AnnualizedHistoricalVolatility[T].IdlePeriod"></a>
+### func \(\*AnnualizedHistoricalVolatility\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L61>)
+
+```go
+func (a *AnnualizedHistoricalVolatility[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Annualized Historical Volatility won't yield any results.
+
+<a name="AnnualizedHistoricalVolatility[T].String"></a>
+### func \(\*AnnualizedHistoricalVolatility\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L66>)
+
+```go
+func (a *AnnualizedHistoricalVolatility[T]) String() string
+```
+
+String function returns a string representation of the Annualized Historical Volatility.
 
 <a name="Atr"></a>
 ## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L32-L35>)

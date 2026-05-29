@@ -97,6 +97,7 @@ The following list of indicators are currently supported by this package:
 
 -   [Percent B](volatility/README.md#PercentB)
 -	[Acceleration Bands](volatility/README.md#AccelerationBands)
+-	[Annualized Historical Volatility (AHV)](volatility/README.md#AnnualizedHistoricalVolatility)
 -	[Average True Range (ATR)](volatility/README.md#Atr)
 -	[Bollinger Band Width](volatility/README.md#BollingerBandWidth)
 -	[Bollinger Bands](volatility/README.md#BollingerBands)
