@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -30,13 +32,13 @@ func (*CoppockCurveStrategy) Name() string {
 	return "Coppock Curve Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (c *CoppockCurveStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosings(snapshots)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (c *CoppockCurveStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 
-	coppock := c.CoppockCurve.Compute(closings)
+	coppock := c.CoppockCurve.ComputeWithContext(ctx, closings)
 
-	actions := helper.Map(coppock, func(value float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, coppock, func(value float64) strategy.Action {
 		if value > 0 {
 			return strategy.Buy
 		}
@@ -48,7 +50,7 @@ func (c *CoppockCurveStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan 
 		return strategy.Hold
 	})
 
-	actions = helper.Shift(actions, c.CoppockCurve.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, c.CoppockCurve.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -84,4 +86,11 @@ func (c *CoppockCurveStrategy) Report(cr <-chan *asset.Snapshot) *helper.Report 
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (c *CoppockCurveStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return c.ComputeWithContext(context.Background(), snapshots)
 }

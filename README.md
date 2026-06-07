@@ -168,6 +168,7 @@ The following list of strategies are currently supported by this package:
 ### 🚀 Momentum Strategies
 
 -	[Awesome Oscillator Strategy](strategy/momentum/README.md#AwesomeOscillatorStrategy)
+-	[Coppock Curve Strategy](strategy/momentum/README.md#CoppockCurveStrategy)
 -	[Elder Ray Strategy](strategy/momentum/README.md#ElderRayStrategy)
 -	[Ichimoku Cloud Strategy](strategy/momentum/README.md#IchimokuCloudStrategy)
 -	[RSI Strategy](strategy/momentum/README.md#RsiStrategy)

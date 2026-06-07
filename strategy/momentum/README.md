@@ -32,6 +32,12 @@ The information provided on this project is strictly for informational purposes 
   - [func \(a \*AwesomeOscillatorStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#AwesomeOscillatorStrategy.ComputeWithContext>)
   - [func \(\*AwesomeOscillatorStrategy\) Name\(\) string](<#AwesomeOscillatorStrategy.Name>)
   - [func \(a \*AwesomeOscillatorStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#AwesomeOscillatorStrategy.Report>)
+- [type CoppockCurveStrategy](<#CoppockCurveStrategy>)
+  - [func NewCoppockCurveStrategy\(\) \*CoppockCurveStrategy](<#NewCoppockCurveStrategy>)
+  - [func \(c \*CoppockCurveStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CoppockCurveStrategy.Compute>)
+  - [func \(c \*CoppockCurveStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CoppockCurveStrategy.ComputeWithContext>)
+  - [func \(\*CoppockCurveStrategy\) Name\(\) string](<#CoppockCurveStrategy.Name>)
+  - [func \(c \*CoppockCurveStrategy\) Report\(cr \<\-chan \*asset.Snapshot\) \*helper.Report](<#CoppockCurveStrategy.Report>)
 - [type ElderRayStrategy](<#ElderRayStrategy>)
   - [func NewElderRayStrategy\(\) \*ElderRayStrategy](<#NewElderRayStrategy>)
   - [func \(e \*ElderRayStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#ElderRayStrategy.Compute>)
@@ -220,6 +226,65 @@ Name returns the name of the strategy.
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+```
+
+Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="CoppockCurveStrategy"></a>
+## type [CoppockCurveStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L18-L21>)
+
+CoppockCurveStrategy represents the configuration parameters for calculating the Coppock Curve strategy. A positive Coppock Curve value suggests a Buy signal, while a negative value suggests a Sell signal.
+
+```go
+type CoppockCurveStrategy struct {
+    // CoppockCurve represents the configuration parameters for calculating the Coppock Curve.
+    CoppockCurve *momentum.CoppockCurve[float64]
+}
+```
+
+<a name="NewCoppockCurveStrategy"></a>
+### func [NewCoppockCurveStrategy](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L24>)
+
+```go
+func NewCoppockCurveStrategy() *CoppockCurveStrategy
+```
+
+NewCoppockCurveStrategy function initializes a new Coppock Curve strategy instance with the default parameters.
+
+<a name="CoppockCurveStrategy.Compute"></a>
+### func \(\*CoppockCurveStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L94>)
+
+```go
+func (c *CoppockCurveStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="CoppockCurveStrategy.ComputeWithContext"></a>
+### func \(\*CoppockCurveStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L36>)
+
+```go
+func (c *CoppockCurveStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+```
+
+ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+
+<a name="CoppockCurveStrategy.Name"></a>
+### func \(\*CoppockCurveStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L31>)
+
+```go
+func (*CoppockCurveStrategy) Name() string
+```
+
+Name returns the name of the strategy.
+
+<a name="CoppockCurveStrategy.Report"></a>
+### func \(\*CoppockCurveStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/momentum/coppock_curve_strategy.go#L59>)
+
+```go
+func (c *CoppockCurveStrategy) Report(cr <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.

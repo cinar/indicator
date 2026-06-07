@@ -5,10 +5,12 @@
 package momentum_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
+	indMomentum "github.com/cinar/indicator/v2/momentum"
 	"github.com/cinar/indicator/v2/strategy"
 	"github.com/cinar/indicator/v2/strategy/momentum"
 )
@@ -51,5 +53,40 @@ func TestCoppockCurveStrategyReport(t *testing.T) {
 	err = report.WriteToFile(fileName)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCoppockCurveStrategyZeroAndContext(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	cc := momentum.NewCoppockCurveStrategy()
+	cc.CoppockCurve = indMomentum.NewCoppockCurveWithPeriods[float64](1, 1, 1)
+
+	snapshots := []*asset.Snapshot{
+		{Close: 10},
+		{Close: 11},
+		{Close: 11},
+		{Close: 10},
+	}
+
+	actions := cc.ComputeWithContext(ctx, helper.SliceToChan(snapshots))
+	actual := helper.ChanToSlice(actions)
+
+	expected := []strategy.Action{
+		strategy.Hold, // Idle period (index 0)
+		strategy.Buy,  // Coppock > 0 (index 1)
+		strategy.Hold, // Coppock == 0 (index 2)
+		strategy.Sell, // Coppock < 0 (index 3)
+	}
+
+	if len(actual) != len(expected) {
+		t.Fatalf("expected length %d, got %d", len(expected), len(actual))
+	}
+
+	for i, v := range actual {
+		if v != expected[i] {
+			t.Errorf("at index %d: expected %v, got %v", i, expected[i], v)
+		}
 	}
 }
