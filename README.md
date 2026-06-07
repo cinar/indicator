@@ -111,6 +111,8 @@ The following list of indicators are currently supported by this package:
 -	[Super Trend](volatility/README.md#SuperTrend)
 -	[True Range (TR)](volatility/README.md#TrueRange)
 -	[Ulcer Index (UI)](volatility/README.md#UlcerIndex)
+-	[Z-Score](volatility/README.md#ZScore)
+
 
 ### 📢 Volume Indicators
 
