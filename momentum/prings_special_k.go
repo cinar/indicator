@@ -1,6 +1,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -68,62 +70,69 @@ func NewPringsSpecialK[T helper.Float]() *PringsSpecialK[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the Prings Special K.
-func (p *PringsSpecialK[T]) Compute(closings <-chan T) <-chan T {
-	c := helper.Duplicate(closings, 12)
+// ComputeWithContext function takes a channel of numbers and computes the Prings Special K.
+func (p *PringsSpecialK[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	c := helper.DuplicateWithContext(ctx, closings, 12)
 
-	roc10 := p.Roc10.Compute(c[0])
-	roc15 := p.Roc15.Compute(c[1])
-	roc20 := p.Roc20.Compute(c[2])
-	roc30 := p.Roc30.Compute(c[3])
-	roc40 := p.Roc40.Compute(c[4])
-	roc65 := p.Roc65.Compute(c[5])
-	roc75 := p.Roc75.Compute(c[6])
-	roc100 := p.Roc100.Compute(c[7])
-	roc195 := p.Roc195.Compute(c[8])
-	roc265 := p.Roc265.Compute(c[9])
-	roc390 := p.Roc390.Compute(c[10])
-	roc530 := p.Roc530.Compute(c[11])
+	roc10 := p.Roc10.ComputeWithContext(ctx, c[0])
+	roc15 := p.Roc15.ComputeWithContext(ctx, c[1])
+	roc20 := p.Roc20.ComputeWithContext(ctx, c[2])
+	roc30 := p.Roc30.ComputeWithContext(ctx, c[3])
+	roc40 := p.Roc40.ComputeWithContext(ctx, c[4])
+	roc65 := p.Roc65.ComputeWithContext(ctx, c[5])
+	roc75 := p.Roc75.ComputeWithContext(ctx, c[6])
+	roc100 := p.Roc100.ComputeWithContext(ctx, c[7])
+	roc195 := p.Roc195.ComputeWithContext(ctx, c[8])
+	roc265 := p.Roc265.ComputeWithContext(ctx, c[9])
+	roc390 := p.Roc390.ComputeWithContext(ctx, c[10])
+	roc530 := p.Roc530.ComputeWithContext(ctx, c[11])
 
-	sma10Roc10 := p.Sma10Roc10.Compute(roc10)
-	sma10Roc15 := p.Sma10Roc15.Compute(roc15)
-	sma10Roc20 := p.Sma10Roc20.Compute(roc20)
-	sma15Roc30 := p.Sma15Roc30.Compute(roc30)
-	sma50Roc40 := p.Sma50Roc40.Compute(roc40)
-	sma65Roc65 := p.Sma65Roc65.Compute(roc65)
-	sma75Roc75 := p.Sma75Roc75.Compute(roc75)
-	sma100Roc100 := p.Sma100Roc100.Compute(roc100)
-	sma130Roc195 := p.Sma130Roc195.Compute(roc195)
-	sma130Roc265 := p.Sma130Roc265.Compute(roc265)
-	sma130Roc390 := p.Sma130Roc390.Compute(roc390)
-	sma195Roc530 := p.Sma195Roc530.Compute(roc530)
+	sma10Roc10 := p.Sma10Roc10.ComputeWithContext(ctx, roc10)
+	sma10Roc15 := p.Sma10Roc15.ComputeWithContext(ctx, roc15)
+	sma10Roc20 := p.Sma10Roc20.ComputeWithContext(ctx, roc20)
+	sma15Roc30 := p.Sma15Roc30.ComputeWithContext(ctx, roc30)
+	sma50Roc40 := p.Sma50Roc40.ComputeWithContext(ctx, roc40)
+	sma65Roc65 := p.Sma65Roc65.ComputeWithContext(ctx, roc65)
+	sma75Roc75 := p.Sma75Roc75.ComputeWithContext(ctx, roc75)
+	sma100Roc100 := p.Sma100Roc100.ComputeWithContext(ctx, roc100)
+	sma130Roc195 := p.Sma130Roc195.ComputeWithContext(ctx, roc195)
+	sma130Roc265 := p.Sma130Roc265.ComputeWithContext(ctx, roc265)
+	sma130Roc390 := p.Sma130Roc390.ComputeWithContext(ctx, roc390)
+	sma195Roc530 := p.Sma195Roc530.ComputeWithContext(ctx, roc530)
 
 	maxIdle := p.Sma195Roc530.IdlePeriod() + p.Roc530.IdlePeriod()
 
-	sma10Roc10 = helper.Skip(sma10Roc10, maxIdle-p.Sma10Roc10.IdlePeriod()-p.Roc10.IdlePeriod())
-	sma10Roc15 = helper.Skip(sma10Roc15, maxIdle-p.Sma10Roc15.IdlePeriod()-p.Roc15.IdlePeriod())
-	sma10Roc20 = helper.Skip(sma10Roc20, maxIdle-p.Sma10Roc20.IdlePeriod()-p.Roc20.IdlePeriod())
-	sma15Roc30 = helper.Skip(sma15Roc30, maxIdle-p.Sma15Roc30.IdlePeriod()-p.Roc30.IdlePeriod())
-	sma50Roc40 = helper.Skip(sma50Roc40, maxIdle-p.Sma50Roc40.IdlePeriod()-p.Roc40.IdlePeriod())
-	sma65Roc65 = helper.Skip(sma65Roc65, maxIdle-p.Sma65Roc65.IdlePeriod()-p.Roc65.IdlePeriod())
-	sma75Roc75 = helper.Skip(sma75Roc75, maxIdle-p.Sma75Roc75.IdlePeriod()-p.Roc75.IdlePeriod())
-	sma100Roc100 = helper.Skip(sma100Roc100, maxIdle-p.Sma100Roc100.IdlePeriod()-p.Roc100.IdlePeriod())
-	sma130Roc195 = helper.Skip(sma130Roc195, maxIdle-p.Sma130Roc195.IdlePeriod()-p.Roc195.IdlePeriod())
-	sma130Roc265 = helper.Skip(sma130Roc265, maxIdle-p.Sma130Roc265.IdlePeriod()-p.Roc265.IdlePeriod())
-	sma130Roc390 = helper.Skip(sma130Roc390, maxIdle-p.Sma130Roc390.IdlePeriod()-p.Roc390.IdlePeriod())
+	sma10Roc10 = helper.SkipWithContext(ctx, sma10Roc10, maxIdle-p.Sma10Roc10.IdlePeriod()-p.Roc10.IdlePeriod())
+	sma10Roc15 = helper.SkipWithContext(ctx, sma10Roc15, maxIdle-p.Sma10Roc15.IdlePeriod()-p.Roc15.IdlePeriod())
+	sma10Roc20 = helper.SkipWithContext(ctx, sma10Roc20, maxIdle-p.Sma10Roc20.IdlePeriod()-p.Roc20.IdlePeriod())
+	sma15Roc30 = helper.SkipWithContext(ctx, sma15Roc30, maxIdle-p.Sma15Roc30.IdlePeriod()-p.Roc30.IdlePeriod())
+	sma50Roc40 = helper.SkipWithContext(ctx, sma50Roc40, maxIdle-p.Sma50Roc40.IdlePeriod()-p.Roc40.IdlePeriod())
+	sma65Roc65 = helper.SkipWithContext(ctx, sma65Roc65, maxIdle-p.Sma65Roc65.IdlePeriod()-p.Roc65.IdlePeriod())
+	sma75Roc75 = helper.SkipWithContext(ctx, sma75Roc75, maxIdle-p.Sma75Roc75.IdlePeriod()-p.Roc75.IdlePeriod())
+	sma100Roc100 = helper.SkipWithContext(ctx, sma100Roc100, maxIdle-p.Sma100Roc100.IdlePeriod()-p.Roc100.IdlePeriod())
+	sma130Roc195 = helper.SkipWithContext(ctx, sma130Roc195, maxIdle-p.Sma130Roc195.IdlePeriod()-p.Roc195.IdlePeriod())
+	sma130Roc265 = helper.SkipWithContext(ctx, sma130Roc265, maxIdle-p.Sma130Roc265.IdlePeriod()-p.Roc265.IdlePeriod())
+	sma130Roc390 = helper.SkipWithContext(ctx, sma130Roc390, maxIdle-p.Sma130Roc390.IdlePeriod()-p.Roc390.IdlePeriod())
 
-	p0 := helper.MultiplyBy(sma10Roc10, 1)
-	p1 := helper.Add(p0, helper.MultiplyBy(sma10Roc15, 2))
-	p2 := helper.Add(p1, helper.MultiplyBy(sma10Roc20, 3))
-	p3 := helper.Add(p2, helper.MultiplyBy(sma15Roc30, 4))
-	p4 := helper.Add(p3, helper.MultiplyBy(sma50Roc40, 1))
-	p5 := helper.Add(p4, helper.MultiplyBy(sma65Roc65, 2))
-	p6 := helper.Add(p5, helper.MultiplyBy(sma75Roc75, 3))
-	p7 := helper.Add(p6, helper.MultiplyBy(sma100Roc100, 4))
-	p8 := helper.Add(p7, helper.MultiplyBy(sma130Roc195, 1))
-	p9 := helper.Add(p8, helper.MultiplyBy(sma130Roc265, 2))
-	p10 := helper.Add(p9, helper.MultiplyBy(sma130Roc390, 3))
-	p11 := helper.Add(p10, helper.MultiplyBy(sma195Roc530, 4))
+	p0 := helper.MultiplyByWithContext(ctx, sma10Roc10, 1)
+	p1 := helper.AddWithContext(ctx, p0, helper.MultiplyByWithContext(ctx, sma10Roc15, 2))
+	p2 := helper.AddWithContext(ctx, p1, helper.MultiplyByWithContext(ctx, sma10Roc20, 3))
+	p3 := helper.AddWithContext(ctx, p2, helper.MultiplyByWithContext(ctx, sma15Roc30, 4))
+	p4 := helper.AddWithContext(ctx, p3, helper.MultiplyByWithContext(ctx, sma50Roc40, 1))
+	p5 := helper.AddWithContext(ctx, p4, helper.MultiplyByWithContext(ctx, sma65Roc65, 2))
+	p6 := helper.AddWithContext(ctx, p5, helper.MultiplyByWithContext(ctx, sma75Roc75, 3))
+	p7 := helper.AddWithContext(ctx, p6, helper.MultiplyByWithContext(ctx, sma100Roc100, 4))
+	p8 := helper.AddWithContext(ctx, p7, helper.MultiplyByWithContext(ctx, sma130Roc195, 1))
+	p9 := helper.AddWithContext(ctx, p8, helper.MultiplyByWithContext(ctx, sma130Roc265, 2))
+	p10 := helper.AddWithContext(ctx, p9, helper.MultiplyByWithContext(ctx, sma130Roc390, 3))
+	p11 := helper.AddWithContext(ctx, p10, helper.MultiplyByWithContext(ctx, sma195Roc530, 4))
 
 	return p11
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (p *PringsSpecialK[T]) Compute(closings <-chan T) <-chan T {
+	return p.ComputeWithContext(context.Background(), closings)
 }

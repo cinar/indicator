@@ -4,12 +4,22 @@
 
 package helper
 
-import "slices"
+import (
+	"context"
+	"slices"
+)
 
-// Lowest returns a channel that emits the lowest value
+// LowestWithContext returns a channel that emits the lowest value
 // within a sliding window of size w from the input channel c.
-func Lowest[T Number](c <-chan T, w int) <-chan T {
-	return Window(c, func(s []T, i int) T {
+func LowestWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T {
+	return WindowWithContext(ctx, c, func(s []T, i int) T {
 		return slices.Min(s)
 	}, w)
+}
+
+// Lowest wraps LowestWithContext for backwards compatibility.
+//
+// Deprecated: Use LowestWithContext instead.
+func Lowest[T Number](c <-chan T, w int) <-chan T {
+	return LowestWithContext(context.Background(), c, w)
 }

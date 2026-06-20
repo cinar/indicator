@@ -4,9 +4,13 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
 
-//goland:noinspection ALL
+	"github.com/cinar/indicator/v2/helper"
+	//goland:noinspection ALL
+)
+
 const (
 	// DefaultApoFastPeriod is the default APO fast period of 14.
 	DefaultApoFastPeriod = 14
@@ -64,25 +68,32 @@ func NewApo[T helper.Number]() *Apo[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the APO
+// ComputeWithContext function takes a channel of numbers and computes the APO
 // over the specified period.
-func (apo *Apo[T]) Compute(c <-chan T) <-chan T {
-	c = helper.Buffered(c, apo.SlowPeriod)
-	cs := helper.Duplicate(c, 2)
+func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+	c = helper.BufferedWithContext(ctx, c, apo.SlowPeriod)
+	cs := helper.DuplicateWithContext(ctx, c, 2)
 
 	fastEma := NewEma[T]()
 	fastEma.Period = apo.FastPeriod
-	cs[0] = fastEma.Compute(cs[0])
-	cs[0] = helper.Skip(cs[0], apo.SlowPeriod-apo.FastPeriod)
+	cs[0] = fastEma.ComputeWithContext(ctx, cs[0])
+	cs[0] = helper.SkipWithContext(ctx, cs[0], apo.SlowPeriod-apo.FastPeriod)
 
 	slowEma := NewEma[T]()
 	slowEma.Period = apo.SlowPeriod
-	cs[1] = slowEma.Compute(cs[1])
+	cs[1] = slowEma.ComputeWithContext(ctx, cs[1])
 
-	return helper.Subtract(cs[0], cs[1])
+	return helper.SubtractWithContext(ctx, cs[0], cs[1])
 }
 
 // IdlePeriod is the initial period that APO won't yield any results.
 func (apo *Apo[T]) IdlePeriod() int {
 	return apo.SlowPeriod - 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (apo *Apo[T]) Compute(c <-chan T) <-chan T {
+	return apo.ComputeWithContext(context.Background(), c)
 }

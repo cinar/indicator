@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -33,19 +35,19 @@ func (*BopStrategy) Name() string {
 	return "BoP Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (b *BopStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshots := helper.Duplicate(c, 4)
+func (b *BopStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 4)
 
-	openings := asset.SnapshotsAsOpenings(snapshots[0])
-	highs := asset.SnapshotsAsHighs(snapshots[1])
-	lows := asset.SnapshotsAsLows(snapshots[2])
-	closings := asset.SnapshotsAsClosings(snapshots[3])
+	openings := asset.SnapshotsAsOpeningsWithContext(ctx, snapshots[0])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshots[1])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshots[2])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots[3])
 
-	bops := b.Bop.Compute(openings, highs, lows, closings)
+	bops := b.Bop.ComputeWithContext(ctx, openings, highs, lows, closings)
 
-	return helper.Map(bops, func(bop float64) strategy.Action {
+	return helper.MapWithContext(ctx, bops, func(bop float64) strategy.Action {
 		if bop > 0 {
 			return strategy.Buy
 		}
@@ -96,4 +98,11 @@ func (b *BopStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (b *BopStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return b.ComputeWithContext(context.Background(), c)
 }

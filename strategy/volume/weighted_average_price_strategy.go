@@ -7,6 +7,8 @@ package volume
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -42,21 +44,20 @@ func (v *WeightedAveragePriceStrategy) Name() string {
 	return fmt.Sprintf("Weighted Average Price Strategy (%d)", v.WeightedAveragePrice.IdlePeriod()+1)
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 2)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (v *WeightedAveragePriceStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	closingsSplice := helper.Duplicate(
-		asset.SnapshotsAsClosings(snapshotsSplice[0]),
+	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[0]),
 		2,
 	)
 
-	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[1])
+	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[1])
 
-	vwaps := v.WeightedAveragePrice.Compute(closingsSplice[1], volumes)
-	closingsSplice[0] = helper.Skip(closingsSplice[0], v.WeightedAveragePrice.IdlePeriod())
+	vwaps := v.WeightedAveragePrice.ComputeWithContext(ctx, closingsSplice[1], volumes)
+	closingsSplice[0] = helper.SkipWithContext(ctx, closingsSplice[0], v.WeightedAveragePrice.IdlePeriod())
 
-	actions := helper.Operate(closingsSplice[0], vwaps, func(closing, vwap float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, closingsSplice[0], vwaps, func(closing, vwap float64) strategy.Action {
 		if vwap > closing {
 			return strategy.Buy
 		}
@@ -69,7 +70,7 @@ func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot)
 	})
 
 	// Weighted Average Price starts only after a full period.
-	actions = helper.Shift(actions, v.WeightedAveragePrice.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, v.WeightedAveragePrice.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -115,4 +116,11 @@ func (v *WeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return v.ComputeWithContext(context.Background(), snapshots)
 }

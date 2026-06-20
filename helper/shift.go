@@ -4,23 +4,31 @@
 
 package helper
 
-// Shift takes a channel of numbers, shifts them to the right by the specified count,
-// and fills in any missing values with the provided fill value.
+import "context"
+
+// Shift wraps ShiftWithContext for backwards compatibility.
 //
-// Example:
-//
-//	input := helper.SliceToChan([]int{2, 4, 6, 8})
-//	output := helper.Shift(input, 4, 0)
-//	fmt.Println(helper.ChanToSlice(output)) // [0, 0, 0, 0, 2, 4, 6, 8]
+// Deprecated: Use ShiftWithContext instead.
 func Shift[T any](c <-chan T, count int, fill T) <-chan T {
+	return ShiftWithContext(context.Background(), c, count, fill)
+}
+
+// ShiftWithContext takes a channel of numbers, shifts them to the right by the specified count,
+// and fills in any missing values with the provided fill value, supporting context cancellation.
+func ShiftWithContext[T any](ctx context.Context, c <-chan T, count int, fill T) <-chan T {
 	result := make(chan T, cap(c)+count)
 
 	go func() {
 		for i := 0; i < count; i++ {
-			result <- fill
+			select {
+			case <-ctx.Done():
+				close(result)
+				return
+			case result <- fill:
+			}
 		}
 
-		Pipe(c, result)
+		PipeWithContext(ctx, c, result)
 	}()
 
 	return result

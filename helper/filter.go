@@ -4,27 +4,40 @@
 
 package helper
 
-// Filter filters the items from the input channel based on the
-// provided predicate function. The predicate function takes a
-// value of type T as input and returns a boolean value indicating
-// whether the value should be included in the output channel.
+import "context"
+
+// Filter wraps FilterWithContext for backwards compatibility.
 //
-// Example:
-//
-//	even := helper.Filter(c, func(n int) bool {
-//	  return n%2 == 0
-//	})
+// Deprecated: Use FilterWithContext instead.
 func Filter[T any](c <-chan T, p func(T) bool) <-chan T {
+	return FilterWithContext(context.Background(), c, p)
+}
+
+// FilterWithContext filters the items from the input channel based on the
+// provided predicate function, supporting context cancellation.
+func FilterWithContext[T any](ctx context.Context, c <-chan T, p func(T) bool) <-chan T {
 	fc := make(chan T)
 
 	go func() {
-		for n := range c {
-			if p(n) {
-				fc <- n
+		defer close(fc)
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-c:
+				if !ok {
+					return
+				}
+				if p(n) {
+					select {
+					case <-ctx.Done():
+						return
+					case fc <- n:
+					}
+				}
 			}
 		}
-
-		close(fc)
 	}()
 
 	return fc

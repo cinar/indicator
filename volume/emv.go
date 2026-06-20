@@ -5,6 +5,8 @@
 package volume
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -43,48 +45,47 @@ func NewEmvWithPeriod[T helper.Number](period int) *Emv[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the EMV.
-func (e *Emv[T]) Compute(highs, lows, volumes <-chan T) <-chan T {
-	highsSplice := helper.Duplicate(highs, 2)
-	lowsSplice := helper.Duplicate(lows, 2)
+// ComputeWithContext function takes a channel of numbers and computes the EMV.
+func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-chan T) <-chan T {
+	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
+	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
 
 	//	Distance Moved = ((High + Low) / 2) - ((Priod High + Prior Low) /2)
-	distanceMoved := helper.Change(
-		helper.DivideBy(
-			helper.Add(
-				highsSplice[0],
-				lowsSplice[0],
-			),
-			2,
-		),
+	distanceMoved := helper.ChangeWithContext(ctx, helper.DivideByWithContext(ctx, helper.AddWithContext(ctx, highsSplice[0],
+		lowsSplice[0],
+	),
+		2,
+	),
 		1,
 	)
 
 	d := 100000000
 
 	// Box Ratio = ((Volume / 100000000) / (High - Low))
-	boxRatio := helper.Divide(
-		helper.DivideBy(
-			volumes,
-			T(d),
-		),
-		helper.Subtract(
-			highsSplice[1],
+	boxRatio := helper.DivideWithContext(ctx, helper.DivideByWithContext(ctx, volumes,
+		T(d),
+	),
+		helper.SubtractWithContext(ctx, highsSplice[1],
 			lowsSplice[1],
 		),
 	)
 
 	// EMV(1) = Distance Moved / Box Ratio
 	// EMV(14) = SMA(14, EMV(1))
-	return e.Sma.Compute(
-		helper.Divide(
-			distanceMoved,
-			boxRatio,
-		),
+	return e.Sma.ComputeWithContext(ctx, helper.DivideWithContext(ctx, distanceMoved,
+		boxRatio,
+	),
 	)
 }
 
 // IdlePeriod is the initial period that EMV won't yield any results.
 func (e *Emv[T]) IdlePeriod() int {
 	return e.Sma.IdlePeriod() + 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (e *Emv[T]) Compute(highs, lows, volumes <-chan T) <-chan T {
+	return e.ComputeWithContext(context.Background(), highs, lows, volumes)
 }

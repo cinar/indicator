@@ -4,7 +4,11 @@
 
 package strategy
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 // Action represents the different action categories that a
 // strategy can recommend.
@@ -41,21 +45,28 @@ func (a Action) Annotation() string {
 	}
 }
 
-// ActionsToAnnotations takes a channel of action recommendations and returns a
-// new channel containing corresponding annotations for those actions.
-func ActionsToAnnotations(ac <-chan Action) <-chan string {
-	return helper.Map(NormalizeActions(ac), func(a Action) string {
+// ActionsToAnnotationsWithContext takes a channel of action recommendations and returns a
+// new channel containing corresponding annotations for those actions, supporting context cancellation.
+func ActionsToAnnotationsWithContext(ctx context.Context, ac <-chan Action) <-chan string {
+	return helper.MapWithContext(ctx, NormalizeActionsWithContext(ctx, ac), func(a Action) string {
 		return a.Annotation()
 	})
 }
 
-// NormalizeActions transforms the given channel of actions to ensure a consistent and
-// predictable sequence. It eliminates consecutive occurrences of the same action
-// (Buy/Sell), ensuring the order follows a pattern of Hold, Buy, Hold, Sell.
-func NormalizeActions(ac <-chan Action) <-chan Action {
+// ActionsToAnnotations takes a channel of action recommendations and returns a
+// new channel containing corresponding annotations for those actions.
+//
+// Deprecated: Use ActionsToAnnotationsWithContext instead.
+func ActionsToAnnotations(ac <-chan Action) <-chan string {
+	return ActionsToAnnotationsWithContext(context.Background(), ac)
+}
+
+// NormalizeActionsWithContext transforms the given channel of actions to ensure a consistent and
+// predictable sequence, supporting context cancellation.
+func NormalizeActionsWithContext(ctx context.Context, ac <-chan Action) <-chan Action {
 	last := Sell
 
-	return helper.Map(ac, func(a Action) Action {
+	return helper.MapWithContext(ctx, ac, func(a Action) Action {
 		if a != Hold && a != last {
 			last = a
 			return a
@@ -65,20 +76,33 @@ func NormalizeActions(ac <-chan Action) <-chan Action {
 	})
 }
 
-// DenormalizeActions simplifies the representation of the action sequence and facilitates subsequent
-// processing by transforming the given channel of actions. It retains Hold actions until the
-// first Buy or Sell action appears. Subsequently, it replaces all remaining Hold actions with
-// the preceding Buy or Sell action, effectively merging consecutive actions.
-func DenormalizeActions(ac <-chan Action) <-chan Action {
+// NormalizeActions transforms the given channel of actions to ensure a consistent and
+// predictable sequence.
+//
+// Deprecated: Use NormalizeActionsWithContext instead.
+func NormalizeActions(ac <-chan Action) <-chan Action {
+	return NormalizeActionsWithContext(context.Background(), ac)
+}
+
+// DenormalizeActionsWithContext simplifies the representation of the action sequence and facilitates subsequent
+// processing by transforming the given channel of actions, supporting context cancellation.
+func DenormalizeActionsWithContext(ctx context.Context, ac <-chan Action) <-chan Action {
 	last := Hold
 
-	return helper.Map(ac, func(a Action) Action {
+	return helper.MapWithContext(ctx, ac, func(a Action) Action {
 		if a != Hold && a != last {
 			last = a
 		}
 
 		return last
 	})
+}
+
+// DenormalizeActions simplifies the representation of the action sequence.
+//
+// Deprecated: Use DenormalizeActionsWithContext instead.
+func DenormalizeActions(ac <-chan Action) <-chan Action {
+	return DenormalizeActionsWithContext(context.Background(), ac)
 }
 
 // CountActions taken a slice of Action channels, and counts them by their type.

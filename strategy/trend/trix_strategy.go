@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -31,13 +33,13 @@ func (*TrixStrategy) Name() string {
 	return "TRIX Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosings(snapshots)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *TrixStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 
-	trixs := t.Trix.Compute(closings)
+	trixs := t.Trix.ComputeWithContext(ctx, closings)
 
-	actions := helper.Map(trixs, func(trix float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, trixs, func(trix float64) strategy.Action {
 		if trix > 0 {
 			return strategy.Buy
 		}
@@ -50,7 +52,7 @@ func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy
 	})
 
 	// TRIX starts only after a full period.
-	actions = helper.Shift(actions, t.Trix.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, t.Trix.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -87,4 +89,11 @@ func (t *TrixStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return t.ComputeWithContext(context.Background(), snapshots)
 }

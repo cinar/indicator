@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -53,11 +55,11 @@ func (*GoldenCrossStrategy) Name() string {
 	return "Golden Cross Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (t *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (t *GoldenCrossStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
 	fastEmas, slowEmas := t.calculateEmas(c)
 
-	actions := helper.Operate(fastEmas, slowEmas, func(fastEma, slowEma float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, fastEmas, slowEmas, func(fastEma, slowEma float64) strategy.Action {
 		// A buy signal is generated when the **fastest** EMA crosses above the **slowest** EMAs.
 		if fastEma > slowEma {
 			return strategy.Buy
@@ -73,7 +75,7 @@ func (t *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.
 	})
 
 	// Generate a Hold signal during the idle period.
-	actions = helper.Shift(actions, t.SlowEma.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, t.SlowEma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -150,4 +152,11 @@ func (t *GoldenCrossStrategy) calculateEmas(c <-chan *asset.Snapshot) (<-chan fl
 	slowEmas := t.SlowEma.Compute(closings[1])
 
 	return fastEmas, slowEmas
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return t.ComputeWithContext(context.Background(), c)
 }

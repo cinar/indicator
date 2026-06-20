@@ -5,6 +5,8 @@
 package strategy
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -36,8 +38,8 @@ func (a *MajorityStrategy) Name() string {
 	return a.name
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (a *MajorityStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
 	sources := ActionSources(a.Strategies, snapshots)
@@ -84,4 +86,11 @@ func (a *MajorityStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (a *MajorityStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+	return a.ComputeWithContext(context.Background(), snapshots)
 }

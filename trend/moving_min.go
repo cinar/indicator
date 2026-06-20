@@ -4,7 +4,11 @@
 
 package trend
 
-import "github.com/cinar/indicator/v2/helper"
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/helper"
+)
 
 // MovingMin represents the configuration parameters for calculating the
 // Moving Min over the specified period.
@@ -27,24 +31,31 @@ func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the
+// ComputeWithContext function takes a channel of numbers and computes the
 // Moving Min over the specified period.
-func (m *MovingMin[T]) Compute(c <-chan T) <-chan T {
-	cs := helper.Duplicate(c, 2)
-	cs[1] = helper.Shift(cs[1], m.Period, 0)
+func (m *MovingMin[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
+	cs := helper.DuplicateWithContext(ctx, c, 2)
+	cs[1] = helper.ShiftWithContext(ctx, cs[1], m.Period, 0)
 
 	bst := helper.NewBst[T]()
 
-	mins := helper.Operate(cs[0], cs[1], func(c, b T) T {
+	mins := helper.OperateWithContext(ctx, cs[0], cs[1], func(c, b T) T {
 		bst.Insert(c)
 		bst.Remove(b)
 		return bst.Min()
 	})
 
-	return helper.Skip(mins, m.Period-1)
+	return helper.SkipWithContext(ctx, mins, m.Period-1)
 }
 
 // IdlePeriod is the initial period that Mocing Min won't yield any results.
 func (m *MovingMin[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (m *MovingMin[T]) Compute(c <-chan T) <-chan T {
+	return m.ComputeWithContext(context.Background(), c)
 }

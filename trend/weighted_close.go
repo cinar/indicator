@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -24,9 +26,9 @@ func NewWeightedClose[T helper.Number]() *WeightedClose[T] {
 	return &WeightedClose[T]{}
 }
 
-// Compute function takes a channel of numbers and computes the Weighted Close over the specified period.
-func (*WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T {
-	return helper.Operate3(highs, lows, closes, func(high, low, close T) T {
+// ComputeWithContext function takes a channel of numbers and computes the Weighted Close over the specified period.
+func (i *WeightedClose[T]) ComputeWithContext(ctx context.Context, highs, lows, closes <-chan T) <-chan T {
+	return helper.Operate3WithContext(ctx, highs, lows, closes, func(high, low, close T) T {
 		// Weighted Close = (High + Low + (Close * 2)) / 4
 		return (high + low + (close * 2)) / 4
 	})
@@ -40,4 +42,11 @@ func (*WeightedClose[T]) IdlePeriod() int {
 // String is the string representation of the Weighted Close.
 func (*WeightedClose[T]) String() string {
 	return "Weighted Close"
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (i *WeightedClose[T]) Compute(highs, lows, closes <-chan T) <-chan T {
+	return i.ComputeWithContext(context.Background(), highs, lows, closes)
 }

@@ -7,6 +7,8 @@ package decorator
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -34,15 +36,15 @@ func (s *StopLossStrategy) Name() string {
 	return fmt.Sprintf("Stop Loss Strategy (%s)", s.InnertStrategy.Name())
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *StopLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 2)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *StopLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	innerActions := s.InnertStrategy.Compute(snapshotsSplice[0])
-	closings := asset.SnapshotsAsClosings(snapshotsSplice[1])
+	innerActions := strategy.ComputeStrategyWithContext(ctx, s.InnertStrategy, snapshotsSplice[0])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[1])
 	stopLossAt := 0.0
 
-	return helper.Operate(innerActions, closings, func(action strategy.Action, closing float64) strategy.Action {
+	return helper.OperateWithContext(ctx, innerActions, closings, func(action strategy.Action, closing float64) strategy.Action {
 		// If action is Buy and the asset is not yet bought, buy it as recommended.
 		if action == strategy.Buy && stopLossAt == 0.0 {
 			stopLossAt = closing * (1 - s.Percentage)
@@ -79,4 +81,11 @@ func (s *StopLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *StopLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return s.ComputeWithContext(context.Background(), snapshots)
 }

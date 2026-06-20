@@ -7,6 +7,8 @@ package strategy
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -35,35 +37,54 @@ func (s *SplitStrategy) Name() string {
 	return fmt.Sprintf("SplitStrategy(%s, %s)", s.BuyStrategy.Name(), s.SellStrategy.Name())
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *SplitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
-	snapshotsSplice := helper.Duplicate(snapshots, 2)
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	buyActions := s.BuyStrategy.Compute(snapshotsSplice[0])
-	sellActions := s.SellStrategy.Compute(snapshotsSplice[1])
+	buyActions := ComputeStrategyWithContext(ctx, s.BuyStrategy, snapshotsSplice[0])
+	sellActions := ComputeStrategyWithContext(ctx, s.SellStrategy, snapshotsSplice[1])
 
 	go func() {
 		defer close(result)
 
 		for {
-			buyAction, ok := <-buyActions
-			if !ok {
-				break
+			var buyAction Action
+			var sellAction Action
+			var ok bool
+
+			select {
+			case <-ctx.Done():
+				return
+			case buyAction, ok = <-buyActions:
+				if !ok {
+					return
+				}
 			}
 
-			sellAction, ok := <-sellActions
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case sellAction, ok = <-sellActions:
+				if !ok {
+					return
+				}
 			}
 
+			var action Action
 			if (buyAction == Buy) && (sellAction != Sell) {
-				result <- Buy
+				action = Buy
 			} else if (sellAction == Sell) && (buyAction != Buy) {
-				result <- Sell
+				action = Sell
 			} else {
-				result <- Hold
+				action = Hold
+			}
+
+			select {
+			case <-ctx.Done():
+				return
+			case result <- action:
 			}
 		}
 	}()
@@ -107,4 +128,11 @@ func AllSplitStrategies(strategies []Strategy) []Strategy {
 	}
 
 	return splitStrategies
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *SplitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+	return s.ComputeWithContext(context.Background(), snapshots)
 }

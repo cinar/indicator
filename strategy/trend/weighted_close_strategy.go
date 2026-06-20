@@ -7,6 +7,8 @@ package trend
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -53,24 +55,23 @@ func (w *WeightedCloseStrategy) Name() string {
 	)
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 3)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (w *WeightedCloseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
 
-	highs := asset.SnapshotsAsHighs(snapshotsSplice[0])
-	lows := asset.SnapshotsAsLows(snapshotsSplice[1])
-	closings := asset.SnapshotsAsClosings(snapshotsSplice[2])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
 
-	wcSplice := helper.Duplicate(
-		w.WeightedClose.Compute(highs, lows, closings),
+	wcSplice := helper.DuplicateWithContext(ctx, w.WeightedClose.ComputeWithContext(ctx, highs, lows, closings),
 		2,
 	)
 
-	mas := w.Ma.Compute(wcSplice[1])
+	mas := trend.ComputeMaWithContext(ctx, w.Ma, wcSplice[1])
 
-	wcSplice[0] = helper.Skip(wcSplice[0], w.Ma.IdlePeriod())
+	wcSplice[0] = helper.SkipWithContext(ctx, wcSplice[0], w.Ma.IdlePeriod())
 
-	actions := helper.Operate(wcSplice[0], mas, func(wc, ma float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, wcSplice[0], mas, func(wc, ma float64) strategy.Action {
 		// A weighted close crossing above the moving average suggests a bullish trend.
 		if wc > ma {
 			return strategy.Buy
@@ -81,7 +82,7 @@ func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan
 	})
 
 	// SMMA strategy starts only after a full period.
-	actions = helper.Shift(actions, w.Ma.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, w.Ma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -137,4 +138,11 @@ func (w *WeightedCloseStrategy) Report(snapshots <-chan *asset.Snapshot) *helper
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return w.ComputeWithContext(context.Background(), snapshots)
 }

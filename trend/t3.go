@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -73,15 +75,15 @@ func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) 
 	return t
 }
 
-// Compute function takes a channel of numbers and computes the T3 Moving Average.
-func (t *T3[T]) Compute(closings <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the T3 Moving Average.
+func (t *T3[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
 	// Chain 6 EMAs
-	ema1 := t.ema1.Compute(closings)
-	ema2 := t.ema2.Compute(ema1)
-	ema3 := t.ema3.Compute(ema2)
-	ema4 := t.ema4.Compute(ema3)
-	ema5 := t.ema5.Compute(ema4)
-	ema6 := t.ema6.Compute(ema5)
+	ema1 := t.ema1.ComputeWithContext(ctx, closings)
+	ema2 := t.ema2.ComputeWithContext(ctx, ema1)
+	ema3 := t.ema3.ComputeWithContext(ctx, ema2)
+	ema4 := t.ema4.ComputeWithContext(ctx, ema3)
+	ema5 := t.ema5.ComputeWithContext(ctx, ema4)
+	ema6 := t.ema6.ComputeWithContext(ctx, ema5)
 
 	// Calculate coefficients based on volume factor
 	a := float64(t.VolumeFactor)
@@ -92,14 +94,11 @@ func (t *T3[T]) Compute(closings <-chan T) <-chan T {
 
 	// T3 = c1*EMA6 + c2*EMA6(EMA6) + c3*EMA6(EMA6(EMA6)) + c4*EMA6(EMA6(EMA6(EMA6)))
 	// Which is: c1*ema6 + c2*ema5 + c3*ema4 + c4*ema3
-	result := helper.Add(
-		helper.Add(
-			helper.MultiplyBy(ema6, T(c1)),
-			helper.MultiplyBy(ema5, T(c2)),
-		),
-		helper.Add(
-			helper.MultiplyBy(ema4, T(c3)),
-			helper.MultiplyBy(ema3, T(c4)),
+	result := helper.AddWithContext(ctx, helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, ema6, T(c1)),
+		helper.MultiplyByWithContext(ctx, ema5, T(c2)),
+	),
+		helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, ema4, T(c3)),
+			helper.MultiplyByWithContext(ctx, ema3, T(c4)),
 		),
 	)
 
@@ -116,4 +115,11 @@ func (t *T3[T]) IdlePeriod() int {
 // String is the string representation of the T3.
 func (t *T3[T]) String() string {
 	return fmt.Sprintf("T3(%d, %.1f)", t.Period, float64(t.VolumeFactor))
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *T3[T]) Compute(closings <-chan T) <-chan T {
+	return t.ComputeWithContext(context.Background(), closings)
 }

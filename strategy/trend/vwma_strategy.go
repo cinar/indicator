@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -45,11 +47,11 @@ func (*VwmaStrategy) Name() string {
 	return "VWMA Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (v *VwmaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
 	smas, vwmas := v.calculateSmaAndVwma(c)
 
-	actions := helper.Operate(smas, vwmas, func(sma, vwma float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, smas, vwmas, func(sma, vwma float64) strategy.Action {
 		if vwma > sma {
 			return strategy.Buy
 		}
@@ -62,7 +64,7 @@ func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action 
 	})
 
 	// VWMA starts only after a full period.
-	actions = helper.Shift(actions, v.Vwma.Period-1, strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, v.Vwma.Period-1, strategy.Hold)
 
 	return actions
 }
@@ -116,4 +118,11 @@ func (v *VwmaStrategy) calculateSmaAndVwma(c <-chan *asset.Snapshot) (<-chan flo
 	vwmas := v.Vwma.Compute(closings[1], volume)
 
 	return smas, vwmas
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return v.ComputeWithContext(context.Background(), c)
 }

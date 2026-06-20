@@ -7,6 +7,8 @@ package trend
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -43,8 +45,8 @@ func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the SMMA over the specified period.
-func (s *Smma[T]) Compute(c <-chan T) <-chan T {
+// ComputeWithContext function takes a channel of numbers and computes the SMMA over the specified period, supporting context cancellation.
+func (s *Smma[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	go func() {
@@ -53,16 +55,49 @@ func (s *Smma[T]) Compute(c <-chan T) <-chan T {
 		// Initial SMMA value is the SMA.
 		sma := NewSmaWithPeriod[T](s.Period)
 
-		before := <-sma.Compute(helper.Head(c, s.Period))
-		result <- before
+		var before T
+		var ok bool
+		select {
+		case <-ctx.Done():
+			return
+		case before, ok = <-sma.ComputeWithContext(ctx, helper.HeadWithContext(ctx, c, s.Period)):
+			if !ok {
+				return
+			}
+		}
 
-		for n := range c {
-			before = ((before * (T(s.Period) - 1)) + n) / T(s.Period)
-			result <- before
+		select {
+		case <-ctx.Done():
+			return
+		case result <- before:
+		}
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-c:
+				if !ok {
+					return
+				}
+				before = ((before * (T(s.Period) - 1)) + n) / T(s.Period)
+				select {
+				case <-ctx.Done():
+					return
+				case result <- before:
+				}
+			}
 		}
 	}()
 
 	return result
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *Smma[T]) Compute(c <-chan T) <-chan T {
+	return s.ComputeWithContext(context.Background(), c)
 }
 
 // IdlePeriod is the initial period that SMMA yield any results.

@@ -5,6 +5,8 @@
 package volume
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -24,14 +26,13 @@ func NewVpt[T helper.Number]() *Vpt[T] {
 	return &Vpt[T]{}
 }
 
-// Compute function takes a channel of numbers and computes the VPT.
-func (*Vpt[T]) Compute(closings, volumes <-chan T) <-chan T {
-	ratios := helper.Multiply(
-		helper.ChangeRatio(closings, 1),
-		helper.Skip(volumes, 1),
+// ComputeWithContext function takes a channel of numbers and computes the VPT.
+func (i *Vpt[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
+	ratios := helper.MultiplyWithContext(ctx, helper.ChangeRatioWithContext(ctx, closings, 1),
+		helper.SkipWithContext(ctx, volumes, 1),
 	)
 
-	return helper.MapWithPrevious(ratios, func(previous, current T) T {
+	return helper.MapWithPreviousWithContext(ctx, ratios, func(previous, current T) T {
 		return previous + current
 	}, 0)
 }
@@ -39,4 +40,11 @@ func (*Vpt[T]) Compute(closings, volumes <-chan T) <-chan T {
 // IdlePeriod is the initial period that VPT won't yield any results.
 func (*Vpt[T]) IdlePeriod() int {
 	return 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (i *Vpt[T]) Compute(closings, volumes <-chan T) <-chan T {
+	return i.ComputeWithContext(context.Background(), closings, volumes)
 }

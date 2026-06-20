@@ -4,18 +4,32 @@
 
 package helper
 
-// Pipe function takes an input channel and an output channel and copies
-// all elements from the input channel into the output channel.
+import "context"
+
+// Pipe wraps PipeWithContext for backwards compatibility.
 //
-// Example:
-//
-//	input := helper.SliceToChan([]int{2, 4, 6, 8})
-//	output := make(chan int)
-//	helper.Pipe(input, output)
-//	fmt.println(helper.ChanToSlice(output)) // [2, 4, 6, 8]
+// Deprecated: Use PipeWithContext instead.
 func Pipe[T any](f <-chan T, t chan<- T) {
+	PipeWithContext(context.Background(), f, t)
+}
+
+// PipeWithContext copies all elements from the input channel into the output channel
+// with context support.
+func PipeWithContext[T any](ctx context.Context, f <-chan T, t chan<- T) {
 	defer close(t)
-	for n := range f {
-		t <- n
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case n, ok := <-f:
+			if !ok {
+				return
+			}
+			select {
+			case <-ctx.Done():
+				return
+			case t <- n:
+			}
+		}
 	}
 }

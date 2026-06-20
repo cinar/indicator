@@ -4,15 +4,26 @@
 
 package helper
 
-// Operate5 applies the provided operate function to corresponding values from five
-// numeric input channels and sends the resulting values to an output channel.
+import "context"
+
+// Operate5 wraps Operate5WithContext for backwards compatibility.
 //
-// Example:
-//
-//	result := helper.Operate5(ac, bc, cc, dc, ec, func(a, b, c, d, e int) int {
-//	  return a + b + c + d + e
-//	})
+// Deprecated: Use Operate5WithContext instead.
 func Operate5[A any, B any, C any, D any, E any, R any](
+	ac <-chan A,
+	bc <-chan B,
+	cc <-chan C,
+	dc <-chan D,
+	ec <-chan E,
+	o func(A, B, C, D, E) R,
+) <-chan R {
+	return Operate5WithContext(context.Background(), ac, bc, cc, dc, ec, o)
+}
+
+// Operate5WithContext applies the provided operate function to corresponding values from five
+// numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
+func Operate5WithContext[A any, B any, C any, D any, E any, R any](
+	ctx context.Context,
 	ac <-chan A,
 	bc <-chan B,
 	cc <-chan C,
@@ -23,42 +34,74 @@ func Operate5[A any, B any, C any, D any, E any, R any](
 	rc := make(chan R)
 
 	go func() {
-		defer close(rc)
+		defer func() {
+			close(rc)
+			DrainWithContext(ctx, ac)
+			DrainWithContext(ctx, bc)
+			DrainWithContext(ctx, cc)
+			DrainWithContext(ctx, dc)
+			DrainWithContext(ctx, ec)
+		}()
 
 		for {
-			an, ok := <-ac
-			if !ok {
-				break
+			var an A
+			var bn B
+			var cn C
+			var dn D
+			var en E
+			var ok bool
+
+			select {
+			case <-ctx.Done():
+				return
+			case an, ok = <-ac:
+				if !ok {
+					return
+				}
 			}
 
-			bn, ok := <-bc
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case bn, ok = <-bc:
+				if !ok {
+					return
+				}
 			}
 
-			cn, ok := <-cc
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case cn, ok = <-cc:
+				if !ok {
+					return
+				}
 			}
 
-			dn, ok := <-dc
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case dn, ok = <-dc:
+				if !ok {
+					return
+				}
 			}
 
-			en, ok := <-ec
-			if !ok {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			case en, ok = <-ec:
+				if !ok {
+					return
+				}
 			}
 
-			rc <- o(an, bn, cn, dn, en)
+			select {
+			case <-ctx.Done():
+				return
+			case rc <- o(an, bn, cn, dn, en):
+			}
 		}
-
-		Drain(ac)
-		Drain(bc)
-		Drain(cc)
-		Drain(dc)
-		Drain(ec)
 	}()
 
 	return rc

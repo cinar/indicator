@@ -5,6 +5,8 @@
 package volatility
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -47,33 +49,29 @@ func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T]
 	}
 }
 
-// Compute function takes a channel of numbers and computes the Keltner Channel over the specified period.
-func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T) {
-	closingsSplice := helper.Duplicate(closings, 2)
+// ComputeWithContext function takes a channel of numbers and computes the Keltner Channel over the specified period.
+func (k *KeltnerChannel[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T) {
+	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
 
 	//	2 * ATR(period, highs, lows, closings)
-	atrs := helper.Duplicate(
-		helper.MultiplyBy(
-			k.Atr.Compute(highs, lows, closingsSplice[0]),
-			2,
-		),
+	atrs := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, k.Atr.ComputeWithContext(ctx, highs, lows, closingsSplice[0]),
+		2,
+	),
 		2,
 	)
 
 	//	Middle Line = EMA(period, closings)
-	middles := helper.Duplicate(
-		helper.Skip(
-			k.Ema.Compute(closingsSplice[1]),
-			k.Atr.IdlePeriod()-k.Ema.IdlePeriod(),
-		),
+	middles := helper.DuplicateWithContext(ctx, helper.SkipWithContext(ctx, k.Ema.ComputeWithContext(ctx, closingsSplice[1]),
+		k.Atr.IdlePeriod()-k.Ema.IdlePeriod(),
+	),
 		3,
 	)
 
 	//	Upper Band = EMA(period, closings) + 2 * ATR(period, highs, lows, closings)
-	upper := helper.Add(middles[0], atrs[0])
+	upper := helper.AddWithContext(ctx, middles[0], atrs[0])
 
 	//	Lower Band = EMA(period, closings) - 2 * ATR(period, highs, lows, closings)
-	lower := helper.Subtract(middles[1], atrs[1])
+	lower := helper.SubtractWithContext(ctx, middles[1], atrs[1])
 
 	return upper, middles[2], lower
 }
@@ -81,4 +79,11 @@ func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <
 // IdlePeriod is the initial period that Keltner Channel won't yield any results.
 func (k *KeltnerChannel[T]) IdlePeriod() int {
 	return k.Atr.IdlePeriod()
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T) {
+	return k.ComputeWithContext(context.Background(), highs, lows, closings)
 }

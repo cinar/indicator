@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -51,29 +53,24 @@ func NewStochasticRsiWithPeriod[T helper.Number](period int) *StochasticRsi[T] {
 	}
 }
 
-// Compute function takes a channel of closings numbers and computes the Stochastic RSI.
-func (s *StochasticRsi[T]) Compute(closings <-chan T) <-chan T {
-	rsisSplice := helper.Duplicate(
-		s.Rsi.Compute(closings),
+// ComputeWithContext function takes a channel of closings numbers and computes the Stochastic RSI.
+func (s *StochasticRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	rsisSplice := helper.DuplicateWithContext(ctx, s.Rsi.ComputeWithContext(ctx, closings),
 		3,
 	)
 
-	rsisSplice[0] = helper.Skip(rsisSplice[0], s.Max.IdlePeriod())
+	rsisSplice[0] = helper.SkipWithContext(ctx, rsisSplice[0], s.Max.IdlePeriod())
 
-	minRsisSplice := helper.Duplicate(
-		s.Min.Compute(rsisSplice[1]),
+	minRsisSplice := helper.DuplicateWithContext(ctx, s.Min.ComputeWithContext(ctx, rsisSplice[1]),
 		2,
 	)
 
-	maxRsis := s.Max.Compute(rsisSplice[2])
+	maxRsis := s.Max.ComputeWithContext(ctx, rsisSplice[2])
 
-	result := helper.Divide(
-		helper.Subtract(
-			rsisSplice[0],
-			minRsisSplice[0],
-		),
-		helper.Subtract(
-			maxRsis,
+	result := helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, rsisSplice[0],
+		minRsisSplice[0],
+	),
+		helper.SubtractWithContext(ctx, maxRsis,
 			minRsisSplice[1],
 		),
 	)
@@ -84,4 +81,11 @@ func (s *StochasticRsi[T]) Compute(closings <-chan T) <-chan T {
 // IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 func (s *StochasticRsi[T]) IdlePeriod() int {
 	return s.Rsi.IdlePeriod() + s.Min.IdlePeriod()
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *StochasticRsi[T]) Compute(closings <-chan T) <-chan T {
+	return s.ComputeWithContext(context.Background(), closings)
 }

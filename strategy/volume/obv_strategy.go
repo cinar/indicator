@@ -7,6 +7,8 @@ package volume
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -49,22 +51,22 @@ func (s *ObvStrategy) Name() string {
 	return fmt.Sprintf("OBV Strategy (%d)", s.Sma.Period)
 }
 
-// Compute function processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *ObvStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	snapshotsSplice := helper.Duplicate(snapshots, 2)
+// ComputeWithContext function processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *ObvStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	closings := asset.SnapshotsAsClosings(snapshotsSplice[0])
-	volumes := asset.SnapshotsAsVolumes(snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[0])
+	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[1])
 
-	obvValues := s.Obv.Compute(closings, volumes)
-	obvSplice := helper.Duplicate(obvValues, 2)
+	obvValues := s.Obv.ComputeWithContext(ctx, closings, volumes)
+	obvSplice := helper.DuplicateWithContext(ctx, obvValues, 2)
 
-	smaValues := s.Sma.Compute(obvSplice[0])
+	smaValues := s.Sma.ComputeWithContext(ctx, obvSplice[0])
 
 	// Align OBV with SMA
-	obvValuesAligned := helper.Skip(obvSplice[1], s.Sma.IdlePeriod())
+	obvValuesAligned := helper.SkipWithContext(ctx, obvSplice[1], s.Sma.IdlePeriod())
 
-	actions := helper.Operate(obvValuesAligned, smaValues, func(obv, sma float64) strategy.Action {
+	actions := helper.OperateWithContext(ctx, obvValuesAligned, smaValues, func(obv, sma float64) strategy.Action {
 		if obv > sma {
 			return strategy.Buy
 		}
@@ -77,7 +79,7 @@ func (s *ObvStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.
 	})
 
 	// OBV starts after its idle period (0), but SMA starts after its idle period.
-	actions = helper.Shift(actions, s.Sma.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, s.Sma.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -137,4 +139,11 @@ func (s *ObvStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *ObvStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return s.ComputeWithContext(context.Background(), snapshots)
 }

@@ -59,6 +59,7 @@ The following list of indicators are currently supported by this package:
 -	[Rolling Moving Average (RMA)](trend/README.md#Rma)
 -	[Simple Moving Average (SMA)](trend/README.md#Sma)
 -	[Since Change](helper/README.md#Since)
+-	[Slope](trend/README.md#Slope)
 -   [Smoothed Moving Average (SMMA)](trend/README.md#Smma)
 -	[Triple Exponential Moving Average (TEMA)](trend/README.md#Tema)
 -	[Triangular Moving Average (TRIMA)](trend/README.md#Trima)
@@ -96,18 +97,22 @@ The following list of indicators are currently supported by this package:
 
 -   [Percent B](volatility/README.md#PercentB)
 -	[Acceleration Bands](volatility/README.md#AccelerationBands)
+-	[Annualized Historical Volatility (AHV)](volatility/README.md#AnnualizedHistoricalVolatility)
 -	[Average True Range (ATR)](volatility/README.md#Atr)
 -	[Bollinger Band Width](volatility/README.md#BollingerBandWidth)
 -	[Bollinger Bands](volatility/README.md#BollingerBands)
 -	[Chandelier Exit](volatility/README.md#ChandelierExit)
 -	[Choppiness Index (CHOP)](volatility/README.md#Chop)
 -	[Donchian Channel (DC)](volatility/README.md#DonchianChannel)
+-	[Historical Volatility (HV)](volatility/README.md#HistoricalVolatility)
 -	[Keltner Channel (KC)](volatility/README.md#KeltnerChannel)
 -	[Moving Standard Deviation (Std)](volatility/README.md#MovingStd)
 -	[Projection Oscillator (PO)](volatility/README.md#Po)
 -	[Super Trend](volatility/README.md#SuperTrend)
 -	[True Range (TR)](volatility/README.md#TrueRange)
 -	[Ulcer Index (UI)](volatility/README.md#UlcerIndex)
+-	[Z-Score](volatility/README.md#ZScore)
+
 
 ### 📢 Volume Indicators
 
@@ -149,6 +154,7 @@ The following list of strategies are currently supported by this package:
 -	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#DemaStrategy)
 -   [Envelope Strategy](strategy/trend/README.md#EnvelopeStrategy)
 -	[Golden Cross Strategy](strategy/trend/README.md#GoldenCrossStrategy)
+-	[Hull Moving Average (HMA) Strategy](strategy/trend/README.md#HmaStrategy)
 -	[Kaufman's Adaptive Moving Average (KAMA) Strategy](strategy/trend/README.md#KamaStrategy)
 -	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#MacdStrategy)
 -	[Qstick Strategy](strategy/trend/README.md#QstickStrategy)
@@ -164,8 +170,11 @@ The following list of strategies are currently supported by this package:
 ### 🚀 Momentum Strategies
 
 -	[Awesome Oscillator Strategy](strategy/momentum/README.md#AwesomeOscillatorStrategy)
+-	[Coppock Curve Strategy](strategy/momentum/README.md#CoppockCurveStrategy)
+-	[Elder Ray Strategy](strategy/momentum/README.md#ElderRayStrategy)
 -	[Ichimoku Cloud Strategy](strategy/momentum/README.md#IchimokuCloudStrategy)
 -	[RSI Strategy](strategy/momentum/README.md#RsiStrategy)
+-	[Stochastic Oscillator Strategy](strategy/momentum/README.md#StochasticOscillatorStrategy)
 -	[Stochastic RSI Strategy](strategy/momentum/README.md#StochasticRsiStrategy)
 -	[Triple RSI Strategy](strategy/momentum/README.md#TripleRsiStrategy)
 -	[Williams R Strategy](strategy/momentum/README.md#WilliamsRStrategy)
@@ -173,6 +182,7 @@ The following list of strategies are currently supported by this package:
 ### 🎢 Volatility Strategies
 
 -	[Bollinger Bands Strategy](strategy/volatility/README.md#BollingerBandsStrategy)
+-	[Donchian Channel Breakout Strategy](strategy/volatility/README.md#DonchianChannelBreakoutStrategy)
 -	[Super Trend Strategy](strategy/volatility/README.md#SuperTrendStrategy)
 
 ### 📢 Volume Strategies

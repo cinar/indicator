@@ -28,11 +28,17 @@ The information provided on this project is strictly for informational purposes 
 - [Variables](<#variables>)
 - [func RegisterRepositoryBuilder\(name string, builder RepositoryBuilderFunc\)](<#RegisterRepositoryBuilder>)
 - [func SnapshotsAsClosings\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsClosings>)
+- [func SnapshotsAsClosingsWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsClosingsWithContext>)
 - [func SnapshotsAsDates\(snapshots \<\-chan \*Snapshot\) \<\-chan time.Time](<#SnapshotsAsDates>)
+- [func SnapshotsAsDatesWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan time.Time](<#SnapshotsAsDatesWithContext>)
 - [func SnapshotsAsHighs\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsHighs>)
+- [func SnapshotsAsHighsWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsHighsWithContext>)
 - [func SnapshotsAsLows\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsLows>)
+- [func SnapshotsAsLowsWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsLowsWithContext>)
 - [func SnapshotsAsOpenings\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsOpenings>)
+- [func SnapshotsAsOpeningsWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsOpeningsWithContext>)
 - [func SnapshotsAsVolumes\(snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsVolumes>)
+- [func SnapshotsAsVolumesWithContext\(ctx context.Context, snapshots \<\-chan \*Snapshot\) \<\-chan float64](<#SnapshotsAsVolumesWithContext>)
 - [type FileSystemRepository](<#FileSystemRepository>)
   - [func NewFileSystemRepository\(base string, csvOptions ...helper.CsvOption\[Snapshot\]\) \*FileSystemRepository](<#NewFileSystemRepository>)
   - [func \(r \*FileSystemRepository\) Append\(name string, snapshots \<\-chan \*Snapshot\) error](<#FileSystemRepository.Append>)
@@ -129,58 +135,124 @@ func RegisterRepositoryBuilder(name string, builder RepositoryBuilderFunc)
 RegisterRepositoryBuilder registers the given builder.
 
 <a name="SnapshotsAsClosings"></a>
-## func [SnapshotsAsClosings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L79>)
+## func [SnapshotsAsClosings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L117>)
 
 ```go
 func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsClosings extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsClosings extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values.
+
+Deprecated: Use SnapshotsAsClosingsWithContext instead.
+
+<a name="SnapshotsAsClosingsWithContext"></a>
+## func [SnapshotsAsClosingsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L107>)
+
+```go
+func SnapshotsAsClosingsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
+```
+
+SnapshotsAsClosingsWithContext extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values, supporting context cancellation.
 
 <a name="SnapshotsAsDates"></a>
-## func [SnapshotsAsDates](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L43>)
+## func [SnapshotsAsDates](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L53>)
 
 ```go
 func SnapshotsAsDates(snapshots <-chan *Snapshot) <-chan time.Time
 ```
 
-SnapshotsAsDates extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsDates extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values.
+
+Deprecated: Use SnapshotsAsDatesWithContext instead.
+
+<a name="SnapshotsAsDatesWithContext"></a>
+## func [SnapshotsAsDatesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L43>)
+
+```go
+func SnapshotsAsDatesWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan time.Time
+```
+
+SnapshotsAsDatesWithContext extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values, supporting context cancellation.
 
 <a name="SnapshotsAsHighs"></a>
-## func [SnapshotsAsHighs](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L61>)
+## func [SnapshotsAsHighs](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L85>)
 
 ```go
 func SnapshotsAsHighs(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsHighs extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsHighs extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values.
+
+Deprecated: Use SnapshotsAsHighsWithContext instead.
+
+<a name="SnapshotsAsHighsWithContext"></a>
+## func [SnapshotsAsHighsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L75>)
+
+```go
+func SnapshotsAsHighsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
+```
+
+SnapshotsAsHighsWithContext extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values, supporting context cancellation.
 
 <a name="SnapshotsAsLows"></a>
-## func [SnapshotsAsLows](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L70>)
+## func [SnapshotsAsLows](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L101>)
 
 ```go
 func SnapshotsAsLows(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsLows extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsLows extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values.
+
+Deprecated: Use SnapshotsAsLowsWithContext instead.
+
+<a name="SnapshotsAsLowsWithContext"></a>
+## func [SnapshotsAsLowsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L91>)
+
+```go
+func SnapshotsAsLowsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
+```
+
+SnapshotsAsLowsWithContext extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values, supporting context cancellation.
 
 <a name="SnapshotsAsOpenings"></a>
-## func [SnapshotsAsOpenings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L52>)
+## func [SnapshotsAsOpenings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L69>)
 
 ```go
 func SnapshotsAsOpenings(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsOpenings extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsOpenings extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values.
+
+Deprecated: Use SnapshotsAsOpeningsWithContext instead.
+
+<a name="SnapshotsAsOpeningsWithContext"></a>
+## func [SnapshotsAsOpeningsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L59>)
+
+```go
+func SnapshotsAsOpeningsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
+```
+
+SnapshotsAsOpeningsWithContext extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values, supporting context cancellation.
 
 <a name="SnapshotsAsVolumes"></a>
-## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L88>)
+## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L133>)
 
 ```go
 func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64
 ```
 
-SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.The original snapshots channel can no longer be directly used afterward.
+SnapshotsAsVolumes extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values.
+
+Deprecated: Use SnapshotsAsVolumesWithContext instead.
+
+<a name="SnapshotsAsVolumesWithContext"></a>
+## func [SnapshotsAsVolumesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L123>)
+
+```go
+func SnapshotsAsVolumesWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
+```
+
+SnapshotsAsVolumesWithContext extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values, supporting context cancellation.
 
 <a name="FileSystemRepository"></a>
 ## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L20-L26>)
@@ -469,7 +541,7 @@ type SQLRepositoryDialect interface {
 ```
 
 <a name="Snapshot"></a>
-## type [Snapshot](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L15-L38>)
+## type [Snapshot](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L16-L39>)
 
 Snapshot captures a single observation of an asset's price at a specific moment.
 

@@ -26,15 +26,23 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [func Abs\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Abs>)
+- [func AbsWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#AbsWithContext>)
 - [func Add\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Add>)
+- [func AddWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#AddWithContext>)
 - [func AppendOrWriteToCsvFile\[T any\]\(fileName string, rows \<\-chan \*T, options ...CsvOption\[T\]\) error](<#AppendOrWriteToCsvFile>)
+- [func AppendOrWriteToCsvFileWithContext\[T any\]\(ctx context.Context, fileName string, rows \<\-chan \*T, options ...CsvOption\[T\]\) error](<#AppendOrWriteToCsvFileWithContext>)
 - [func Apply\[T Number\]\(c \<\-chan T, f func\(T\) T\) \<\-chan T](<#Apply>)
+- [func ApplyWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, f func\(T\) T\) \<\-chan T](<#ApplyWithContext>)
 - [func Buffered\[T any\]\(c \<\-chan T, size int\) \<\-chan T](<#Buffered>)
+- [func BufferedWithContext\[T any\]\(ctx context.Context, c \<\-chan T, size int\) \<\-chan T](<#BufferedWithContext>)
 - [func ChanToJSON\[T any\]\(c \<\-chan T, w io.Writer\) error](<#ChanToJSON>)
 - [func ChanToSlice\[T any\]\(c \<\-chan T\) \[\]T](<#ChanToSlice>)
 - [func Change\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#Change>)
 - [func ChangePercent\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangePercent>)
+- [func ChangePercentWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, before int\) \<\-chan T](<#ChangePercentWithContext>)
 - [func ChangeRatio\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangeRatio>)
+- [func ChangeRatioWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, before int\) \<\-chan T](<#ChangeRatioWithContext>)
+- [func ChangeWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, before int\) \<\-chan T](<#ChangeWithContext>)
 - [func CheckEquals\[T comparable\]\(inputs ...\<\-chan T\) error](<#CheckEquals>)
 - [func CloseAndLogError\(closer io.Closer, message string\)](<#CloseAndLogError>)
 - [func CloseAndLogErrorWithLogger\(closer io.Closer, message string, logger \*slog.Logger\)](<#CloseAndLogErrorWithLogger>)
@@ -42,59 +50,102 @@ The information provided on this project is strictly for informational purposes 
 - [func CloseDatabaseWithError\(db \*sql.DB, err error\) error](<#CloseDatabaseWithError>)
 - [func CommonPeriod\(periods ...int\) int](<#CommonPeriod>)
 - [func Count\[T Number, O any\]\(from T, other \<\-chan O\) \<\-chan T](<#Count>)
+- [func CountWithContext\[T Number, O any\]\(ctx context.Context, from T, other \<\-chan O\) \<\-chan T](<#CountWithContext>)
 - [func DaysBetween\(from, to time.Time\) int](<#DaysBetween>)
 - [func DecrementBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DecrementBy>)
+- [func DecrementByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, d T\) \<\-chan T](<#DecrementByWithContext>)
 - [func Divide\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Divide>)
 - [func DivideBy\[T Number\]\(c \<\-chan T, d T\) \<\-chan T](<#DivideBy>)
+- [func DivideByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, d T\) \<\-chan T](<#DivideByWithContext>)
+- [func DivideWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#DivideWithContext>)
 - [func Drain\[T any\]\(c \<\-chan T\)](<#Drain>)
+- [func DrainWithContext\[T any\]\(ctx context.Context, c \<\-chan T\)](<#DrainWithContext>)
 - [func Duplicate\[T any\]\(input \<\-chan T, count int\) \[\]\<\-chan T](<#Duplicate>)
+- [func DuplicateWithContext\[T any\]\(ctx context.Context, input \<\-chan T, count int\) \[\]\<\-chan T](<#DuplicateWithContext>)
 - [func Echo\[T any\]\(input \<\-chan T, last, count int\) \<\-chan T](<#Echo>)
+- [func EchoWithContext\[T any\]\(ctx context.Context, input \<\-chan T, last, count int\) \<\-chan T](<#EchoWithContext>)
 - [func Field\[T, S any\]\(c \<\-chan \*S, name string\) \(\<\-chan T, error\)](<#Field>)
+- [func FieldWithContext\[T, S any\]\(ctx context.Context, c \<\-chan \*S, name string\) \(\<\-chan T, error\)](<#FieldWithContext>)
 - [func Filter\[T any\]\(c \<\-chan T, p func\(T\) bool\) \<\-chan T](<#Filter>)
+- [func FilterWithContext\[T any\]\(ctx context.Context, c \<\-chan T, p func\(T\) bool\) \<\-chan T](<#FilterWithContext>)
 - [func First\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#First>)
+- [func FirstWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#FirstWithContext>)
 - [func Gcd\(values ...int\) int](<#Gcd>)
 - [func Head\[T Number\]\(c \<\-chan T, count int\) \<\-chan T](<#Head>)
+- [func HeadWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#HeadWithContext>)
 - [func Highest\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#Highest>)
+- [func HighestWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#HighestWithContext>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
+- [func IncrementByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, i T\) \<\-chan T](<#IncrementByWithContext>)
 - [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
+- [func JSONToChanWithContext\[T any\]\(ctx context.Context, r io.Reader\) \<\-chan T](<#JSONToChanWithContext>)
 - [func JSONToChanWithLogger\[T any\]\(r io.Reader, logger \*slog.Logger\) \<\-chan T](<#JSONToChanWithLogger>)
+- [func JSONToChanWithLoggerWithContext\[T any\]\(ctx context.Context, r io.Reader, logger \*slog.Logger\) \<\-chan T](<#JSONToChanWithLoggerWithContext>)
 - [func KeepNegatives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepNegatives>)
+- [func KeepNegativesWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#KeepNegativesWithContext>)
 - [func KeepPositives\[T Number\]\(c \<\-chan T\) \<\-chan T](<#KeepPositives>)
+- [func KeepPositivesWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#KeepPositivesWithContext>)
 - [func Last\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Last>)
+- [func LastWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#LastWithContext>)
 - [func Lcm\(values ...int\) int](<#Lcm>)
 - [func Lowest\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#Lowest>)
+- [func LowestWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#LowestWithContext>)
 - [func Map\[F, T any\]\(c \<\-chan F, f func\(F\) T\) \<\-chan T](<#Map>)
+- [func MapWithContext\[F, T any\]\(ctx context.Context, c \<\-chan F, f func\(F\) T\) \<\-chan T](<#MapWithContext>)
 - [func MapWithPrevious\[F, T any\]\(c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPrevious>)
+- [func MapWithPreviousWithContext\[F, T any\]\(ctx context.Context, c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPreviousWithContext>)
 - [func MaxSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MaxSince>)
 - [func MinSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MinSince>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
 - [func MultiplyBy\[T Number\]\(c \<\-chan T, m T\) \<\-chan T](<#MultiplyBy>)
+- [func MultiplyByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, m T\) \<\-chan T](<#MultiplyByWithContext>)
+- [func MultiplyWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#MultiplyWithContext>)
 - [func Operate\[A any, B any, R any\]\(ac \<\-chan A, bc \<\-chan B, o func\(A, B\) R\) \<\-chan R](<#Operate>)
 - [func Operate3\[A any, B any, C any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, o func\(A, B, C\) R\) \<\-chan R](<#Operate3>)
+- [func Operate3WithContext\[A any, B any, C any, R any\]\(ctx context.Context, ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, o func\(A, B, C\) R\) \<\-chan R](<#Operate3WithContext>)
 - [func Operate4\[A any, B any, C any, D any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, o func\(A, B, C, D\) R\) \<\-chan R](<#Operate4>)
+- [func Operate4WithContext\[A any, B any, C any, D any, R any\]\(ctx context.Context, ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, o func\(A, B, C, D\) R\) \<\-chan R](<#Operate4WithContext>)
 - [func Operate5\[A any, B any, C any, D any, E any, R any\]\(ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, ec \<\-chan E, o func\(A, B, C, D, E\) R\) \<\-chan R](<#Operate5>)
+- [func Operate5WithContext\[A any, B any, C any, D any, E any, R any\]\(ctx context.Context, ac \<\-chan A, bc \<\-chan B, cc \<\-chan C, dc \<\-chan D, ec \<\-chan E, o func\(A, B, C, D, E\) R\) \<\-chan R](<#Operate5WithContext>)
+- [func OperateWithContext\[A any, B any, R any\]\(ctx context.Context, ac \<\-chan A, bc \<\-chan B, o func\(A, B\) R\) \<\-chan R](<#OperateWithContext>)
 - [func PercentRank\[T Number\]\(c \<\-chan T, period int\) \<\-chan T](<#PercentRank>)
+- [func PercentRankWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, period int\) \<\-chan T](<#PercentRankWithContext>)
 - [func Pipe\[T any\]\(f \<\-chan T, t chan\<\- T\)](<#Pipe>)
+- [func PipeWithContext\[T any\]\(ctx context.Context, f \<\-chan T, t chan\<\- T\)](<#PipeWithContext>)
 - [func Pow\[T Number\]\(c \<\-chan T, y T\) \<\-chan T](<#Pow>)
+- [func PowWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, y T\) \<\-chan T](<#PowWithContext>)
 - [func ReadFromCsvFile\[T any\]\(fileName string, options ...CsvOption\[T\]\) \(\<\-chan \*T, error\)](<#ReadFromCsvFile>)
+- [func ReadFromCsvFileWithContext\[T any\]\(ctx context.Context, fileName string, options ...CsvOption\[T\]\) \(\<\-chan \*T, error\)](<#ReadFromCsvFileWithContext>)
 - [func Remove\(t \*testing.T, name string\)](<#Remove>)
 - [func RemoveAll\(t \*testing.T, path string\)](<#RemoveAll>)
 - [func RoundDigit\[T Number\]\(n T, d int\) T](<#RoundDigit>)
 - [func RoundDigits\[T Number\]\(c \<\-chan T, d int\) \<\-chan T](<#RoundDigits>)
+- [func RoundDigitsWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, d int\) \<\-chan T](<#RoundDigitsWithContext>)
 - [func Seq\[T Number\]\(from, to, increment T\) \<\-chan T](<#Seq>)
+- [func SeqWithContext\[T Number\]\(ctx context.Context, from, to, increment T\) \<\-chan T](<#SeqWithContext>)
 - [func Shift\[T any\]\(c \<\-chan T, count int, fill T\) \<\-chan T](<#Shift>)
+- [func ShiftWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int, fill T\) \<\-chan T](<#ShiftWithContext>)
 - [func Sign\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sign>)
+- [func SignWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#SignWithContext>)
 - [func Since\[T comparable, R Number\]\(c \<\-chan T\) \<\-chan R](<#Since>)
 - [func Skip\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Skip>)
 - [func SkipLast\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#SkipLast>)
+- [func SkipLastWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#SkipLastWithContext>)
+- [func SkipWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#SkipWithContext>)
 - [func SliceToChan\[T any\]\(slice \[\]T\) \<\-chan T](<#SliceToChan>)
+- [func SliceToChanWithContext\[T any\]\(ctx context.Context, slice \[\]T\) \<\-chan T](<#SliceToChanWithContext>)
 - [func SlicesReverse\[T any\]\(r \[\]T, i int, f func\(T\) bool\)](<#SlicesReverse>)
 - [func SortedPercentRank\[T Number\]\(c \<\-chan T, period int\) \<\-chan T](<#SortedPercentRank>)
+- [func SortedPercentRankWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, period int\) \<\-chan T](<#SortedPercentRankWithContext>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
+- [func SqrtWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#SqrtWithContext>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
+- [func SubtractWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#SubtractWithContext>)
 - [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
 - [func Waitable\[T any\]\(wg \*sync.WaitGroup, c \<\-chan T\) \<\-chan T](<#Waitable>)
+- [func WaitableWithContext\[T any\]\(ctx context.Context, wg \*sync.WaitGroup, c \<\-chan T\) \<\-chan T](<#WaitableWithContext>)
 - [func Window\[T any\]\(c \<\-chan T, f func\(\[\]T, int\) T, w int\) \<\-chan T](<#Window>)
+- [func WindowWithContext\[T any\]\(ctx context.Context, c \<\-chan T, f func\(\[\]T, int\) T, w int\) \<\-chan T](<#WindowWithContext>)
 - [type Bst](<#Bst>)
   - [func NewBst\[T Number\]\(\) \*Bst\[T\]](<#NewBst>)
   - [func \(b \*Bst\[T\]\) Contains\(value T\) bool](<#Bst[T].Contains>)
@@ -106,9 +157,13 @@ The information provided on this project is strictly for informational purposes 
 - [type Csv](<#Csv>)
   - [func NewCsv\[T any\]\(options ...CsvOption\[T\]\) \(\*Csv\[T\], error\)](<#NewCsv>)
   - [func \(c \*Csv\[T\]\) AppendToFile\(fileName string, rows \<\-chan \*T\) error](<#Csv[T].AppendToFile>)
+  - [func \(c \*Csv\[T\]\) AppendToFileWithContext\(ctx context.Context, fileName string, rows \<\-chan \*T\) error](<#Csv[T].AppendToFileWithContext>)
   - [func \(c \*Csv\[T\]\) ReadFromFile\(fileName string\) \(\<\-chan \*T, error\)](<#Csv[T].ReadFromFile>)
+  - [func \(c \*Csv\[T\]\) ReadFromFileWithContext\(ctx context.Context, fileName string\) \(\<\-chan \*T, error\)](<#Csv[T].ReadFromFileWithContext>)
   - [func \(c \*Csv\[T\]\) ReadFromReader\(reader io.Reader\) \<\-chan \*T](<#Csv[T].ReadFromReader>)
+  - [func \(c \*Csv\[T\]\) ReadFromReaderWithContext\(ctx context.Context, reader io.Reader\) \<\-chan \*T](<#Csv[T].ReadFromReaderWithContext>)
   - [func \(c \*Csv\[T\]\) WriteToFile\(fileName string, rows \<\-chan \*T\) error](<#Csv[T].WriteToFile>)
+  - [func \(c \*Csv\[T\]\) WriteToFileWithContext\(ctx context.Context, fileName string, rows \<\-chan \*T\) error](<#Csv[T].WriteToFileWithContext>)
 - [type CsvOption](<#CsvOption>)
   - [func WithCsvDefaultDateTimeFormat\[T any\]\(format string\) CsvOption\[T\]](<#WithCsvDefaultDateTimeFormat>)
   - [func WithCsvLogger\[T any\]\(logger \*slog.Logger\) CsvOption\[T\]](<#WithCsvLogger>)
@@ -161,13 +216,24 @@ const (
 ```
 
 <a name="Abs"></a>
-## func [Abs](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L15>)
+## func [Abs](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L27>)
 
 ```go
 func Abs[T Number](c <-chan T) <-chan T
 ```
 
-Abs calculates the absolute value of each value in a channel of type T.
+Abs wraps AbsWithContext for backwards compatibility.
+
+Deprecated: Use AbsWithContext instead.
+
+<a name="AbsWithContext"></a>
+## func [AbsWithContext](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L18>)
+
+```go
+func AbsWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
+```
+
+AbsWithContext calculates the absolute value of each value in a channel of type T.
 
 Example:
 
@@ -177,13 +243,24 @@ fmt.Println(helper.ChanToSlice(abs)) // [10, 20, 4, 5]
 ```
 
 <a name="Add"></a>
-## func [Add](<https://github.com/cinar/indicator/blob/master/helper/add.go#L18>)
+## func [Add](<https://github.com/cinar/indicator/blob/master/helper/add.go#L31>)
 
 ```go
 func Add[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Add adds each pair of values from the two input channels of type T and returns a new channel containing the sums.
+Add wraps AddWithContext for backwards compatibility.
+
+Deprecated: Use AddWithContext instead.
+
+<a name="AddWithContext"></a>
+## func [AddWithContext](<https://github.com/cinar/indicator/blob/master/helper/add.go#L22>)
+
+```go
+func AddWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T
+```
+
+AddWithContext adds each pair of values from the two input channels of type T and returns a new channel containing the sums.
 
 Example:
 
@@ -197,30 +274,44 @@ fmt.Println(actual) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 ```
 
 <a name="AppendOrWriteToCsvFile"></a>
-## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L323>)
+## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L384>)
 
 ```go
 func AppendOrWriteToCsvFile[T any](fileName string, rows <-chan *T, options ...CsvOption[T]) error
 ```
 
-AppendOrWriteToCsvFile writes the provided rows of data to the specified file, appending to the existing file if it exists or creating a new one if it doesn't. In append mode, the function assumes that the existing file's column order matches the field order of the given row struct to ensure consistent data structure.
+AppendOrWriteToCsvFile wraps AppendOrWriteToCsvFileWithContext for backwards compatibility.
+
+Deprecated: Use AppendOrWriteToCsvFileWithContext instead.
+
+<a name="AppendOrWriteToCsvFileWithContext"></a>
+## func [AppendOrWriteToCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L390>)
+
+```go
+func AppendOrWriteToCsvFileWithContext[T any](ctx context.Context, fileName string, rows <-chan *T, options ...CsvOption[T]) error
+```
+
+AppendOrWriteToCsvFileWithContext writes the provided rows of data to the specified file, appending to the existing file if it exists or creating a new one if it doesn't, supporting context cancellation.
 
 <a name="Apply"></a>
-## func [Apply](<https://github.com/cinar/indicator/blob/master/helper/apply.go#L17>)
+## func [Apply](<https://github.com/cinar/indicator/blob/master/helper/apply.go#L12>)
 
 ```go
 func Apply[T Number](c <-chan T, f func(T) T) <-chan T
 ```
 
-Apply applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a value of type T as input and returns a value of type T as output.
+Apply wraps ApplyWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use ApplyWithContext instead.
 
+<a name="ApplyWithContext"></a>
+## func [ApplyWithContext](<https://github.com/cinar/indicator/blob/master/helper/apply.go#L19>)
+
+```go
+func ApplyWithContext[T Number](ctx context.Context, c <-chan T, f func(T) T) <-chan T
 ```
-timesTwo := helper.Apply(c, func(n int) int {
-	return n * 2
-})
-```
+
+ApplyWithContext applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values with context support.
 
 <a name="Buffered"></a>
 ## func [Buffered](<https://github.com/cinar/indicator/blob/master/helper/buffered.go#L12>)
@@ -229,9 +320,18 @@ timesTwo := helper.Apply(c, func(n int) int {
 func Buffered[T any](c <-chan T, size int) <-chan T
 ```
 
-Buffered takes a channel of any type and returns a new channel of the same type with a buffer of the specified size. This allows the original channel to continue sending data even if the receiving end is temporarily unavailable.
+Buffered wraps BufferedWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use BufferedWithContext instead.
+
+<a name="BufferedWithContext"></a>
+## func [BufferedWithContext](<https://github.com/cinar/indicator/blob/master/helper/buffered.go#L18>)
+
+```go
+func BufferedWithContext[T any](ctx context.Context, c <-chan T, size int) <-chan T
+```
+
+BufferedWithContext takes a channel of any type and returns a new channel of the same type with a buffer of the specified size with context support.
 
 <a name="ChanToJSON"></a>
 ## func [ChanToJSON](<https://github.com/cinar/indicator/blob/master/helper/chan_to_json.go#L23>)
@@ -277,30 +377,35 @@ fmt.Println(helper.ChanToSlice(c)) // [1, 2, 3, 4]
 ```
 
 <a name="Change"></a>
-## func [Change](<https://github.com/cinar/indicator/blob/master/helper/change.go#L14>)
+## func [Change](<https://github.com/cinar/indicator/blob/master/helper/change.go#L29>)
 
 ```go
 func Change[T Number](c <-chan T, before int) <-chan T
 ```
 
-Change calculates the difference between the current value and the value N before.
+Change wraps ChangeWithContext for backwards compatibility.
 
-Example:
-
-```
-input := []int{1, 2, 5, 5, 8, 2, 1, 1, 3, 4}
-output := helper.Change(helper.SliceToChan(input), 2)
-fmt.Println(helper.ChanToSlice(output)) // [4, 3, 3, -3, -7, -1, 2, 3]
-```
+Deprecated: Use ChangeWithContext instead.
 
 <a name="ChangePercent"></a>
-## func [ChangePercent](<https://github.com/cinar/indicator/blob/master/helper/change_percent.go#L15>)
+## func [ChangePercent](<https://github.com/cinar/indicator/blob/master/helper/change_percent.go#L26>)
 
 ```go
 func ChangePercent[T Number](c <-chan T, before int) <-chan T
 ```
 
-ChangePercent calculates the percentage change between the current value and the value N positions before.
+ChangePercent wraps ChangePercentWithContext for backwards compatibility.
+
+Deprecated: Use ChangePercentWithContext instead.
+
+<a name="ChangePercentWithContext"></a>
+## func [ChangePercentWithContext](<https://github.com/cinar/indicator/blob/master/helper/change_percent.go#L19>)
+
+```go
+func ChangePercentWithContext[T Number](ctx context.Context, c <-chan T, before int) <-chan T
+```
+
+ChangePercentWithContext calculates the percentage change between the current value and the value N positions before.
 
 Example:
 
@@ -311,13 +416,24 @@ fmt.Println(helper.ChanToSlice(actual)) // [400, 150, 60, -60, -87.5, -50, 200, 
 ```
 
 <a name="ChangeRatio"></a>
-## func [ChangeRatio](<https://github.com/cinar/indicator/blob/master/helper/change_ratio.go#L15>)
+## func [ChangeRatio](<https://github.com/cinar/indicator/blob/master/helper/change_ratio.go#L28>)
 
 ```go
 func ChangeRatio[T Number](c <-chan T, before int) <-chan T
 ```
 
-ChangeRatio calculates the ratio change between the current value and the value N positions before.
+ChangeRatio wraps ChangeRatioWithContext for backwards compatibility.
+
+Deprecated: Use ChangeRatioWithContext instead.
+
+<a name="ChangeRatioWithContext"></a>
+## func [ChangeRatioWithContext](<https://github.com/cinar/indicator/blob/master/helper/change_ratio.go#L19>)
+
+```go
+func ChangeRatioWithContext[T Number](ctx context.Context, c <-chan T, before int) <-chan T
+```
+
+ChangeRatioWithContext calculates the ratio change between the current value and the value N positions before.
 
 Example:
 
@@ -325,6 +441,23 @@ Example:
 c := helper.ChanToSlice([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
 actual := helper.ChangeRatio(c, 2))
 fmt.Println(helper.ChanToSlice(actual)) // [400, 150, 60, -60, -87.5, -50, 200, 300]
+```
+
+<a name="ChangeWithContext"></a>
+## func [ChangeWithContext](<https://github.com/cinar/indicator/blob/master/helper/change.go#L18>)
+
+```go
+func ChangeWithContext[T Number](ctx context.Context, c <-chan T, before int) <-chan T
+```
+
+ChangeWithContext calculates the difference between the current value and the value N before.
+
+Example:
+
+```
+input := []int{1, 2, 5, 5, 8, 2, 1, 1, 3, 4}
+output := helper.Change(helper.SliceToChan(input), 2)
+fmt.Println(helper.ChanToSlice(output)) // [4, 3, 3, -3, -7, -1, 2, 3]
 ```
 
 <a name="CheckEquals"></a>
@@ -398,31 +531,24 @@ c3 := helper.Sync(commonPeriod, 3, c3)
 ```
 
 <a name="Count"></a>
-## func [Count](<https://github.com/cinar/indicator/blob/master/helper/count.go#L25>)
+## func [Count](<https://github.com/cinar/indicator/blob/master/helper/count.go#L12>)
 
 ```go
 func Count[T Number, O any](from T, other <-chan O) <-chan T
 ```
 
-Count generates a sequence of numbers starting with a specified value, from, and incrementing by one until the given other channel continues to produce values.
+Count wraps CountWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use CountWithContext instead.
 
+<a name="CountWithContext"></a>
+## func [CountWithContext](<https://github.com/cinar/indicator/blob/master/helper/count.go#L18>)
+
+```go
+func CountWithContext[T Number, O any](ctx context.Context, from T, other <-chan O) <-chan T
 ```
-other := make(chan int, 4)
-other <- 1
-other <- 1
-other <- 1
-other <- 1
-close(other)
 
-c := Count(0, other)
-
-fmt.Println(<- s) // 1
-fmt.Println(<- s) // 2
-fmt.Println(<- s) // 3
-fmt.Println(<- s) // 4
-```
+CountWithContext generates a sequence of numbers starting with a specified value, from, and incrementing by one until the given other channel continues to produce values, supporting context cancellation.
 
 <a name="DaysBetween"></a>
 ## func [DaysBetween](<https://github.com/cinar/indicator/blob/master/helper/days_between.go#L13>)
@@ -434,13 +560,24 @@ func DaysBetween(from, to time.Time) int
 DaysBetween calculates the days between the given two times.
 
 <a name="DecrementBy"></a>
-## func [DecrementBy](<https://github.com/cinar/indicator/blob/master/helper/decrement_by.go#L16>)
+## func [DecrementBy](<https://github.com/cinar/indicator/blob/master/helper/decrement_by.go#L29>)
 
 ```go
 func DecrementBy[T Number](c <-chan T, d T) <-chan T
 ```
 
-DecrementBy decrements each element in the input channel by the specified decrement value and returns a new channel containing the decremented values.
+DecrementBy wraps DecrementByWithContext for backwards compatibility.
+
+Deprecated: Use DecrementByWithContext instead.
+
+<a name="DecrementByWithContext"></a>
+## func [DecrementByWithContext](<https://github.com/cinar/indicator/blob/master/helper/decrement_by.go#L20>)
+
+```go
+func DecrementByWithContext[T Number](ctx context.Context, c <-chan T, d T) <-chan T
+```
+
+DecrementByWithContext decrements each element in the input channel by the specified decrement value and returns a new channel containing the decremented values.
 
 Example:
 
@@ -451,13 +588,51 @@ fmt.Println(helper.ChanToSlice(substractOne)) // [0, 1, 2, 3]
 ```
 
 <a name="Divide"></a>
-## func [Divide](<https://github.com/cinar/indicator/blob/master/helper/divide.go#L20>)
+## func [Divide](<https://github.com/cinar/indicator/blob/master/helper/divide.go#L33>)
 
 ```go
 func Divide[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Divide takes two channels of type T and divides the values from the first channel with the values from the second one. It returns a new channel containing the results of the division.
+Divide wraps DivideWithContext for backwards compatibility.
+
+Deprecated: Use DivideWithContext instead.
+
+<a name="DivideBy"></a>
+## func [DivideBy](<https://github.com/cinar/indicator/blob/master/helper/divide_by.go#L28>)
+
+```go
+func DivideBy[T Number](c <-chan T, d T) <-chan T
+```
+
+DivideBy wraps DivideByWithContext for backwards compatibility.
+
+Deprecated: Use DivideByWithContext instead.
+
+<a name="DivideByWithContext"></a>
+## func [DivideByWithContext](<https://github.com/cinar/indicator/blob/master/helper/divide_by.go#L19>)
+
+```go
+func DivideByWithContext[T Number](ctx context.Context, c <-chan T, d T) <-chan T
+```
+
+DivideByWithContext divides each element in the input channel of type T values by the given divider and returns a new channel containing the divided values.
+
+Example:
+
+```
+half := helper.DivideBy(helper.SliceToChan([]int{2, 4, 6, 8}), 2)
+fmt.Println(helper.ChanToSlice(half)) // [1, 2, 3, 4]
+```
+
+<a name="DivideWithContext"></a>
+## func [DivideWithContext](<https://github.com/cinar/indicator/blob/master/helper/divide.go#L24>)
+
+```go
+func DivideWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T
+```
+
+DivideWithContext takes two channels of type T and divides the values from the first channel with the values from the second one. It returns a new channel containing the results of the division.
 
 Example:
 
@@ -470,101 +645,125 @@ division := helper.Divide(ac, bc)
 fmt.Println(helper.ChanToSlice(division)) // [1, 4, 2, 4, 2]
 ```
 
-<a name="DivideBy"></a>
-## func [DivideBy](<https://github.com/cinar/indicator/blob/master/helper/divide_by.go#L15>)
-
-```go
-func DivideBy[T Number](c <-chan T, d T) <-chan T
-```
-
-DivideBy divides each element in the input channel of type T values by the given divider and returns a new channel containing the divided values.
-
-Example:
-
-```
-half := helper.DivideBy(helper.SliceToChan([]int{2, 4, 6, 8}), 2)
-fmt.Println(helper.ChanToSlice(half)) // [1, 2, 3, 4]
-```
-
 <a name="Drain"></a>
-## func [Drain](<https://github.com/cinar/indicator/blob/master/helper/drain.go#L8>)
+## func [Drain](<https://github.com/cinar/indicator/blob/master/helper/drain.go#L12>)
 
 ```go
 func Drain[T any](c <-chan T)
 ```
 
-Drain drains the given channel. It blocks the caller.
+Drain wraps DrainWithContext for backwards compatibility.
+
+Deprecated: Use DrainWithContext instead.
+
+<a name="DrainWithContext"></a>
+## func [DrainWithContext](<https://github.com/cinar/indicator/blob/master/helper/drain.go#L17>)
+
+```go
+func DrainWithContext[T any](ctx context.Context, c <-chan T)
+```
+
+DrainWithContext drains the given channel with context support. It blocks the caller.
 
 <a name="Duplicate"></a>
-## func [Duplicate](<https://github.com/cinar/indicator/blob/master/helper/duplicate.go#L17>)
+## func [Duplicate](<https://github.com/cinar/indicator/blob/master/helper/duplicate.go#L12>)
 
 ```go
 func Duplicate[T any](input <-chan T, count int) []<-chan T
 ```
 
-Duplicate duplicates a given receive\-only channel by reading each value coming out of that channel and sending them on requested number of new output channels.
+Duplicate wraps DuplicateWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use DuplicateWithContext instead.
 
+<a name="DuplicateWithContext"></a>
+## func [DuplicateWithContext](<https://github.com/cinar/indicator/blob/master/helper/duplicate.go#L18>)
+
+```go
+func DuplicateWithContext[T any](ctx context.Context, input <-chan T, count int) []<-chan T
 ```
-expected := helper.SliceToChan([]float64{-10, 20, -4, -5})
-outputs := helper.Duplicates[float64](helper.SliceToChan(expected), 2)
 
-fmt.Println(helper.ChanToSlice(outputs[0])) // [-10, 20, -4, -5]
-fmt.Println(helper.ChanToSlice(outputs[1])) // [-10, 20, -4, -5]
-```
+DuplicateWithContext duplicates a given receive\-only channel by reading each value coming out of that channel and sending them on requested number of new output channels, supporting context cancellation.
 
 <a name="Echo"></a>
-## func [Echo](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L14>)
+## func [Echo](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L12>)
 
 ```go
 func Echo[T any](input <-chan T, last, count int) <-chan T
 ```
 
-Echo takes a channel of numbers, repeats the specified count of numbers at the end by the specified count.
+Echo wraps EchoWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use EchoWithContext instead.
 
+<a name="EchoWithContext"></a>
+## func [EchoWithContext](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L17>)
+
+```go
+func EchoWithContext[T any](ctx context.Context, input <-chan T, last, count int) <-chan T
 ```
-input := helper.SliceToChan([]int{2, 4, 6, 8})
-output := helper.Echo(input, 2, 4))
-fmt.Println(helper.ChanToSlice(output)) // [2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8]
-```
+
+EchoWithContext takes a channel of numbers, repeats the specified count of numbers at the end by the specified count, supporting context cancellation.
 
 <a name="Field"></a>
-## func [Field](<https://github.com/cinar/indicator/blob/master/helper/field.go#L14>)
+## func [Field](<https://github.com/cinar/indicator/blob/master/helper/field.go#L16>)
 
 ```go
 func Field[T, S any](c <-chan *S, name string) (<-chan T, error)
 ```
 
-Field extracts a specific field from a channel of struct pointers and delivers it through a new channel.
+Field wraps FieldWithContext for backwards compatibility.
+
+Deprecated: Use FieldWithContext instead.
+
+<a name="FieldWithContext"></a>
+## func [FieldWithContext](<https://github.com/cinar/indicator/blob/master/helper/field.go#L22>)
+
+```go
+func FieldWithContext[T, S any](ctx context.Context, c <-chan *S, name string) (<-chan T, error)
+```
+
+FieldWithContext extracts a specific field from a channel of struct pointers and delivers it through a new channel, supporting context cancellation.
 
 <a name="Filter"></a>
-## func [Filter](<https://github.com/cinar/indicator/blob/master/helper/filter.go#L17>)
+## func [Filter](<https://github.com/cinar/indicator/blob/master/helper/filter.go#L12>)
 
 ```go
 func Filter[T any](c <-chan T, p func(T) bool) <-chan T
 ```
 
-Filter filters the items from the input channel based on the provided predicate function. The predicate function takes a value of type T as input and returns a boolean value indicating whether the value should be included in the output channel.
+Filter wraps FilterWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use FilterWithContext instead.
 
+<a name="FilterWithContext"></a>
+## func [FilterWithContext](<https://github.com/cinar/indicator/blob/master/helper/filter.go#L18>)
+
+```go
+func FilterWithContext[T any](ctx context.Context, c <-chan T, p func(T) bool) <-chan T
 ```
-even := helper.Filter(c, func(n int) bool {
-  return n%2 == 0
-})
-```
+
+FilterWithContext filters the items from the input channel based on the provided predicate function, supporting context cancellation.
 
 <a name="First"></a>
-## func [First](<https://github.com/cinar/indicator/blob/master/helper/first.go#L8>)
+## func [First](<https://github.com/cinar/indicator/blob/master/helper/first.go#L12>)
 
 ```go
 func First[T any](c <-chan T, count int) <-chan T
 ```
 
-First takes a channel of values and returns a new channel containing the first N values.
+First wraps FirstWithContext for backwards compatibility.
+
+Deprecated: Use FirstWithContext instead.
+
+<a name="FirstWithContext"></a>
+## func [FirstWithContext](<https://github.com/cinar/indicator/blob/master/helper/first.go#L17>)
+
+```go
+func FirstWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
+```
+
+FirstWithContext takes a channel of values and returns a new channel containing the first N values, supporting context cancellation.
 
 <a name="Gcd"></a>
 ## func [Gcd](<https://github.com/cinar/indicator/blob/master/helper/gcd.go#L8>)
@@ -576,39 +775,64 @@ func Gcd(values ...int) int
 Gcd calculates the Greatest Common Divisor of the given numbers.
 
 <a name="Head"></a>
-## func [Head](<https://github.com/cinar/indicator/blob/master/helper/head.go#L16>)
+## func [Head](<https://github.com/cinar/indicator/blob/master/helper/head.go#L12>)
 
 ```go
 func Head[T Number](c <-chan T, count int) <-chan T
 ```
 
-Head retrieves the specified number of elements from the given channel of type T values and delivers them through a new channel.
+Head wraps HeadWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use HeadWithContext instead.
 
+<a name="HeadWithContext"></a>
+## func [HeadWithContext](<https://github.com/cinar/indicator/blob/master/helper/head.go#L19>)
+
+```go
+func HeadWithContext[T Number](ctx context.Context, c <-chan T, count int) <-chan T
 ```
-c := helper.SliceToChan([]int{2, 4, 6, 8})
-actual := helper.Head(c, 2)
-fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
-```
+
+HeadWithContext retrieves the specified number of elements from the given channel of type T values and delivers them through a new channel, supporting context cancellation.
 
 <a name="Highest"></a>
-## func [Highest](<https://github.com/cinar/indicator/blob/master/helper/highest.go#L11>)
+## func [Highest](<https://github.com/cinar/indicator/blob/master/helper/highest.go#L23>)
 
 ```go
 func Highest[T Number](c <-chan T, w int) <-chan T
 ```
 
-Highest returns a channel that emits the highest value within a sliding window of size w from the input channel c.
+Highest wraps HighestWithContext for backwards compatibility.
+
+Deprecated: Use HighestWithContext instead.
+
+<a name="HighestWithContext"></a>
+## func [HighestWithContext](<https://github.com/cinar/indicator/blob/master/helper/highest.go#L14>)
+
+```go
+func HighestWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+HighestWithContext returns a channel that emits the highest value within a sliding window of size w from the input channel c.
 
 <a name="IncrementBy"></a>
-## func [IncrementBy](<https://github.com/cinar/indicator/blob/master/helper/increment_by.go#L16>)
+## func [IncrementBy](<https://github.com/cinar/indicator/blob/master/helper/increment_by.go#L29>)
 
 ```go
 func IncrementBy[T Number](c <-chan T, i T) <-chan T
 ```
 
-IncrementBy increments each element in the input channel by the specified increment value and returns a new channel containing the incremented values.
+IncrementBy wraps IncrementByWithContext for backwards compatibility.
+
+Deprecated: Use IncrementByWithContext instead.
+
+<a name="IncrementByWithContext"></a>
+## func [IncrementByWithContext](<https://github.com/cinar/indicator/blob/master/helper/increment_by.go#L20>)
+
+```go
+func IncrementByWithContext[T Number](ctx context.Context, c <-chan T, i T) <-chan T
+```
+
+IncrementByWithContext increments each element in the input channel by the specified increment value and returns a new channel containing the incremented values.
 
 Example:
 
@@ -619,31 +843,64 @@ fmt.Println(helper.ChanToSlice(actual)) // [2, 3, 4, 5]
 ```
 
 <a name="JSONToChan"></a>
-## func [JSONToChan](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L14>)
+## func [JSONToChan](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L17>)
 
 ```go
 func JSONToChan[T any](r io.Reader) <-chan T
 ```
 
-JSONToChan reads values from the specified reader in JSON format into a channel of values.
+JSONToChan wraps JSONToChanWithContext for backwards compatibility.
+
+Deprecated: Use JSONToChanWithContext instead.
+
+<a name="JSONToChanWithContext"></a>
+## func [JSONToChanWithContext](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L22>)
+
+```go
+func JSONToChanWithContext[T any](ctx context.Context, r io.Reader) <-chan T
+```
+
+JSONToChanWithContext reads values from the specified reader in JSON format into a channel of values, supporting context cancellation.
 
 <a name="JSONToChanWithLogger"></a>
-## func [JSONToChanWithLogger](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L19>)
+## func [JSONToChanWithLogger](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L29>)
 
 ```go
 func JSONToChanWithLogger[T any](r io.Reader, logger *slog.Logger) <-chan T
 ```
 
-JSONToChanWithLogger reads values from the specified reader in JSON format into a channel of values.
+JSONToChanWithLogger wraps JSONToChanWithLoggerWithContext for backwards compatibility.
+
+Deprecated: Use JSONToChanWithLoggerWithContext instead.
+
+<a name="JSONToChanWithLoggerWithContext"></a>
+## func [JSONToChanWithLoggerWithContext](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L34>)
+
+```go
+func JSONToChanWithLoggerWithContext[T any](ctx context.Context, r io.Reader, logger *slog.Logger) <-chan T
+```
+
+JSONToChanWithLoggerWithContext reads values from the specified reader in JSON format into a channel of values with logger and context.
 
 <a name="KeepNegatives"></a>
-## func [KeepNegatives](<https://github.com/cinar/indicator/blob/master/helper/keep_negatives.go#L15>)
+## func [KeepNegatives](<https://github.com/cinar/indicator/blob/master/helper/keep_negatives.go#L32>)
 
 ```go
 func KeepNegatives[T Number](c <-chan T) <-chan T
 ```
 
-KeepNegatives processes a stream of type T values, retaining negative values unchanged and replacing positive values with zero.
+KeepNegatives wraps KeepNegativesWithContext for backwards compatibility.
+
+Deprecated: Use KeepNegativesWithContext instead.
+
+<a name="KeepNegativesWithContext"></a>
+## func [KeepNegativesWithContext](<https://github.com/cinar/indicator/blob/master/helper/keep_negatives.go#L19>)
+
+```go
+func KeepNegativesWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
+```
+
+KeepNegativesWithContext processes a stream of type T values, retaining negative values unchanged and replacing positive values with zero.
 
 Example:
 
@@ -654,13 +911,24 @@ fmt.Println(helper.ChanToSlice(negatives)) // [-10, 0, 0, -5]
 ```
 
 <a name="KeepPositives"></a>
-## func [KeepPositives](<https://github.com/cinar/indicator/blob/master/helper/keep_positives.go#L15>)
+## func [KeepPositives](<https://github.com/cinar/indicator/blob/master/helper/keep_positives.go#L32>)
 
 ```go
 func KeepPositives[T Number](c <-chan T) <-chan T
 ```
 
-KeepPositives processes a stream of type T values, retaining positive values unchanged and replacing negative values with zero.
+KeepPositives wraps KeepPositivesWithContext for backwards compatibility.
+
+Deprecated: Use KeepPositivesWithContext instead.
+
+<a name="KeepPositivesWithContext"></a>
+## func [KeepPositivesWithContext](<https://github.com/cinar/indicator/blob/master/helper/keep_positives.go#L19>)
+
+```go
+func KeepPositivesWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
+```
+
+KeepPositivesWithContext processes a stream of type T values, retaining positive values unchanged and replacing negative values with zero.
 
 Example:
 
@@ -671,13 +939,24 @@ fmt.Println(helper.ChanToSlice(positives)) // [0, 20, 4, 0]
 ```
 
 <a name="Last"></a>
-## func [Last](<https://github.com/cinar/indicator/blob/master/helper/last.go#L8>)
+## func [Last](<https://github.com/cinar/indicator/blob/master/helper/last.go#L12>)
 
 ```go
 func Last[T any](c <-chan T, count int) <-chan T
 ```
 
-Last takes a channel of values and returns a new channel containing the last N values.
+Last wraps LastWithContext for backwards compatibility.
+
+Deprecated: Use LastWithContext instead.
+
+<a name="LastWithContext"></a>
+## func [LastWithContext](<https://github.com/cinar/indicator/blob/master/helper/last.go#L17>)
+
+```go
+func LastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
+```
+
+LastWithContext takes a channel of values and returns a new channel containing the last N values, supporting context cancellation.
 
 <a name="Lcm"></a>
 ## func [Lcm](<https://github.com/cinar/indicator/blob/master/helper/lcm.go#L8>)
@@ -689,47 +968,64 @@ func Lcm(values ...int) int
 Lcm calculates the Least Common Multiple of the given numbers.
 
 <a name="Lowest"></a>
-## func [Lowest](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L11>)
+## func [Lowest](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L23>)
 
 ```go
 func Lowest[T Number](c <-chan T, w int) <-chan T
 ```
 
-Lowest returns a channel that emits the lowest value within a sliding window of size w from the input channel c.
+Lowest wraps LowestWithContext for backwards compatibility.
+
+Deprecated: Use LowestWithContext instead.
+
+<a name="LowestWithContext"></a>
+## func [LowestWithContext](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L14>)
+
+```go
+func LowestWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+LowestWithContext returns a channel that emits the lowest value within a sliding window of size w from the input channel c.
 
 <a name="Map"></a>
-## func [Map](<https://github.com/cinar/indicator/blob/master/helper/map.go#L17>)
+## func [Map](<https://github.com/cinar/indicator/blob/master/helper/map.go#L12>)
 
 ```go
 func Map[F, T any](c <-chan F, f func(F) T) <-chan T
 ```
 
-Map applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values. The transformation function takes a value of type F as input and returns a value of type T as output.
+Map wraps MapWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use MapWithContext instead.
 
+<a name="MapWithContext"></a>
+## func [MapWithContext](<https://github.com/cinar/indicator/blob/master/helper/map.go#L19>)
+
+```go
+func MapWithContext[F, T any](ctx context.Context, c <-chan F, f func(F) T) <-chan T
 ```
-timesTwo := helper.Map(c, func(n int) int {
-	return n * 2
-})
-```
+
+MapWithContext applies the given transformation function to each element in the input channel and returns a new channel containing the transformed values, supporting context cancellation.
 
 <a name="MapWithPrevious"></a>
-## func [MapWithPrevious](<https://github.com/cinar/indicator/blob/master/helper/map_with_previous.go#L17>)
+## func [MapWithPrevious](<https://github.com/cinar/indicator/blob/master/helper/map_with_previous.go#L12>)
 
 ```go
 func MapWithPrevious[F, T any](c <-chan F, f func(T, F) T, previous T) <-chan T
 ```
 
-MapWithPrevious applies a transformation function to each element in an input channel, creating a new channel with the transformed values. It maintains a "memory" of the previous result, allowing the transformation function to consider both the current element and the outcome of the previous transformation. This enables functions that rely on accumulated state or sequential dependencies between elements.
+MapWithPrevious wraps MapWithPreviousWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use MapWithPreviousWithContext instead.
 
+<a name="MapWithPreviousWithContext"></a>
+## func [MapWithPreviousWithContext](<https://github.com/cinar/indicator/blob/master/helper/map_with_previous.go#L18>)
+
+```go
+func MapWithPreviousWithContext[F, T any](ctx context.Context, c <-chan F, f func(T, F) T, previous T) <-chan T
 ```
-sum := helper.MapWithPrevious(c, func(p, c int) int {
-	return p + c
-}, 0)
-```
+
+MapWithPreviousWithContext applies a transformation function to each element in an input channel, creating a new channel with the transformed values, supporting context cancellation.
 
 <a name="MaxSince"></a>
 ## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L14>)
@@ -750,13 +1046,52 @@ func MinSince[T Number](c <-chan T, w int) <-chan T
 MinSince returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
 
 <a name="Multiply"></a>
-## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L20>)
+## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L33>)
 
 ```go
 func Multiply[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Multiply takes two channels of type T and multiples the values from the first channel with the values from the second channel. It returns a new channel containing the results of the multiplication.
+Multiply wraps MultiplyWithContext for backwards compatibility.
+
+Deprecated: Use MultiplyWithContext instead.
+
+<a name="MultiplyBy"></a>
+## func [MultiplyBy](<https://github.com/cinar/indicator/blob/master/helper/multiply_by.go#L29>)
+
+```go
+func MultiplyBy[T Number](c <-chan T, m T) <-chan T
+```
+
+MultiplyBy wraps MultiplyByWithContext for backwards compatibility.
+
+Deprecated: Use MultiplyByWithContext instead.
+
+<a name="MultiplyByWithContext"></a>
+## func [MultiplyByWithContext](<https://github.com/cinar/indicator/blob/master/helper/multiply_by.go#L20>)
+
+```go
+func MultiplyByWithContext[T Number](ctx context.Context, c <-chan T, m T) <-chan T
+```
+
+MultiplyByWithContext multiplies each element in the input channel of type T values by the given multiplier and returns a new channel containing the multiplied values.
+
+Example:
+
+```
+c := helper.SliceToChan([]int{1, 2, 3, 4})
+twoTimes := helper.MultiplyBy(c, 2)
+fmt.Println(helper.ChanToSlice(twoTimes)) // [2, 4, 6, 8]
+```
+
+<a name="MultiplyWithContext"></a>
+## func [MultiplyWithContext](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L24>)
+
+```go
+func MultiplyWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T
+```
+
+MultiplyWithContext takes two channels of type T and multiples the values from the first channel with the values from the second channel. It returns a new channel containing the results of the multiplication.
 
 Example:
 
@@ -769,126 +1104,145 @@ multiplication := helper.Multiply(ac, bc)
 fmt.Println(helper.ChanToSlice(multiplication)) // [2, 4, 6, 8, 10]
 ```
 
-<a name="MultiplyBy"></a>
-## func [MultiplyBy](<https://github.com/cinar/indicator/blob/master/helper/multiply_by.go#L16>)
-
-```go
-func MultiplyBy[T Number](c <-chan T, m T) <-chan T
-```
-
-MultiplyBy multiplies each element in the input channel of type T values by the given multiplier and returns a new channel containing the multiplied values.
-
-Example:
-
-```
-c := helper.SliceToChan([]int{1, 2, 3, 4})
-twoTimes := helper.MultiplyBy(c, 2)
-fmt.Println(helper.ChanToSlice(twoTimes)) // [2, 4, 6, 8]
-```
-
 <a name="Operate"></a>
-## func [Operate](<https://github.com/cinar/indicator/blob/master/helper/operate.go#L15>)
+## func [Operate](<https://github.com/cinar/indicator/blob/master/helper/operate.go#L12>)
 
 ```go
 func Operate[A any, B any, R any](ac <-chan A, bc <-chan B, o func(A, B) R) <-chan R
 ```
 
-Operate applies the provided operate function to corresponding values from two numeric input channels and sends the resulting values to an output channel.
+Operate wraps OperateWithContext for backwards compatibility.
 
-Example:
-
-```
-add := helper.Operate(ac, bc, func(a, b int) int {
-  return a + b
-})
-```
+Deprecated: Use OperateWithContext instead.
 
 <a name="Operate3"></a>
-## func [Operate3](<https://github.com/cinar/indicator/blob/master/helper/operate3.go#L15>)
+## func [Operate3](<https://github.com/cinar/indicator/blob/master/helper/operate3.go#L12>)
 
 ```go
 func Operate3[A any, B any, C any, R any](ac <-chan A, bc <-chan B, cc <-chan C, o func(A, B, C) R) <-chan R
 ```
 
-Operate3 applies the provided operate function to corresponding values from three numeric input channels and sends the resulting values to an output channel.
+Operate3 wraps Operate3WithContext for backwards compatibility.
 
-Example:
+Deprecated: Use Operate3WithContext instead.
 
+<a name="Operate3WithContext"></a>
+## func [Operate3WithContext](<https://github.com/cinar/indicator/blob/master/helper/operate3.go#L18>)
+
+```go
+func Operate3WithContext[A any, B any, C any, R any](ctx context.Context, ac <-chan A, bc <-chan B, cc <-chan C, o func(A, B, C) R) <-chan R
 ```
-add := helper.Operate3(ac, bc, cc, func(a, b, c int) int {
-  return a + b + c
-})
-```
+
+Operate3WithContext applies the provided operate function to corresponding values from three numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
 
 <a name="Operate4"></a>
-## func [Operate4](<https://github.com/cinar/indicator/blob/master/helper/operate4.go#L15>)
+## func [Operate4](<https://github.com/cinar/indicator/blob/master/helper/operate4.go#L12>)
 
 ```go
 func Operate4[A any, B any, C any, D any, R any](ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, o func(A, B, C, D) R) <-chan R
 ```
 
-Operate4 applies the provided operate function to corresponding values from four numeric input channels and sends the resulting values to an output channel.
+Operate4 wraps Operate4WithContext for backwards compatibility.
 
-Example:
+Deprecated: Use Operate4WithContext instead.
 
+<a name="Operate4WithContext"></a>
+## func [Operate4WithContext](<https://github.com/cinar/indicator/blob/master/helper/operate4.go#L18>)
+
+```go
+func Operate4WithContext[A any, B any, C any, D any, R any](ctx context.Context, ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, o func(A, B, C, D) R) <-chan R
 ```
-add := helper.Operate4(ac, bc, cc, dc, func(a, b, c, d int) int {
-  return a + b + c + d
-})
-```
+
+Operate4WithContext applies the provided operate function to corresponding values from four numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
 
 <a name="Operate5"></a>
-## func [Operate5](<https://github.com/cinar/indicator/blob/master/helper/operate5.go#L15-L22>)
+## func [Operate5](<https://github.com/cinar/indicator/blob/master/helper/operate5.go#L12-L19>)
 
 ```go
 func Operate5[A any, B any, C any, D any, E any, R any](ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, ec <-chan E, o func(A, B, C, D, E) R) <-chan R
 ```
 
-Operate5 applies the provided operate function to corresponding values from five numeric input channels and sends the resulting values to an output channel.
+Operate5 wraps Operate5WithContext for backwards compatibility.
 
-Example:
+Deprecated: Use Operate5WithContext instead.
 
+<a name="Operate5WithContext"></a>
+## func [Operate5WithContext](<https://github.com/cinar/indicator/blob/master/helper/operate5.go#L25-L33>)
+
+```go
+func Operate5WithContext[A any, B any, C any, D any, E any, R any](ctx context.Context, ac <-chan A, bc <-chan B, cc <-chan C, dc <-chan D, ec <-chan E, o func(A, B, C, D, E) R) <-chan R
 ```
-result := helper.Operate5(ac, bc, cc, dc, ec, func(a, b, c, d, e int) int {
-  return a + b + c + d + e
-})
+
+Operate5WithContext applies the provided operate function to corresponding values from five numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
+
+<a name="OperateWithContext"></a>
+## func [OperateWithContext](<https://github.com/cinar/indicator/blob/master/helper/operate.go#L18>)
+
+```go
+func OperateWithContext[A any, B any, R any](ctx context.Context, ac <-chan A, bc <-chan B, o func(A, B) R) <-chan R
 ```
+
+OperateWithContext applies the provided operate function to corresponding values from two numeric input channels and sends the resulting values to an output channel, supporting context cancellation.
 
 <a name="PercentRank"></a>
-## func [PercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L12>)
+## func [PercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L15>)
 
 ```go
 func PercentRank[T Number](c <-chan T, period int) <-chan T
 ```
 
-PercentRank returns a channel that emits the percentile rank of each value compared to the previous period\-1 values. The rank is between 0 and 100.
+PercentRank wraps PercentRankWithContext for backwards compatibility.
+
+Deprecated: Use PercentRankWithContext instead.
+
+<a name="PercentRankWithContext"></a>
+## func [PercentRankWithContext](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L21>)
+
+```go
+func PercentRankWithContext[T Number](ctx context.Context, c <-chan T, period int) <-chan T
+```
+
+PercentRankWithContext returns a channel that emits the percentile rank of each value compared to the previous period\-1 values, supporting context cancellation.
 
 <a name="Pipe"></a>
-## func [Pipe](<https://github.com/cinar/indicator/blob/master/helper/pipe.go#L16>)
+## func [Pipe](<https://github.com/cinar/indicator/blob/master/helper/pipe.go#L12>)
 
 ```go
 func Pipe[T any](f <-chan T, t chan<- T)
 ```
 
-Pipe function takes an input channel and an output channel and copies all elements from the input channel into the output channel.
+Pipe wraps PipeWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use PipeWithContext instead.
 
+<a name="PipeWithContext"></a>
+## func [PipeWithContext](<https://github.com/cinar/indicator/blob/master/helper/pipe.go#L18>)
+
+```go
+func PipeWithContext[T any](ctx context.Context, f <-chan T, t chan<- T)
 ```
-input := helper.SliceToChan([]int{2, 4, 6, 8})
-output := make(chan int)
-helper.Pipe(input, output)
-fmt.println(helper.ChanToSlice(output)) // [2, 4, 6, 8]
-```
+
+PipeWithContext copies all elements from the input channel into the output channel with context support.
 
 <a name="Pow"></a>
-## func [Pow](<https://github.com/cinar/indicator/blob/master/helper/pow.go#L17>)
+## func [Pow](<https://github.com/cinar/indicator/blob/master/helper/pow.go#L29>)
 
 ```go
 func Pow[T Number](c <-chan T, y T) <-chan T
 ```
 
-Pow takes a channel of type T values and returns the element\-wise base\-value exponential of y.
+Pow wraps PowWithContext for backwards compatibility.
+
+Deprecated: Use PowWithContext instead.
+
+<a name="PowWithContext"></a>
+## func [PowWithContext](<https://github.com/cinar/indicator/blob/master/helper/pow.go#L20>)
+
+```go
+func PowWithContext[T Number](ctx context.Context, c <-chan T, y T) <-chan T
+```
+
+PowWithContext takes a channel of type T values and returns the element\-wise base\-value exponential of y.
 
 Example:
 
@@ -899,13 +1253,24 @@ fmt.Println(helper.ChanToSlice(squared)) // [4, 9, 25, 100]
 ```
 
 <a name="ReadFromCsvFile"></a>
-## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L310>)
+## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L366>)
 
 ```go
 func ReadFromCsvFile[T any](fileName string, options ...CsvOption[T]) (<-chan *T, error)
 ```
 
-ReadFromCsvFile creates a CSV instance, parses CSV data from the provided filename, maps the data to corresponding struct fields, and delivers it through the channel.
+ReadFromCsvFile wraps ReadFromCsvFileWithContext for backwards compatibility.
+
+Deprecated: Use ReadFromCsvFileWithContext instead.
+
+<a name="ReadFromCsvFileWithContext"></a>
+## func [ReadFromCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L372>)
+
+```go
+func ReadFromCsvFileWithContext[T any](ctx context.Context, fileName string, options ...CsvOption[T]) (<-chan *T, error)
+```
+
+ReadFromCsvFileWithContext creates a CSV instance, parses CSV data from the provided filename, maps the data to corresponding struct fields, and delivers it through the channel, supporting context cancellation.
 
 <a name="Remove"></a>
 ## func [Remove](<https://github.com/cinar/indicator/blob/master/helper/remove.go#L13>)
@@ -942,13 +1307,24 @@ fmt.Println(n) // 10.12
 ```
 
 <a name="RoundDigits"></a>
-## func [RoundDigits](<https://github.com/cinar/indicator/blob/master/helper/round_digits.go#L15>)
+## func [RoundDigits](<https://github.com/cinar/indicator/blob/master/helper/round_digits.go#L28>)
 
 ```go
 func RoundDigits[T Number](c <-chan T, d int) <-chan T
 ```
 
-RoundDigits takes a channel of type T numbers and rounds them to d decimal places.
+RoundDigits wraps RoundDigitsWithContext for backwards compatibility.
+
+Deprecated: Use RoundDigitsWithContext instead.
+
+<a name="RoundDigitsWithContext"></a>
+## func [RoundDigitsWithContext](<https://github.com/cinar/indicator/blob/master/helper/round_digits.go#L19>)
+
+```go
+func RoundDigitsWithContext[T Number](ctx context.Context, c <-chan T, d int) <-chan T
+```
+
+RoundDigitsWithContext takes a channel of type T numbers and rounds them to d decimal places.
 
 Example:
 
@@ -959,51 +1335,64 @@ fmt.Println(helper.ChanToSlice(rounded)) // [10.12, 5.68, 6.78, 8.91]
 ```
 
 <a name="Seq"></a>
-## func [Seq](<https://github.com/cinar/indicator/blob/master/helper/seq.go#L21>)
+## func [Seq](<https://github.com/cinar/indicator/blob/master/helper/seq.go#L12>)
 
 ```go
 func Seq[T Number](from, to, increment T) <-chan T
 ```
 
-Seq generates a sequence of numbers starting with a specified value, from, and incrementing by a specified amount, increment, until a specified value, to, is reached or exceeded. The sequence includes from, but not to.
+Seq wraps SeqWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use SeqWithContext instead.
 
+<a name="SeqWithContext"></a>
+## func [SeqWithContext](<https://github.com/cinar/indicator/blob/master/helper/seq.go#L17>)
+
+```go
+func SeqWithContext[T Number](ctx context.Context, from, to, increment T) <-chan T
 ```
-s := Seq(1, 5, 1)
-defer close(s)
 
-fmt.Println(<- s) // 1
-fmt.Println(<- s) // 2
-fmt.Println(<- s) // 3
-fmt.Println(<- s) // 4
-```
+SeqWithContext generates a sequence of numbers, supporting context cancellation.
 
 <a name="Shift"></a>
-## func [Shift](<https://github.com/cinar/indicator/blob/master/helper/shift.go#L15>)
+## func [Shift](<https://github.com/cinar/indicator/blob/master/helper/shift.go#L12>)
 
 ```go
 func Shift[T any](c <-chan T, count int, fill T) <-chan T
 ```
 
-Shift takes a channel of numbers, shifts them to the right by the specified count, and fills in any missing values with the provided fill value.
+Shift wraps ShiftWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use ShiftWithContext instead.
 
+<a name="ShiftWithContext"></a>
+## func [ShiftWithContext](<https://github.com/cinar/indicator/blob/master/helper/shift.go#L18>)
+
+```go
+func ShiftWithContext[T any](ctx context.Context, c <-chan T, count int, fill T) <-chan T
 ```
-input := helper.SliceToChan([]int{2, 4, 6, 8})
-output := helper.Shift(input, 4, 0)
-fmt.Println(helper.ChanToSlice(output)) // [0, 0, 0, 0, 2, 4, 6, 8]
-```
+
+ShiftWithContext takes a channel of numbers, shifts them to the right by the specified count, and fills in any missing values with the provided fill value, supporting context cancellation.
 
 <a name="Sign"></a>
-## func [Sign](<https://github.com/cinar/indicator/blob/master/helper/sign.go#L15>)
+## func [Sign](<https://github.com/cinar/indicator/blob/master/helper/sign.go#L34>)
 
 ```go
 func Sign[T Number](c <-chan T) <-chan T
 ```
 
-Sign takes a channel of type T values and returns their signs as \-1 for negative, 0 for zero, and 1 for positive.
+Sign wraps SignWithContext for backwards compatibility.
+
+Deprecated: Use SignWithContext instead.
+
+<a name="SignWithContext"></a>
+## func [SignWithContext](<https://github.com/cinar/indicator/blob/master/helper/sign.go#L19>)
+
+```go
+func SignWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
+```
+
+SignWithContext takes a channel of type T values and returns their signs as \-1 for negative, 0 for zero, and 1 for positive.
 
 Example:
 
@@ -1023,58 +1412,64 @@ func Since[T comparable, R Number](c <-chan T) <-chan R
 Since counts the number of periods since the last change of value in a channel of numbers.
 
 <a name="Skip"></a>
-## func [Skip](<https://github.com/cinar/indicator/blob/master/helper/skip.go#L15>)
+## func [Skip](<https://github.com/cinar/indicator/blob/master/helper/skip.go#L12>)
 
 ```go
 func Skip[T any](c <-chan T, count int) <-chan T
 ```
 
-Skip skips the specified number of elements from the given channel of type T.
+Skip wraps SkipWithContext for backwards compatibility.
 
-Example:
-
-```
-c := helper.SliceToChan([]int{2, 4, 6, 8})
-actual := helper.Skip(c, 2)
-fmt.Println(helper.ChanToSlice(actual)) // [6, 8]
-```
+Deprecated: Use SkipWithContext instead.
 
 <a name="SkipLast"></a>
-## func [SkipLast](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L11>)
+## func [SkipLast](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L12>)
 
 ```go
 func SkipLast[T any](c <-chan T, count int) <-chan T
 ```
 
-SkipLast skips the specified number of elements from the end of the given channel.
+SkipLast wraps SkipLastWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use SkipLastWithContext instead.
 
+<a name="SkipLastWithContext"></a>
+## func [SkipLastWithContext](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L18>)
+
+```go
+func SkipLastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
 ```
-c := helper.SliceToChan([]int{2, 4, 6, 8})
-actual := helper.SkipLast(c, 2)
-fmt.Println(helper.ChanToSlice(actual)) // [2, 4]
+
+SkipLastWithContext skips the specified number of elements from the end of the given channel, supporting context cancellation.
+
+<a name="SkipWithContext"></a>
+## func [SkipWithContext](<https://github.com/cinar/indicator/blob/master/helper/skip.go#L18>)
+
+```go
+func SkipWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
 ```
+
+SkipWithContext skips the specified number of elements from the given channel of type T, supporting context cancellation.
 
 <a name="SliceToChan"></a>
-## func [SliceToChan](<https://github.com/cinar/indicator/blob/master/helper/slice_to_chan.go#L17>)
+## func [SliceToChan](<https://github.com/cinar/indicator/blob/master/helper/slice_to_chan.go#L12>)
 
 ```go
 func SliceToChan[T any](slice []T) <-chan T
 ```
 
-SliceToChan converts a slice of type T to a channel of type T.
+SliceToChan wraps SliceToChanWithContext for backwards compatibility.
 
-Example:
+Deprecated: Use SliceToChanWithContext instead.
 
+<a name="SliceToChanWithContext"></a>
+## func [SliceToChanWithContext](<https://github.com/cinar/indicator/blob/master/helper/slice_to_chan.go#L17>)
+
+```go
+func SliceToChanWithContext[T any](ctx context.Context, slice []T) <-chan T
 ```
-slice := []float64{2, 4, 6, 8}
-c := helper.SliceToChan(slice)
-fmt.Println(<- c)  // 2
-fmt.Println(<- c)  // 4
-fmt.Println(<- c)  // 6
-fmt.Println(<- c)  // 8
-```
+
+SliceToChanWithContext converts a slice of type T to a channel of type T, supporting context cancellation.
 
 <a name="SlicesReverse"></a>
 ## func [SlicesReverse](<https://github.com/cinar/indicator/blob/master/helper/slices_reverse.go#L6>)
@@ -1086,22 +1481,44 @@ func SlicesReverse[T any](r []T, i int, f func(T) bool)
 SlicesReverse loops through a slice in reverse order starting from the given index. The given function is called for each element in the slice. If the function returns false, the loop is terminated.
 
 <a name="SortedPercentRank"></a>
-## func [SortedPercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L55>)
+## func [SortedPercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L77>)
 
 ```go
 func SortedPercentRank[T Number](c <-chan T, period int) <-chan T
 ```
 
-SortedPercentRank returns a channel that emits the percentile rank by sorting the window values. This is more accurate but slower.
+SortedPercentRank wraps SortedPercentRankWithContext for backwards compatibility.
+
+Deprecated: Use SortedPercentRankWithContext instead.
+
+<a name="SortedPercentRankWithContext"></a>
+## func [SortedPercentRankWithContext](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L83>)
+
+```go
+func SortedPercentRankWithContext[T Number](ctx context.Context, c <-chan T, period int) <-chan T
+```
+
+SortedPercentRankWithContext returns a channel that emits the percentile rank by sorting the window values, supporting context cancellation.
 
 <a name="Sqrt"></a>
-## func [Sqrt](<https://github.com/cinar/indicator/blob/master/helper/sqrt.go#L16>)
+## func [Sqrt](<https://github.com/cinar/indicator/blob/master/helper/sqrt.go#L28>)
 
 ```go
 func Sqrt[T Number](c <-chan T) <-chan T
 ```
 
-Sqrt calculates the square root of each value in a channel of type T.
+Sqrt wraps SqrtWithContext for backwards compatibility.
+
+Deprecated: Use SqrtWithContext instead.
+
+<a name="SqrtWithContext"></a>
+## func [SqrtWithContext](<https://github.com/cinar/indicator/blob/master/helper/sqrt.go#L19>)
+
+```go
+func SqrtWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
+```
+
+SqrtWithContext calculates the square root of each value in a channel of type T.
 
 Example:
 
@@ -1112,13 +1529,24 @@ fmt.Println(helper.ChanToSlice(sqrt)) // [3, 9, 4, 10]
 ```
 
 <a name="Subtract"></a>
-## func [Subtract](<https://github.com/cinar/indicator/blob/master/helper/subtract.go#L17>)
+## func [Subtract](<https://github.com/cinar/indicator/blob/master/helper/subtract.go#L30>)
 
 ```go
 func Subtract[T Number](ac, bc <-chan T) <-chan T
 ```
 
-Subtract takes two channels of type T and subtracts the values from the second channel from the first one. It returns a new channel containing the results of the subtractions.
+Subtract wraps SubtractWithContext for backwards compatibility.
+
+Deprecated: Use SubtractWithContext instead.
+
+<a name="SubtractWithContext"></a>
+## func [SubtractWithContext](<https://github.com/cinar/indicator/blob/master/helper/subtract.go#L21>)
+
+```go
+func SubtractWithContext[T Number](ctx context.Context, ac, bc <-chan T) <-chan T
+```
+
+SubtractWithContext takes two channels of type T and subtracts the values from the second channel from the first one. It returns a new channel containing the results of the subtractions.
 
 Example:
 
@@ -1139,13 +1567,24 @@ func SyncPeriod[T any](commonPeriod, period int, c <-chan T) <-chan T
 SyncPeriod adjusts the given channel to match the given common period.
 
 <a name="Waitable"></a>
-## func [Waitable](<https://github.com/cinar/indicator/blob/master/helper/waitable.go#L11>)
+## func [Waitable](<https://github.com/cinar/indicator/blob/master/helper/waitable.go#L15>)
 
 ```go
 func Waitable[T any](wg *sync.WaitGroup, c <-chan T) <-chan T
 ```
 
-Waitable increments the wait group before reading from the channel and signals completion when the channel is closed.
+Waitable wraps WaitableWithContext for backwards compatibility.
+
+Deprecated: Use WaitableWithContext instead.
+
+<a name="WaitableWithContext"></a>
+## func [WaitableWithContext](<https://github.com/cinar/indicator/blob/master/helper/waitable.go#L21>)
+
+```go
+func WaitableWithContext[T any](ctx context.Context, wg *sync.WaitGroup, c <-chan T) <-chan T
+```
+
+WaitableWithContext increments the wait group before reading from the channel and signals completion when the channel is closed, supporting context cancellation.
 
 <a name="Window"></a>
 ## func [Window](<https://github.com/cinar/indicator/blob/master/helper/window.go#L12>)
@@ -1154,7 +1593,18 @@ Waitable increments the wait group before reading from the channel and signals c
 func Window[T any](c <-chan T, f func([]T, int) T, w int) <-chan T
 ```
 
-Window returns a channel that emits the passed function result within a sliding window of size w from the input channel c. Note: the slice is in the same order than in source channel but the 1st element may not be 0, use modulo window size if order is important.
+Window wraps WindowWithContext for backwards compatibility.
+
+Deprecated: Use WindowWithContext instead.
+
+<a name="WindowWithContext"></a>
+## func [WindowWithContext](<https://github.com/cinar/indicator/blob/master/helper/window.go#L18>)
+
+```go
+func WindowWithContext[T any](ctx context.Context, c <-chan T, f func([]T, int) T, w int) <-chan T
+```
+
+WindowWithContext returns a channel that emits the passed function result within a sliding window of size w from the input channel c, supporting context cancellation.
 
 <a name="Bst"></a>
 ## type [Bst](<https://github.com/cinar/indicator/blob/master/helper/bst.go#L15-L17>)
@@ -1233,7 +1683,7 @@ type BstNode[T Number] struct {
 ```
 
 <a name="Csv"></a>
-## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L40-L53>)
+## type [Csv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L41-L54>)
 
 Csv represents the configuration for CSV reader and writer.
 
@@ -1247,7 +1697,7 @@ type Csv[T any] struct {
 ```
 
 <a name="NewCsv"></a>
-### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L80>)
+### func [NewCsv](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L81>)
 
 ```go
 func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error)
@@ -1256,16 +1706,25 @@ func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error)
 NewCsv creates a new CSV instance with the provided options.
 
 <a name="Csv[T].AppendToFile"></a>
-### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L206>)
+### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L229>)
 
 ```go
 func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
 ```
 
-AppendToFile appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist. In append mode, the function assumes that the existing file's column order matches the field order of the given row struct to ensure consistent data structure.
+AppendToFile appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist.
+
+<a name="Csv[T].AppendToFileWithContext"></a>
+### func \(\*Csv\[T\]\) [AppendToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L235>)
+
+```go
+func (c *Csv[T]) AppendToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error
+```
+
+AppendToFileWithContext appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist, supporting context cancellation.
 
 <a name="Csv[T].ReadFromFile"></a>
-### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L182>)
+### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L200>)
 
 ```go
 func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
@@ -1273,8 +1732,17 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
 
 ReadFromFile parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel.
 
+<a name="Csv[T].ReadFromFileWithContext"></a>
+### func \(\*Csv\[T\]\) [ReadFromFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L207>)
+
+```go
+func (c *Csv[T]) ReadFromFileWithContext(ctx context.Context, fileName string) (<-chan *T, error)
+```
+
+ReadFromFileWithContext parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel, supporting context cancellation.
+
 <a name="Csv[T].ReadFromReader"></a>
-### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L127>)
+### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L128>)
 
 ```go
 func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
@@ -1282,8 +1750,17 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
 
 ReadFromReader parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel.
 
+<a name="Csv[T].ReadFromReaderWithContext"></a>
+### func \(\*Csv\[T\]\) [ReadFromReaderWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L135>)
+
+```go
+func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader) <-chan *T
+```
+
+ReadFromReaderWithContext parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel, supporting context cancellation.
+
 <a name="Csv[T].WriteToFile"></a>
-### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L222>)
+### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L252>)
 
 ```go
 func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error
@@ -1291,8 +1768,17 @@ func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error
 
 WriteToFile creates a new file with the given name and writes the provided rows of data to it, overwriting any existing content.
 
+<a name="Csv[T].WriteToFileWithContext"></a>
+### func \(\*Csv\[T\]\) [WriteToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L258>)
+
+```go
+func (c *Csv[T]) WriteToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error
+```
+
+WriteToFileWithContext creates a new file with the given name and writes the provided rows of data to it, overwriting any existing content, supporting context cancellation.
+
 <a name="CsvOption"></a>
-## type [CsvOption](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L56>)
+## type [CsvOption](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L57>)
 
 CsvOption represents a functional option for configuring the CSV instance.
 
@@ -1301,7 +1787,7 @@ type CsvOption[T any] func(*Csv[T])
 ```
 
 <a name="WithCsvDefaultDateTimeFormat"></a>
-### func [WithCsvDefaultDateTimeFormat](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L73>)
+### func [WithCsvDefaultDateTimeFormat](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L74>)
 
 ```go
 func WithCsvDefaultDateTimeFormat[T any](format string) CsvOption[T]
@@ -1310,7 +1796,7 @@ func WithCsvDefaultDateTimeFormat[T any](format string) CsvOption[T]
 WithCsvDefaultDateTimeFormat sets the default date and time format for the CSV instance.
 
 <a name="WithCsvLogger"></a>
-### func [WithCsvLogger](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L66>)
+### func [WithCsvLogger](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L67>)
 
 ```go
 func WithCsvLogger[T any](logger *slog.Logger) CsvOption[T]
@@ -1319,7 +1805,7 @@ func WithCsvLogger[T any](logger *slog.Logger) CsvOption[T]
 WithCsvLogger sets the logger for the CSV instance.
 
 <a name="WithoutCsvHeader"></a>
-### func [WithoutCsvHeader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L59>)
+### func [WithoutCsvHeader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L60>)
 
 ```go
 func WithoutCsvHeader[T any]() CsvOption[T]

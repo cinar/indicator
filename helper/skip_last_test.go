@@ -5,19 +5,19 @@
 package helper_test
 
 import (
-    "testing"
+	"testing"
 
-    "github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/helper"
 )
 
 func TestSkipLast(t *testing.T) {
-    input := helper.SliceToChan([]int{2, 4, 6, 8})
-    expected := helper.SliceToChan([]int{2, 4})
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{2, 4})
 
-    actual := helper.SkipLast(input, 2)
+	actual := helper.SkipLast(input, 2)
 
-    err := helper.CheckEquals(actual, expected)
-    if err != nil {
-        t.Fatal(err)
-    }
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
 }

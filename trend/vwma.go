@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -30,22 +32,26 @@ func NewVwma[T helper.Number]() *Vwma[T] {
 	}
 }
 
-// Compute function takes a channel of numbers and computes the VWMA and the signal line.
-func (v *Vwma[T]) Compute(closing, volume <-chan T) <-chan T {
-	volumes := helper.Duplicate(volume, 2)
+// ComputeWithContext function takes a channel of numbers and computes the VWMA and the signal line.
+func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan T) <-chan T {
+	volumes := helper.DuplicateWithContext(ctx, volume, 2)
 
 	sum := NewMovingSum[T]()
 	sum.Period = v.Period
 
-	return helper.Divide(
-		sum.Compute(
-			helper.Multiply(closing, volumes[0]),
-		),
-		sum.Compute(volumes[1]),
+	return helper.DivideWithContext(ctx, sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closing, volumes[0])),
+		sum.ComputeWithContext(ctx, volumes[1]),
 	)
 }
 
 // IdlePeriod is the initial period that VWMA won't yield any results.
 func (v *Vwma[T]) IdlePeriod() int {
 	return v.Period - 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (v *Vwma[T]) Compute(closing, volume <-chan T) <-chan T {
+	return v.ComputeWithContext(context.Background(), closing, volume)
 }

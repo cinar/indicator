@@ -7,6 +7,8 @@ package momentum
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -44,17 +46,17 @@ func NewElderRayWithPeriod[T helper.Number](period int) *ElderRay[T] {
 	}
 }
 
-// Compute function takes channels of highs, lows, and closings and computes the Elder-Ray Index.
+// ComputeWithContext function takes channels of highs, lows, and closings and computes the Elder-Ray Index.
 // Returns bullPower and bearPower channels.
-func (e *ElderRay[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T) {
+func (e *ElderRay[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T) {
 	ema := trend.NewEmaWithPeriod[T](e.Period)
-	emas := helper.Duplicate(ema.Compute(closings), 2)
+	emas := helper.DuplicateWithContext(ctx, ema.ComputeWithContext(ctx, closings), 2)
 
-	highs = helper.Skip(highs, e.IdlePeriod())
-	lows = helper.Skip(lows, e.IdlePeriod())
+	highs = helper.SkipWithContext(ctx, highs, e.IdlePeriod())
+	lows = helper.SkipWithContext(ctx, lows, e.IdlePeriod())
 
-	bullPower := helper.Subtract(highs, emas[0])
-	bearPower := helper.Subtract(lows, emas[1])
+	bullPower := helper.SubtractWithContext(ctx, highs, emas[0])
+	bearPower := helper.SubtractWithContext(ctx, lows, emas[1])
 
 	return bullPower, bearPower
 }
@@ -67,4 +69,11 @@ func (e *ElderRay[T]) IdlePeriod() int {
 // String is the string representation of the Elder-Ray Index.
 func (e *ElderRay[T]) String() string {
 	return fmt.Sprintf("Elder-Ray Index(%d)", e.Period)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (e *ElderRay[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T) {
+	return e.ComputeWithContext(context.Background(), highs, lows, closings)
 }

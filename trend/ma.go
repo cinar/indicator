@@ -5,6 +5,8 @@
 package trend
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -18,4 +20,19 @@ type Ma[T helper.Number] interface {
 
 	// String is the string representation of the MA instance.
 	String() string
+}
+
+// MaWithContext represents the interface for the Moving Average (MA) indicators
+// that support context-aware computation.
+type MaWithContext[T helper.Number] interface {
+	Ma[T]
+	ComputeWithContext(context.Context, <-chan T) <-chan T
+}
+
+// ComputeMaWithContext computes moving average of a channel with context.
+func ComputeMaWithContext[T helper.Number](ctx context.Context, ma Ma[T], c <-chan T) <-chan T {
+	if mac, ok := ma.(MaWithContext[T]); ok {
+		return mac.ComputeWithContext(ctx, c)
+	}
+	return ma.Compute(c)
 }

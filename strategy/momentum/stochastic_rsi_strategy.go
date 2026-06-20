@@ -7,6 +7,8 @@ package momentum
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -55,13 +57,13 @@ func (s *StochasticRsiStrategy) Name() string {
 	return fmt.Sprintf("Stochastic RSI Strategy (%.1f,%.1f)", s.BuyAt, s.SellAt)
 }
 
-// Compute processes the provided asset snapshots and generates a stream of actionable recommendations.
-func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := asset.SnapshotsAsClosings(snapshots)
+// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+func (s *StochasticRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 
-	stochasticRsi := s.StochasticRsi.Compute(closings)
+	stochasticRsi := s.StochasticRsi.ComputeWithContext(ctx, closings)
 
-	actions := helper.Map(stochasticRsi, func(value float64) strategy.Action {
+	actions := helper.MapWithContext(ctx, stochasticRsi, func(value float64) strategy.Action {
 		if value <= s.BuyAt {
 			return strategy.Buy
 		}
@@ -74,7 +76,7 @@ func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan
 	})
 
 	// Stochastic RSI starts only after the idle period.
-	actions = helper.Shift(actions, s.StochasticRsi.IdlePeriod(), strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, s.StochasticRsi.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -111,4 +113,11 @@ func (s *StochasticRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report 
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return s.ComputeWithContext(context.Background(), snapshots)
 }

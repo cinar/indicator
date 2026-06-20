@@ -4,11 +4,21 @@
 
 package helper
 
-import "sync"
+import (
+	"context"
+	"sync"
+)
 
-// Waitable increments the wait group before reading from the channel
-// and signals completion when the channel is closed.
+// Waitable wraps WaitableWithContext for backwards compatibility.
+//
+// Deprecated: Use WaitableWithContext instead.
 func Waitable[T any](wg *sync.WaitGroup, c <-chan T) <-chan T {
+	return WaitableWithContext(context.Background(), wg, c)
+}
+
+// WaitableWithContext increments the wait group before reading from the channel
+// and signals completion when the channel is closed, supporting context cancellation.
+func WaitableWithContext[T any](ctx context.Context, wg *sync.WaitGroup, c <-chan T) <-chan T {
 	result := make(chan T, cap(c))
 
 	wg.Add(1)
@@ -17,8 +27,20 @@ func Waitable[T any](wg *sync.WaitGroup, c <-chan T) <-chan T {
 		defer close(result)
 		defer wg.Done()
 
-		for n := range c {
-			result <- n
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-c:
+				if !ok {
+					return
+				}
+				select {
+				case <-ctx.Done():
+					return
+				case result <- n:
+				}
+			}
 		}
 	}()
 

@@ -5,6 +5,8 @@
 package strategy
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -26,10 +28,10 @@ func (*BuyAndHoldStrategy) Name() string {
 	return "Buy and Hold Strategy"
 }
 
-// Compute processes the provided asset snapshots and generates a
+// ComputeWithContext processes the provided asset snapshots and generates a
 // stream of actionable recommendations.
-func (*BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
-	closings := asset.SnapshotsAsClosings(snapshots)
+func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 	actions := make(chan Action, cap(snapshots))
 
 	go func() {
@@ -71,4 +73,11 @@ func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
 
 	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (i *BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+	return i.ComputeWithContext(context.Background(), snapshots)
 }

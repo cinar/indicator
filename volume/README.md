@@ -28,55 +28,67 @@ The information provided on this project is strictly for informational purposes 
 - [type Ad](<#Ad>)
   - [func NewAd\[T helper.Number\]\(\) \*Ad\[T\]](<#NewAd>)
   - [func \(a \*Ad\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Ad[T].Compute>)
+  - [func \(a \*Ad\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Ad[T].ComputeWithContext>)
   - [func \(\*Ad\[T\]\) IdlePeriod\(\) int](<#Ad[T].IdlePeriod>)
 - [type Cmf](<#Cmf>)
   - [func NewCmf\[T helper.Number\]\(\) \*Cmf\[T\]](<#NewCmf>)
   - [func NewCmfWithPeriod\[T helper.Number\]\(period int\) \*Cmf\[T\]](<#NewCmfWithPeriod>)
   - [func \(c \*Cmf\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Cmf[T].Compute>)
+  - [func \(c \*Cmf\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Cmf[T].ComputeWithContext>)
   - [func \(c \*Cmf\[T\]\) IdlePeriod\(\) int](<#Cmf[T].IdlePeriod>)
 - [type Emv](<#Emv>)
   - [func NewEmv\[T helper.Number\]\(\) \*Emv\[T\]](<#NewEmv>)
   - [func NewEmvWithPeriod\[T helper.Number\]\(period int\) \*Emv\[T\]](<#NewEmvWithPeriod>)
   - [func \(e \*Emv\[T\]\) Compute\(highs, lows, volumes \<\-chan T\) \<\-chan T](<#Emv[T].Compute>)
+  - [func \(e \*Emv\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, volumes \<\-chan T\) \<\-chan T](<#Emv[T].ComputeWithContext>)
   - [func \(e \*Emv\[T\]\) IdlePeriod\(\) int](<#Emv[T].IdlePeriod>)
 - [type Fi](<#Fi>)
   - [func NewFi\[T helper.Number\]\(\) \*Fi\[T\]](<#NewFi>)
   - [func NewFiWithPeriod\[T helper.Number\]\(period int\) \*Fi\[T\]](<#NewFiWithPeriod>)
   - [func \(f \*Fi\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Fi[T].Compute>)
+  - [func \(f \*Fi\[T\]\) ComputeWithContext\(ctx context.Context, closings, volumes \<\-chan T\) \<\-chan T](<#Fi[T].ComputeWithContext>)
   - [func \(f \*Fi\[T\]\) IdlePeriod\(\) int](<#Fi[T].IdlePeriod>)
 - [type Kvo](<#Kvo>)
   - [func NewKvo\[T helper.Number\]\(\) \*Kvo\[T\]](<#NewKvo>)
   - [func \(k \*Kvo\[T\]\) Compute\(highs, lows, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Kvo[T].Compute>)
+  - [func \(k \*Kvo\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Kvo[T].ComputeWithContext>)
   - [func \(k \*Kvo\[T\]\) IdlePeriod\(\) int](<#Kvo[T].IdlePeriod>)
 - [type Mfi](<#Mfi>)
   - [func NewMfi\[T helper.Number\]\(\) \*Mfi\[T\]](<#NewMfi>)
   - [func NewMfiWithPeriod\[T helper.Number\]\(period int\) \*Mfi\[T\]](<#NewMfiWithPeriod>)
   - [func \(m \*Mfi\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].Compute>)
+  - [func \(m \*Mfi\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].ComputeWithContext>)
   - [func \(m \*Mfi\[T\]\) IdlePeriod\(\) int](<#Mfi[T].IdlePeriod>)
 - [type Mfm](<#Mfm>)
   - [func NewMfm\[T helper.Number\]\(\) \*Mfm\[T\]](<#NewMfm>)
-  - [func \(\*Mfm\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Mfm[T].Compute>)
+  - [func \(i \*Mfm\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Mfm[T].Compute>)
+  - [func \(i \*Mfm\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#Mfm[T].ComputeWithContext>)
   - [func \(\*Mfm\[T\]\) IdlePeriod\(\) int](<#Mfm[T].IdlePeriod>)
 - [type Mfv](<#Mfv>)
   - [func NewMfv\[T helper.Number\]\(\) \*Mfv\[T\]](<#NewMfv>)
   - [func \(m \*Mfv\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfv[T].Compute>)
+  - [func \(m \*Mfv\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfv[T].ComputeWithContext>)
   - [func \(\*Mfv\[T\]\) IdlePeriod\(\) int](<#Mfv[T].IdlePeriod>)
 - [type Nvi](<#Nvi>)
   - [func NewNvi\[T helper.Number\]\(\) \*Nvi\[T\]](<#NewNvi>)
   - [func \(n \*Nvi\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Nvi[T].Compute>)
+  - [func \(n \*Nvi\[T\]\) ComputeWithContext\(ctx context.Context, closings, volumes \<\-chan T\) \<\-chan T](<#Nvi[T].ComputeWithContext>)
   - [func \(\*Nvi\[T\]\) IdlePeriod\(\) int](<#Nvi[T].IdlePeriod>)
 - [type Obv](<#Obv>)
   - [func NewObv\[T helper.Number\]\(\) \*Obv\[T\]](<#NewObv>)
-  - [func \(\*Obv\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Obv[T].Compute>)
+  - [func \(i \*Obv\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Obv[T].Compute>)
+  - [func \(i \*Obv\[T\]\) ComputeWithContext\(ctx context.Context, closings, volumes \<\-chan T\) \<\-chan T](<#Obv[T].ComputeWithContext>)
   - [func \(\*Obv\[T\]\) IdlePeriod\(\) int](<#Obv[T].IdlePeriod>)
 - [type Vpt](<#Vpt>)
   - [func NewVpt\[T helper.Number\]\(\) \*Vpt\[T\]](<#NewVpt>)
-  - [func \(\*Vpt\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Vpt[T].Compute>)
+  - [func \(i \*Vpt\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Vpt[T].Compute>)
+  - [func \(i \*Vpt\[T\]\) ComputeWithContext\(ctx context.Context, closings, volumes \<\-chan T\) \<\-chan T](<#Vpt[T].ComputeWithContext>)
   - [func \(\*Vpt\[T\]\) IdlePeriod\(\) int](<#Vpt[T].IdlePeriod>)
 - [type Vwap](<#Vwap>)
   - [func NewVwap\[T helper.Number\]\(\) \*Vwap\[T\]](<#NewVwap>)
   - [func NewVwapWithPeriod\[T helper.Number\]\(period int\) \*Vwap\[T\]](<#NewVwapWithPeriod>)
   - [func \(v \*Vwap\[T\]\) Compute\(closings, volumes \<\-chan T\) \<\-chan T](<#Vwap[T].Compute>)
+  - [func \(v \*Vwap\[T\]\) ComputeWithContext\(ctx context.Context, closings, volumes \<\-chan T\) \<\-chan T](<#Vwap[T].ComputeWithContext>)
   - [func \(v \*Vwap\[T\]\) IdlePeriod\(\) int](<#Vwap[T].IdlePeriod>)
 
 
@@ -152,7 +164,7 @@ const (
 ```
 
 <a name="Ad"></a>
-## type [Ad](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L20-L23>)
+## type [Ad](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L24-L27>)
 
 Ad holds configuration parameters for calculating Accumulation/Distribution \(A/D\). It is a cumulative indicator that uses volume and price to assess whether an asset is being accumulated or distributed.
 
@@ -177,7 +189,7 @@ type Ad[T helper.Number] struct {
 ```
 
 <a name="NewAd"></a>
-### func [NewAd](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L26>)
+### func [NewAd](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L30>)
 
 ```go
 func NewAd[T helper.Number]() *Ad[T]
@@ -186,16 +198,27 @@ func NewAd[T helper.Number]() *Ad[T]
 NewAd function initializes a new A/D instance with the default parameters.
 
 <a name="Ad[T].Compute"></a>
-### func \(\*Ad\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L33>)
+### func \(\*Ad\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L56>)
 
 ```go
 func (a *Ad[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the A/D.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Ad[T].ComputeWithContext"></a>
+### func \(\*Ad\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L37>)
+
+```go
+func (a *Ad[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the A/D.
 
 <a name="Ad[T].IdlePeriod"></a>
-### func \(\*Ad\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L45>)
+### func \(\*Ad\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/ad.go#L49>)
 
 ```go
 func (*Ad[T]) IdlePeriod() int
@@ -204,7 +227,7 @@ func (*Ad[T]) IdlePeriod() int
 IdlePeriod is the initial period that A/D won't yield any results.
 
 <a name="Cmf"></a>
-## type [Cmf](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L28-L34>)
+## type [Cmf](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L30-L36>)
 
 Cmf holds configuration parameters for calculating the Chaikin Money Flow \(CMF\). It measures the amount of money flow volume over a given period.
 
@@ -232,7 +255,7 @@ type Cmf[T helper.Number] struct {
 ```
 
 <a name="NewCmf"></a>
-### func [NewCmf](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L37>)
+### func [NewCmf](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L39>)
 
 ```go
 func NewCmf[T helper.Number]() *Cmf[T]
@@ -241,7 +264,7 @@ func NewCmf[T helper.Number]() *Cmf[T]
 NewCmf function initializes a new CMF instance with the default parameters.
 
 <a name="NewCmfWithPeriod"></a>
-### func [NewCmfWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L42>)
+### func [NewCmfWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L44>)
 
 ```go
 func NewCmfWithPeriod[T helper.Number](period int) *Cmf[T]
@@ -250,16 +273,27 @@ func NewCmfWithPeriod[T helper.Number](period int) *Cmf[T]
 NewCmfWithPeriod function initializes a new CMF instance with the given period.
 
 <a name="Cmf[T].Compute"></a>
-### func \(\*Cmf\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L50>)
+### func \(\*Cmf\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L73>)
 
 ```go
 func (c *Cmf[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the CMF.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Cmf[T].ComputeWithContext"></a>
+### func \(\*Cmf\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L52>)
+
+```go
+func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the CMF.
 
 <a name="Cmf[T].IdlePeriod"></a>
-### func \(\*Cmf\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L65>)
+### func \(\*Cmf\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/cmf.go#L66>)
 
 ```go
 func (c *Cmf[T]) IdlePeriod() int
@@ -268,7 +302,7 @@ func (c *Cmf[T]) IdlePeriod() int
 IdlePeriod is the initial period that MFV won't yield any results.
 
 <a name="Emv"></a>
-## type [Emv](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L29-L32>)
+## type [Emv](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L31-L34>)
 
 Emv holds configuration parameters for calculating the Ease of Movement \(EMV\). It is a volume based oscillator measuring the ease of price movement.
 
@@ -294,7 +328,7 @@ type Emv[T helper.Number] struct {
 ```
 
 <a name="NewEmv"></a>
-### func [NewEmv](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L35>)
+### func [NewEmv](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L37>)
 
 ```go
 func NewEmv[T helper.Number]() *Emv[T]
@@ -303,7 +337,7 @@ func NewEmv[T helper.Number]() *Emv[T]
 NewEmv function initializes a new EMV instance with the default parameters.
 
 <a name="NewEmvWithPeriod"></a>
-### func [NewEmvWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L40>)
+### func [NewEmvWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L42>)
 
 ```go
 func NewEmvWithPeriod[T helper.Number](period int) *Emv[T]
@@ -312,16 +346,27 @@ func NewEmvWithPeriod[T helper.Number](period int) *Emv[T]
 NewEmvWithPeriod function initializes a new EMV instance with the given period.
 
 <a name="Emv[T].Compute"></a>
-### func \(\*Emv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L47>)
+### func \(\*Emv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L89>)
 
 ```go
 func (e *Emv[T]) Compute(highs, lows, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the EMV.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Emv[T].ComputeWithContext"></a>
+### func \(\*Emv\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L49>)
+
+```go
+func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the EMV.
 
 <a name="Emv[T].IdlePeriod"></a>
-### func \(\*Emv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L88>)
+### func \(\*Emv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/emv.go#L82>)
 
 ```go
 func (e *Emv[T]) IdlePeriod() int
@@ -330,7 +375,7 @@ func (e *Emv[T]) IdlePeriod() int
 IdlePeriod is the initial period that EMV won't yield any results.
 
 <a name="Fi"></a>
-## type [Fi](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L26-L29>)
+## type [Fi](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L28-L31>)
 
 Fi holds configuration parameters for calculating the Force Index \(FI\). It uses the closing price and the volume to assess the power behind a move and identify turning points.
 
@@ -353,7 +398,7 @@ type Fi[T helper.Number] struct {
 ```
 
 <a name="NewFi"></a>
-### func [NewFi](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L32>)
+### func [NewFi](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L34>)
 
 ```go
 func NewFi[T helper.Number]() *Fi[T]
@@ -362,7 +407,7 @@ func NewFi[T helper.Number]() *Fi[T]
 NewFi function initializes a new FI instance with the default parameters.
 
 <a name="NewFiWithPeriod"></a>
-### func [NewFiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L37>)
+### func [NewFiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L39>)
 
 ```go
 func NewFiWithPeriod[T helper.Number](period int) *Fi[T]
@@ -371,13 +416,24 @@ func NewFiWithPeriod[T helper.Number](period int) *Fi[T]
 NewFiWithPeriod function initializes a new FI instance with the given period.
 
 <a name="Fi[T].Compute"></a>
-### func \(\*Fi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L44>)
+### func \(\*Fi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L61>)
 
 ```go
 func (f *Fi[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the FI.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Fi[T].ComputeWithContext"></a>
+### func \(\*Fi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L46>)
+
+```go
+func (f *Fi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the FI.
 
 <a name="Fi[T].IdlePeriod"></a>
 ### func \(\*Fi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/fi.go#L54>)
@@ -389,7 +445,7 @@ func (f *Fi[T]) IdlePeriod() int
 IdlePeriod is the initial period that FI won't yield any results.
 
 <a name="Kvo"></a>
-## type [Kvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L37-L46>)
+## type [Kvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L39-L48>)
 
 Kvo represents the configuration parameters for calculating the Klinger Volume Oscillator \(KVO\). It is a volume\-based oscillator that identifies long\-term money flow trends using EMA differences.
 
@@ -423,7 +479,7 @@ type Kvo[T helper.Number] struct {
 ```
 
 <a name="NewKvo"></a>
-### func [NewKvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L49>)
+### func [NewKvo](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L51>)
 
 ```go
 func NewKvo[T helper.Number]() *Kvo[T]
@@ -432,16 +488,27 @@ func NewKvo[T helper.Number]() *Kvo[T]
 NewKvo function initializes a new KVO instance.
 
 <a name="Kvo[T].Compute"></a>
-### func \(\*Kvo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L59>)
+### func \(\*Kvo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L110>)
 
 ```go
 func (k *Kvo[T]) Compute(highs, lows, volumes <-chan T) (<-chan T, <-chan T)
 ```
 
-Compute function takes channels of numbers and computes the Klinger Volume Oscillator. Returns kvo and signal.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Kvo[T].ComputeWithContext"></a>
+### func \(\*Kvo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L61>)
+
+```go
+func (k *Kvo[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-chan T) (<-chan T, <-chan T)
+```
+
+ComputeWithContext function takes channels of numbers and computes the Klinger Volume Oscillator. Returns kvo and signal.
 
 <a name="Kvo[T].IdlePeriod"></a>
-### func \(\*Kvo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L101>)
+### func \(\*Kvo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/kvo.go#L103>)
 
 ```go
 func (k *Kvo[T]) IdlePeriod() int
@@ -450,7 +517,7 @@ func (k *Kvo[T]) IdlePeriod() int
 IdlePeriod is the initial period that KVO won't yield any results.
 
 <a name="Mfi"></a>
-## type [Mfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L29-L35>)
+## type [Mfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L31-L37>)
 
 Mfi holds configuration parameters for calculating the Money Flow Index \(MFI\). It analyzes both the closing price and the volume to measure to identify overbought and oversold states. It is similar to the Relative Strength Index \(RSI\), but it also uses the volume.
 
@@ -478,7 +545,7 @@ type Mfi[T helper.Number] struct {
 ```
 
 <a name="NewMfi"></a>
-### func [NewMfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L38>)
+### func [NewMfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L40>)
 
 ```go
 func NewMfi[T helper.Number]() *Mfi[T]
@@ -487,7 +554,7 @@ func NewMfi[T helper.Number]() *Mfi[T]
 NewMfi function initializes a new MFI instance with the default parameters.
 
 <a name="NewMfiWithPeriod"></a>
-### func [NewMfiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L43>)
+### func [NewMfiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L45>)
 
 ```go
 func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T]
@@ -496,16 +563,27 @@ func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T]
 NewMfiWithPeriod function initializes a new MFI instance with the given period.
 
 <a name="Mfi[T].Compute"></a>
-### func \(\*Mfi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L51>)
+### func \(\*Mfi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L95>)
 
 ```go
 func (m *Mfi[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the MFI.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Mfi[T].ComputeWithContext"></a>
+### func \(\*Mfi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L53>)
+
+```go
+func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the MFI.
 
 <a name="Mfi[T].IdlePeriod"></a>
-### func \(\*Mfi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L101>)
+### func \(\*Mfi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L88>)
 
 ```go
 func (m *Mfi[T]) IdlePeriod() int
@@ -514,7 +592,7 @@ func (m *Mfi[T]) IdlePeriod() int
 IdlePeriod is the initial period that MFI won't yield any results.
 
 <a name="Mfm"></a>
-## type [Mfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L23>)
+## type [Mfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L27>)
 
 Mfm holds configuration parameters for calculating the Money Flow Multiplier \(MFM\), which adjusts volume based on the closing price's position within the high\-low range:
 
@@ -536,7 +614,7 @@ type Mfm[T helper.Number] struct{}
 ```
 
 <a name="NewMfm"></a>
-### func [NewMfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L26>)
+### func [NewMfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L30>)
 
 ```go
 func NewMfm[T helper.Number]() *Mfm[T]
@@ -545,16 +623,27 @@ func NewMfm[T helper.Number]() *Mfm[T]
 NewMfm function initializes a new MFM instance with the default parameters.
 
 <a name="Mfm[T].Compute"></a>
-### func \(\*Mfm\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L31>)
+### func \(\*Mfm\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L55>)
 
 ```go
-func (*Mfm[T]) Compute(highs, lows, closings <-chan T) <-chan T
+func (i *Mfm[T]) Compute(highs, lows, closings <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the MFM.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Mfm[T].ComputeWithContext"></a>
+### func \(\*Mfm\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L35>)
+
+```go
+func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the MFM.
 
 <a name="Mfm[T].IdlePeriod"></a>
-### func \(\*Mfm\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L46>)
+### func \(\*Mfm\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L48>)
 
 ```go
 func (*Mfm[T]) IdlePeriod() int
@@ -563,7 +652,7 @@ func (*Mfm[T]) IdlePeriod() int
 IdlePeriod is the initial period that MFM won't yield any results.
 
 <a name="Mfv"></a>
-## type [Mfv](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L21-L24>)
+## type [Mfv](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L25-L28>)
 
 Mfv holds configuration parameters for calculating Money Flow Volume \(MFV\), a volume\-based indicator that incorporates the Money Flow Multiplier \(MFM\) to gauge the intensity of buying and selling pressure. MFV reflects the cumulative volume adjusted by MFM, with higher values indicating stronger buying pressure and lower values suggesting selling dominance. MFV highlights periods of significant volume\-driven price action, offering insights into potential trend strength and reversals.
 
@@ -586,7 +675,7 @@ type Mfv[T helper.Number] struct {
 ```
 
 <a name="NewMfv"></a>
-### func [NewMfv](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L27>)
+### func [NewMfv](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L31>)
 
 ```go
 func NewMfv[T helper.Number]() *Mfv[T]
@@ -595,16 +684,27 @@ func NewMfv[T helper.Number]() *Mfv[T]
 NewMfv function initializes a new MFV instance with the default parameters.
 
 <a name="Mfv[T].Compute"></a>
-### func \(\*Mfv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L34>)
+### func \(\*Mfv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L52>)
 
 ```go
 func (m *Mfv[T]) Compute(highs, lows, closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the MFV.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Mfv[T].ComputeWithContext"></a>
+### func \(\*Mfv\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L38>)
+
+```go
+func (m *Mfv[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the MFV.
 
 <a name="Mfv[T].IdlePeriod"></a>
-### func \(\*Mfv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L42>)
+### func \(\*Mfv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfv.go#L45>)
 
 ```go
 func (*Mfv[T]) IdlePeriod() int
@@ -613,7 +713,7 @@ func (*Mfv[T]) IdlePeriod() int
 IdlePeriod is the initial period that MFV won't yield any results.
 
 <a name="Nvi"></a>
-## type [Nvi](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L31-L34>)
+## type [Nvi](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L33-L36>)
 
 Nvi holds configuration parameters for calculating the Negative Volume Index \(NVI\). It is a cumulative indicator using the change in volume to decide when the smart money is active.
 
@@ -644,7 +744,7 @@ type Nvi[T helper.Number] struct {
 ```
 
 <a name="NewNvi"></a>
-### func [NewNvi](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L37>)
+### func [NewNvi](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L39>)
 
 ```go
 func NewNvi[T helper.Number]() *Nvi[T]
@@ -653,16 +753,27 @@ func NewNvi[T helper.Number]() *Nvi[T]
 NewNvi function initializes a new NVI instance with the default parameters.
 
 <a name="Nvi[T].Compute"></a>
-### func \(\*Nvi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L46>)
+### func \(\*Nvi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L78>)
 
 ```go
 func (n *Nvi[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the NVI.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Nvi[T].ComputeWithContext"></a>
+### func \(\*Nvi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L48>)
+
+```go
+func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the NVI.
 
 <a name="Nvi[T].IdlePeriod"></a>
-### func \(\*Nvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L69>)
+### func \(\*Nvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/nvi.go#L71>)
 
 ```go
 func (*Nvi[T]) IdlePeriod() int
@@ -671,7 +782,7 @@ func (*Nvi[T]) IdlePeriod() int
 IdlePeriod is the initial period that NVI won't yield any results.
 
 <a name="Obv"></a>
-## type [Obv](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L21>)
+## type [Obv](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L25>)
 
 Obv holds configuration parameters for calculating the On\-Balance Volume \(OBV\). It is a technical trading momentum indicator that uses volume flow to predict changes in asset price.
 
@@ -694,7 +805,7 @@ type Obv[T helper.Number] struct{}
 ```
 
 <a name="NewObv"></a>
-### func [NewObv](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L24>)
+### func [NewObv](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L28>)
 
 ```go
 func NewObv[T helper.Number]() *Obv[T]
@@ -703,16 +814,27 @@ func NewObv[T helper.Number]() *Obv[T]
 NewObv function initializes a new OBV instance with the default parameters.
 
 <a name="Obv[T].Compute"></a>
-### func \(\*Obv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L29>)
+### func \(\*Obv\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L60>)
 
 ```go
-func (*Obv[T]) Compute(closings, volumes <-chan T) <-chan T
+func (i *Obv[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the OBV.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Obv[T].ComputeWithContext"></a>
+### func \(\*Obv\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L33>)
+
+```go
+func (i *Obv[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the OBV.
 
 <a name="Obv[T].IdlePeriod"></a>
-### func \(\*Obv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L49>)
+### func \(\*Obv\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/obv.go#L53>)
 
 ```go
 func (*Obv[T]) IdlePeriod() int
@@ -721,7 +843,7 @@ func (*Obv[T]) IdlePeriod() int
 IdlePeriod is the initial period that OBV won't yield any results.
 
 <a name="Vpt"></a>
-## type [Vpt](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L20>)
+## type [Vpt](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L22>)
 
 Vpt holds configuration parameters for calculating the Volume Price Trend \(VPT\). It provides a correlation between the volume and the price.
 
@@ -741,7 +863,7 @@ type Vpt[T helper.Number] struct{}
 ```
 
 <a name="NewVpt"></a>
-### func [NewVpt](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L23>)
+### func [NewVpt](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L25>)
 
 ```go
 func NewVpt[T helper.Number]() *Vpt[T]
@@ -750,16 +872,27 @@ func NewVpt[T helper.Number]() *Vpt[T]
 NewVpt function initializes a new VPT instance with the default parameters.
 
 <a name="Vpt[T].Compute"></a>
-### func \(\*Vpt\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L28>)
+### func \(\*Vpt\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L48>)
 
 ```go
-func (*Vpt[T]) Compute(closings, volumes <-chan T) <-chan T
+func (i *Vpt[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the VPT.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Vpt[T].ComputeWithContext"></a>
+### func \(\*Vpt\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L30>)
+
+```go
+func (i *Vpt[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the VPT.
 
 <a name="Vpt[T].IdlePeriod"></a>
-### func \(\*Vpt\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L40>)
+### func \(\*Vpt\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/vpt.go#L41>)
 
 ```go
 func (*Vpt[T]) IdlePeriod() int
@@ -768,7 +901,7 @@ func (*Vpt[T]) IdlePeriod() int
 IdlePeriod is the initial period that VPT won't yield any results.
 
 <a name="Vwap"></a>
-## type [Vwap](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L26-L29>)
+## type [Vwap](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L28-L31>)
 
 Vwap holds configuration parameters for calculating the Volume Weighted Average Price \(VWAP\). It provides the average price the asset has traded.
 
@@ -791,7 +924,7 @@ type Vwap[T helper.Number] struct {
 ```
 
 <a name="NewVwap"></a>
-### func [NewVwap](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L32>)
+### func [NewVwap](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L34>)
 
 ```go
 func NewVwap[T helper.Number]() *Vwap[T]
@@ -800,7 +933,7 @@ func NewVwap[T helper.Number]() *Vwap[T]
 NewVwap function initializes a new VWAP instance with the default parameters.
 
 <a name="NewVwapWithPeriod"></a>
-### func [NewVwapWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L37>)
+### func [NewVwapWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L39>)
 
 ```go
 func NewVwapWithPeriod[T helper.Number](period int) *Vwap[T]
@@ -809,16 +942,27 @@ func NewVwapWithPeriod[T helper.Number](period int) *Vwap[T]
 NewVwapWithPeriod function initializes a new VWAP instance with the given period.
 
 <a name="Vwap[T].Compute"></a>
-### func \(\*Vwap\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L44>)
+### func \(\*Vwap\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L65>)
 
 ```go
 func (v *Vwap[T]) Compute(closings, volumes <-chan T) <-chan T
 ```
 
-Compute function takes a channel of numbers and computes the VWAP.
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="Vwap[T].ComputeWithContext"></a>
+### func \(\*Vwap\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L46>)
+
+```go
+func (v *Vwap[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T
+```
+
+ComputeWithContext function takes a channel of numbers and computes the VWAP.
 
 <a name="Vwap[T].IdlePeriod"></a>
-### func \(\*Vwap\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L61>)
+### func \(\*Vwap\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/vwap.go#L58>)
 
 ```go
 func (v *Vwap[T]) IdlePeriod() int

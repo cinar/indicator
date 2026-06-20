@@ -4,7 +4,11 @@
 
 package helper
 
-// RoundDigits takes a channel of type T numbers and rounds them to d
+import (
+	"context"
+)
+
+// RoundDigitsWithContext takes a channel of type T numbers and rounds them to d
 // decimal places.
 //
 // Example:
@@ -12,8 +16,15 @@ package helper
 //	c := helper.SliceToChan([]float64{10.1234, 5.678, 6.78, 8.91011})
 //	rounded := helper.RoundDigits(c, 2)
 //	fmt.Println(helper.ChanToSlice(rounded)) // [10.12, 5.68, 6.78, 8.91]
-func RoundDigits[T Number](c <-chan T, d int) <-chan T {
-	return Apply(c, func(n T) T {
+func RoundDigitsWithContext[T Number](ctx context.Context, c <-chan T, d int) <-chan T {
+	return ApplyWithContext(ctx, c, func(n T) T {
 		return RoundDigit(n, d)
 	})
+}
+
+// RoundDigits wraps RoundDigitsWithContext for backwards compatibility.
+//
+// Deprecated: Use RoundDigitsWithContext instead.
+func RoundDigits[T Number](c <-chan T, d int) <-chan T {
+	return RoundDigitsWithContext(context.Background(), c, d)
 }

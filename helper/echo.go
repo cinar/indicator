@@ -4,28 +4,48 @@
 
 package helper
 
-// Echo takes a channel of numbers, repeats the specified count of numbers at the end by the specified count.
+import "context"
+
+// Echo wraps EchoWithContext for backwards compatibility.
 //
-// Example:
-//
-//	input := helper.SliceToChan([]int{2, 4, 6, 8})
-//	output := helper.Echo(input, 2, 4))
-//	fmt.Println(helper.ChanToSlice(output)) // [2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8]
+// Deprecated: Use EchoWithContext instead.
 func Echo[T any](input <-chan T, last, count int) <-chan T {
+	return EchoWithContext(context.Background(), input, last, count)
+}
+
+// EchoWithContext takes a channel of numbers, repeats the specified count of numbers at the end by the specified count, supporting context cancellation.
+func EchoWithContext[T any](ctx context.Context, input <-chan T, last, count int) <-chan T {
 	output := make(chan T)
 	memory := NewRing[T](last)
 
 	go func() {
 		defer close(output)
 
-		for n := range input {
-			memory.Put(n)
-			output <- n
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case n, ok := <-input:
+				if !ok {
+					goto repeat
+				}
+				memory.Put(n)
+				select {
+				case <-ctx.Done():
+					return
+				case output <- n:
+				}
+			}
 		}
 
+	repeat:
 		for i := 0; i < count; i++ {
 			for j := 0; j < last; j++ {
-				output <- memory.At(j)
+				select {
+				case <-ctx.Done():
+					return
+				case output <- memory.At(j):
+				}
 			}
 		}
 	}()

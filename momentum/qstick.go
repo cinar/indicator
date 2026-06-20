@@ -5,6 +5,8 @@
 package momentum
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -45,10 +47,10 @@ func NewQstick[T helper.Number]() *Qstick[T] {
 	return qstick
 }
 
-// Compute function takes a channel of numbers and computes the Qstick.
-func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T {
-	qstick := helper.Subtract(closings, openings)
-	qstick = q.Sma.Compute(qstick)
+// ComputeWithContext function takes a channel of numbers and computes the Qstick.
+func (q *Qstick[T]) ComputeWithContext(ctx context.Context, openings, closings <-chan T) <-chan T {
+	qstick := helper.SubtractWithContext(ctx, closings, openings)
+	qstick = q.Sma.ComputeWithContext(ctx, qstick)
 
 	return qstick
 }
@@ -56,4 +58,11 @@ func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T {
 // IdlePeriod is the initial period that Qstick won't yield any results.
 func (q *Qstick[T]) IdlePeriod() int {
 	return q.Sma.IdlePeriod()
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T {
+	return q.ComputeWithContext(context.Background(), openings, closings)
 }

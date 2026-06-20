@@ -7,6 +7,8 @@ package trend
 import (
 	"fmt"
 
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 )
 
@@ -49,22 +51,22 @@ func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T] {
 	}
 }
 
-// Compute calculates the DPO indicator over the input price channel.
-func (d *Dpo[T]) Compute(closing <-chan T) <-chan T {
+// ComputeWithContext calculates the DPO indicator over the input price channel.
+func (d *Dpo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T {
 	k := d.period/2 + 1
-	dup := helper.Duplicate(closing, 2)
+	dup := helper.DuplicateWithContext(ctx, closing, 2)
 
 	// compute SMA on the first duplicated stream
 	sma := NewSma[T]()
 	sma.Period = d.period
-	smaOut := sma.Compute(dup[0])
+	smaOut := sma.ComputeWithContext(ctx, dup[0])
 
 	// align the original price stream and the SMA stream according to DPO formula
-	skippedClosing := helper.Skip(dup[1], d.IdlePeriod())
-	smaDelayed := helper.SkipLast(smaOut, k)
+	skippedClosing := helper.SkipWithContext(ctx, dup[1], d.IdlePeriod())
+	smaDelayed := helper.SkipLastWithContext(ctx, smaOut, k)
 
 	// DPO = Price - shifted SMA
-	return helper.Operate(skippedClosing, smaDelayed, func(price, shiftedSma T) T {
+	return helper.OperateWithContext(ctx, skippedClosing, smaDelayed, func(price, shiftedSma T) T {
 		return price - shiftedSma
 	})
 }
@@ -77,4 +79,11 @@ func (d *Dpo[T]) IdlePeriod() int {
 // String is the string representation of the DPO.
 func (d *Dpo[T]) String() string {
 	return fmt.Sprintf("DPO(%d)", d.period)
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (d *Dpo[T]) Compute(closing <-chan T) <-chan T {
+	return d.ComputeWithContext(context.Background(), closing)
 }

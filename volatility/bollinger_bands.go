@@ -5,6 +5,8 @@
 package volatility
 
 import (
+	"context"
+
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
@@ -43,32 +45,27 @@ func NewBollingerBandsWithPeriod[T helper.Number](period int) *BollingerBands[T]
 	}
 }
 
-// Compute function takes a channel of numbers and computes the Bollinger Bands over the specified period.
-func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
-	cs := helper.Duplicate(c, 2)
+// ComputeWithContext function takes a channel of numbers and computes the Bollinger Bands over the specified period.
+func (b *BollingerBands[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T, <-chan T) {
+	cs := helper.DuplicateWithContext(ctx, c, 2)
 	sma := trend.NewSmaWithPeriod[T](b.Period)
 	std := NewMovingStdWithPeriod[T](b.Period)
 
-	middleBands := helper.Duplicate(
-		sma.Compute(cs[0]),
+	middleBands := helper.DuplicateWithContext(ctx, sma.ComputeWithContext(ctx, cs[0]),
 		3,
 	)
 
-	std2s := helper.Duplicate(
-		helper.MultiplyBy(
-			std.Compute(cs[1]),
-			2,
-		),
+	std2s := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, std.ComputeWithContext(ctx, cs[1]),
+		2,
+	),
 		2,
 	)
 
-	upperBand := helper.Add(
-		middleBands[0],
+	upperBand := helper.AddWithContext(ctx, middleBands[0],
 		std2s[0],
 	)
 
-	lowerBand := helper.Subtract(
-		middleBands[1],
+	lowerBand := helper.SubtractWithContext(ctx, middleBands[1],
 		std2s[1],
 	)
 
@@ -78,4 +75,11 @@ func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
 // IdlePeriod is the initial period that Bollinger Bands won't yield any results.
 func (b *BollingerBands[T]) IdlePeriod() int {
 	return b.Period - 1
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
+	return b.ComputeWithContext(context.Background(), c)
 }
