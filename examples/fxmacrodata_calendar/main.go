@@ -1,3 +1,9 @@
+// Copyright (c) 2021-2026 Onur Cinar.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+// Package main provides a self-contained example of fetching and filtering
+// macroeconomic announcement events from the FXMacroData public release-calendar endpoint.
 package main
 
 import (
@@ -32,8 +38,10 @@ func main() {
 	}
 }
 
+var apiHost = "https://fxmacrodata.com"
+
 func fetchCalendar(currency, startDate, endDate string) ([]calendarEvent, error) {
-	endpoint := fmt.Sprintf("https://fxmacrodata.com/api/v1/calendar/%s", currency)
+	endpoint := fmt.Sprintf("%s/api/v1/calendar/%s", apiHost, currency)
 	params := url.Values{}
 	params.Set("start_date", startDate)
 	params.Set("end_date", endDate)
