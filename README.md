@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://pkg.go.dev/github.com/cinar/indicator/v2"><img src="https://img.shields.io/badge/Go_Reference-007D9C?style=for-the-badge&logo=go&logoColor=white" alt="Go Reference" /></a>
-    <a href="LICENSE"><img src="https://img.shields.io/github/license/cinar/indicator?style=for-the-badge" alt="License" /></a>
+    <a href="LICENSE.md"><img src="https://img.shields.io/github/license/cinar/indicator?style=for-the-badge" alt="License" /></a>
     <a href="https://github.com/cinar/indicator/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/cinar/indicator/ci.yml?branch=main&style=for-the-badge&logo=github&label=CI" alt="Go CI" /></a>
     <a href="https://codecov.io/gh/cinar/indicator"><img src="https://img.shields.io/codecov/c/github/cinar/indicator?style=for-the-badge&logo=codecov&logoColor=white" alt="Codecov" /></a>
     <a href="https://github.com/cinar/indicator/pkgs/container/indicator"><img src="https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github&style=for-the-badge" alt="GHCR Version" /></a>
