@@ -1,9 +1,17 @@
-[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator) [![GHCR Version](https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github)](https://github.com/cinar/indicator/pkgs/container/indicator) [![GitHub Stars](https://img.shields.io/github/stars/cinar/indicator?style=social)](https://github.com/cinar/indicator/stargazers)
-
-
 <p align="center">
     <img src="logo.png" />
 </p>
+
+<p align="center">
+    <a href="https://godoc.org/github.com/cinar/indicator/v2"><img src="https://img.shields.io/badge/GoDoc-007D9C?style=for-the-badge&logo=go&logoColor=white" alt="GoDoc" /></a>
+    <a href="https://opensource.org/licenses/AGPLv3"><img src="https://img.shields.io/badge/License-AGPLv3-blue?style=for-the-badge" alt="License" /></a>
+    <a href="https://goreportcard.com/report/github.com/cinar/indicator/v2"><img src="https://goreportcard.com/badge/github.com/cinar/indicator/v2?style=for-the-badge" alt="Go Report Card" /></a>
+    <a href="https://github.com/cinar/indicator/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/cinar/indicator/ci.yml?branch=main&style=for-the-badge&logo=github&label=CI" alt="Go CI" /></a>
+    <a href="https://codecov.io/gh/cinar/indicator"><img src="https://img.shields.io/codecov/c/github/cinar/indicator?style=for-the-badge&logo=codecov&logoColor=white" alt="Codecov" /></a>
+    <a href="https://github.com/cinar/indicator/pkgs/container/indicator"><img src="https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github&style=for-the-badge" alt="GHCR Version" /></a>
+    <a href="https://github.com/cinar/indicator/stargazers"><img src="https://img.shields.io/github/stars/cinar/indicator?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Stars" /></a>
+</p>
+
 
 Indicator Go
 ============
