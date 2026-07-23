@@ -51,12 +51,13 @@ func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the MFI.
 func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T {
-	//	TP = (high + low + close) / 3
+	// TP = (High + Low + Close) / 3
 	tpSplice := helper.DuplicateWithContext(ctx,
 		m.TypicalPrice.ComputeWithContext(ctx, highs, lows, closings),
-		2)
+		2,
+	)
 
-	//	Raw Money Flow = Typical Price * Volume
+	// Raw Money Flow = Typical Price * Volume
 	rawMoneyFlow := helper.MultiplyWithContext(ctx, tpSplice[0], volumes)
 
 	moneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, helper.SignWithContext(ctx, helper.ChangeWithContext(ctx, tpSplice[1], 1)),
