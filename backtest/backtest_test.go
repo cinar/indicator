@@ -29,7 +29,6 @@ func TestBacktest(t *testing.T) {
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
 	bt := backtest.NewBacktest(repository, htmlReport)
-	bt.Workers = 16
 	bt.Names = append(bt.Names, "brk-b")
 	bt.Strategies = append(bt.Strategies, trend.NewApoStrategy())
 
@@ -51,6 +50,7 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
 	bt := backtest.NewBacktest(repository, htmlReport)
+	bt.Workers = 16
 
 	err = bt.Run()
 	if err != nil {
