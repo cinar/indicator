@@ -50,6 +50,7 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
 	bt := backtest.NewBacktest(repository, htmlReport)
+	bt.Workers = 16
 
 	err = bt.Run()
 	if err != nil {

@@ -13,6 +13,7 @@ import (
 	"path"
 	"path/filepath"
 	"slices"
+	"sync"
 	"text/template"
 	"time"
 
@@ -38,6 +39,9 @@ type HTMLReport struct {
 
 	// outputDir is the output directory for the generated reports.
 	outputDir string
+
+	// mu is a mutex that ensures thread safety.
+	mu sync.Mutex
 
 	// assetResults is the mapping from the asset name to strategy results.
 	assetResults map[string][]*htmlReportResult
@@ -102,6 +106,9 @@ func (h *HTMLReport) Begin(assetNames []string, _ []strategy.Strategy) error {
 
 // AssetBegin is called when backtesting for the given asset begins.
 func (h *HTMLReport) AssetBegin(name string, strategies []strategy.Strategy) error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	_, ok := h.assetResults[name]
 	if ok {
 		return fmt.Errorf("asset has already begun: %s", name)
@@ -136,6 +143,9 @@ func (h *HTMLReport) Write(assetName string, currentStrategy strategy.Strategy, 
 		go helper.Drain(snapshots)
 	}
 
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	// Get asset strategy results.
 	results, ok := h.assetResults[assetName]
 	if !ok {
@@ -157,6 +167,9 @@ func (h *HTMLReport) Write(assetName string, currentStrategy strategy.Strategy, 
 
 // AssetEnd is called when backtesting for the given asset ends.
 func (h *HTMLReport) AssetEnd(name string) error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	results, ok := h.assetResults[name]
 	if !ok {
 		return fmt.Errorf("asset has not begun: %s", name)
