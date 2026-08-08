@@ -10,6 +10,9 @@
     <a href="https://github.com/cinar/indicator/pkgs/container/indicator"><img src="https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github&style=for-the-badge" alt="GHCR Version" /></a>
     <a href="https://github.com/cinar/indicator/stargazers"><img src="https://img.shields.io/github/stars/cinar/indicator?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Stars" /></a>
 </p>
+<p align="center">
+    <a href="https://trendshift.io/repositories/23333?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-23333" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/23333" alt="cinar%2Findicator | Trendshift" width="250" height="55"/></a>
+</p>
 
 
 Indicator Go
