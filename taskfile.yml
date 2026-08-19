@@ -3,7 +3,6 @@ output: 'prefixed'
 
 env:
   INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./helper/... ./momentum/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
-  INDICATOR_MCP: './mcp/...'
 
 tasks:
   default:
@@ -29,7 +28,7 @@ tasks:
 
   test:
     cmds:
-      - go test -cover -coverprofile=coverage.out $INDICATOR_BASE
+      - go test -race -cover -coverprofile=coverage.out $INDICATOR_BASE
 
   docs:
     cmds:
