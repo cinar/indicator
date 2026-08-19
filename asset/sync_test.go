@@ -128,6 +128,41 @@ func TestSyncFailingTargetAssets(t *testing.T) {
 	}
 }
 
+func TestSyncFailingTargetAppendMultiWorker(t *testing.T) {
+	assetNames := []string{"A", "B", "C", "D", "E", "F", "G", "H"}
+
+	source := &MockRepository{
+		GetSinceFunc: func(_ string, _ time.Time) (<-chan *asset.Snapshot, error) {
+			return helper.SliceToChan([]*asset.Snapshot{}), nil
+		},
+	}
+
+	target := &MockRepository{
+		AssetsFunc: func() ([]string, error) {
+			return assetNames, nil
+		},
+
+		LastDateFunc: func(_ string) (time.Time, error) {
+			return time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC), nil
+		},
+
+		AppendFunc: func(_ string, _ <-chan *asset.Snapshot) error {
+			return errors.New("append error")
+		},
+	}
+
+	defaultStartDate := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	sync := asset.NewSync()
+	sync.Workers = 4
+	sync.Delay = 0
+
+	err := sync.Run(source, target, defaultStartDate)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
 func TestSyncFailingTargetAppend(t *testing.T) {
 	source := &MockRepository{
 		GetSinceFunc: func(_ string, _ time.Time) (<-chan *asset.Snapshot, error) {
