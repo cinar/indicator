@@ -47,6 +47,9 @@ type Backtest struct {
 	// report is the report writer for the backtest.
 	report Report
 
+	// reportMu serializes calls into report across concurrent workers.
+	reportMu sync.Mutex
+
 	// Names is the names of the assets to backtest.
 	Names []string
 
@@ -145,7 +148,9 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 		snapshotsSlice := helper.ChanToSlice(snapshots)
 
 		// Backtesting asset has begun.
+		b.reportMu.Lock()
 		err = b.report.AssetBegin(name, b.Strategies)
+		b.reportMu.Unlock()
 		if err != nil {
 			b.Logger.Error("Unable to begin asset.", "asset", name, "error", err)
 			continue
@@ -156,14 +161,19 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 			snapshotsSplice := helper.Duplicate(helper.SliceToChan(snapshotsSlice), 2)
 
 			actions, outcomes := strategy.ComputeWithOutcome(currentStrategy, snapshotsSplice[0])
+
+			b.reportMu.Lock()
 			err = b.report.Write(name, currentStrategy, snapshotsSplice[1], actions, outcomes)
+			b.reportMu.Unlock()
 			if err != nil {
 				b.Logger.Error("Unable to write report.", "asset", name, "error", err)
 			}
 		}
 
 		// Backtesting asset had ended
+		b.reportMu.Lock()
 		err = b.report.AssetEnd(name)
+		b.reportMu.Unlock()
 		if err != nil {
 			b.Logger.Error("Unable to end asset.", "asset", name, "error", err)
 		}

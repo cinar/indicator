@@ -58,6 +58,19 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 	}
 }
 
+func TestBacktestAllAssetsAndStrategiesWithDataReport(t *testing.T) {
+	repository := asset.NewFileSystemRepository("testdata/repository")
+
+	dataReport := backtest.NewDataReport()
+	bt := backtest.NewBacktest(repository, dataReport)
+	bt.Workers = 16
+
+	err := bt.Run()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestBacktestNonExistingAsset(t *testing.T) {
 	repository := asset.NewFileSystemRepository("testdata/repository")
 
