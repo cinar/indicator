@@ -128,6 +128,15 @@ func (b *Backtest) Run() error {
 	return nil
 }
 
+// withReportLock serializes a call into report across concurrent workers. The
+// mutex is released via defer so it is not left locked if fn panics.
+func (b *Backtest) withReportLock(fn func() error) error {
+	b.reportMu.Lock()
+	defer b.reportMu.Unlock()
+
+	return fn()
+}
+
 // worker is a backtesting worker that concurrently executes backtests for individual
 // assets. It receives asset names from the provided channel, and performs backtests
 // using the given strategies.
@@ -148,9 +157,9 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 		snapshotsSlice := helper.ChanToSlice(snapshots)
 
 		// Backtesting asset has begun.
-		b.reportMu.Lock()
-		err = b.report.AssetBegin(name, b.Strategies)
-		b.reportMu.Unlock()
+		err = b.withReportLock(func() error {
+			return b.report.AssetBegin(name, b.Strategies)
+		})
 		if err != nil {
 			b.Logger.Error("Unable to begin asset.", "asset", name, "error", err)
 			continue
@@ -162,18 +171,18 @@ func (b *Backtest) worker(names <-chan string, wg *sync.WaitGroup) {
 
 			actions, outcomes := strategy.ComputeWithOutcome(currentStrategy, snapshotsSplice[0])
 
-			b.reportMu.Lock()
-			err = b.report.Write(name, currentStrategy, snapshotsSplice[1], actions, outcomes)
-			b.reportMu.Unlock()
+			err = b.withReportLock(func() error {
+				return b.report.Write(name, currentStrategy, snapshotsSplice[1], actions, outcomes)
+			})
 			if err != nil {
 				b.Logger.Error("Unable to write report.", "asset", name, "error", err)
 			}
 		}
 
 		// Backtesting asset had ended
-		b.reportMu.Lock()
-		err = b.report.AssetEnd(name)
-		b.reportMu.Unlock()
+		err = b.withReportLock(func() error {
+			return b.report.AssetEnd(name)
+		})
 		if err != nil {
 			b.Logger.Error("Unable to end asset.", "asset", name, "error", err)
 		}
