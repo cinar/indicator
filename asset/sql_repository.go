@@ -6,6 +6,7 @@ package asset
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -139,9 +140,14 @@ func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot,
 			)
 			if err != nil {
 				log.Printf("unable to scan row: %v", err)
+				continue
 			}
 
 			snapshots <- snapshot
+		}
+
+		if err := rows.Err(); err != nil {
+			log.Printf("unable to iterate rows: %v", err)
 		}
 	}()
 
@@ -168,25 +174,25 @@ func (s *SQLRepository) LastDate(name string) (time.Time, error) {
 
 // Append adds the given snapshots to the asset with the given name.
 func (s *SQLRepository) Append(name string, snapshots <-chan *Snapshot) error {
-	go func() {
-		for snapshot := range snapshots {
-			_, err := s.appendQuery.Exec(
-				name,
-				snapshot.Date,
-				snapshot.Open,
-				snapshot.High,
-				snapshot.Low,
-				snapshot.Close,
-				snapshot.Volume,
-			)
+	var appendErrors []error
 
-			if err != nil {
-				log.Printf("unable to append snapshot: %v", err)
-			}
+	for snapshot := range snapshots {
+		_, err := s.appendQuery.Exec(
+			name,
+			snapshot.Date,
+			snapshot.Open,
+			snapshot.High,
+			snapshot.Low,
+			snapshot.Close,
+			snapshot.Volume,
+		)
+
+		if err != nil {
+			appendErrors = append(appendErrors, fmt.Errorf("unable to append snapshot: %w", err))
 		}
-	}()
+	}
 
-	return nil
+	return errors.Join(appendErrors...)
 }
 
 // Drop drops the snapshots table.
