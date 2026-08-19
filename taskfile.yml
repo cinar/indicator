@@ -3,7 +3,6 @@ output: 'prefixed'
 
 env:
   INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./helper/... ./momentum/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
-  INDICATOR_MCP: './mcp/...'
 
 tasks:
   default:
@@ -19,7 +18,6 @@ tasks:
   fmt:
     cmds:
       - go fix ./...
-      - cd mcp && go fix ./...
 
   lint:
     cmds:
@@ -27,15 +25,10 @@ tasks:
       - go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 $INDICATOR_BASE
       - go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 $INDICATOR_BASE
       - go run github.com/mgechev/revive@v1.3.4 -config=revive.toml $INDICATOR_BASE
-      - cd mcp && go vet $INDICATOR_MCP
-      - cd mcp && go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 $INDICATOR_MCP
-      - cd mcp && go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 $INDICATOR_MCP
-      - cd mcp && go run github.com/mgechev/revive@v1.3.4 -config=../revive.toml $INDICATOR_MCP
 
   test:
     cmds:
       - go test -race -cover -coverprofile=coverage.out $INDICATOR_BASE
-      - cd mcp && go test -race -cover -coverprofile=coverage.out $INDICATOR_MCP
 
   docs:
     cmds:
