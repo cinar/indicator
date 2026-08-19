@@ -10,6 +10,10 @@ import (
 )
 
 // Report is the backtest report interface.
+//
+// Backtest serializes all calls into a Report instance across its workers,
+// so implementations do not need to provide their own synchronization even
+// when Backtest.Workers runs multiple assets concurrently.
 type Report interface {
 	// Begin is called when the backtest begins.
 	Begin(assetNames []string, strategies []strategy.Strategy) error
