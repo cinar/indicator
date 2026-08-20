@@ -34,7 +34,7 @@ const (
 //
 //	ppo := momentum.Ppo[float64]()
 //	p, s, h := ppo.Compute(closings)
-type Ppo[T helper.Number] struct {
+type Ppo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -46,7 +46,7 @@ type Ppo[T helper.Number] struct {
 }
 
 // NewPpo function initializes a new Percentage Price Oscillator instance.
-func NewPpo[T helper.Number]() *Ppo[T] {
+func NewPpo[T helper.Float]() *Ppo[T] {
 	return &Ppo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultPpoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultPpoLongPeriod),

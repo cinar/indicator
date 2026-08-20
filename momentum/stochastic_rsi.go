@@ -28,7 +28,7 @@ const (
 //
 //	stochasticRsi := momentum.NewStochasticRsi[float64]()
 //	result := stochasticRsi.Compute(closings)
-type StochasticRsi[T helper.Number] struct {
+type StochasticRsi[T helper.Float] struct {
 	// Rsi is that RSI instance.
 	Rsi *Rsi[T]
 
@@ -40,12 +40,12 @@ type StochasticRsi[T helper.Number] struct {
 }
 
 // NewStochasticRsi function initializes a new Storchastic RSI instance with the default parameters.
-func NewStochasticRsi[T helper.Number]() *StochasticRsi[T] {
+func NewStochasticRsi[T helper.Float]() *StochasticRsi[T] {
 	return NewStochasticRsiWithPeriod[T](DefaultStochasticRsiPeriod)
 }
 
 // NewStochasticRsiWithPeriod function initializes a new Stochastic RSI instance with the given period.
-func NewStochasticRsiWithPeriod[T helper.Number](period int) *StochasticRsi[T] {
+func NewStochasticRsiWithPeriod[T helper.Float](period int) *StochasticRsi[T] {
 	return &StochasticRsi[T]{
 		Rsi: NewRsiWithPeriod[T](period),
 		Min: trend.NewMovingMinWithPeriod[T](period),

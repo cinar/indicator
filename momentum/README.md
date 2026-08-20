@@ -74,7 +74,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(ibs \*InternalBarStrength\[T\]\) IdlePeriod\(\) int](<#InternalBarStrength[T].IdlePeriod>)
   - [func \(ibs \*InternalBarStrength\[T\]\) String\(\) string](<#InternalBarStrength[T].String>)
 - [type Ppo](<#Ppo>)
-  - [func NewPpo\[T helper.Number\]\(\) \*Ppo\[T\]](<#NewPpo>)
+  - [func NewPpo\[T helper.Float\]\(\) \*Ppo\[T\]](<#NewPpo>)
   - [func \(p \*Ppo\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Ppo[T].Compute>)
   - [func \(p \*Ppo\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Ppo[T].ComputeWithContext>)
   - [func \(p \*Ppo\[T\]\) IdlePeriod\(\) int](<#Ppo[T].IdlePeriod>)
@@ -83,7 +83,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(p \*PringsSpecialK\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#PringsSpecialK[T].Compute>)
   - [func \(p \*PringsSpecialK\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#PringsSpecialK[T].ComputeWithContext>)
 - [type Pvo](<#Pvo>)
-  - [func NewPvo\[T helper.Number\]\(\) \*Pvo\[T\]](<#NewPvo>)
+  - [func NewPvo\[T helper.Float\]\(\) \*Pvo\[T\]](<#NewPvo>)
   - [func \(p \*Pvo\[T\]\) Compute\(volumes \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Pvo[T].Compute>)
   - [func \(p \*Pvo\[T\]\) ComputeWithContext\(ctx context.Context, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Pvo[T].ComputeWithContext>)
   - [func \(p \*Pvo\[T\]\) IdlePeriod\(\) int](<#Pvo[T].IdlePeriod>)
@@ -93,8 +93,8 @@ The information provided on this project is strictly for informational purposes 
   - [func \(q \*Qstick\[T\]\) ComputeWithContext\(ctx context.Context, openings, closings \<\-chan T\) \<\-chan T](<#Qstick[T].ComputeWithContext>)
   - [func \(q \*Qstick\[T\]\) IdlePeriod\(\) int](<#Qstick[T].IdlePeriod>)
 - [type Rsi](<#Rsi>)
-  - [func NewRsi\[T helper.Number\]\(\) \*Rsi\[T\]](<#NewRsi>)
-  - [func NewRsiWithPeriod\[T helper.Number\]\(period int\) \*Rsi\[T\]](<#NewRsiWithPeriod>)
+  - [func NewRsi\[T helper.Float\]\(\) \*Rsi\[T\]](<#NewRsi>)
+  - [func NewRsiWithPeriod\[T helper.Float\]\(period int\) \*Rsi\[T\]](<#NewRsiWithPeriod>)
   - [func \(r \*Rsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Rsi[T].Compute>)
   - [func \(r \*Rsi\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#Rsi[T].ComputeWithContext>)
   - [func \(r \*Rsi\[T\]\) IdlePeriod\(\) int](<#Rsi[T].IdlePeriod>)
@@ -110,8 +110,8 @@ The information provided on this project is strictly for informational purposes 
   - [func \(s \*StochasticOscillator\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#StochasticOscillator[T].ComputeWithContext>)
   - [func \(s \*StochasticOscillator\[T\]\) IdlePeriod\(\) int](<#StochasticOscillator[T].IdlePeriod>)
 - [type StochasticRsi](<#StochasticRsi>)
-  - [func NewStochasticRsi\[T helper.Number\]\(\) \*StochasticRsi\[T\]](<#NewStochasticRsi>)
-  - [func NewStochasticRsiWithPeriod\[T helper.Number\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
+  - [func NewStochasticRsi\[T helper.Float\]\(\) \*StochasticRsi\[T\]](<#NewStochasticRsi>)
+  - [func NewStochasticRsiWithPeriod\[T helper.Float\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
   - [func \(s \*StochasticRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].Compute>)
   - [func \(s \*StochasticRsi\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].ComputeWithContext>)
   - [func \(s \*StochasticRsi\[T\]\) IdlePeriod\(\) int](<#StochasticRsi[T].IdlePeriod>)
@@ -133,7 +133,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(u \*UltimateOscillator\[T\]\) IdlePeriod\(\) int](<#UltimateOscillator[T].IdlePeriod>)
   - [func \(u \*UltimateOscillator\[T\]\) String\(\) string](<#UltimateOscillator[T].String>)
 - [type WilliamsR](<#WilliamsR>)
-  - [func NewWilliamsR\[T helper.Number\]\(\) \*WilliamsR\[T\]](<#NewWilliamsR>)
+  - [func NewWilliamsR\[T helper.Float\]\(\) \*WilliamsR\[T\]](<#NewWilliamsR>)
   - [func \(w \*WilliamsR\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].Compute>)
   - [func \(w \*WilliamsR\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].ComputeWithContext>)
   - [func \(w \*WilliamsR\[T\]\) IdlePeriod\(\) int](<#WilliamsR[T].IdlePeriod>)
@@ -998,7 +998,7 @@ p, s, h := ppo.Compute(closings)
 ```
 
 ```go
-type Ppo[T helper.Number] struct {
+type Ppo[T helper.Float] struct {
     // ShortEma is the short EMA instance.
     ShortEma *trend.Ema[T]
 
@@ -1014,7 +1014,7 @@ type Ppo[T helper.Number] struct {
 ### func [NewPpo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L49>)
 
 ```go
-func NewPpo[T helper.Number]() *Ppo[T]
+func NewPpo[T helper.Float]() *Ppo[T]
 ```
 
 NewPpo function initializes a new Percentage Price Oscillator instance.
@@ -1131,7 +1131,7 @@ p, s, h := pvo.Compute(volumes)
 ```
 
 ```go
-type Pvo[T helper.Number] struct {
+type Pvo[T helper.Float] struct {
     // ShortEma is the short EMA instance.
     ShortEma *trend.Ema[T]
 
@@ -1147,7 +1147,7 @@ type Pvo[T helper.Number] struct {
 ### func [NewPvo](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L49>)
 
 ```go
-func NewPvo[T helper.Number]() *Pvo[T]
+func NewPvo[T helper.Float]() *Pvo[T]
 ```
 
 NewPvo function initializes a new Percentage Volume Oscillator instance.
@@ -1263,7 +1263,7 @@ result := rsi.Compute(closings)
 ```
 
 ```go
-type Rsi[T helper.Number] struct {
+type Rsi[T helper.Float] struct {
     // Rma is the RMA instance.
     Rma *trend.Rma[T]
 }
@@ -1273,7 +1273,7 @@ type Rsi[T helper.Number] struct {
 ### func [NewRsi](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L35>)
 
 ```go
-func NewRsi[T helper.Number]() *Rsi[T]
+func NewRsi[T helper.Float]() *Rsi[T]
 ```
 
 NewRsi function initializes a new Relative Strength Index instance with the default parameters.
@@ -1282,7 +1282,7 @@ NewRsi function initializes a new Relative Strength Index instance with the defa
 ### func [NewRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L40>)
 
 ```go
-func NewRsiWithPeriod[T helper.Number](period int) *Rsi[T]
+func NewRsiWithPeriod[T helper.Float](period int) *Rsi[T]
 ```
 
 NewRsiWithPeriod function initializes a new Relative Strength Index instance with the given period.
@@ -1483,7 +1483,7 @@ result := stochasticRsi.Compute(closings)
 ```
 
 ```go
-type StochasticRsi[T helper.Number] struct {
+type StochasticRsi[T helper.Float] struct {
     // Rsi is that RSI instance.
     Rsi *Rsi[T]
 
@@ -1499,7 +1499,7 @@ type StochasticRsi[T helper.Number] struct {
 ### func [NewStochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L43>)
 
 ```go
-func NewStochasticRsi[T helper.Number]() *StochasticRsi[T]
+func NewStochasticRsi[T helper.Float]() *StochasticRsi[T]
 ```
 
 NewStochasticRsi function initializes a new Storchastic RSI instance with the default parameters.
@@ -1508,7 +1508,7 @@ NewStochasticRsi function initializes a new Storchastic RSI instance with the de
 ### func [NewStochasticRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L48>)
 
 ```go
-func NewStochasticRsiWithPeriod[T helper.Number](period int) *StochasticRsi[T]
+func NewStochasticRsiWithPeriod[T helper.Float](period int) *StochasticRsi[T]
 ```
 
 NewStochasticRsiWithPeriod function initializes a new Stochastic RSI instance with the given period.
@@ -1772,7 +1772,7 @@ values := wr.Compute(highs, lows, closings)
 ```
 
 ```go
-type WilliamsR[T helper.Number] struct {
+type WilliamsR[T helper.Float] struct {
     // Max is the Moving Max instance.
     Max *trend.MovingMax[T]
 
@@ -1785,7 +1785,7 @@ type WilliamsR[T helper.Number] struct {
 ### func [NewWilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L40>)
 
 ```go
-func NewWilliamsR[T helper.Number]() *WilliamsR[T]
+func NewWilliamsR[T helper.Float]() *WilliamsR[T]
 ```
 
 NewWilliamsR function initializes a new Williams R instance.
