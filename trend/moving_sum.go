@@ -35,18 +35,36 @@ func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the
 // Moving Sum over the specified period.
+//
+// The running sum is accumulated with Kahan summation so that
+// floating-point rounding error stays bounded regardless of how long the
+// input series is, rather than compounding on every add/subtract step. For
+// integer T the compensation term is always zero, so behavior is unchanged.
 func (m *MovingSum[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	cs := helper.DuplicateWithContext(ctx, c, 2)
 	cs[1] = helper.ShiftWithContext(ctx, cs[1], m.Period, 0)
 
 	sum := T(0)
+	comp := T(0)
 
 	sums := helper.OperateWithContext(ctx, cs[0], cs[1], func(c, b T) T {
-		sum = sum + c - b
+		sum, comp = kahanAdd(sum, comp, c)
+		sum, comp = kahanAdd(sum, comp, -b)
+
 		return sum
 	})
 
 	return helper.SkipWithContext(ctx, sums, m.Period-1)
+}
+
+// kahanAdd adds value to sum using Kahan compensated summation, returning
+// the updated sum and compensation term.
+func kahanAdd[T helper.Number](sum, comp, value T) (T, T) {
+	y := value - comp
+	t := sum + y
+	comp = (t - sum) - y
+
+	return t, comp
 }
 
 // IdlePeriod is the initial period that Moving Sum won't yield any results.
