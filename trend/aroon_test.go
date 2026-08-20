@@ -5,7 +5,10 @@
 package trend_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -87,6 +90,35 @@ func TestAroonCompareRust(t *testing.T) {
 	err := helper.CheckEquals(actualUp, expectedUp, actualDown, expectedDown)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAroonCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	high := make(chan float64)
+	low := make(chan float64)
+
+	aroon := trend.NewAroon[float64]()
+	up, down := aroon.ComputeWithContext(ctx, high, low)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-up; ok {
+		t.Fatal("Up channel should be closed after cancellation")
+	}
+	if _, ok := <-down; ok {
+		t.Fatal("Down channel should be closed after cancellation")
 	}
 }
 

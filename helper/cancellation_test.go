@@ -67,6 +67,25 @@ func TestCancellationWithApplyWindow(t *testing.T) {
 	}
 }
 
+func TestCancellationWithMaxSinceMinSince(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	input := make(chan int)
+
+	maxSince := helper.MaxSinceWithContext(ctx, input, 3)
+	minSince := helper.MinSinceWithContext(ctx, input, 3)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+
+	if _, ok := <-maxSince; ok {
+		t.Fatal("MaxSince channel should be closed after cancellation")
+	}
+	if _, ok := <-minSince; ok {
+		t.Fatal("MinSince channel should be closed after cancellation")
+	}
+}
+
 func TestCancellationWithEchoSkip(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	input := make(chan int)

@@ -50,8 +50,8 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 	movingMax := NewMovingMaxWithPeriod[T](a.Period)
 	movingMin := NewMovingMinWithPeriod[T](a.Period)
 
-	sinceLastHigh := helper.MaxSince(movingMax.ComputeWithContext(ctx, high), a.Period)
-	sinceLastLow := helper.MinSince(movingMin.ComputeWithContext(ctx, low), a.Period)
+	sinceLastHigh := helper.MaxSinceWithContext(ctx, movingMax.ComputeWithContext(ctx, high), a.Period)
+	sinceLastLow := helper.MinSinceWithContext(ctx, movingMin.ComputeWithContext(ctx, low), a.Period)
 
 	// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
 	aroonUp := helper.MultiplyByWithContext(ctx, sinceLastHigh, -1)
