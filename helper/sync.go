@@ -6,7 +6,8 @@ package helper
 
 import "slices"
 
-// CommonPeriod calculates the smallest period at which all data channels can be synchronized
+// CommonPeriod calculates the largest period at which all data channels can be synchronized,
+// so that every channel has warmed up (skipped its own idle period) before values are compared.
 //
 // Example:
 //

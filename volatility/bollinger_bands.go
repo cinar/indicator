@@ -14,6 +14,9 @@ import (
 const (
 	// DefaultBollingerBandsPeriod is the default period for the Bollinger Bands.
 	DefaultBollingerBandsPeriod = 20
+
+	// DefaultBollingerBandsMultiplier is the default standard deviation multiplier for the Bollinger Bands.
+	DefaultBollingerBandsMultiplier = 2
 )
 
 // BollingerBands represents the configuration parameters for calculating the Bollinger Bands. It is a technical
@@ -21,8 +24,8 @@ const (
 // the upper band, the middle band, and the lower band.
 //
 //	Middle Band = 20-Period SMA.
-//	Upper Band = 20-Period SMA + 2 (20-Period Std)
-//	Lower Band = 20-Period SMA - 2 (20-Period Std)
+//	Upper Band = 20-Period SMA + Multiplier (20-Period Std)
+//	Lower Band = 20-Period SMA - Multiplier (20-Period Std)
 //
 // Example:
 //
@@ -31,6 +34,9 @@ const (
 type BollingerBands[T helper.Number] struct {
 	// Time period.
 	Period int
+
+	// Multiplier is the standard deviation multiplier.
+	Multiplier T
 }
 
 // NewBollingerBands function initializes a new Bollinger Bands instance with the default parameters.
@@ -41,7 +47,8 @@ func NewBollingerBands[T helper.Number]() *BollingerBands[T] {
 // NewBollingerBandsWithPeriod function initializes a new Bollinger Bands instance with the given period.
 func NewBollingerBandsWithPeriod[T helper.Number](period int) *BollingerBands[T] {
 	return &BollingerBands[T]{
-		Period: period,
+		Period:     period,
+		Multiplier: DefaultBollingerBandsMultiplier,
 	}
 }
 
@@ -56,7 +63,7 @@ func (b *BollingerBands[T]) ComputeWithContext(ctx context.Context, c <-chan T) 
 	)
 
 	std2s := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, std.ComputeWithContext(ctx, cs[1]),
-		2,
+		b.Multiplier,
 	),
 		2,
 	)
