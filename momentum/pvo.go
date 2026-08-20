@@ -34,7 +34,7 @@ const (
 //
 //	pvo := momentum.Pvo[float64]()
 //	p, s, h := pvo.Compute(volumes)
-type Pvo[T helper.Number] struct {
+type Pvo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -46,7 +46,7 @@ type Pvo[T helper.Number] struct {
 }
 
 // NewPvo function initializes a new Percentage Volume Oscillator instance.
-func NewPvo[T helper.Number]() *Pvo[T] {
+func NewPvo[T helper.Float]() *Pvo[T] {
 	return &Pvo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultPvoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultPvoLongPeriod),

@@ -26,18 +26,18 @@ const (
 //
 //	rsi := momentum.NewRsi[float64]()
 //	result := rsi.Compute(closings)
-type Rsi[T helper.Number] struct {
+type Rsi[T helper.Float] struct {
 	// Rma is the RMA instance.
 	Rma *trend.Rma[T]
 }
 
 // NewRsi function initializes a new Relative Strength Index instance with the default parameters.
-func NewRsi[T helper.Number]() *Rsi[T] {
+func NewRsi[T helper.Float]() *Rsi[T] {
 	return NewRsiWithPeriod[T](DefaultRsiPeriod)
 }
 
 // NewRsiWithPeriod function initializes a new Relative Strength Index instance with the given period.
-func NewRsiWithPeriod[T helper.Number](period int) *Rsi[T] {
+func NewRsiWithPeriod[T helper.Float](period int) *Rsi[T] {
 	return &Rsi[T]{
 		Rma: trend.NewRmaWithPeriod[T](period),
 	}

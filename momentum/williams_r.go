@@ -28,7 +28,7 @@ const (
 //
 //	wr := momentum.WilliamsR[float64]()
 //	values := wr.Compute(highs, lows, closings)
-type WilliamsR[T helper.Number] struct {
+type WilliamsR[T helper.Float] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]
 
@@ -37,7 +37,7 @@ type WilliamsR[T helper.Number] struct {
 }
 
 // NewWilliamsR function initializes a new Williams R instance.
-func NewWilliamsR[T helper.Number]() *WilliamsR[T] {
+func NewWilliamsR[T helper.Float]() *WilliamsR[T] {
 	return &WilliamsR[T]{
 		Max: trend.NewMovingMaxWithPeriod[T](DefaultWilliamsRPeriod),
 		Min: trend.NewMovingMinWithPeriod[T](DefaultWilliamsRPeriod),

@@ -54,8 +54,8 @@ The information provided on this project is strictly for informational purposes 
   - [func \(k \*Kvo\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#Kvo[T].ComputeWithContext>)
   - [func \(k \*Kvo\[T\]\) IdlePeriod\(\) int](<#Kvo[T].IdlePeriod>)
 - [type Mfi](<#Mfi>)
-  - [func NewMfi\[T helper.Number\]\(\) \*Mfi\[T\]](<#NewMfi>)
-  - [func NewMfiWithPeriod\[T helper.Number\]\(period int\) \*Mfi\[T\]](<#NewMfiWithPeriod>)
+  - [func NewMfi\[T helper.Float\]\(\) \*Mfi\[T\]](<#NewMfi>)
+  - [func NewMfiWithPeriod\[T helper.Float\]\(period int\) \*Mfi\[T\]](<#NewMfiWithPeriod>)
   - [func \(m \*Mfi\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].Compute>)
   - [func \(m \*Mfi\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \<\-chan T](<#Mfi[T].ComputeWithContext>)
   - [func \(m \*Mfi\[T\]\) IdlePeriod\(\) int](<#Mfi[T].IdlePeriod>)
@@ -535,7 +535,7 @@ result := mfi.Compute(highs, lows, closings, volumes)
 ```
 
 ```go
-type Mfi[T helper.Number] struct {
+type Mfi[T helper.Float] struct {
     // TypicalPrice is the Typical Price instance.
     TypicalPrice *trend.TypicalPrice[T]
 
@@ -548,7 +548,7 @@ type Mfi[T helper.Number] struct {
 ### func [NewMfi](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L40>)
 
 ```go
-func NewMfi[T helper.Number]() *Mfi[T]
+func NewMfi[T helper.Float]() *Mfi[T]
 ```
 
 NewMfi function initializes a new MFI instance with the default parameters.
@@ -557,7 +557,7 @@ NewMfi function initializes a new MFI instance with the default parameters.
 ### func [NewMfiWithPeriod](<https://github.com/cinar/indicator/blob/master/volume/mfi.go#L45>)
 
 ```go
-func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T]
+func NewMfiWithPeriod[T helper.Float](period int) *Mfi[T]
 ```
 
 NewMfiWithPeriod function initializes a new MFI instance with the given period.
