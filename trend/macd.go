@@ -28,6 +28,9 @@ const (
 //	Signal = 9-Period EMA of MACD.
 //
 // Example:
+//
+//	macd := trend.NewMacd[float64]()
+//	macdLine, signal := macd.Compute(c)
 type Macd[T helper.Number] struct {
 	Ema1 *Ema[T]
 	Ema2 *Ema[T]

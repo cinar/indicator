@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2026 Onur Cinar.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
 package momentum
 
 import (
@@ -11,6 +15,11 @@ import (
 // It composes multiple Rate-of-Change (ROC) series smoothed by Simple Moving Averages (SMA)
 // and outputs a weighted sum aligned to the slowest path so all terms are time-synchronized.
 // See Compute for the exact composition and weights.
+//
+// This constrains on helper.Float rather than the usual helper.Number: the
+// underlying Roc computation divides by an earlier value in the series, and
+// over integer types that division truncates badly enough to distort the
+// weighted sum, so integer support is intentionally not offered here.
 type PringsSpecialK[T helper.Float] struct {
 	Roc10  *trend.Roc[T]
 	Roc15  *trend.Roc[T]

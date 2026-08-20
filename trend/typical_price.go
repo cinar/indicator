@@ -31,6 +31,11 @@ func (i *TypicalPrice[T]) ComputeWithContext(ctx context.Context, high, low, clo
 	)
 }
 
+// IdlePeriod is the initial period that Typical Price won't yield any results.
+func (*TypicalPrice[T]) IdlePeriod() int {
+	return 0
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

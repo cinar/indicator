@@ -35,8 +35,8 @@ func TestAroon(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row *AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row *AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
@@ -82,8 +82,8 @@ func TestAroonCompareRust(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
@@ -157,8 +157,8 @@ func TestAroonValidateDefinition(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
