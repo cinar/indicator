@@ -5,14 +5,15 @@
 package helper
 
 import (
+	"context"
 	"slices"
 )
 
-// MaxSince returns a channel of T indicating since when
+// MaxSinceWithContext returns a channel of T indicating since when
 // (number of previous values) the respective value was the maximum
 // within the window of size w.
-func MaxSince[T Number](c <-chan T, w int) <-chan T {
-	return Window(c, func(w []T, i int) T {
+func MaxSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T {
+	return WindowWithContext(ctx, c, func(w []T, i int) T {
 		since := 0
 		found := false
 		m := slices.Max(w)
@@ -28,4 +29,11 @@ func MaxSince[T Number](c <-chan T, w int) <-chan T {
 		})
 		return T(since - 1)
 	}, w)
+}
+
+// MaxSince wraps MaxSinceWithContext for backwards compatibility.
+//
+// Deprecated: Use MaxSinceWithContext instead.
+func MaxSince[T Number](c <-chan T, w int) <-chan T {
+	return MaxSinceWithContext(context.Background(), c, w)
 }

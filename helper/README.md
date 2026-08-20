@@ -95,7 +95,9 @@ The information provided on this project is strictly for informational purposes 
 - [func MapWithPrevious\[F, T any\]\(c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPrevious>)
 - [func MapWithPreviousWithContext\[F, T any\]\(ctx context.Context, c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPreviousWithContext>)
 - [func MaxSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MaxSince>)
+- [func MaxSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MaxSinceWithContext>)
 - [func MinSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MinSince>)
+- [func MinSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MinSinceWithContext>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
 - [func MultiplyBy\[T Number\]\(c \<\-chan T, m T\) \<\-chan T](<#MultiplyBy>)
 - [func MultiplyByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, m T\) \<\-chan T](<#MultiplyByWithContext>)
@@ -1028,22 +1030,44 @@ func MapWithPreviousWithContext[F, T any](ctx context.Context, c <-chan F, f fun
 MapWithPreviousWithContext applies a transformation function to each element in an input channel, creating a new channel with the transformed values, supporting context cancellation.
 
 <a name="MaxSince"></a>
-## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L14>)
+## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L37>)
 
 ```go
 func MaxSince[T Number](c <-chan T, w int) <-chan T
 ```
 
-MaxSince returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
+MaxSince wraps MaxSinceWithContext for backwards compatibility.
+
+Deprecated: Use MaxSinceWithContext instead.
+
+<a name="MaxSinceWithContext"></a>
+## func [MaxSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L15>)
+
+```go
+func MaxSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+MaxSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
 
 <a name="MinSince"></a>
-## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L13>)
+## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L36>)
 
 ```go
 func MinSince[T Number](c <-chan T, w int) <-chan T
 ```
 
-MinSince returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
+MinSince wraps MinSinceWithContext for backwards compatibility.
+
+Deprecated: Use MinSinceWithContext instead.
+
+<a name="MinSinceWithContext"></a>
+## func [MinSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L14>)
+
+```go
+func MinSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+MinSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
 
 <a name="Multiply"></a>
 ## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L33>)
