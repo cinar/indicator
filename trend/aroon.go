@@ -70,6 +70,11 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 	return aroonUp, aroonDown
 }
 
+// IdlePeriod is the initial period that Aroon won't yield any results.
+func (a *Aroon[T]) IdlePeriod() int {
+	return a.Period - 1
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

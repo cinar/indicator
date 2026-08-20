@@ -31,6 +31,11 @@ func (i *Bop[T]) ComputeWithContext(ctx context.Context, opening, high, low, clo
 	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closing, opening), helper.SubtractWithContext(ctx, high, low))
 }
 
+// IdlePeriod is the initial period that BOP won't yield any results.
+func (*Bop[T]) IdlePeriod() int {
+	return 0
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

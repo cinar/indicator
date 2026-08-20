@@ -8,7 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"time"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -16,6 +16,9 @@ import (
 
 // SQLRepository provides a SQL backed storage facility for financial market data.
 type SQLRepository struct {
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
+
 	// db is the database connection.
 	db *sql.DB
 
@@ -68,12 +71,13 @@ func NewSQLRepository(dbDriver, dbURL string, dialect SQLRepositoryDialect) (*SQ
 	}
 
 	repository := &SQLRepository{
-		db,
-		dialect,
-		assetQuery,
-		getSinceQuery,
-		lastDateQuery,
-		appendQuery,
+		Logger:        slog.Default(),
+		db:            db,
+		dialect:       dialect,
+		assetsQuery:   assetQuery,
+		getSinceQuery: getSinceQuery,
+		lastDateQuery: lastDateQuery,
+		appendQuery:   appendQuery,
 	}
 
 	return repository, nil
@@ -139,7 +143,7 @@ func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot,
 				&snapshot.Volume,
 			)
 			if err != nil {
-				log.Printf("unable to scan row: %v", err)
+				s.Logger.Error("Unable to scan row.", "asset", name, "error", err)
 				continue
 			}
 
@@ -147,7 +151,7 @@ func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot,
 		}
 
 		if err := rows.Err(); err != nil {
-			log.Printf("unable to iterate rows: %v", err)
+			s.Logger.Error("Unable to iterate rows.", "asset", name, "error", err)
 		}
 	}()
 
