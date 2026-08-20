@@ -5,6 +5,8 @@
 package trend_test
 
 import (
+	"math"
+	"math/rand"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -23,5 +25,139 @@ func TestMovingSum(t *testing.T) {
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestMovingSumFloatDrift checks that the running sum stays close to a
+// freshly recomputed window sum over a long float32 series, rather than
+// letting per-step rounding error compound as the series grows. It also
+// computes the naive `sum = sum + c - b` running sum for the same series to
+// confirm the compensated-summation implementation is meaningfully more
+// accurate, not merely within some arbitrary tolerance.
+func TestMovingSumFloatDrift(t *testing.T) {
+	const (
+		n      = 200_000
+		period = 20
+	)
+
+	values := make([]float32, n)
+	for i := range values {
+		trendValue := 100.0 + float64(i)*0.01
+		noise := math.Sin(float64(i)) * 5
+
+		values[i] = float32(trendValue + noise)
+	}
+
+	sum := trend.NewMovingSum[float32]()
+	sum.Period = period
+
+	actual := helper.ChanToSlice(sum.Compute(helper.SliceToChan(values)))
+
+	var (
+		naive        float32
+		reference    float64
+		naiveMaxErr  float64
+		actualMaxErr float64
+	)
+
+	for i, c := range values {
+		var b float32
+		if i-period >= 0 {
+			b = values[i-period]
+		}
+
+		naive = naive + c - b
+
+		var bRef float64
+		if i-period >= 0 {
+			bRef = float64(values[i-period])
+		}
+
+		reference = reference + float64(c) - bRef
+
+		if i >= period-1 {
+			actualErr := math.Abs(float64(actual[i-period+1]) - reference)
+			if actualErr > actualMaxErr {
+				actualMaxErr = actualErr
+			}
+
+			naiveErr := math.Abs(float64(naive) - reference)
+			if naiveErr > naiveMaxErr {
+				naiveMaxErr = naiveErr
+			}
+		}
+	}
+
+	const maxAllowedErr = 0.01
+
+	if actualMaxErr > maxAllowedErr {
+		t.Fatalf("MovingSum drifted too far from the reference sum: %v (max allowed %v)", actualMaxErr, maxAllowedErr)
+	}
+
+	if actualMaxErr >= naiveMaxErr {
+		t.Fatalf("MovingSum (%v) is not more accurate than the naive running sum (%v)", actualMaxErr, naiveMaxErr)
+	}
+}
+
+// TestMovingSumFloatDriftNearZeroSum exercises the regime where the window
+// sum is near zero while individual terms are much larger in magnitude —
+// the shape of a Cmf or Mfi moving sum of signed money flow in a quiet
+// market. This is the case where classic Kahan summation is known to be
+// weaker than plain summation; Neumaier's variant, used here, handles it
+// correctly.
+func TestMovingSumFloatDriftNearZeroSum(t *testing.T) {
+	const (
+		n      = 200_000
+		period = 20
+	)
+
+	rnd := rand.New(rand.NewSource(1))
+
+	values := make([]float64, n)
+	for i := range values {
+		values[i] = (rnd.Float64()*2 - 1) * 1e6
+	}
+
+	sum := trend.NewMovingSum[float64]()
+	sum.Period = period
+
+	actual := helper.ChanToSlice(sum.Compute(helper.SliceToChan(values)))
+
+	var (
+		naive        float64
+		naiveMaxErr  float64
+		actualMaxErr float64
+	)
+
+	for i, c := range values {
+		var b float64
+		if i-period >= 0 {
+			b = values[i-period]
+		}
+
+		naive = naive + c - b
+
+		if i >= period-1 {
+			// Reference: the window summed from scratch, independent of
+			// either running-sum implementation's accumulated state.
+			var reference float64
+			for j := i - period + 1; j <= i; j++ {
+				reference += values[j]
+			}
+
+			actualErr := math.Abs(actual[i-period+1] - reference)
+			if actualErr > actualMaxErr {
+				actualMaxErr = actualErr
+			}
+
+			naiveErr := math.Abs(naive - reference)
+			if naiveErr > naiveMaxErr {
+				naiveMaxErr = naiveErr
+			}
+		}
+	}
+
+	if actualMaxErr >= naiveMaxErr {
+		t.Fatalf("MovingSum (%v) is not more accurate than the naive running sum (%v) in the near-zero-sum regime", actualMaxErr, naiveMaxErr)
 	}
 }

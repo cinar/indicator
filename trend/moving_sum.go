@@ -35,18 +35,54 @@ func NewMovingSumWithPeriod[T helper.Number](period int) *MovingSum[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the
 // Moving Sum over the specified period.
+//
+// The running sum is accumulated with Neumaier (improved Kahan) compensated
+// summation so that floating-point rounding error stays bounded regardless
+// of how long the input series is, rather than compounding on every
+// add/subtract step. Neumaier's variant, unlike classic Kahan, stays
+// accurate even when an added term is larger in magnitude than the running
+// sum, which happens whenever the window sum is near zero — e.g. a Cmf or
+// Mfi moving sum of signed money flow in a quiet market. For integer T the
+// compensation term is always zero, so behavior is unchanged.
 func (m *MovingSum[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	cs := helper.DuplicateWithContext(ctx, c, 2)
 	cs[1] = helper.ShiftWithContext(ctx, cs[1], m.Period, 0)
 
 	sum := T(0)
+	comp := T(0)
 
 	sums := helper.OperateWithContext(ctx, cs[0], cs[1], func(c, b T) T {
-		sum = sum + c - b
-		return sum
+		sum, comp = neumaierAdd(sum, comp, c)
+		sum, comp = neumaierAdd(sum, comp, -b)
+
+		return sum + comp
 	})
 
 	return helper.SkipWithContext(ctx, sums, m.Period-1)
+}
+
+// neumaierAdd adds value to sum using Neumaier compensated summation,
+// returning the updated running sum and compensation term. The
+// numerically corrected total is sum+comp.
+func neumaierAdd[T helper.Number](sum, comp, value T) (T, T) {
+	t := sum + value
+
+	if absT(sum) >= absT(value) {
+		comp += (sum - t) + value
+	} else {
+		comp += (value - t) + sum
+	}
+
+	return t, comp
+}
+
+// absT returns the absolute value of v.
+func absT[T helper.Number](v T) T {
+	if v < 0 {
+		return -v
+	}
+
+	return v
 }
 
 // IdlePeriod is the initial period that Moving Sum won't yield any results.

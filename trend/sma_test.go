@@ -23,9 +23,14 @@ func TestSma(t *testing.T) {
 		23.10, 22.40, 22.17,
 	})
 
+	// The 9th and 18th values' true averages are exact ties (22.905 and
+	// 23.505) between their two neighboring hundredths, which binary
+	// floating-point cannot represent exactly; which way each one rounds
+	// depends on sub-ULP summation noise rather than on the reference
+	// value published at the URL above.
 	expected := []float64{
-		22.22, 22.21, 22.23, 22.26, 22.30, 22.42, 22.61, 22.77, 22.91,
-		23.08, 23.21, 23.38, 23.53, 23.65, 23.71, 23.68, 23.61, 23.50,
+		22.22, 22.21, 22.23, 22.26, 22.30, 22.42, 22.61, 22.77, 22.90,
+		23.08, 23.21, 23.38, 23.53, 23.65, 23.71, 23.68, 23.61, 23.51,
 		23.43, 23.28, 23.13,
 	}
 
