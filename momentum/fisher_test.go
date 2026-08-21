@@ -38,9 +38,8 @@ func TestFisherSimple(t *testing.T) {
 	t.Logf("Fisher values: %v", resultSlice[:5])
 }
 
-// referenceFisher independently computes the Fisher Transform with a plain
-// sliding-window min/max over a slice, to verify Fisher's values rather
-// than just its output length or well-formedness.
+// referenceFisher computes the Fisher Transform with a plain sliding-window
+// min/max over a slice, independently of Fisher's channel implementation.
 func referenceFisher(closings []float64, period int) []float64 {
 	var out []float64
 
@@ -71,15 +70,6 @@ func referenceFisher(closings []float64, period int) []float64 {
 	return out
 }
 
-// TestFisherValues guards against a regression where minValues was read by
-// two consumers (the range and the close-minus-min terms) without being
-// duplicated first, and IdlePeriod() double-counted a delay that doesn't
-// compound (min, max, and the aligned closings are each independently
-// delayed by the same Period-1, not chained one after another the way
-// T3's EMAs are). Both silently produced wrong output rather than a build
-// or panic, so this compares against an independently computed reference
-// instead of just length or well-formedness, the way TestFisherSimple
-// already did.
 func TestFisherValues(t *testing.T) {
 	closings := make([]float64, 400)
 	for i := range closings {

@@ -59,21 +59,11 @@ func NewFisher[T helper.Float]() *Fisher[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the Fisher Transform.
 func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
-	// Split closings into three branches for Min, Max, and the aligned
-	// closings below. This used to collect the whole input into a slice
-	// upfront instead (to hand each branch its own independent channel),
-	// but that made ComputeWithContext block synchronously until closings
-	// closed before returning anything -- unlike every other indicator in
-	// this package -- which deadlocks a caller that duplicates closings
-	// itself and only starts draining the other branch after this call
-	// returns.
 	inputs := helper.DuplicateWithContext(ctx, closings, 3)
 	input1, input2, input3 := inputs[0], inputs[1], inputs[2]
 
-	// Compute min and max. minValues feeds both the range (max - min) and
-	// close-min-min below, so it needs its own duplicated copy for the
-	// second use -- a channel only has one consumer's worth of values to
-	// give out.
+	// minValues is used twice below (range and close-minus-min), so it
+	// needs its own duplicated copy for the second use.
 	minSplice := helper.DuplicateWithContext(ctx, f.Min.ComputeWithContext(ctx, input1), 2)
 	maxValues := f.Max.ComputeWithContext(ctx, input2)
 
@@ -111,12 +101,9 @@ func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 
 // IdlePeriod is the initial period that Fisher Transform won't yield any results.
 func (f *Fisher[T]) IdlePeriod() int {
-	// minValues, maxValues, and alignedClosings are all computed
-	// independently over the same window of the original input (Min and
-	// Max each skip their own Period-1 internally; alignedClosings skips
-	// Period-1 to land on the same window's last close), not chained one
-	// after another, so their delays don't compound: the combined idle
-	// period is just Period-1, the same as Min/Max's own.
+	// Min, Max, and the aligned closings are each independently delayed
+	// by Period-1 from the same input, not chained one after another, so
+	// the delay doesn't compound.
 	return f.Period - 1
 }
 
