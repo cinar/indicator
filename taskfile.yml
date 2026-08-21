@@ -2,7 +2,7 @@ version: '3'
 output: 'prefixed'
 
 env:
-  INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./helper/... ./momentum/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
+  INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./helper/... ./momentum/... ./registry/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
 
 tasks:
   default:
@@ -38,3 +38,4 @@ tasks:
     cmds:
       - go build -o indicator-backtest cmd/indicator-backtest/main.go
       - go build -o indicator-sync cmd/indicator-sync/main.go
+      - go build -o indicator-cli cmd/indicator-cli/main.go

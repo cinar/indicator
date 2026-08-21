@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/cinar/indicator/v2/registry"
 	"github.com/cinar/indicator/v2/strategy"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -69,6 +70,58 @@ func RunMCPServer() *server.MCPServer {
 	// Add tool handler using the typed handler
 	s.AddTool(tool, mcp.NewTypedToolHandler(handleBacktest))
 
+	// Add indicator tool with schema
+	indicatorTool := mcp.NewTool("indicator",
+		mcp.WithDescription("Compute a technical indicator over the specified OHLCV data"),
+		mcp.WithString("indicator",
+			mcp.Required(),
+			mcp.Description("The indicator to compute"),
+			mcp.Enum(registry.Names()...),
+		),
+		mcp.WithArray("params",
+			mcp.Description(`Optional indicator parameters as "Name=Value" strings, e.g. ["Period=14"]. Unset parameters keep their default value.`),
+			mcp.Items(map[string]any{"type": "string"}),
+		),
+		mcp.WithObject("data",
+			mcp.Required(),
+			mcp.Description("OHLCV data for the indicator"),
+			mcp.Properties(map[string]any{
+				"date": map[string]any{
+					"type":        "array",
+					"description": "Array of timestamps (Unix seconds)",
+					"items":       map[string]any{"type": "integer"},
+				},
+				"opening": map[string]any{
+					"type":        "array",
+					"description": "Array of opening prices",
+					"items":       map[string]any{"type": "number"},
+				},
+				"closing": map[string]any{
+					"type":        "array",
+					"description": "Array of closing prices",
+					"items":       map[string]any{"type": "number"},
+				},
+				"high": map[string]any{
+					"type":        "array",
+					"description": "Array of high prices",
+					"items":       map[string]any{"type": "number"},
+				},
+				"low": map[string]any{
+					"type":        "array",
+					"description": "Array of low prices",
+					"items":       map[string]any{"type": "number"},
+				},
+				"volume": map[string]any{
+					"type":        "array",
+					"description": "Array of volume values",
+					"items":       map[string]any{"type": "number"},
+				},
+			}),
+		),
+	)
+
+	s.AddTool(indicatorTool, mcp.NewTypedToolHandler(handleIndicator))
+
 	return s
 }
 
@@ -111,6 +164,25 @@ func handleBacktest(_ context.Context, _ mcp.CallToolRequest, args StrategyReque
 	}{
 		Actions: actions,
 		Outcome: results[0].Outcome,
+	}
+
+	jsonData, err := json.Marshal(response)
+	if err != nil {
+		return mcp.NewToolResultError(fmt.Sprintf("failed to marshal response: %v", err)), nil
+	}
+
+	return mcp.NewToolResultText(string(jsonData)), nil
+}
+
+// handleIndicator processes an indicator request by computing the specified
+// indicator over the provided OHLCV data. It returns the aligned dates and
+// each of the indicator's named output series as a JSON string.
+//
+// If the computation fails, it returns a tool result error.
+func handleIndicator(ctx context.Context, _ mcp.CallToolRequest, args IndicatorRequest) (*mcp.CallToolResult, error) {
+	response, err := runIndicator(ctx, args)
+	if err != nil {
+		return mcp.NewToolResultError(fmt.Sprintf("Failed to compute indicator: %v", err)), nil
 	}
 
 	jsonData, err := json.Marshal(response)
