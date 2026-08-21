@@ -134,16 +134,24 @@ func Run(ctx context.Context, name string, params map[string]string, snapshots <
 		}
 	}
 
-	copies := helper.DuplicateWithContext(ctx, snapshots, len(definition.Fields)+1)
+	// Materialize the snapshots once, then give every consumer (the dates
+	// and each Field) its own independent producer reading from the slice,
+	// rather than a single lock-step fan-out shared between them. Most
+	// indicators are lazy and only pull from their input as their own
+	// output is consumed, but a few (e.g. momentum.Fisher) read their
+	// entire input channel before returning anything; sharing one
+	// synchronized fan-out with those would deadlock, since nothing
+	// consumes the dates channel until Run itself returns.
+	data := helper.ChanToSlice(snapshots)
 
-	dates := asset.SnapshotsAsDatesWithContext(ctx, copies[0])
+	dates := asset.SnapshotsAsDatesWithContext(ctx, helper.SliceToChanWithContext(ctx, data))
 	if idler, ok := indicator.(idlePerioder); ok {
 		dates = helper.SkipWithContext(ctx, dates, idler.IdlePeriod())
 	}
 
 	inputs := make([]<-chan float64, len(definition.Fields))
 	for i, field := range definition.Fields {
-		inputs[i] = fieldChannel(ctx, copies[i+1], field)
+		inputs[i] = fieldChannel(ctx, helper.SliceToChanWithContext(ctx, data), field)
 	}
 
 	series, err := definition.Compute(ctx, indicator, inputs)

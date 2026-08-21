@@ -193,7 +193,9 @@ func TestRunCciMultiInput(t *testing.T) {
 }
 
 func TestRunEveryRegisteredIndicator(t *testing.T) {
-	data := testSnapshots(80)
+	// Some indicators (e.g. ConnorsRsi's 100-period PercentRank) need a
+	// long lookback before they yield a single value.
+	data := testSnapshots(400)
 
 	for _, name := range registry.Names() {
 		t.Run(name, func(t *testing.T) {
