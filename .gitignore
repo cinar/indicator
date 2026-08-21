@@ -10,7 +10,7 @@
 bin
 indicator-backtest
 indicator-sync
-indicator-cli
+/indicator-cli
 /mcp/mcp
 
 # Test binary, built with `go test -c`
