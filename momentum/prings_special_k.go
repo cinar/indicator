@@ -139,6 +139,11 @@ func (p *PringsSpecialK[T]) ComputeWithContext(ctx context.Context, closings <-c
 	return p11
 }
 
+// IdlePeriod is the initial period that Pring's Special K won't yield any results.
+func (p *PringsSpecialK[T]) IdlePeriod() int {
+	return p.Sma195Roc530.IdlePeriod() + p.Roc530.IdlePeriod()
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.
