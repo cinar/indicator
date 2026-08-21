@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/registry"
 )
 
@@ -54,7 +55,15 @@ func parseIndicatorParams(params []string) (map[string]string, error) {
 // It shares the indicator lookup, parameter binding, and computation logic
 // with the indicator-cli command through the registry package, so both
 // front ends stay in sync as indicators are added.
+//
+// ctx is wrapped in its own cancellation so that an early return (e.g. a
+// series ending before the dates do) tells the still-running computation
+// pipeline to stop, instead of leaving its goroutines blocked forever in
+// this long-lived server process.
 func runIndicator(ctx context.Context, req IndicatorRequest) (*IndicatorResponse, error) {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	dateArray := toTimeArray(req.Data.Date)
 
 	if len(req.Data.Opening) != len(dateArray) || len(req.Data.Closing) != len(dateArray) ||
@@ -75,13 +84,19 @@ func runIndicator(ctx context.Context, req IndicatorRequest) (*IndicatorResponse
 		defer close(snapshots)
 
 		for i := range dateArray {
-			snapshots <- &asset.Snapshot{
+			snapshot := &asset.Snapshot{
 				Date:   dateArray[i],
 				Open:   req.Data.Opening[i],
 				Close:  req.Data.Closing[i],
 				High:   req.Data.High[i],
 				Low:    req.Data.Low[i],
 				Volume: req.Data.Volume[i],
+			}
+
+			select {
+			case <-ctx.Done():
+				return
+			case snapshots <- snapshot:
 			}
 		}
 	}()
@@ -96,7 +111,7 @@ func runIndicator(ctx context.Context, req IndicatorRequest) (*IndicatorResponse
 	}
 
 	for date := range result.Dates {
-		response.Dates = append(response.Dates, date.Format("2006-01-02"))
+		response.Dates = append(response.Dates, date.Format(helper.DefaultDateTimeFormat))
 
 		for _, series := range result.Series {
 			value, ok := <-series.Values

@@ -11,6 +11,7 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"os"
@@ -19,6 +20,7 @@ import (
 	"time"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/registry"
 )
 
@@ -101,7 +103,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	result, err := registry.Run(context.Background(), indicatorName, params, snapshots)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	result, err := registry.Run(ctx, indicatorName, params, snapshots)
 	if err != nil {
 		logger.Error("Unable to compute indicator.", "error", err)
 		os.Exit(1)
@@ -114,8 +119,10 @@ func main() {
 }
 
 // writeCsv writes the indicator result as CSV, one row per date, with a
-// "date" column followed by one column per output series.
-func writeCsv(w *os.File, result *registry.Result) error {
+// "date" column followed by one column per output series. Dates and floats
+// are formatted the same way helper.Csv formats them, so this output reads
+// the same as any other CSV this project produces.
+func writeCsv(w io.Writer, result *registry.Result) error {
 	writer := csv.NewWriter(w)
 	defer writer.Flush()
 
@@ -131,7 +138,7 @@ func writeCsv(w *os.File, result *registry.Result) error {
 
 	for date := range result.Dates {
 		row := make([]string, 0, len(result.Series)+1)
-		row = append(row, date.Format("2006-01-02"))
+		row = append(row, date.Format(helper.DefaultDateTimeFormat))
 
 		for _, series := range result.Series {
 			value, ok := <-series.Values
@@ -139,7 +146,7 @@ func writeCsv(w *os.File, result *registry.Result) error {
 				return fmt.Errorf("indicator produced fewer values than dates for series %q", series.Name)
 			}
 
-			row = append(row, strconv.FormatFloat(value, 'f', -1, 64))
+			row = append(row, strconv.FormatFloat(value, 'g', -1, 64))
 		}
 
 		if err := writer.Write(row); err != nil {
