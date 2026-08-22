@@ -33,10 +33,17 @@ const (
 //	EMA2 = EMA(values, slowPeriod)
 //	MACD = EMA1 - EMA2
 //
-//	%K = Stochastic %K of MACD with kPeriod
-//	%D = Stochastic %D of MACD with dPeriod
+//	%K1, %D1 = Stochastic(MACD, kPeriod, dPeriod)
+//	%K2, %D2 = Stochastic(%D1, kPeriod, dPeriod)
 //
-//	STC = 100 * (MACD - %K) / (%D - %K)
+//	STC = %D2
+//
+// The Stochastic pass (rolling-min/max normalization to a 0-100 range,
+// then smoothed by an SMA) is applied twice, once to MACD and again to
+// the first pass's %D, the way the standard Schaff Trend Cycle algorithm
+// double-smooths MACD -- not once to MACD with a second division against
+// its own %K/%D, which isn't bounded to 0-100 and can divide by a
+// near-zero denominator.
 //
 // Example:
 //
@@ -96,47 +103,22 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	c = helper.BufferedWithContext(ctx, c, s.SlowPeriod)
 	macd := s.Apo.ComputeWithContext(ctx, c)
 
-	macd = helper.BufferedWithContext(ctx, macd, s.Stochastic.Period)
-	inputs := helper.DuplicateWithContext(ctx, macd, 4)
+	// %K1 and %K2 are unused (STC only needs the doubly-smoothed %D), but
+	// each comes from the same internal duplicate fan-out as %D1/%D2, so
+	// it still has to be drained -- an unread duplicate branch blocks the
+	// shared producer, stalling %D1/%D2 too.
+	k1, d1 := s.Stochastic.ComputeWithContext(ctx, macd)
+	go helper.DrainWithContext(ctx, k1)
 
-	movingMin := NewMovingMinWithPeriod[T](s.Stochastic.Period)
-	movingMax := NewMovingMaxWithPeriod[T](s.Stochastic.Period)
+	k2, d2 := s.Stochastic.ComputeWithContext(ctx, d1)
+	go helper.DrainWithContext(ctx, k2)
 
-	lowestSplice := helper.DuplicateWithContext(ctx, movingMin.ComputeWithContext(ctx, inputs[0]),
-		2,
-	)
-
-	highest := movingMax.ComputeWithContext(ctx, inputs[1])
-
-	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
-
-	kValues := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	)
-
-	kDuplicate := helper.DuplicateWithContext(ctx, kValues, 2)
-
-	d := s.Stochastic.Sma.ComputeWithContext(ctx, kDuplicate[0])
-
-	kForStcSplice := helper.DuplicateWithContext(ctx,
-		helper.SkipWithContext(ctx, kDuplicate[1], s.Stochastic.Sma.IdlePeriod()),
-		2,
-	)
-
-	macdForStc := helper.SkipWithContext(ctx, inputs[3], s.Stochastic.IdlePeriod())
-
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, macdForStc, kForStcSplice[0]),
-		helper.SubtractWithContext(ctx, d, kForStcSplice[1]),
-	),
-		100,
-	)
+	return d2
 }
 
 // IdlePeriod is the initial period that STC won't yield any results.
 func (s *Stc[T]) IdlePeriod() int {
-	return s.Apo.IdlePeriod() + s.Stochastic.IdlePeriod()
+	return s.Apo.IdlePeriod() + 2*s.Stochastic.IdlePeriod()
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.
