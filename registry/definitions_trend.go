@@ -276,18 +276,15 @@ func init() {
 	// that's frequently near zero, so real-world input (verified against
 	// asset/testdata/repository/brk-b.csv) yields -Inf and swings like
 	// 1435 or -710 for an indicator that's documented to oscillate
-	// 0-100. This is a distinct, still-open bug in trend.Stc's formula,
-	// not the one #421 fixed.
+	// 0-100. Filed as #425, with a fix up in PR #428, not yet merged.
 
 	// T3 is still not registered: #423 fixed ComputeWithContext yielding
 	// fewer values than IdlePeriod() promised, but the weighted-sum
 	// coefficients themselves don't sum to 1 (c1+c2+c3+c4 = 3a(a-1), not
 	// 1 as a moving average requires), so T3 doesn't track price at all
 	// -- verified by feeding a constant 100 closings and getting -63
-	// back, not 100. This is a distinct, still-open bug in T3's formula
-	// (see the standard Tillson T3 coefficients: c2 should include a
-	// +3a^3 term and c3 a -6a^2-3a^3 term, both missing here), not the
-	// one #423 fixed.
+	// back, not 100. Filed as #426, with a fix up in PR #429, not yet
+	// merged.
 
 	Register("tema", Definition{
 		Fields: []Field{FieldClose},
