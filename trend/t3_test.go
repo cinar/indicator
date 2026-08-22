@@ -89,7 +89,8 @@ func TestT3Values(t *testing.T) {
 	ema6 := referenceEma(ema5, period)
 
 	a := factor
-	c1, c2, c3, c4 := -math.Pow(a, 3), 3*math.Pow(a, 2), -3*a, math.Pow(a, 3)
+	a2, a3 := a*a, a*a*a
+	c1, c2, c3, c4 := -a3, 3*a2+3*a3, -6*a2-3*a-3*a3, 1+3*a+3*a2+a3
 
 	tail := func(s []float64) []float64 { return s[len(s)-expectedLen:] }
 	e3, e4, e5, e6 := tail(ema3), tail(ema4), tail(ema5), tail(ema6)
@@ -98,6 +99,33 @@ func TestT3Values(t *testing.T) {
 		want := c1*e6[i] + c2*e5[i] + c3*e4[i] + c4*e3[i]
 		if math.Abs(want-out[i]) > 1e-9 {
 			t.Fatalf("value %d: expected %v, got %v", i, want, out[i])
+		}
+	}
+}
+
+// TestT3FlatInput guards against a regression where the weighted-sum
+// coefficients didn't sum to 1 (c1+c2+c3+c4 = 3a(a-1) instead of 1 for the
+// old, wrong coefficients), which meant T3 didn't track price at all -- a
+// flat 100 series came out as -63. A moving average's weights must sum to
+// 1, so a constant input should reproduce that same constant.
+func TestT3FlatInput(t *testing.T) {
+	const flat = 100.0
+
+	prices := make([]float64, 100)
+	for i := range prices {
+		prices[i] = flat
+	}
+
+	t3 := trend.NewT3[float64]()
+	out := helper.ChanToSlice(t3.Compute(helper.SliceToChan(prices)))
+
+	if len(out) == 0 {
+		t.Fatal("expected at least one value")
+	}
+
+	for i, v := range out {
+		if math.Abs(v-flat) > 1e-9 {
+			t.Fatalf("value %d: expected %v (flat input), got %v", i, flat, v)
 		}
 	}
 }

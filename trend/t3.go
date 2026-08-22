@@ -6,7 +6,6 @@ package trend
 
 import (
 	"fmt"
-	"math"
 
 	"context"
 
@@ -31,10 +30,13 @@ const (
 // where:
 //
 //	c1 = -a^3
-//	c2 = 3a^2
-//	c3 = -3a
-//	c4 = a^3
+//	c2 = 3a^2 + 3a^3
+//	c3 = -6a^2 - 3a - 3a^3
+//	c4 = 1 + 3a + 3a^2 + a^3
 //	a = volume factor
+//
+// The coefficients sum to 1 for any a, the way a weighted moving average's
+// must, so T3 reproduces a constant input exactly.
 //
 // Example:
 //
@@ -98,12 +100,16 @@ func (t *T3[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-cha
 	ema4Aligned := helper.SkipWithContext(ctx, ema4Splice[1], 2*idle)
 	ema5Aligned := helper.SkipWithContext(ctx, ema5Splice[1], idle)
 
-	// Calculate coefficients based on volume factor
+	// Calculate coefficients based on volume factor. These sum to 1 for
+	// any a (verify: -a^3 + 3a^2+3a^3 -6a^2-3a-3a^3 + 1+3a+3a^2+a^3 = 1),
+	// as required of a weighted moving average.
 	a := float64(t.VolumeFactor)
-	c1 := -math.Pow(a, 3)
-	c2 := 3 * math.Pow(a, 2)
-	c3 := -3 * a
-	c4 := math.Pow(a, 3)
+	a2 := a * a
+	a3 := a2 * a
+	c1 := -a3
+	c2 := 3*a2 + 3*a3
+	c3 := -6*a2 - 3*a - 3*a3
+	c4 := 1 + 3*a + 3*a2 + a3
 
 	// T3 = c1*EMA6 + c2*EMA6(EMA6) + c3*EMA6(EMA6(EMA6)) + c4*EMA6(EMA6(EMA6(EMA6)))
 	// Which is: c1*ema6 + c2*ema5 + c3*ema4 + c4*ema3
