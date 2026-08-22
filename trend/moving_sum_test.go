@@ -99,6 +99,51 @@ func TestMovingSumFloatDrift(t *testing.T) {
 	}
 }
 
+// TestMovingSumRecoversFromNaN guards against a regression where a single
+// NaN entering the running sum poisoned every output for the rest of the
+// series, even long after that NaN left the window: subtracting a value
+// back out (`sum - NaN`) doesn't undo NaN contamination, since the running
+// sum itself had already become NaN. The output should only be NaN while
+// the NaN value is actually within the window, and recover to a correct,
+// finite sum as soon as it slides out.
+func TestMovingSumRecoversFromNaN(t *testing.T) {
+	const period = 4
+
+	values := []float64{1, 2, 3, math.NaN(), 4, 5, 6, 7, 8, 9}
+
+	sum := trend.NewMovingSum[float64]()
+	sum.Period = period
+
+	actual := helper.ChanToSlice(sum.Compute(helper.SliceToChan(values)))
+
+	expectedLen := len(values) - (period - 1)
+	if len(actual) != expectedLen {
+		t.Fatalf("expected %d values, got %d", expectedLen, len(actual))
+	}
+
+	for i, v := range actual {
+		// Window i covers values[i : i+period]; NaN is at index 3.
+		wantNaN := i <= 3 && i+period > 3
+
+		if wantNaN {
+			if !math.IsNaN(v) {
+				t.Fatalf("value %d: expected NaN (window still contains the NaN input), got %v", i, v)
+			}
+
+			continue
+		}
+
+		var want float64
+		for j := i; j < i+period; j++ {
+			want += values[j]
+		}
+
+		if math.Abs(v-want) > 1e-9 {
+			t.Fatalf("value %d: expected %v once the NaN left the window, got %v", i, want, v)
+		}
+	}
+}
+
 // TestMovingSumFloatDriftNearZeroSum exercises the regime where the window
 // sum is near zero while individual terms are much larger in magnitude —
 // the shape of a Cmf or Mfi moving sum of signed money flow in a quiet
