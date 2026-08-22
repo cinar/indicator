@@ -120,12 +120,15 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 
 	d := s.Stochastic.Sma.ComputeWithContext(ctx, kDuplicate[0])
 
-	kValues = helper.SkipWithContext(ctx, kDuplicate[1], s.Stochastic.Sma.IdlePeriod())
+	kForStcSplice := helper.DuplicateWithContext(ctx,
+		helper.SkipWithContext(ctx, kDuplicate[1], s.Stochastic.Sma.IdlePeriod()),
+		2,
+	)
 
 	macdForStc := helper.SkipWithContext(ctx, inputs[3], s.Stochastic.IdlePeriod())
 
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, macdForStc, kValues),
-		helper.SubtractWithContext(ctx, d, kValues),
+	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, macdForStc, kForStcSplice[0]),
+		helper.SubtractWithContext(ctx, d, kForStcSplice[1]),
 	),
 		100,
 	)

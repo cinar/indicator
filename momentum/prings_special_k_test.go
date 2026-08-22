@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
-	"github.com/cinar/indicator/v2/trend"
 )
 
 func TestNewPringsSpecialKInitialization(t *testing.T) {
@@ -70,9 +69,7 @@ func pringsSpecialKComputeOutputLengthOnInputLength(inputLen int) int {
 
 // Test sufficient number of samples for output
 func TestPringsSpecialKComputeBasicOutput(t *testing.T) {
-	sma530 := trend.NewSmaWithPeriod[float64](530)
-	roc195 := trend.NewRocWithPeriod[float64](195)
-	minimumRequiredInputLength := sma530.IdlePeriod() + roc195.IdlePeriod() + 1
+	minimumRequiredInputLength := NewPringsSpecialK[float64]().IdlePeriod() + 1
 
 	expectedOutputLen := 0
 	actualOutputLen := pringsSpecialKComputeOutputLengthOnInputLength(minimumRequiredInputLength - 1)
@@ -83,6 +80,15 @@ func TestPringsSpecialKComputeBasicOutput(t *testing.T) {
 	actualOutputLen = pringsSpecialKComputeOutputLengthOnInputLength(minimumRequiredInputLength)
 	if actualOutputLen != expectedOutputLen {
 		t.Errorf("Expected %d output values, got %d", expectedOutputLen, actualOutputLen)
+	}
+}
+
+func TestPringsSpecialKIdlePeriod(t *testing.T) {
+	psk := NewPringsSpecialK[float64]()
+
+	expected := psk.Sma195Roc530.IdlePeriod() + psk.Roc530.IdlePeriod()
+	if psk.IdlePeriod() != expected {
+		t.Fatalf("expected IdlePeriod %d, got %d", expected, psk.IdlePeriod())
 	}
 }
 

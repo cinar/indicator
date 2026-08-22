@@ -59,26 +59,22 @@ func NewFisher[T helper.Float]() *Fisher[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the Fisher Transform.
 func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
-	// Collect input to slice first to allow multiple independent channels
-	values := helper.ChanToSlice(closings)
+	inputs := helper.DuplicateWithContext(ctx, closings, 3)
+	input1, input2, input3 := inputs[0], inputs[1], inputs[2]
 
-	// Create three independent channels from the slice
-	input1 := helper.SliceToChanWithContext(ctx, values)
-	input2 := helper.SliceToChanWithContext(ctx, values)
-	input3 := helper.SliceToChanWithContext(ctx, values)
-
-	// Compute min and max
-	minValues := f.Min.ComputeWithContext(ctx, input1)
+	// minValues is used twice below (range and close-minus-min), so it
+	// needs its own duplicated copy for the second use.
+	minSplice := helper.DuplicateWithContext(ctx, f.Min.ComputeWithContext(ctx, input1), 2)
 	maxValues := f.Max.ComputeWithContext(ctx, input2)
 
 	// Align close values with min/max outputs
 	alignedClosings := helper.SkipWithContext(ctx, input3, f.Period-1)
 
 	// Compute: range = max - min
-	rangeValues := helper.SubtractWithContext(ctx, maxValues, minValues)
+	rangeValues := helper.SubtractWithContext(ctx, maxValues, minSplice[0])
 
 	// Compute: close - min
-	closeMinusMin := helper.SubtractWithContext(ctx, alignedClosings, minValues)
+	closeMinusMin := helper.SubtractWithContext(ctx, alignedClosings, minSplice[1])
 
 	// Compute: normalized = (close - min) / (max - min)
 	normalized := helper.DivideWithContext(ctx, closeMinusMin, rangeValues)
@@ -105,10 +101,10 @@ func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 
 // IdlePeriod is the initial period that Fisher Transform won't yield any results.
 func (f *Fisher[T]) IdlePeriod() int {
-	// Min outputs after Period-1, Max outputs after Period-1
-	// Close values need to skip Period-1
-	// So total idle = Period-1 (from min/max) + Period-1 (from skip) = 2*Period-2
-	return 2*f.Period - 2
+	// Min, Max, and the aligned closings are each independently delayed
+	// by Period-1 from the same input, not chained one after another, so
+	// the delay doesn't compound.
+	return f.Period - 1
 }
 
 // String is the string representation of the Fisher Transform.
