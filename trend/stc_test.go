@@ -51,27 +51,23 @@ func TestStcSlowStochastic(t *testing.T) {
 	}
 }
 
+// TestStcFull checks that STC's output length matches IdlePeriod() once the
+// Stochastic pass is applied twice (once to MACD, again to its %D), which
+// needs more warm-up than the 19-row testdata/stochastic.csv fixture
+// (shared with TestStcSlowStochastic/TestStochastic) has, so this generates
+// its own longer synthetic series instead.
 func TestStcFull(t *testing.T) {
-	type Data struct {
-		Value float64
-		K     float64
-		D     float64
+	values := make([]float64, 200)
+	for i := range values {
+		values[i] = 100 + float64(i%7)
 	}
-
-	input, err := helper.ReadFromCsvFile[Data]("testdata/stochastic.csv")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	inputSlice := helper.ChanToSlice(input)
-	values := helper.Map(helper.SliceToChan(inputSlice), func(d *Data) float64 { return d.Value })
 
 	stc := trend.NewStcWithPeriod[float64](5, 10, 5, 3)
-	result := stc.Compute(values)
+	result := stc.Compute(helper.SliceToChan(values))
 
 	slice := helper.ChanToSlice(result)
 
-	expected := len(inputSlice) - stc.IdlePeriod()
+	expected := len(values) - stc.IdlePeriod()
 	if len(slice) != expected {
 		t.Fatalf("expected %d values, got %d", expected, len(slice))
 	}
