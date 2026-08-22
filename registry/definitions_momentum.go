@@ -86,12 +86,16 @@ func init() {
 		},
 	})
 
-	// Fisher is not registered: its ComputeWithContext produces far fewer
-	// values than IdlePeriod() promises (verified independently of this
-	// registry -- 400 closings in, IdlePeriod says 382 values should come
-	// out, only 195 actually do), so Dates and its Series can't be
-	// aligned. Worth its own issue and fix in momentum.Fisher before
-	// registering it here.
+	Register("fisher", Definition{
+		Fields: []Field{FieldClose},
+		New:    func() any { return momentum.NewFisher[float64]() },
+		Compute: func(ctx context.Context, indicator any, in []<-chan float64) ([]Series, error) {
+			fisher := indicator.(*momentum.Fisher[float64])
+			return []Series{
+				{Name: "fisher", Values: fisher.ComputeWithContext(ctx, in[0])},
+			}, nil
+		},
+	})
 
 	Register("ibs", Definition{
 		Fields: []Field{FieldHigh, FieldLow, FieldClose},
@@ -134,14 +138,16 @@ func init() {
 		},
 	})
 
-	// PringsSpecialK is not registered: unlike its peers it has no
-	// IdlePeriod() method, so registry.Run can't skip the leading dates
-	// its (very long, 500+ period) internal ROC/SMA chain needs before it
-	// yields a value -- Run would treat every date as immediately valid
-	// and the series/dates would come out misaligned. Its own test works
-	// around this the same way, computing the required length by hand
-	// instead of calling an IdlePeriod(). Worth an IdlePeriod() method on
-	// PringsSpecialK itself before registering it here.
+	Register("prings_special_k", Definition{
+		Fields: []Field{FieldClose},
+		New:    func() any { return momentum.NewPringsSpecialK[float64]() },
+		Compute: func(ctx context.Context, indicator any, in []<-chan float64) ([]Series, error) {
+			pringsSpecialK := indicator.(*momentum.PringsSpecialK[float64])
+			return []Series{
+				{Name: "prings_special_k", Values: pringsSpecialK.ComputeWithContext(ctx, in[0])},
+			}, nil
+		},
+	})
 
 	Register("pvo", Definition{
 		Fields: []Field{FieldVolume},

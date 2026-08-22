@@ -193,9 +193,10 @@ func TestRunCciMultiInput(t *testing.T) {
 }
 
 func TestRunEveryRegisteredIndicator(t *testing.T) {
-	// Some indicators (e.g. ConnorsRsi's 100-period PercentRank) need a
-	// long lookback before they yield a single value.
-	data := testSnapshots(400)
+	// Some indicators need a long lookback before they yield a single
+	// value -- PringsSpecialK's IdlePeriod is 724 (Sma195 chained onto
+	// Roc530), the longest of any registered indicator.
+	data := testSnapshots(800)
 
 	for _, name := range registry.Names() {
 		t.Run(name, func(t *testing.T) {

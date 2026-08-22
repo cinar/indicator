@@ -270,18 +270,24 @@ func init() {
 		},
 	})
 
-	// Stc (Schaff Trend Cycle) is not registered: its ComputeWithContext
-	// output channel never closes when driven from an independent input
-	// producer the way registry.Run feeds it (verified with a standalone
-	// repro), which looks like a pre-existing internal deadlock in
-	// trend.Stc unrelated to this registry. Worth its own issue and fix
-	// before registering it here.
+	// Stc (Schaff Trend Cycle) is still not registered: #421 fixed the
+	// output channel never closing, but the computed values themselves
+	// are wrong -- STC = 100*(MACD-%K)/(%D-%K) divides by a denominator
+	// that's frequently near zero, so real-world input (verified against
+	// asset/testdata/repository/brk-b.csv) yields -Inf and swings like
+	// 1435 or -710 for an indicator that's documented to oscillate
+	// 0-100. This is a distinct, still-open bug in trend.Stc's formula,
+	// not the one #421 fixed.
 
-	// T3 is not registered: its ComputeWithContext produces far fewer
-	// values than IdlePeriod() promises (verified independently of this
-	// registry -- 400 closings in, IdlePeriod says 376 values should come
-	// out, only 93 actually do), so Dates and its Series can't be aligned.
-	// Worth its own issue and fix in trend.T3 before registering it here.
+	// T3 is still not registered: #423 fixed ComputeWithContext yielding
+	// fewer values than IdlePeriod() promised, but the weighted-sum
+	// coefficients themselves don't sum to 1 (c1+c2+c3+c4 = 3a(a-1), not
+	// 1 as a moving average requires), so T3 doesn't track price at all
+	// -- verified by feeding a constant 100 closings and getting -63
+	// back, not 100. This is a distinct, still-open bug in T3's formula
+	// (see the standard Tillson T3 coefficients: c2 should include a
+	// +3a^3 term and c3 a -6a^2-3a^3 term, both missing here), not the
+	// one #423 fixed.
 
 	Register("tema", Definition{
 		Fields: []Field{FieldClose},
