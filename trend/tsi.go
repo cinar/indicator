@@ -63,10 +63,10 @@ func (t *Tsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 	)
 
 	//	PCDS = Ema(13, Ema(25, (Current - Prior)))
-	pcds := ComputeMaWithContext(ctx, t.FirstSmoothing, ComputeMaWithContext(ctx, t.SecondSmoothing, pcsSplice[0]))
+	pcds := ComputeMaWithContext(ctx, t.SecondSmoothing, ComputeMaWithContext(ctx, t.FirstSmoothing, pcsSplice[0]))
 
 	// APCDS = Ema(13, Ema(25, Abs(Current - Prior)))
-	apcds := ComputeMaWithContext(ctx, t.FirstSmoothing, ComputeMaWithContext(ctx, t.SecondSmoothing, helper.AbsWithContext(ctx, pcsSplice[1])))
+	apcds := ComputeMaWithContext(ctx, t.SecondSmoothing, ComputeMaWithContext(ctx, t.FirstSmoothing, helper.AbsWithContext(ctx, pcsSplice[1])))
 
 	// TSI = (PCDS / APCDS) * 100
 	tsi := helper.MultiplyByWithContext(ctx,
