@@ -24,7 +24,7 @@ Indicator is a Golang library for technical analysis, providing a wide range of 
 - **Composition & Reusability:** Build and utilize reusable blocks, particularly those in the `helper/` package. Avoid re-implementing existing logic within a single indicator. For example, if an indicator uses a moving average, it should employ the existing implementation rather than duplicating the logic internally.
 - **Copyright Header:** Every file must start with the copyright notice:
   ```go
-  // Copyright (c) 2021-2026 Onur Cinar.
+  // Copyright (c) 2021-2026 The Indicator Authors.
   // The source code is provided under GNU AGPLv3 License.
   // https://github.com/cinar/indicator
   ```
