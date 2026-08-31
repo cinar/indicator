@@ -141,7 +141,7 @@ func (t *TripleRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-
 
 		// - The 5-period RSI reading is down for the 3rd period in a row.
 		for i := 1; i < t.DownDays; i++ {
-			if memory.At(i-1) > memory.At(i) {
+			if memory.At(i-1) < memory.At(i) {
 				return strategy.Hold
 			}
 		}
