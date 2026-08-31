@@ -15,7 +15,7 @@ import (
 // Wma represents the configuration parameters for calculating the Weighted Moving Average (WMA).
 // It calculates a moving average by putting more weight on recent data and less on past data.
 //
-//	WMA = ((Value1 * 1/N) + (Value2 * 2/N) + ...) / 2
+//	WMA = (Oldest * 1 + ... + Newest * N) / (N * (N + 1) / 2)
 type Wma[T helper.Number] struct {
 	// Time period.
 	Period int
@@ -46,7 +46,7 @@ func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan
 
 		for i := 0; i < w.Period; i++ {
 			v := window.At(i)
-			sum += v * T(w.Period-i)
+			sum += v * T(i+1)
 		}
 
 		return sum / divisor
