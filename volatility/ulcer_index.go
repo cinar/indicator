@@ -62,9 +62,9 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 
 	//	Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 	sma := trend.NewSmaWithPeriod[T](u.Period)
-	squaredAverage := helper.PowWithContext(ctx, sma.ComputeWithContext(ctx, percentageDrawdown),
+	squaredAverage := sma.ComputeWithContext(ctx, helper.PowWithContext(ctx, percentageDrawdown,
 		2,
-	)
+	))
 
 	// Ulcer Index = Sqrt(Squared Average)
 	ulcerIndex := helper.SqrtWithContext(ctx, squaredAverage)
