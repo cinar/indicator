@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2026 Onur Cinar.
+# Copyright (c) 2021-2026 The Indicator Authors.
 # The source code is provided under GNU AGPLv3 License.
 # https://github.com/cinar/indicator
 

@@ -10,7 +10,7 @@ The purpose of this contributor agreement ("Agreement") is to clarify and docume
 
 ### How to use this Contributor Agreement
 
-If You are an employee and have created the Contribution as part of your employment, You need to have Your employer approve this Agreement or sign the Entity version of this document. If You do not own the Copyright in the entire work of authorship, any other author of the Contribution should also sign this – in any event, please contact Us at onur.cinar@gmail.com
+If You are an employee and have created the Contribution as part of your employment, You need to have Your employer approve this Agreement or sign the Entity version of this document. If You do not own the Copyright in the entire work of authorship, any other author of the Contribution should also sign this – in any event, please contact Us via GitHub project issues or maintainers.
 
 ### 1\. Definitions
 

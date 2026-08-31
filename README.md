@@ -31,18 +31,20 @@ Indicator is a Golang module that provides an extensive set of technical analysi
 -	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
 -   **MCP Support:** MCP (Multi-Client Protocol Server) support is integrated into the library, facilitating its use with various AI tools.
 
-I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+There is also a TypeScript version of this module at [Indicator TS](https://github.com/cinar/indicatorts).
 
 ⚠️ Risk Disclosure & Disclaimer
 -------------------------------
 
-**Financial Risk:** Trading stocks, futures, and cryptocurrencies involves significant risk of loss and is not suitable for every investor. The use of leveraged instruments can lead to losses greater than the initial investment.
+**Financial Risk:** Trading stocks, options, futures, foreign exchange, and cryptocurrencies involves substantial risk of loss and is not suitable for every investor. Valuation of securities and financial instruments may fluctuate, and investors may lose more than their initial investment.
 
-**Not Financial Advice:** The information and tools provided in this project are strictly for educational and informational purposes and are not to be construed as advice or solicitation to buy or sell any security. They do NOT constitute financial, investment, or trading advice. Onur Cinar is not a financial advisor.
+**Not Financial or Investment Advice:** The software, algorithms, indicators, strategies, and backtest results provided in this project are strictly for educational, research, and informational purposes. Nothing contained in this project or its associated tools constitutes a solicitation, recommendation, endorsement, or financial/investment/trading advice by The Indicator Authors or any contributor. You are solely responsible for evaluating the merits and risks associated with the use of any information or software before making any financial decisions.
 
-**No Warranties:** This software is provided "AS IS," without warranty of any kind. Technical analysis indicators are based on historical data and do not guarantee future results. While we strive for 90%+ test coverage, software can contain bugs.
+**Hypothetical Performance Disclosure (CFTC Rule 4.41):** Hypothetical or simulated performance results have certain inherent limitations. Unlike an actual performance record, simulated results do not represent actual trading. Also, since the trades have not actually been executed, the results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity or market slippage. Simulated trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those shown.
 
-**Limitation of Liability:** In no event shall the author or contributors be liable for any financial loss, data loss, or any other damages arising from the use of this library. Use at your own risk.
+**No Warranties:** This software is provided "AS IS," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. Past performance is no guarantee of future results.
+
+**Limitation of Liability:** In no event shall the author, contributors, or copyright holders be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, financial loss, loss of profits, trading losses, loss of data, or business interruption) however caused and on any theory of liability arising in any way out of the use of this software, even if advised of the possibility of such damage.
 
 👆 Indicators Provided
 ----------------------
@@ -232,7 +234,7 @@ Compound strategies merge multiple strategies to produce integrated recommendati
 Decorator strategies offer a way to alter the recommendations of other strategies.
 
 -   [Inverse Strategy](strategy/decorator/README.md#InverseStrategy)
--   [No Loss Strategy](strategy/decorator/README.md#NoLossStrategy)
+-   [Cost Basis Exit Strategy](strategy/decorator/README.md#CostBasisExitStrategy)
 -   [Stop Loss Strategy](strategy/decorator/README.md#StopLossStrategy)
 
 🗃 Repositories
@@ -385,8 +387,8 @@ import (
 Indicator Go is part of a broader ecosystem of technical analysis tools:
 
 - [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
-- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for live trading
-- [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration
+- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for market data and trading (users supply their own brokerage credentials and assume all live execution risk)
+- [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration (simulation and research purposes)
 
 💖 Our Sponsors
 ---------------
@@ -403,10 +405,10 @@ Anyone can contribute to Indicator library. Please make sure to read our [Contri
 License
 -------
 
-The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact me.
+The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact the maintainers.
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.    
+Copyright (c) 2021-2026 The Indicator Authors.    
 The source code is provided under GNU AGPLv3 License.
 
 This program is free software: you can redistribute it and/or modify
@@ -426,7 +428,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The version `v1.x.x` is provided under MIT License.
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.
+Copyright (c) 2021-2026 The Indicator Authors.
 The source code is provided under MIT License.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -447,3 +449,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+Trademarks
+----------
+
+- **TD Sequential®** is a registered trademark of DeMark Analytics, LLC. This library is an independent open-source mathematical implementation and is not affiliated with, sponsored by, or endorsed by DeMark Analytics, LLC.
+- **Bollinger Bands®** is a registered trademark of John Bollinger.
+- **ConnorsRSI®** is a registered trademark of Connors Group, Inc.
+- All other product names, logos, and brands mentioned herein are trademarks or registered trademarks of their respective owners. Mention of third-party products, services, or trademarks is for nominative identification and educational purposes only and does not imply affiliation or endorsement.
