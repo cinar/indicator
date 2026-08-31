@@ -44,6 +44,8 @@ func NewFiWithPeriod[T helper.Number](period int) *Fi[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the FI.
 func (f *Fi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
+	volumes = helper.SkipWithContext(ctx, volumes, 1)
+
 	return f.Ema.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, helper.ChangeWithContext(ctx, closings, 1),
 		volumes,
 	),
