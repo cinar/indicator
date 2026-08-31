@@ -83,7 +83,7 @@ func (kdj *KdjStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 
 	dates := asset.SnapshotsAsDates(snapshots[0])
 	highs := asset.SnapshotsAsHighs(snapshots[1])
-	lows := asset.SnapshotsAsHighs(snapshots[2])
+	lows := asset.SnapshotsAsLows(snapshots[2])
 	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshots[3]), 2)
 
 	k, d, j := kdj.Kdj.Compute(highs, lows, closings[1])
