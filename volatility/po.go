@@ -19,8 +19,8 @@ const (
 // Po represents the configuration parameters for calculating the Projection Oscillator (PO). It uses the linear
 // regression slope, along with highs and lows. Period defines the moving window to calculates the PO.
 //
-//	PL = Min(period, (high + MLS(period, x, high)))
-//	PH = Max(period, (low + MLS(period, x, low)))
+//	PL = Min(period, (low + MLS(period, x, low)))
+//	PH = Max(period, (high + MLS(period, x, high)))
 //	PO = 100 * (Closing - PL) / (PH - PL)
 //
 // Example:
@@ -62,26 +62,26 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 		2,
 	)
 
-	// PL = Min(period, (high + MLS(period, x, high)))
-	plM, plB := p.mls.ComputeWithContext(ctx, xSplice[0], highsSplice[0])
+	// PL = Min(period, (low + MLS(period, x, low)))
+	plM, plB := p.mls.ComputeWithContext(ctx, xSplice[0], lowsSplice[0])
 	go helper.DrainWithContext(ctx, plB)
 
-	highsSplice[1] = helper.SkipWithContext(ctx, highsSplice[1], p.mls.IdlePeriod())
+	lowsSplice[1] = helper.SkipWithContext(ctx, lowsSplice[1], p.mls.IdlePeriod())
 
-	plSplice := helper.DuplicateWithContext(ctx, p.min.ComputeWithContext(ctx, helper.AddWithContext(ctx, highsSplice[1],
+	plSplice := helper.DuplicateWithContext(ctx, p.min.ComputeWithContext(ctx, helper.AddWithContext(ctx, lowsSplice[1],
 		plM,
 	),
 	),
 		2,
 	)
 
-	// PH = Max(period, (low + MLS(period, x, low)))
-	phM, phB := p.mls.ComputeWithContext(ctx, xSplice[1], lowsSplice[0])
+	// PH = Max(period, (high + MLS(period, x, high)))
+	phM, phB := p.mls.ComputeWithContext(ctx, xSplice[1], highsSplice[0])
 	go helper.DrainWithContext(ctx, phB)
 
-	lowsSplice[1] = helper.SkipWithContext(ctx, lowsSplice[1], p.mls.IdlePeriod())
+	highsSplice[1] = helper.SkipWithContext(ctx, highsSplice[1], p.mls.IdlePeriod())
 
-	ph := p.max.ComputeWithContext(ctx, helper.AddWithContext(ctx, lowsSplice[1],
+	ph := p.max.ComputeWithContext(ctx, helper.AddWithContext(ctx, highsSplice[1],
 		phM,
 	),
 	)
