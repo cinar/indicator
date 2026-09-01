@@ -49,7 +49,7 @@ const (
 //
 //	stc := trend.NewStc[float64]()
 //	result := stc.Compute(closings)
-type Stc[T helper.Number] struct {
+type Stc[T helper.Float] struct {
 	// FastPeriod is the period for the fast EMA.
 	FastPeriod int
 
@@ -70,7 +70,7 @@ type Stc[T helper.Number] struct {
 }
 
 // NewStc function initializes a new STC instance with the default parameters.
-func NewStc[T helper.Number]() *Stc[T] {
+func NewStc[T helper.Float]() *Stc[T] {
 	return NewStcWithPeriod[T](
 		DefaultStcFastPeriod,
 		DefaultStcSlowPeriod,
@@ -80,7 +80,7 @@ func NewStc[T helper.Number]() *Stc[T] {
 }
 
 // NewStcWithPeriod function initializes a new STC instance with the given periods.
-func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T] {
+func NewStcWithPeriod[T helper.Float](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T] {
 	apo := NewApo[T]()
 	apo.FastPeriod = fastPeriod
 	apo.SlowPeriod = slowPeriod

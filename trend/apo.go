@@ -43,7 +43,7 @@ const (
 //	apo.SlowPeriod = 26
 //
 //	result := apo.Compute(c)
-type Apo[T helper.Number] struct {
+type Apo[T helper.Float] struct {
 	// Fast period.
 	FastPeriod int
 
@@ -59,7 +59,7 @@ type Apo[T helper.Number] struct {
 
 // NewApo function initializes a new APO instance
 // with the default parameters.
-func NewApo[T helper.Number]() *Apo[T] {
+func NewApo[T helper.Float]() *Apo[T] {
 	return &Apo[T]{
 		FastPeriod:    DefaultApoFastPeriod,
 		FastSmoothing: DefaultApoFastSmoothing,
