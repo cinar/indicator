@@ -114,11 +114,24 @@ func (s *SQLRepository) Assets() ([]string, error) {
 }
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
+//
+// By design, this only returns snapshots from 2000-01-01 onward, unlike
+// InMemoryRepository and FileSystemRepository, whose Get returns full
+// history with no floor date.
 func (s *SQLRepository) Get(name string) (<-chan *Snapshot, error) {
 	return s.GetSince(name, time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC))
 }
 
 // GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
+//
+// The query runs in a background goroutine that owns the underlying database
+// rows and sends each scanned snapshot on the returned channel. Callers must
+// drain the returned channel to completion (or otherwise ensure it keeps
+// being read) so the goroutine can finish and its deferred cleanup can
+// release the rows/connection; abandoning the channel partway through leaks
+// the goroutine and the underlying database resources, since there is no
+// cancellation signal on this interface. See Repository.GetSince for the
+// broader interface-level contract.
 func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error) {
 	rows, err := s.getSinceQuery.Query(name, date)
 	if err != nil {
