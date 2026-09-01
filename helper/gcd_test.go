@@ -36,3 +36,30 @@ func TestGcdWithFourValues(t *testing.T) {
 		t.Fatalf("actual %d expected %d", actual, expected)
 	}
 }
+
+func TestGcdWithEmptyInput(t *testing.T) {
+	actual := helper.Gcd()
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestGcdWithOneNegativeValue(t *testing.T) {
+	actual := helper.Gcd(10, -5)
+	expected := 5
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestGcdWithTwoNegativeValues(t *testing.T) {
+	actual := helper.Gcd(-10, -5)
+	expected := 5
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
