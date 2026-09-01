@@ -34,16 +34,18 @@ func (*DonchianChannelBreakoutStrategy) Name() string {
 
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (d *DonchianChannelBreakoutStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	closings := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
-		2,
-	)
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
 
-	uppers, middles, lowers := d.DonchianChannel.ComputeWithContext(ctx, closings[0])
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+
+	uppers, middles, lowers := d.DonchianChannel.ComputeWithContext(ctx, highs, lows)
 	go helper.DrainWithContext(ctx, middles)
 
-	closings[1] = helper.SkipWithContext(ctx, closings[1], d.DonchianChannel.IdlePeriod())
+	closings = helper.SkipWithContext(ctx, closings, d.DonchianChannel.IdlePeriod())
 
-	actions := helper.Operate3WithContext(ctx, uppers, lowers, closings[1], func(upper, lower, closing float64) strategy.Action {
+	actions := helper.Operate3WithContext(ctx, uppers, lowers, closings, func(upper, lower, closing float64) strategy.Action {
 		if closing >= upper {
 			return strategy.Buy
 		}
@@ -65,31 +67,32 @@ func (d *DonchianChannelBreakoutStrategy) ComputeWithContext(ctx context.Context
 func (d *DonchianChannelBreakoutStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	//
 	// snapshots[0] -> dates
-	// snapshots[1] -> closings[0] -> closings
-	//                 closings[1] -> upper
-	//                             -> middle
-	//                             -> lower
-	// snapshots[2] -> actions     -> annotations
+	// snapshots[1] -> highs   -|
+	// snapshots[2] -> lows    -+-> DonchianChannel.Compute -> upper, middle, lower
+	// snapshots[3] -> closings -> close
+	// snapshots[4] -> actions  -> annotations
 	//              -> outcomes
 	//
-	snapshots := helper.Duplicate(c, 3)
+	snapshots := helper.Duplicate(c, 5)
 
 	dates := asset.SnapshotsAsDates(snapshots[0])
-	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshots[1]), 2)
+	highs := asset.SnapshotsAsHighs(snapshots[1])
+	lows := asset.SnapshotsAsLows(snapshots[2])
+	closings := asset.SnapshotsAsClosings(snapshots[3])
 
-	uppers, middles, lowers := d.DonchianChannel.Compute(closings[0])
+	uppers, middles, lowers := d.DonchianChannel.Compute(highs, lows)
 	uppers = helper.Shift(uppers, d.DonchianChannel.IdlePeriod(), 0)
 	middles = helper.Shift(middles, d.DonchianChannel.IdlePeriod(), 0)
 	lowers = helper.Shift(lowers, d.DonchianChannel.IdlePeriod(), 0)
 
-	actions, outcomes := strategy.ComputeWithOutcome(d, snapshots[2])
+	actions, outcomes := strategy.ComputeWithOutcome(d, snapshots[4])
 	annotations := strategy.ActionsToAnnotations(actions)
 	outcomes = helper.MultiplyBy(outcomes, 100)
 
 	report := helper.NewReport(d.Name(), dates)
 	report.AddChart()
 
-	report.AddColumn(helper.NewNumericReportColumn("Close", closings[1]))
+	report.AddColumn(helper.NewNumericReportColumn("Close", closings))
 	report.AddColumn(helper.NewNumericReportColumn("Upper", uppers))
 	report.AddColumn(helper.NewNumericReportColumn("Middle", middles))
 	report.AddColumn(helper.NewNumericReportColumn("Lower", lowers))
