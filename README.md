@@ -294,7 +294,7 @@ $ indicator-backtest \
 ☁️  MCP Server
 --------------
 
-The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time strategy execution and data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
+The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
 
 🐳 Docker
 ---------
