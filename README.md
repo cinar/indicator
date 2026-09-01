@@ -20,7 +20,7 @@ Indicator Go
 
 Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting.
 
-> An extensive technical analysis library for algorithmic trading - 80+ indicators, backtesting framework, and AI integration via MCP.
+> An extensive technical analysis library for algorithmic trading - 80+ indicators and backtesting framework.
 
 ### Major improvements in v2:
 
@@ -29,7 +29,6 @@ Indicator is a Golang module that provides an extensive set of technical analysi
 -	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#SliceToChan) and [helper.ChanToSlice](helper/README.md#ChanToSlice) are available. Alternatively, you can still use the [v1 version](https://github.com/cinar/indicator/tree/v1).
 -	**Configurable Indicators and Strategies:** All indicators and strategies were designed to be fully configurable with no preset values.
 -	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
--   **MCP Support:** MCP (Multi-Client Protocol Server) support is integrated into the library, facilitating its use with various AI tools.
 
 There is also a TypeScript version of this module at [Indicator TS](https://github.com/cinar/indicatorts).
 
@@ -301,11 +300,6 @@ $ indicator-backtest \
     -workers 1
 ```
 
-☁️  MCP Server
---------------
-
-The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
-
 🐳 Docker
 ---------
 
@@ -397,7 +391,6 @@ import (
 Indicator Go is part of a broader ecosystem of technical analysis tools:
 
 - [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
-- [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration (simulation and research purposes)
 
 💖 Our Sponsors
 ---------------

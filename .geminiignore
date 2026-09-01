@@ -11,6 +11,5 @@ bin/
 go.work
 .idea/
 conductor/
-mcp/
 logo.png
 sponsors.svg
