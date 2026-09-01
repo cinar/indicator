@@ -163,7 +163,7 @@ func (p *PivotPoint[T]) calculate(h, l, c, currO T) PivotPointResult[T] {
 		res.R2 = res.P + (h - l)
 		res.S2 = res.P - (h - l)
 		res.R3 = h + 2*(res.P-l)
-		res.S3 = l - 2*(res.P-l)
+		res.S3 = l - 2*(h-res.P)
 
 	case PivotPointCamarilla:
 		diff := h - l
