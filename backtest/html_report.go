@@ -5,6 +5,8 @@
 package backtest
 
 import (
+	"cmp"
+
 	// Go embed report template.
 	_ "embed"
 	"fmt"
@@ -166,14 +168,18 @@ func (h *HTMLReport) AssetEnd(name string) error {
 
 	// Sort the backtest results by the outcomes.
 	slices.SortFunc(results, func(a, b *htmlReportResult) int {
-		return int(b.Outcome - a.Outcome)
+		return cmp.Compare(b.Outcome, a.Outcome)
 	})
 
-	bestResult := results[0]
+	if len(results) == 0 {
+		h.Logger.Warn("No strategy results for asset, skipping best result.", "asset", name)
+	} else {
+		bestResult := results[0]
 
-	// Report the best result for the current asset.
-	h.Logger.Info("Best outcome", "asset", name, "strategy", bestResult.StrategyName, "outcome", bestResult.Outcome)
-	h.bestResults = append(h.bestResults, bestResult)
+		// Report the best result for the current asset.
+		h.Logger.Info("Best outcome", "asset", name, "strategy", bestResult.StrategyName, "outcome", bestResult.Outcome)
+		h.bestResults = append(h.bestResults, bestResult)
+	}
 
 	// Write the asset report.
 	err := h.writeAssetReport(name, results)
@@ -188,7 +194,7 @@ func (h *HTMLReport) AssetEnd(name string) error {
 func (h *HTMLReport) End() error {
 	// Sort the best results by the outcomes.
 	slices.SortFunc(h.bestResults, func(a, b *htmlReportResult) int {
-		return int(b.Outcome - a.Outcome)
+		return cmp.Compare(b.Outcome, a.Outcome)
 	})
 
 	return h.writeReport()

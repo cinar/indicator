@@ -7,6 +7,7 @@ package backtest_test
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/cinar/indicator/v2/asset"
@@ -125,6 +126,108 @@ func TestHTMLReportErrors(t *testing.T) {
 	err = report.AssetEnd("UNKNOWN")
 	if err == nil {
 		t.Fatal("expected error for not begun asset")
+	}
+}
+
+func TestHTMLReportSortsCloseOutcomes(t *testing.T) {
+	outputDir, err := os.MkdirTemp("", "report_sort")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer helper.RemoveAll(t, outputDir)
+
+	report := backtest.NewHTMLReport(outputDir)
+	report.WriteStrategyReports = false
+
+	strategies := []strategy.Strategy{
+		strategy.NewMajorityStrategy("Strategy A"),
+		strategy.NewMajorityStrategy("Strategy B"),
+	}
+
+	err = report.Begin([]string{"TEST"}, strategies)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = report.AssetBegin("TEST", strategies)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Outcomes 1.2 and 1.6 (0.012 and 0.016 before the *100 scaling in
+	// Write) differ by less than 1.0, so int(b-a) truncation would treat
+	// them as equal. They must still sort with the 1.6 outcome first.
+	writeOutcome := func(currentStrategy strategy.Strategy, outcome float64) {
+		snapshots := make(chan *asset.Snapshot, 1)
+		snapshots <- &asset.Snapshot{Close: 100}
+		close(snapshots)
+
+		actions := make(chan strategy.Action, 1)
+		actions <- strategy.Buy
+		close(actions)
+
+		outcomes := make(chan float64, 1)
+		outcomes <- outcome
+		close(outcomes)
+
+		err = report.Write("TEST", currentStrategy, snapshots, actions, outcomes)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	writeOutcome(strategies[0], 0.012)
+	writeOutcome(strategies[1], 0.016)
+
+	err = report.AssetEnd("TEST")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = report.End()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	content, err := os.ReadFile(filepath.Join(outputDir, "TEST.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	indexA := strings.Index(string(content), "Strategy A")
+	indexB := strings.Index(string(content), "Strategy B")
+	if indexA == -1 || indexB == -1 {
+		t.Fatalf("expected both strategies in report, got: %s", content)
+	}
+
+	if indexB > indexA {
+		t.Fatalf("expected higher outcome (Strategy B, 1.6) to be listed before lower outcome (Strategy A, 1.2)")
+	}
+}
+
+func TestHTMLReportAssetEndNoResults(t *testing.T) {
+	outputDir, err := os.MkdirTemp("", "report_no_results")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer helper.RemoveAll(t, outputDir)
+
+	report := backtest.NewHTMLReport(outputDir)
+
+	err = report.AssetBegin("TEST", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// No strategies were written for the asset, so AssetEnd must not panic
+	// on an empty results slice.
+	err = report.AssetEnd("TEST")
+	if err != nil {
+		t.Fatalf("expected no error for asset with no results, got: %v", err)
+	}
+
+	if _, err := os.Stat(filepath.Join(outputDir, "TEST.html")); os.IsNotExist(err) {
+		t.Fatal("TEST.html not found")
 	}
 }
 
