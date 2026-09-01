@@ -10,15 +10,11 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/examples/compound"
-	"github.com/cinar/indicator/v2/examples/momentum"
-	"github.com/cinar/indicator/v2/examples/trend"
-	"github.com/cinar/indicator/v2/examples/volatility"
-	"github.com/cinar/indicator/v2/examples/volume"
 )
 
 func main() {
@@ -26,6 +22,8 @@ func main() {
 	var repositoryConfig string
 	var reportName string
 	var reportConfig string
+	var strategyNames string
+	var listStrategies bool
 	var workers int
 	var lastDays int
 	var addSplits bool
@@ -45,6 +43,8 @@ func main() {
 	flag.StringVar(&repositoryConfig, "repository-config", "", "repository config")
 	flag.StringVar(&reportName, "report-name", "html", "report name")
 	flag.StringVar(&reportConfig, "report-config", ".", "report type")
+	flag.StringVar(&strategyNames, "strategies", "", "comma-separated list of strategy names to backtest (see -list-strategies)")
+	flag.BoolVar(&listStrategies, "list-strategies", false, "list the available strategy names and exit")
 	flag.IntVar(&workers, "workers", backtest.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", backtest.DefaultLastDays, "number of days to do backtest")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
@@ -52,6 +52,19 @@ func main() {
 	flag.Parse()
 
 	logger := slog.Default()
+
+	if listStrategies {
+		for _, name := range StrategyNames() {
+			stdErr.Println(name)
+		}
+
+		return
+	}
+
+	if strategyNames == "" {
+		logger.Error("No strategies specified. Provide one or more with -strategies (comma-separated), or see -list-strategies for the available names.")
+		os.Exit(1)
+	}
 
 	source, err := asset.NewRepository(repositoryName, repositoryConfig)
 	if err != nil {
@@ -70,12 +83,18 @@ func main() {
 	backtester.LastDays = lastDays
 	backtester.Logger = logger
 	backtester.Names = append(backtester.Names, flag.Args()...)
-	backtester.Strategies = append(backtester.Strategies, compound.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, momentum.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, strategy.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, trend.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, volatility.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, volume.AllStrategies()...)
+
+	for _, name := range strings.Split(strategyNames, ",") {
+		name = strings.TrimSpace(name)
+
+		s, err := NewStrategy(name)
+		if err != nil {
+			logger.Error("Unable to initialize strategy.", "name", name, "error", err)
+			os.Exit(1)
+		}
+
+		backtester.Strategies = append(backtester.Strategies, s)
+	}
 
 	if addSplits {
 		backtester.Strategies = append(backtester.Strategies, strategy.AllSplitStrategies(backtester.Strategies)...)

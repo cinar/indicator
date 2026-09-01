@@ -163,6 +163,96 @@ func TestSyncFailingTargetAppendMultiWorker(t *testing.T) {
 	}
 }
 
+func TestSyncLastDateRealErrorDoesNotFallBackToDefault(t *testing.T) {
+	name := "A"
+
+	var getSinceCalledWithDate time.Time
+	getSinceCalled := false
+
+	source := &MockRepository{
+		GetSinceFunc: func(_ string, date time.Time) (<-chan *asset.Snapshot, error) {
+			getSinceCalled = true
+			getSinceCalledWithDate = date
+
+			return helper.SliceToChan([]*asset.Snapshot{}), nil
+		},
+	}
+
+	target := &MockRepository{
+		AssetsFunc: func() ([]string, error) {
+			return []string{name}, nil
+		},
+
+		LastDateFunc: func(_ string) (time.Time, error) {
+			return time.Time{}, errors.New("db connection dropped")
+		},
+
+		AppendFunc: func(_ string, snapshots <-chan *asset.Snapshot) error {
+			helper.Drain(snapshots)
+			return nil
+		},
+	}
+
+	defaultStartDate := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	sync := asset.NewSync()
+	sync.Workers = 1
+	sync.Delay = 0
+
+	err := sync.Run(source, target, defaultStartDate)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+
+	if getSinceCalled {
+		t.Fatalf("expected GetSince to not be called, but it was called with date %v", getSinceCalledWithDate)
+	}
+}
+
+func TestSyncLastDateSentinelErrorFallsBackToDefault(t *testing.T) {
+	name := "A"
+
+	var getSinceCalledWithDate time.Time
+
+	source := &MockRepository{
+		GetSinceFunc: func(_ string, date time.Time) (<-chan *asset.Snapshot, error) {
+			getSinceCalledWithDate = date
+
+			return helper.SliceToChan([]*asset.Snapshot{}), nil
+		},
+	}
+
+	target := &MockRepository{
+		AssetsFunc: func() ([]string, error) {
+			return []string{name}, nil
+		},
+
+		LastDateFunc: func(_ string) (time.Time, error) {
+			return time.Time{}, asset.ErrRepositoryAssetEmpty
+		},
+
+		AppendFunc: func(_ string, snapshots <-chan *asset.Snapshot) error {
+			helper.Drain(snapshots)
+			return nil
+		},
+	}
+
+	defaultStartDate := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	sync := asset.NewSync()
+	sync.Workers = 1
+	sync.Delay = 0
+
+	err := sync.Run(source, target, defaultStartDate)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !getSinceCalledWithDate.Equal(defaultStartDate) {
+		t.Fatalf("expected GetSince to be called with default start date %v, got %v", defaultStartDate, getSinceCalledWithDate)
+	}
+}
+
 func TestSyncFailingTargetAppend(t *testing.T) {
 	source := &MockRepository{
 		GetSinceFunc: func(_ string, _ time.Time) (<-chan *asset.Snapshot, error) {
