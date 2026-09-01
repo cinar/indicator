@@ -9,6 +9,7 @@ API_KEY=""
 DAYS=365
 LAST=365
 ASSETS=""
+STRATEGIES=""
 OUTPUT="/app/output"
 DATA_DIR="/app/data"
 
@@ -18,15 +19,16 @@ show_usage() {
     echo "Sync market data from Tiingo and run backtests."
     echo ""
     echo "Options:"
-    echo "  --api-key KEY   Tiingo API key (required)"
-    echo "  --days N        Days of historical data to fetch (default: 365)"
-    echo "  --last N        Days to backtest (default: 365)"
-    echo "  --assets TICKERS Space-separated list of ticker symbols (default: all available)"
-    echo "  --output DIR    Output directory for reports (default: /app/output)"
-    echo "  --help          Show this help message"
+    echo "  --api-key KEY           Tiingo API key (required)"
+    echo "  --strategies STRATEGIES Comma-separated list of strategies (required)"
+    echo "  --days N                Days of historical data to fetch (default: 365)"
+    echo "  --last N                Days to backtest (default: 365)"
+    echo "  --assets TICKERS        Space-separated list of ticker symbols (default: all available)"
+    echo "  --output DIR            Output directory for reports (default: /app/output)"
+    echo "  --help                  Show this help message"
     echo ""
     echo "Example:"
-    echo "  indicator --api-key YOUR_KEY --days 365 --assets aapl msft googl"
+    echo "  indicator --api-key YOUR_KEY --strategies macd,rsi --days 365 --assets aapl msft googl"
     echo ""
     echo "Get your free Tiingo API key at: https://www.tiingo.com/"
 }
@@ -35,6 +37,10 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --api-key)
             API_KEY="$2"
+            shift 2
+            ;;
+        --strategies)
+            STRATEGIES="$2"
             shift 2
             ;;
         --days)
@@ -76,12 +82,20 @@ if [ -z "$API_KEY" ]; then
     exit 1
 fi
 
+if [ -z "$STRATEGIES" ]; then
+    echo "Error: --strategies is required"
+    echo ""
+    show_usage
+    exit 1
+fi
+
 echo "=========================================="
 echo "Indicator Docker - Sync & Backtest"
 echo "=========================================="
 echo ""
 echo "Configuration:"
 echo "  API Key: ***"
+echo "  Strategies: $STRATEGIES"
 echo "  Days: $DAYS"
 echo "  Backtest Period: $LAST days"
 echo "  Assets: ${ASSETS:-all}"
@@ -120,6 +134,7 @@ if [ -z "$ASSETS" ]; then
         -repository-config "$DATA_DIR" \
         -report-name html \
         -report-config "$OUTPUT" \
+        -strategies "$STRATEGIES" \
         -last "$LAST"
 else
     ./indicator-backtest \
@@ -127,6 +142,7 @@ else
         -repository-config "$DATA_DIR" \
         -report-name html \
         -report-config "$OUTPUT" \
+        -strategies "$STRATEGIES" \
         -last "$LAST" \
         $ASSETS
 fi

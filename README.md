@@ -290,13 +290,15 @@ if err != nil {
 }
 ```
 
-The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. This capability encompasses the application of all currently recognized strategies, culminating in the generation of detailed reports within a designated output directory.
+The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository for explicitly specified strategies, culminating in the generation of detailed reports within a designated output directory. Strategies must be explicitly specified using the `-strategies` flag (e.g. `macd,rsi` or `all`).
 
 ```bash
 $ indicator-backtest \
-    -source-name filesystem \
-    -source-config /home/user/assets \
-    -output /home/user/reports \
+    -repository-name filesystem \
+    -repository-config /home/user/assets \
+    -report-name html \
+    -report-config /home/user/reports \
+    -strategies macd,rsi \
     -workers 1
 ```
 
@@ -310,11 +312,12 @@ The easiest way to get started is using our Docker image. It handles everything 
 ```bash
 # Get your free Tiingo API key at: https://www.tiingo.com/
 
-# Run backtest for specific assets
+# Run backtest for specific assets and strategies
 docker run -it --rm \
   -v $(pwd)/output:/app/output \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
+  --strategies macd,rsi \
   --days 365 \
   --assets aapl msft googl
 
@@ -330,6 +333,7 @@ xdg-open output/index.html
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--api-key` | Tiingo API key (required) | - |
+| `--strategies` | Comma-separated list of strategies (required, e.g. `macd,rsi` or `all`) | - |
 | `--days` | Days of historical data to fetch | 365 |
 | `--last` | Days to backtest | 365 |
 | `--assets` | Space-separated ticker symbols (default: all) | all |
@@ -338,17 +342,19 @@ xdg-open output/index.html
 ### Examples
 
 ```bash
-# Backtest all available assets for 1 year
+# Backtest all available assets for 1 year with specific strategies
 docker run -it --rm \
   -v $(pwd)/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
-  --api-key YOUR_TIINGO_API_KEY
+  --api-key YOUR_TIINGO_API_KEY \
+  --strategies macd,rsi
 
 # Backtest specific stocks for last 6 months, test last 30 days
 docker run -it --rm \
   -v $(pwd)/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
+  --strategies macd,rsi \
   --days 180 \
   --last 30 \
   --assets aapl msft googl amzn
@@ -358,6 +364,7 @@ docker run -it --rm \
   -v /path/to/my/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
+  --strategies macd,rsi \
   --output /app/output
 ```
 
@@ -365,7 +372,7 @@ docker run -it --rm \
 
 ```bash
 docker build -t indicator .
-docker run -it --rm -v $(pwd)/output:/app/output indicator --api-key YOUR_KEY
+docker run -it --rm -v $(pwd)/output:/app/output indicator --api-key YOUR_KEY --strategies macd,rsi
 ```
 
 Usage
