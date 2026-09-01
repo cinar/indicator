@@ -31,9 +31,14 @@ const (
 //
 //	Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
 //	Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
-//	Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
-//	Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
-//	Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
+//	Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2, plotted LaggingPeriod periods ahead.
+//	Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2, plotted LaggingPeriod periods ahead.
+//	Chikou Span (Lagging Span) = Today's closing, plotted LaggingPeriod periods back on the chart.
+//
+// Senkou Span A/B and Chikou Span are all displaced on the chart relative to the day they are computed
+// from. Since real-world implementations almost universally default both displacements to the same value,
+// LaggingPeriod is reused for both: it is the number of periods Senkou Span A/B are shifted forward, and
+// also the number of periods Chikou Span is shifted back.
 //
 // Example:
 //
@@ -120,17 +125,39 @@ func (i *IchimokuCloud[T]) ComputeWithContext(ctx context.Context, highs, lows, 
 	conversionLineSplice[1] = helper.SkipWithContext(ctx, conversionLineSplice[1], i.LeadingMax.IdlePeriod()-i.BaseMax.IdlePeriod())
 	baseLineSplice[1] = helper.SkipWithContext(ctx, baseLineSplice[1], i.LeadingMax.IdlePeriod()-i.BaseMax.IdlePeriod())
 
-	//	Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
-	laggingLine := helper.ShiftWithContext(ctx, closings, i.LaggingPeriod, 0)
-	laggingLine = helper.SkipWithContext(ctx, laggingLine, i.LeadingMax.IdlePeriod())
-	laggingLine = helper.SkipLastWithContext(ctx, laggingLine, i.LaggingPeriod)
+	// At this point conversionLineSplice[1], baseLineSplice[1], leadingSpanA, and leadingSpanB all start
+	// emitting at the same absolute input row, idle := i.LeadingMax.IdlePeriod(). Senkou Span A/B (leadingSpanA
+	// and leadingSpanB) are supposed to be plotted disp periods ahead on the chart, i.e. the span value
+	// computed from data through day idle+k belongs at chart position idle+disp+k. Rather than delaying the
+	// span streams themselves, we delay the returned Conversion/Base Line streams by disp instead: this makes
+	// the whole output start disp rows later, so output row p corresponds to absolute chart row idle+disp+p.
+	// leadingSpanA/leadingSpanB's row p is then still the span computed as of day idle+p (unchanged), which is
+	// exactly the value that belongs at chart row idle+disp+p. No front skip on the spans is needed at all.
+	disp := i.LaggingPeriod
+
+	conversionLineSplice[1] = helper.SkipWithContext(ctx, conversionLineSplice[1], disp)
+	baseLineSplice[1] = helper.SkipWithContext(ctx, baseLineSplice[1], disp)
+
+	//	Chikou Span (Lagging Span) = Today's closing, plotted disp periods back on the chart, i.e. chart row p
+	//	shows the closing from row p+disp. Combined with the output starting at absolute row idle+disp (per
+	//	above), chart row p needs closings[idle+2*disp+p], so simply skip idle+2*disp raw closings.
+	laggingLine := helper.SkipWithContext(ctx, closings, i.LeadingMax.IdlePeriod()+2*disp)
+
+	// Delaying conversionLine/baseLine by disp above leaves them disp elements shorter than the still
+	// front-aligned leadingSpanA/leadingSpanB, and laggingLine (skipped by an extra disp again) ends up a
+	// further disp elements shorter still. Trim the tails so all five returned channels remain the same
+	// length and row-aligned, as required by callers that zip them together (e.g. helper.Operate5WithContext).
+	leadingSpanA = helper.SkipLastWithContext(ctx, leadingSpanA, 2*disp)
+	leadingSpanB = helper.SkipLastWithContext(ctx, leadingSpanB, 2*disp)
+	conversionLineSplice[1] = helper.SkipLastWithContext(ctx, conversionLineSplice[1], disp)
+	baseLineSplice[1] = helper.SkipLastWithContext(ctx, baseLineSplice[1], disp)
 
 	return conversionLineSplice[1], baseLineSplice[1], leadingSpanA, leadingSpanB, laggingLine
 }
 
 // IdlePeriod is the initial period that Ichimoku Cloud won't yield any results.
 func (i *IchimokuCloud[T]) IdlePeriod() int {
-	return i.LeadingMax.IdlePeriod()
+	return i.LeadingMax.IdlePeriod() + i.LaggingPeriod
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.
