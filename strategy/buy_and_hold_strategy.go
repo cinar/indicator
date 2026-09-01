@@ -11,25 +11,23 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
-// BuyAndHoldStrategy defines an investment approach of acquiring and
-// indefinitely retaining an asset. This strategy primarily serves as
-// a benchmark for evaluating the performance of alternative
-// strategies against a baseline of passive asset ownership.
+// BuyAndHoldStrategy demonstrates a baseline buy-and-hold strategy for
+// illustrative and benchmarking purposes.
 type BuyAndHoldStrategy struct {
 }
 
-// NewBuyAndHoldStrategy function initializes a new buy and hold strategy instance.
+// NewBuyAndHoldStrategy initializes an example BuyAndHoldStrategy instance with default parameters.
 func NewBuyAndHoldStrategy() *BuyAndHoldStrategy {
 	return &BuyAndHoldStrategy{}
 }
 
-// Name returns the name of the strategy.
+// Name returns the name of the example strategy.
 func (*BuyAndHoldStrategy) Name() string {
 	return "Buy and Hold Strategy"
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a
-// stream of actionable recommendations.
+// ComputeWithContext processes the provided asset snapshots and generates an
+// illustrative stream of actions.
 func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 	actions := make(chan Action, cap(snapshots))
@@ -52,8 +50,8 @@ func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <
 	return actions
 }
 
-// Report processes the provided asset snapshots and generates a
-// report annotated with the recommended actions.
+// Report processes the provided asset snapshots and generates an
+// illustrative report annotated with example actions.
 func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 

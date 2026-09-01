@@ -33,18 +33,23 @@ Indicator is a Golang module that provides an extensive set of technical analysi
 
 There is also a TypeScript version of this module at [Indicator TS](https://github.com/cinar/indicatorts).
 
-⚠️ Risk Disclosure & Disclaimer
--------------------------------
+⚠️ Risk Disclosure & Legal Disclaimer
+------------------------------------
 
-**Financial Risk:** Trading stocks, options, futures, foreign exchange, and cryptocurrencies involves substantial risk of loss and is not suitable for every investor. Valuation of securities and financial instruments may fluctuate, and investors may lose more than their initial investment.
+1. **Strict Educational, Research, and Informational Purpose Notice:**
+This repository, software library, documentation, and all associated tools, mathematical models, indicator calculations, example strategies, and backtesting utilities are provided strictly and solely for educational, academic, and research purposes. Nothing contained herein constitutes, or is intended to constitute, investment, financial, tax, legal, or trading advice. No communication or output from this software shall be construed as a recommendation, endorsement, solicitation, or offer to buy or sell any security, commodity, currency, digital asset, or other financial instrument.
 
-**Not Financial or Investment Advice:** The software, algorithms, indicators, strategies, and backtest results provided in this project are strictly for educational, research, and informational purposes. Nothing contained in this project or its associated tools constitutes a solicitation, recommendation, endorsement, or financial/investment/trading advice by The Indicator Authors or any contributor. You are solely responsible for evaluating the merits and risks associated with the use of any information or software before making any financial decisions.
+2. **Non-Advisory and Non-Fiduciary Status:**
+The Indicator Authors, maintainers, contributors, and copyright holders are not registered investment advisers (RIAs), registered broker-dealers, commodity trading advisors (CTAs), commodity pool operators (CPOs), financial planners, or tax advisors with the U.S. Securities and Exchange Commission (SEC), the U.S. Commodity Futures Trading Commission (CFTC), the Financial Industry Regulatory Authority (FINRA), or any other regulatory agency or authority in any jurisdiction. The maintainers do not act in any fiduciary capacity, and no fiduciary, advisory, or professional-client relationship is established through the use of, contribution to, or access to this software.
 
-**Hypothetical Performance Disclosure (CFTC Rule 4.41):** Hypothetical or simulated performance results have certain inherent limitations. Unlike an actual performance record, simulated results do not represent actual trading. Also, since the trades have not actually been executed, the results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity or market slippage. Simulated trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those shown.
+3. **Risk Disclosure Regarding Substantial Trading Losses and Leverage:**
+Trading and investing in equities, options, futures, foreign exchange (Forex), commodities, and cryptocurrencies carries substantial risk of loss and is not suitable for all individuals or investors. Prices of financial instruments fluctuate significantly and unpredictably. The use of leverage, margin, or derivative contracts can rapidly amplify losses as well as gains, potentially resulting in the complete loss of all invested capital or losses exceeding initial deposits. You should carefully consider whether trading is appropriate for you in light of your personal financial condition, experience level, and risk tolerance, and you should consult with qualified, licensed financial advisors before making any investment or trading decisions.
 
-**No Warranties:** This software is provided "AS IS," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. Past performance is no guarantee of future results.
+4. **CFTC-Style Hypothetical and Backtested Performance Disclosure (CFTC Rule 4.41):**
+Hypothetical, simulated, or backtested performance results have inherent and significant limitations. Unlike an actual performance record, simulated results do not represent actual trading. Because trades have not actually been executed, results may over- or under-compensate for the impact, if any, of certain market factors, including but not limited to lack of liquidity, order execution delays, market impact, exchange fees, slippage, and spread. Furthermore, hypothetical and simulated trading programs are designed with the benefit of hindsight and retrospective knowledge of historical price movements. No representation or warranty is being made that any account, strategy, or portfolio will or is likely to achieve profits, avoid losses, or experience outcomes similar to those illustrated in any backtest, example, or simulation.
 
-**Limitation of Liability:** In no event shall the author, contributors, or copyright holders be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, financial loss, loss of profits, trading losses, loss of data, or business interruption) however caused and on any theory of liability arising in any way out of the use of this software, even if advised of the possibility of such damage.
+5. **"AS IS" Software Liability Limitation & Disclaimers:**
+This software is provided on an "AS IS" and "AS AVAILABLE" basis, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, COMPLETENESS, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, MAINTAINERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, FINANCIAL LOSSES, TRADING LOSSES, LOSS OF CAPITAL, LOSS OF PROFITS, LOSS OF DATA, SYSTEM FAILURES, INACCURATE CALCULATIONS, OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND UNDER ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 👆 Indicators Provided
 ----------------------
@@ -157,85 +162,85 @@ The following list of indicators are currently supported by this package:
 -   [Net Present Value (NPV)](valuation/README.md#Npv)
 -   [Present Value (PV)](valuation/README.md#Pv)
 
-🧠 Strategies Provided
-----------------------
+💡 Example Strategies (Educational Demonstrations)
+---------------------------------------------------
 
-The following list of strategies are currently supported by this package:
+The following concrete strategies are provided in the `examples/` directory purely as illustrative demonstrations on how developers can consume the core indicator mathematics and generic backtesting framework. They are intended strictly for educational and research purposes:
 
 ### ⚖ Base Strategies
 
--	[Buy and Hold Strategy](strategy/README.md#type-buyandholdstrategy)
+-	[Buy and Hold Strategy](strategy/README.md#BuyAndHoldStrategy)
 
-### 📈 Trend Strategies
+### 📈 Trend Strategy Examples
 
--   [Alligator Strategy](strategy/trend/README.md#AlligatorStrategy)
--	[Absolute Price Oscillator (APO) Strategy](strategy/trend/README.md#ApoStrategy)
--	[Aroon Strategy](strategy/trend/README.md#AroonStrategy)
--	[Balance of Power (BoP) Strategy](strategy/trend/README.md#BopStrategy)
--	[Chande Forecast Oscillator Strategy](strategy/trend/README.md#CfoStrategy)
--	[Commodity Channel Index (CCI) Strategy](strategy/trend/README.md#CciStrategy)
--	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#DemaStrategy)
--   [Envelope Strategy](strategy/trend/README.md#EnvelopeStrategy)
--	[Golden Cross Strategy](strategy/trend/README.md#GoldenCrossStrategy)
--	[Hull Moving Average (HMA) Strategy](strategy/trend/README.md#HmaStrategy)
--	[Kaufman's Adaptive Moving Average (KAMA) Strategy](strategy/trend/README.md#KamaStrategy)
--	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#MacdStrategy)
--	[Qstick Strategy](strategy/trend/README.md#QstickStrategy)
--	[Random Index (KDJ) Strategy](strategy/trend/README.md#KdjStrategy)
--   [Smoothed Moving Average (SMMA) Strategy](strategy/trend/README.md#SmmaStrategy)
--	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#TrimaStrategy)
--	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#TrixStrategy)
--	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#TripleMovingAverageCrossoverStrategy)
--	[True Strength Index (TSI) Strategy](strategy/trend/README.md#TsiStrategy)
--	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#VwmaStrategy)
--   [Weighted Close Strategy](strategy/trend/README.md#WeightedCloseStrategy)
+-   [Alligator Strategy](examples/trend/README.md#AlligatorStrategy)
+-	[Absolute Price Oscillator (APO) Strategy](examples/trend/README.md#ApoStrategy)
+-	[Aroon Strategy](examples/trend/README.md#AroonStrategy)
+-	[Balance of Power (BoP) Strategy](examples/trend/README.md#BopStrategy)
+-	[Chande Forecast Oscillator Strategy](examples/trend/README.md#CfoStrategy)
+-	[Commodity Channel Index (CCI) Strategy](examples/trend/README.md#CciStrategy)
+-	[Double Exponential Moving Average (DEMA) Strategy](examples/trend/README.md#DemaStrategy)
+-   [Envelope Strategy](examples/trend/README.md#EnvelopeStrategy)
+-	[Golden Cross Strategy](examples/trend/README.md#GoldenCrossStrategy)
+-	[Hull Moving Average (HMA) Strategy](examples/trend/README.md#HmaStrategy)
+-	[Kaufman's Adaptive Moving Average (KAMA) Strategy](examples/trend/README.md#KamaStrategy)
+-	[Moving Average Convergence Divergence (MACD) Strategy](examples/trend/README.md#MacdStrategy)
+-	[Qstick Strategy](examples/trend/README.md#QstickStrategy)
+-	[Random Index (KDJ) Strategy](examples/trend/README.md#KdjStrategy)
+-   [Smoothed Moving Average (SMMA) Strategy](examples/trend/README.md#SmmaStrategy)
+-	[Triangular Moving Average (TRIMA) Strategy](examples/trend/README.md#TrimaStrategy)
+-	[Triple Exponential Average (TRIX) Strategy](examples/trend/README.md#TrixStrategy)
+-	[Triple Moving Average Crossover Strategy](examples/trend/README.md#TripleMovingAverageCrossoverStrategy)
+-	[True Strength Index (TSI) Strategy](examples/trend/README.md#TsiStrategy)
+-	[Volume Weighted Moving Average (VWMA) Strategy](examples/trend/README.md#VwmaStrategy)
+-   [Weighted Close Strategy](examples/trend/README.md#WeightedCloseStrategy)
 
-### 🚀 Momentum Strategies
+### 🚀 Momentum Strategy Examples
 
--	[Awesome Oscillator Strategy](strategy/momentum/README.md#AwesomeOscillatorStrategy)
--	[Coppock Curve Strategy](strategy/momentum/README.md#CoppockCurveStrategy)
--	[Elder Ray Strategy](strategy/momentum/README.md#ElderRayStrategy)
--	[Ichimoku Cloud Strategy](strategy/momentum/README.md#IchimokuCloudStrategy)
--	[RSI Strategy](strategy/momentum/README.md#RsiStrategy)
--	[Stochastic Oscillator Strategy](strategy/momentum/README.md#StochasticOscillatorStrategy)
--	[Stochastic RSI Strategy](strategy/momentum/README.md#StochasticRsiStrategy)
--	[Triple RSI Strategy](strategy/momentum/README.md#TripleRsiStrategy)
--	[Williams R Strategy](strategy/momentum/README.md#WilliamsRStrategy)
+-	[Awesome Oscillator Strategy](examples/momentum/README.md#AwesomeOscillatorStrategy)
+-	[Coppock Curve Strategy](examples/momentum/README.md#CoppockCurveStrategy)
+-	[Elder Ray Strategy](examples/momentum/README.md#ElderRayStrategy)
+-	[Ichimoku Cloud Strategy](examples/momentum/README.md#IchimokuCloudStrategy)
+-	[RSI Strategy](examples/momentum/README.md#RsiStrategy)
+-	[Stochastic Oscillator Strategy](examples/momentum/README.md#StochasticOscillatorStrategy)
+-	[Stochastic RSI Strategy](examples/momentum/README.md#StochasticRsiStrategy)
+-	[Triple RSI Strategy](examples/momentum/README.md#TripleRsiStrategy)
+-	[Williams R Strategy](examples/momentum/README.md#WilliamsRStrategy)
 
-### 🎢 Volatility Strategies
+### 🎢 Volatility Strategy Examples
 
--	[Bollinger Bands Strategy](strategy/volatility/README.md#BollingerBandsStrategy)
--	[Donchian Channel Breakout Strategy](strategy/volatility/README.md#DonchianChannelBreakoutStrategy)
--	[Super Trend Strategy](strategy/volatility/README.md#SuperTrendStrategy)
+-	[Bollinger Bands Strategy](examples/volatility/README.md#BollingerBandsStrategy)
+-	[Donchian Channel Breakout Strategy](examples/volatility/README.md#DonchianChannelBreakoutStrategy)
+-	[Super Trend Strategy](examples/volatility/README.md#SuperTrendStrategy)
 
-### 📢 Volume Strategies
+### 📢 Volume Strategy Examples
 
--	[Chaikin Money Flow Strategy](strategy/volume/README.md#ChaikinMoneyFlowStrategy)
--	[Ease of Movement Strategy](strategy/volume/README.md#EaseOfMovementStrategy)
--	[Force Index Strategy](strategy/volume/README.md#ForceIndexStrategy)
--	[Money Flow Index Strategy](strategy/volume/README.md#MoneyFlowIndexStrategy)
--	[Negative Volume Index Strategy](strategy/volume/README.md#NegativeVolumeIndexStrategy)
--	[On-Balance Volume (OBV) Strategy](strategy/volume/README.md#ObvStrategy)
--	[Percent Band and MFI Strategy](strategy/volume/README.md#PercentBandMFIStrategy)
--	[Weighted Average Price Strategy](strategy/volume/README.md#WeightedAveragePriceStrategy)
+-	[Chaikin Money Flow Strategy](examples/volume/README.md#ChaikinMoneyFlowStrategy)
+-	[Ease of Movement Strategy](examples/volume/README.md#EaseOfMovementStrategy)
+-	[Force Index Strategy](examples/volume/README.md#ForceIndexStrategy)
+-	[Money Flow Index Strategy](examples/volume/README.md#MoneyFlowIndexStrategy)
+-	[Negative Volume Index Strategy](examples/volume/README.md#NegativeVolumeIndexStrategy)
+-	[On-Balance Volume (OBV) Strategy](examples/volume/README.md#ObvStrategy)
+-	[Percent Band and MFI Strategy](examples/volume/README.md#PercentBandMFIStrategy)
+-	[Weighted Average Price Strategy](examples/volume/README.md#WeightedAveragePriceStrategy)
 
-### 🧪 Compound Strategies
+### 🧪 Compound Strategy Examples
 
-Compound strategies merge multiple strategies to produce integrated recommendations. They combine individual strategies' recommendations using various decision-making logic.
+Compound strategies demonstrate merging multiple indicator signals into unified actions using various logical combinations.
 
 -	[And Strategy](strategy/README.md#AndStrategy)
 -	[Majority Strategy](strategy/README.md#MajorityStrategy)
--	[MACD-RSI Strategy](strategy/compound/README.md#MacdRsiStrategy)
+-	[MACD-RSI Strategy](examples/compound/README.md#MacdRsiStrategy)
 -	[Or Strategy](strategy/README.md#OrStrategy)
 -	[Split Strategy](strategy/README.md#SplitStrategy)
 
-### 🎁 Decorator Strategies
+### 🎁 Decorator Strategy Examples
 
-Decorator strategies offer a way to alter the recommendations of other strategies.
+Decorator strategies offer an illustrative way to alter or filter the recommendations of underlying strategies.
 
--   [Inverse Strategy](strategy/decorator/README.md#InverseStrategy)
--   [Cost Basis Exit Strategy](strategy/decorator/README.md#CostBasisExitStrategy)
--   [Stop Loss Strategy](strategy/decorator/README.md#StopLossStrategy)
+-   [Inverse Strategy](examples/decorator/README.md#InverseStrategy)
+-   [Cost Basis Exit Strategy](examples/decorator/README.md#CostBasisExitStrategy)
+-   [Stop Loss Strategy](examples/decorator/README.md#StopLossStrategy)
 
 🗃 Repositories
 --------------
@@ -266,9 +271,15 @@ This command effectively retrieves the most recent snapshots for assets residing
 ⏳ Backtesting
 --------------
 
-The [Backtest functionality](backtest/README.md#Backtest), using the [Outcome](strategy/README.md#Outcome), rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy-asset pairing.
+The [Backtest functionality](backtest/README.md#Backtest), using the [Outcome](strategy/README.md#Outcome), evaluates the hypothetical performance of specified strategies applied to a defined set of historical asset data. It generates comprehensive visual representations for each strategy-asset pairing.
 
 ```go
+import (
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/backtest"
+	"github.com/cinar/indicator/v2/examples/trend"
+)
+
 report := backtest.NewHTMLReport(outputDir)
 bt := backtest.NewBacktest(repository, report)
 bt.Names = append(bt.Names, "brk-b")

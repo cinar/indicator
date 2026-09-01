@@ -1,0 +1,131 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package momentum
+
+import (
+	"fmt"
+
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/momentum"
+	"github.com/cinar/indicator/v2/strategy"
+)
+
+const (
+	// DefaultWilliamsRStrategyBuyAt defines the default Williams R level at which a Buy action is generated.
+	DefaultWilliamsRStrategyBuyAt = -80.0
+
+	// DefaultWilliamsRStrategySellAt defines the default Williams R level at which a Sell action is generated.
+	DefaultWilliamsRStrategySellAt = -20.0
+)
+
+// WilliamsRStrategy demonstrates how to compose Williams %R into an
+// illustrative threshold-based strategy.
+type WilliamsRStrategy struct {
+	// WilliamsR represents the configuration parameters for calculating the Williams %R.
+	WilliamsR *momentum.WilliamsR[float64]
+
+	// BuyAt defines the Williams R level at which a Buy action is generated.
+	BuyAt float64
+
+	// SellAt defines the Williams R level at which a Sell action is generated.
+	SellAt float64
+}
+
+// NewWilliamsRStrategy initializes an example WilliamsRStrategy instance with default parameters.
+func NewWilliamsRStrategy() *WilliamsRStrategy {
+	return NewWilliamsRStrategyWith(
+		DefaultWilliamsRStrategyBuyAt,
+		DefaultWilliamsRStrategySellAt,
+	)
+}
+
+// NewWilliamsRStrategyWith initializes an example WilliamsRStrategyWith instance with default parameters.
+func NewWilliamsRStrategyWith(buyAt, sellAt float64) *WilliamsRStrategy {
+	return &WilliamsRStrategy{
+		WilliamsR: momentum.NewWilliamsR[float64](),
+		BuyAt:     buyAt,
+		SellAt:    sellAt,
+	}
+}
+
+// Name returns the name of the example strategy.
+func (r *WilliamsRStrategy) Name() string {
+	return fmt.Sprintf("Williams R Strategy (%.0f,%.0f)", r.BuyAt, r.SellAt)
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
+func (r *WilliamsRStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+
+	wr := r.WilliamsR.ComputeWithContext(ctx, highs, lows, closings)
+
+	actions := helper.MapWithContext(ctx, wr, func(value float64) strategy.Action {
+		if value <= r.BuyAt {
+			return strategy.Buy
+		}
+
+		if value >= r.SellAt {
+			return strategy.Sell
+		}
+
+		return strategy.Hold
+	})
+
+	// Williams R starts only after the idle period.
+	actions = helper.ShiftWithContext(ctx, actions, r.WilliamsR.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
+func (r *WilliamsRStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> Compute          -> actions -> annotations
+	// snapshots[2] -> closings         -> close
+	// snapshots[3] -> highs   -|
+	// snapshots[4] -> lows    -+-> WilliamsR.Compute -> wr
+	// snapshots[5] -> closings-|
+	//
+	snapshots := helper.Duplicate(c, 6)
+
+	dates := asset.SnapshotsAsDates(snapshots[0])
+	closings := asset.SnapshotsAsClosings(snapshots[2])
+	highs := asset.SnapshotsAsHighs(snapshots[3])
+	lows := asset.SnapshotsAsLows(snapshots[4])
+	closingsForWR := asset.SnapshotsAsClosings(snapshots[5])
+
+	wr := helper.Shift(r.WilliamsR.Compute(highs, lows, closingsForWR), r.WilliamsR.IdlePeriod(), 0)
+
+	actions, outcomes := strategy.ComputeWithOutcome(r, snapshots[1])
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	report := helper.NewReport(r.Name(), dates)
+	report.AddChart()
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closings))
+	report.AddColumn(helper.NewNumericReportColumn("Williams R", wr), 1)
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (r *WilliamsRStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return r.ComputeWithContext(context.Background(), snapshots)
+}

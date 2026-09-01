@@ -24,7 +24,7 @@ type SplitStrategy struct {
 	SellStrategy Strategy
 }
 
-// NewSplitStrategy function initializes a new split strategy with the given parameters.
+// NewSplitStrategy initializes an example SplitStrategy instance with default parameters.
 func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy {
 	return &SplitStrategy{
 		BuyStrategy:  buyStrategy,
@@ -32,12 +32,12 @@ func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy {
 	}
 }
 
-// Name returns the name of the strategy.
+// Name returns the name of the example strategy.
 func (s *SplitStrategy) Name() string {
 	return fmt.Sprintf("SplitStrategy(%s, %s)", s.BuyStrategy.Name(), s.SellStrategy.Name())
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
@@ -92,7 +92,7 @@ func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan
 	return result
 }
 
-// Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 

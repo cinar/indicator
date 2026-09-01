@@ -32,12 +32,12 @@ func NewAndStrategy(name string, strategies ...Strategy) *AndStrategy {
 	}
 }
 
-// Name returns the name of the strategy.
+// Name returns the name of the example strategy.
 func (a *AndStrategy) Name() string {
 	return a.name
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
@@ -67,7 +67,7 @@ func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *
 	return result
 }
 
-// Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 func (a *AndStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 

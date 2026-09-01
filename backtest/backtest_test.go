@@ -14,7 +14,7 @@ import (
 	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/trend"
+	"github.com/cinar/indicator/v2/examples/trend"
 )
 
 func TestBacktest(t *testing.T) {

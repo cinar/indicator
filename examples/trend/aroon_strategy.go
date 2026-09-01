@@ -1,0 +1,109 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package trend
+
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/trend"
+)
+
+// AroonStrategy demonstrates how to compose Aroon Up and Aroon Down indicator
+// lines into an illustrative trend crossover strategy.
+type AroonStrategy struct {
+	// Aroon represent the configuration for calculating the Aroon indicator.
+	Aroon *trend.Aroon[float64]
+}
+
+// NewAroonStrategy initializes an example AroonStrategy instance with default parameters.
+// with the default parameters.
+func NewAroonStrategy() *AroonStrategy {
+	return &AroonStrategy{
+		Aroon: trend.NewAroon[float64](),
+	}
+}
+
+// Name returns the name of the example strategy.
+func (*AroonStrategy) Name() string {
+	return "Aroon Strategy"
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an
+// illustrative stream of actions.
+func (a *AroonStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshots := helper.DuplicateWithContext(ctx, c, 2)
+
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshots[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshots[1])
+
+	ups, downs := a.Aroon.ComputeWithContext(ctx, highs, lows)
+
+	actions := helper.OperateWithContext(ctx, ups, downs, func(up, down float64) strategy.Action {
+		if up > down {
+			return strategy.Buy
+		}
+
+		if down > up {
+			return strategy.Sell
+		}
+
+		return strategy.Hold
+	})
+
+	// Aroon starts only after a full period.
+	actions = helper.ShiftWithContext(ctx, actions, a.Aroon.Period-1, strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an
+// illustrative report annotated with example actions.
+func (a *AroonStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> highs    |> ups, downs
+	// snapshots[2] -> lows     |
+	// snapshots[3] -> closings
+	// snapshots[4] -> Compute -> actions  -> annotations
+	//                            outcomes
+	//
+	snapshots := helper.Duplicate(c, 5)
+
+	dates := asset.SnapshotsAsDates(snapshots[0])
+	highs := asset.SnapshotsAsHighs(snapshots[1])
+	lows := asset.SnapshotsAsLows(snapshots[2])
+	closings := asset.SnapshotsAsClosings(snapshots[3])
+
+	ups, downs := a.Aroon.Compute(highs, lows)
+	ups = helper.Shift(ups, a.Aroon.Period-1, 0)
+	downs = helper.Shift(downs, a.Aroon.Period-1, 0)
+
+	actions, outcomes := strategy.ComputeWithOutcome(a, snapshots[4])
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	report := helper.NewReport(a.Name(), dates)
+	report.AddChart()
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closings))
+	report.AddColumn(helper.NewNumericReportColumn("Aroon Up", ups), 1)
+	report.AddColumn(helper.NewNumericReportColumn("Aroon Down", downs), 1)
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action {
+	return a.ComputeWithContext(context.Background(), c)
+}
