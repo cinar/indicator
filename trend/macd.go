@@ -31,14 +31,14 @@ const (
 //
 //	macd := trend.NewMacd[float64]()
 //	macdLine, signal := macd.Compute(c)
-type Macd[T helper.Number] struct {
+type Macd[T helper.Float] struct {
 	Ema1 *Ema[T]
 	Ema2 *Ema[T]
 	Ema3 *Ema[T]
 }
 
 // NewMacd function initializes a new MACD instance with the default parameters.
-func NewMacd[T helper.Number]() *Macd[T] {
+func NewMacd[T helper.Float]() *Macd[T] {
 	return NewMacdWithPeriod[T](
 		DefaultMacdPeriod1,
 		DefaultMacdPeriod2,
@@ -47,7 +47,7 @@ func NewMacd[T helper.Number]() *Macd[T] {
 }
 
 // NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
-func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T] {
+func NewMacdWithPeriod[T helper.Float](period1, period2, period3 int) *Macd[T] {
 	return &Macd[T]{
 		Ema1: NewEmaWithPeriod[T](period1),
 		Ema2: NewEmaWithPeriod[T](period2),

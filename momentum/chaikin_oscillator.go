@@ -29,9 +29,9 @@ const (
 //
 // Example:
 //
-//	co := momentum.ChaikinOscillator[float64]()
+//	co := momentum.NewChaikinOscillator[float64]()
 //	values := co.Compute(lows, highs)
-type ChaikinOscillator[T helper.Number] struct {
+type ChaikinOscillator[T helper.Float] struct {
 	// Ad is the Accumulation/Distribution (A/D) instance.
 	Ad *volume.Ad[T]
 
@@ -43,7 +43,7 @@ type ChaikinOscillator[T helper.Number] struct {
 }
 
 // NewChaikinOscillator function initializes a new Chaikin Oscillator instance.
-func NewChaikinOscillator[T helper.Number]() *ChaikinOscillator[T] {
+func NewChaikinOscillator[T helper.Float]() *ChaikinOscillator[T] {
 	return &ChaikinOscillator[T]{
 		Ad:       volume.NewAd[T](),
 		ShortEma: trend.NewEmaWithPeriod[T](DefaultChaikinOscillatorShortPeriod),

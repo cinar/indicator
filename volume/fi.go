@@ -25,18 +25,18 @@ const (
 //
 //	fi := volume.NewFi[float64]()
 //	result := fi.Compute(closings, volumes)
-type Fi[T helper.Number] struct {
+type Fi[T helper.Float] struct {
 	// Ema is the EMA instance.
 	Ema *trend.Ema[T]
 }
 
 // NewFi function initializes a new FI instance with the default parameters.
-func NewFi[T helper.Number]() *Fi[T] {
+func NewFi[T helper.Float]() *Fi[T] {
 	return NewFiWithPeriod[T](DefaultFiPeriod)
 }
 
 // NewFiWithPeriod function initializes a new FI instance with the given period.
-func NewFiWithPeriod[T helper.Number](period int) *Fi[T] {
+func NewFiWithPeriod[T helper.Float](period int) *Fi[T] {
 	return &Fi[T]{
 		Ema: trend.NewEmaWithPeriod[T](period),
 	}

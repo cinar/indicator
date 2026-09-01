@@ -17,7 +17,7 @@ import (
 //	EMA1 = EMA(values)
 //	EMA2 = EMA(EMA1)
 //	EMA3 = EMA(EMA2)
-type Tema[T helper.Number] struct {
+type Tema[T helper.Float] struct {
 	Ema1 *Ema[T]
 	Ema2 *Ema[T]
 	Ema3 *Ema[T]
@@ -25,7 +25,7 @@ type Tema[T helper.Number] struct {
 
 // NewTema function initializes a new TEMA instance
 // with the default parameters.
-func NewTema[T helper.Number]() *Tema[T] {
+func NewTema[T helper.Float]() *Tema[T] {
 	return &Tema[T]{
 		Ema1: NewEma[T](),
 		Ema2: NewEma[T](),
