@@ -13,7 +13,7 @@ This package belongs to the Indicator project. Indicator is a Golang module that
 ### License
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.
+Copyright (c) 2021-2026 The Indicator Authors.
 The source code is provided under GNU AGPLv3 License.
 https://github.com/cinar/indicator
 ```
@@ -30,12 +30,14 @@ The information provided on this project is strictly for informational purposes 
   - [func \(i \*InverseStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#InverseStrategy.ComputeWithContext>)
   - [func \(i \*InverseStrategy\) Name\(\) string](<#InverseStrategy.Name>)
   - [func \(i \*InverseStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#InverseStrategy.Report>)
+- [type CostBasisExitStrategy](<#CostBasisExitStrategy>)
+  - [func NewCostBasisExitStrategy\(innerStrategy strategy.Strategy\) \*CostBasisExitStrategy](<#NewCostBasisExitStrategy>)
+  - [func \(c \*CostBasisExitStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CostBasisExitStrategy.Compute>)
+  - [func \(c \*CostBasisExitStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#CostBasisExitStrategy.ComputeWithContext>)
+  - [func \(c \*CostBasisExitStrategy\) Name\(\) string](<#CostBasisExitStrategy.Name>)
+  - [func \(c \*CostBasisExitStrategy\) Report\(s \<\-chan \*asset.Snapshot\) \*helper.Report](<#CostBasisExitStrategy.Report>)
 - [type NoLossStrategy](<#NoLossStrategy>)
-  - [func NewNoLossStrategy\(innerStrategy strategy.Strategy\) \*NoLossStrategy](<#NewNoLossStrategy>)
-  - [func \(n \*NoLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.Compute>)
-  - [func \(n \*NoLossStrategy\) ComputeWithContext\(ctx context.Context, snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#NoLossStrategy.ComputeWithContext>)
-  - [func \(n \*NoLossStrategy\) Name\(\) string](<#NoLossStrategy.Name>)
-  - [func \(n \*NoLossStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#NoLossStrategy.Report>)
+  - [func NewNoLossStrategy\(innerStrategy strategy.Strategy\) \*CostBasisExitStrategy](<#NewNoLossStrategy>)
 - [type StopLossStrategy](<#StopLossStrategy>)
   - [func NewStopLossStrategy\(innerStrategy strategy.Strategy, percentage float64\) \*StopLossStrategy](<#NewStopLossStrategy>)
   - [func \(s \*StopLossStrategy\) Compute\(snapshots \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#StopLossStrategy.Compute>)
@@ -103,64 +105,86 @@ func (i *InverseStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
-<a name="NoLossStrategy"></a>
-## type [NoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L19-L22>)
+<a name="CostBasisExitStrategy"></a>
+## type [CostBasisExitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L18-L21>)
 
-NoLossStrategy prevents selling an asset at a loss. It modifies the recommendations of another strategy to ensure that the asset is only sold if its value is at or above the original purchase price.
+CostBasisExitStrategy filters sell recommendations to ensure that an asset is only sold if its current value is at or above the original purchase price (cost basis).
 
 ```go
-type NoLossStrategy struct {
-    // InnertStrategy is the inner strategy.
-    InnertStrategy strategy.Strategy
+type CostBasisExitStrategy struct {
+    // InnerStrategy is the inner strategy.
+    InnerStrategy strategy.Strategy
 }
 ```
 
-<a name="NewNoLossStrategy"></a>
-### func [NewNoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L25>)
+<a name="NewCostBasisExitStrategy"></a>
+### func [NewCostBasisExitStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L24>)
 
 ```go
-func NewNoLossStrategy(innerStrategy strategy.Strategy) *NoLossStrategy
+func NewCostBasisExitStrategy(innerStrategy strategy.Strategy) *CostBasisExitStrategy
 ```
 
-NewNoLossStrategy function initializes a new no loss strategy instance.
+NewCostBasisExitStrategy initializes a new cost basis exit strategy instance.
 
-<a name="NoLossStrategy.Compute"></a>
-### func \(\*NoLossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L86>)
+<a name="CostBasisExitStrategy.Compute"></a>
+### func \(\*CostBasisExitStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L81>)
 
 ```go
-func (n *NoLossStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+func (c *CostBasisExitStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
 Compute wraps ComputeWithContext for backwards compatibility.
 
 Deprecated: Use ComputeWithContext instead.
 
-<a name="NoLossStrategy.ComputeWithContext"></a>
-### func \(\*NoLossStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L37>)
+<a name="CostBasisExitStrategy.ComputeWithContext"></a>
+### func \(\*CostBasisExitStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L36>)
 
 ```go
-func (n *NoLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
+func (c *CostBasisExitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
 ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
 
-<a name="NoLossStrategy.Name"></a>
-### func \(\*NoLossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L32>)
+<a name="CostBasisExitStrategy.Name"></a>
+### func \(\*CostBasisExitStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L31>)
 
 ```go
-func (n *NoLossStrategy) Name() string
+func (c *CostBasisExitStrategy) Name() string
 ```
 
 Name returns the name of the strategy.
 
-<a name="NoLossStrategy.Report"></a>
-### func \(\*NoLossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/no_loss_strategy.go#L62>)
+<a name="CostBasisExitStrategy.Report"></a>
+### func \(\*CostBasisExitStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L56>)
 
 ```go
-func (n *NoLossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
+func (c *CostBasisExitStrategy) Report(s <-chan *asset.Snapshot) *helper.Report
 ```
 
 Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+
+<a name="NoLossStrategy"></a>
+## type [NoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L88>)
+
+NoLossStrategy is an alias for CostBasisExitStrategy for backwards compatibility.
+
+Deprecated: Use CostBasisExitStrategy instead.
+
+```go
+type NoLossStrategy = CostBasisExitStrategy
+```
+
+<a name="NewNoLossStrategy"></a>
+### func [NewNoLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/cost_basis_exit_strategy.go#L93>)
+
+```go
+func NewNoLossStrategy(innerStrategy strategy.Strategy) *CostBasisExitStrategy
+```
+
+NewNoLossStrategy is an alias for NewCostBasisExitStrategy for backwards compatibility.
+
+Deprecated: Use NewCostBasisExitStrategy instead.
 
 <a name="StopLossStrategy"></a>
 ## type [StopLossStrategy](<https://github.com/cinar/indicator/blob/master/strategy/decorator/stop_loss_strategy.go#L18-L24>)

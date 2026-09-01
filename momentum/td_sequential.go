@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -25,8 +25,13 @@ const (
 )
 
 // TdSequential represents the configuration parameters for calculating the
-// Tom DeMark's TD Sequential indicator. TD Sequential is a momentum indicator
-// that identifies potential trend exhaustion and reversals.
+// Sequential exhaustion momentum indicator (commonly referred to in technical analysis
+// as TD Sequential). TD Sequential is a momentum indicator that identifies potential
+// trend exhaustion and reversals.
+//
+// Trademark Notice: TD Sequential® is a registered trademark of DeMark Analytics, LLC.
+// This implementation is an independent mathematical algorithm developed for educational
+// and research purposes and is not affiliated with, sponsored by, or endorsed by DeMark Analytics, LLC.
 //
 // The indicator consists of two phases:
 //

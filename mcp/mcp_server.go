@@ -22,7 +22,7 @@ func RunMCPServer() *server.MCPServer {
 
 	// Add backtest tool with schema
 	tool := mcp.NewTool("backtest",
-		mcp.WithDescription("Run a backtest with the specified strategy and OHLCV data"),
+		mcp.WithDescription("Run a mathematical backtest simulation with the specified strategy and historical OHLCV data. Note: Output actions (Buy/Sell/Hold) are theoretical algorithmic states for research purposes only and do NOT constitute financial or investment advice."),
 		mcp.WithString("strategy",
 			mcp.Required(),
 			mcp.Description("The strategy to use for backtesting"),
