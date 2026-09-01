@@ -87,9 +87,9 @@ func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percen
 func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
 	cs := helper.DuplicateWithContext(ctx, closings, 3)
 
-	cs[0] = helper.BufferedWithContext(ctx, cs[0], 100)
-	cs[1] = helper.BufferedWithContext(ctx, cs[1], 100)
-	cs[2] = helper.BufferedWithContext(ctx, cs[2], 100)
+	cs[0] = helper.BufferedWithContext(ctx, cs[0], c.PercentRankPeriod)
+	cs[1] = helper.BufferedWithContext(ctx, cs[1], c.PercentRankPeriod)
+	cs[2] = helper.BufferedWithContext(ctx, cs[2], c.PercentRankPeriod)
 
 	// Component 1: RSI on closing prices
 	rsis := c.Rsi.ComputeWithContext(ctx, cs[0])
@@ -102,6 +102,16 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 	rocs := c.Roc.ComputeWithContext(ctx, cs[2])
 	percentRanks := helper.PercentRankWithContext(ctx, rocs, c.PercentRankPeriod)
 
+	// The three components run in parallel over the same closing-price stream, but each
+	// reaches its first value at a different offset. Skip the faster branches so all
+	// three land on the same time index before combining them.
+	rsiIdle, streakRsiIdle, percentRankIdle := c.componentIdlePeriods()
+	maxIdle := c.IdlePeriod()
+
+	rsis = helper.SkipWithContext(ctx, rsis, maxIdle-rsiIdle)
+	streakRsis = helper.SkipWithContext(ctx, streakRsis, maxIdle-streakRsiIdle)
+	percentRanks = helper.SkipWithContext(ctx, percentRanks, maxIdle-percentRankIdle)
+
 	// Combine: average of three components
 	result := helper.MultiplyByWithContext(ctx, helper.AddWithContext(ctx, helper.AddWithContext(ctx, rsis, streakRsis),
 		percentRanks,
@@ -112,11 +122,31 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 	return result
 }
 
-// IdlePeriod is the initial period that Connors RSI won't yield any results.
+// componentIdlePeriods returns the idle period of each of the three parallel components,
+// measured from the start of the closings stream.
+func (c *ConnorsRsi[T]) componentIdlePeriods() (rsiIdle, streakRsiIdle, percentRankIdle int) {
+	rsiIdle = c.Rsi.IdlePeriod()
+	streakRsiIdle = c.Streak.IdlePeriod() + c.StreakRsi.IdlePeriod()
+	percentRankIdle = c.Roc.IdlePeriod() + c.PercentRankPeriod
+
+	return rsiIdle, streakRsiIdle, percentRankIdle
+}
+
+// IdlePeriod is the initial period that Connors RSI won't yield any results. The three
+// components run in parallel, not sequentially, so this is the max of their individual
+// idle periods, not the sum.
 func (c *ConnorsRsi[T]) IdlePeriod() int {
-	// ROC period 1 + RSI period 3 + RMA period 14 + PercentRank period 100
-	// = 1 + 3 + 14 + 100 = 118
-	return c.Roc.IdlePeriod() + c.Rsi.IdlePeriod() + c.PercentRankPeriod
+	rsiIdle, streakRsiIdle, percentRankIdle := c.componentIdlePeriods()
+
+	idle := rsiIdle
+	if streakRsiIdle > idle {
+		idle = streakRsiIdle
+	}
+	if percentRankIdle > idle {
+		idle = percentRankIdle
+	}
+
+	return idle
 }
 
 // String is the string representation of the Connors RSI.
