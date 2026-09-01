@@ -157,10 +157,13 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 
 			// Setup phase - buy (close < close 4 bars ago)
 			if lessThan(current, prevClose) {
-				if float64(currentBuySetup) >= 0 {
-					currentBuySetup = T(float64(currentBuySetup) + 1)
-				} else {
-					currentBuySetup = 1
+				// Hold steady once the count reaches SetupPeriod instead of counting past it.
+				if float64(currentBuySetup) < float64(t.SetupPeriod) {
+					if float64(currentBuySetup) >= 0 {
+						currentBuySetup = T(float64(currentBuySetup) + 1)
+					} else {
+						currentBuySetup = 1
+					}
 				}
 			} else {
 				currentBuySetup = 0
@@ -168,10 +171,13 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 
 			// Setup phase - sell (close > close 4 bars ago)
 			if greaterThan(current, prevClose) {
-				if float64(currentSellSetup) <= 0 {
-					currentSellSetup = T(float64(currentSellSetup) - 1)
-				} else {
-					currentSellSetup = -1
+				// Hold steady once the count reaches -SetupPeriod instead of counting past it.
+				if float64(currentSellSetup) > -float64(t.SetupPeriod) {
+					if float64(currentSellSetup) <= 0 {
+						currentSellSetup = T(float64(currentSellSetup) - 1)
+					} else {
+						currentSellSetup = -1
+					}
 				}
 			} else {
 				currentSellSetup = 0
@@ -183,6 +189,16 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 			}
 			if float64(currentSellSetup) <= -float64(t.SetupPeriod) {
 				inSellCountdown = true
+			}
+
+			// A completed setup cancels any in-progress countdown in the opposite direction.
+			if float64(currentSellSetup) <= -float64(t.SetupPeriod) {
+				inBuyCountdown = false
+				buyCountdownCount = 0
+			}
+			if float64(currentBuySetup) >= float64(t.SetupPeriod) {
+				inSellCountdown = false
+				sellCountdownCount = 0
 			}
 
 			// Countdown phase - buy (close <= close 2 bars ago)
