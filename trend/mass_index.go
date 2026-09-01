@@ -31,7 +31,7 @@ const (
 //	Mass Index = SUM(Ratio, 25)
 //
 // Example:
-type MassIndex[T helper.Number] struct {
+type MassIndex[T helper.Float] struct {
 	Ema1      *Ema[T]
 	Ema2      *Ema[T]
 	MovingSum *MovingSum[T]
@@ -39,7 +39,7 @@ type MassIndex[T helper.Number] struct {
 
 // NewMassIndex function initializes a new APO instance
 // with the default parameters.
-func NewMassIndex[T helper.Number]() *MassIndex[T] {
+func NewMassIndex[T helper.Float]() *MassIndex[T] {
 	mi := &MassIndex[T]{
 		Ema1:      NewEma[T](),
 		Ema2:      NewEma[T](),

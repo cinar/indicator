@@ -28,7 +28,7 @@ const (
 //	ema.Period = 10
 //
 //	result := ema.Compute(c)
-type Ema[T helper.Number] struct {
+type Ema[T helper.Float] struct {
 	// Time period.
 	Period int
 
@@ -37,7 +37,7 @@ type Ema[T helper.Number] struct {
 }
 
 // NewEma function initializes a new EMA instance with the default parameters.
-func NewEma[T helper.Number]() *Ema[T] {
+func NewEma[T helper.Float]() *Ema[T] {
 	return &Ema[T]{
 		Period:    DefaultEmaPeriod,
 		Smoothing: DefaultEmaSmoothing,
@@ -45,7 +45,7 @@ func NewEma[T helper.Number]() *Ema[T] {
 }
 
 // NewEmaWithPeriod function initializes a new EMA instance with the given period.
-func NewEmaWithPeriod[T helper.Number](period int) *Ema[T] {
+func NewEmaWithPeriod[T helper.Float](period int) *Ema[T] {
 	ema := NewEma[T]()
 	ema.Period = period
 
