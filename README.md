@@ -290,15 +290,18 @@ if err != nil {
 }
 ```
 
-The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. This capability encompasses the application of all currently recognized strategies, culminating in the generation of detailed reports within a designated output directory.
+The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. It does not run any strategy by default — you must explicitly name the strategies to backtest with the `-strategies` flag, culminating in the generation of detailed reports within a designated output directory.
 
 ```bash
 $ indicator-backtest \
-    -source-name filesystem \
-    -source-config /home/user/assets \
-    -output /home/user/reports \
+    -repository-name filesystem \
+    -repository-config /home/user/assets \
+    -report-config /home/user/reports \
+    -strategies apo,macd,rsi \
     -workers 1
 ```
+
+Run `indicator-backtest -list-strategies` to print the full list of strategy names that are available to pass to `-strategies`.
 
 🐳 Docker
 ---------
@@ -316,7 +319,8 @@ docker run -it --rm \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
   --days 365 \
-  --assets aapl msft googl
+  --assets aapl msft googl \
+  --strategies apo,macd,rsi
 
 # View results (macOS)
 open output/index.html
@@ -333,7 +337,10 @@ xdg-open output/index.html
 | `--days` | Days of historical data to fetch | 365 |
 | `--last` | Days to backtest | 365 |
 | `--assets` | Space-separated ticker symbols (default: all) | all |
+| `--strategies` | Comma-separated strategy names to backtest (required) | - |
 | `--output` | Output directory for reports | /app/output |
+
+Run `docker run --rm --entrypoint ./indicator-backtest ghcr.io/cinar/indicator:latest -list-strategies` to see the available strategy names.
 
 ### Examples
 
@@ -342,7 +349,8 @@ xdg-open output/index.html
 docker run -it --rm \
   -v $(pwd)/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
-  --api-key YOUR_TIINGO_API_KEY
+  --api-key YOUR_TIINGO_API_KEY \
+  --strategies apo,macd,rsi
 
 # Backtest specific stocks for last 6 months, test last 30 days
 docker run -it --rm \
@@ -351,13 +359,15 @@ docker run -it --rm \
   --api-key YOUR_TIINGO_API_KEY \
   --days 180 \
   --last 30 \
-  --assets aapl msft googl amzn
+  --assets aapl msft googl amzn \
+  --strategies apo,macd,rsi
 
 # Custom output directory
 docker run -it --rm \
   -v /path/to/my/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
+  --strategies apo,macd,rsi \
   --output /app/output
 ```
 
