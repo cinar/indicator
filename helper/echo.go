@@ -41,10 +41,15 @@ func EchoWithContext[T any](ctx context.Context, input <-chan T, last, count int
 	repeat:
 		for i := 0; i < count; i++ {
 			for j := 0; j < last; j++ {
+				v, ok := memory.At(j)
+				if !ok {
+					break
+				}
+
 				select {
 				case <-ctx.Done():
 					return
-				case output <- memory.At(j):
+				case output <- v:
 				}
 			}
 		}

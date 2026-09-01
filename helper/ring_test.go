@@ -46,8 +46,12 @@ func TestRingEmpty(t *testing.T) {
 			j = size - 1
 		}
 
-		if ring.At(j) != n {
-			t.Fatalf("actual %v expected %v", ring.At(j), n)
+		actual, ok := ring.At(j)
+		if !ok {
+			t.Fatalf("At(%d) not ok", j)
+		}
+		if actual != n {
+			t.Fatalf("actual %v expected %v", actual, n)
 		}
 	}
 
@@ -69,5 +73,46 @@ func TestRingEmpty(t *testing.T) {
 	_, ok := ring.Get()
 	if ok {
 		t.Fatal("not empty")
+	}
+}
+
+func TestRingAtPartiallyFilled(t *testing.T) {
+	ring := helper.NewRing[int](5)
+
+	ring.Put(1)
+	ring.Put(2)
+
+	for i, expected := range []int{1, 2} {
+		actual, ok := ring.At(i)
+		if !ok {
+			t.Fatalf("At(%d) not ok", i)
+		}
+		if actual != expected {
+			t.Fatalf("actual %v expected %v", actual, expected)
+		}
+	}
+
+	for i := 2; i < 5; i++ {
+		if _, ok := ring.At(i); ok {
+			t.Fatalf("At(%d) should not be ok", i)
+		}
+	}
+}
+
+func TestRingAtFull(t *testing.T) {
+	ring := helper.NewRing[int](5)
+
+	for i := 1; i <= 5; i++ {
+		ring.Put(i)
+	}
+
+	for i, expected := range []int{1, 2, 3, 4, 5} {
+		actual, ok := ring.At(i)
+		if !ok {
+			t.Fatalf("At(%d) not ok", i)
+		}
+		if actual != expected {
+			t.Fatalf("actual %v expected %v", actual, expected)
+		}
 	}
 }
