@@ -17,10 +17,10 @@ import (
 
 const (
 	// DefaultStochasticRsiStrategyBuyAt defines the default level at which a Buy action is generated.
-	DefaultStochasticRsiStrategyBuyAt = 0.8
+	DefaultStochasticRsiStrategyBuyAt = 0.2
 
 	// DefaultStochasticRsiStrategySellAt defines the default level at which a Sell action is generated.
-	DefaultStochasticRsiStrategySellAt = 0.2
+	DefaultStochasticRsiStrategySellAt = 0.8
 )
 
 // StochasticRsiStrategy represents the configuration parameters for calculating the Stochastic RSI strategy.
