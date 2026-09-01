@@ -14,11 +14,11 @@ import (
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/compound"
-	"github.com/cinar/indicator/v2/strategy/momentum"
-	"github.com/cinar/indicator/v2/strategy/trend"
-	"github.com/cinar/indicator/v2/strategy/volatility"
-	"github.com/cinar/indicator/v2/strategy/volume"
+	"github.com/cinar/indicator/v2/examples/compound"
+	"github.com/cinar/indicator/v2/examples/momentum"
+	"github.com/cinar/indicator/v2/examples/trend"
+	"github.com/cinar/indicator/v2/examples/volatility"
+	"github.com/cinar/indicator/v2/examples/volume"
 )
 
 func main() {

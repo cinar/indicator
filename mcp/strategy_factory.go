@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/momentum"
-	"github.com/cinar/indicator/v2/strategy/trend"
-	"github.com/cinar/indicator/v2/strategy/volume"
+	"github.com/cinar/indicator/v2/examples/momentum"
+	"github.com/cinar/indicator/v2/examples/trend"
+	"github.com/cinar/indicator/v2/examples/volume"
 )
 
 // StrategyType defines the type of trading strategy to be used in a backtest.

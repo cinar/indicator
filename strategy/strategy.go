@@ -27,7 +27,7 @@ import (
 
 // Strategy defines a shared interface for trading strategies.
 type Strategy interface {
-	// Name returns the name of the strategy.
+	// Name returns the name of the example strategy.
 	Name() string
 
 	// Compute processes the provided asset snapshots and generates a

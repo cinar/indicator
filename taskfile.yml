@@ -2,7 +2,7 @@ version: '3'
 output: 'prefixed'
 
 env:
-  INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./helper/... ./momentum/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
+  INDICATOR_BASE: './asset/... ./backtest/... ./cmd/... ./examples/... ./helper/... ./momentum/... ./strategy/... ./trend/... ./volatility/... ./volume/...'
 
 tasks:
   default:

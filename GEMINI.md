@@ -13,8 +13,9 @@ Indicator is a Golang library for technical analysis, providing a wide range of 
 - **Package Organization:**
   - `asset`: Asset data management and repositories.
   - `backtest`: Framework for testing strategies against historical data.
+  - `examples`: Illustrative example strategies demonstrating indicator composition for educational and research purposes.
   - `helper`: Low-level channel and math utilities.
-  - `strategy`: Logic for generating buy/sell/hold signals.
+  - `strategy`: Generic interfaces, action types, and combinators for signals.
   - `trend`, `momentum`, `volatility`, `volume`, `valuation`: Category-specific indicators.
 
 ## Development Standards

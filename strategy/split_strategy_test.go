@@ -10,7 +10,7 @@ import (
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/trend"
+	"github.com/cinar/indicator/v2/examples/trend"
 )
 
 func TestSplitStrategy(t *testing.T) {
