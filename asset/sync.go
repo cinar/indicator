@@ -6,6 +6,7 @@ package asset
 
 import (
 	"errors"
+	"io/fs"
 	"log/slog"
 	"sync"
 	"sync/atomic"
@@ -75,10 +76,19 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 
 			for name := range jobs {
 				lastDate, err := target.LastDate(name)
-				if err == nil {
+
+				switch {
+				case err == nil:
 					lastDate = lastDate.AddDate(0, 0, 1)
-				} else {
+
+				case errors.Is(err, ErrRepositoryAssetNotFound), errors.Is(err, ErrRepositoryAssetEmpty), errors.Is(err, fs.ErrNotExist):
+					// Asset has genuinely never been synced before.
 					lastDate = defaultStartDate
+
+				default:
+					s.Logger.Error("LastDate failed.", "asset", name, "error", err)
+					hasErrors.Store(true)
+					continue
 				}
 
 				s.Logger.Info("Syncing asset.", "asset", name, "start", lastDate.Format("2006-01-02"))

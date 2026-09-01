@@ -167,7 +167,7 @@ func (s *SQLRepository) LastDate(name string) (time.Time, error) {
 	err := row.Scan(&date)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return date, fmt.Errorf("unable to find asset")
+			return date, ErrRepositoryAssetNotFound
 		}
 
 		return date, fmt.Errorf("unable to get the last date: %w", err)

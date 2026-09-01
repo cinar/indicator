@@ -23,7 +23,7 @@ import (
 //	dema.Ema2.Period = 16
 //
 //	result := dema.Compute(input)
-type Dema[T helper.Number] struct {
+type Dema[T helper.Float] struct {
 	// Ema1 represents the configuration parameters for
 	// calculating the first EMA.
 	Ema1 *Ema[T]
@@ -35,7 +35,7 @@ type Dema[T helper.Number] struct {
 
 // NewDema function initializes a new DEMA instance
 // with the default parameters.
-func NewDema[T helper.Number]() *Dema[T] {
+func NewDema[T helper.Float]() *Dema[T] {
 	return &Dema[T]{
 		Ema1: NewEma[T](),
 		Ema2: NewEma[T](),

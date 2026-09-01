@@ -40,7 +40,7 @@ type Tsi[T helper.Number] struct {
 }
 
 // NewTsi function initializes a new TSI instance with the default parameters.
-func NewTsi[T helper.Number]() *Tsi[T] {
+func NewTsi[T helper.Float]() *Tsi[T] {
 	return NewTsiWith[T](
 		DefaultTsiFirstSmoothingPeriod,
 		DefaultTsiSecondSmoothingPeriod,
@@ -48,7 +48,7 @@ func NewTsi[T helper.Number]() *Tsi[T] {
 }
 
 // NewTsiWith function initializes a new TSI instance with the given parameters.
-func NewTsiWith[T helper.Number](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T] {
+func NewTsiWith[T helper.Float](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T] {
 	return &Tsi[T]{
 		FirstSmoothing:  NewEmaWithPeriod[T](firstSmoothingPeriod),
 		SecondSmoothing: NewEmaWithPeriod[T](secondSmoothingPeriod),

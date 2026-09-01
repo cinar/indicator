@@ -5,7 +5,6 @@
 package asset
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -86,7 +85,7 @@ func (r *FileSystemRepository) LastDate(name string) (time.Time, error) {
 
 	snapshot, ok := <-helper.Last(snapshots, 1)
 	if !ok {
-		return last, errors.New("empty asset")
+		return last, ErrRepositoryAssetEmpty
 	}
 
 	return snapshot.Date, nil

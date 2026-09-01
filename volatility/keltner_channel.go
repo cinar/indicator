@@ -28,7 +28,7 @@ const (
 //
 //	dc := volatility.NewKeltnerChannel[float64]()
 //	result := dc.Compute(highs, lows, closings)
-type KeltnerChannel[T helper.Number] struct {
+type KeltnerChannel[T helper.Float] struct {
 	// Atr is the ATR instance.
 	Atr *Atr[T]
 
@@ -37,12 +37,12 @@ type KeltnerChannel[T helper.Number] struct {
 }
 
 // NewKeltnerChannel function initializes a new Keltner Channel instance with the default parameters.
-func NewKeltnerChannel[T helper.Number]() *KeltnerChannel[T] {
+func NewKeltnerChannel[T helper.Float]() *KeltnerChannel[T] {
 	return NewKeltnerChannelWithPeriod[T](DefaultKeltnerChannelPeriod)
 }
 
 // NewKeltnerChannelWithPeriod function initializes a new Keltner Channel instance with the given period.
-func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T] {
+func NewKeltnerChannelWithPeriod[T helper.Float](period int) *KeltnerChannel[T] {
 	return &KeltnerChannel[T]{
 		Atr: NewAtrWithPeriod[T](period),
 		Ema: trend.NewEmaWithPeriod[T](period),

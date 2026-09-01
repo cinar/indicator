@@ -28,13 +28,13 @@ const (
 //
 //	trix := trend.NewTrix[float64]()
 //	result := trix.Compute(values)
-type Trix[T helper.Number] struct {
+type Trix[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewTrix function initializes a new TRIX instance with the default parameters.
-func NewTrix[T helper.Number]() *Trix[T] {
+func NewTrix[T helper.Float]() *Trix[T] {
 	return &Trix[T]{
 		Period: DefaultTrixPeriod,
 	}

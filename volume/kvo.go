@@ -36,7 +36,7 @@ const (
 //
 //	kvo := volume.NewKvo[float64]()
 //	kvoResult, signalResult := kvo.Compute(highs, lows, volumes)
-type Kvo[T helper.Number] struct {
+type Kvo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -48,7 +48,7 @@ type Kvo[T helper.Number] struct {
 }
 
 // NewKvo function initializes a new KVO instance.
-func NewKvo[T helper.Number]() *Kvo[T] {
+func NewKvo[T helper.Float]() *Kvo[T] {
 	return &Kvo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultKvoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultKvoLongPeriod),
