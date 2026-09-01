@@ -18,6 +18,8 @@ tasks:
   fmt:
     cmds:
       - go fix ./...
+      - cmd: go fix ./...
+        dir: mcp
 
   lint:
     cmds:
@@ -25,10 +27,20 @@ tasks:
       - go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 $INDICATOR_BASE
       - go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 $INDICATOR_BASE
       - go run github.com/mgechev/revive@v1.3.4 -config=revive.toml $INDICATOR_BASE
+      - cmd: go vet ./...
+        dir: mcp
+      - cmd: go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 ./...
+        dir: mcp
+      - cmd: go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 ./...
+        dir: mcp
+      - cmd: go run github.com/mgechev/revive@v1.3.4 -config=../revive.toml ./...
+        dir: mcp
 
   test:
     cmds:
       - go test -race -cover -coverprofile=coverage.out $INDICATOR_BASE
+      - cmd: go test -race -cover -coverprofile=coverage.out ./...
+        dir: mcp
 
   docs:
     cmds:
