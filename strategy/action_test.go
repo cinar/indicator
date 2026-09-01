@@ -119,6 +119,14 @@ func TestCountActionsEmpty(t *testing.T) {
 	}
 }
 
+func TestCountActionsNoChannels(t *testing.T) {
+	_, _, _, ok := strategy.CountActions([]<-chan strategy.Action{})
+
+	if ok {
+		t.Fatal("is ok")
+	}
+}
+
 func TestCountTransactions(t *testing.T) {
 	actions := helper.SliceToChan([]strategy.Action{strategy.Hold, strategy.Buy, strategy.Hold, strategy.Sell})
 	expected := helper.SliceToChan([]int{0, 1, 1, 2})

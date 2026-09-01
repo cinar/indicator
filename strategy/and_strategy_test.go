@@ -6,6 +6,7 @@ package strategy_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
@@ -53,6 +54,22 @@ func TestAndStrategyReport(t *testing.T) {
 	err = report.WriteToFile(fileName)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAndStrategyNoStrategies(t *testing.T) {
+	snapshots := helper.SliceToChan([]*asset.Snapshot{})
+
+	and := strategy.NewAndStrategy("And Strategy")
+	actual := and.Compute(snapshots)
+
+	select {
+	case _, ok := <-actual:
+		if ok {
+			t.Fatal("expected closed channel")
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("timeout - result channel never closed")
 	}
 }
 
