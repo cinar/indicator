@@ -11,7 +11,10 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"reflect"
+	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/backtest"
@@ -23,16 +26,167 @@ import (
 	"github.com/cinar/indicator/v2/strategy"
 )
 
+var parensRegex = regexp.MustCompile(`\(([^)]+)\)`)
+
+// camelToSnake converts CamelCase string to snake_case.
+func camelToSnake(s string) string {
+	var res strings.Builder
+	for i, r := range s {
+		if unicode.IsUpper(r) {
+			if i > 0 {
+				prev := rune(s[i-1])
+				if unicode.IsLower(prev) || (i+1 < len(s) && unicode.IsLower(rune(s[i+1]))) {
+					res.WriteRune('_')
+				}
+			}
+			res.WriteRune(unicode.ToLower(r))
+		} else {
+			res.WriteRune(r)
+		}
+	}
+	return res.String()
+}
+
+// normalize cleans and standardizes a name into snake_case format.
+func normalize(s string) string {
+	s = strings.ToLower(strings.TrimSpace(s))
+	s = strings.ReplaceAll(s, "-", "_")
+
+	var res strings.Builder
+	prevUnderscore := false
+	for _, r := range s {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			res.WriteRune(r)
+			prevUnderscore = false
+		} else if !prevUnderscore {
+			res.WriteRune('_')
+			prevUnderscore = true
+		}
+	}
+	return strings.Trim(res.String(), "_")
+}
+
+// strategyKeys extracts all candidate lookup keys for a given strategy.
+func strategyKeys(s strategy.Strategy) []string {
+	keys := make(map[string]bool)
+
+	// 1. From struct type name
+	t := reflect.TypeOf(s)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	typeName := t.Name()
+	snakeType := camelToSnake(typeName)
+	trimmedType := strings.TrimSuffix(snakeType, "_strategy")
+
+	keys[snakeType] = true
+	keys[trimmedType] = true
+
+	// Custom aliases for common abbreviations
+	if trimmedType == "triple_moving_average_crossover" {
+		keys["triple_ma_crossover"] = true
+	}
+	if trimmedType == "percent_band_mfi" {
+		keys["percent_b_and_mfi"] = true
+		keys["percent_band_and_mfi"] = true
+		keys["percent_b_mfi"] = true
+	}
+
+	// 2. From strategy Name()
+	displayName := s.Name()
+	normDisplay := normalize(displayName)
+	keys[normDisplay] = true
+	keys[strings.TrimSuffix(normDisplay, "_strategy")] = true
+
+	// Extract acronyms or text inside parentheses, e.g. "Balance of Power (BoP) Strategy" -> "bop"
+	matches := parensRegex.FindAllStringSubmatch(displayName, -1)
+	for _, match := range matches {
+		if len(match) > 1 {
+			normParen := normalize(match[1])
+			if normParen != "" && !unicode.IsDigit(rune(normParen[0])) {
+				keys[normParen] = true
+			}
+		}
+	}
+
+	var result []string
+	for k := range keys {
+		if k != "" {
+			result = append(result, k)
+		}
+	}
+	return result
+}
+
+type strategyCatalog struct {
+	categories map[string][]strategy.Strategy
+	strategies map[string][]strategy.Strategy
+}
+
+func newStrategyCatalog() *strategyCatalog {
+	cat := &strategyCatalog{
+		categories: map[string][]strategy.Strategy{
+			"compound":   compound.AllStrategies(),
+			"momentum":   momentum.AllStrategies(),
+			"strategy":   strategy.AllStrategies(),
+			"trend":      trend.AllStrategies(),
+			"volatility": volatility.AllStrategies(),
+			"volume":     volume.AllStrategies(),
+		},
+		strategies: make(map[string][]strategy.Strategy),
+	}
+
+	for _, strats := range cat.categories {
+		for _, s := range strats {
+			keys := strategyKeys(s)
+			for _, k := range keys {
+				cat.strategies[k] = append(cat.strategies[k], s)
+			}
+		}
+	}
+
+	return cat
+}
+
+func (c *strategyCatalog) Resolve(token string) ([]strategy.Strategy, error) {
+	norm := normalize(token)
+	norm = strings.TrimSuffix(norm, "_strategy")
+
+	if norm == "all" {
+		var all []strategy.Strategy
+		categoryOrder := []string{"strategy", "compound", "momentum", "trend", "volatility", "volume"}
+		for _, catName := range categoryOrder {
+			all = append(all, c.categories[catName]...)
+		}
+		return all, nil
+	}
+
+	if cat, ok := c.categories[norm]; ok {
+		return cat, nil
+	}
+	if norm == "base" {
+		return c.categories["strategy"], nil
+	}
+
+	if strats, ok := c.strategies[norm]; ok && len(strats) > 0 {
+		return strats, nil
+	}
+
+	return nil, fmt.Errorf("unknown strategy: %s", token)
+}
+
 func parseStrategies(input string) ([]strategy.Strategy, error) {
-	var result []strategy.Strategy
 	tokens := strings.Split(input, ",")
+	catalog := newStrategyCatalog()
+
+	var result []strategy.Strategy
 	for _, token := range tokens {
 		token = strings.TrimSpace(token)
 		if token == "" {
 			continue
 		}
 
-		strats, err := resolveStrategy(token)
+		strats, err := catalog.Resolve(token)
 		if err != nil {
 			return nil, err
 		}
@@ -44,141 +198,6 @@ func parseStrategies(input string) ([]strategy.Strategy, error) {
 	}
 
 	return result, nil
-}
-
-func resolveStrategy(name string) ([]strategy.Strategy, error) {
-	normalized := strings.ToLower(strings.ReplaceAll(strings.TrimSpace(name), "-", "_"))
-	normalized = strings.TrimSuffix(normalized, "_strategy")
-
-	switch normalized {
-	case "all":
-		var all []strategy.Strategy
-		all = append(all, strategy.AllStrategies()...)
-		all = append(all, compound.AllStrategies()...)
-		all = append(all, momentum.AllStrategies()...)
-		all = append(all, trend.AllStrategies()...)
-		all = append(all, volatility.AllStrategies()...)
-		all = append(all, volume.AllStrategies()...)
-		return all, nil
-
-	case "compound":
-		return compound.AllStrategies(), nil
-
-	case "momentum":
-		return momentum.AllStrategies(), nil
-
-	case "trend":
-		return trend.AllStrategies(), nil
-
-	case "volatility":
-		return volatility.AllStrategies(), nil
-
-	case "volume":
-		return volume.AllStrategies(), nil
-
-	// Base strategies
-	case "buy_and_hold":
-		return []strategy.Strategy{strategy.NewBuyAndHoldStrategy()}, nil
-
-	// Trend strategies
-	case "alligator":
-		return []strategy.Strategy{trend.NewAlligatorStrategy()}, nil
-	case "apo":
-		return []strategy.Strategy{trend.NewApoStrategy()}, nil
-	case "aroon":
-		return []strategy.Strategy{trend.NewAroonStrategy()}, nil
-	case "bop":
-		return []strategy.Strategy{trend.NewBopStrategy()}, nil
-	case "cci":
-		return []strategy.Strategy{trend.NewCciStrategy()}, nil
-	case "cfo":
-		return []strategy.Strategy{trend.NewCfoStrategy()}, nil
-	case "dema":
-		return []strategy.Strategy{trend.NewDemaStrategy()}, nil
-	case "envelope":
-		return []strategy.Strategy{trend.NewEnvelopeStrategy()}, nil
-	case "golden_cross":
-		return []strategy.Strategy{trend.NewGoldenCrossStrategy()}, nil
-	case "hma":
-		return []strategy.Strategy{trend.NewHmaStrategy()}, nil
-	case "kama":
-		return []strategy.Strategy{trend.NewKamaStrategy()}, nil
-	case "kdj":
-		return []strategy.Strategy{trend.NewKdjStrategy()}, nil
-	case "macd":
-		return []strategy.Strategy{trend.NewMacdStrategy()}, nil
-	case "qstick":
-		return []strategy.Strategy{trend.NewQstickStrategy()}, nil
-	case "smma":
-		return []strategy.Strategy{trend.NewSmmaStrategy()}, nil
-	case "trima":
-		return []strategy.Strategy{trend.NewTrimaStrategy()}, nil
-	case "triple_moving_average_crossover", "triple_ma_crossover":
-		return []strategy.Strategy{trend.NewTripleMovingAverageCrossoverStrategy()}, nil
-	case "trix":
-		return []strategy.Strategy{trend.NewTrixStrategy()}, nil
-	case "tsi":
-		return []strategy.Strategy{trend.NewTsiStrategy()}, nil
-	case "vwma":
-		return []strategy.Strategy{trend.NewVwmaStrategy()}, nil
-	case "weighted_close":
-		return []strategy.Strategy{trend.NewWeightedCloseStrategy()}, nil
-
-	// Momentum strategies
-	case "awesome_oscillator":
-		return []strategy.Strategy{momentum.NewAwesomeOscillatorStrategy()}, nil
-	case "coppock_curve":
-		return []strategy.Strategy{momentum.NewCoppockCurveStrategy()}, nil
-	case "elder_ray":
-		return []strategy.Strategy{momentum.NewElderRayStrategy()}, nil
-	case "ichimoku_cloud":
-		return []strategy.Strategy{momentum.NewIchimokuCloudStrategy()}, nil
-	case "rsi":
-		return []strategy.Strategy{momentum.NewRsiStrategy()}, nil
-	case "stochastic_oscillator":
-		return []strategy.Strategy{momentum.NewStochasticOscillatorStrategy()}, nil
-	case "stochastic_rsi":
-		return []strategy.Strategy{momentum.NewStochasticRsiStrategy()}, nil
-	case "triple_rsi":
-		return []strategy.Strategy{momentum.NewTripleRsiStrategy()}, nil
-	case "williams_r":
-		return []strategy.Strategy{momentum.NewWilliamsRStrategy()}, nil
-
-	// Volatility strategies
-	case "bollinger_bands":
-		return []strategy.Strategy{volatility.NewBollingerBandsStrategy()}, nil
-	case "donchian_channel_breakout":
-		return []strategy.Strategy{volatility.NewDonchianChannelBreakoutStrategy()}, nil
-	case "keltner_channel":
-		return []strategy.Strategy{volatility.NewKeltnerChannelStrategy()}, nil
-	case "super_trend":
-		return []strategy.Strategy{volatility.NewSuperTrendStrategy()}, nil
-
-	// Volume strategies
-	case "chaikin_money_flow":
-		return []strategy.Strategy{volume.NewChaikinMoneyFlowStrategy()}, nil
-	case "ease_of_movement":
-		return []strategy.Strategy{volume.NewEaseOfMovementStrategy()}, nil
-	case "force_index":
-		return []strategy.Strategy{volume.NewForceIndexStrategy()}, nil
-	case "money_flow_index":
-		return []strategy.Strategy{volume.NewMoneyFlowIndexStrategy()}, nil
-	case "negative_volume_index":
-		return []strategy.Strategy{volume.NewNegativeVolumeIndexStrategy()}, nil
-	case "obv":
-		return []strategy.Strategy{volume.NewObvStrategy()}, nil
-	case "percent_b_and_mfi", "percent_band_and_mfi", "percent_b_mfi":
-		return []strategy.Strategy{volume.NewPercentBandMFIStrategy()}, nil
-	case "weighted_average_price":
-		return []strategy.Strategy{volume.NewWeightedAveragePriceStrategy()}, nil
-
-	// Compound strategies
-	case "macd_rsi":
-		return []strategy.Strategy{compound.NewMacdRsiStrategy()}, nil
-
-	default:
-		return nil, fmt.Errorf("unknown strategy: %s", name)
-	}
 }
 
 func main() {

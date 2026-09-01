@@ -42,7 +42,7 @@ func TestParseStrategies(t *testing.T) {
 		{
 			name:          "category trend",
 			input:         "trend",
-			expectedCount: 19,
+			expectedCount: 21,
 			expectErr:     false,
 		},
 		{
@@ -60,7 +60,7 @@ func TestParseStrategies(t *testing.T) {
 		{
 			name:          "category volume",
 			input:         "volume",
-			expectedCount: 7,
+			expectedCount: 8,
 			expectErr:     false,
 		},
 		{
@@ -72,7 +72,7 @@ func TestParseStrategies(t *testing.T) {
 		{
 			name:          "all strategies",
 			input:         "all",
-			expectedCount: 47,
+			expectedCount: 50,
 			expectErr:     false,
 		},
 		{
@@ -133,9 +133,10 @@ func TestResolveAllKnownStrategies(t *testing.T) {
 		"weighted_average_price", "macd_rsi",
 	}
 
+	catalog := newStrategyCatalog()
 	for _, name := range knownStrategies {
 		t.Run(name, func(t *testing.T) {
-			strats, err := resolveStrategy(name)
+			strats, err := catalog.Resolve(name)
 			if err != nil {
 				t.Fatalf("unexpected error for %q: %v", name, err)
 			}

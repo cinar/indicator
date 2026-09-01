@@ -12,7 +12,7 @@ import (
 
 func TestAllStrategies(t *testing.T) {
 	strategies := trend.AllStrategies()
-	if len(strategies) != 19 {
-		t.Fatalf("expected 19 strategies, got %d", len(strategies))
+	if len(strategies) != 21 {
+		t.Fatalf("expected 21 strategies, got %d", len(strategies))
 	}
 }

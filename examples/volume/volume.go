@@ -32,6 +32,7 @@ func AllStrategies() []strategy.Strategy {
 		NewMoneyFlowIndexStrategy(),
 		NewNegativeVolumeIndexStrategy(),
 		NewObvStrategy(),
+		NewPercentBandMFIStrategy(),
 		NewWeightedAveragePriceStrategy(),
 	}
 }
