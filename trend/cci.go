@@ -25,21 +25,21 @@ const (
 //
 // Example:
 //
-//	cmi := trend.NewCmi()
-//	cmi.Period = 20
-//	values = cmi.Compute(highs, lows, closings)
-type Cci[T helper.Number] struct {
+//	cci := trend.NewCci[float64]()
+//	cci.Period = 20
+//	values = cci.Compute(highs, lows, closings)
+type Cci[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewCci function initializes a new CCI instance with the default parameters.
-func NewCci[T helper.Number]() *Cci[T] {
+func NewCci[T helper.Float]() *Cci[T] {
 	return NewCciWithPeriod[T](DefaultCciPeriod)
 }
 
 // NewCciWithPeriod function initializes a new CCI instance with the given period.
-func NewCciWithPeriod[T helper.Number](period int) *Cci[T] {
+func NewCciWithPeriod[T helper.Float](period int) *Cci[T] {
 	return &Cci[T]{
 		Period: period,
 	}

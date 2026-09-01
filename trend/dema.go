@@ -49,7 +49,7 @@ func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	ema2 := d.Ema2.ComputeWithContext(ctx, ema1[1])
 
 	doubleEma1 := helper.MultiplyByWithContext(ctx, ema1[0], 2)
-	doubleEma1 = helper.BufferedWithContext(ctx, doubleEma1, d.Ema2.Period)
+	doubleEma1 = helper.SkipWithContext(ctx, doubleEma1, d.Ema2.Period-1)
 
 	return helper.SubtractWithContext(ctx, doubleEma1, ema2)
 }
