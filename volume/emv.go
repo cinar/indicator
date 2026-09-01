@@ -62,12 +62,14 @@ func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 	d := 100000000
 
 	// Box Ratio = ((Volume / 100000000) / (High - Low))
-	boxRatio := helper.DivideWithContext(ctx, helper.DivideByWithContext(ctx, volumes,
+	boxRatio := helper.SkipWithContext(ctx, helper.DivideWithContext(ctx, helper.DivideByWithContext(ctx, volumes,
 		T(d),
 	),
 		helper.SubtractWithContext(ctx, highsSplice[1],
 			lowsSplice[1],
 		),
+	),
+		1,
 	)
 
 	// EMV(1) = Distance Moved / Box Ratio
