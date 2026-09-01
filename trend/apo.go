@@ -76,11 +76,13 @@ func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 
 	fastEma := NewEma[T]()
 	fastEma.Period = apo.FastPeriod
+	fastEma.Smoothing = apo.FastSmoothing
 	cs[0] = fastEma.ComputeWithContext(ctx, cs[0])
 	cs[0] = helper.SkipWithContext(ctx, cs[0], apo.SlowPeriod-apo.FastPeriod)
 
 	slowEma := NewEma[T]()
 	slowEma.Period = apo.SlowPeriod
+	slowEma.Smoothing = apo.SlowSmoothing
 	cs[1] = slowEma.ComputeWithContext(ctx, cs[1])
 
 	return helper.SubtractWithContext(ctx, cs[0], cs[1])
