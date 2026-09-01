@@ -247,7 +247,6 @@ The following [repository implementations](asset/README.md#Repository) are provi
 -	[File System Repository](asset/README.md#FileSystemRepository)
 -	[In Memory Repository](asset/README.md#InMemoryRepository)
 -	[Tiingo Repository](asset/README.md#TiingoRepository)
--	[Alpaca Markets Repository](https://github.com/cinar/indicatoralpaca)
 
 The [Sync function](asset/README.md#Sync) facilitates the synchronization of assets between designated source and target repositories by employing multi-worker concurrency for enhanced efficiency. This function serves the purpose of procuring the most recent snapshots from remote repositories and seamlessly transferring them to local repositories, such as file system repositories.
 
@@ -387,7 +386,6 @@ import (
 Indicator Go is part of a broader ecosystem of technical analysis tools:
 
 - [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
-- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for market data only (users supply their own credentials)
 - [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration (simulation and research purposes)
 
 💖 Our Sponsors
