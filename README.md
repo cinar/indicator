@@ -18,7 +18,7 @@
 Indicator Go
 ============
 
-Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting with real-time strategy execution.
+Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting.
 
 > An extensive technical analysis library for algorithmic trading - 80+ indicators, backtesting framework, and AI integration via MCP.
 
@@ -387,7 +387,7 @@ import (
 Indicator Go is part of a broader ecosystem of technical analysis tools:
 
 - [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
-- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for market data and trading (users supply their own brokerage credentials and assume all live execution risk)
+- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for market data only (users supply their own credentials)
 - [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration (simulation and research purposes)
 
 💖 Our Sponsors
