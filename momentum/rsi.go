@@ -55,24 +55,18 @@ func (r *Rsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 		-1,
 	)
 
-	rs := helper.DivideWithContext(ctx, averageGains,
-		averageLosses,
-	)
+	// RSI = 100 - (100 / (1 + RS)), where RS = Average Gain / Average Loss.
+	// A flat window (no gains and no losses) makes RS an undefined 0/0, so it
+	// is treated as neutral (RSI = 50) instead of propagating NaN.
+	rsi := helper.OperateWithContext(ctx, averageGains, averageLosses, func(averageGain, averageLoss T) T {
+		if averageGain == 0 && averageLoss == 0 {
+			return 50
+		}
 
-	// RSI = 100 - (100 / (1 + RS))
-	rsi := helper.IncrementByWithContext(ctx, // - (100 / (1 + RS))
-		helper.MultiplyByWithContext(ctx, // 100 / (1 + RS)
-			helper.MultiplyByWithContext(ctx, // 1 / (1 + RS)
-				helper.PowWithContext(ctx, // 1 + RS
-					helper.IncrementByWithContext(ctx, rs, 1),
-					-1,
-				),
-				100,
-			),
-			-1,
-		),
-		100,
-	)
+		rs := averageGain / averageLoss
+
+		return 100 - (100 / (1 + rs))
+	})
 
 	return rsi
 }
