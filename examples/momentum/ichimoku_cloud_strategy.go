@@ -47,7 +47,13 @@ func (i *IchimokuCloudStrategy) ComputeWithContext(ctx context.Context, snapshot
 	// Lagging line is not used in the core logic, drain it to prevent blocking
 	go helper.DrainWithContext(ctx, ll)
 
-	actions := helper.Operate5WithContext(ctx, helper.SkipWithContext(ctx, closingsSplice[1], i.IchimokuCloud.IdlePeriod()),
+	// cl, bl, lsa, and lsb are each IchimokuCloud.LaggingPeriod shorter than
+	// IdlePeriod() alone would suggest, since the Chikou Span's forward lookahead
+	// also truncates their tail. Skip the extra LaggingPeriod off closings so it
+	// lines up 1:1 with them.
+	alignPeriod := i.IchimokuCloud.IdlePeriod() + i.IchimokuCloud.LaggingPeriod
+
+	actions := helper.Operate5WithContext(ctx, helper.SkipWithContext(ctx, closingsSplice[1], alignPeriod),
 		cl,
 		bl,
 		lsa,
@@ -66,7 +72,7 @@ func (i *IchimokuCloudStrategy) ComputeWithContext(ctx context.Context, snapshot
 	)
 
 	// Shift the actions to account for the idle period
-	return helper.ShiftWithContext(ctx, actions, i.IchimokuCloud.IdlePeriod(), strategy.Hold)
+	return helper.ShiftWithContext(ctx, actions, alignPeriod, strategy.Hold)
 }
 
 // Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
@@ -84,10 +90,13 @@ func (i *IchimokuCloudStrategy) Report(c <-chan *asset.Snapshot) *helper.Report 
 	// Lagging line is not used in the report right now, drain it.
 	go helper.Drain(ll)
 
-	clShifted := helper.Shift(cl, i.IchimokuCloud.IdlePeriod(), 0)
-	blShifted := helper.Shift(bl, i.IchimokuCloud.IdlePeriod(), 0)
-	lsaShifted := helper.Shift(lsa, i.IchimokuCloud.IdlePeriod(), 0)
-	lsbShifted := helper.Shift(lsb, i.IchimokuCloud.IdlePeriod(), 0)
+	// See the matching comment in ComputeWithContext for why the extra LaggingPeriod is needed here.
+	alignPeriod := i.IchimokuCloud.IdlePeriod() + i.IchimokuCloud.LaggingPeriod
+
+	clShifted := helper.Shift(cl, alignPeriod, 0)
+	blShifted := helper.Shift(bl, alignPeriod, 0)
+	lsaShifted := helper.Shift(lsa, alignPeriod, 0)
+	lsbShifted := helper.Shift(lsb, alignPeriod, 0)
 
 	actions, outcomes := strategy.ComputeWithOutcome(i, snapshots[1])
 	annotations := strategy.ActionsToAnnotations(actions)
