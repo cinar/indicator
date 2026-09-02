@@ -55,13 +55,25 @@ func NewStochasticOscillator[T helper.Number]() *StochasticOscillator[T] {
 func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T) {
 	//	K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 	//	D = 3-Period SMA of K
+	maxIdlePeriod := s.Max.IdlePeriod()
+	minIdlePeriod := s.Min.IdlePeriod()
+
 	lowestSplice := helper.DuplicateWithContext(ctx, s.Min.ComputeWithContext(ctx, lows),
 		2,
 	)
 
 	highest := s.Max.ComputeWithContext(ctx, highs)
 
-	closings = helper.SkipWithContext(ctx, closings, s.Min.IdlePeriod())
+	// Max and Min are independently configurable, so their idle periods may differ. Align both
+	// branches on the larger of the two idle periods before combining them.
+	if maxIdlePeriod > minIdlePeriod {
+		lowestSplice[0] = helper.SkipWithContext(ctx, lowestSplice[0], maxIdlePeriod-minIdlePeriod)
+		lowestSplice[1] = helper.SkipWithContext(ctx, lowestSplice[1], maxIdlePeriod-minIdlePeriod)
+	} else if minIdlePeriod > maxIdlePeriod {
+		highest = helper.SkipWithContext(ctx, highest, minIdlePeriod-maxIdlePeriod)
+	}
+
+	closings = helper.SkipWithContext(ctx, closings, max(maxIdlePeriod, minIdlePeriod))
 
 	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closings, lowestSplice[0]),
 		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
@@ -79,7 +91,7 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 
 // IdlePeriod is the initial period that Stochastic Oscillator won't yield any results.
 func (s *StochasticOscillator[T]) IdlePeriod() int {
-	return s.Max.IdlePeriod() + s.Sma.IdlePeriod()
+	return max(s.Max.IdlePeriod(), s.Min.IdlePeriod()) + s.Sma.IdlePeriod()
 }
 
 // String is the string representation of the Stochastic Oscillator.
