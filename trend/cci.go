@@ -51,12 +51,12 @@ func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 	sma1 := NewSmaWithPeriod[T](c.Period)
 	sma2 := NewSmaWithPeriod[T](c.Period)
 
-	tps := helper.Duplicate[T](
+	tps := helper.DuplicateWithContext[T](ctx,
 		typicalPrice.ComputeWithContext(ctx, highs, lows, closings),
 		3,
 	)
 
-	mas := helper.Duplicate[T](
+	mas := helper.DuplicateWithContext[T](ctx,
 		sma1.ComputeWithContext(ctx, tps[0]),
 		2,
 	)

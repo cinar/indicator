@@ -129,17 +129,26 @@ func AllStrategies() []Strategy {
 	}
 }
 
-// ActionSources creates a slice of action channels, one for each strategy, where each channel emits actions
-// computed by its corresponding strategy based on snapshots from the provided snapshot channel.
-func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action {
-	snapshotsSplice := helper.Duplicate(snapshots, len(strategies))
+// ActionSourcesWithContext creates a slice of action channels, one for each strategy, where each channel emits
+// actions computed by its corresponding strategy based on snapshots from the provided snapshot channel,
+// supporting context cancellation.
+func ActionSourcesWithContext(ctx context.Context, strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, len(strategies))
 	sources := make([]<-chan Action, len(strategies))
 
 	for i, strategy := range strategies {
 		sources[i] = DenormalizeActions(
-			strategy.Compute(snapshotsSplice[i]),
+			ComputeStrategyWithContext(ctx, strategy, snapshotsSplice[i]),
 		)
 	}
 
 	return sources
+}
+
+// ActionSources creates a slice of action channels, one for each strategy, where each channel emits actions
+// computed by its corresponding strategy based on snapshots from the provided snapshot channel.
+//
+// Deprecated: Use ActionSourcesWithContext instead.
+func ActionSources(strategies []Strategy, snapshots <-chan *asset.Snapshot) []<-chan Action {
+	return ActionSourcesWithContext(context.Background(), strategies, snapshots)
 }

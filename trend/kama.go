@@ -71,15 +71,15 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	closingsSplice := helper.DuplicateWithContext(ctx, closings, 3)
 
 	//	Direction = Abs(Close - Previous Close Period Ago)
-	directions := helper.Abs(
-		helper.Change(closingsSplice[0], k.ErPeriod),
+	directions := helper.AbsWithContext(ctx,
+		helper.ChangeWithContext(ctx, closingsSplice[0], k.ErPeriod),
 	)
 
 	//	Volatility = MovingSum(Period, Abs(Close - Previous Close))
 	movingSum := NewMovingSumWithPeriod[T](k.ErPeriod)
 	volatilitys := movingSum.ComputeWithContext(ctx,
-		helper.Abs(
-			helper.Change(closingsSplice[1], 1),
+		helper.AbsWithContext(ctx,
+			helper.ChangeWithContext(ctx, closingsSplice[1], 1),
 		),
 	)
 

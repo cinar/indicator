@@ -41,7 +41,7 @@ func (a *AndStrategy) Name() string {
 func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
-	sources := ActionSources(a.Strategies, snapshots)
+	sources := ActionSourcesWithContext(ctx, a.Strategies, snapshots)
 
 	go func() {
 		defer close(result)

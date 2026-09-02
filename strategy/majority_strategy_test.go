@@ -5,6 +5,8 @@
 package strategy_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
 	"time"
 
@@ -51,6 +53,33 @@ func TestMajorityStrategyNoStrategies(t *testing.T) {
 		}
 	case <-time.After(2 * time.Second):
 		t.Fatal("timeout - result channel never closed")
+	}
+}
+
+func TestMajorityStrategyCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	snapshots := make(chan *asset.Snapshot)
+
+	majority := strategy.NewMajorityStrategy("Majority Strategy")
+	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy(), strategy.NewBuyAndHoldStrategy())
+
+	actual := majority.ComputeWithContext(ctx, snapshots)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-actual; ok {
+		t.Fatal("Majority strategy channel should be closed after cancellation")
 	}
 }
 

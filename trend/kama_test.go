@@ -5,7 +5,10 @@
 package trend_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -48,6 +51,31 @@ func TestKamaEmpty(t *testing.T) {
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestKamaCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	closings := make(chan float64)
+
+	kama := trend.NewKama[float64]()
+	actual := kama.ComputeWithContext(ctx, closings)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-actual; ok {
+		t.Fatal("Kama channel should be closed after cancellation")
 	}
 }
 

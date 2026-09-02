@@ -42,7 +42,7 @@ func (a *MajorityStrategy) Name() string {
 func (a *MajorityStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
-	sources := ActionSources(a.Strategies, snapshots)
+	sources := ActionSourcesWithContext(ctx, a.Strategies, snapshots)
 
 	go func() {
 		defer close(result)
