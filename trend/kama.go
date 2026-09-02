@@ -86,7 +86,7 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	//	Efficiency Ratio (ER) = Direction / Volatility
 	ers := helper.Divide(directions, volatilitys)
 
-	//	Smoothing Constant (SC) = (ER * (2/(Slow + 1) - 2/(Fast + 1)) + (2/(Slow + 1)))^2
+	//	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
 	fastSc := T(2.0) / T(k.FastScPeriod+1)
 	slowSc := T(2.0) / T(k.SlowScPeriod+1)
 

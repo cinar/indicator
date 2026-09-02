@@ -20,10 +20,10 @@ const (
 )
 
 // ChandelierExit represents the configuration parameters for calculating the Chandelier Exit.
-// It sets a trailing stop-loss based on the Average True Value (ATR).
+// It sets a trailing stop-loss based on the Average True Range (ATR).
 //
-//	Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
-//	Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+//	Chandelier Exit Long = 22-Period Highest High - ATR(22) * 3
+//	Chandelier Exit Short = 22-Period Lowest Low + ATR(22) * 3
 //
 // Example:
 //

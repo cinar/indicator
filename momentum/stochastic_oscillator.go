@@ -28,8 +28,8 @@ const (
 //
 // Example:
 //
-//	so := momentum.StochasticOscillator[float64]()
-//	k, d := wr.Compute(highs, lows, closings)
+//	so := momentum.NewStochasticOscillator[float64]()
+//	k, d := so.Compute(highs, lows, closings)
 type StochasticOscillator[T helper.Number] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]

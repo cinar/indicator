@@ -60,7 +60,7 @@ func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 	return atr
 }
 
-// IdlePeriod is the initial period that Acceleration Bands won't yield any results.
+// IdlePeriod is the initial period that ATR won't yield any results.
 func (a *Atr[T]) IdlePeriod() int {
 	// Ma idle period and for using the previous closing.
 	return a.Ma.IdlePeriod() + 1

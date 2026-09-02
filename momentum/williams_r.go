@@ -26,7 +26,7 @@ const (
 //
 // Example:
 //
-//	wr := momentum.WilliamsR[float64]()
+//	wr := momentum.NewWilliamsR[float64]()
 //	values := wr.Compute(highs, lows, closings)
 type WilliamsR[T helper.Float] struct {
 	// Max is the Moving Max instance.

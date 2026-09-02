@@ -26,8 +26,8 @@ const (
 //
 // Example:
 //
-//	dc := volatility.NewKeltnerChannel[float64]()
-//	result := dc.Compute(highs, lows, closings)
+//	kc := volatility.NewKeltnerChannel[float64]()
+//	result := kc.Compute(highs, lows, closings)
 type KeltnerChannel[T helper.Float] struct {
 	// Atr is the ATR instance.
 	Atr *Atr[T]

@@ -30,7 +30,7 @@ const (
 //
 // Example:
 //
-//	ao := momentum.AwesomeOscillator[float64]()
+//	ao := momentum.NewAwesomeOscillator[float64]()
 //	values := ao.Compute(lows, highs)
 type AwesomeOscillator[T helper.Number] struct {
 	// ShortSma is the SMA for the short period.

@@ -32,7 +32,7 @@ const (
 //
 // Example:
 //
-//	pvo := momentum.Pvo[float64]()
+//	pvo := momentum.NewPvo[float64]()
 //	p, s, h := pvo.Compute(volumes)
 type Pvo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.

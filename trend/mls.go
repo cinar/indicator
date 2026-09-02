@@ -15,7 +15,7 @@ import (
 //
 //	y = mx + b
 //	b = y-intercept
-//	y = slope
+//	m = slope
 //
 //	m = (period * sumXY - sumX * sumY) / (period * sumX2 - sumX * sumX)
 //	b = (sumY - m * sumX) / period

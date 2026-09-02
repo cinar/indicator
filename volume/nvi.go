@@ -18,7 +18,7 @@ const (
 // Nvi holds configuration parameters for calculating the Negative Volume Index (NVI). It is a cumulative
 // indicator using the change in volume to decide when the smart money is active.
 //
-// If Volume is greather than Previous Volume:
+// If Volume is greater than Previous Volume:
 //
 //	NVI = Previous NVI
 //
@@ -52,7 +52,7 @@ func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 	previous := n.Initial
 
 	return helper.OperateWithContext(ctx, closingRatios, volumeChanges, func(closingRatio, volumeChange T) T {
-		// If Volume is greather than Previous Volume:
+		// If Volume is greater than Previous Volume:
 		//	NVI = Previous NVI
 		current := previous
 
