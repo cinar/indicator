@@ -12,6 +12,8 @@ import (
 	"log/slog"
 	"net/http"
 	"time"
+
+	"github.com/cinar/indicator/v2/helper"
 )
 
 // TiingoMeta is the response from the meta endpoint.
@@ -128,6 +130,10 @@ func (*TiingoRepository) Assets() ([]string, error) {
 }
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
+//
+// By design, this only returns snapshots from 2000-01-01 onward, unlike
+// InMemoryRepository and FileSystemRepository, whose Get returns full
+// history with no floor date.
 func (r *TiingoRepository) Get(name string) (<-chan *Snapshot, error) {
 	return r.GetSince(name, time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC))
 }
@@ -151,13 +157,22 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 	}
 
 	if res.StatusCode != 200 {
+		helper.CloseAndLogErrorWithLogger(res.Body, "Unable to close response.", r.Logger)
 		return nil, fmt.Errorf("request failed with %s", res.Status)
 	}
 
 	snapshots := make(chan *Snapshot)
 
 	go func() {
+		// The response body must stay open for as long as this goroutine is
+		// decoding from it, so it is closed here via defer rather than by
+		// the caller, ensuring it is closed exactly once regardless of
+		// which return path below is taken. Deferred close(snapshots) is
+		// declared first so it runs last (defers are LIFO), guaranteeing
+		// the body is already closed by the time a consumer observes the
+		// channel closing.
 		defer close(snapshots)
+		defer helper.CloseAndLogErrorWithLogger(res.Body, "Unable to close response.", r.Logger)
 
 		decoder := json.NewDecoder(res.Body)
 
@@ -182,12 +197,6 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 		_, err = decoder.Token()
 		if err != nil {
 			r.Logger.Error("GetSince failed.", "error", err)
-			return
-		}
-
-		err = res.Body.Close()
-		if err != nil {
-			r.Logger.Error("Unable to close respose.", "error", err)
 		}
 	}()
 
@@ -209,17 +218,13 @@ func (r *TiingoRepository) LastDate(name string) (time.Time, error) {
 	if err != nil {
 		return lastDate, err
 	}
+	defer helper.CloseAndLogErrorWithLogger(res.Body, "Unable to close response.", r.Logger)
 
 	if res.StatusCode != 200 {
 		return lastDate, fmt.Errorf("request failed with %s", res.Status)
 	}
 
 	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return lastDate, err
-	}
-
-	err = res.Body.Close()
 	if err != nil {
 		return lastDate, err
 	}
