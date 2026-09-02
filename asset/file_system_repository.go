@@ -45,6 +45,10 @@ func (r *FileSystemRepository) Assets() ([]string, error) {
 	suffix := ".csv"
 
 	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
 		name := file.Name()
 
 		if strings.HasSuffix(name, suffix) {

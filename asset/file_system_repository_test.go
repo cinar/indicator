@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"os"
 	"path"
 	"reflect"
 	"testing"
@@ -22,6 +23,27 @@ var repositoryBase = "testdata/repository"
 func TestFileSystemRepositoryAssets(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
 	expected := []string{"brk-b", "empty"}
+
+	actual, err := repository.Assets()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
+
+func TestFileSystemRepositoryAssetsSkipsDirectories(t *testing.T) {
+	repository := asset.NewFileSystemRepository(repositoryBase)
+	expected := []string{"brk-b", "empty"}
+
+	dirName := path.Join(repositoryBase, "subdir.csv")
+
+	if err := os.Mkdir(dirName, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	defer helper.RemoveAll(t, dirName)
 
 	actual, err := repository.Assets()
 	if err != nil {
