@@ -28,6 +28,11 @@ const (
 //	MACD = 12-Period EMA - 26-Period EMA.
 //	Signal = 9-Period EMA of MACD.
 //
+// Ema1's period (the "fast" period) must be less than Ema2's period (the
+// "slow" period) for the MACD line to align its two EMA streams correctly.
+// NewMacdWithPeriod automatically swaps period1 and period2 when they are
+// given in the wrong order, so Ema1 always ends up shorter than Ema2.
+//
 // Example:
 //
 //	macd := trend.NewMacd[float64]()
@@ -47,8 +52,17 @@ func NewMacd[T helper.Float]() *Macd[T] {
 	)
 }
 
-// NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
+// NewMacdWithPeriod function initializes a new MACD instance with the given
+// parameters. The fast period (period1) must be less than the slow period
+// (period2) for the two EMA streams to align correctly when the MACD line
+// is computed. If period1 is greater than period2, the two are swapped so
+// that the resulting instance is always well-formed regardless of the
+// order the caller passes them in.
 func NewMacdWithPeriod[T helper.Float](period1, period2, period3 int) *Macd[T] {
+	if period1 > period2 {
+		period1, period2 = period2, period1
+	}
+
 	return &Macd[T]{
 		Ema1: NewEmaWithPeriod[T](period1),
 		Ema2: NewEmaWithPeriod[T](period2),
