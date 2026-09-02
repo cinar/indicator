@@ -39,3 +39,12 @@ func TestMassIndex(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMassIndexString(t *testing.T) {
+	expected := "MASSINDEX(9,9,25)"
+	actual := trend.NewMassIndex[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

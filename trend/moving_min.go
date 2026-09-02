@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -51,6 +52,11 @@ func (m *MovingMin[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 // IdlePeriod is the initial period that Mocing Min won't yield any results.
 func (m *MovingMin[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// String is the string representation of the Moving Min.
+func (m *MovingMin[T]) String() string {
+	return fmt.Sprintf("MOVINGMIN(%d)", m.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

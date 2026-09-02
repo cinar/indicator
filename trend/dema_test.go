@@ -37,3 +37,12 @@ func TestDema(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestDemaString(t *testing.T) {
+	expected := "DEMA(20,20)"
+	actual := trend.NewDema[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

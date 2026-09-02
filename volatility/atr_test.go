@@ -41,3 +41,12 @@ func TestAtr(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAtrString(t *testing.T) {
+	expected := "ATR(SMA(14))"
+	actual := volatility.NewAtr[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

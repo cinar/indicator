@@ -51,3 +51,12 @@ func TestKdj(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestKdjString(t *testing.T) {
+	expected := "KDJ(9,3,3)"
+	actual := trend.NewKdj[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

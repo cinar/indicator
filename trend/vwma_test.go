@@ -40,3 +40,12 @@ func TestVwma(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestVwmaString(t *testing.T) {
+	expected := "VWMA(20)"
+	actual := trend.NewVwma[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

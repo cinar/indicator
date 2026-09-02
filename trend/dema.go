@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -57,6 +58,11 @@ func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that DEMA won't yield any results.
 func (d *Dema[T]) IdlePeriod() int {
 	return d.Ema1.Period + d.Ema2.Period - 2
+}
+
+// String is the string representation of the DEMA.
+func (d *Dema[T]) String() string {
+	return fmt.Sprintf("DEMA(%d,%d)", d.Ema1.Period, d.Ema2.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

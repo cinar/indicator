@@ -35,3 +35,12 @@ func TestCfo(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestCfoString(t *testing.T) {
+	expected := "CFO(14)"
+	actual := trend.NewCfo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

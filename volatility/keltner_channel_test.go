@@ -49,3 +49,12 @@ func TestKeltnerChannel(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestKeltnerChannelString(t *testing.T) {
+	expected := "KC(20)"
+	actual := volatility.NewKeltnerChannel[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

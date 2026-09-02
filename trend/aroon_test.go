@@ -167,3 +167,12 @@ func TestAroonValidateDefinition(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAroonString(t *testing.T) {
+	expected := "AROON(25)"
+	actual := trend.NewAroon[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

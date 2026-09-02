@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -57,6 +58,11 @@ func (v *Vwap[T]) ComputeWithContext(ctx context.Context, closings, volumes <-ch
 // IdlePeriod is the initial period that VWAP won't yield any results.
 func (v *Vwap[T]) IdlePeriod() int {
 	return v.Sum.IdlePeriod()
+}
+
+// String is the string representation of the VWAP.
+func (v *Vwap[T]) String() string {
+	return fmt.Sprintf("VWAP(%d)", v.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

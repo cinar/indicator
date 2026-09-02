@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -75,6 +76,11 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 // IdlePeriod is the initial period that Ulcer Index won't yield any results.
 func (u *UlcerIndex[T]) IdlePeriod() int {
 	return (u.Period - 1) * 2
+}
+
+// String is the string representation of the Ulcer Index.
+func (u *UlcerIndex[T]) String() string {
+	return fmt.Sprintf("ULCERINDEX(%d)", u.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

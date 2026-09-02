@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -84,6 +85,11 @@ func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 // IdlePeriod is the initial period that CCI won't yield any results.
 func (c *Cci[T]) IdlePeriod() int {
 	return (c.Period * 2) - 2
+}
+
+// String is the string representation of the CCI.
+func (c *Cci[T]) String() string {
+	return fmt.Sprintf("CCI(%d)", c.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

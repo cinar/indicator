@@ -41,3 +41,12 @@ func TestSuperTrend(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestSuperTrendString(t *testing.T) {
+	expected := "SUPERTREND(HMA(14),2.5)"
+	actual := volatility.NewSuperTrend[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

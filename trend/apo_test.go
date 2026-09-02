@@ -76,3 +76,12 @@ func TestApoWithCustomSmoothing(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestApoString(t *testing.T) {
+	expected := "APO(14,30)"
+	actual := trend.NewApo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

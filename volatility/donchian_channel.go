@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -71,6 +72,11 @@ func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, highs, lows
 // IdlePeriod is the initial period that Donchian Channel won't yield any results.
 func (d *DonchianChannel[T]) IdlePeriod() int {
 	return d.Max.IdlePeriod()
+}
+
+// String is the string representation of the Donchian Channel.
+func (d *DonchianChannel[T]) String() string {
+	return fmt.Sprintf("DC(%d)", d.Max.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

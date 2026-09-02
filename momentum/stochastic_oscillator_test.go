@@ -45,3 +45,12 @@ func TestStochasticOscillator(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestStochasticOscillatorString(t *testing.T) {
+	expected := "STOCHOSC(14,3)"
+	actual := momentum.NewStochasticOscillator[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

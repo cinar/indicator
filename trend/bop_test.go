@@ -42,3 +42,12 @@ func TestBop(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestBopString(t *testing.T) {
+	expected := "BOP"
+	actual := trend.NewBop[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

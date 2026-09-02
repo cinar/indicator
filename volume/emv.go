@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -83,6 +84,11 @@ func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 // IdlePeriod is the initial period that EMV won't yield any results.
 func (e *Emv[T]) IdlePeriod() int {
 	return e.Sma.IdlePeriod() + 1
+}
+
+// String is the string representation of the EMV.
+func (e *Emv[T]) String() string {
+	return fmt.Sprintf("EMV(%d)", e.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

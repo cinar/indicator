@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -78,6 +79,11 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 // IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 func (a *AccelerationBands[T]) IdlePeriod() int {
 	return a.Period - 1
+}
+
+// String is the string representation of the Acceleration Bands.
+func (a *AccelerationBands[T]) String() string {
+	return fmt.Sprintf("ACCELBANDS(%d)", a.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

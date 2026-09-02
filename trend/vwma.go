@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -47,6 +48,11 @@ func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan
 // IdlePeriod is the initial period that VWMA won't yield any results.
 func (v *Vwma[T]) IdlePeriod() int {
 	return v.Period - 1
+}
+
+// String is the string representation of the VWMA.
+func (v *Vwma[T]) String() string {
+	return fmt.Sprintf("VWMA(%d)", v.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

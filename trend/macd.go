@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -75,6 +76,11 @@ func (m *Macd[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T,
 // IdlePeriod is the initial period that MACD won't yield any results.
 func (m *Macd[T]) IdlePeriod() int {
 	return m.Ema2.Period + m.Ema3.Period - 2
+}
+
+// String is the string representation of the MACD.
+func (m *Macd[T]) String() string {
+	return fmt.Sprintf("MACD(%d,%d,%d)", m.Ema1.Period, m.Ema2.Period, m.Ema3.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

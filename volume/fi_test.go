@@ -37,3 +37,12 @@ func TestFi(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestFiString(t *testing.T) {
+	expected := "FI(13)"
+	actual := volume.NewFi[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

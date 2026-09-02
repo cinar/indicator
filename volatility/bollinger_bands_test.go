@@ -45,3 +45,12 @@ func TestBollingerBands(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestBollingerBandsString(t *testing.T) {
+	expected := "BBANDS(20,2)"
+	actual := volatility.NewBollingerBands[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -39,3 +39,12 @@ func TestEmv(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestEmvString(t *testing.T) {
+	expected := "EMV(14)"
+	actual := volume.NewEmv[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -95,6 +96,11 @@ func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-c
 // IdlePeriod is the initial period that Percentage Price Oscillator won't yield any results.
 func (p *Ppo[T]) IdlePeriod() int {
 	return p.LongEma.IdlePeriod() + p.SignalEma.IdlePeriod()
+}
+
+// String is the string representation of the PPO.
+func (p *Ppo[T]) String() string {
+	return fmt.Sprintf("PPO(%d,%d,%d)", p.ShortEma.Period, p.LongEma.Period, p.SignalEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

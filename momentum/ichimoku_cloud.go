@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -158,6 +159,11 @@ func (i *IchimokuCloud[T]) ComputeWithContext(ctx context.Context, highs, lows, 
 // IdlePeriod is the initial period that Ichimoku Cloud won't yield any results.
 func (i *IchimokuCloud[T]) IdlePeriod() int {
 	return i.LeadingMax.IdlePeriod() + i.LaggingPeriod
+}
+
+// String is the string representation of the Ichimoku Cloud.
+func (i *IchimokuCloud[T]) String() string {
+	return fmt.Sprintf("ICHIMOKU(%d,%d,%d,%d)", i.ConversionMax.Period, i.BaseMax.Period, i.LeadingMax.Period, i.LaggingPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

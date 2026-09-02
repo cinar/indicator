@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -102,4 +103,9 @@ func (r *Rma[T]) Compute(c <-chan T) <-chan T {
 // IdlePeriod is the initial period that RMA won't yield any results.
 func (r *Rma[T]) IdlePeriod() int {
 	return r.Period - 1
+}
+
+// String is the string representation of the RMA.
+func (r *Rma[T]) String() string {
+	return fmt.Sprintf("RMA(%d)", r.Period)
 }

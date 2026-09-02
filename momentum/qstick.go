@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -58,6 +59,11 @@ func (q *Qstick[T]) ComputeWithContext(ctx context.Context, openings, closings <
 // IdlePeriod is the initial period that Qstick won't yield any results.
 func (q *Qstick[T]) IdlePeriod() int {
 	return q.Sma.IdlePeriod()
+}
+
+// String is the string representation of the Qstick.
+func (q *Qstick[T]) String() string {
+	return fmt.Sprintf("QSTICK(%d)", q.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

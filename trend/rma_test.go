@@ -39,3 +39,12 @@ func TestRma(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestRmaString(t *testing.T) {
+	expected := "RMA(15)"
+	actual := trend.NewRmaWithPeriod[float64](15).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

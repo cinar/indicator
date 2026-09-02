@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -64,6 +65,11 @@ func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, clos
 // IdlePeriod is the initial period that Williams R won't yield any results.
 func (w *WilliamsR[T]) IdlePeriod() int {
 	return w.Max.IdlePeriod()
+}
+
+// String is the string representation of the Williams R.
+func (w *WilliamsR[T]) String() string {
+	return fmt.Sprintf("WILLIAMSR(%d)", w.Max.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

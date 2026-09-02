@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -79,6 +80,11 @@ func (k *KeltnerChannel[T]) ComputeWithContext(ctx context.Context, highs, lows,
 // IdlePeriod is the initial period that Keltner Channel won't yield any results.
 func (k *KeltnerChannel[T]) IdlePeriod() int {
 	return k.Atr.IdlePeriod()
+}
+
+// String is the string representation of the Keltner Channel.
+func (k *KeltnerChannel[T]) String() string {
+	return fmt.Sprintf("KC(%d)", k.Ema.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

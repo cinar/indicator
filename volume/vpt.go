@@ -42,6 +42,11 @@ func (*Vpt[T]) IdlePeriod() int {
 	return 1
 }
 
+// String is the string representation of the VPT.
+func (*Vpt[T]) String() string {
+	return "VPT"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

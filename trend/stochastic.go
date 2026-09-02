@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -86,6 +87,11 @@ func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T)
 // IdlePeriod is the initial period that Stochastic won't yield any results.
 func (s *Stochastic[T]) IdlePeriod() int {
 	return s.Period + s.Sma.Period - 2
+}
+
+// String is the string representation of the Stochastic.
+func (s *Stochastic[T]) String() string {
+	return fmt.Sprintf("STOCHASTIC(%d,%d)", s.Period, s.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

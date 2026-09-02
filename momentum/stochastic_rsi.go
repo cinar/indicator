@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -81,6 +82,11 @@ func (s *StochasticRsi[T]) ComputeWithContext(ctx context.Context, closings <-ch
 // IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 func (s *StochasticRsi[T]) IdlePeriod() int {
 	return s.Rsi.IdlePeriod() + s.Min.IdlePeriod()
+}
+
+// String is the string representation of the Stochastic RSI.
+func (s *StochasticRsi[T]) String() string {
+	return fmt.Sprintf("STOCHRSI(%d)", s.Min.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

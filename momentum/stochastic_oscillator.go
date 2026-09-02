@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -79,6 +80,11 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 // IdlePeriod is the initial period that Stochastic Oscillator won't yield any results.
 func (s *StochasticOscillator[T]) IdlePeriod() int {
 	return s.Max.IdlePeriod() + s.Sma.IdlePeriod()
+}
+
+// String is the string representation of the Stochastic Oscillator.
+func (s *StochasticOscillator[T]) String() string {
+	return fmt.Sprintf("STOCHOSC(%d,%d)", s.Max.Period, s.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

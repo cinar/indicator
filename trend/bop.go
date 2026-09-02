@@ -36,6 +36,11 @@ func (*Bop[T]) IdlePeriod() int {
 	return 0
 }
 
+// String is the string representation of the BOP.
+func (*Bop[T]) String() string {
+	return "BOP"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

@@ -60,3 +60,12 @@ func TestKvoIdlePeriod(t *testing.T) {
 		t.Fatalf("Expected %d, got %d", expected, actual)
 	}
 }
+
+func TestKvoString(t *testing.T) {
+	expected := "KVO(34,55,13)"
+	actual := volume.NewKvo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

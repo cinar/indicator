@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -267,4 +268,9 @@ func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan
 // IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
 func (t *TdSequential[T]) IdlePeriod() int {
 	return t.Lookback + t.SetupPeriod + t.CountdownPeriod
+}
+
+// String is the string representation of the TD Sequential.
+func (t *TdSequential[T]) String() string {
+	return fmt.Sprintf("TDSEQUENTIAL(%d,%d,%d,%d)", t.Lookback, t.CountdownLookback, t.SetupPeriod, t.CountdownPeriod)
 }

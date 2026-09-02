@@ -37,3 +37,12 @@ func TestNvi(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestNviString(t *testing.T) {
+	expected := "NVI(1000)"
+	actual := volume.NewNvi[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

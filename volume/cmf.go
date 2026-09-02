@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -65,6 +66,11 @@ func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 // IdlePeriod is the initial period that CMF won't yield any results.
 func (c *Cmf[T]) IdlePeriod() int {
 	return c.Sum.IdlePeriod()
+}
+
+// String is the string representation of the CMF.
+func (c *Cmf[T]) String() string {
+	return fmt.Sprintf("CMF(%d)", c.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

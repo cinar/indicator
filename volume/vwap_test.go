@@ -37,3 +37,12 @@ func TestVwap(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestVwapString(t *testing.T) {
+	expected := "VWAP(14)"
+	actual := volume.NewVwap[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

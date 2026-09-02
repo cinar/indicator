@@ -156,3 +156,12 @@ func TestTdSequentialCountdownCrossCancel(t *testing.T) {
 		t.Fatalf("row 25: buyCountdown = %v, want 0 (stays cancelled, not 5)", rows[25].buyCountdown)
 	}
 }
+
+func TestTdSequentialString(t *testing.T) {
+	expected := "TDSEQUENTIAL(4,2,9,13)"
+	actual := momentum.NewTdSequential[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

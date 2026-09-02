@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	//goland:noinspection ALL
@@ -91,6 +92,11 @@ func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 // IdlePeriod is the initial period that APO won't yield any results.
 func (apo *Apo[T]) IdlePeriod() int {
 	return apo.SlowPeriod - 1
+}
+
+// String is the string representation of the APO.
+func (apo *Apo[T]) String() string {
+	return fmt.Sprintf("APO(%d,%d)", apo.FastPeriod, apo.SlowPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

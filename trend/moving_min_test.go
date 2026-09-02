@@ -23,3 +23,12 @@ func TestMovingMin(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMovingMinString(t *testing.T) {
+	expected := "MOVINGMIN(4)"
+	actual := trend.NewMovingMinWithPeriod[int](4).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -110,6 +111,11 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 // IdlePeriod is the initial period that KDJ won't yield any results.
 func (kdj *Kdj[T]) IdlePeriod() int {
 	return kdj.MovingMax.Period + kdj.Sma1.Period + kdj.Sma2.Period - 3
+}
+
+// String is the string representation of the KDJ.
+func (kdj *Kdj[T]) String() string {
+	return fmt.Sprintf("KDJ(%d,%d,%d)", kdj.MovingMax.Period, kdj.Sma1.Period, kdj.Sma2.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

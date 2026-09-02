@@ -206,6 +206,11 @@ func (s *Streak[T]) IdlePeriod() int {
 	return 1
 }
 
+// String is the string representation of the Streak.
+func (s *Streak[T]) String() string {
+	return "STREAK"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

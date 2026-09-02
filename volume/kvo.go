@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -102,6 +103,11 @@ func (k *Kvo[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 // IdlePeriod is the initial period that KVO won't yield any results.
 func (k *Kvo[T]) IdlePeriod() int {
 	return k.LongEma.IdlePeriod() + k.SignalEma.IdlePeriod() + 1
+}
+
+// String is the string representation of the KVO.
+func (k *Kvo[T]) String() string {
+	return fmt.Sprintf("KVO(%d,%d,%d)", k.ShortEma.Period, k.LongEma.Period, k.SignalEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

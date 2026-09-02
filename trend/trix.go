@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -56,6 +57,11 @@ func (t *Trix[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that TRIX won't yield any results.
 func (t *Trix[T]) IdlePeriod() int {
 	return (t.Period * 3) - 3 + 1
+}
+
+// String is the string representation of the TRIX.
+func (t *Trix[T]) String() string {
+	return fmt.Sprintf("TRIX(%d)", t.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

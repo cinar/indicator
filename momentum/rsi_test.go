@@ -57,3 +57,12 @@ func TestRsiFlatMarket(t *testing.T) {
 		}
 	}
 }
+
+func TestRsiString(t *testing.T) {
+	expected := "RSI(14)"
+	actual := momentum.NewRsi[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -71,6 +72,11 @@ func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
 func (c *ChaikinOscillator[T]) IdlePeriod() int {
 	return c.LongEma.IdlePeriod()
+}
+
+// String is the string representation of the Chaikin Oscillator.
+func (c *ChaikinOscillator[T]) String() string {
+	return fmt.Sprintf("CO(%d,%d)", c.ShortEma.Period, c.LongEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

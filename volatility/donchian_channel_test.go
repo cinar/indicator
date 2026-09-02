@@ -47,3 +47,12 @@ func TestDonchianChannel(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestDonchianChannelString(t *testing.T) {
+	expected := "DC(20)"
+	actual := volatility.NewDonchianChannel[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

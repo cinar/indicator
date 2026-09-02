@@ -111,3 +111,12 @@ func TestPringsSpecialKComputeConstantInput(t *testing.T) {
 		}
 	}
 }
+
+func TestPringsSpecialKString(t *testing.T) {
+	expected := "SPECIALK"
+	actual := NewPringsSpecialK[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

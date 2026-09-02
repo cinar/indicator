@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -70,6 +71,11 @@ func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 // IdlePeriod is the initial period that NVI won't yield any results.
 func (*Nvi[T]) IdlePeriod() int {
 	return 1
+}
+
+// String is the string representation of the NVI.
+func (n *Nvi[T]) String() string {
+	return fmt.Sprintf("NVI(%v)", n.Initial)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -23,3 +23,12 @@ func TestMovingMax(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMovingMaxString(t *testing.T) {
+	expected := "MOVINGMAX(4)"
+	actual := trend.NewMovingMaxWithPeriod[int](4).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

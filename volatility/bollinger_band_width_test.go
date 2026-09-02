@@ -37,3 +37,12 @@ func TestBollingerBandWidth(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestBollingerBandWidthString(t *testing.T) {
+	expected := "BBW(20)"
+	actual := volatility.NewBollingerBandWidth[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

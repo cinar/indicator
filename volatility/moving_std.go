@@ -5,6 +5,7 @@
 package volatility
 
 import (
+	"fmt"
 	"math"
 
 	"context"
@@ -96,4 +97,9 @@ func (m *MovingStd[T]) Compute(c <-chan T) <-chan T {
 // IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
 func (m *MovingStd[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// String is the string representation of the Moving Standard Deviation.
+func (m *MovingStd[T]) String() string {
+	return fmt.Sprintf("MOVINGSTD(%d)", m.Period)
 }

@@ -37,3 +37,12 @@ func TestMovingStd(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMovingStdString(t *testing.T) {
+	expected := "MOVINGSTD(20)"
+	actual := volatility.NewMovingStdWithPeriod[float64](20).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
