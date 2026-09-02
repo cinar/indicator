@@ -5,14 +5,18 @@
 package asset
 
 import (
+	"sync"
 	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 )
 
 // InMemoryRepository stores and retrieves asset snapshots using
-// an in memory storage.
+// an in memory storage. It is safe for concurrent use.
 type InMemoryRepository struct {
+	// mutex guards access to storage.
+	mutex sync.RWMutex
+
 	// storage is the in memory storage for assets.
 	storage map[string][]*Snapshot
 }
@@ -26,6 +30,9 @@ func NewInMemoryRepository() *InMemoryRepository {
 
 // Assets returns the names of all assets in the repository.
 func (r *InMemoryRepository) Assets() ([]string, error) {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
 	assets := make([]string, 0, len(r.storage))
 	for name := range r.storage {
 		assets = append(assets, name)
@@ -36,12 +43,21 @@ func (r *InMemoryRepository) Assets() ([]string, error) {
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
 func (r *InMemoryRepository) Get(name string) (<-chan *Snapshot, error) {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
 	snapshots, ok := r.storage[name]
 	if !ok {
 		return nil, ErrRepositoryAssetNotFound
 	}
 
-	return helper.SliceToChan(snapshots), nil
+	// Copy while holding the lock, since SliceToChan reads the slice
+	// lazily from a goroutine, after a concurrent Append may have
+	// mutated this slice's backing array in place.
+	copied := make([]*Snapshot, len(snapshots))
+	copy(copied, snapshots)
+
+	return helper.SliceToChan(copied), nil
 }
 
 // GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
@@ -77,13 +93,16 @@ func (r *InMemoryRepository) LastDate(name string) (time.Time, error) {
 
 // Append adds the given snapshows to the asset with the given name.
 func (r *InMemoryRepository) Append(name string, snapshots <-chan *Snapshot) error {
-	combined := r.storage[name]
+	var newSnapshots []*Snapshot
 
 	for snapshot := range snapshots {
-		combined = append(combined, snapshot)
+		newSnapshots = append(newSnapshots, snapshot)
 	}
 
-	r.storage[name] = combined
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	r.storage[name] = append(r.storage[name], newSnapshots...)
 
 	return nil
 }

@@ -5,6 +5,8 @@
 package asset_test
 
 import (
+	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -157,4 +159,58 @@ func TestInMemoryRepositoryLastDate(t *testing.T) {
 	if !expected.Equal(actual) {
 		t.Fatalf("actual %v expected %v", actual, expected)
 	}
+}
+
+func TestInMemoryRepositoryConcurrentAccess(t *testing.T) {
+	repository := asset.NewInMemoryRepository()
+
+	const (
+		workers        = 8
+		appendsPerName = 50
+	)
+
+	var wg sync.WaitGroup
+
+	for w := 0; w < workers; w++ {
+		name := fmt.Sprintf("ASSET_%d", w)
+
+		wg.Add(2)
+
+		// Concurrently appends snapshots to the same asset name.
+		go func(name string) {
+			defer wg.Done()
+
+			for i := 0; i < appendsPerName; i++ {
+				snapshot := &asset.Snapshot{
+					Date: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC).AddDate(0, 0, i),
+				}
+
+				err := repository.Append(name, helper.SliceToChan([]*asset.Snapshot{snapshot}))
+				if err != nil {
+					t.Error(err)
+				}
+			}
+		}(name)
+
+		// Concurrently reads the storage while the appends above are in flight.
+		go func(name string) {
+			defer wg.Done()
+
+			for i := 0; i < appendsPerName; i++ {
+				if _, err := repository.Assets(); err != nil {
+					t.Error(err)
+				}
+
+				channel, err := repository.Get(name)
+				if err != nil {
+					continue
+				}
+
+				for range channel {
+				}
+			}
+		}(name)
+	}
+
+	wg.Wait()
 }
