@@ -225,6 +225,35 @@ func TestSetReflectValueFromNotUint8(t *testing.T) {
 	}
 }
 
+func TestSetReflectValueFromUint8Max(t *testing.T) {
+	actual := uint8(0)
+	value := reflect.ValueOf(&actual).Elem()
+	expected := uint8(255)
+
+	err := setReflectValue(value, "255", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
+
+func TestSetReflectValueFromUint8OutOfRange(t *testing.T) {
+	actual := uint8(0)
+	value := reflect.ValueOf(&actual).Elem()
+
+	err := setReflectValue(value, "300", "")
+	if err == nil {
+		t.Fatalf("actual %v expected error", actual)
+	}
+
+	if actual != 0 {
+		t.Fatalf("actual %v expected value to remain unset", actual)
+	}
+}
+
 func TestSetReflectValueFromUint16(t *testing.T) {
 	actual := uint16(0)
 	value := reflect.ValueOf(&actual).Elem()
