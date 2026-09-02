@@ -75,6 +75,53 @@ func ComputeWithOutcome(s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-
 	return ComputeWithOutcomeWithContext(context.Background(), s, c)
 }
 
+// ComputeWithOutcomeAndTimingWithContext uses the given strategy to process the provided asset snapshots and
+// generates a stream of actionable recommendations and outcomes, using the given ExecutionTiming to decide
+// which price a simulated trade executes at, supporting context cancellation.
+//
+// With AtClose, this behaves identically to ComputeWithOutcomeWithContext: each action is paired with the
+// closing price of the same bar it was computed from.
+//
+// With NextOpen or NextClose, each action is instead paired with the opening or closing price of the
+// following bar. As a result, the returned outcomes channel yields one fewer value than the returned
+// actions channel, since there is no following bar for the last action. Callers that need the actions and
+// outcomes channels aligned position-for-position (for example, to build a report column) must account for
+// this offset themselves, the same way many strategies already skip-align channels of differing lengths.
+// Callers only interested in the final/aggregate outcome (for example, via helper.Last(outcomes, 1)) are
+// unaffected either way.
+func ComputeWithOutcomeAndTimingWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot, timing ExecutionTiming) (<-chan Action, <-chan float64) {
+	snapshots := helper.DuplicateWithContext(ctx, c, 2)
+
+	actions := helper.DuplicateWithContext(ctx, ComputeStrategyWithContext(ctx, s, snapshots[0]), 2)
+
+	var prices <-chan float64
+
+	switch timing {
+	case NextOpen:
+		prices = helper.SkipWithContext(ctx, asset.SnapshotsAsOpeningsWithContext(ctx, snapshots[1]), 1)
+
+	case NextClose:
+		prices = helper.SkipWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots[1]), 1)
+
+	default:
+		prices = asset.SnapshotsAsClosingsWithContext(ctx, snapshots[1])
+	}
+
+	outcomes := OutcomeWithContext(ctx, prices, actions[1])
+
+	return actions[0], outcomes
+}
+
+// ComputeWithOutcomeAndTiming uses the given strategy to process the provided asset snapshots and
+// generates a stream of actionable recommendations and outcomes, using the given ExecutionTiming to decide
+// which price a simulated trade executes at.
+//
+// See ComputeWithOutcomeAndTimingWithContext for details, including the note on the outcomes channel
+// being shorter than the actions channel when timing is NextOpen or NextClose.
+func ComputeWithOutcomeAndTiming(s Strategy, c <-chan *asset.Snapshot, timing ExecutionTiming) (<-chan Action, <-chan float64) {
+	return ComputeWithOutcomeAndTimingWithContext(context.Background(), s, c, timing)
+}
+
 // AllStrategies returns a slice containing references to all available base strategies.
 func AllStrategies() []Strategy {
 	return []Strategy{

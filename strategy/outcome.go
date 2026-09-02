@@ -11,6 +11,15 @@ import (
 )
 
 // OutcomeWithContext simulates the potential result of executing the given actions based on the provided values, supporting context cancellation.
+//
+// The values and actions channels are paired positionally: the value at position i is assumed to be the
+// execution price for the action at position i. Callers that pass same-bar closing prices are therefore
+// simulating same-bar/"at close" execution, i.e. the trade is assumed to fill at the very same closing
+// price that produced the signal. This is unrealistic (a signal cannot be acted upon before the bar that
+// generated it has been observed) and tends to overstate backtest performance. Callers who want the more
+// realistic assumption of executing on the next bar's open or close should use
+// ComputeWithOutcomeAndTimingWithContext (or ComputeWithOutcomeAndTiming) with ExecutionTiming NextOpen
+// or NextClose instead of constructing the values channel directly.
 func OutcomeWithContext[T helper.Number](ctx context.Context, values <-chan T, actions <-chan Action) <-chan float64 {
 	balance := 1.0
 	shares := 0.0
@@ -29,6 +38,8 @@ func OutcomeWithContext[T helper.Number](ctx context.Context, values <-chan T, a
 }
 
 // Outcome simulates the potential result of executing the given actions based on the provided values.
+//
+// See OutcomeWithContext for details on the same-bar/"at close" execution assumption.
 //
 // Deprecated: Use OutcomeWithContext instead.
 func Outcome[T helper.Number](values <-chan T, actions <-chan Action) <-chan float64 {
