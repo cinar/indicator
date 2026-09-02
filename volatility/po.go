@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -105,6 +106,11 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 // IdlePeriod is the initial period that PO won't yield any results.
 func (p *Po[T]) IdlePeriod() int {
 	return p.mls.IdlePeriod() + p.min.IdlePeriod()
+}
+
+// String is the string representation of the PO.
+func (p *Po[T]) String() string {
+	return fmt.Sprintf("PO(%d)", p.mls.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

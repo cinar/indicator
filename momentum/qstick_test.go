@@ -39,3 +39,12 @@ func TestQstick(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestQstickString(t *testing.T) {
+	expected := "QSTICK(20)"
+	actual := momentum.NewQstick[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

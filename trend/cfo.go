@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -64,6 +65,11 @@ func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-cha
 // IdlePeriod is the initial period that CFO won't yield any results.
 func (c *Cfo[T]) IdlePeriod() int {
 	return c.Mlr.IdlePeriod()
+}
+
+// String is the string representation of the CFO.
+func (c *Cfo[T]) String() string {
+	return fmt.Sprintf("CFO(%d)", c.Mlr.Mls.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -50,6 +50,11 @@ func (*Ad[T]) IdlePeriod() int {
 	return 0
 }
 
+// String is the string representation of the A/D.
+func (*Ad[T]) String() string {
+	return "AD"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

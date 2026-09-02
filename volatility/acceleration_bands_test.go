@@ -49,3 +49,12 @@ func TestAccelerationBands(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAccelerationBandsString(t *testing.T) {
+	expected := "ACCELBANDS(20)"
+	actual := volatility.NewAccelerationBands[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

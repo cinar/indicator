@@ -38,3 +38,12 @@ func TestTrix(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTrixString(t *testing.T) {
+	expected := "TRIX(15)"
+	actual := trend.NewTrix[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

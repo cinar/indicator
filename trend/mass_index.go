@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -71,6 +72,11 @@ func (m *MassIndex[T]) ComputeWithContext(ctx context.Context, highs, lows <-cha
 // IdlePeriod is the initial period that Mass Index won't yield any results.
 func (m *MassIndex[T]) IdlePeriod() int {
 	return m.Ema1.Period + m.Ema2.Period + m.MovingSum.Period - 3
+}
+
+// String is the string representation of the Mass Index.
+func (m *MassIndex[T]) String() string {
+	return fmt.Sprintf("MASSINDEX(%d,%d,%d)", m.Ema1.Period, m.Ema2.Period, m.MovingSum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

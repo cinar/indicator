@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 	"math"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -129,6 +130,11 @@ func isNaNOrInf[T helper.Number](v T) bool {
 // IdlePeriod is the initial period that Moving Sum won't yield any results.
 func (m *MovingSum[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// String is the string representation of the Moving Sum.
+func (m *MovingSum[T]) String() string {
+	return fmt.Sprintf("MOVINGSUM(%d)", m.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

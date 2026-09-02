@@ -45,3 +45,12 @@ func TestChandelierExit(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestChandelierExitString(t *testing.T) {
+	expected := "CE(22,3)"
+	actual := volatility.NewChandelierExit[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

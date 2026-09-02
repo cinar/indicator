@@ -54,3 +54,12 @@ func TestMlr(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMlrString(t *testing.T) {
+	expected := "MLR(4)"
+	actual := trend.NewMlrWithPeriod[float64](4).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -69,6 +70,11 @@ func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Awesome Oscillator won't yield any results.
 func (a *AwesomeOscillator[T]) IdlePeriod() int {
 	return a.LongSma.IdlePeriod()
+}
+
+// String is the string representation of the Awesome Oscillator.
+func (a *AwesomeOscillator[T]) String() string {
+	return fmt.Sprintf("AO(%d,%d)", a.ShortSma.Period, a.LongSma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

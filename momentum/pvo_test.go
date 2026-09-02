@@ -45,3 +45,12 @@ func TestPvo(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestPvoString(t *testing.T) {
+	expected := "PVO(12,26,9)"
+	actual := momentum.NewPvo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

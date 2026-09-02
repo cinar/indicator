@@ -66,3 +66,12 @@ func TestIchimokuCloud(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestIchimokuCloudString(t *testing.T) {
+	expected := "ICHIMOKU(9,26,52,26)"
+	actual := momentum.NewIchimokuCloud[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

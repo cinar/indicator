@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -89,6 +90,11 @@ func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 // IdlePeriod is the initial period that MFI won't yield any results.
 func (m *Mfi[T]) IdlePeriod() int {
 	return m.Sum.IdlePeriod() + 1
+}
+
+// String is the string representation of the MFI.
+func (m *Mfi[T]) String() string {
+	return fmt.Sprintf("MFI(%d)", m.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

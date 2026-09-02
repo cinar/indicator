@@ -37,3 +37,12 @@ func TestStochasticRsi(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestStochasticRsiString(t *testing.T) {
+	expected := "STOCHRSI(14)"
+	actual := momentum.NewStochasticRsi[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

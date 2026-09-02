@@ -41,3 +41,12 @@ func TestStochastic(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestStochasticString(t *testing.T) {
+	expected := "STOCHASTIC(10,3)"
+	actual := trend.NewStochastic[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

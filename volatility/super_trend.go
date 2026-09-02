@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -160,6 +161,11 @@ func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, clo
 // IdlePeriod is the initial period that Super Trend won't yield any results.
 func (s *SuperTrend[T]) IdlePeriod() int {
 	return s.Atr.IdlePeriod()
+}
+
+// String is the string representation of the Super Trend.
+func (s *SuperTrend[T]) String() string {
+	return fmt.Sprintf("SUPERTREND(%s,%v)", s.Atr.Ma.String(), s.Multiplier)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

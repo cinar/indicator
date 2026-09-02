@@ -49,6 +49,11 @@ func (*Mfm[T]) IdlePeriod() int {
 	return 0
 }
 
+// String is the string representation of the MFM.
+func (*Mfm[T]) String() string {
+	return "MFM"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

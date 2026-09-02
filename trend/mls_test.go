@@ -58,3 +58,12 @@ func TestMls(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMlsString(t *testing.T) {
+	expected := "MLS(5)"
+	actual := trend.NewMlsWithPeriod[float64](5).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

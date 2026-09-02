@@ -39,3 +39,12 @@ func TestAwesomeOscillator(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAwesomeOscillatorString(t *testing.T) {
+	expected := "AO(5,34)"
+	actual := momentum.NewAwesomeOscillator[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

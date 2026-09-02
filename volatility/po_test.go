@@ -41,3 +41,12 @@ func TestPo(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestPoString(t *testing.T) {
+	expected := "PO(14)"
+	actual := volatility.NewPo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

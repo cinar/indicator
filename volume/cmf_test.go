@@ -41,3 +41,12 @@ func TestCmf(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestCmfString(t *testing.T) {
+	expected := "CMF(20)"
+	actual := volume.NewCmf[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

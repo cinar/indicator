@@ -39,3 +39,12 @@ func TestMfm(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMfmString(t *testing.T) {
+	expected := "MFM"
+	actual := volume.NewMfm[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -40,3 +40,12 @@ func TestTypicalPrice(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTypicalPriceString(t *testing.T) {
+	expected := "Typical Price"
+	actual := trend.NewTypicalPrice[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

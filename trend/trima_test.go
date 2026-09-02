@@ -82,3 +82,12 @@ func TestTrimaWithEvenPeriod(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTrimaString(t *testing.T) {
+	expected := "TRIMA(15)"
+	actual := trend.NewTrima[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -62,6 +63,11 @@ func (t *Tema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that TEMA won't yield any results.
 func (t *Tema[T]) IdlePeriod() int {
 	return t.Ema1.Period + t.Ema2.Period + t.Ema3.Period - 3
+}
+
+// String is the string representation of the TEMA.
+func (t *Tema[T]) String() string {
+	return fmt.Sprintf("TEMA(%d,%d,%d)", t.Ema1.Period, t.Ema2.Period, t.Ema3.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

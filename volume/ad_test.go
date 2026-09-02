@@ -41,3 +41,12 @@ func TestAd(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAdString(t *testing.T) {
+	expected := "AD"
+	actual := volume.NewAd[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

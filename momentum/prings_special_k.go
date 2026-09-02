@@ -144,6 +144,11 @@ func (p *PringsSpecialK[T]) IdlePeriod() int {
 	return p.Sma195Roc530.IdlePeriod() + p.Roc530.IdlePeriod()
 }
 
+// String is the string representation of the Pring's Special K.
+func (p *PringsSpecialK[T]) String() string {
+	return "SPECIALK"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

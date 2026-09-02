@@ -72,3 +72,12 @@ func TestCciCancellation(t *testing.T) {
 		t.Fatal("Cci channel should be closed after cancellation")
 	}
 }
+
+func TestCciString(t *testing.T) {
+	expected := "CCI(20)"
+	actual := trend.NewCci[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

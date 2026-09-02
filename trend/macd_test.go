@@ -47,3 +47,12 @@ func TestMacd(t *testing.T) {
 		}
 	}
 }
+
+func TestMacdString(t *testing.T) {
+	expected := "MACD(12,26,9)"
+	actual := trend.NewMacd[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

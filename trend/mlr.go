@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -60,6 +61,11 @@ func (m *Mlr[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) <-chan T
 // IdlePeriod is the initial period that MLR won't yield any results.
 func (m *Mlr[T]) IdlePeriod() int {
 	return m.Mls.IdlePeriod()
+}
+
+// String is the string representation of the MLR.
+func (m *Mlr[T]) String() string {
+	return fmt.Sprintf("MLR(%d)", m.Mls.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

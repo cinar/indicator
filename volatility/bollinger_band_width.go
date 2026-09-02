@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -47,6 +48,11 @@ func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan
 // IdlePeriod is the initial period that Bollinger Band Width won't yield any results.
 func (b *BollingerBandWidth[T]) IdlePeriod() int {
 	return b.BollingerBands.IdlePeriod()
+}
+
+// String is the string representation of the Bollinger Band Width.
+func (b *BollingerBandWidth[T]) String() string {
+	return fmt.Sprintf("BBW(%d)", b.BollingerBands.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

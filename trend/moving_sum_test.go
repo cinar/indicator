@@ -206,3 +206,12 @@ func TestMovingSumFloatDriftNearZeroSum(t *testing.T) {
 		t.Fatalf("MovingSum (%v) is not more accurate than the naive running sum (%v) in the near-zero-sum regime", actualMaxErr, naiveMaxErr)
 	}
 }
+
+func TestMovingSumString(t *testing.T) {
+	expected := "MOVINGSUM(4)"
+	actual := trend.NewMovingSumWithPeriod[int](4).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

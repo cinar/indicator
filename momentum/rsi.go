@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -74,6 +75,11 @@ func (r *Rsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 // IdlePeriod is the initial period that Relative Strength Index won't yield any results.
 func (r *Rsi[T]) IdlePeriod() int {
 	return r.Rma.IdlePeriod() + 1
+}
+
+// String is the string representation of the RSI.
+func (r *Rsi[T]) String() string {
+	return fmt.Sprintf("RSI(%d)", r.Rma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

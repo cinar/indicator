@@ -102,3 +102,12 @@ func TestStcDeadlock(t *testing.T) {
 		t.Fatal("Stc.ComputeWithContext deadlocked")
 	}
 }
+
+func TestStcString(t *testing.T) {
+	expected := "STC(23,50,10,3)"
+	actual := trend.NewStc[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

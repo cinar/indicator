@@ -54,3 +54,12 @@ func TestNewSlowStochasticWithPeriod(t *testing.T) {
 		t.Fatalf("expected period 14, got %d", s.Period)
 	}
 }
+
+func TestSlowStochasticString(t *testing.T) {
+	expected := "SLOWSTOCH(14,3,3)"
+	actual := trend.NewSlowStochasticWithPeriod[float64](14, 3, 3).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

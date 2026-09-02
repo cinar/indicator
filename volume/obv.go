@@ -54,6 +54,11 @@ func (*Obv[T]) IdlePeriod() int {
 	return 0
 }
 
+// String is the string representation of the OBV.
+func (*Obv[T]) String() string {
+	return "OBV"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

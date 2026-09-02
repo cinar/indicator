@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -119,6 +120,11 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that STC won't yield any results.
 func (s *Stc[T]) IdlePeriod() int {
 	return s.Apo.IdlePeriod() + 2*s.Stochastic.IdlePeriod()
+}
+
+// String is the string representation of the STC.
+func (s *Stc[T]) String() string {
+	return fmt.Sprintf("STC(%d,%d,%d,%d)", s.FastPeriod, s.SlowPeriod, s.KPeriod, s.DPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -37,3 +37,12 @@ func TestVpt(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestVptString(t *testing.T) {
+	expected := "VPT"
+	actual := volume.NewVpt[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

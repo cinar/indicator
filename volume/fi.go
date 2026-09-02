@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -55,6 +56,11 @@ func (f *Fi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan
 // IdlePeriod is the initial period that FI won't yield any results.
 func (f *Fi[T]) IdlePeriod() int {
 	return f.Ema.IdlePeriod() + 1
+}
+
+// String is the string representation of the FI.
+func (f *Fi[T]) String() string {
+	return fmt.Sprintf("FI(%d)", f.Ema.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

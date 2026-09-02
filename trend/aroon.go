@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -73,6 +74,11 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 // IdlePeriod is the initial period that Aroon won't yield any results.
 func (a *Aroon[T]) IdlePeriod() int {
 	return a.Period - 1
+}
+
+// String is the string representation of the Aroon.
+func (a *Aroon[T]) String() string {
+	return fmt.Sprintf("AROON(%d)", a.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

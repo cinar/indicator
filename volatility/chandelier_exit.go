@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -78,6 +79,11 @@ func (c *ChandelierExit[T]) ComputeWithContext(ctx context.Context, highs, lows,
 // IdlePeriod is the initial period that Chandelier Exit won't yield any results.
 func (c *ChandelierExit[T]) IdlePeriod() int {
 	return c.Period
+}
+
+// String is the string representation of the Chandelier Exit.
+func (c *ChandelierExit[T]) String() string {
+	return fmt.Sprintf("CE(%d,%v)", c.Period, c.Multiplier)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

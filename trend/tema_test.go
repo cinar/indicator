@@ -38,3 +38,12 @@ func TestTema(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTemaString(t *testing.T) {
+	expected := "TEMA(20,20,20)"
+	actual := trend.NewTema[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

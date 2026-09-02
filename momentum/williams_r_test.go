@@ -41,3 +41,12 @@ func TestWilliamsR(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestWilliamsRString(t *testing.T) {
+	expected := "WILLIAMSR(14)"
+	actual := momentum.NewWilliamsR[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

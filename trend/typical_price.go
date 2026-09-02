@@ -36,6 +36,11 @@ func (*TypicalPrice[T]) IdlePeriod() int {
 	return 0
 }
 
+// String is the string representation of the Typical Price.
+func (*TypicalPrice[T]) String() string {
+	return "Typical Price"
+}
+
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.

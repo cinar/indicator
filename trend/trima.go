@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -64,6 +65,11 @@ func (t *Trima[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 func (t *Trima[T]) IdlePeriod() int {
 	period1, period2 := t.calculatePeriods()
 	return period1 + period2 - 2
+}
+
+// String is the string representation of the TRIMA.
+func (t *Trima[T]) String() string {
+	return fmt.Sprintf("TRIMA(%d)", t.Period)
 }
 
 // calculatePeriods calculates the individual periods to use based on the

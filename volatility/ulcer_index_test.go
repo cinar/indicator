@@ -37,3 +37,12 @@ func TestUlcerIndex(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestUlcerIndexString(t *testing.T) {
+	expected := "ULCERINDEX(14)"
+	actual := volatility.NewUlcerIndex[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}

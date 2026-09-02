@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -64,6 +65,11 @@ func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 func (a *Atr[T]) IdlePeriod() int {
 	// Ma idle period and for using the previous closing.
 	return a.Ma.IdlePeriod() + 1
+}
+
+// String is the string representation of the ATR.
+func (a *Atr[T]) String() string {
+	return fmt.Sprintf("ATR(%s)", a.Ma.String())
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

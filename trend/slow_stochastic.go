@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -101,6 +102,11 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 // IdlePeriod is the initial period that Slow Stochastic won't yield any results.
 func (s *SlowStochastic[T]) IdlePeriod() int {
 	return s.Period + s.KPeriod + s.DPeriod - 3
+}
+
+// String is the string representation of the Slow Stochastic.
+func (s *SlowStochastic[T]) String() string {
+	return fmt.Sprintf("SLOWSTOCH(%d,%d,%d)", s.Period, s.KPeriod, s.DPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

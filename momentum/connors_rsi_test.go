@@ -47,3 +47,12 @@ func TestConnorsRsiString(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, actual)
 	}
 }
+
+func TestStreakString(t *testing.T) {
+	expected := "STREAK"
+	actual := momentum.NewStreak[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("expected %v, got %v", expected, actual)
+	}
+}

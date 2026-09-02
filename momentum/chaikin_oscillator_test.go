@@ -47,3 +47,12 @@ func TestChaikinOscillator(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestChaikinOscillatorString(t *testing.T) {
+	expected := "CO(3,10)"
+	actual := momentum.NewChaikinOscillator[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
