@@ -65,7 +65,11 @@ func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 					sum2 := T(0)
 
 					for i := 0; i < m.Period; i++ {
-						sum2 += T(math.Pow(float64(ring.At(i)-sma), 2))
+						v, ok := ring.At(i)
+						if !ok {
+							continue
+						}
+						sum2 += T(math.Pow(float64(v-sma), 2))
 					}
 
 					std := T(math.Sqrt(float64(sum2 / T(m.Period))))

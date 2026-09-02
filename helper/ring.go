@@ -20,6 +20,7 @@ type Ring[T any] struct {
 	begin  int
 	end    int
 	empty  bool
+	count  int
 }
 
 // NewRing creates a new ring instance with the given size.
@@ -29,6 +30,7 @@ func NewRing[T any](size int) *Ring[T] {
 		begin:  0,
 		end:    0,
 		empty:  true,
+		count:  0,
 	}
 }
 
@@ -37,6 +39,8 @@ func NewRing[T any](size int) *Ring[T] {
 func (r *Ring[T]) Put(t T) T {
 	if r.IsFull() {
 		r.begin = r.nextIndex(r.begin)
+	} else {
+		r.count++
 	}
 
 	o := r.buffer[r.end]
@@ -59,6 +63,7 @@ func (r *Ring[T]) Get() (T, bool) {
 
 	t = r.buffer[r.begin]
 	r.begin = r.nextIndex(r.begin)
+	r.count--
 
 	if r.begin == r.end {
 		r.empty = true
@@ -67,9 +72,17 @@ func (r *Ring[T]) Get() (T, bool) {
 	return t, true
 }
 
-// At returns the value at the given index.
-func (r *Ring[T]) At(index int) T {
-	return r.buffer[(r.begin+index)%len(r.buffer)]
+// At returns the value at the given index, relative to the oldest
+// element currently in the ring. It returns false if index is out
+// of range, or fewer than index+1 elements have ever been Put.
+func (r *Ring[T]) At(index int) (T, bool) {
+	var t T
+
+	if index < 0 || index >= r.count {
+		return t, false
+	}
+
+	return r.buffer[(r.begin+index)%len(r.buffer)], true
 }
 
 // IsEmpty checks if the current ring buffer is empty.

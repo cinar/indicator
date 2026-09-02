@@ -130,13 +130,16 @@ func (t *TripleRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-
 
 		// - The 5-period RSI reading is down for the 3rd period in a row.
 		for i := 1; i < t.DownDays; i++ {
-			if memory.At(i-1) < memory.At(i) {
+			prev, prevOk := memory.At(i - 1)
+			curr, currOk := memory.At(i)
+			if !prevOk || !currOk || prev < curr {
 				return strategy.Hold
 			}
 		}
 
 		// - The 5-period RSI reading was below 60 three trading periods ago.
-		if memory.At(0) >= t.BuySignalAt {
+		signal, signalOk := memory.At(0)
+		if !signalOk || signal >= t.BuySignalAt {
 			return strategy.Hold
 		}
 

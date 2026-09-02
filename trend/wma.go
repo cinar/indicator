@@ -45,7 +45,10 @@ func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan
 		var sum T
 
 		for i := 0; i < w.Period; i++ {
-			v := window.At(i)
+			v, ok := window.At(i)
+			if !ok {
+				continue
+			}
 			sum += v * T(i+1)
 		}
 
