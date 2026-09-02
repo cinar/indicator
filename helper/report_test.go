@@ -5,6 +5,7 @@
 package helper_test
 
 import (
+	"bytes"
 	"testing"
 	"time"
 
@@ -71,6 +72,35 @@ func TestReportWriteToFileFailed(t *testing.T) {
 	report.AddColumn(helper.NewNumericReportColumn("Close", closes))
 
 	err = report.WriteToFile("")
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestReportWriteToWriterShortColumn(t *testing.T) {
+	type Row struct {
+		Date  time.Time `format:"2006-01-02"`
+		Close float64
+	}
+
+	input, err := helper.ReadFromCsvFile[Row]("testdata/report.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dates := helper.Map(input, func(row *Row) time.Time { return row.Date })
+
+	// The Close column is deliberately shorter than the Date axis, so
+	// the report generation is expected to fail instead of silently
+	// producing a report with a truncated or zero-filled column.
+	closes := helper.SliceToChan([]float64{1, 2, 3})
+
+	report := helper.NewReport("Test Report", dates)
+	report.AddColumn(helper.NewNumericReportColumn("Close", closes))
+
+	var buffer bytes.Buffer
+
+	err = report.WriteToWriter(&buffer)
 	if err == nil {
 		t.Fatal("expected error")
 	}

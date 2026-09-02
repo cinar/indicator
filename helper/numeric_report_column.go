@@ -36,7 +36,15 @@ func (*numericReportColumn[T]) Role() string {
 	return "data"
 }
 
-// Value returns the next data value for the report column.
-func (c *numericReportColumn[T]) Value() string {
-	return fmt.Sprintf("%v", <-c.values)
+// Value returns the next data value for the report column. It returns
+// an error when the backing channel is exhausted before the report's
+// time axis is, which would otherwise silently produce a zero value.
+func (c *numericReportColumn[T]) Value() (string, error) {
+	value, ok := <-c.values
+
+	if !ok {
+		return "", fmt.Errorf("report column %q: no more data available", c.name)
+	}
+
+	return fmt.Sprintf("%v", value), nil
 }
