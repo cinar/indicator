@@ -20,3 +20,16 @@ func TestRoundDigit(t *testing.T) {
 		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }
+
+func TestRoundDigitIntegerIsNoOp(t *testing.T) {
+	// Beyond float64's 53-bit exact-integer range (2^53). A lossy
+	// float64 round-trip would not return this exact value.
+	var input int64 = (1 << 62) + 1234567
+	expected := input
+
+	actual := helper.RoundDigit(input, 2)
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
