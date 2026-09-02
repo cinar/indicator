@@ -6,11 +6,12 @@ package strategy_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/examples/trend"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/examples/trend"
 )
 
 func TestMajorityStrategy(t *testing.T) {
@@ -34,6 +35,22 @@ func TestMajorityStrategy(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMajorityStrategyNoStrategies(t *testing.T) {
+	snapshots := helper.SliceToChan([]*asset.Snapshot{})
+
+	majority := strategy.NewMajorityStrategy("Majority Strategy")
+	actual := majority.Compute(snapshots)
+
+	select {
+	case _, ok := <-actual:
+		if ok {
+			t.Fatal("expected closed channel")
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("timeout - result channel never closed")
 	}
 }
 
