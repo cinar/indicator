@@ -99,6 +99,37 @@ func TestRingAtPartiallyFilled(t *testing.T) {
 	}
 }
 
+func TestRingZeroSizeClampedToOne(t *testing.T) {
+	ring := helper.NewRing[int](0)
+
+	if ring.Put(1) != 0 {
+		t.Fatal("expected zero value evicted on first put")
+	}
+
+	actual, ok := ring.At(0)
+	if !ok {
+		t.Fatal("At(0) not ok")
+	}
+	if actual != 1 {
+		t.Fatalf("actual %v expected %v", actual, 1)
+	}
+
+	if !ring.IsFull() {
+		t.Fatal("expected ring of clamped size 1 to be full after one put")
+	}
+}
+
+func TestRingNegativeSizeClampedToOne(t *testing.T) {
+	ring := helper.NewRing[int](-1)
+
+	ring.Put(1)
+	actual := ring.Put(2)
+
+	if actual != 1 {
+		t.Fatalf("actual %v expected %v", actual, 1)
+	}
+}
+
 func TestRingAtFull(t *testing.T) {
 	ring := helper.NewRing[int](5)
 

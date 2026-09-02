@@ -14,6 +14,11 @@ func Echo[T any](input <-chan T, last, count int) <-chan T {
 }
 
 // EchoWithContext takes a channel of numbers, repeats the specified count of numbers at the end by the specified count, supporting context cancellation.
+//
+// A last of zero or less means there is nothing to replay: the repeat
+// phase emits no values regardless of count, and only the original
+// input is forwarded (NewRing clamps its backing ring to a minimum
+// size of 1 in this case, but that ring's contents are never read).
 func EchoWithContext[T any](ctx context.Context, input <-chan T, last, count int) <-chan T {
 	output := make(chan T)
 	memory := NewRing[T](last)

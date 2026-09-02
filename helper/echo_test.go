@@ -22,6 +22,18 @@ func TestEcho(t *testing.T) {
 	}
 }
 
+func TestEchoZeroLast(t *testing.T) {
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{2, 4, 6, 8})
+
+	actual := helper.Echo(input, 0, 4)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestEchoShorterThanLast(t *testing.T) {
 	input := helper.SliceToChan([]int{2, 4})
 	expected := helper.SliceToChan([]int{2, 4, 2, 4, 2, 4})

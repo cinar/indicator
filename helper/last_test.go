@@ -22,6 +22,30 @@ func TestLast(t *testing.T) {
 	}
 }
 
+func TestLastZeroCount(t *testing.T) {
+	input := helper.SliceToChan([]int{1, 2, 3, 4})
+	expected := helper.SliceToChan([]int{})
+
+	actual := helper.Last(input, 0)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLastNegativeCount(t *testing.T) {
+	input := helper.SliceToChan([]int{1, 2, 3, 4})
+	expected := helper.SliceToChan([]int{})
+
+	actual := helper.Last(input, -2)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestLastLessValues(t *testing.T) {
 	input := helper.SliceToChan([]int{1, 2})
 	expected := helper.SliceToChan([]int{1, 2})

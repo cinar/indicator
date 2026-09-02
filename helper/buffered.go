@@ -15,7 +15,15 @@ func Buffered[T any](c <-chan T, size int) <-chan T {
 
 // BufferedWithContext takes a channel of any type and returns a new channel of the same type with
 // a buffer of the specified size with context support.
+//
+// A negative size is treated as zero: the returned channel is unbuffered
+// but still forwards every input value, matching SkipWithContext's
+// negative-count convention.
 func BufferedWithContext[T any](ctx context.Context, c <-chan T, size int) <-chan T {
+	if size < 0 {
+		size = 0
+	}
+
 	result := make(chan T, size)
 
 	go PipeWithContext(ctx, c, result)

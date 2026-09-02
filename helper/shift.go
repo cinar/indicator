@@ -15,7 +15,15 @@ func Shift[T any](c <-chan T, count int, fill T) <-chan T {
 
 // ShiftWithContext takes a channel of numbers, shifts them to the right by the specified count,
 // and fills in any missing values with the provided fill value, supporting context cancellation.
+//
+// A negative count is treated as zero: no fill values are inserted, and
+// every input value is forwarded unchanged, matching SkipWithContext's
+// negative-count convention.
 func ShiftWithContext[T any](ctx context.Context, c <-chan T, count int, fill T) <-chan T {
+	if count < 0 {
+		count = 0
+	}
+
 	result := make(chan T, cap(c)+count)
 
 	go func() {
