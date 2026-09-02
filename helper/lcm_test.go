@@ -36,3 +36,44 @@ func TestLcmWithFiveValues(t *testing.T) {
 		t.Fatalf("actual %d expected %d", actual, expected)
 	}
 }
+
+func TestLcmWithEmptyInput(t *testing.T) {
+	actual := helper.Lcm()
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestLcmWithZeroInInput(t *testing.T) {
+	actual := helper.Lcm(0, 5)
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestLcmWithAllZeros(t *testing.T) {
+	actual := helper.Lcm(0, 0)
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+// TestLcmAvoidsMultiplyBeforeDivideOverflow uses values whose product
+// overflows a 64-bit int (16000000016000000000, larger than
+// math.MaxInt64) even though their LCM (4000000004000000000) does not.
+// Computing (values[i]*lcm)/Gcd(...) would overflow and silently wrap
+// to a wrong, negative result; dividing first avoids it.
+func TestLcmAvoidsMultiplyBeforeDivideOverflow(t *testing.T) {
+	actual := helper.Lcm(4000000000, 4000000004)
+	expected := 4000000004000000000
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
