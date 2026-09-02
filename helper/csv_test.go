@@ -6,6 +6,7 @@ package helper_test
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -238,6 +239,52 @@ func TestCsvWriteToFile(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCsvWriteToFileOverwritesShorterContent(t *testing.T) {
+	type Row struct {
+		Close float64
+		High  float64
+	}
+
+	longInput := []*Row{
+		{Close: 10, High: 20},
+		{Close: 30, High: 40},
+		{Close: 50, High: 60},
+	}
+
+	shortInput := []*Row{
+		{Close: 70, High: 80},
+	}
+
+	csv, err := helper.NewCsv[Row]()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fileName := "test_csv_write_to_file_overwrites_shorter_content.csv"
+	defer helper.Remove(t, fileName)
+
+	err = csv.WriteToFile(fileName, helper.SliceToChan(longInput))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = csv.WriteToFile(fileName, helper.SliceToChan(shortInput))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	actual, err := os.ReadFile(fileName)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := "Close,High\n70,80\n"
+
+	if string(actual) != expected {
+		t.Fatalf("actual %q expected %q", string(actual), expected)
 	}
 }
 
