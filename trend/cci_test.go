@@ -5,7 +5,10 @@
 package trend_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -40,5 +43,32 @@ func TestCci(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCciCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	highs := make(chan float64)
+	lows := make(chan float64)
+	closings := make(chan float64)
+
+	cci := trend.NewCci[float64]()
+	actual := cci.ComputeWithContext(ctx, highs, lows, closings)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-actual; ok {
+		t.Fatal("Cci channel should be closed after cancellation")
 	}
 }
