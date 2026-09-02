@@ -127,7 +127,9 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 func (c *ConnorsRsi[T]) componentIdlePeriods() (rsiIdle, streakRsiIdle, percentRankIdle int) {
 	rsiIdle = c.Rsi.IdlePeriod()
 	streakRsiIdle = c.Streak.IdlePeriod() + c.StreakRsi.IdlePeriod()
-	percentRankIdle = c.Roc.IdlePeriod() + c.PercentRankPeriod
+	// PercentRank ranks a value once it has period-1 predecessors, so it becomes
+	// idle one input sooner than a naive period-based count would suggest.
+	percentRankIdle = c.Roc.IdlePeriod() + c.PercentRankPeriod - 1
 
 	return rsiIdle, streakRsiIdle, percentRankIdle
 }

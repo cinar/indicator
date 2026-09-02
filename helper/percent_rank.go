@@ -29,7 +29,7 @@ func PercentRankWithContext[T Number](ctx context.Context, c <-chan T, period in
 	go func() {
 		defer close(r)
 
-		values := make([]T, 0, period)
+		values := make([]T, 0, period-1)
 		count := 0
 
 		for {
@@ -40,17 +40,13 @@ func PercentRankWithContext[T Number](ctx context.Context, c <-chan T, period in
 				if !ok {
 					return
 				}
-				if count < period {
+				if count < period-1 {
 					values = append(values, value)
 					count++
 					continue
 				}
 
-				// Shift: remove oldest, add new
-				copy(values[0:period-1], values[1:period])
-				values[period-1] = value
-
-				// Count how many values are less than current
+				// Count how many of the period-1 preceding values are less than current.
 				lessCount := 0
 				for i := 0; i < period-1; i++ {
 					if values[i] < value {
@@ -59,6 +55,11 @@ func PercentRankWithContext[T Number](ctx context.Context, c <-chan T, period in
 				}
 
 				rank := float64(lessCount) * 100.0 / float64(period-1)
+
+				// Shift: remove oldest, add current as the newest predecessor.
+				copy(values[0:period-2], values[1:period-1])
+				values[period-2] = value
+
 				select {
 				case <-ctx.Done():
 					return
@@ -91,7 +92,7 @@ func SortedPercentRankWithContext[T Number](ctx context.Context, c <-chan T, per
 	go func() {
 		defer close(r)
 
-		values := make([]T, 0, period)
+		values := make([]T, 0, period-1)
 		count := 0
 
 		for {
@@ -102,17 +103,13 @@ func SortedPercentRankWithContext[T Number](ctx context.Context, c <-chan T, per
 				if !ok {
 					return
 				}
-				if count < period {
+				if count < period-1 {
 					values = append(values, value)
 					count++
 					continue
 				}
 
-				// Shift: remove oldest, add new
-				copy(values[0:period-1], values[1:period])
-				values[period-1] = value
-
-				// Sort copy for ranking
+				// Sort copy of the period-1 preceding values for ranking.
 				sorted := make([]T, period-1)
 				copy(sorted, values[:period-1])
 				sort.Slice(sorted, func(i, j int) bool {
@@ -125,6 +122,11 @@ func SortedPercentRankWithContext[T Number](ctx context.Context, c <-chan T, per
 				})
 
 				rank := float64(rankIdx) * 100.0 / float64(period-1)
+
+				// Shift: remove oldest, add current as the newest predecessor.
+				copy(values[0:period-2], values[1:period-1])
+				values[period-2] = value
+
 				select {
 				case <-ctx.Done():
 					return
