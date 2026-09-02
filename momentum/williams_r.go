@@ -47,13 +47,25 @@ func NewWilliamsR[T helper.Float]() *WilliamsR[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the Williams R.
 func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
+	maxIdlePeriod := w.Max.IdlePeriod()
+	minIdlePeriod := w.Min.IdlePeriod()
+
 	highestSplice := helper.DuplicateWithContext(ctx, w.Max.ComputeWithContext(ctx, highs),
 		2,
 	)
 
 	lowest := w.Min.ComputeWithContext(ctx, lows)
 
-	closings = helper.SkipWithContext(ctx, closings, w.Max.IdlePeriod())
+	// Max and Min are independently configurable, so their idle periods may differ. Align both
+	// branches on the larger of the two idle periods before combining them.
+	if maxIdlePeriod > minIdlePeriod {
+		lowest = helper.SkipWithContext(ctx, lowest, maxIdlePeriod-minIdlePeriod)
+	} else if minIdlePeriod > maxIdlePeriod {
+		highestSplice[0] = helper.SkipWithContext(ctx, highestSplice[0], minIdlePeriod-maxIdlePeriod)
+		highestSplice[1] = helper.SkipWithContext(ctx, highestSplice[1], minIdlePeriod-maxIdlePeriod)
+	}
+
+	closings = helper.SkipWithContext(ctx, closings, max(maxIdlePeriod, minIdlePeriod))
 
 	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, highestSplice[0], closings),
 		helper.SubtractWithContext(ctx, highestSplice[1], lowest),
@@ -64,7 +76,7 @@ func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, clos
 
 // IdlePeriod is the initial period that Williams R won't yield any results.
 func (w *WilliamsR[T]) IdlePeriod() int {
-	return w.Max.IdlePeriod()
+	return max(w.Max.IdlePeriod(), w.Min.IdlePeriod())
 }
 
 // String is the string representation of the Williams R.

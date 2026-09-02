@@ -46,6 +46,36 @@ func TestStochasticOscillator(t *testing.T) {
 	}
 }
 
+// TestStochasticOscillatorDifferentMaxMinPeriods verifies that StochasticOscillator correctly
+// aligns the Max and Min branches when they are independently configured with different periods,
+// rather than assuming Max.IdlePeriod() == Min.IdlePeriod(). Expected values were derived by hand
+// (and cross-checked with an independent reference calculation) for this small synthetic input.
+func TestStochasticOscillatorDifferentMaxMinPeriods(t *testing.T) {
+	highs := helper.SliceToChan([]float64{10, 12, 11, 15, 14, 16})
+	lows := helper.SliceToChan([]float64{5, 6, 4, 7, 8, 9})
+	closings := helper.SliceToChan([]float64{8, 9, 7, 10, 11, 12})
+
+	so := momentum.NewStochasticOscillator[float64]()
+	so.Max.Period = 2
+	so.Min.Period = 3
+
+	if so.IdlePeriod() != 4 {
+		t.Fatalf("actual idle period %v expected %v", so.IdlePeriod(), 4)
+	}
+
+	actualK, actualD := so.Compute(highs, lows, closings)
+	actualK = helper.RoundDigits(actualK, 2)
+	actualD = helper.RoundDigits(actualD, 2)
+
+	expectedK := helper.SliceToChan([]float64{63.64, 55.56})
+	expectedD := helper.SliceToChan([]float64{51.89, 57.91})
+
+	err := helper.CheckEquals(actualK, expectedK, actualD, expectedD)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestStochasticOscillatorString(t *testing.T) {
 	expected := "STOCHOSC(14,3)"
 	actual := momentum.NewStochasticOscillator[float64]().String()
