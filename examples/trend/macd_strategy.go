@@ -15,12 +15,35 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
+// MacdSignalMode selects how MacdStrategy turns a MACD/signal-line crossover into an action.
+type MacdSignalMode int
+
+const (
+	// LevelTriggered evaluates the crossover condition independently on every bar, so it keeps
+	// returning Buy (or Sell) on every consecutive bar for which the condition holds, not just
+	// the bar on which the crossing actually happened. This is the existing default behavior.
+	LevelTriggered MacdSignalMode = iota
+
+	// EdgeTriggered fires Buy/Sell only once, on the bar where the MACD/signal-line crossing
+	// actually occurs, by comparing the previous bar's MACD/signal pair against the current
+	// one. This requires one additional bar of history, so the strategy's idle period is one
+	// bar longer than in LevelTriggered mode.
+	EdgeTriggered
+)
+
 // MacdStrategy demonstrates how to compose the Moving Average Convergence Divergence (MACD)
-// and its signal line into an illustrative MACD crossover strategy.
+// and its signal line into an illustrative, zero-line-filtered MACD crossover strategy. Buy
+// signals fire only on a MACD-above-signal crossing that occurs while MACD is still below
+// zero; Sell signals fire only on a MACD-below-signal crossing while MACD is still above
+// zero.
 type MacdStrategy struct {
 	// Macd represents the configuration parameters for calculating the
 	// Moving Average Convergence Divergence (MACD).
 	Macd *trend.Macd[float64]
+
+	// SignalMode selects between LevelTriggered (default) and EdgeTriggered crossover
+	// detection. See MacdSignalMode for details.
+	SignalMode MacdSignalMode
 }
 
 // NewMacdStrategy initializes an example MacdStrategy instance with default parameters.
@@ -59,6 +82,10 @@ func (m *MacdStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan 
 
 	macds, signals := m.Macd.ComputeWithContext(ctx, closings)
 
+	if m.SignalMode == EdgeTriggered {
+		return m.computeEdgeTriggered(ctx, macds, signals)
+	}
+
 	actions := helper.OperateWithContext(ctx, macds, signals, func(macd, signal float64) strategy.Action {
 		// A MACD value crossing above signal line suggests a bullish trend.
 		if (macd > signal) && (macd < 0) {
@@ -75,6 +102,40 @@ func (m *MacdStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan 
 
 	// MACD starts only after a full period.
 	actions = helper.ShiftWithContext(ctx, actions, m.Macd.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// computeEdgeTriggered implements the EdgeTriggered SignalMode: it fires Buy/Sell only once,
+// on the bar where the MACD/signal-line crossing occurs, by pairing each bar's MACD/signal
+// values with the previous bar's.
+func (m *MacdStrategy) computeEdgeTriggered(ctx context.Context, macds, signals <-chan float64) <-chan strategy.Action {
+	macds = helper.BufferedWithContext(ctx, macds, 2)
+	signals = helper.BufferedWithContext(ctx, signals, 2)
+
+	macdInputs := helper.DuplicateWithContext(ctx, macds, 2)
+	macdInputs[1] = helper.SkipWithContext(ctx, macdInputs[1], 1)
+
+	signalInputs := helper.DuplicateWithContext(ctx, signals, 2)
+	signalInputs[1] = helper.SkipWithContext(ctx, signalInputs[1], 1)
+
+	actions := helper.Operate4WithContext(ctx, macdInputs[0], signalInputs[0], macdInputs[1], signalInputs[1], func(prevMacd, prevSignal, macd, signal float64) strategy.Action {
+		// A MACD value crossing above the signal line while still below zero suggests a bullish trend.
+		if (macd > signal) && (prevMacd <= prevSignal) && (macd < 0) {
+			return strategy.Buy
+		}
+
+		// A MACD value crossing below the signal line while still above zero suggests a bearish trend.
+		if (macd < signal) && (prevMacd >= prevSignal) && (macd > 0) {
+			return strategy.Sell
+		}
+
+		return strategy.Hold
+	})
+
+	// MACD starts only after a full period, plus one more bar consumed by the
+	// previous/current pairing used for crossover edge-detection.
+	actions = helper.ShiftWithContext(ctx, actions, m.Macd.IdlePeriod()+1, strategy.Hold)
 
 	return actions
 }
