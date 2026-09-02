@@ -76,3 +76,37 @@ func TestDataReport(t *testing.T) {
 		t.Fatalf("results count and strategies count are not the same, %d %d", len(results), len(strategies))
 	}
 }
+
+func TestDataReportWriteInsufficientData(t *testing.T) {
+	assetName := "brk-b"
+	strategies := []strategy.Strategy{
+		strategy.NewBuyAndHoldStrategy(),
+	}
+
+	report := backtest.NewDataReport()
+
+	err := report.AssetBegin(assetName, strategies)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Simulate a strategy that never produced an action or outcome, such as
+	// when its IdlePeriod() exceeds the available snapshot count.
+	snapshots := make(chan *asset.Snapshot)
+	close(snapshots)
+
+	actions := make(chan strategy.Action)
+	close(actions)
+
+	outcomes := make(chan float64)
+	close(outcomes)
+
+	err = report.Write(assetName, strategies[0], snapshots, actions, outcomes)
+	if err == nil {
+		t.Fatal("expected an error for insufficient data, got nil")
+	}
+
+	if results := report.Results[assetName]; len(results) != 0 {
+		t.Fatalf("expected no results to be recorded, got %d", len(results))
+	}
+}

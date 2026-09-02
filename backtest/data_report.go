@@ -5,6 +5,8 @@
 package backtest
 
 import (
+	"fmt"
+
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
@@ -62,11 +64,18 @@ func (d *DataReport) Write(assetName string, currentStrategy strategy.Strategy, 
 	lastAction := helper.Last(actionsSplice[0], 1)
 	transactions := helper.ChanToSlice(actionsSplice[1])
 
+	outcome, outcomeOk := <-lastOutcome
+	action, actionOk := <-lastAction
+
+	if !outcomeOk || !actionOk {
+		return fmt.Errorf("insufficient data to backtest %s with %s: strategy requires more historical data than is available", currentStrategy.Name(), assetName)
+	}
+
 	result := &DataStrategyResult{
 		Asset:        assetName,
 		Strategy:     currentStrategy,
-		Outcome:      <-lastOutcome,
-		Action:       <-lastAction,
+		Outcome:      outcome,
+		Action:       action,
 		Transactions: transactions,
 	}
 
