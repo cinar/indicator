@@ -29,18 +29,18 @@ const (
 //
 //	er := momentum.NewElderRay[float64]()
 //	bullPower, bearPower := er.Compute(highs, lows, closings)
-type ElderRay[T helper.Number] struct {
+type ElderRay[T helper.Float] struct {
 	// Period is the time period.
 	Period int
 }
 
 // NewElderRay function initializes a new Elder-Ray Index instance with the default parameters.
-func NewElderRay[T helper.Number]() *ElderRay[T] {
+func NewElderRay[T helper.Float]() *ElderRay[T] {
 	return NewElderRayWithPeriod[T](DefaultElderRayPeriod)
 }
 
 // NewElderRayWithPeriod function initializes a new Elder-Ray Index instance with the given period.
-func NewElderRayWithPeriod[T helper.Number](period int) *ElderRay[T] {
+func NewElderRayWithPeriod[T helper.Float](period int) *ElderRay[T] {
 	return &ElderRay[T]{
 		Period: period,
 	}

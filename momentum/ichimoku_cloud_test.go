@@ -47,11 +47,13 @@ func TestIchimokuCloud(t *testing.T) {
 	actualLeadingSpanB = helper.RoundDigits(actualLeadingSpanB, 2)
 	actualLaggingLine = helper.RoundDigits(actualLaggingLine, 2)
 
-	expectedConversionLine = helper.Skip(expectedConversionLine, ic.IdlePeriod())
-	expectedBaseLine = helper.Skip(expectedBaseLine, ic.IdlePeriod())
-	expectedLeadingSpanA = helper.Skip(expectedLeadingSpanA, ic.IdlePeriod())
-	expectedLeadingSpanB = helper.Skip(expectedLeadingSpanB, ic.IdlePeriod())
-	expectedLaggingLine = helper.Skip(expectedLaggingLine, ic.IdlePeriod())
+	// The Chikou Span's forward lookahead means the returned channels also end
+	// LaggingPeriod short of the raw input, on top of the IdlePeriod() lead-in.
+	expectedConversionLine = helper.SkipLast(helper.Skip(expectedConversionLine, ic.IdlePeriod()), ic.LaggingPeriod)
+	expectedBaseLine = helper.SkipLast(helper.Skip(expectedBaseLine, ic.IdlePeriod()), ic.LaggingPeriod)
+	expectedLeadingSpanA = helper.SkipLast(helper.Skip(expectedLeadingSpanA, ic.IdlePeriod()), ic.LaggingPeriod)
+	expectedLeadingSpanB = helper.SkipLast(helper.Skip(expectedLeadingSpanB, ic.IdlePeriod()), ic.LaggingPeriod)
+	expectedLaggingLine = helper.SkipLast(helper.Skip(expectedLaggingLine, ic.IdlePeriod()), ic.LaggingPeriod)
 
 	err = helper.CheckEquals(
 		actualConversionLine, expectedConversionLine,

@@ -37,3 +37,23 @@ func TestRsi(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestRsiFlatMarket(t *testing.T) {
+	closings := make([]float64, momentum.DefaultRsiPeriod+20)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	rsi := momentum.NewRsi[float64]()
+	actualRsi := helper.ChanToSlice(rsi.Compute(helper.SliceToChan(closings)))
+
+	if len(actualRsi) == 0 {
+		t.Fatal("expected at least one RSI value")
+	}
+
+	for _, v := range actualRsi {
+		if v != 50 {
+			t.Fatalf("expected RSI of 50 for flat market, got %v", v)
+		}
+	}
+}

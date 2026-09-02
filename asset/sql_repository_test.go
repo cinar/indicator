@@ -90,9 +90,43 @@ func (d *mockRepoDriverAppendErr) Open(name string) (driver.Conn, error) {
 	return &mockRepoConnAppendErr{}, nil
 }
 
+type mockRepoRowsEmpty struct{}
+
+func (r *mockRepoRowsEmpty) Columns() []string              { return []string{"Date"} }
+func (r *mockRepoRowsEmpty) Close() error                   { return nil }
+func (r *mockRepoRowsEmpty) Next(dest []driver.Value) error { return io.EOF }
+
+type mockRepoStmtNoRows struct{}
+
+func (s *mockRepoStmtNoRows) Close() error                                    { return nil }
+func (s *mockRepoStmtNoRows) NumInput() int                                   { return -1 }
+func (s *mockRepoStmtNoRows) Exec(args []driver.Value) (driver.Result, error) { return nil, nil }
+func (s *mockRepoStmtNoRows) Query(args []driver.Value) (driver.Rows, error) {
+	return &mockRepoRowsEmpty{}, nil
+}
+
+type mockRepoConnLastDateNoRows struct{}
+
+func (c *mockRepoConnLastDateNoRows) Prepare(query string) (driver.Stmt, error) {
+	if query == "LASTDATE" {
+		return &mockRepoStmtNoRows{}, nil
+	}
+
+	return &mockRepoStmt{}, nil
+}
+func (c *mockRepoConnLastDateNoRows) Close() error              { return nil }
+func (c *mockRepoConnLastDateNoRows) Begin() (driver.Tx, error) { return nil, nil }
+
+type mockRepoDriverLastDateNoRows struct{}
+
+func (d *mockRepoDriverLastDateNoRows) Open(name string) (driver.Conn, error) {
+	return &mockRepoConnLastDateNoRows{}, nil
+}
+
 func init() {
 	sql.Register("mockrepo", &mockRepoDriver{})
 	sql.Register("mockrepoappenderr", &mockRepoDriverAppendErr{})
+	sql.Register("mockrepolastdatenorows", &mockRepoDriverLastDateNoRows{})
 }
 
 func TestSQLRepository(t *testing.T) {
@@ -158,6 +192,20 @@ func TestSQLRepositoryGetSinceSkipsScanErrors(t *testing.T) {
 
 	if count != 0 {
 		t.Fatalf("expected 0 snapshots, got %d", count)
+	}
+}
+
+func TestSQLRepositoryLastDateNoRows(t *testing.T) {
+	dialect := &mockDialect{}
+	repo, err := asset.NewSQLRepository("mockrepolastdatenorows", "db", dialect)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+
+	_, err = repo.LastDate("TEST")
+	if !errors.Is(err, asset.ErrRepositoryAssetNotFound) {
+		t.Fatalf("expected ErrRepositoryAssetNotFound, got %v", err)
 	}
 }
 

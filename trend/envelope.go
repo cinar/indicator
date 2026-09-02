@@ -46,7 +46,7 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 }
 
 // NewEnvelopeWithEma function initializes a new Envelope instance using EMA.
-func NewEnvelopeWithEma[T helper.Number]() *Envelope[T] {
+func NewEnvelopeWithEma[T helper.Float]() *Envelope[T] {
 	return NewEnvelope(
 		NewEmaWithPeriod[T](DefaultEnvelopePeriod),
 		T(DefaultEnvelopePercentage),

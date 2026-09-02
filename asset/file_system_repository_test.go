@@ -5,7 +5,9 @@
 package asset_test
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
 	"path"
 	"reflect"
 	"testing"
@@ -19,7 +21,7 @@ var repositoryBase = "testdata/repository"
 
 func TestFileSystemRepositoryAssets(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
-	expected := []string{"brk-b"}
+	expected := []string{"brk-b", "empty"}
 
 	actual, err := repository.Assets()
 	if err != nil {
@@ -109,8 +111,8 @@ func TestFileSystemRepositoryLastDateNonExisting(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
 
 	_, err := repository.LastDate("brk")
-	if err == nil {
-		t.Fatal("expected error")
+	if !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("expected fs.ErrNotExist, got %v", err)
 	}
 }
 
@@ -118,8 +120,8 @@ func TestFileSystemRepositoryLastDateEmpty(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
 
 	_, err := repository.LastDate("empty")
-	if err == nil {
-		t.Fatal("expected error")
+	if !errors.Is(err, asset.ErrRepositoryAssetEmpty) {
+		t.Fatalf("expected ErrRepositoryAssetEmpty, got %v", err)
 	}
 }
 

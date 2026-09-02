@@ -21,14 +21,14 @@ const (
 // around a midrange or median band. The upper band marks the highest price of an asset while the lower band marks
 // the lowest price of an asset, and the area between the upper and lower bands represents the Donchian Channel.
 //
-//	Upper Channel = Mmax(period, closings)
-//	Lower Channel = Mmin(period, closings)
+//	Upper Channel = Mmax(period, highs)
+//	Lower Channel = Mmin(period, lows)
 //	Middle Channel = (Upper Channel + Lower Channel) / 2
 //
 // Example:
 //
 //	dc := volatility.NewDonchianChannel[float64]()
-//	result := dc.Compute(values)
+//	uppers, middles, lowers := dc.Compute(highs, lows)
 type DonchianChannel[T helper.Number] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]
@@ -50,15 +50,14 @@ func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the Donchian Channel over the specified period.
-func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T, <-chan T) {
-	closings := helper.DuplicateWithContext(ctx, c, 2)
-
-	uppers := helper.DuplicateWithContext(ctx, d.Max.ComputeWithContext(ctx, closings[0]),
+// ComputeWithContext function takes the highs and lows channels and computes the Donchian Channel over the
+// specified period.
+func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) (<-chan T, <-chan T, <-chan T) {
+	uppers := helper.DuplicateWithContext(ctx, d.Max.ComputeWithContext(ctx, highs),
 		2,
 	)
 
-	lowers := helper.DuplicateWithContext(ctx, d.Min.ComputeWithContext(ctx, closings[1]),
+	lowers := helper.DuplicateWithContext(ctx, d.Min.ComputeWithContext(ctx, lows),
 		2,
 	)
 
@@ -77,6 +76,6 @@ func (d *DonchianChannel[T]) IdlePeriod() int {
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.
-func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T) {
-	return d.ComputeWithContext(context.Background(), c)
+func (d *DonchianChannel[T]) Compute(highs, lows <-chan T) (<-chan T, <-chan T, <-chan T) {
+	return d.ComputeWithContext(context.Background(), highs, lows)
 }

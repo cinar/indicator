@@ -26,18 +26,18 @@ const (
 //	rma.Period = 10
 //
 //	result := rma.Compute(c)
-type Rma[T helper.Number] struct {
+type Rma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewRma function initializes a new RMA instance with the default parameters.
-func NewRma[T helper.Number]() *Rma[T] {
+func NewRma[T helper.Float]() *Rma[T] {
 	return NewRmaWithPeriod[T](DefaultRmaPeriod)
 }
 
 // NewRmaWithPeriod function initializes a new RMA instance with the given period.
-func NewRmaWithPeriod[T helper.Number](period int) *Rma[T] {
+func NewRmaWithPeriod[T helper.Float](period int) *Rma[T] {
 	return &Rma[T]{
 		Period: period,
 	}
