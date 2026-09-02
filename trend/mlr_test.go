@@ -11,6 +11,20 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
+func TestNewMlr(t *testing.T) {
+	mlr := trend.NewMlr[float64]()
+	if mlr.Mls.Sum.Period != trend.DefaultMlrPeriod {
+		t.Fatalf("actual %v expected %v", mlr.Mls.Sum.Period, trend.DefaultMlrPeriod)
+	}
+}
+
+func TestNewMlrWithPeriod(t *testing.T) {
+	mlr := trend.NewMlrWithPeriod[float64](10)
+	if mlr.Mls.Sum.Period != 10 {
+		t.Fatalf("actual %v expected %v", mlr.Mls.Sum.Period, 10)
+	}
+}
+
 func TestMlr(t *testing.T) {
 	type Data struct {
 		X float64

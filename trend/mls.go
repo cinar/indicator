@@ -10,6 +10,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultMlsPeriod is the default MLS period.
+	DefaultMlsPeriod = 14
+)
+
 // Mls represents the configuration parameters for calculating the Moving Least Square (MLS). It is a regression
 // analysis to determine the line of best fit for the given set of data.
 //
@@ -27,6 +32,11 @@ import (
 type Mls[T helper.Number] struct {
 	// Sum is the moving sum instance.
 	Sum *MovingSum[T]
+}
+
+// NewMls function initializes a new MLS instance with the default parameters.
+func NewMls[T helper.Number]() *Mls[T] {
+	return NewMlsWithPeriod[T](DefaultMlsPeriod)
 }
 
 // NewMlsWithPeriod function initializes a new MLS instance with the given period.

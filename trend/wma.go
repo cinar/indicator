@@ -12,6 +12,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultWmaPeriod is the default WMA period.
+	DefaultWmaPeriod = 20
+)
+
 // Wma represents the configuration parameters for calculating the Weighted Moving Average (WMA).
 // It calculates a moving average by putting more weight on recent data and less on past data.
 //
@@ -21,14 +26,26 @@ type Wma[T helper.Number] struct {
 	Period int
 }
 
-// NewWmaWith function initializes a new WMA instance with the given parameters.
-func NewWmaWith[T helper.Number](period int) *Wma[T] {
+// NewWma function initializes a new WMA instance with the default parameters.
+func NewWma[T helper.Number]() *Wma[T] {
+	return NewWmaWithPeriod[T](DefaultWmaPeriod)
+}
+
+// NewWmaWithPeriod function initializes a new WMA instance with the given parameters.
+func NewWmaWithPeriod[T helper.Number](period int) *Wma[T] {
 	if period <= 0 {
 		panic("period must be greater than 0")
 	}
 	return &Wma[T]{
 		Period: period,
 	}
+}
+
+// NewWmaWith is an alias for NewWmaWithPeriod for backwards compatibility.
+//
+// Deprecated: Use NewWmaWithPeriod instead.
+func NewWmaWith[T helper.Number](period int) *Wma[T] {
+	return NewWmaWithPeriod[T](period)
 }
 
 // ComputeWithContext computes the WMA over the input stream.
