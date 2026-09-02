@@ -13,9 +13,9 @@ import (
 //
 // Example:
 //
-//	c := helper.ChanToSlice([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
-//	actual := helper.ChangeRatio(c, 2))
-//	fmt.Println(helper.ChanToSlice(actual)) // [400, 150, 60, -60, -87.5, -50, 200, 300]
+//	c := helper.SliceToChan([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
+//	actual := helper.ChangeRatio(c, 2)
+//	fmt.Println(helper.ChanToSlice(actual)) // [4, 1.5, 0.6, -0.6, -0.875, -0.5, 2, 3]
 func ChangeRatioWithContext[T Number](ctx context.Context, c <-chan T, before int) <-chan T {
 	cs := DuplicateWithContext(ctx, c, 2)
 	cs[1] = BufferedWithContext(ctx, cs[1], before)

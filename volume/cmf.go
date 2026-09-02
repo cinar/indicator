@@ -62,7 +62,7 @@ func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 	)
 }
 
-// IdlePeriod is the initial period that MFV won't yield any results.
+// IdlePeriod is the initial period that CMF won't yield any results.
 func (c *Cmf[T]) IdlePeriod() int {
 	return c.Sum.IdlePeriod()
 }

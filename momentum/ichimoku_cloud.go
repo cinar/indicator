@@ -42,7 +42,7 @@ const (
 //
 // Example:
 //
-//	ic := momentum.IchimokuCloud[float64]()
+//	ic := momentum.NewIchimokuCloud[float64]()
 //	conversionLine, baseLine, leadingSpanA, leasingSpanB, laggingSpan := ic.Compute(highs, lows, closings)
 type IchimokuCloud[T helper.Number] struct {
 	// ConversionMax is the conversion Moving Max instance.

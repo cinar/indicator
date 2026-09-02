@@ -37,7 +37,7 @@ type MassIndex[T helper.Float] struct {
 	MovingSum *MovingSum[T]
 }
 
-// NewMassIndex function initializes a new APO instance
+// NewMassIndex function initializes a new Mass Index instance
 // with the default parameters.
 func NewMassIndex[T helper.Float]() *MassIndex[T] {
 	mi := &MassIndex[T]{

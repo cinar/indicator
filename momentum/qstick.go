@@ -28,7 +28,7 @@ const (
 //
 // Example:
 //
-//	qstick := momentum.Qstick[float64]()
+//	qstick := momentum.NewQstick[float64]()
 //	qstick.Sma.Period = 50
 //
 //	values := qstick.Compute(openings, closings)
