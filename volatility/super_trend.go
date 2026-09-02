@@ -38,6 +38,11 @@ const (
 //
 //	UpTrend = If (SuperTrend == FinalUpperBand) Then True Else False
 //
+// By default, the underlying ATR is smoothed using HMA (Hull Moving Average) rather than the more
+// textbook SMA/RMA, so that Super Trend reacts faster to price changes. This comes at the cost of a
+// longer idle period, e.g. 17 for a period of 14, versus 14 for a textbook SMA-based ATR of the same
+// period. Use NewSuperTrendWithMa to use a different moving average, such as SMA or RMA.
+//
 // Example:
 type SuperTrend[T helper.Number] struct {
 	Atr        *Atr[T]
@@ -55,6 +60,10 @@ func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
 }
 
 // NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
+//
+// The ATR used internally is built with HMA smoothing (not the textbook SMA/RMA), which increases
+// the effective idle period, e.g. 17 rather than 14 for the default period of 14. Use
+// NewSuperTrendWithMa directly if a different moving average, such as SMA or RMA, is desired.
 func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T] {
 	return NewSuperTrendWithMa[T](
 		trend.NewHmaWithPeriod[T](period),
