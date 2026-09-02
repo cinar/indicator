@@ -28,7 +28,7 @@ const (
 //
 //	po := volatility.NewPo()
 //	ps := po.Compute(highs, lows, closings)
-type Po[T helper.Number] struct {
+type Po[T helper.Float] struct {
 	// Mls is the Moving Least Square instance.
 	mls *trend.Mls[T]
 
@@ -40,12 +40,12 @@ type Po[T helper.Number] struct {
 }
 
 // NewPo function initializes a new PO instance with the default parameters.
-func NewPo[T helper.Number]() *Po[T] {
+func NewPo[T helper.Float]() *Po[T] {
 	return NewPoWithPeriod[T](DefaultPoPeriod)
 }
 
 // NewPoWithPeriod function initializes a new PO instance with the given period.
-func NewPoWithPeriod[T helper.Number](period int) *Po[T] {
+func NewPoWithPeriod[T helper.Float](period int) *Po[T] {
 	return &Po[T]{
 		mls: trend.NewMlsWithPeriod[T](period),
 		min: trend.NewMovingMinWithPeriod[T](period),

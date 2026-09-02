@@ -37,7 +37,7 @@ const (
 //
 //	kama := trend.NewKama[float64]()
 //	result := kama.Compute(c)
-type Kama[T helper.Number] struct {
+type Kama[T helper.Float] struct {
 	// ErPeriod is the Efficiency Ratio time period.
 	ErPeriod int
 
@@ -49,7 +49,7 @@ type Kama[T helper.Number] struct {
 }
 
 // NewKama function initializes a new KAMA instance with the default parameters.
-func NewKama[T helper.Number]() *Kama[T] {
+func NewKama[T helper.Float]() *Kama[T] {
 	return NewKamaWith[T](
 		DefaultKamaErPeriod,
 		DefaultKamaFastScPeriod,
@@ -58,7 +58,7 @@ func NewKama[T helper.Number]() *Kama[T] {
 }
 
 // NewKamaWith function initializes a new KAMA instance with the given parameters.
-func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T] {
+func NewKamaWith[T helper.Float](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T] {
 	return &Kama[T]{
 		ErPeriod:     erPeriod,
 		FastScPeriod: fastScPeriod,

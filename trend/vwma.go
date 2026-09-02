@@ -21,13 +21,13 @@ const (
 // greater weight.
 //
 //	VWMA = Sum(Price * Volume) / Sum(Volume)
-type Vwma[T helper.Number] struct {
+type Vwma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewVwma function initializes a new VWMA instance with the default parameters.
-func NewVwma[T helper.Number]() *Vwma[T] {
+func NewVwma[T helper.Float]() *Vwma[T] {
 	return &Vwma[T]{
 		Period: DefaultVwmaPeriod,
 	}

@@ -21,13 +21,13 @@ import (
 //
 //	ad := volume.NewAd[float64]()
 //	result := ad.Compute(highs, lows, closings, volumes)
-type Ad[T helper.Number] struct {
+type Ad[T helper.Float] struct {
 	// Mfv is the MFV instance.
 	Mfv *Mfv[T]
 }
 
 // NewAd function initializes a new A/D instance with the default parameters.
-func NewAd[T helper.Number]() *Ad[T] {
+func NewAd[T helper.Float]() *Ad[T] {
 	return &Ad[T]{
 		Mfv: NewMfv[T](),
 	}

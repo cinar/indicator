@@ -40,7 +40,7 @@ const (
 //
 //	uo := momentum.NewUltimateOscillator[float64]()
 //	values := uo.Compute(highs, lows, closings)
-type UltimateOscillator[T helper.Number] struct {
+type UltimateOscillator[T helper.Float] struct {
 	// ShortPeriod is the short period for the UO.
 	ShortPeriod int
 
@@ -52,7 +52,7 @@ type UltimateOscillator[T helper.Number] struct {
 }
 
 // NewUltimateOscillator function initializes a new Ultimate Oscillator instance.
-func NewUltimateOscillator[T helper.Number]() *UltimateOscillator[T] {
+func NewUltimateOscillator[T helper.Float]() *UltimateOscillator[T] {
 	return NewUltimateOscillatorWithPeriods[T](
 		DefaultUltimateOscillatorShortPeriod,
 		DefaultUltimateOscillatorMediumPeriod,
@@ -61,7 +61,7 @@ func NewUltimateOscillator[T helper.Number]() *UltimateOscillator[T] {
 }
 
 // NewUltimateOscillatorWithPeriods function initializes a new Ultimate Oscillator instance with the given periods.
-func NewUltimateOscillatorWithPeriods[T helper.Number](shortPeriod, mediumPeriod, longPeriod int) *UltimateOscillator[T] {
+func NewUltimateOscillatorWithPeriods[T helper.Float](shortPeriod, mediumPeriod, longPeriod int) *UltimateOscillator[T] {
 	return &UltimateOscillator[T]{
 		ShortPeriod:  shortPeriod,
 		MediumPeriod: mediumPeriod,

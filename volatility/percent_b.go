@@ -15,18 +15,18 @@ import (
 // PercentB represents the parameters for calculating the %B indicator.
 //
 //	%B = (Close - Lower Band) / (Upper Band - Lower Band)
-type PercentB[T helper.Number] struct {
+type PercentB[T helper.Float] struct {
 	// BollingerBands is the underlying Bollinger Bands indicator used for calculations.
 	BollingerBands *BollingerBands[T]
 }
 
 // NewPercentB function initializes a new %B instance with the default parameters.
-func NewPercentB[T helper.Number]() *PercentB[T] {
+func NewPercentB[T helper.Float]() *PercentB[T] {
 	return NewPercentBWithPeriod[T](DefaultBollingerBandsPeriod)
 }
 
 // NewPercentBWithPeriod function initializes a new %B instance with the given period.
-func NewPercentBWithPeriod[T helper.Number](period int) *PercentB[T] {
+func NewPercentBWithPeriod[T helper.Float](period int) *PercentB[T] {
 	return &PercentB[T]{
 		BollingerBands: NewBollingerBandsWithPeriod[T](period),
 	}

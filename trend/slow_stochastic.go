@@ -34,7 +34,7 @@ const (
 //
 //	s := trend.NewSlowStochastic[float64]()
 //	k, d := s.Compute(values)
-type SlowStochastic[T helper.Number] struct {
+type SlowStochastic[T helper.Float] struct {
 	// Period is the period for the min/max calculation.
 	Period int
 
@@ -46,7 +46,7 @@ type SlowStochastic[T helper.Number] struct {
 }
 
 // NewSlowStochastic function initializes a new SlowStochastic instance with the default parameters.
-func NewSlowStochastic[T helper.Number]() *SlowStochastic[T] {
+func NewSlowStochastic[T helper.Float]() *SlowStochastic[T] {
 	return &SlowStochastic[T]{
 		Period:  DefaultSlowStochasticPeriod,
 		KPeriod: DefaultSlowStochasticKPeriod,
@@ -55,7 +55,7 @@ func NewSlowStochastic[T helper.Number]() *SlowStochastic[T] {
 }
 
 // NewSlowStochasticWithPeriod function initializes a new SlowStochastic instance with the given periods.
-func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) *SlowStochastic[T] {
+func NewSlowStochasticWithPeriod[T helper.Float](period, kPeriod, dPeriod int) *SlowStochastic[T] {
 	return &SlowStochastic[T]{
 		Period:  period,
 		KPeriod: kPeriod,

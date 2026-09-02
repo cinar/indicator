@@ -28,13 +28,13 @@ const (
 //
 //	accelerationBands := NewAccelerationBands[float64]()
 //	accelerationBands.Compute(values)
-type AccelerationBands[T helper.Number] struct {
+type AccelerationBands[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewAccelerationBands function initializes a new Acceleration Bands instance with the default parameters.
-func NewAccelerationBands[T helper.Number]() *AccelerationBands[T] {
+func NewAccelerationBands[T helper.Float]() *AccelerationBands[T] {
 	return &AccelerationBands[T]{
 		Period: DefaultAccelerationBandsPeriod,
 	}

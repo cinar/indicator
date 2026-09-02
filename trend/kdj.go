@@ -43,7 +43,7 @@ const (
 //
 //	kdj := NewKdj[float64]()
 //	values := kdj.Compute(highs, lows, closings)
-type Kdj[T helper.Number] struct {
+type Kdj[T helper.Float] struct {
 	// MovingMax is the highest high.
 	MovingMax *MovingMax[T]
 
@@ -58,7 +58,7 @@ type Kdj[T helper.Number] struct {
 }
 
 // NewKdj function initializes a new Kdj instance with the default parameters
-func NewKdj[T helper.Number]() *Kdj[T] {
+func NewKdj[T helper.Float]() *Kdj[T] {
 	kdj := &Kdj[T]{
 		MovingMax: NewMovingMax[T](),
 		MovingMin: NewMovingMin[T](),

@@ -32,7 +32,7 @@ const (
 //
 //	s := trend.NewStochastic[float64]()
 //	k, d := s.Compute(values)
-type Stochastic[T helper.Number] struct {
+type Stochastic[T helper.Float] struct {
 	// Period is the period for the min/max calculation.
 	Period int
 
@@ -41,12 +41,12 @@ type Stochastic[T helper.Number] struct {
 }
 
 // NewStochastic function initializes a new Stochastic instance with the default parameters.
-func NewStochastic[T helper.Number]() *Stochastic[T] {
+func NewStochastic[T helper.Float]() *Stochastic[T] {
 	return NewStochasticWithPeriod[T](DefaultStochasticPeriod)
 }
 
 // NewStochasticWithPeriod function initializes a new Stochastic instance with the given period.
-func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T] {
+func NewStochasticWithPeriod[T helper.Float](period int) *Stochastic[T] {
 	return &Stochastic[T]{
 		Period: period,
 		Sma:    NewSmaWithPeriod[T](DefaultStochasticSmaPeriod),

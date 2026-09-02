@@ -26,18 +26,18 @@ const (
 //
 //	vwap := volume.NewVwap[float64]()
 //	result := vwap.Compute(closings, volumes)
-type Vwap[T helper.Number] struct {
+type Vwap[T helper.Float] struct {
 	// Sum is the Moving Sum instance.
 	Sum *trend.MovingSum[T]
 }
 
 // NewVwap function initializes a new VWAP instance with the default parameters.
-func NewVwap[T helper.Number]() *Vwap[T] {
+func NewVwap[T helper.Float]() *Vwap[T] {
 	return NewVwapWithPeriod[T](DefaultVwapPeriod)
 }
 
 // NewVwapWithPeriod function initializes a new VWAP instance with the given period.
-func NewVwapWithPeriod[T helper.Number](period int) *Vwap[T] {
+func NewVwapWithPeriod[T helper.Float](period int) *Vwap[T] {
 	return &Vwap[T]{
 		Sum: trend.NewMovingSumWithPeriod[T](period),
 	}

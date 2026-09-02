@@ -26,18 +26,18 @@ const (
 //
 //	z := NewZScore[float64]()
 //	z.Compute(c)
-type ZScore[T helper.Number] struct {
+type ZScore[T helper.Float] struct {
 	// Period is the time period.
 	Period int
 }
 
 // NewZScore function initializes a new Z-Score instance with default parameters.
-func NewZScore[T helper.Number]() *ZScore[T] {
+func NewZScore[T helper.Float]() *ZScore[T] {
 	return NewZScoreWithPeriod[T](DefaultZScorePeriod)
 }
 
 // NewZScoreWithPeriod function initializes a new Z-Score instance with the given period.
-func NewZScoreWithPeriod[T helper.Number](period int) *ZScore[T] {
+func NewZScoreWithPeriod[T helper.Float](period int) *ZScore[T] {
 	return &ZScore[T]{
 		Period: period,
 	}

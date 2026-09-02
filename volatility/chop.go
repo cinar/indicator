@@ -23,18 +23,18 @@ const (
 // It is a technical analysis indicator that measures the market's trendiness or choppiness.
 //
 //	CHOP = 100 * LOG10( SUM(ATR(1), n) / (MAX(High, n) - MIN(Low, n)) ) / LOG10(n)
-type Chop[T helper.Number] struct {
+type Chop[T helper.Float] struct {
 	// Period is the period for the CHOP.
 	Period int
 }
 
 // NewChop function initializes a new CHOP instance with the default parameters.
-func NewChop[T helper.Number]() *Chop[T] {
+func NewChop[T helper.Float]() *Chop[T] {
 	return NewChopWithPeriod[T](DefaultChopPeriod)
 }
 
 // NewChopWithPeriod function initializes a new CHOP instance with the given period.
-func NewChopWithPeriod[T helper.Number](period int) *Chop[T] {
+func NewChopWithPeriod[T helper.Float](period int) *Chop[T] {
 	return &Chop[T]{
 		Period: period,
 	}
