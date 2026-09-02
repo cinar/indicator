@@ -5,6 +5,8 @@
 package momentum_test
 
 import (
+	"math"
+	"runtime"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -154,6 +156,102 @@ func TestTdSequentialCountdownCrossCancel(t *testing.T) {
 	// without cross-cancellation the count would climb back to 5.
 	if rows[25].buyCountdown != 0 {
 		t.Fatalf("row 25: buyCountdown = %v, want 0 (stays cancelled, not 5)", rows[25].buyCountdown)
+	}
+}
+
+// TestTdSequentialLongStreamMemoryBounded runs many thousands of bars
+// through TD Sequential and checks that heap usage does not grow with the
+// length of the stream. Prior to the fix, ComputeWithContext kept an
+// ever-appended closeHistory slice that retained every close it had ever
+// seen, even though only the last handful of bars were ever read from it -
+// a real memory leak on a long-running/streaming input. A properly bounded
+// buffer should only ever hold max(Lookback, CountdownLookback)+1 elements,
+// so processing a long stream should not noticeably grow the heap.
+func TestTdSequentialLongStreamMemoryBounded(t *testing.T) {
+	const barCount = 200_000
+
+	// Oscillating, slowly drifting series so that setups and countdowns
+	// actually trigger repeatedly throughout the stream, rather than the
+	// indicator sitting idle the whole time.
+	closings := make([]float64, barCount)
+	price := 100.0
+	for i := 0; i < barCount; i++ {
+		closings[i] = price + math.Sin(float64(i)/3.0)*5
+		price += 0.001
+	}
+
+	runtime.GC()
+	runtime.GC()
+
+	var before runtime.MemStats
+	runtime.ReadMemStats(&before)
+
+	td := momentum.NewTdSequential[float64]()
+	buySetup, sellSetup, buyCountdown, sellCountdown := td.Compute(helper.SliceToChan(closings))
+
+	combined := helper.Operate4(buySetup, sellSetup, buyCountdown, sellCountdown,
+		func(bs, ss, bc, sc float64) tdSequentialRow {
+			return tdSequentialRow{
+				buySetup:      bs,
+				sellSetup:     ss,
+				buyCountdown:  bc,
+				sellCountdown: sc,
+			}
+		})
+
+	// Drain without accumulating the results, so the test only measures
+	// growth attributable to the indicator's own internal state, not to a
+	// results slice held by the test itself.
+	count := 0
+	var lastRow tdSequentialRow
+
+	for row := range combined {
+		count++
+		lastRow = row
+	}
+
+	if count != barCount {
+		t.Fatalf("processed %d rows, want %d", count, barCount)
+	}
+
+	runtime.GC()
+	runtime.GC()
+
+	var after runtime.MemStats
+	runtime.ReadMemStats(&after)
+
+	// An unbounded closeHistory slice holding barCount float64s (plus the
+	// amortized doubling overhead of repeated append) would retain several
+	// MiB for this input size. A bounded ring buffer only ever holds a
+	// handful of elements, so allow a generous ceiling that would still
+	// fail on a regression to the unbounded slice.
+	const maxHeapGrowth = 2 << 20 // 2 MiB
+
+	if after.HeapAlloc > before.HeapAlloc {
+		grown := after.HeapAlloc - before.HeapAlloc
+		if grown > maxHeapGrowth {
+			t.Fatalf("heap grew by %d bytes processing %d bars, want <= %d bytes (closeHistory may be unbounded again)",
+				grown, barCount, maxHeapGrowth)
+		}
+	}
+
+	// Sanity check that the outputs stayed within their documented bounds
+	// at the end of the run, confirming the bounded buffer did not silently
+	// corrupt the setup/countdown logic on a long stream.
+	if lastRow.buySetup < 0 || lastRow.buySetup > momentum.DefaultTdSequentialSetupPeriod {
+		t.Fatalf("final buySetup = %v, want within [0, %v]", lastRow.buySetup, momentum.DefaultTdSequentialSetupPeriod)
+	}
+
+	if lastRow.sellSetup > 0 || lastRow.sellSetup < -momentum.DefaultTdSequentialSetupPeriod {
+		t.Fatalf("final sellSetup = %v, want within [%v, 0]", lastRow.sellSetup, -momentum.DefaultTdSequentialSetupPeriod)
+	}
+
+	if lastRow.buyCountdown < 0 || lastRow.buyCountdown > momentum.DefaultTdSequentialCountdownPeriod {
+		t.Fatalf("final buyCountdown = %v, want within [0, %v]", lastRow.buyCountdown, momentum.DefaultTdSequentialCountdownPeriod)
+	}
+
+	if lastRow.sellCountdown < 0 || lastRow.sellCountdown > momentum.DefaultTdSequentialCountdownPeriod {
+		t.Fatalf("final sellCountdown = %v, want within [0, %v]", lastRow.sellCountdown, momentum.DefaultTdSequentialCountdownPeriod)
 	}
 }
 
