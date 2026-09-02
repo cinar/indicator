@@ -10,6 +10,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultMlrPeriod is the default MLR period.
+	DefaultMlrPeriod = 14
+)
+
 // Mlr represents the configuration parameters for calculating the Moving Linear Regression.
 //
 //	y = mx + b
@@ -21,6 +26,11 @@ import (
 type Mlr[T helper.Number] struct {
 	// Mls is the Moving Least Square instance.
 	Mls *Mls[T]
+}
+
+// NewMlr function initializes a new MLR instance with the default parameters.
+func NewMlr[T helper.Number]() *Mlr[T] {
+	return NewMlrWithPeriod[T](DefaultMlrPeriod)
 }
 
 // NewMlrWithPeriod function initializes a new MLR instance with the given period.

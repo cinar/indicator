@@ -13,6 +13,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultHmaPeriod is the default HMA period.
+	DefaultHmaPeriod = 20
+)
+
 // Hma represents the configuration parameters for calculating the Hull Moving Average (HMA). Developed by
 // Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
 //
@@ -31,12 +36,17 @@ type Hma[T helper.Number] struct {
 	wma3 *Wma[T]
 }
 
+// NewHma function initializes a new HMA instance with the default parameters.
+func NewHma[T helper.Number]() *Hma[T] {
+	return NewHmaWithPeriod[T](DefaultHmaPeriod)
+}
+
 // NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
 func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
 	return &Hma[T]{
-		wma1: NewWmaWith[T](int(math.Round(float64(period) / 2))),
-		wma2: NewWmaWith[T](period),
-		wma3: NewWmaWith[T](int(math.Round(math.Sqrt(float64(period))))),
+		wma1: NewWmaWithPeriod[T](int(math.Round(float64(period) / 2))),
+		wma2: NewWmaWithPeriod[T](period),
+		wma3: NewWmaWithPeriod[T](int(math.Round(math.Sqrt(float64(period))))),
 	}
 }
 

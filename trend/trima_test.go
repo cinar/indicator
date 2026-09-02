@@ -11,6 +11,20 @@ import (
 	"github.com/cinar/indicator/v2/trend"
 )
 
+func TestNewTrima(t *testing.T) {
+	trima := trend.NewTrima[float64]()
+	if trima.Period != trend.DefaultTrimaPeriod {
+		t.Fatalf("actual %v expected %v", trima.Period, trend.DefaultTrimaPeriod)
+	}
+}
+
+func TestNewTrimaWithPeriod(t *testing.T) {
+	trima := trend.NewTrimaWithPeriod[float64](10)
+	if trima.Period != 10 {
+		t.Fatalf("actual %v expected %v", trima.Period, 10)
+	}
+}
+
 func TestTrimaWithOddPeriod(t *testing.T) {
 	type Data struct {
 		Close float64

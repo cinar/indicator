@@ -71,6 +71,20 @@ func TestWmaWeightsNewestHighest(t *testing.T) {
 	}
 }
 
+func TestNewWma(t *testing.T) {
+	wma := trend.NewWma[float64]()
+	if wma.Period != trend.DefaultWmaPeriod {
+		t.Fatalf("actual %v expected %v", wma.Period, trend.DefaultWmaPeriod)
+	}
+}
+
+func TestNewWmaWithPeriod(t *testing.T) {
+	wma := trend.NewWmaWithPeriod[float64](10)
+	if wma.Period != 10 {
+		t.Fatalf("actual %v expected %v", wma.Period, 10)
+	}
+}
+
 func TestWmaString(t *testing.T) {
 	expected := "WMA(10)"
 	actual := trend.NewWmaWith[float64](10).String()

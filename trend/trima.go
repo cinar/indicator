@@ -33,8 +33,14 @@ type Trima[T helper.Number] struct {
 // NewTrima function initializes a new TRIMA instance
 // with the default parameters.
 func NewTrima[T helper.Number]() *Trima[T] {
+	return NewTrimaWithPeriod[T](DefaultTrimaPeriod)
+}
+
+// NewTrimaWithPeriod function initializes a new TRIMA instance
+// with the given period.
+func NewTrimaWithPeriod[T helper.Number](period int) *Trima[T] {
 	return &Trima[T]{
-		Period: DefaultTrimaPeriod,
+		Period: period,
 	}
 }
 
