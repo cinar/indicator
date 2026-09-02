@@ -47,8 +47,8 @@ func (c *CostBasisExitStrategy) ComputeWithContext(ctx context.Context, snapshot
 			return strategy.Buy
 		}
 
-		// If the action is sell and the asset was bought at a lower amount, sell it as recommended.
-		if action == strategy.Sell && boughtAt != 0.0 && boughtAt < closing {
+		// If the action is sell and the asset was bought at or below the current amount, sell it as recommended.
+		if action == strategy.Sell && boughtAt != 0.0 && boughtAt <= closing {
 			boughtAt = 0.0
 			return strategy.Sell
 		}
