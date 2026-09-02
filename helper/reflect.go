@@ -20,6 +20,7 @@ var kindToBits = map[reflect.Kind]int{
 	reflect.Int32:   32,
 	reflect.Int64:   64,
 	reflect.Uint:    bits.UintSize,
+	reflect.Uint8:   8,
 	reflect.Uint16:  16,
 	reflect.Uint32:  32,
 	reflect.Uint64:  64,
