@@ -256,7 +256,7 @@ func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error {
 // WriteToFileWithContext creates a new file with the given name and writes the provided rows
 // of data to it, overwriting any existing content, supporting context cancellation.
 func (c *Csv[T]) WriteToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error {
-	file, err := os.OpenFile(filepath.Clean(fileName), os.O_CREATE|os.O_WRONLY, 0o600)
+	file, err := os.OpenFile(filepath.Clean(fileName), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
 	if err != nil {
 		return err
 	}
