@@ -15,6 +15,20 @@ import (
 // at a specific moment.
 type Snapshot struct {
 	// Date represents the specific timestamp.
+	//
+	// This field has no explicit `format` struct tag, so the CSV
+	// helpers in the helper package (see helper.Csv, helper.CsvFormatTag,
+	// and helper.DefaultDateTimeFormat) read and write it using the
+	// date-only layout "2006-01-02". Any time-of-day component present
+	// in an RFC3339 or similarly timestamped source is silently dropped
+	// when a Snapshot is round-tripped through those CSV helpers; the
+	// in-memory value is unaffected outside of that path. This is a
+	// deliberate, library-wide limitation of the reflection-based CSV
+	// format (which has no per-row error channel), not specific to
+	// Snapshot. If time-of-day precision is ever needed, a `format`
+	// struct tag (e.g. `format:"2006-01-02T15:04:05Z07:00"`, matching
+	// time.RFC3339) could be added to this field without affecting any
+	// other field or requiring changes to the CSV helpers themselves.
 	Date time.Time
 
 	// Open represents the opening price for the
