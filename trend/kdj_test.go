@@ -5,6 +5,7 @@
 package trend_test
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -49,6 +50,64 @@ func TestKdj(t *testing.T) {
 	err = helper.CheckEquals(actualK, expectedK, actualD, expectedD, actualJ, expectedJ)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestKdjFlatMarket(t *testing.T) {
+	count := trend.DefaultKdjMinMaxPeriod + trend.DefaultKdjSma1Period + trend.DefaultKdjSma2Period + 5
+	high := make([]float64, count)
+	low := make([]float64, count)
+	closing := make([]float64, count)
+
+	for i := range count {
+		high[i] = 100
+		low[i] = 100
+		closing[i] = 100
+	}
+
+	kdj := trend.NewKdj[float64]()
+	actualK, actualD, actualJ := kdj.Compute(helper.SliceToChan(high), helper.SliceToChan(low), helper.SliceToChan(closing))
+
+	// K, D, and J share an upstream fan-out that requires all three output
+	// channels to be drained concurrently, so they are collected in
+	// parallel rather than one at a time.
+	var k, d, j []float64
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		k = helper.ChanToSlice(actualK)
+	}()
+
+	go func() {
+		defer wg.Done()
+		d = helper.ChanToSlice(actualD)
+	}()
+
+	go func() {
+		defer wg.Done()
+		j = helper.ChanToSlice(actualJ)
+	}()
+
+	wg.Wait()
+
+	if len(k) == 0 {
+		t.Fatal("expected at least one KDJ value")
+	}
+
+	for i := range k {
+		if k[i] != 50 {
+			t.Fatalf("expected K of 50 for a zero-range market, got %v", k[i])
+		}
+
+		if d[i] != 50 {
+			t.Fatalf("expected D of 50 for a zero-range market, got %v", d[i])
+		}
+
+		if j[i] != 50 {
+			t.Fatalf("expected J of 50 for a zero-range market, got %v", j[i])
+		}
 	}
 }
 

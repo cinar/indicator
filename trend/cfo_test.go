@@ -36,6 +36,27 @@ func TestCfo(t *testing.T) {
 	}
 }
 
+func TestCfoZeroPrice(t *testing.T) {
+	cfo := trend.NewCfoWithPeriod[float64](5)
+
+	closing := make([]float64, cfo.IdlePeriod()+5)
+	for i := range closing {
+		closing[i] = 0
+	}
+
+	actual := helper.ChanToSlice(cfo.Compute(helper.SliceToChan(closing)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one CFO value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected CFO of 0 for a zero closing price, got %v", v)
+		}
+	}
+}
+
 func TestCfoString(t *testing.T) {
 	expected := "CFO(14)"
 	actual := trend.NewCfo[float64]().String()

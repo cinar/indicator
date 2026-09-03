@@ -27,6 +27,11 @@ const (
 //	APCDS = Ema(13, Ema(25, Abs(Current - Prior)))
 //	TSI = (PCDS / APCDS) * 100
 //
+// APCDS (the smoothed absolute price change) is zero only when price has
+// been perfectly flat, in which case there is no momentum to report; TSI is
+// defined as 0, its neutral center on the signed -100 to 100 scale, instead
+// of propagating a 0/0 NaN.
+//
 // Example:
 //
 //	tsi := trend.NewTsi[float64]()
@@ -69,13 +74,13 @@ func (t *Tsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 	apcds := ComputeMaWithContext(ctx, t.SecondSmoothing, ComputeMaWithContext(ctx, t.FirstSmoothing, helper.AbsWithContext(ctx, pcsSplice[1])))
 
 	// TSI = (PCDS / APCDS) * 100
-	tsi := helper.MultiplyByWithContext(ctx,
-		helper.DivideWithContext(ctx,
-			pcds,
-			apcds,
-		),
-		T(100),
-	)
+	tsi := helper.OperateWithContext(ctx, pcds, apcds, func(pcd, apcd T) T {
+		if apcd == 0 {
+			return 0
+		}
+
+		return (pcd / apcd) * T(100)
+	})
 
 	return tsi
 }

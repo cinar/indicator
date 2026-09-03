@@ -23,6 +23,10 @@ const (
 //
 //	CFO = ((Price - Forecast) / Price) * 100
 //
+// A zero closing price is a degenerate/theoretical input for real
+// securities; CFO is defined as 0 (no forecast deviation to report)
+// instead of propagating a 0/0 NaN.
+//
 // Example:
 //
 //	cfo := trend.NewCfo[float64]()
@@ -53,13 +57,15 @@ func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-cha
 
 	closingPriceSplice := helper.DuplicateWithContext(ctx, helper.SkipWithContext(ctx, closingSplices[2], c.IdlePeriod()), 2)
 
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingPriceSplice[0],
-		forecast,
-	),
-		closingPriceSplice[1],
-	),
-		T(100),
-	)
+	numerator := helper.SubtractWithContext(ctx, closingPriceSplice[0], forecast)
+
+	return helper.OperateWithContext(ctx, numerator, closingPriceSplice[1], func(num, price T) T {
+		if price == 0 {
+			return 0
+		}
+
+		return (num / price) * T(100)
+	})
 }
 
 // IdlePeriod is the initial period that CFO won't yield any results.

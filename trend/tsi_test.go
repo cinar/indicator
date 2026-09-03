@@ -38,6 +38,27 @@ func TestTsi(t *testing.T) {
 	}
 }
 
+func TestTsiFlatMarket(t *testing.T) {
+	tsi := trend.NewTsi[float64]()
+
+	closings := make([]float64, tsi.IdlePeriod()+20)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(tsi.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one TSI value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected TSI of 0 for flat market, got %v", v)
+		}
+	}
+}
+
 func TestTsiString(t *testing.T) {
 	expected := "TSI(EMA(1),EMA(2))"
 	actual := trend.NewTsiWith[float64](1, 2).String()

@@ -30,6 +30,10 @@ const (
 //	Slow %K = SMA(Fast %K, kPeriod)
 //	Slow %D = SMA(Slow %K, dPeriod)
 //
+// Fast %K is a 0-100 range ratio; a zero range (Max == Min) makes it an
+// undefined 0/0, defined as the neutral midpoint 50 instead of propagating
+// NaN, matching the RSI flat-market convention.
+//
 // Example:
 //
 //	s := trend.NewSlowStochastic[float64]()
@@ -80,11 +84,16 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 
 	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
 
-	fastK := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	)
+	numerator := helper.SubtractWithContext(ctx, skipped, lowestSplice[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowestSplice[1])
+
+	fastK := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		if denom == 0 {
+			return 50
+		}
+
+		return (num / denom) * 100
+	})
 
 	slowKSma := NewSmaWithPeriod[T](s.KPeriod)
 	slowK := slowKSma.ComputeWithContext(ctx, fastK)

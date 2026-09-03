@@ -21,6 +21,13 @@ const (
 // greater weight.
 //
 //	VWMA = Sum(Price * Volume) / Sum(Volume)
+//
+// A window with no trading at all makes Sum(Volume) zero, so there is no
+// real volume-weighted price to report; VWMA is defined as 0 rather than
+// propagating a 0/0 NaN. This is a known limitation: forward-filling the
+// last valid average would be more representative for plotting purposes,
+// but would require per-window state that no other guard in this indicator
+// family needs, so it is left as a documented edge case instead.
 type Vwma[T helper.Float] struct {
 	// Time period.
 	Period int
@@ -40,9 +47,16 @@ func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan
 	sum := NewMovingSum[T]()
 	sum.Period = v.Period
 
-	return helper.DivideWithContext(ctx, sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closing, volumes[0])),
-		sum.ComputeWithContext(ctx, volumes[1]),
-	)
+	priceVolumeSum := sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closing, volumes[0]))
+	volumeSum := sum.ComputeWithContext(ctx, volumes[1])
+
+	return helper.OperateWithContext(ctx, priceVolumeSum, volumeSum, func(pv, vol T) T {
+		if vol == 0 {
+			return 0
+		}
+
+		return pv / vol
+	})
 }
 
 // IdlePeriod is the initial period that VWMA won't yield any results.

@@ -33,6 +33,11 @@ const (
 //	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
 //	KAMA = Previous KAMA + SC * (Price - Previous KAMA)
 //
+// A perfectly flat window (no price change at all) makes Volatility zero,
+// which also forces Direction to zero; the Efficiency Ratio is defined as 0
+// (no efficient movement occurred) instead of propagating a 0/0 NaN, matching
+// most published KAMA implementations' explicit zero-volatility case.
+//
 // Example:
 //
 //	kama := trend.NewKama[float64]()
@@ -84,7 +89,13 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	)
 
 	//	Efficiency Ratio (ER) = Direction / Volatility
-	ers := helper.Divide(directions, volatilitys)
+	ers := helper.OperateWithContext(ctx, directions, volatilitys, func(direction, volatility T) T {
+		if volatility == 0 {
+			return 0
+		}
+
+		return direction / volatility
+	})
 
 	//	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
 	fastSc := T(2.0) / T(k.FastScPeriod+1)

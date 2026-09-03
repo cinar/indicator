@@ -28,6 +28,10 @@ const (
 //	K = (Value - Min(Value, period)) / (Max(Value, period) - Min(Value, period)) * 100
 //	D = SMA(K, dPeriod)
 //
+// %K is a 0-100 range ratio; a zero range (Max == Min) makes it an undefined
+// 0/0, defined as the neutral midpoint 50 instead of propagating NaN,
+// matching the RSI flat-market convention.
+//
 // Example:
 //
 //	s := trend.NewStochastic[float64]()
@@ -70,13 +74,18 @@ func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T)
 
 	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
 
-	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	),
-		2,
-	)
+	numerator := helper.SubtractWithContext(ctx, skipped, lowestSplice[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowestSplice[1])
+
+	k := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		if denom == 0 {
+			return 50
+		}
+
+		return (num / denom) * 100
+	})
+
+	kSplice := helper.DuplicateWithContext(ctx, k, 2)
 
 	d := s.Sma.ComputeWithContext(ctx, kSplice[0])
 	kSplice[1] = helper.SkipWithContext(ctx, kSplice[1], s.Sma.IdlePeriod())

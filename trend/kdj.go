@@ -39,6 +39,10 @@ const (
 //	D = Sma(K, dPeriod)
 //	J = (3 * K) - (2 * D)
 //
+// A zero range (Max(High) == Min(Low)) makes RSV an undefined 0/0. RSV, like
+// its Stochastic %K counterpart, is on a 0-100 scale, so it is defined as the
+// neutral midpoint 50 instead of propagating NaN.
+//
 // Example:
 //
 //	kdj := NewKdj[float64]()
@@ -84,11 +88,16 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 
 	closing = helper.SkipWithContext(ctx, closing, kdj.MovingMax.Period-1)
 
-	rsv := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closing, lowests[0]),
-		helper.SubtractWithContext(ctx, highest, lowests[1]),
-	),
-		100,
-	)
+	numerator := helper.SubtractWithContext(ctx, closing, lowests[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowests[1])
+
+	rsv := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		if denom == 0 {
+			return 50
+		}
+
+		return (num / denom) * 100
+	})
 
 	ks := helper.DuplicateWithContext(ctx, kdj.Sma1.ComputeWithContext(ctx, rsv),
 		3,
