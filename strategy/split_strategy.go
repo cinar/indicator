@@ -37,6 +37,11 @@ func (s *SplitStrategy) Name() string {
 	return fmt.Sprintf("SplitStrategy(%s, %s)", s.BuyStrategy.Name(), s.SellStrategy.Name())
 }
 
+// String is the string representation of the SplitStrategy.
+func (s *SplitStrategy) String() string {
+	return s.Name()
+}
+
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)

@@ -26,6 +26,11 @@ func (*BuyAndHoldStrategy) Name() string {
 	return "Buy and Hold Strategy"
 }
 
+// String is the string representation of the BuyAndHoldStrategy.
+func (b *BuyAndHoldStrategy) String() string {
+	return b.Name()
+}
+
 // ComputeWithContext processes the provided asset snapshots and generates an
 // illustrative stream of actions.
 func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
