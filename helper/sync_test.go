@@ -31,3 +31,21 @@ func TestSync(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestCommonPeriodWithEmptyInput(t *testing.T) {
+	actual := helper.CommonPeriod()
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestCommonPeriodWithValues(t *testing.T) {
+	actual := helper.CommonPeriod(4, 2, 3)
+	expected := 4
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}

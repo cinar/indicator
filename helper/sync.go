@@ -8,6 +8,7 @@ import "slices"
 
 // CommonPeriod calculates the largest period at which all data channels can be synchronized,
 // so that every channel has warmed up (skipped its own idle period) before values are compared.
+// It returns 0 for empty input.
 //
 // Example:
 //
@@ -23,6 +24,10 @@ import "slices"
 //	// Synchronize the third channel
 //	c3 := helper.Sync(commonPeriod, 3, c3)
 func CommonPeriod(periods ...int) int {
+	if len(periods) == 0 {
+		return 0
+	}
+
 	return slices.Max(periods)
 }
 
