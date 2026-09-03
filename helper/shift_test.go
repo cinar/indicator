@@ -21,3 +21,15 @@ func TestShift(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestShiftNegativeCount(t *testing.T) {
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{2, 4, 6, 8})
+
+	actual := helper.Shift(input, -2, 0)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

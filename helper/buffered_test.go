@@ -23,3 +23,15 @@ func TestBuffered(_ *testing.T) {
 
 	helper.Drain(b)
 }
+
+func TestBufferedNegativeSize(t *testing.T) {
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{2, 4, 6, 8})
+
+	actual := helper.Buffered(input, -1)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

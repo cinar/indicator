@@ -15,7 +15,15 @@ func SkipLast[T any](c <-chan T, count int) <-chan T {
 
 // SkipLastWithContext skips the specified number of elements
 // from the end of the given channel, supporting context cancellation.
+//
+// A negative count is treated as zero: nothing is skipped, and every
+// input value is forwarded unchanged, matching SkipWithContext's
+// negative-count convention.
 func SkipLastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T {
+	if count < 0 {
+		count = 0
+	}
+
 	result := make(chan T, cap(c))
 
 	go func() {

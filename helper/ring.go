@@ -23,8 +23,14 @@ type Ring[T any] struct {
 	count  int
 }
 
-// NewRing creates a new ring instance with the given size.
+// NewRing creates a new ring instance with the given size. A ring
+// cannot function with zero or negative capacity, so a size less than
+// 1 is clamped to 1.
 func NewRing[T any](size int) *Ring[T] {
+	if size < 1 {
+		size = 1
+	}
+
 	return &Ring[T]{
 		buffer: make([]T, size),
 		begin:  0,
