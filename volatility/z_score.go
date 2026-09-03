@@ -22,6 +22,12 @@ const (
 //
 //	Z-Score = (Price - SMA) / StdDev
 //
+// When every value in the window is identical, StdDev is 0 and Price
+// equals the SMA too, so the ratio is an undefined 0/0. It falls back to
+// 0, which is the mathematically correct answer here (not merely a
+// convention): a value identical to every other value in its window
+// deviates exactly 0 standard deviations from the mean.
+//
 // Example:
 //
 //	z := NewZScore[float64]()
@@ -54,7 +60,13 @@ func (z *ZScore[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
 	stdChan := std.ComputeWithContext(ctx, cs[1])
 	priceChan := helper.SkipWithContext(ctx, cs[2], z.IdlePeriod())
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, priceChan, smaChan), stdChan)
+	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, priceChan, smaChan), stdChan, func(diff, std T) T {
+		if std == 0 {
+			return 0
+		}
+
+		return diff / std
+	})
 }
 
 // IdlePeriod is the initial period that Z-Score won't yield any results.

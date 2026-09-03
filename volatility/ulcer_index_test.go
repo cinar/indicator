@@ -38,6 +38,34 @@ func TestUlcerIndex(t *testing.T) {
 	}
 }
 
+func TestUlcerIndexZeroOrNegativePrice(t *testing.T) {
+	ui := volatility.NewUlcerIndex[float64]()
+	length := ui.IdlePeriod() + 20
+
+	// A degenerate closing series that is zero or negative throughout, so
+	// the rolling High Closings (a moving max) is never positive.
+	closings := make([]float64, length)
+	for i := range closings {
+		if i%2 == 0 {
+			closings[i] = 0
+		} else {
+			closings[i] = -1
+		}
+	}
+
+	actual := helper.ChanToSlice(ui.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one Ulcer Index value")
+	}
+
+	for i, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected Ulcer Index of 0 for non-positive prices at %d, got %v", i, v)
+		}
+	}
+}
+
 func TestUlcerIndexString(t *testing.T) {
 	expected := "ULCERINDEX(14)"
 	actual := volatility.NewUlcerIndex[float64]().String()
