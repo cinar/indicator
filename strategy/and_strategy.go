@@ -37,6 +37,11 @@ func (a *AndStrategy) Name() string {
 	return a.name
 }
 
+// String is the string representation of the AndStrategy.
+func (a *AndStrategy) String() string {
+	return a.Name()
+}
+
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (a *AndStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)

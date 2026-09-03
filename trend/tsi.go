@@ -36,7 +36,7 @@ const (
 //
 //	tsi := trend.NewTsi[float64]()
 //	result := tsi.Compute(closings)
-type Tsi[T helper.Number] struct {
+type Tsi[T helper.Float] struct {
 	// FirstSmoothing is the first smoothing moving average.
 	FirstSmoothing Ma[T]
 
