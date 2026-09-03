@@ -23,18 +23,18 @@ const (
 //	where R_t = (P_t / P_(t-1)) - 1
 //
 // Refactored to utilize composition of helper.ChangeRatio and MovingStd.
-type HistoricalVolatility[T helper.Number] struct {
+type HistoricalVolatility[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewHistoricalVolatility function initializes a new Historical Volatility instance with the default parameters.
-func NewHistoricalVolatility[T helper.Number]() *HistoricalVolatility[T] {
+func NewHistoricalVolatility[T helper.Float]() *HistoricalVolatility[T] {
 	return NewHistoricalVolatilityWithPeriod[T](DefaultHistoricalVolatilityPeriod)
 }
 
 // NewHistoricalVolatilityWithPeriod function initializes a new Historical Volatility instance with the given period.
-func NewHistoricalVolatilityWithPeriod[T helper.Number](period int) *HistoricalVolatility[T] {
+func NewHistoricalVolatilityWithPeriod[T helper.Float](period int) *HistoricalVolatility[T] {
 	if period <= 0 {
 		period = DefaultHistoricalVolatilityPeriod
 	}

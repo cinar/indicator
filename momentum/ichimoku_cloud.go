@@ -45,7 +45,7 @@ const (
 //
 //	ic := momentum.NewIchimokuCloud[float64]()
 //	conversionLine, baseLine, leadingSpanA, leasingSpanB, laggingSpan := ic.Compute(highs, lows, closings)
-type IchimokuCloud[T helper.Number] struct {
+type IchimokuCloud[T helper.Float] struct {
 	// ConversionMax is the conversion Moving Max instance.
 	ConversionMax *trend.MovingMax[T]
 
@@ -69,7 +69,7 @@ type IchimokuCloud[T helper.Number] struct {
 }
 
 // NewIchimokuCloud function initializes a new Ichimoku Cloud instance.
-func NewIchimokuCloud[T helper.Number]() *IchimokuCloud[T] {
+func NewIchimokuCloud[T helper.Float]() *IchimokuCloud[T] {
 	return &IchimokuCloud[T]{
 		ConversionMax: trend.NewMovingMaxWithPeriod[T](DefaultIchimokuCloudConversionPeriod),
 		ConversionMin: trend.NewMovingMinWithPeriod[T](DefaultIchimokuCloudConversionPeriod),

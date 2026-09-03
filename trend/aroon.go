@@ -32,14 +32,14 @@ const (
 //	aroon.Period = 25
 //
 //	result := aroon.Compute(c)
-type Aroon[T helper.Number] struct {
+type Aroon[T helper.Float] struct {
 	// Period is the period to use.
 	Period int
 }
 
 // NewAroon function initializes a new Aroon instance
 // with the default parameters.
-func NewAroon[T helper.Number]() *Aroon[T] {
+func NewAroon[T helper.Float]() *Aroon[T] {
 	return &Aroon[T]{
 		Period: DefaultAroonPeriod,
 	}

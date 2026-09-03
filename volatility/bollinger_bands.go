@@ -32,7 +32,7 @@ const (
 //
 //	bollingerBands := NewBollingerBands[float64]()
 //	bollingerBands.Compute(values)
-type BollingerBands[T helper.Number] struct {
+type BollingerBands[T helper.Float] struct {
 	// Time period.
 	Period int
 
@@ -41,12 +41,12 @@ type BollingerBands[T helper.Number] struct {
 }
 
 // NewBollingerBands function initializes a new Bollinger Bands instance with the default parameters.
-func NewBollingerBands[T helper.Number]() *BollingerBands[T] {
+func NewBollingerBands[T helper.Float]() *BollingerBands[T] {
 	return NewBollingerBandsWithPeriod[T](DefaultBollingerBandsPeriod)
 }
 
 // NewBollingerBandsWithPeriod function initializes a new Bollinger Bands instance with the given period.
-func NewBollingerBandsWithPeriod[T helper.Number](period int) *BollingerBands[T] {
+func NewBollingerBandsWithPeriod[T helper.Float](period int) *BollingerBands[T] {
 	return &BollingerBands[T]{
 		Period:     period,
 		Multiplier: DefaultBollingerBandsMultiplier,

@@ -30,13 +30,13 @@ const (
 //
 //	ui := volatility.NewUlcerIndex[float64]()
 //	ui.Compute(closings)
-type UlcerIndex[T helper.Number] struct {
+type UlcerIndex[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewUlcerIndex function initializes a new Ulcer Index instance with the default parameters.
-func NewUlcerIndex[T helper.Number]() *UlcerIndex[T] {
+func NewUlcerIndex[T helper.Float]() *UlcerIndex[T] {
 	return &UlcerIndex[T]{
 		Period: DefaultUlcerIndexPeriod,
 	}

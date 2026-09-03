@@ -18,11 +18,11 @@ import (
 //
 //	weightedClose := trend.NewWeightedClose[float64]()
 //	result := weightedClose.Compute(highs, lows, closes)
-type WeightedClose[T helper.Number] struct {
+type WeightedClose[T helper.Float] struct {
 }
 
 // NewWeightedClose function initializes a new Weighted Close instance with the default parameters.
-func NewWeightedClose[T helper.Number]() *WeightedClose[T] {
+func NewWeightedClose[T helper.Float]() *WeightedClose[T] {
 	return &WeightedClose[T]{}
 }
 

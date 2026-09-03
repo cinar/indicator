@@ -27,7 +27,7 @@ const (
 // multiplying it by the square root of the number of trading days per year.
 //
 //	AHV = HV × √TradingDaysPerYear
-type AnnualizedHistoricalVolatility[T helper.Number] struct {
+type AnnualizedHistoricalVolatility[T helper.Float] struct {
 	// Hv is the underlying Historical Volatility indicator.
 	Hv *HistoricalVolatility[T]
 
@@ -37,13 +37,13 @@ type AnnualizedHistoricalVolatility[T helper.Number] struct {
 
 // NewAnnualizedHistoricalVolatility function initializes a new Annualized Historical Volatility
 // instance with the default parameters.
-func NewAnnualizedHistoricalVolatility[T helper.Number]() *AnnualizedHistoricalVolatility[T] {
+func NewAnnualizedHistoricalVolatility[T helper.Float]() *AnnualizedHistoricalVolatility[T] {
 	return NewAnnualizedHistoricalVolatilityWithPeriod[T](DefaultAnnualizedHistoricalVolatilityPeriod)
 }
 
 // NewAnnualizedHistoricalVolatilityWithPeriod function initializes a new Annualized Historical
 // Volatility instance with the given period.
-func NewAnnualizedHistoricalVolatilityWithPeriod[T helper.Number](period int) *AnnualizedHistoricalVolatility[T] {
+func NewAnnualizedHistoricalVolatilityWithPeriod[T helper.Float](period int) *AnnualizedHistoricalVolatility[T] {
 	return &AnnualizedHistoricalVolatility[T]{
 		Hv:                 NewHistoricalVolatilityWithPeriod[T](period),
 		TradingDaysPerYear: DefaultTradingDaysPerYear,

@@ -30,23 +30,23 @@ const (
 //
 //	atr := volatility.NewAtr()
 //	atr.Compute(highs, lows, closings)
-type Atr[T helper.Number] struct {
+type Atr[T helper.Float] struct {
 	// Ma is the moving average for the ATR.
 	Ma trend.Ma[T]
 }
 
 // NewAtr function initializes a new ATR instance with the default parameters.
-func NewAtr[T helper.Number]() *Atr[T] {
+func NewAtr[T helper.Float]() *Atr[T] {
 	return NewAtrWithPeriod[T](DefaultAtrPeriod)
 }
 
 // NewAtrWithPeriod function initializes a new ATR instance with the given period.
-func NewAtrWithPeriod[T helper.Number](period int) *Atr[T] {
+func NewAtrWithPeriod[T helper.Float](period int) *Atr[T] {
 	return NewAtrWithMa(trend.NewSmaWithPeriod[T](period))
 }
 
 // NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
-func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T] {
+func NewAtrWithMa[T helper.Float](ma trend.Ma[T]) *Atr[T] {
 	return &Atr[T]{
 		Ma: ma,
 	}

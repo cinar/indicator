@@ -30,18 +30,18 @@ const (
 //
 //	mls := trend.NewMlsWithPeriod[float64](14)
 //	ms, bs := mls.Compute(x , y)
-type Mls[T helper.Number] struct {
+type Mls[T helper.Float] struct {
 	// Sum is the moving sum instance.
 	Sum *MovingSum[T]
 }
 
 // NewMls function initializes a new MLS instance with the default parameters.
-func NewMls[T helper.Number]() *Mls[T] {
+func NewMls[T helper.Float]() *Mls[T] {
 	return NewMlsWithPeriod[T](DefaultMlsPeriod)
 }
 
 // NewMlsWithPeriod function initializes a new MLS instance with the given period.
-func NewMlsWithPeriod[T helper.Number](period int) *Mls[T] {
+func NewMlsWithPeriod[T helper.Float](period int) *Mls[T] {
 	return &Mls[T]{
 		Sum: NewMovingSumWithPeriod[T](period),
 	}

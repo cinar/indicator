@@ -23,18 +23,18 @@ const (
 //	Slope = (Current Price - Price n periods ago) / n
 //
 // Refactored to utilize composition of helper.Change and helper.DivideBy.
-type Slope[T helper.Number] struct {
+type Slope[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewSlope function initializes a new Slope instance with the default parameters.
-func NewSlope[T helper.Number]() *Slope[T] {
+func NewSlope[T helper.Float]() *Slope[T] {
 	return NewSlopeWithPeriod[T](DefaultSlopePeriod)
 }
 
 // NewSlopeWithPeriod function initializes a new Slope instance with the given parameters.
-func NewSlopeWithPeriod[T helper.Number](period int) *Slope[T] {
+func NewSlopeWithPeriod[T helper.Float](period int) *Slope[T] {
 	if period <= 0 {
 		period = DefaultSlopePeriod
 	}
