@@ -21,18 +21,18 @@ const (
 // It calculates a moving average by putting more weight on recent data and less on past data.
 //
 //	WMA = (Oldest * 1 + ... + Newest * N) / (N * (N + 1) / 2)
-type Wma[T helper.Number] struct {
+type Wma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewWma function initializes a new WMA instance with the default parameters.
-func NewWma[T helper.Number]() *Wma[T] {
+func NewWma[T helper.Float]() *Wma[T] {
 	return NewWmaWithPeriod[T](DefaultWmaPeriod)
 }
 
 // NewWmaWithPeriod function initializes a new WMA instance with the given parameters.
-func NewWmaWithPeriod[T helper.Number](period int) *Wma[T] {
+func NewWmaWithPeriod[T helper.Float](period int) *Wma[T] {
 	if period <= 0 {
 		panic("period must be greater than 0")
 	}
@@ -44,7 +44,7 @@ func NewWmaWithPeriod[T helper.Number](period int) *Wma[T] {
 // NewWmaWith is an alias for NewWmaWithPeriod for backwards compatibility.
 //
 // Deprecated: Use NewWmaWithPeriod instead.
-func NewWmaWith[T helper.Number](period int) *Wma[T] {
+func NewWmaWith[T helper.Float](period int) *Wma[T] {
 	return NewWmaWithPeriod[T](period)
 }
 

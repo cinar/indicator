@@ -26,20 +26,20 @@ const (
 // If period is odd:
 //
 //	TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
-type Trima[T helper.Number] struct {
+type Trima[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewTrima function initializes a new TRIMA instance
 // with the default parameters.
-func NewTrima[T helper.Number]() *Trima[T] {
+func NewTrima[T helper.Float]() *Trima[T] {
 	return NewTrimaWithPeriod[T](DefaultTrimaPeriod)
 }
 
 // NewTrimaWithPeriod function initializes a new TRIMA instance
 // with the given period.
-func NewTrimaWithPeriod[T helper.Number](period int) *Trima[T] {
+func NewTrimaWithPeriod[T helper.Float](period int) *Trima[T] {
 	return &Trima[T]{
 		Period: period,
 	}

@@ -29,18 +29,18 @@ const (
 //
 //	emv := volume.NewEmv[float64]()
 //	result := emv.Compute(highs, lows, volumes)
-type Emv[T helper.Number] struct {
+type Emv[T helper.Float] struct {
 	// Sma is the SMA instance.
 	Sma *trend.Sma[T]
 }
 
 // NewEmv function initializes a new EMV instance with the default parameters.
-func NewEmv[T helper.Number]() *Emv[T] {
+func NewEmv[T helper.Float]() *Emv[T] {
 	return NewEmvWithPeriod[T](DefaultEmvPeriod)
 }
 
 // NewEmvWithPeriod function initializes a new EMV instance with the given period.
-func NewEmvWithPeriod[T helper.Number](period int) *Emv[T] {
+func NewEmvWithPeriod[T helper.Float](period int) *Emv[T] {
 	return &Emv[T]{
 		Sma: trend.NewSmaWithPeriod[T](period),
 	}

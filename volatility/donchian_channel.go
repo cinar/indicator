@@ -30,7 +30,7 @@ const (
 //
 //	dc := volatility.NewDonchianChannel[float64]()
 //	uppers, middles, lowers := dc.Compute(highs, lows)
-type DonchianChannel[T helper.Number] struct {
+type DonchianChannel[T helper.Float] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]
 
@@ -39,12 +39,12 @@ type DonchianChannel[T helper.Number] struct {
 }
 
 // NewDonchianChannel function initializes a new Donchian Channel instance with the default parameters.
-func NewDonchianChannel[T helper.Number]() *DonchianChannel[T] {
+func NewDonchianChannel[T helper.Float]() *DonchianChannel[T] {
 	return NewDonchianChannelWithPeriod[T](DefaultDonchianChannelPeriod)
 }
 
 // NewDonchianChannelWithPeriod function initializes a new Donchian Channel instance with the given period.
-func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[T] {
+func NewDonchianChannelWithPeriod[T helper.Float](period int) *DonchianChannel[T] {
 	return &DonchianChannel[T]{
 		Max: trend.NewMovingMaxWithPeriod[T](period),
 		Min: trend.NewMovingMinWithPeriod[T](period),

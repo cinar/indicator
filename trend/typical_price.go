@@ -15,10 +15,10 @@ import (
 // filter for moving average systems.
 //
 //	Typical Price = (High + Low + Closing) / 3
-type TypicalPrice[T helper.Number] struct{}
+type TypicalPrice[T helper.Float] struct{}
 
 // NewTypicalPrice function initializes a new Typical Price instance with the default parameters.
-func NewTypicalPrice[T helper.Number]() *TypicalPrice[T] {
+func NewTypicalPrice[T helper.Float]() *TypicalPrice[T] {
 	return &TypicalPrice[T]{}
 }
 

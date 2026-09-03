@@ -33,12 +33,12 @@ const (
 //	qstick.Sma.Period = 50
 //
 //	values := qstick.Compute(openings, closings)
-type Qstick[T helper.Number] struct {
+type Qstick[T helper.Float] struct {
 	Sma *trend.Sma[T]
 }
 
 // NewQstick function initializes a new QStick instance.
-func NewQstick[T helper.Number]() *Qstick[T] {
+func NewQstick[T helper.Float]() *Qstick[T] {
 	qstick := &Qstick[T]{
 		Sma: trend.NewSma[T](),
 	}

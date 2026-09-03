@@ -33,7 +33,7 @@ const (
 //
 //	ao := momentum.NewAwesomeOscillator[float64]()
 //	values := ao.Compute(lows, highs)
-type AwesomeOscillator[T helper.Number] struct {
+type AwesomeOscillator[T helper.Float] struct {
 	// ShortSma is the SMA for the short period.
 	ShortSma *trend.Sma[T]
 
@@ -42,7 +42,7 @@ type AwesomeOscillator[T helper.Number] struct {
 }
 
 // NewAwesomeOscillator function initializes a new Awesome Oscillator instance.
-func NewAwesomeOscillator[T helper.Number]() *AwesomeOscillator[T] {
+func NewAwesomeOscillator[T helper.Float]() *AwesomeOscillator[T] {
 	return &AwesomeOscillator[T]{
 		ShortSma: trend.NewSmaWithPeriod[T](DefaultAwesomeOscillatorShortPeriod),
 		LongSma:  trend.NewSmaWithPeriod[T](DefaultAwesomeOscillatorLongPeriod),

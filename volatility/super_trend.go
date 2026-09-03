@@ -44,13 +44,13 @@ const (
 // period. Use NewSuperTrendWithMa to use a different moving average, such as SMA or RMA.
 //
 // Example:
-type SuperTrend[T helper.Number] struct {
+type SuperTrend[T helper.Float] struct {
 	Atr        *Atr[T]
 	Multiplier T
 }
 
 // NewSuperTrend function initializes a new Super Trend instance with the default parameters.
-func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
+func NewSuperTrend[T helper.Float]() *SuperTrend[T] {
 	multiplier := DefaultSuperTrendMultiplier
 
 	return NewSuperTrendWithPeriod[T](
@@ -64,7 +64,7 @@ func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
 // The ATR used internally is built with HMA smoothing (not the textbook SMA/RMA), which increases
 // the effective idle period, e.g. 17 rather than 14 for the default period of 14. Use
 // NewSuperTrendWithMa directly if a different moving average, such as SMA or RMA, is desired.
-func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T] {
+func NewSuperTrendWithPeriod[T helper.Float](period int, multiplier T) *SuperTrend[T] {
 	return NewSuperTrendWithMa[T](
 		trend.NewHmaWithPeriod[T](period),
 		multiplier,
@@ -73,7 +73,7 @@ func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTr
 
 // NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance
 // and multiplier.
-func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T] {
+func NewSuperTrendWithMa[T helper.Float](ma trend.Ma[T], multiplier T) *SuperTrend[T] {
 	return &SuperTrend[T]{
 		Atr:        NewAtrWithMa(ma),
 		Multiplier: multiplier,

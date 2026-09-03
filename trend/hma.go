@@ -33,7 +33,7 @@ const (
 // periods this matches the common truncating variants, but for odd periods it can yield a WMA1 length
 // one greater than a truncating implementation would use, which may explain small output differences
 // when cross-checking against another platform's HMA.
-type Hma[T helper.Number] struct {
+type Hma[T helper.Float] struct {
 	// First WMA.
 	wma1 *Wma[T]
 
@@ -45,12 +45,12 @@ type Hma[T helper.Number] struct {
 }
 
 // NewHma function initializes a new HMA instance with the default parameters.
-func NewHma[T helper.Number]() *Hma[T] {
+func NewHma[T helper.Float]() *Hma[T] {
 	return NewHmaWithPeriod[T](DefaultHmaPeriod)
 }
 
 // NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
-func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
+func NewHmaWithPeriod[T helper.Float](period int) *Hma[T] {
 	return &Hma[T]{
 		// Rounded rather than truncated; see the variant-choice note on the Hma type above.
 		wma1: NewWmaWithPeriod[T](int(math.Round(float64(period) / 2))),

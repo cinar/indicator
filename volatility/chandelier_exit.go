@@ -30,7 +30,7 @@ const (
 //
 //	ce := volatility.NewChandelierExit[float64]()
 //	ceLong, ceShort := ce.Compute(highs, lows, closings)
-type ChandelierExit[T helper.Number] struct {
+type ChandelierExit[T helper.Float] struct {
 	// Period is time period.
 	Period int
 
@@ -39,7 +39,7 @@ type ChandelierExit[T helper.Number] struct {
 }
 
 // NewChandelierExit function initializes a new Chandelier Exit instance with the default parameters.
-func NewChandelierExit[T helper.Number]() *ChandelierExit[T] {
+func NewChandelierExit[T helper.Float]() *ChandelierExit[T] {
 	return &ChandelierExit[T]{
 		Period:     DefaultChandelierExitPeriod,
 		Multiplier: DefaultChandelierExitMultiplier,

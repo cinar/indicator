@@ -24,18 +24,18 @@ const (
 //
 //	mlr := trend.NewMlrWithPeriod[float64](14)
 //	rs := mlr.Compute(x , y)
-type Mlr[T helper.Number] struct {
+type Mlr[T helper.Float] struct {
 	// Mls is the Moving Least Square instance.
 	Mls *Mls[T]
 }
 
 // NewMlr function initializes a new MLR instance with the default parameters.
-func NewMlr[T helper.Number]() *Mlr[T] {
+func NewMlr[T helper.Float]() *Mlr[T] {
 	return NewMlrWithPeriod[T](DefaultMlrPeriod)
 }
 
 // NewMlrWithPeriod function initializes a new MLR instance with the given period.
-func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T] {
+func NewMlrWithPeriod[T helper.Float](period int) *Mlr[T] {
 	return &Mlr[T]{
 		Mls: NewMlsWithPeriod[T](period),
 	}

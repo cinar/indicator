@@ -22,18 +22,18 @@ const (
 // over the specified period.
 //
 //	Std = Sqrt(1/Period * Sum(Pow(value - sma), 2))
-type MovingStd[T helper.Number] struct {
+type MovingStd[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
-func NewMovingStd[T helper.Number]() *MovingStd[T] {
+func NewMovingStd[T helper.Float]() *MovingStd[T] {
 	return NewMovingStdWithPeriod[T](DefaultMovingStdPeriod)
 }
 
 // NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.
-func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T] {
+func NewMovingStdWithPeriod[T helper.Float](period int) *MovingStd[T] {
 	return &MovingStd[T]{
 		Period: period,
 	}
