@@ -25,6 +25,14 @@ const (
 //	WMA2 = WMA(period, values)
 //	WMA3 = WMA(sqrt(period), (2 * WMA1) - WMA2)
 //	HMA = WMA3
+//
+// Note on period derivation: reference HMA implementations vary in how they derive the WMA1 and WMA3
+// sub-periods from period/2 and sqrt(period). Some truncate period/2 (integer division) rather than
+// rounding it, while most round sqrt(period). This implementation rounds both (via math.Round in
+// NewHmaWithPeriod), which is a deliberate, internally consistent choice rather than a bug. For even
+// periods this matches the common truncating variants, but for odd periods it can yield a WMA1 length
+// one greater than a truncating implementation would use, which may explain small output differences
+// when cross-checking against another platform's HMA.
 type Hma[T helper.Number] struct {
 	// First WMA.
 	wma1 *Wma[T]
@@ -44,6 +52,7 @@ func NewHma[T helper.Number]() *Hma[T] {
 // NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
 func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
 	return &Hma[T]{
+		// Rounded rather than truncated; see the variant-choice note on the Hma type above.
 		wma1: NewWmaWithPeriod[T](int(math.Round(float64(period) / 2))),
 		wma2: NewWmaWithPeriod[T](period),
 		wma3: NewWmaWithPeriod[T](int(math.Round(math.Sqrt(float64(period))))),
