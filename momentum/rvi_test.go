@@ -5,8 +5,11 @@
 package momentum_test
 
 import (
+	"context"
 	"math"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/momentum"
@@ -55,6 +58,51 @@ func TestRviSimple(t *testing.T) {
 	}
 
 	t.Logf("RVI: %d values, Signal: %d values", len(rviSlice), len(signalSlice))
+}
+
+func TestRviCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// Unbuffered, never-closing input channels, simulating a genuinely
+	// open-ended stream that nothing ever writes to or closes.
+	opens := make(chan float64)
+	highs := make(chan float64)
+	lows := make(chan float64)
+	closings := make(chan float64)
+
+	rvi := momentum.NewRvi[float64]()
+	rviResult, signalResult := rvi.ComputeWithContext(ctx, opens, highs, lows, closings)
+
+	cancel()
+
+	select {
+	case _, ok := <-rviResult:
+		if ok {
+			t.Fatal("RVI channel should not yield a value after cancellation")
+		}
+	case <-time.After(time.Second):
+		t.Fatal("RVI channel did not close promptly after cancellation")
+	}
+
+	select {
+	case _, ok := <-signalResult:
+		if ok {
+			t.Fatal("Signal channel should not yield a value after cancellation")
+		}
+	case <-time.After(time.Second):
+		t.Fatal("Signal channel did not close promptly after cancellation")
+	}
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
 }
 
 func TestRviString(t *testing.T) {

@@ -60,80 +60,84 @@ func NewRvi[T helper.Float]() *Rvi[T] {
 	}
 }
 
-// computeFir applies a 4-bar FIR filter with weights 1-2-2-1.
-func computeFir[T helper.Float](c <-chan T) <-chan T {
+// computeFir applies a 4-bar FIR filter with weights 1-2-2-1, propagating
+// ctx through every stage so the filter closes its output promptly on
+// cancellation instead of blocking on a stalled upstream channel.
+func computeFir[T helper.Float](ctx context.Context, c <-chan T) <-chan T {
 	// FIR with weights 1-2-2-1:
 	// output[n] = (1*input[n] + 2*input[n-1] + 2*input[n-2] + 1*input[n-3]) / 6
 
 	// Duplicate to get delayed versions
-	cs := helper.Duplicate(c, 4)
+	cs := helper.DuplicateWithContext(ctx, c, 4)
 
 	// Shift each copy to get delayed values
 	delayed0 := cs[0] // current
-	delayed1 := helper.Shift(cs[1], 1, 0)
-	delayed2 := helper.Shift(cs[2], 2, 0)
-	delayed3 := helper.Shift(cs[3], 3, 0)
+	delayed1 := helper.ShiftWithContext(ctx, cs[1], 1, 0)
+	delayed2 := helper.ShiftWithContext(ctx, cs[2], 2, 0)
+	delayed3 := helper.ShiftWithContext(ctx, cs[3], 3, 0)
 
 	// Apply weights: 1*current + 2*prev1 + 2*prev2 + 1*prev3
-	weighted := helper.Add(
-		helper.Add(delayed0, helper.MultiplyBy(delayed1, 2)),
-		helper.Add(helper.MultiplyBy(delayed2, 2), delayed3),
+	weighted := helper.AddWithContext(ctx,
+		helper.AddWithContext(ctx, delayed0, helper.MultiplyByWithContext(ctx, delayed1, 2)),
+		helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, delayed2, 2), delayed3),
 	)
 
 	// Divide by sum of weights (6)
-	result := helper.MultiplyBy(weighted, T(1)/T(RviFirSum))
+	result := helper.MultiplyByWithContext(ctx, weighted, T(1)/T(RviFirSum))
 
 	// Skip first 3 values (FIR warmup)
-	return helper.Skip(result, RviFirPeriod-1)
+	return helper.SkipWithContext(ctx, result, RviFirPeriod-1)
 }
 
 // ComputeWithContext function takes channels of OHLC numbers and computes the
 // Relative Vigor Index and its signal line.
 func (r *Rvi[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
-	return r.computeSimple(opens, highs, lows, closings)
+	return r.computeSimple(ctx, opens, highs, lows, closings)
 }
 
 // computeSimple is a simpler implementation.
-func (r *Rvi[T]) computeSimple(opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
-	// Collect inputs to allow multiple passes
-	openVals := helper.ChanToSlice(opens)
-	highVals := helper.ChanToSlice(highs)
-	lowVals := helper.ChanToSlice(lows)
-	closeVals := helper.ChanToSlice(closings)
-
-	// Create channels for each calculation
-	openChan := helper.SliceToChan(openVals)
-	highChan := helper.SliceToChan(highVals)
-	lowChan := helper.SliceToChan(lowVals)
-	closeChan := helper.SliceToChan(closeVals)
-
+//
+// It used to collect the OHLC channels into slices with helper.ChanToSlice
+// before streaming them back through helper.SliceToChan. That collection
+// step ignored ctx and read its source channel to completion with a plain
+// `for n := range c`, so on a channel that never closes (a genuinely
+// open-ended stream) the call would block forever with no way to cancel
+// it. Since each of opens/highs/lows/closings is only ever read once
+// below (there was never an actual need for the "multiple passes" the
+// collect step was collecting for), the fix removes the collect/replay
+// round-trip entirely and wires the *WithContext helpers directly onto
+// the input channels, matching how Fisher (momentum/fisher.go) streams.
+// Every stage now selects on ctx.Done(), so ComputeWithContext returns
+// immediately and both output channels close promptly as soon as ctx is
+// cancelled, even if the inputs never close.
+func (r *Rvi[T]) computeSimple(ctx context.Context, opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T) {
 	// Compute: Close - Open
-	numeratorRaw := helper.Subtract(closeChan, openChan)
+	numeratorRaw := helper.SubtractWithContext(ctx, closings, opens)
 
 	// Compute: High - Low
-	denominatorRaw := helper.Subtract(highChan, lowChan)
+	denominatorRaw := helper.SubtractWithContext(ctx, highs, lows)
 
 	// Apply 4-bar FIR filter
-	numeratorFir := computeFir(numeratorRaw)
-	denominatorFir := computeFir(denominatorRaw)
+	numeratorFir := computeFir(ctx, numeratorRaw)
+	denominatorFir := computeFir(ctx, denominatorRaw)
 
 	// Apply SMA to filtered values
 	smaNum := trend.NewSmaWithPeriod[T](r.Period)
 	smaDen := trend.NewSmaWithPeriod[T](r.Period)
 
-	smaNumerator := smaNum.Compute(numeratorFir)
-	smaDenominator := smaDen.Compute(denominatorFir)
+	smaNumerator := smaNum.ComputeWithContext(ctx, numeratorFir)
+	smaDenominator := smaDen.ComputeWithContext(ctx, denominatorFir)
 
 	// Divide: RVI = SMA(FIR(Numerator)) / SMA(FIR(Denominator))
-	rvi := helper.Divide(smaNumerator, smaDenominator)
+	rvi := helper.DivideWithContext(ctx, smaNumerator, smaDenominator)
 
-	rviSplice := helper.Duplicate(rvi, 2)
+	rviSplice := helper.DuplicateWithContext(ctx, rvi, 2)
 
 	// Compute signal line
 	signalSma := trend.NewSmaWithPeriod[T](r.SignalPeriod)
-	signalResult = signalSma.Compute(rviSplice[0])
+	signalResult = signalSma.ComputeWithContext(ctx, rviSplice[0])
 
-	return helper.Skip(rviSplice[1], r.SignalPeriod-1), signalResult
+	return helper.SkipWithContext(ctx, rviSplice[1], r.SignalPeriod-1), signalResult
 }
 
 // IdlePeriod is the initial period that RVI won't yield any results.
