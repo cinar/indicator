@@ -24,6 +24,11 @@ const (
 //	MFV = MFM * Volume
 //	CMF = Sum(20, Money Flow Volume) / Sum(20, Volume)
 //
+// When no trading occurred anywhere in the window, the volume sum is 0 and the
+// money-flow-volume-weighted ratio is undefined (0/0). CMF returns 0, since a
+// value near 0 conventionally reads as "no strong buying or selling pressure" -
+// exactly what a window with no trading should report.
+//
 // Example:
 //
 //	cmf := volume.NewCmf[float64]()
@@ -58,8 +63,15 @@ func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 	mfvs := c.Mfv.ComputeWithContext(ctx, highs, lows, closings, volumesSplice[0])
 
 	//	CMF = Sum(20, Money Flow Volume) / Sum(20, Volume)
-	return helper.DivideWithContext(ctx, c.Sum.ComputeWithContext(ctx, mfvs),
+	return helper.OperateWithContext(ctx, c.Sum.ComputeWithContext(ctx, mfvs),
 		c.Sum.ComputeWithContext(ctx, volumesSplice[1]),
+		func(mfvSum, volumeSum T) T {
+			if volumeSum == 0 {
+				return 0
+			}
+
+			return mfvSum / volumeSum
+		},
 	)
 }
 

@@ -40,6 +40,21 @@ func TestMfm(t *testing.T) {
 	}
 }
 
+func TestMfmZeroDenom(t *testing.T) {
+	highs := helper.SliceToChan([]float64{10, 10, 10})
+	lows := helper.SliceToChan([]float64{10, 10, 10})
+	closings := helper.SliceToChan([]float64{10, 10, 10})
+
+	mfm := volume.NewMfm[float64]()
+	actuals := mfm.Compute(highs, lows, closings)
+
+	for actual := range actuals {
+		if actual != 0 {
+			t.Fatalf("expected 0 when high == low, got %v", actual)
+		}
+	}
+}
+
 func TestMfmString(t *testing.T) {
 	expected := "MFM"
 	actual := volume.NewMfm[float64]().String()

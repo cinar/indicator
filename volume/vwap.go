@@ -22,6 +22,17 @@ const (
 //
 //	VWAP = Sum(Closing * Volume) / Sum(Volume)
 //
+// When no trading occurred anywhere in the window, the volume sum is 0 and a
+// volume-weighted price is undefined (0/0). Unlike MFM/CMF, 0 is not a safe
+// stand-in here: a VWAP of 0 would read as a real, implausibly low price rather
+// than "no data," which is actively misleading if plotted or compared against
+// actual prices (see the example WeightedAveragePriceStrategy, which crosses
+// closing price against VWAP - a fabricated 0 would falsely signal a crossover
+// every time). Instead, VWAP carries forward the last period with actual volume,
+// which is the conventional real-market handling for an illiquid bar. Before any
+// window has had volume, there is no prior value to carry forward, so VWAP
+// returns the zero value of T.
+//
 // Example:
 //
 //	vwap := volume.NewVwap[float64]()
@@ -47,12 +58,25 @@ func NewVwapWithPeriod[T helper.Float](period int) *Vwap[T] {
 func (v *Vwap[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
 	volumesSplice := helper.DuplicateWithContext(ctx, volumes, 2)
 
-	return helper.DivideWithContext(ctx, v.Sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closings,
+	sumPriceVolume := v.Sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closings,
 		volumesSplice[0],
-	),
-	),
-		v.Sum.ComputeWithContext(ctx, volumesSplice[1]),
-	)
+	))
+	sumVolume := v.Sum.ComputeWithContext(ctx, volumesSplice[1])
+
+	// last holds the most recently computed valid VWAP, carried forward when a
+	// window has no volume. OperateWithContext runs sequentially, so this
+	// closure state is safe without synchronization.
+	var last T
+
+	return helper.OperateWithContext(ctx, sumPriceVolume, sumVolume, func(priceVolumeSum, volumeSum T) T {
+		if volumeSum == 0 {
+			return last
+		}
+
+		last = priceVolumeSum / volumeSum
+
+		return last
+	})
 }
 
 // IdlePeriod is the initial period that VWAP won't yield any results.
