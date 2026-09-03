@@ -20,6 +20,12 @@ import (
 // - MFM of 1: Close equals high, strongest buying pressure.
 // - MFM of -1: Close equals low, strongest selling pressure.
 //
+// On a flat bar (High == Low), the close's position within the range is undefined
+// (0/0). MFM returns 0, the neutral point of its [-1, 1] scale, matching the
+// InternalBarStrength precedent for the identical High-Low denominator. Since MFM
+// feeds Mfv, Ad, and Cmf, a neutral 0 flows through as "zero contribution" to all
+// of them.
+//
 // Example:
 //
 //	mfm := volume.NewMfm[float64]()
@@ -33,15 +39,14 @@ func NewMfm[T helper.Float]() *Mfm[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the MFM.
 func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
-	highsSplice := helper.DuplicateWithContext(ctx, highs, 2)
-	lowsSplice := helper.DuplicateWithContext(ctx, lows, 2)
-	closingsSplice := helper.DuplicateWithContext(ctx, closings, 2)
+	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
+		denom := high - low
+		if denom == 0 {
+			return 0
+		}
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[0], lowsSplice[0]),
-		helper.SubtractWithContext(ctx, highsSplice[0], closingsSplice[1]),
-	),
-		helper.SubtractWithContext(ctx, highsSplice[1], lowsSplice[1]),
-	)
+		return ((closing - low) - (high - closing)) / denom
+	})
 }
 
 // IdlePeriod is the initial period that MFM won't yield any results.

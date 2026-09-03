@@ -42,6 +42,22 @@ func TestCmf(t *testing.T) {
 	}
 }
 
+func TestCmfZeroVolume(t *testing.T) {
+	highs := helper.SliceToChan([]float64{11, 11, 11, 11})
+	lows := helper.SliceToChan([]float64{9, 9, 9, 9})
+	closings := helper.SliceToChan([]float64{10, 10, 10, 10})
+	volumes := helper.SliceToChan([]float64{0, 0, 0, 0})
+
+	cmf := volume.NewCmfWithPeriod[float64](2)
+	actuals := cmf.Compute(highs, lows, closings, volumes)
+
+	for actual := range actuals {
+		if actual != 0 {
+			t.Fatalf("expected 0 when window volume is 0, got %v", actual)
+		}
+	}
+}
+
 func TestCmfString(t *testing.T) {
 	expected := "CMF(20)"
 	actual := volume.NewCmf[float64]().String()
