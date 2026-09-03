@@ -76,6 +76,33 @@ func TestStochasticOscillatorDifferentMaxMinPeriods(t *testing.T) {
 	}
 }
 
+// TestStochasticOscillatorFlatMarket verifies that StochasticOscillator returns the neutral %K/%D
+// of 50 instead of NaN when the high-low range is zero (a flat market with no price movement at
+// all within the window).
+func TestStochasticOscillatorFlatMarket(t *testing.T) {
+	so := momentum.NewStochasticOscillator[float64]()
+
+	const bars = 20
+	flat := make([]float64, so.IdlePeriod()+bars)
+	for i := range flat {
+		flat[i] = 100
+	}
+
+	inputs := helper.Duplicate(helper.SliceToChan(flat), 3)
+
+	actualK, actualD := so.Compute(inputs[0], inputs[1], inputs[2])
+
+	expected := make([]float64, bars)
+	for i := range expected {
+		expected[i] = 50
+	}
+
+	err := helper.CheckEquals(actualK, helper.SliceToChan(expected), actualD, helper.SliceToChan(expected))
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestStochasticOscillatorString(t *testing.T) {
 	expected := "STOCHOSC(14,3)"
 	actual := momentum.NewStochasticOscillator[float64]().String()
