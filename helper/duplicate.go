@@ -15,6 +15,12 @@ func Duplicate[T any](input <-chan T, count int) []<-chan T {
 
 // DuplicateWithContext duplicates a given receive-only channel by reading each value coming out of
 // that channel and sending them on requested number of new output channels, supporting context cancellation.
+//
+// The returned output channels are unbuffered (regardless of the input channel's buffering), so all of
+// them must be actively read concurrently. Fully draining one output channel before starting to read
+// another will block the producer goroutine forever, since it sends to every output channel for each
+// value before moving on to the next. Use ChanToSlices to safely drain all of the returned channels
+// concurrently, or otherwise ensure each channel is read from its own goroutine.
 func DuplicateWithContext[T any](ctx context.Context, input <-chan T, count int) []<-chan T {
 	outputs := make([]chan T, count)
 	result := make([]<-chan T, count)
