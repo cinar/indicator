@@ -22,6 +22,12 @@ import (
 //
 //	obv := volume.NewObv[float64]()
 //	result := obv.Compute(closings, volumes)
+//
+// Note that the first emitted value, OBV[0], includes the full first-bar volume rather than starting at exactly
+// 0. This is because there is no true "previous close" for the very first bar, so the zero-valued previousClosing
+// causes the first comparison to read as an increase by default. This is inconsequential for typical OBV usage,
+// such as slope or trend analysis, since it only introduces a constant offset to the series rather than changing
+// its shape.
 type Obv[T helper.Number] struct{}
 
 // NewObv function initializes a new OBV instance with the default parameters.
@@ -30,6 +36,9 @@ func NewObv[T helper.Number]() *Obv[T] {
 }
 
 // ComputeWithContext function takes a channel of numbers and computes the OBV.
+//
+// Note that the first result includes the full first-bar volume rather than 0, since previousClosing starts at
+// its zero value and there is no real prior close to compare against for the first bar.
 func (i *Obv[T]) ComputeWithContext(ctx context.Context, closings, volumes <-chan T) <-chan T {
 	var previousClosing T
 	var previousObv T
