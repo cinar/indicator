@@ -20,10 +20,10 @@ import (
 //
 //	ibs := momentum.NewInternalBarStrength[float64]()
 //	result := ibs.Compute(highs, lows, closings)
-type InternalBarStrength[T helper.Number] struct{}
+type InternalBarStrength[T helper.Float] struct{}
 
 // NewInternalBarStrength function initializes a new InternalBarStrength instance.
-func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T] {
+func NewInternalBarStrength[T helper.Float]() *InternalBarStrength[T] {
 	return &InternalBarStrength[T]{}
 }
 

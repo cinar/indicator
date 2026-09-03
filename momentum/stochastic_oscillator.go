@@ -31,7 +31,7 @@ const (
 //
 //	so := momentum.NewStochasticOscillator[float64]()
 //	k, d := so.Compute(highs, lows, closings)
-type StochasticOscillator[T helper.Number] struct {
+type StochasticOscillator[T helper.Float] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]
 
@@ -43,7 +43,7 @@ type StochasticOscillator[T helper.Number] struct {
 }
 
 // NewStochasticOscillator function initializes a new Stochastic Oscillator instance.
-func NewStochasticOscillator[T helper.Number]() *StochasticOscillator[T] {
+func NewStochasticOscillator[T helper.Float]() *StochasticOscillator[T] {
 	return &StochasticOscillator[T]{
 		Max: trend.NewMovingMaxWithPeriod[T](DefaultStochasticOscillatorMaxAndMinPeriod),
 		Min: trend.NewMovingMinWithPeriod[T](DefaultStochasticOscillatorMaxAndMinPeriod),

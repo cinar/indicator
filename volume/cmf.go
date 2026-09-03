@@ -28,7 +28,7 @@ const (
 //
 //	cmf := volume.NewCmf[float64]()
 //	result := cmf.Compute(highs, lows, closings, volumes)
-type Cmf[T helper.Number] struct {
+type Cmf[T helper.Float] struct {
 	// Mfv is the MFV instance.
 	Mfv *Mfv[T]
 
@@ -37,12 +37,12 @@ type Cmf[T helper.Number] struct {
 }
 
 // NewCmf function initializes a new CMF instance with the default parameters.
-func NewCmf[T helper.Number]() *Cmf[T] {
+func NewCmf[T helper.Float]() *Cmf[T] {
 	return NewCmfWithPeriod[T](DefaultCmfPeriod)
 }
 
 // NewCmfWithPeriod function initializes a new CMF instance with the given period.
-func NewCmfWithPeriod[T helper.Number](period int) *Cmf[T] {
+func NewCmfWithPeriod[T helper.Float](period int) *Cmf[T] {
 	return &Cmf[T]{
 		Mfv: NewMfv[T](),
 		Sum: trend.NewMovingSumWithPeriod[T](period),

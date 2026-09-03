@@ -24,13 +24,13 @@ import (
 //
 //	bbw := NewBollingerBandWidth[float64]()
 //	bbw.Compute(c)
-type BollingerBandWidth[T helper.Number] struct {
+type BollingerBandWidth[T helper.Float] struct {
 	// Bollinger bands.
 	BollingerBands *BollingerBands[T]
 }
 
 // NewBollingerBandWidth function initializes a new Bollinger Band Width instance with the default parameters.
-func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T] {
+func NewBollingerBandWidth[T helper.Float]() *BollingerBandWidth[T] {
 	return &BollingerBandWidth[T]{
 		BollingerBands: NewBollingerBands[T](),
 	}

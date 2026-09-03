@@ -27,18 +27,18 @@ const (
 //
 //	cfo := trend.NewCfo[float64]()
 //	result := cfo.Compute(c)
-type Cfo[T helper.Number] struct {
+type Cfo[T helper.Float] struct {
 	// Mlr is the Moving Linear Regression instance.
 	Mlr *Mlr[T]
 }
 
 // NewCfo function initializes a new CFO instance with the default parameters.
-func NewCfo[T helper.Number]() *Cfo[T] {
+func NewCfo[T helper.Float]() *Cfo[T] {
 	return NewCfoWithPeriod[T](DefaultCfoPeriod)
 }
 
 // NewCfoWithPeriod function initializes a new CFO instance with the given period.
-func NewCfoWithPeriod[T helper.Number](period int) *Cfo[T] {
+func NewCfoWithPeriod[T helper.Float](period int) *Cfo[T] {
 	return &Cfo[T]{
 		Mlr: NewMlrWithPeriod[T](period),
 	}

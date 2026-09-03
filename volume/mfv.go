@@ -22,13 +22,13 @@ import (
 //
 //	mfv := volume.NewMfv[float64]()
 //	result := mfv.Compute(highs, lows, closings, volumes)
-type Mfv[T helper.Number] struct {
+type Mfv[T helper.Float] struct {
 	// Mfm is the MFM instance.
 	Mfm *Mfm[T]
 }
 
 // NewMfv function initializes a new MFV instance with the default parameters.
-func NewMfv[T helper.Number]() *Mfv[T] {
+func NewMfv[T helper.Float]() *Mfv[T] {
 	return &Mfv[T]{
 		Mfm: NewMfm[T](),
 	}

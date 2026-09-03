@@ -24,10 +24,10 @@ import (
 //
 //	mfm := volume.NewMfm[float64]()
 //	result := mfm.Compute(highs, lows, closings)
-type Mfm[T helper.Number] struct{}
+type Mfm[T helper.Float] struct{}
 
 // NewMfm function initializes a new MFM instance with the default parameters.
-func NewMfm[T helper.Number]() *Mfm[T] {
+func NewMfm[T helper.Float]() *Mfm[T] {
 	return &Mfm[T]{}
 }
 

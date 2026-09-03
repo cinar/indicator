@@ -17,11 +17,11 @@ import (
 // between the two forces.
 //
 //	Formula: BOP = (Closing - Opening) / (High - Low)
-type Bop[T helper.Number] struct{}
+type Bop[T helper.Float] struct{}
 
 // NewBop function initializes a new BOP instance
 // with the default parameters.
-func NewBop[T helper.Number]() *Bop[T] {
+func NewBop[T helper.Float]() *Bop[T] {
 	return &Bop[T]{}
 }
 
