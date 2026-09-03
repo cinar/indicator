@@ -14,8 +14,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o indicator-sync ./cmd/indicator-sync/main.go
-RUN go build -o indicator-backtest ./cmd/indicator-backtest/main.go
+RUN go build -o indicator-sync ./cmd/indicator-sync/
+RUN go build -o indicator-backtest ./cmd/indicator-backtest/
 
 FROM alpine:3.19
 

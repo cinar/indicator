@@ -36,5 +36,5 @@ tasks:
 
   build-tools:
     cmds:
-      - go build -o indicator-backtest cmd/indicator-backtest/main.go
-      - go build -o indicator-sync cmd/indicator-sync/main.go
+      - go build -o indicator-backtest ./cmd/indicator-backtest/
+      - go build -o indicator-sync ./cmd/indicator-sync/
