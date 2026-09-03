@@ -33,6 +33,13 @@ const (
 // The clamped x value is bounded between -0.999 and +0.999 to prevent
 // division by zero or logarithmic infinity errors.
 //
+// This is a simplified, non-recursive variant that uses the closing price
+// only (rather than the median of high and low) and performs no smoothing
+// across iterations. As a result, its output will diverge from the
+// canonical Ehlers Fisher Transform implemented by most trading platforms
+// (e.g. TradingView, TA-Lib). For the canonical, recursive formula, see
+// [EhlersFisher] instead.
+//
 // Example:
 //
 //	fisher := momentum.NewFisher[float64]()
