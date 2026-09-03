@@ -17,6 +17,10 @@ import (
 // between the two forces.
 //
 //	Formula: BOP = (Closing - Opening) / (High - Low)
+//
+// A zero-range bar (High == Low) also forces Open == Close == High == Low,
+// so the numerator is zero too; BOP is defined as 0 (equilibrium, its
+// natural centered value) instead of propagating the resulting 0/0 NaN.
 type Bop[T helper.Float] struct{}
 
 // NewBop function initializes a new BOP instance
@@ -28,7 +32,16 @@ func NewBop[T helper.Float]() *Bop[T] {
 // ComputeWithContext processes a channel of open, high, low, and close values,
 // computing the BOP for each entry.
 func (i *Bop[T]) ComputeWithContext(ctx context.Context, opening, high, low, closing <-chan T) <-chan T {
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closing, opening), helper.SubtractWithContext(ctx, high, low))
+	numerator := helper.SubtractWithContext(ctx, closing, opening)
+	denominator := helper.SubtractWithContext(ctx, high, low)
+
+	return helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		if denom == 0 {
+			return 0
+		}
+
+		return num / denom
+	})
 }
 
 // IdlePeriod is the initial period that BOP won't yield any results.

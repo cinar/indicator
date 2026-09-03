@@ -5,6 +5,7 @@
 package trend_test
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -44,6 +45,50 @@ func TestSlowStochastic(t *testing.T) {
 
 		if ad != data.D {
 			t.Fatalf("D: actual %v expected %v", ad, data.D)
+		}
+	}
+}
+
+func TestSlowStochasticFlatMarket(t *testing.T) {
+	s := trend.NewSlowStochastic[float64]()
+
+	closing := make([]float64, s.IdlePeriod()+5)
+	for i := range closing {
+		closing[i] = 100
+	}
+
+	actualK, actualD := s.Compute(helper.SliceToChan(closing))
+
+	// %K and %D share an upstream fan-out that requires both output
+	// channels to be drained concurrently, so they are collected in
+	// parallel rather than one at a time.
+	var k, d []float64
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		k = helper.ChanToSlice(actualK)
+	}()
+
+	go func() {
+		defer wg.Done()
+		d = helper.ChanToSlice(actualD)
+	}()
+
+	wg.Wait()
+
+	if len(k) == 0 {
+		t.Fatal("expected at least one Slow Stochastic value")
+	}
+
+	for i := range k {
+		if k[i] != 50 {
+			t.Fatalf("expected Slow %%K of 50 for flat market, got %v", k[i])
+		}
+
+		if d[i] != 50 {
+			t.Fatalf("expected Slow %%D of 50 for flat market, got %v", d[i])
 		}
 	}
 }

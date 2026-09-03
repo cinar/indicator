@@ -54,6 +54,26 @@ func TestKamaEmpty(t *testing.T) {
 	}
 }
 
+func TestKamaFlatMarket(t *testing.T) {
+	closings := make([]float64, trend.DefaultKamaErPeriod+20)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	kama := trend.NewKama[float64]()
+	actual := helper.ChanToSlice(kama.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one KAMA value")
+	}
+
+	for _, v := range actual {
+		if v != 100 {
+			t.Fatalf("expected KAMA of 100 for flat market, got %v", v)
+		}
+	}
+}
+
 func TestKamaCancellation(t *testing.T) {
 	runtime.GC()
 	baseline := runtime.NumGoroutine()

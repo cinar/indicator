@@ -43,6 +43,26 @@ func TestBop(t *testing.T) {
 	}
 }
 
+func TestBopFlatBar(t *testing.T) {
+	opening := helper.SliceToChan([]float64{100, 100, 100})
+	high := helper.SliceToChan([]float64{100, 100, 100})
+	low := helper.SliceToChan([]float64{100, 100, 100})
+	closing := helper.SliceToChan([]float64{100, 100, 100})
+
+	bop := trend.NewBop[float64]()
+	actual := helper.ChanToSlice(bop.Compute(opening, high, low, closing))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one BOP value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected BOP of 0 for a zero-range bar, got %v", v)
+		}
+	}
+}
+
 func TestBopString(t *testing.T) {
 	expected := "BOP"
 	actual := trend.NewBop[float64]().String()
