@@ -81,11 +81,8 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 
 	kSplice := helper.DuplicateWithContext(ctx, helper.Operate4WithContext(ctx, closings, lowestSplice[0], highest, lowestSplice[1], func(closing, low, high, low2 T) T {
 		denom := high - low2
-		if denom == 0 {
-			return 50
-		}
-
-		return (closing - low) / denom * 100
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(closing-low, denom, T(0.5)) * 100
 	}),
 		2,
 	)

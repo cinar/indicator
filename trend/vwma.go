@@ -51,11 +51,7 @@ func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan
 	volumeSum := sum.ComputeWithContext(ctx, volumes[1])
 
 	return helper.OperateWithContext(ctx, priceVolumeSum, volumeSum, func(pv, vol T) T {
-		if vol == 0 {
-			return 0
-		}
-
-		return pv / vol
+		return helper.SafeDivide(pv, vol, T(0))
 	})
 }
 

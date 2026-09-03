@@ -54,11 +54,7 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 	ks := helper.DuplicateWithContext(ctx, helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, highs[0], lows[0]),
 		helper.AddWithContext(ctx, highs[1], lows[1]),
 		func(diff, sum T) T {
-			if sum == 0 {
-				return 0
-			}
-
-			return diff / sum
+			return helper.SafeDivide(diff, sum, T(0))
 		},
 	),
 		2,

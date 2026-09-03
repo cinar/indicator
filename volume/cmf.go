@@ -66,11 +66,7 @@ func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 	return helper.OperateWithContext(ctx, c.Sum.ComputeWithContext(ctx, mfvs),
 		c.Sum.ComputeWithContext(ctx, volumesSplice[1]),
 		func(mfvSum, volumeSum T) T {
-			if volumeSum == 0 {
-				return 0
-			}
-
-			return mfvSum / volumeSum
+			return helper.SafeDivide(mfvSum, volumeSum, T(0))
 		},
 	)
 }

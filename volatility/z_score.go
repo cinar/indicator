@@ -61,11 +61,7 @@ func (z *ZScore[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
 	priceChan := helper.SkipWithContext(ctx, cs[2], z.IdlePeriod())
 
 	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, priceChan, smaChan), stdChan, func(diff, std T) T {
-		if std == 0 {
-			return 0
-		}
-
-		return diff / std
+		return helper.SafeDivide(diff, std, T(0))
 	})
 }
 

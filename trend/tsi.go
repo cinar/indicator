@@ -75,11 +75,7 @@ func (t *Tsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 
 	// TSI = (PCDS / APCDS) * 100
 	tsi := helper.OperateWithContext(ctx, pcds, apcds, func(pcd, apcd T) T {
-		if apcd == 0 {
-			return 0
-		}
-
-		return (pcd / apcd) * T(100)
+		return helper.SafeDivide(pcd, apcd, T(0)) * T(100)
 	})
 
 	return tsi

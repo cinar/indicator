@@ -36,11 +36,7 @@ func (i *Bop[T]) ComputeWithContext(ctx context.Context, opening, high, low, clo
 	denominator := helper.SubtractWithContext(ctx, high, low)
 
 	return helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
-		if denom == 0 {
-			return 0
-		}
-
-		return num / denom
+		return helper.SafeDivide(num, denom, T(0))
 	})
 }
 
