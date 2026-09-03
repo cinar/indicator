@@ -45,11 +45,7 @@ func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan
 	upper, middle, lower := b.BollingerBands.ComputeWithContext(ctx, c)
 
 	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower), middle, func(diff, middle T) T {
-		if middle == 0 {
-			return 0
-		}
-
-		return diff / middle
+		return helper.SafeDivide(diff, middle, T(0))
 	})
 }
 

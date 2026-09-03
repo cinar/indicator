@@ -88,11 +88,8 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 	denominator := helper.SubtractWithContext(ctx, highest, lowestSplice[1])
 
 	fastK := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
-		if denom == 0 {
-			return 50
-		}
-
-		return (num / denom) * 100
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(num, denom, T(0.5)) * 100
 	})
 
 	slowKSma := NewSmaWithPeriod[T](s.KPeriod)
