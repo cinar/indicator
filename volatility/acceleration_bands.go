@@ -24,6 +24,12 @@ const (
 //	Middle Band = SMA(Closing)
 //	Lower Band = SMA(Low * (1 - 4 * (High - Low) / (High + Low)))
 //
+// When a bar has both High and Low equal to zero (a zero-priced or
+// untraded instrument), the (High - Low) / (High + Low) ratio is an
+// undefined 0/0. It falls back to 0, leaving that bar's contribution to
+// the bands unadjusted, since there is no price range to derive a
+// directional adjustment from.
+//
 // Example:
 //
 //	accelerationBands := NewAccelerationBands[float64]()
@@ -45,8 +51,15 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 	highs := helper.DuplicateWithContext(ctx, high, 3)
 	lows := helper.DuplicateWithContext(ctx, low, 3)
 
-	ks := helper.DuplicateWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, highs[0], lows[0]),
+	ks := helper.DuplicateWithContext(ctx, helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, highs[0], lows[0]),
 		helper.AddWithContext(ctx, highs[1], lows[1]),
+		func(diff, sum T) T {
+			if sum == 0 {
+				return 0
+			}
+
+			return diff / sum
+		},
 	),
 		2,
 	)

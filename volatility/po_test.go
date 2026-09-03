@@ -42,6 +42,37 @@ func TestPo(t *testing.T) {
 	}
 }
 
+func TestPoFlatMarket(t *testing.T) {
+	po := volatility.NewPo[float64]()
+	length := po.IdlePeriod() + 20
+
+	highs := make([]float64, length)
+	lows := make([]float64, length)
+	closings := make([]float64, length)
+
+	for i := range highs {
+		highs[i] = 100
+		lows[i] = 100
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(po.Compute(
+		helper.SliceToChan(highs),
+		helper.SliceToChan(lows),
+		helper.SliceToChan(closings),
+	))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one PO value")
+	}
+
+	for i, v := range actual {
+		if v != 50 {
+			t.Fatalf("expected PO of 50 for flat market at %d, got %v", i, v)
+		}
+	}
+}
+
 func TestPoString(t *testing.T) {
 	expected := "PO(14)"
 	actual := volatility.NewPo[float64]().String()

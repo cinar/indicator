@@ -24,6 +24,13 @@ const (
 //	PH = Max(period, (high + MLS(period, x, high)))
 //	PO = 100 * (Closing - PL) / (PH - PL)
 //
+// PO is expressed on a 0-100 scale locating price within the projected
+// range. When PH and PL collapse to the same value (a flat window, e.g.
+// unchanged highs, lows, and closings), the projected range has zero
+// width, an undefined 0/0. It falls back to the neutral midpoint 50,
+// mirroring the flat-market convention used by RSI and other 0-100
+// range-position oscillators.
+//
 // Example:
 //
 //	po := volatility.NewPo()
@@ -90,15 +97,15 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 	// PO = 100 * (Closing - PL) / (PH - PL)
 	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], p.mls.IdlePeriod()+p.min.IdlePeriod())
 
-	po := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1],
-		plSplice[0],
-	),
-		helper.SubtractWithContext(ctx, ph,
-			plSplice[1],
-		),
-	),
-		T(100),
-	)
+	phMinusPl := helper.SubtractWithContext(ctx, ph, plSplice[1])
+
+	po := helper.Operate3WithContext(ctx, closingsSplice[1], plSplice[0], phMinusPl, func(closing, pl, denom T) T {
+		if denom == 0 {
+			return 50
+		}
+
+		return 100 * (closing - pl) / denom
+	})
 
 	return po
 }

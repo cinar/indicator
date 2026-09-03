@@ -26,6 +26,15 @@ const (
 //	Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 //	Ulcer Index = Sqrt(Squared Average)
 //
+// High Closings is a rolling max of Closings, so it is zero or negative
+// only when every closing in the window is zero or negative — a
+// degenerate/invalid-price input (e.g. a worthless or corrupted feed),
+// not a normal market condition. Rather than propagate a NaN/Inf (or
+// panic, which would crash the whole streaming pipeline for one bad
+// window), that bar's Percentage Drawdown falls back to 0, the neutral
+// "no computable drawdown" value: it contributes no signal to the
+// Squared Average instead of a fabricated one.
+//
 // Example:
 //
 //	ui := volatility.NewUlcerIndex[float64]()
@@ -55,8 +64,15 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 	//	Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
 	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], movingMax.Period-1)
 
-	percentageDrawdown := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1], highsSplice[0]),
+	percentageDrawdown := helper.MultiplyByWithContext(ctx, helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1], highsSplice[0]),
 		highsSplice[1],
+		func(diff, highClosing T) T {
+			if highClosing <= 0 {
+				return 0
+			}
+
+			return diff / highClosing
+		},
 	),
 		100,
 	)

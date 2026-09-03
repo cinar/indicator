@@ -15,6 +15,13 @@ import (
 // PercentB represents the parameters for calculating the %B indicator.
 //
 //	%B = (Close - Lower Band) / (Upper Band - Lower Band)
+//
+// %B is expressed on a 0-1 scale locating price within the bands (0 at
+// the lower band, 1 at the upper band). When the bands collapse to zero
+// width (upper == lower, i.e. zero rolling standard deviation — a flat
+// price window), price sits exactly at that single collapsed band value.
+// The ratio is an undefined 0/0, so it falls back to the neutral
+// midpoint 0.5.
 type PercentB[T helper.Float] struct {
 	// BollingerBands is the underlying Bollinger Bands indicator used for calculations.
 	BollingerBands *BollingerBands[T]
@@ -46,8 +53,13 @@ func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T)
 	go helper.DrainWithContext(ctx, middleBands)
 
 	return helper.Operate3WithContext(ctx, upperBands, lowerBands, closingsSplice[1], func(upperBand, lowerBand, closing T) T {
+		denom := upperBand - lowerBand
+		if denom == 0 {
+			return 0.5
+		}
+
 		// %B = (Close - Lower Band) / (Upper Band - Lower Band)
-		return (closing - lowerBand) / (upperBand - lowerBand)
+		return (closing - lowerBand) / denom
 	})
 }
 

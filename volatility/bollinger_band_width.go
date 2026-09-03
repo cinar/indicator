@@ -20,6 +20,10 @@ import (
 //
 //	Band Width = (Upper Band - Lower Band) / Middle BollingerBandWidth
 //
+// If the middle band (an SMA of the closing price) is zero — only
+// possible for a zero-priced instrument, an extremely unlikely
+// real-world scenario — Band Width falls back to 0 instead of NaN/Inf.
+//
 // Example:
 //
 //	bbw := NewBollingerBandWidth[float64]()
@@ -40,9 +44,13 @@ func NewBollingerBandWidth[T helper.Float]() *BollingerBandWidth[T] {
 func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	upper, middle, lower := b.BollingerBands.ComputeWithContext(ctx, c)
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower),
-		middle,
-	)
+	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower), middle, func(diff, middle T) T {
+		if middle == 0 {
+			return 0
+		}
+
+		return diff / middle
+	})
 }
 
 // IdlePeriod is the initial period that Bollinger Band Width won't yield any results.

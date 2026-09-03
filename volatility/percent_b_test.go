@@ -62,6 +62,28 @@ func TestPercentB(t *testing.T) {
 	}
 }
 
+func TestPercentBFlatMarket(t *testing.T) {
+	percentB := volatility.NewPercentB[float64]()
+	length := percentB.IdlePeriod() + 20
+
+	closings := make([]float64, length)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(percentB.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one %B value")
+	}
+
+	for i, v := range actual {
+		if v != 0.5 {
+			t.Fatalf("expected %%B of 0.5 for flat market at %d, got %v", i, v)
+		}
+	}
+}
+
 func TestPercentBString(t *testing.T) {
 	expected := "%B(10)"
 	actual := volatility.NewPercentBWithPeriod[float64](10).String()

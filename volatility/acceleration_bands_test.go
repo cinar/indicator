@@ -5,6 +5,7 @@
 package volatility_test
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -47,6 +48,69 @@ func TestAccelerationBands(t *testing.T) {
 	err = helper.CheckEquals(actualUpper, upper, actualMiddle, middle, actualLower, lower)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAccelerationBandsZeroPricedInstrument(t *testing.T) {
+	period := volatility.DefaultAccelerationBandsPeriod
+	length := period + 5
+
+	highs := make([]float64, length)
+	lows := make([]float64, length)
+	closings := make([]float64, length)
+
+	ab := volatility.NewAccelerationBands[float64]()
+	actualUpper, actualMiddle, actualLower := ab.Compute(
+		helper.SliceToChan(highs),
+		helper.SliceToChan(lows),
+		helper.SliceToChan(closings),
+	)
+
+	// The three output channels share upstream duplicated/fanned-out
+	// channels internally, so they must be drained concurrently rather
+	// than one at a time, or the pipeline deadlocks.
+	var upperValues, middleValues, lowerValues []float64
+
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		upperValues = helper.ChanToSlice(actualUpper)
+	}()
+
+	go func() {
+		defer wg.Done()
+		middleValues = helper.ChanToSlice(actualMiddle)
+	}()
+
+	go func() {
+		defer wg.Done()
+		lowerValues = helper.ChanToSlice(actualLower)
+	}()
+
+	wg.Wait()
+
+	if len(upperValues) == 0 {
+		t.Fatal("expected at least one value")
+	}
+
+	for i, v := range upperValues {
+		if v != 0 {
+			t.Fatalf("expected upper band 0 for zero-priced instrument at %d, got %v", i, v)
+		}
+	}
+
+	for i, v := range middleValues {
+		if v != 0 {
+			t.Fatalf("expected middle band 0 for zero-priced instrument at %d, got %v", i, v)
+		}
+	}
+
+	for i, v := range lowerValues {
+		if v != 0 {
+			t.Fatalf("expected lower band 0 for zero-priced instrument at %d, got %v", i, v)
+		}
 	}
 }
 

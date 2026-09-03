@@ -39,6 +39,28 @@ func TestZScore(t *testing.T) {
 	}
 }
 
+func TestZScoreFlatMarket(t *testing.T) {
+	z := volatility.NewZScore[float64]()
+	length := z.IdlePeriod() + 20
+
+	closings := make([]float64, length)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(z.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one Z-Score value")
+	}
+
+	for i, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected Z-Score of 0 for flat market at %d, got %v", i, v)
+		}
+	}
+}
+
 func TestZScoreString(t *testing.T) {
 	z := volatility.NewZScoreWithPeriod[float64](14)
 	expected := "ZSCORE(14)"

@@ -38,6 +38,24 @@ func TestBollingerBandWidth(t *testing.T) {
 	}
 }
 
+func TestBollingerBandWidthZeroPricedInstrument(t *testing.T) {
+	length := volatility.DefaultBollingerBandsPeriod + 5
+	closings := make([]float64, length)
+
+	bbw := volatility.NewBollingerBandWidth[float64]()
+	actual := helper.ChanToSlice(bbw.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one value")
+	}
+
+	for i, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected band width 0 for zero-priced instrument at %d, got %v", i, v)
+		}
+	}
+}
+
 func TestBollingerBandWidthString(t *testing.T) {
 	expected := "BBW(20)"
 	actual := volatility.NewBollingerBandWidth[float64]().String()
