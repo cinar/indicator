@@ -36,6 +36,12 @@ const (
 //	Average28 = Sum(BP for 28 periods) / Sum(TR for 28 periods)
 //	UO = 100 * [(4 * Average7) + (2 * Average14) + Average28] / (4 + 2 + 1)
 //
+// When a window's true range sum is zero (a flat market for that window, i.e. no true range at
+// all across it), its Average is an undefined 0/0. It is treated as neutral (0.5), the midpoint
+// of that Average's own 0-1 range, so that a fully flat market across all lookback windows
+// resolves to UO's own neutral midpoint of 50 (0-100 scale), matching the flat-market convention
+// established by Rsi.
+//
 // Example:
 //
 //	uo := momentum.NewUltimateOscillator[float64]()
@@ -123,9 +129,20 @@ func (u *UltimateOscillator[T]) ComputeWithContext(ctx context.Context, highs, l
 	mediumBpSum = helper.SkipWithContext(ctx, mediumBpSum, u.LongPeriod-u.MediumPeriod)
 	mediumTrSum = helper.SkipWithContext(ctx, mediumTrSum, u.LongPeriod-u.MediumPeriod)
 
-	avgShort := helper.DivideWithContext(ctx, shortBpSum, shortTrSum)
-	avgMedium := helper.DivideWithContext(ctx, mediumBpSum, mediumTrSum)
-	avgLong := helper.DivideWithContext(ctx, longBpSum, longTrSum)
+	// Average = Sum(BP) / Sum(TR). A flat window has no true range at all, so Sum(TR) is zero and
+	// the ratio is an undefined 0/0; treat it as neutral (0.5, the midpoint of this ratio's own
+	// 0-1 range) instead of propagating NaN.
+	average := func(bpSum, trSum T) T {
+		if trSum == 0 {
+			return 0.5
+		}
+
+		return bpSum / trSum
+	}
+
+	avgShort := helper.OperateWithContext(ctx, shortBpSum, shortTrSum, average)
+	avgMedium := helper.OperateWithContext(ctx, mediumBpSum, mediumTrSum, average)
+	avgLong := helper.OperateWithContext(ctx, longBpSum, longTrSum, average)
 
 	// UO = 100 * [(4 * Average7) + (2 * Average14) + Average28] / (4 + 2 + 1)
 	// (4 + 2 + 1) = 7

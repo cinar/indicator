@@ -27,6 +27,10 @@ const (
 //	K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 //	D = 3-Period SMA of K
 //
+// When the window is flat (Highest High == Lowest Low, i.e. price hasn't moved at all within the
+// window), %K is an undefined 0/0. It is treated as neutral (50), the midpoint of %K's own 0-100
+// scale, matching the flat-market convention established by Rsi.
+//
 // Example:
 //
 //	so := momentum.NewStochasticOscillator[float64]()
@@ -75,11 +79,14 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 
 	closings = helper.SkipWithContext(ctx, closings, max(maxIdlePeriod, minIdlePeriod))
 
-	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closings, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	),
+	kSplice := helper.DuplicateWithContext(ctx, helper.Operate4WithContext(ctx, closings, lowestSplice[0], highest, lowestSplice[1], func(closing, low, high, low2 T) T {
+		denom := high - low2
+		if denom == 0 {
+			return 50
+		}
+
+		return (closing - low) / denom * 100
+	}),
 		2,
 	)
 
