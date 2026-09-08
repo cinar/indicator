@@ -101,9 +101,9 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	fastSc := T(2.0) / T(k.FastScPeriod+1)
 	slowSc := T(2.0) / T(k.SlowScPeriod+1)
 
-	scs := helper.Pow(
-		helper.IncrementBy(
-			helper.MultiplyBy(
+	scs := helper.PowWithContext(ctx,
+		helper.IncrementByWithContext(ctx,
+			helper.MultiplyByWithContext(ctx,
 				ers,
 				fastSc-slowSc,
 			),
