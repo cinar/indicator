@@ -5,6 +5,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 
@@ -92,4 +93,28 @@ func NewStrategy(name string) (strategy.Strategy, error) {
 	}
 
 	return builder(), nil
+}
+
+// NewStrategyFromConfig builds a new strategy instance for the given registered name, and, when config is
+// non-empty, overlays it onto the strategy's default instance.
+//
+// The strategy is first built through its normal zero-argument builder, so it starts out with the same
+// defaults NewStrategy would produce. The config JSON is then unmarshaled directly onto that instance:
+// encoding/json decodes into already-allocated pointer fields in place rather than replacing them, so any
+// field the config omits (at any nesting depth, e.g. an indicator's period buried inside the strategy)
+// keeps its default value, and only the fields the config names are overridden. This lets every strategy's
+// exported fields double as its configuration surface without a hand-written config struct per strategy.
+func NewStrategyFromConfig(name string, config json.RawMessage) (strategy.Strategy, error) {
+	s, err := NewStrategy(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(config) > 0 {
+		if err := json.Unmarshal(config, s); err != nil {
+			return nil, fmt.Errorf("invalid config for strategy %q: %w", name, err)
+		}
+	}
+
+	return s, nil
 }

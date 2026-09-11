@@ -28,6 +28,7 @@ func main() {
 	var lastDays int
 	var addSplits bool
 	var addAnds bool
+	var configPath string
 
 	stdErr := log.New(os.Stderr, "", 0)
 	stdErr.Println("Indicator Backtest")
@@ -49,6 +50,7 @@ func main() {
 	flag.IntVar(&lastDays, "last", backtest.DefaultLastDays, "number of days to do backtest")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
+	flag.StringVar(&configPath, "config", "", "path to a JSON config file describing the full backtest run (see README); when set, all other flags except -list-strategies are ignored")
 	flag.Parse()
 
 	logger := slog.Default()
@@ -56,6 +58,27 @@ func main() {
 	if listStrategies {
 		for _, name := range StrategyNames() {
 			stdErr.Println(name)
+		}
+
+		return
+	}
+
+	if configPath != "" {
+		config, err := LoadConfig(configPath)
+		if err != nil {
+			logger.Error("Unable to load config file.", "path", configPath, "error", err)
+			os.Exit(1)
+		}
+
+		backtester, err := NewBacktestFromConfig(config, logger)
+		if err != nil {
+			logger.Error("Unable to initialize backtest from config file.", "path", configPath, "error", err)
+			os.Exit(1)
+		}
+
+		if err := backtester.Run(); err != nil {
+			logger.Error("Unable to run backtest.", "error", err)
+			os.Exit(1)
 		}
 
 		return
