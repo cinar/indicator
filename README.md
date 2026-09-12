@@ -336,6 +336,14 @@ $ indicator-backtest -config backtest.json
 
 Each entry in `strategies` names a registered strategy (see `-list-strategies`) and, optionally, a `config` object. `config` is overlaid onto the strategy's default instance field by field — including into nested indicators, such as `Rsi.Rma.Period` above — so only the parameters you want to change need to be listed; everything else keeps its documented default. The available field names are the exported fields on the strategy's Go struct (e.g. [`RsiStrategy`](examples/momentum/rsi_strategy.go)) and the indicator(s) it wraps.
 
+📊 Performance Metrics
+----------------------
+
+The following risk-adjusted metrics can be computed from a strategy's [Outcome](strategy/README.md#Outcome) curve, for comparing strategies beyond raw cumulative return.
+
+-	[Sharpe Ratio](strategy/README.md#SharpeRatioWithContext)
+-	[Sortino Ratio](strategy/README.md#SortinoRatioWithContext)
+
 🐳 Docker
 ---------
 
