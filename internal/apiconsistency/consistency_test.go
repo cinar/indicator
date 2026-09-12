@@ -2,23 +2,6 @@
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
-// Package apiconsistency contains static-analysis tests that guard two
-// library-wide conventions that are easy for a future contributor to
-// silently regress when adding a new indicator/strategy type:
-//
-//  1. Every type with a ComputeWithContext method must also implement
-//     fmt.Stringer (a String() string method) and have a package-level
-//     New<TypeName> constructor function.
-//  2. Every such type that is generic over helper.Number, rather than the
-//     stricter helper.Float (float32|float64), is heuristically checked for
-//     an in-body division of a value of its own generic type parameter -
-//     which would silently truncate for integer type arguments.
-//
-// New types are discovered automatically by parsing the source with
-// go/parser and go/ast (deliberately not golang.org/x/tools or go/types, to
-// keep the module dependency-free and the check a pure syntax-level match)
-// so nothing here needs to be updated when a new indicator is added - only
-// when one is added that violates a convention.
 package apiconsistency
 
 import (
