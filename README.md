@@ -20,7 +20,7 @@ Indicator Go
 
 Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting.
 
-> An extensive technical analysis library for algorithmic trading - 80+ indicators and backtesting framework.
+> An extensive technical analysis library for research and education - 80+ indicators and backtesting framework.
 
 ### Major improvements in v2:
 
