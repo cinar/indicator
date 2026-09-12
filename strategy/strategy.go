@@ -39,16 +39,16 @@ type Strategy interface {
 	Report(snapshots <-chan *asset.Snapshot) *helper.Report
 }
 
-// StrategyWithContext defines a shared interface for trading strategies
+// WithContext defines a shared interface for trading strategies
 // supporting context-aware computations.
-type StrategyWithContext interface {
+type WithContext interface {
 	Strategy
 	ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action
 }
 
-// ComputeStrategyWithContext processes snapshots with a strategy using context.
-func ComputeStrategyWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot) <-chan Action {
-	if sc, ok := s.(StrategyWithContext); ok {
+// ComputeWithContext processes snapshots with a strategy using context.
+func ComputeWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot) <-chan Action {
+	if sc, ok := s.(WithContext); ok {
 		return sc.ComputeWithContext(ctx, c)
 	}
 	return s.Compute(c)
@@ -59,7 +59,7 @@ func ComputeStrategyWithContext(ctx context.Context, s Strategy, c <-chan *asset
 func ComputeWithOutcomeWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-chan float64) {
 	snapshots := helper.DuplicateWithContext(ctx, c, 2)
 
-	actions := helper.DuplicateWithContext(ctx, ComputeStrategyWithContext(ctx, s, snapshots[0]), 2)
+	actions := helper.DuplicateWithContext(ctx, ComputeWithContext(ctx, s, snapshots[0]), 2)
 	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots[1])
 
 	outcomes := OutcomeWithContext(ctx, closings, actions[1])
@@ -92,7 +92,7 @@ func ComputeWithOutcome(s Strategy, c <-chan *asset.Snapshot) (<-chan Action, <-
 func ComputeWithOutcomeAndTimingWithContext(ctx context.Context, s Strategy, c <-chan *asset.Snapshot, timing ExecutionTiming) (<-chan Action, <-chan float64) {
 	snapshots := helper.DuplicateWithContext(ctx, c, 2)
 
-	actions := helper.DuplicateWithContext(ctx, ComputeStrategyWithContext(ctx, s, snapshots[0]), 2)
+	actions := helper.DuplicateWithContext(ctx, ComputeWithContext(ctx, s, snapshots[0]), 2)
 
 	var prices <-chan float64
 
@@ -138,7 +138,7 @@ func ActionSourcesWithContext(ctx context.Context, strategies []Strategy, snapsh
 
 	for i, strategy := range strategies {
 		sources[i] = DenormalizeActions(
-			ComputeStrategyWithContext(ctx, strategy, snapshotsSplice[i]),
+			ComputeWithContext(ctx, strategy, snapshotsSplice[i]),
 		)
 	}
 

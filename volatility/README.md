@@ -26,92 +26,102 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [type AccelerationBands](<#AccelerationBands>)
-  - [func NewAccelerationBands\[T helper.Number\]\(\) \*AccelerationBands\[T\]](<#NewAccelerationBands>)
+  - [func NewAccelerationBands\[T helper.Float\]\(\) \*AccelerationBands\[T\]](<#NewAccelerationBands>)
   - [func \(a \*AccelerationBands\[T\]\) Compute\(high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#AccelerationBands[T].Compute>)
   - [func \(a \*AccelerationBands\[T\]\) ComputeWithContext\(ctx context.Context, high, low, closing \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#AccelerationBands[T].ComputeWithContext>)
   - [func \(a \*AccelerationBands\[T\]\) IdlePeriod\(\) int](<#AccelerationBands[T].IdlePeriod>)
+  - [func \(a \*AccelerationBands\[T\]\) String\(\) string](<#AccelerationBands[T].String>)
 - [type AnnualizedHistoricalVolatility](<#AnnualizedHistoricalVolatility>)
-  - [func NewAnnualizedHistoricalVolatility\[T helper.Number\]\(\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatility>)
-  - [func NewAnnualizedHistoricalVolatilityWithPeriod\[T helper.Number\]\(period int\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatilityWithPeriod>)
+  - [func NewAnnualizedHistoricalVolatility\[T helper.Float\]\(\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatility>)
+  - [func NewAnnualizedHistoricalVolatilityWithPeriod\[T helper.Float\]\(period int\) \*AnnualizedHistoricalVolatility\[T\]](<#NewAnnualizedHistoricalVolatilityWithPeriod>)
   - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) Compute\(prices \<\-chan T\) \<\-chan T](<#AnnualizedHistoricalVolatility[T].Compute>)
   - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) ComputeWithContext\(ctx context.Context, prices \<\-chan T\) \<\-chan T](<#AnnualizedHistoricalVolatility[T].ComputeWithContext>)
   - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) IdlePeriod\(\) int](<#AnnualizedHistoricalVolatility[T].IdlePeriod>)
   - [func \(a \*AnnualizedHistoricalVolatility\[T\]\) String\(\) string](<#AnnualizedHistoricalVolatility[T].String>)
 - [type Atr](<#Atr>)
-  - [func NewAtr\[T helper.Number\]\(\) \*Atr\[T\]](<#NewAtr>)
-  - [func NewAtrWithMa\[T helper.Number\]\(ma trend.Ma\[T\]\) \*Atr\[T\]](<#NewAtrWithMa>)
-  - [func NewAtrWithPeriod\[T helper.Number\]\(period int\) \*Atr\[T\]](<#NewAtrWithPeriod>)
+  - [func NewAtr\[T helper.Float\]\(\) \*Atr\[T\]](<#NewAtr>)
+  - [func NewAtrWithMa\[T helper.Float\]\(ma trend.Ma\[T\]\) \*Atr\[T\]](<#NewAtrWithMa>)
+  - [func NewAtrWithPeriod\[T helper.Float\]\(period int\) \*Atr\[T\]](<#NewAtrWithPeriod>)
   - [func \(a \*Atr\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Atr[T].Compute>)
   - [func \(a \*Atr\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#Atr[T].ComputeWithContext>)
   - [func \(a \*Atr\[T\]\) IdlePeriod\(\) int](<#Atr[T].IdlePeriod>)
+  - [func \(a \*Atr\[T\]\) String\(\) string](<#Atr[T].String>)
 - [type BollingerBandWidth](<#BollingerBandWidth>)
-  - [func NewBollingerBandWidth\[T helper.Number\]\(\) \*BollingerBandWidth\[T\]](<#NewBollingerBandWidth>)
+  - [func NewBollingerBandWidth\[T helper.Float\]\(\) \*BollingerBandWidth\[T\]](<#NewBollingerBandWidth>)
   - [func \(b \*BollingerBandWidth\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#BollingerBandWidth[T].Compute>)
   - [func \(b \*BollingerBandWidth\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#BollingerBandWidth[T].ComputeWithContext>)
   - [func \(b \*BollingerBandWidth\[T\]\) IdlePeriod\(\) int](<#BollingerBandWidth[T].IdlePeriod>)
+  - [func \(b \*BollingerBandWidth\[T\]\) String\(\) string](<#BollingerBandWidth[T].String>)
 - [type BollingerBands](<#BollingerBands>)
-  - [func NewBollingerBands\[T helper.Number\]\(\) \*BollingerBands\[T\]](<#NewBollingerBands>)
-  - [func NewBollingerBandsWithPeriod\[T helper.Number\]\(period int\) \*BollingerBands\[T\]](<#NewBollingerBandsWithPeriod>)
+  - [func NewBollingerBands\[T helper.Float\]\(\) \*BollingerBands\[T\]](<#NewBollingerBands>)
+  - [func NewBollingerBandsWithPeriod\[T helper.Float\]\(period int\) \*BollingerBands\[T\]](<#NewBollingerBandsWithPeriod>)
   - [func \(b \*BollingerBands\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#BollingerBands[T].Compute>)
   - [func \(b \*BollingerBands\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#BollingerBands[T].ComputeWithContext>)
   - [func \(b \*BollingerBands\[T\]\) IdlePeriod\(\) int](<#BollingerBands[T].IdlePeriod>)
+  - [func \(b \*BollingerBands\[T\]\) String\(\) string](<#BollingerBands[T].String>)
 - [type ChandelierExit](<#ChandelierExit>)
-  - [func NewChandelierExit\[T helper.Number\]\(\) \*ChandelierExit\[T\]](<#NewChandelierExit>)
+  - [func NewChandelierExit\[T helper.Float\]\(\) \*ChandelierExit\[T\]](<#NewChandelierExit>)
   - [func \(c \*ChandelierExit\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChandelierExit[T].Compute>)
   - [func \(c \*ChandelierExit\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChandelierExit[T].ComputeWithContext>)
   - [func \(c \*ChandelierExit\[T\]\) IdlePeriod\(\) int](<#ChandelierExit[T].IdlePeriod>)
+  - [func \(c \*ChandelierExit\[T\]\) String\(\) string](<#ChandelierExit[T].String>)
 - [type Chop](<#Chop>)
-  - [func NewChop\[T helper.Number\]\(\) \*Chop\[T\]](<#NewChop>)
-  - [func NewChopWithPeriod\[T helper.Number\]\(period int\) \*Chop\[T\]](<#NewChopWithPeriod>)
+  - [func NewChop\[T helper.Float\]\(\) \*Chop\[T\]](<#NewChop>)
+  - [func NewChopWithPeriod\[T helper.Float\]\(period int\) \*Chop\[T\]](<#NewChopWithPeriod>)
   - [func \(c \*Chop\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Chop[T].Compute>)
   - [func \(c \*Chop\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#Chop[T].ComputeWithContext>)
   - [func \(c \*Chop\[T\]\) IdlePeriod\(\) int](<#Chop[T].IdlePeriod>)
   - [func \(c \*Chop\[T\]\) String\(\) string](<#Chop[T].String>)
 - [type DonchianChannel](<#DonchianChannel>)
-  - [func NewDonchianChannel\[T helper.Number\]\(\) \*DonchianChannel\[T\]](<#NewDonchianChannel>)
-  - [func NewDonchianChannelWithPeriod\[T helper.Number\]\(period int\) \*DonchianChannel\[T\]](<#NewDonchianChannelWithPeriod>)
-  - [func \(d \*DonchianChannel\[T\]\) Compute\(c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#DonchianChannel[T].Compute>)
-  - [func \(d \*DonchianChannel\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#DonchianChannel[T].ComputeWithContext>)
+  - [func NewDonchianChannel\[T helper.Float\]\(\) \*DonchianChannel\[T\]](<#NewDonchianChannel>)
+  - [func NewDonchianChannelWithPeriod\[T helper.Float\]\(period int\) \*DonchianChannel\[T\]](<#NewDonchianChannelWithPeriod>)
+  - [func \(d \*DonchianChannel\[T\]\) Compute\(highs, lows \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#DonchianChannel[T].Compute>)
+  - [func \(d \*DonchianChannel\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#DonchianChannel[T].ComputeWithContext>)
   - [func \(d \*DonchianChannel\[T\]\) IdlePeriod\(\) int](<#DonchianChannel[T].IdlePeriod>)
+  - [func \(d \*DonchianChannel\[T\]\) String\(\) string](<#DonchianChannel[T].String>)
 - [type HistoricalVolatility](<#HistoricalVolatility>)
-  - [func NewHistoricalVolatility\[T helper.Number\]\(\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatility>)
-  - [func NewHistoricalVolatilityWithPeriod\[T helper.Number\]\(period int\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatilityWithPeriod>)
+  - [func NewHistoricalVolatility\[T helper.Float\]\(\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatility>)
+  - [func NewHistoricalVolatilityWithPeriod\[T helper.Float\]\(period int\) \*HistoricalVolatility\[T\]](<#NewHistoricalVolatilityWithPeriod>)
   - [func \(h \*HistoricalVolatility\[T\]\) Compute\(prices \<\-chan T\) \<\-chan T](<#HistoricalVolatility[T].Compute>)
   - [func \(h \*HistoricalVolatility\[T\]\) ComputeWithContext\(ctx context.Context, prices \<\-chan T\) \<\-chan T](<#HistoricalVolatility[T].ComputeWithContext>)
   - [func \(h \*HistoricalVolatility\[T\]\) IdlePeriod\(\) int](<#HistoricalVolatility[T].IdlePeriod>)
   - [func \(h \*HistoricalVolatility\[T\]\) String\(\) string](<#HistoricalVolatility[T].String>)
 - [type KeltnerChannel](<#KeltnerChannel>)
-  - [func NewKeltnerChannel\[T helper.Number\]\(\) \*KeltnerChannel\[T\]](<#NewKeltnerChannel>)
-  - [func NewKeltnerChannelWithPeriod\[T helper.Number\]\(period int\) \*KeltnerChannel\[T\]](<#NewKeltnerChannelWithPeriod>)
+  - [func NewKeltnerChannel\[T helper.Float\]\(\) \*KeltnerChannel\[T\]](<#NewKeltnerChannel>)
+  - [func NewKeltnerChannelWithPeriod\[T helper.Float\]\(period int\) \*KeltnerChannel\[T\]](<#NewKeltnerChannelWithPeriod>)
   - [func \(k \*KeltnerChannel\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#KeltnerChannel[T].Compute>)
   - [func \(k \*KeltnerChannel\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#KeltnerChannel[T].ComputeWithContext>)
   - [func \(k \*KeltnerChannel\[T\]\) IdlePeriod\(\) int](<#KeltnerChannel[T].IdlePeriod>)
+  - [func \(k \*KeltnerChannel\[T\]\) String\(\) string](<#KeltnerChannel[T].String>)
 - [type MovingStd](<#MovingStd>)
-  - [func NewMovingStd\[T helper.Number\]\(\) \*MovingStd\[T\]](<#NewMovingStd>)
-  - [func NewMovingStdWithPeriod\[T helper.Number\]\(period int\) \*MovingStd\[T\]](<#NewMovingStdWithPeriod>)
+  - [func NewMovingStd\[T helper.Float\]\(\) \*MovingStd\[T\]](<#NewMovingStd>)
+  - [func NewMovingStdWithPeriod\[T helper.Float\]\(period int\) \*MovingStd\[T\]](<#NewMovingStdWithPeriod>)
   - [func \(m \*MovingStd\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#MovingStd[T].Compute>)
   - [func \(m \*MovingStd\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#MovingStd[T].ComputeWithContext>)
   - [func \(m \*MovingStd\[T\]\) IdlePeriod\(\) int](<#MovingStd[T].IdlePeriod>)
+  - [func \(m \*MovingStd\[T\]\) String\(\) string](<#MovingStd[T].String>)
 - [type PercentB](<#PercentB>)
-  - [func NewPercentB\[T helper.Number\]\(\) \*PercentB\[T\]](<#NewPercentB>)
-  - [func NewPercentBWithPeriod\[T helper.Number\]\(period int\) \*PercentB\[T\]](<#NewPercentBWithPeriod>)
+  - [func NewPercentB\[T helper.Float\]\(\) \*PercentB\[T\]](<#NewPercentB>)
+  - [func NewPercentBWithPeriod\[T helper.Float\]\(period int\) \*PercentB\[T\]](<#NewPercentBWithPeriod>)
   - [func \(p \*PercentB\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#PercentB[T].Compute>)
   - [func \(p \*PercentB\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#PercentB[T].ComputeWithContext>)
   - [func \(p \*PercentB\[T\]\) IdlePeriod\(\) int](<#PercentB[T].IdlePeriod>)
   - [func \(p \*PercentB\[T\]\) String\(\) string](<#PercentB[T].String>)
 - [type Po](<#Po>)
-  - [func NewPo\[T helper.Number\]\(\) \*Po\[T\]](<#NewPo>)
-  - [func NewPoWithPeriod\[T helper.Number\]\(period int\) \*Po\[T\]](<#NewPoWithPeriod>)
+  - [func NewPo\[T helper.Float\]\(\) \*Po\[T\]](<#NewPo>)
+  - [func NewPoWithPeriod\[T helper.Float\]\(period int\) \*Po\[T\]](<#NewPoWithPeriod>)
   - [func \(p \*Po\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#Po[T].Compute>)
   - [func \(p \*Po\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#Po[T].ComputeWithContext>)
   - [func \(p \*Po\[T\]\) IdlePeriod\(\) int](<#Po[T].IdlePeriod>)
+  - [func \(p \*Po\[T\]\) String\(\) string](<#Po[T].String>)
 - [type SuperTrend](<#SuperTrend>)
-  - [func NewSuperTrend\[T helper.Number\]\(\) \*SuperTrend\[T\]](<#NewSuperTrend>)
-  - [func NewSuperTrendWithMa\[T helper.Number\]\(ma trend.Ma\[T\], multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithMa>)
-  - [func NewSuperTrendWithPeriod\[T helper.Number\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithPeriod>)
+  - [func NewSuperTrend\[T helper.Float\]\(\) \*SuperTrend\[T\]](<#NewSuperTrend>)
+  - [func NewSuperTrendWithMa\[T helper.Float\]\(ma trend.Ma\[T\], multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithMa>)
+  - [func NewSuperTrendWithPeriod\[T helper.Float\]\(period int, multiplier T\) \*SuperTrend\[T\]](<#NewSuperTrendWithPeriod>)
   - [func \(s \*SuperTrend\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#SuperTrend[T].Compute>)
   - [func \(s \*SuperTrend\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#SuperTrend[T].ComputeWithContext>)
   - [func \(s \*SuperTrend\[T\]\) IdlePeriod\(\) int](<#SuperTrend[T].IdlePeriod>)
+  - [func \(s \*SuperTrend\[T\]\) String\(\) string](<#SuperTrend[T].String>)
 - [type TrueRange](<#TrueRange>)
   - [func NewTrueRange\[T helper.Number\]\(\) \*TrueRange\[T\]](<#NewTrueRange>)
   - [func \(tr \*TrueRange\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#TrueRange[T].Compute>)
@@ -119,13 +129,14 @@ The information provided on this project is strictly for informational purposes 
   - [func \(tr \*TrueRange\[T\]\) IdlePeriod\(\) int](<#TrueRange[T].IdlePeriod>)
   - [func \(tr \*TrueRange\[T\]\) String\(\) string](<#TrueRange[T].String>)
 - [type UlcerIndex](<#UlcerIndex>)
-  - [func NewUlcerIndex\[T helper.Number\]\(\) \*UlcerIndex\[T\]](<#NewUlcerIndex>)
+  - [func NewUlcerIndex\[T helper.Float\]\(\) \*UlcerIndex\[T\]](<#NewUlcerIndex>)
   - [func \(u \*UlcerIndex\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#UlcerIndex[T].Compute>)
   - [func \(u \*UlcerIndex\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#UlcerIndex[T].ComputeWithContext>)
   - [func \(u \*UlcerIndex\[T\]\) IdlePeriod\(\) int](<#UlcerIndex[T].IdlePeriod>)
+  - [func \(u \*UlcerIndex\[T\]\) String\(\) string](<#UlcerIndex[T].String>)
 - [type ZScore](<#ZScore>)
-  - [func NewZScore\[T helper.Number\]\(\) \*ZScore\[T\]](<#NewZScore>)
-  - [func NewZScoreWithPeriod\[T helper.Number\]\(period int\) \*ZScore\[T\]](<#NewZScoreWithPeriod>)
+  - [func NewZScore\[T helper.Float\]\(\) \*ZScore\[T\]](<#NewZScore>)
+  - [func NewZScoreWithPeriod\[T helper.Float\]\(period int\) \*ZScore\[T\]](<#NewZScoreWithPeriod>)
   - [func \(z \*ZScore\[T\]\) Compute\(c \<\-chan T\) \<\-chan T](<#ZScore[T].Compute>)
   - [func \(z \*ZScore\[T\]\) ComputeWithContext\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#ZScore[T].ComputeWithContext>)
   - [func \(z \*ZScore\[T\]\) IdlePeriod\(\) int](<#ZScore[T].IdlePeriod>)
@@ -144,6 +155,18 @@ const (
 
     // DefaultTradingDaysPerYear is the standard number of trading days in a year.
     DefaultTradingDaysPerYear = 252
+)
+```
+
+<a name="DefaultBollingerBandsPeriod"></a>
+
+```go
+const (
+    // DefaultBollingerBandsPeriod is the default period for the Bollinger Bands.
+    DefaultBollingerBandsPeriod = 20
+
+    // DefaultBollingerBandsMultiplier is the default standard deviation multiplier for the Bollinger Bands.
+    DefaultBollingerBandsMultiplier = 2
 )
 ```
 
@@ -186,15 +209,6 @@ const (
 const (
     // DefaultAtrPeriod is the default period for the Average True Range (ATR).
     DefaultAtrPeriod = 14
-)
-```
-
-<a name="DefaultBollingerBandsPeriod"></a>
-
-```go
-const (
-    // DefaultBollingerBandsPeriod is the default period for the Bollinger Bands.
-    DefaultBollingerBandsPeriod = 20
 )
 ```
 
@@ -271,7 +285,7 @@ const (
 ```
 
 <a name="AccelerationBands"></a>
-## type [AccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L30-L33>)
+## type [AccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L37-L40>)
 
 AccelerationBands represents the configuration parameters for calculating the Acceleration Bands.
 
@@ -281,6 +295,8 @@ Middle Band = SMA(Closing)
 Lower Band = SMA(Low * (1 - 4 * (High - Low) / (High + Low)))
 ```
 
+When a bar has both High and Low equal to zero \(a zero\-priced or untraded instrument\), the \(High \- Low\) / \(High \+ Low\) ratio is an undefined 0/0. It falls back to 0, leaving that bar's contribution to the bands unadjusted, since there is no price range to derive a directional adjustment from.
+
 Example:
 
 ```
@@ -289,23 +305,23 @@ accelerationBands.Compute(values)
 ```
 
 ```go
-type AccelerationBands[T helper.Number] struct {
+type AccelerationBands[T helper.Float] struct {
     // Time period.
     Period int
 }
 ```
 
 <a name="NewAccelerationBands"></a>
-### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L36>)
+### func [NewAccelerationBands](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L43>)
 
 ```go
-func NewAccelerationBands[T helper.Number]() *AccelerationBands[T]
+func NewAccelerationBands[T helper.Float]() *AccelerationBands[T]
 ```
 
 NewAccelerationBands function initializes a new Acceleration Bands instance with the default parameters.
 
 <a name="AccelerationBands[T].Compute"></a>
-### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L86>)
+### func \(\*AccelerationBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L101>)
 
 ```go
 func (a *AccelerationBands[T]) Compute(high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -316,7 +332,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="AccelerationBands[T].ComputeWithContext"></a>
-### func \(\*AccelerationBands\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L43>)
+### func \(\*AccelerationBands\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L50>)
 
 ```go
 func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low, closing <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -325,13 +341,22 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 ComputeWithContext function takes a channel of numbers and computes the Acceleration Bands over the specified period.
 
 <a name="AccelerationBands[T].IdlePeriod"></a>
-### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L79>)
+### func \(\*AccelerationBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L89>)
 
 ```go
 func (a *AccelerationBands[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Acceleration Bands won't yield any results.
+
+<a name="AccelerationBands[T].String"></a>
+### func \(\*AccelerationBands\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/acceleration_bands.go#L94>)
+
+```go
+func (a *AccelerationBands[T]) String() string
+```
+
+String is the string representation of the Acceleration Bands.
 
 <a name="AnnualizedHistoricalVolatility"></a>
 ## type [AnnualizedHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L30-L36>)
@@ -343,7 +368,7 @@ AHV = HV × √TradingDaysPerYear
 ```
 
 ```go
-type AnnualizedHistoricalVolatility[T helper.Number] struct {
+type AnnualizedHistoricalVolatility[T helper.Float] struct {
     // Hv is the underlying Historical Volatility indicator.
     Hv  *HistoricalVolatility[T]
 
@@ -356,7 +381,7 @@ type AnnualizedHistoricalVolatility[T helper.Number] struct {
 ### func [NewAnnualizedHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L40>)
 
 ```go
-func NewAnnualizedHistoricalVolatility[T helper.Number]() *AnnualizedHistoricalVolatility[T]
+func NewAnnualizedHistoricalVolatility[T helper.Float]() *AnnualizedHistoricalVolatility[T]
 ```
 
 NewAnnualizedHistoricalVolatility function initializes a new Annualized Historical Volatility instance with the default parameters.
@@ -365,7 +390,7 @@ NewAnnualizedHistoricalVolatility function initializes a new Annualized Historic
 ### func [NewAnnualizedHistoricalVolatilityWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/annualized_historical_volatility.go#L46>)
 
 ```go
-func NewAnnualizedHistoricalVolatilityWithPeriod[T helper.Number](period int) *AnnualizedHistoricalVolatility[T]
+func NewAnnualizedHistoricalVolatilityWithPeriod[T helper.Float](period int) *AnnualizedHistoricalVolatility[T]
 ```
 
 NewAnnualizedHistoricalVolatilityWithPeriod function initializes a new Annualized Historical Volatility instance with the given period.
@@ -409,7 +434,7 @@ func (a *AnnualizedHistoricalVolatility[T]) String() string
 String function returns a string representation of the Annualized Historical Volatility.
 
 <a name="Atr"></a>
-## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L32-L35>)
+## type [Atr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L33-L36>)
 
 Atr represents the configuration parameters for calculating the Average True Range \(ATR\). It is a technical analysis indicator that measures market volatility by decomposing the entire range of stock prices for that period.
 
@@ -428,41 +453,41 @@ atr.Compute(highs, lows, closings)
 ```
 
 ```go
-type Atr[T helper.Number] struct {
+type Atr[T helper.Float] struct {
     // Ma is the moving average for the ATR.
     Ma trend.Ma[T]
 }
 ```
 
 <a name="NewAtr"></a>
-### func [NewAtr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L38>)
+### func [NewAtr](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L39>)
 
 ```go
-func NewAtr[T helper.Number]() *Atr[T]
+func NewAtr[T helper.Float]() *Atr[T]
 ```
 
 NewAtr function initializes a new ATR instance with the default parameters.
 
 <a name="NewAtrWithMa"></a>
-### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L48>)
+### func [NewAtrWithMa](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L49>)
 
 ```go
-func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T]
+func NewAtrWithMa[T helper.Float](ma trend.Ma[T]) *Atr[T]
 ```
 
 NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
 
 <a name="NewAtrWithPeriod"></a>
-### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L43>)
+### func [NewAtrWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L44>)
 
 ```go
-func NewAtrWithPeriod[T helper.Number](period int) *Atr[T]
+func NewAtrWithPeriod[T helper.Float](period int) *Atr[T]
 ```
 
 NewAtrWithPeriod function initializes a new ATR instance with the given period.
 
 <a name="Atr[T].Compute"></a>
-### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L72>)
+### func \(\*Atr\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L78>)
 
 ```go
 func (a *Atr[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -473,7 +498,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Atr[T].ComputeWithContext"></a>
-### func \(\*Atr\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L55>)
+### func \(\*Atr\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L56>)
 
 ```go
 func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -482,16 +507,25 @@ func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 ComputeWithContext function takes a channel of numbers and computes the ATR over the specified period, supporting context cancellation.
 
 <a name="Atr[T].IdlePeriod"></a>
-### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L64>)
+### func \(\*Atr\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L65>)
 
 ```go
 func (a *Atr[T]) IdlePeriod() int
 ```
 
-IdlePeriod is the initial period that Acceleration Bands won't yield any results.
+IdlePeriod is the initial period that ATR won't yield any results.
+
+<a name="Atr[T].String"></a>
+### func \(\*Atr\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/atr.go#L71>)
+
+```go
+func (a *Atr[T]) String() string
+```
+
+String is the string representation of the ATR.
 
 <a name="BollingerBandWidth"></a>
-## type [BollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L26-L29>)
+## type [BollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L31-L34>)
 
 BollingerBandWidth represents the configuration parameters for calculating the Bollinger Band Width. It measures the percentage difference between the upper band and the lower band. It decreases as Bollinger Bands narrows and increases as Bollinger Bands widens.
 
@@ -501,6 +535,8 @@ During a period of rising price volatity the bandwidth widens, and during a peri
 Band Width = (Upper Band - Lower Band) / Middle BollingerBandWidth
 ```
 
+If the middle band \(an SMA of the closing price\) is zero — only possible for a zero\-priced instrument, an extremely unlikely real\-world scenario — Band Width falls back to 0 instead of NaN/Inf.
+
 Example:
 
 ```
@@ -509,23 +545,23 @@ bbw.Compute(c)
 ```
 
 ```go
-type BollingerBandWidth[T helper.Number] struct {
+type BollingerBandWidth[T helper.Float] struct {
     // Bollinger bands.
     BollingerBands *BollingerBands[T]
 }
 ```
 
 <a name="NewBollingerBandWidth"></a>
-### func [NewBollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L32>)
+### func [NewBollingerBandWidth](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L37>)
 
 ```go
-func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T]
+func NewBollingerBandWidth[T helper.Float]() *BollingerBandWidth[T]
 ```
 
 NewBollingerBandWidth function initializes a new Bollinger Band Width instance with the default parameters.
 
 <a name="BollingerBandWidth[T].Compute"></a>
-### func \(\*BollingerBandWidth\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L55>)
+### func \(\*BollingerBandWidth\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L65>)
 
 ```go
 func (b *BollingerBandWidth[T]) Compute(c <-chan T) <-chan T
@@ -536,7 +572,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="BollingerBandWidth[T].ComputeWithContext"></a>
-### func \(\*BollingerBandWidth\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L39>)
+### func \(\*BollingerBandWidth\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L44>)
 
 ```go
 func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
@@ -545,7 +581,7 @@ func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan
 ComputeWithContext function takes a channel of numbers and computes the Bollinger Band Width.
 
 <a name="BollingerBandWidth[T].IdlePeriod"></a>
-### func \(\*BollingerBandWidth\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L48>)
+### func \(\*BollingerBandWidth\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L53>)
 
 ```go
 func (b *BollingerBandWidth[T]) IdlePeriod() int
@@ -553,15 +589,24 @@ func (b *BollingerBandWidth[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Bollinger Band Width won't yield any results.
 
+<a name="BollingerBandWidth[T].String"></a>
+### func \(\*BollingerBandWidth\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_band_width.go#L58>)
+
+```go
+func (b *BollingerBandWidth[T]) String() string
+```
+
+String is the string representation of the Bollinger Band Width.
+
 <a name="BollingerBands"></a>
-## type [BollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L31-L34>)
+## type [BollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L35-L41>)
 
 BollingerBands represents the configuration parameters for calculating the Bollinger Bands. It is a technical analysis tool used to gauge a market's volatility and identify overbought and oversold conditions. Returns the upper band, the middle band, and the lower band.
 
 ```
 Middle Band = 20-Period SMA.
-Upper Band = 20-Period SMA + 2 (20-Period Std)
-Lower Band = 20-Period SMA - 2 (20-Period Std)
+Upper Band = 20-Period SMA + Multiplier (20-Period Std)
+Lower Band = 20-Period SMA - Multiplier (20-Period Std)
 ```
 
 Example:
@@ -572,32 +617,35 @@ bollingerBands.Compute(values)
 ```
 
 ```go
-type BollingerBands[T helper.Number] struct {
+type BollingerBands[T helper.Float] struct {
     // Time period.
     Period int
+
+    // Multiplier is the standard deviation multiplier.
+    Multiplier T
 }
 ```
 
 <a name="NewBollingerBands"></a>
-### func [NewBollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L37>)
+### func [NewBollingerBands](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L44>)
 
 ```go
-func NewBollingerBands[T helper.Number]() *BollingerBands[T]
+func NewBollingerBands[T helper.Float]() *BollingerBands[T]
 ```
 
 NewBollingerBands function initializes a new Bollinger Bands instance with the default parameters.
 
 <a name="NewBollingerBandsWithPeriod"></a>
-### func [NewBollingerBandsWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L42>)
+### func [NewBollingerBandsWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L49>)
 
 ```go
-func NewBollingerBandsWithPeriod[T helper.Number](period int) *BollingerBands[T]
+func NewBollingerBandsWithPeriod[T helper.Float](period int) *BollingerBands[T]
 ```
 
 NewBollingerBandsWithPeriod function initializes a new Bollinger Bands instance with the given period.
 
 <a name="BollingerBands[T].Compute"></a>
-### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L83>)
+### func \(\*BollingerBands\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L96>)
 
 ```go
 func (b *BollingerBands[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -608,7 +656,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="BollingerBands[T].ComputeWithContext"></a>
-### func \(\*BollingerBands\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L49>)
+### func \(\*BollingerBands\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L57>)
 
 ```go
 func (b *BollingerBands[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -617,7 +665,7 @@ func (b *BollingerBands[T]) ComputeWithContext(ctx context.Context, c <-chan T) 
 ComputeWithContext function takes a channel of numbers and computes the Bollinger Bands over the specified period.
 
 <a name="BollingerBands[T].IdlePeriod"></a>
-### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L76>)
+### func \(\*BollingerBands\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L84>)
 
 ```go
 func (b *BollingerBands[T]) IdlePeriod() int
@@ -625,14 +673,23 @@ func (b *BollingerBands[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Bollinger Bands won't yield any results.
 
-<a name="ChandelierExit"></a>
-## type [ChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L32-L38>)
+<a name="BollingerBands[T].String"></a>
+### func \(\*BollingerBands\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/bollinger_bands.go#L89>)
 
-ChandelierExit represents the configuration parameters for calculating the Chandelier Exit. It sets a trailing stop\-loss based on the Average True Value \(ATR\).
+```go
+func (b *BollingerBands[T]) String() string
+```
+
+String is the string representation of the Bollinger Bands.
+
+<a name="ChandelierExit"></a>
+## type [ChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L33-L39>)
+
+ChandelierExit represents the configuration parameters for calculating the Chandelier Exit. It sets a trailing stop\-loss based on the Average True Range \(ATR\).
 
 ```
-Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
-Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+Chandelier Exit Long = 22-Period Highest High - ATR(22) * 3
+Chandelier Exit Short = 22-Period Lowest Low + ATR(22) * 3
 ```
 
 Example:
@@ -643,7 +700,7 @@ ceLong, ceShort := ce.Compute(highs, lows, closings)
 ```
 
 ```go
-type ChandelierExit[T helper.Number] struct {
+type ChandelierExit[T helper.Float] struct {
     // Period is time period.
     Period int
 
@@ -653,16 +710,16 @@ type ChandelierExit[T helper.Number] struct {
 ```
 
 <a name="NewChandelierExit"></a>
-### func [NewChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L41>)
+### func [NewChandelierExit](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L42>)
 
 ```go
-func NewChandelierExit[T helper.Number]() *ChandelierExit[T]
+func NewChandelierExit[T helper.Float]() *ChandelierExit[T]
 ```
 
 NewChandelierExit function initializes a new Chandelier Exit instance with the default parameters.
 
 <a name="ChandelierExit[T].Compute"></a>
-### func \(\*ChandelierExit\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L86>)
+### func \(\*ChandelierExit\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L92>)
 
 ```go
 func (c *ChandelierExit[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T)
@@ -673,7 +730,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ChandelierExit[T].ComputeWithContext"></a>
-### func \(\*ChandelierExit\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L49>)
+### func \(\*ChandelierExit\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L50>)
 
 ```go
 func (c *ChandelierExit[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T)
@@ -682,13 +739,22 @@ func (c *ChandelierExit[T]) ComputeWithContext(ctx context.Context, highs, lows,
 ComputeWithContext function takes a channel of numbers and computes the Chandelier Exit over the specified period.
 
 <a name="ChandelierExit[T].IdlePeriod"></a>
-### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L79>)
+### func \(\*ChandelierExit\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L80>)
 
 ```go
 func (c *ChandelierExit[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Chandelier Exit won't yield any results.
+
+<a name="ChandelierExit[T].String"></a>
+### func \(\*ChandelierExit\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/chandelier_exit.go#L85>)
+
+```go
+func (c *ChandelierExit[T]) String() string
+```
+
+String is the string representation of the Chandelier Exit.
 
 <a name="Chop"></a>
 ## type [Chop](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L26-L29>)
@@ -700,7 +766,7 @@ CHOP = 100 * LOG10( SUM(ATR(1), n) / (MAX(High, n) - MIN(Low, n)) ) / LOG10(n)
 ```
 
 ```go
-type Chop[T helper.Number] struct {
+type Chop[T helper.Float] struct {
     // Period is the period for the CHOP.
     Period int
 }
@@ -710,7 +776,7 @@ type Chop[T helper.Number] struct {
 ### func [NewChop](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L32>)
 
 ```go
-func NewChop[T helper.Number]() *Chop[T]
+func NewChop[T helper.Float]() *Chop[T]
 ```
 
 NewChop function initializes a new CHOP instance with the default parameters.
@@ -719,7 +785,7 @@ NewChop function initializes a new CHOP instance with the default parameters.
 ### func [NewChopWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/chop.go#L37>)
 
 ```go
-func NewChopWithPeriod[T helper.Number](period int) *Chop[T]
+func NewChopWithPeriod[T helper.Float](period int) *Chop[T]
 ```
 
 NewChopWithPeriod function initializes a new CHOP instance with the given period.
@@ -763,13 +829,13 @@ func (c *Chop[T]) String() string
 String function returns a string representation of the CHOP.
 
 <a name="DonchianChannel"></a>
-## type [DonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L32-L38>)
+## type [DonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L33-L39>)
 
 DonchianChannel represents the configuration parameters for calculating the Donchian Channel \(DC\). It calculates three lines generated by moving average calculations that comprise an indicator formed by upper and lower bands around a midrange or median band. The upper band marks the highest price of an asset while the lower band marks the lowest price of an asset, and the area between the upper and lower bands represents the Donchian Channel.
 
 ```
-Upper Channel = Mmax(period, closings)
-Lower Channel = Mmin(period, closings)
+Upper Channel = Mmax(period, highs)
+Lower Channel = Mmin(period, lows)
 Middle Channel = (Upper Channel + Lower Channel) / 2
 ```
 
@@ -777,11 +843,11 @@ Example:
 
 ```
 dc := volatility.NewDonchianChannel[float64]()
-result := dc.Compute(values)
+uppers, middles, lowers := dc.Compute(highs, lows)
 ```
 
 ```go
-type DonchianChannel[T helper.Number] struct {
+type DonchianChannel[T helper.Float] struct {
     // Max is the Moving Max instance.
     Max *trend.MovingMax[T]
 
@@ -791,28 +857,28 @@ type DonchianChannel[T helper.Number] struct {
 ```
 
 <a name="NewDonchianChannel"></a>
-### func [NewDonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L41>)
+### func [NewDonchianChannel](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L42>)
 
 ```go
-func NewDonchianChannel[T helper.Number]() *DonchianChannel[T]
+func NewDonchianChannel[T helper.Float]() *DonchianChannel[T]
 ```
 
 NewDonchianChannel function initializes a new Donchian Channel instance with the default parameters.
 
 <a name="NewDonchianChannelWithPeriod"></a>
-### func [NewDonchianChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L46>)
+### func [NewDonchianChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L47>)
 
 ```go
-func NewDonchianChannelWithPeriod[T helper.Number](period int) *DonchianChannel[T]
+func NewDonchianChannelWithPeriod[T helper.Float](period int) *DonchianChannel[T]
 ```
 
 NewDonchianChannelWithPeriod function initializes a new Donchian Channel instance with the given period.
 
 <a name="DonchianChannel[T].Compute"></a>
-### func \(\*DonchianChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L80>)
+### func \(\*DonchianChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L85>)
 
 ```go
-func (d *DonchianChannel[T]) Compute(c <-chan T) (<-chan T, <-chan T, <-chan T)
+func (d *DonchianChannel[T]) Compute(highs, lows <-chan T) (<-chan T, <-chan T, <-chan T)
 ```
 
 Compute wraps ComputeWithContext for backwards compatibility.
@@ -820,13 +886,13 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="DonchianChannel[T].ComputeWithContext"></a>
-### func \(\*DonchianChannel\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L54>)
+### func \(\*DonchianChannel\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L56>)
 
 ```go
-func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T, <-chan T, <-chan T)
+func (d *DonchianChannel[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) (<-chan T, <-chan T, <-chan T)
 ```
 
-ComputeWithContext function takes a channel of numbers and computes the Donchian Channel over the specified period.
+ComputeWithContext function takes the highs and lows channels and computes the Donchian Channel over the specified period.
 
 <a name="DonchianChannel[T].IdlePeriod"></a>
 ### func \(\*DonchianChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L73>)
@@ -836,6 +902,15 @@ func (d *DonchianChannel[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Donchian Channel won't yield any results.
+
+<a name="DonchianChannel[T].String"></a>
+### func \(\*DonchianChannel\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/donchian_channel.go#L78>)
+
+```go
+func (d *DonchianChannel[T]) String() string
+```
+
+String is the string representation of the Donchian Channel.
 
 <a name="HistoricalVolatility"></a>
 ## type [HistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L26-L29>)
@@ -850,7 +925,7 @@ where R_t = (P_t / P_(t-1)) - 1
 Refactored to utilize composition of helper.ChangeRatio and MovingStd.
 
 ```go
-type HistoricalVolatility[T helper.Number] struct {
+type HistoricalVolatility[T helper.Float] struct {
     // Time period.
     Period int
 }
@@ -860,7 +935,7 @@ type HistoricalVolatility[T helper.Number] struct {
 ### func [NewHistoricalVolatility](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L32>)
 
 ```go
-func NewHistoricalVolatility[T helper.Number]() *HistoricalVolatility[T]
+func NewHistoricalVolatility[T helper.Float]() *HistoricalVolatility[T]
 ```
 
 NewHistoricalVolatility function initializes a new Historical Volatility instance with the default parameters.
@@ -869,7 +944,7 @@ NewHistoricalVolatility function initializes a new Historical Volatility instanc
 ### func [NewHistoricalVolatilityWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/historical_volatility.go#L37>)
 
 ```go
-func NewHistoricalVolatilityWithPeriod[T helper.Number](period int) *HistoricalVolatility[T]
+func NewHistoricalVolatilityWithPeriod[T helper.Float](period int) *HistoricalVolatility[T]
 ```
 
 NewHistoricalVolatilityWithPeriod function initializes a new Historical Volatility instance with the given period.
@@ -913,7 +988,7 @@ func (h *HistoricalVolatility[T]) String() string
 String function returns a string representation of the Historical Volatility.
 
 <a name="KeltnerChannel"></a>
-## type [KeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L31-L37>)
+## type [KeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L32-L38>)
 
 KeltnerChannel represents the configuration parameters for calculating the Keltner Channel \(KC\). It provides volatility\-based bands that are placed on either side of an asset's price and can aid in determining the direction of a trend.
 
@@ -926,12 +1001,12 @@ Lower Band = EMA(period, closings) - 2 * ATR(period, highs, lows, closings)
 Example:
 
 ```
-dc := volatility.NewKeltnerChannel[float64]()
-result := dc.Compute(highs, lows, closings)
+kc := volatility.NewKeltnerChannel[float64]()
+result := kc.Compute(highs, lows, closings)
 ```
 
 ```go
-type KeltnerChannel[T helper.Number] struct {
+type KeltnerChannel[T helper.Float] struct {
     // Atr is the ATR instance.
     Atr *Atr[T]
 
@@ -941,25 +1016,25 @@ type KeltnerChannel[T helper.Number] struct {
 ```
 
 <a name="NewKeltnerChannel"></a>
-### func [NewKeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L40>)
+### func [NewKeltnerChannel](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L41>)
 
 ```go
-func NewKeltnerChannel[T helper.Number]() *KeltnerChannel[T]
+func NewKeltnerChannel[T helper.Float]() *KeltnerChannel[T]
 ```
 
 NewKeltnerChannel function initializes a new Keltner Channel instance with the default parameters.
 
 <a name="NewKeltnerChannelWithPeriod"></a>
-### func [NewKeltnerChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L45>)
+### func [NewKeltnerChannelWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L46>)
 
 ```go
-func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T]
+func NewKeltnerChannelWithPeriod[T helper.Float](period int) *KeltnerChannel[T]
 ```
 
 NewKeltnerChannelWithPeriod function initializes a new Keltner Channel instance with the given period.
 
 <a name="KeltnerChannel[T].Compute"></a>
-### func \(\*KeltnerChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L87>)
+### func \(\*KeltnerChannel\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L93>)
 
 ```go
 func (k *KeltnerChannel[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -970,7 +1045,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="KeltnerChannel[T].ComputeWithContext"></a>
-### func \(\*KeltnerChannel\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L53>)
+### func \(\*KeltnerChannel\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L54>)
 
 ```go
 func (k *KeltnerChannel[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -979,7 +1054,7 @@ func (k *KeltnerChannel[T]) ComputeWithContext(ctx context.Context, highs, lows,
 ComputeWithContext function takes a channel of numbers and computes the Keltner Channel over the specified period.
 
 <a name="KeltnerChannel[T].IdlePeriod"></a>
-### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L80>)
+### func \(\*KeltnerChannel\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L81>)
 
 ```go
 func (k *KeltnerChannel[T]) IdlePeriod() int
@@ -987,8 +1062,17 @@ func (k *KeltnerChannel[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Keltner Channel won't yield any results.
 
+<a name="KeltnerChannel[T].String"></a>
+### func \(\*KeltnerChannel\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/keltner_channel.go#L86>)
+
+```go
+func (k *KeltnerChannel[T]) String() string
+```
+
+String is the string representation of the Keltner Channel.
+
 <a name="MovingStd"></a>
-## type [MovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L24-L27>)
+## type [MovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L25-L28>)
 
 MovingStd represents the configuration parameters for calculating the Moving Standard Deviation over the specified period.
 
@@ -997,32 +1081,32 @@ Std = Sqrt(1/Period * Sum(Pow(value - sma), 2))
 ```
 
 ```go
-type MovingStd[T helper.Number] struct {
+type MovingStd[T helper.Float] struct {
     // Time period.
     Period int
 }
 ```
 
 <a name="NewMovingStd"></a>
-### func [NewMovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L30>)
+### func [NewMovingStd](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L31>)
 
 ```go
-func NewMovingStd[T helper.Number]() *MovingStd[T]
+func NewMovingStd[T helper.Float]() *MovingStd[T]
 ```
 
 NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
 
 <a name="NewMovingStdWithPeriod"></a>
-### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L35>)
+### func [NewMovingStdWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L36>)
 
 ```go
-func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T]
+func NewMovingStdWithPeriod[T helper.Float](period int) *MovingStd[T]
 ```
 
 NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.
 
 <a name="MovingStd[T].Compute"></a>
-### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L88>)
+### func \(\*MovingStd\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L93>)
 
 ```go
 func (m *MovingStd[T]) Compute(c <-chan T) <-chan T
@@ -1033,7 +1117,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="MovingStd[T].ComputeWithContext"></a>
-### func \(\*MovingStd\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L42>)
+### func \(\*MovingStd\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L43>)
 
 ```go
 func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
@@ -1042,7 +1126,7 @@ func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 ComputeWithContext function takes a channel of numbers and computes the Moving Standard Deviation over the specified period, supporting context cancellation.
 
 <a name="MovingStd[T].IdlePeriod"></a>
-### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L93>)
+### func \(\*MovingStd\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L98>)
 
 ```go
 func (m *MovingStd[T]) IdlePeriod() int
@@ -1050,8 +1134,17 @@ func (m *MovingStd[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
 
+<a name="MovingStd[T].String"></a>
+### func \(\*MovingStd\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/moving_std.go#L103>)
+
+```go
+func (m *MovingStd[T]) String() string
+```
+
+String is the string representation of the Moving Standard Deviation.
+
 <a name="PercentB"></a>
-## type [PercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L18-L21>)
+## type [PercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L25-L28>)
 
 PercentB represents the parameters for calculating the %B indicator.
 
@@ -1059,8 +1152,10 @@ PercentB represents the parameters for calculating the %B indicator.
 %B = (Close - Lower Band) / (Upper Band - Lower Band)
 ```
 
+%B is expressed on a 0\-1 scale locating price within the bands \(0 at the lower band, 1 at the upper band\). When the bands collapse to zero width \(upper == lower, i.e. zero rolling standard deviation — a flat price window\), price sits exactly at that single collapsed band value. The ratio is an undefined 0/0, so it falls back to the neutral midpoint 0.5.
+
 ```go
-type PercentB[T helper.Number] struct {
+type PercentB[T helper.Float] struct {
     // BollingerBands is the underlying Bollinger Bands indicator used for calculations.
     BollingerBands *BollingerBands[T]
 }
@@ -1113,25 +1208,25 @@ func main() {
 </details>
 
 <a name="NewPercentB"></a>
-### func [NewPercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L24>)
+### func [NewPercentB](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L31>)
 
 ```go
-func NewPercentB[T helper.Number]() *PercentB[T]
+func NewPercentB[T helper.Float]() *PercentB[T]
 ```
 
 NewPercentB function initializes a new %B instance with the default parameters.
 
 <a name="NewPercentBWithPeriod"></a>
-### func [NewPercentBWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L29>)
+### func [NewPercentBWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L36>)
 
 ```go
-func NewPercentBWithPeriod[T helper.Number](period int) *PercentB[T]
+func NewPercentBWithPeriod[T helper.Float](period int) *PercentB[T]
 ```
 
 NewPercentBWithPeriod function initializes a new %B instance with the given period.
 
 <a name="PercentB[T].Compute"></a>
-### func \(\*PercentB\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L67>)
+### func \(\*PercentB\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L74>)
 
 ```go
 func (p *PercentB[T]) Compute(closings <-chan T) <-chan T
@@ -1142,7 +1237,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="PercentB[T].ComputeWithContext"></a>
-### func \(\*PercentB\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L36>)
+### func \(\*PercentB\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L43>)
 
 ```go
 func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1151,7 +1246,7 @@ func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T)
 ComputeWithContext function takes a channel of numbers and computes the %B over the specified period.
 
 <a name="PercentB[T].IdlePeriod"></a>
-### func \(\*PercentB\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L55>)
+### func \(\*PercentB\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L62>)
 
 ```go
 func (p *PercentB[T]) IdlePeriod() int
@@ -1160,7 +1255,7 @@ func (p *PercentB[T]) IdlePeriod() int
 IdlePeriod is the initial period that %B yield any results.
 
 <a name="PercentB[T].String"></a>
-### func \(\*PercentB\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L60>)
+### func \(\*PercentB\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/percent_b.go#L67>)
 
 ```go
 func (p *PercentB[T]) String() string
@@ -1169,15 +1264,17 @@ func (p *PercentB[T]) String() string
 String is the string representation of the %B.
 
 <a name="Po"></a>
-## type [Po](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L30-L39>)
+## type [Po](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L38-L47>)
 
 Po represents the configuration parameters for calculating the Projection Oscillator \(PO\). It uses the linear regression slope, along with highs and lows. Period defines the moving window to calculates the PO.
 
 ```
-PL = Min(period, (high + MLS(period, x, high)))
-PH = Max(period, (low + MLS(period, x, low)))
+PL = Min(period, (low + MLS(period, x, low)))
+PH = Max(period, (high + MLS(period, x, high)))
 PO = 100 * (Closing - PL) / (PH - PL)
 ```
+
+PO is expressed on a 0\-100 scale locating price within the projected range. When PH and PL collapse to the same value \(a flat window, e.g. unchanged highs, lows, and closings\), the projected range has zero width, an undefined 0/0. It falls back to the neutral midpoint 50, mirroring the flat\-market convention used by RSI and other 0\-100 range\-position oscillators.
 
 Example:
 
@@ -1187,31 +1284,31 @@ ps := po.Compute(highs, lows, closings)
 ```
 
 ```go
-type Po[T helper.Number] struct {
+type Po[T helper.Float] struct {
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewPo"></a>
-### func [NewPo](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L42>)
+### func [NewPo](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L50>)
 
 ```go
-func NewPo[T helper.Number]() *Po[T]
+func NewPo[T helper.Float]() *Po[T]
 ```
 
 NewPo function initializes a new PO instance with the default parameters.
 
 <a name="NewPoWithPeriod"></a>
-### func [NewPoWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L47>)
+### func [NewPoWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L55>)
 
 ```go
-func NewPoWithPeriod[T helper.Number](period int) *Po[T]
+func NewPoWithPeriod[T helper.Float](period int) *Po[T]
 ```
 
 NewPoWithPeriod function initializes a new PO instance with the given period.
 
 <a name="Po[T].Compute"></a>
-### func \(\*Po\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L113>)
+### func \(\*Po\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L122>)
 
 ```go
 func (p *Po[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -1222,7 +1319,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Po[T].ComputeWithContext"></a>
-### func \(\*Po\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L56>)
+### func \(\*Po\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L64>)
 
 ```go
 func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -1231,7 +1328,7 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 ComputeWithContext function takes a channel of numbers and computes the PO over the specified period.
 
 <a name="Po[T].IdlePeriod"></a>
-### func \(\*Po\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L106>)
+### func \(\*Po\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L110>)
 
 ```go
 func (p *Po[T]) IdlePeriod() int
@@ -1239,8 +1336,17 @@ func (p *Po[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that PO won't yield any results.
 
+<a name="Po[T].String"></a>
+### func \(\*Po\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/po.go#L115>)
+
+```go
+func (p *Po[T]) String() string
+```
+
+String is the string representation of the PO.
+
 <a name="SuperTrend"></a>
-## type [SuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L41-L44>)
+## type [SuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L47-L50>)
 
 SuperTrend represents the configuration parameters for calculating the Super Trend.
 
@@ -1262,44 +1368,48 @@ SuperTrend = If upTrend
 UpTrend = If (SuperTrend == FinalUpperBand) Then True Else False
 ```
 
+By default, the underlying ATR is smoothed using HMA \(Hull Moving Average\) rather than the more textbook SMA/RMA, so that Super Trend reacts faster to price changes. This comes at the cost of a longer idle period, e.g. 17 for a period of 14, versus 14 for a textbook SMA\-based ATR of the same period. Use NewSuperTrendWithMa to use a different moving average, such as SMA or RMA.
+
 Example:
 
 ```go
-type SuperTrend[T helper.Number] struct {
+type SuperTrend[T helper.Float] struct {
     Atr        *Atr[T]
     Multiplier T
 }
 ```
 
 <a name="NewSuperTrend"></a>
-### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L47>)
+### func [NewSuperTrend](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L53>)
 
 ```go
-func NewSuperTrend[T helper.Number]() *SuperTrend[T]
+func NewSuperTrend[T helper.Float]() *SuperTrend[T]
 ```
 
 NewSuperTrend function initializes a new Super Trend instance with the default parameters.
 
 <a name="NewSuperTrendWithMa"></a>
-### func [NewSuperTrendWithMa](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L66>)
+### func [NewSuperTrendWithMa](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L76>)
 
 ```go
-func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T]
+func NewSuperTrendWithMa[T helper.Float](ma trend.Ma[T], multiplier T) *SuperTrend[T]
 ```
 
 NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance and multiplier.
 
 <a name="NewSuperTrendWithPeriod"></a>
-### func [NewSuperTrendWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L57>)
+### func [NewSuperTrendWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L67>)
 
 ```go
-func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T]
+func NewSuperTrendWithPeriod[T helper.Float](period int, multiplier T) *SuperTrend[T]
 ```
 
 NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
 
+The ATR used internally is built with HMA smoothing \(not the textbook SMA/RMA\), which increases the effective idle period, e.g. 17 rather than 14 for the default period of 14. Use NewSuperTrendWithMa directly if a different moving average, such as SMA or RMA, is desired.
+
 <a name="SuperTrend[T].Compute"></a>
-### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L168>)
+### func \(\*SuperTrend\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L183>)
 
 ```go
 func (s *SuperTrend[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -1310,7 +1420,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="SuperTrend[T].ComputeWithContext"></a>
-### func \(\*SuperTrend\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L74>)
+### func \(\*SuperTrend\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L84>)
 
 ```go
 func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -1319,13 +1429,22 @@ func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, clo
 ComputeWithContext function calculates the Super Trend, using separate channels for highs, lows, and closings.
 
 <a name="SuperTrend[T].IdlePeriod"></a>
-### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L161>)
+### func \(\*SuperTrend\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L171>)
 
 ```go
 func (s *SuperTrend[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Super Trend won't yield any results.
+
+<a name="SuperTrend[T].String"></a>
+### func \(\*SuperTrend\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/super_trend.go#L176>)
+
+```go
+func (s *SuperTrend[T]) String() string
+```
+
+String is the string representation of the Super Trend.
 
 <a name="TrueRange"></a>
 ## type [TrueRange](<https://github.com/cinar/indicator/blob/master/volatility/tr.go#L25>)
@@ -1395,7 +1514,7 @@ func (tr *TrueRange[T]) String() string
 String is the string representation of the TrueRange.
 
 <a name="UlcerIndex"></a>
-## type [UlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L32-L35>)
+## type [UlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L42-L45>)
 
 UlcerIndex represents the configuration parameters for calculating the Ulcer Index \(UI\). It measures downside risk. The index increases in value as the price moves farther away from a recent high and falls as the price rises to new highs.
 
@@ -1406,6 +1525,8 @@ Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 Ulcer Index = Sqrt(Squared Average)
 ```
 
+High Closings is a rolling max of Closings, so it is zero or negative only when every closing in the window is zero or negative — a degenerate/invalid\-price input \(e.g. a worthless or corrupted feed\), not a normal market condition. Rather than propagate a NaN/Inf \(or panic, which would crash the whole streaming pipeline for one bad window\), that bar's Percentage Drawdown falls back to 0, the neutral "no computable drawdown" value: it contributes no signal to the Squared Average instead of a fabricated one.
+
 Example:
 
 ```
@@ -1414,23 +1535,23 @@ ui.Compute(closings)
 ```
 
 ```go
-type UlcerIndex[T helper.Number] struct {
+type UlcerIndex[T helper.Float] struct {
     // Time period.
     Period int
 }
 ```
 
 <a name="NewUlcerIndex"></a>
-### func [NewUlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L38>)
+### func [NewUlcerIndex](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L48>)
 
 ```go
-func NewUlcerIndex[T helper.Number]() *UlcerIndex[T]
+func NewUlcerIndex[T helper.Float]() *UlcerIndex[T]
 ```
 
 NewUlcerIndex function initializes a new Ulcer Index instance with the default parameters.
 
 <a name="UlcerIndex[T].Compute"></a>
-### func \(\*UlcerIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L83>)
+### func \(\*UlcerIndex\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L105>)
 
 ```go
 func (u *UlcerIndex[T]) Compute(closings <-chan T) <-chan T
@@ -1441,7 +1562,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="UlcerIndex[T].ComputeWithContext"></a>
-### func \(\*UlcerIndex\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L45>)
+### func \(\*UlcerIndex\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L55>)
 
 ```go
 func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1450,7 +1571,7 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 ComputeWithContext function takes a channel of numbers and computes the Ulcer Index over the specified period.
 
 <a name="UlcerIndex[T].IdlePeriod"></a>
-### func \(\*UlcerIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L76>)
+### func \(\*UlcerIndex\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L93>)
 
 ```go
 func (u *UlcerIndex[T]) IdlePeriod() int
@@ -1458,14 +1579,25 @@ func (u *UlcerIndex[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Ulcer Index won't yield any results.
 
+<a name="UlcerIndex[T].String"></a>
+### func \(\*UlcerIndex\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/ulcer_index.go#L98>)
+
+```go
+func (u *UlcerIndex[T]) String() string
+```
+
+String is the string representation of the Ulcer Index.
+
 <a name="ZScore"></a>
-## type [ZScore](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L29-L32>)
+## type [ZScore](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L35-L38>)
 
 ZScore represents the configuration parameters for Z\-Score. It measures how many standard deviations price is away from its SMA.
 
 ```
 Z-Score = (Price - SMA) / StdDev
 ```
+
+When every value in the window is identical, StdDev is 0 and Price equals the SMA too, so the ratio is an undefined 0/0. It falls back to 0, which is the mathematically correct answer here \(not merely a convention\): a value identical to every other value in its window deviates exactly 0 standard deviations from the mean.
 
 Example:
 
@@ -1475,32 +1607,32 @@ z.Compute(c)
 ```
 
 ```go
-type ZScore[T helper.Number] struct {
+type ZScore[T helper.Float] struct {
     // Period is the time period.
     Period int
 }
 ```
 
 <a name="NewZScore"></a>
-### func [NewZScore](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L35>)
+### func [NewZScore](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L41>)
 
 ```go
-func NewZScore[T helper.Number]() *ZScore[T]
+func NewZScore[T helper.Float]() *ZScore[T]
 ```
 
 NewZScore function initializes a new Z\-Score instance with default parameters.
 
 <a name="NewZScoreWithPeriod"></a>
-### func [NewZScoreWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L40>)
+### func [NewZScoreWithPeriod](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L46>)
 
 ```go
-func NewZScoreWithPeriod[T helper.Number](period int) *ZScore[T]
+func NewZScoreWithPeriod[T helper.Float](period int) *ZScore[T]
 ```
 
 NewZScoreWithPeriod function initializes a new Z\-Score instance with the given period.
 
 <a name="ZScore[T].Compute"></a>
-### func \(\*ZScore\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L73>)
+### func \(\*ZScore\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L81>)
 
 ```go
 func (z *ZScore[T]) Compute(c <-chan T) <-chan T
@@ -1511,7 +1643,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ZScore[T].ComputeWithContext"></a>
-### func \(\*ZScore\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L47>)
+### func \(\*ZScore\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L53>)
 
 ```go
 func (z *ZScore[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
@@ -1520,7 +1652,7 @@ func (z *ZScore[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
 ComputeWithContext function takes a channel of numbers and computes the Z\-Score over the specified period.
 
 <a name="ZScore[T].IdlePeriod"></a>
-### func \(\*ZScore\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L61>)
+### func \(\*ZScore\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L69>)
 
 ```go
 func (z *ZScore[T]) IdlePeriod() int
@@ -1529,7 +1661,7 @@ func (z *ZScore[T]) IdlePeriod() int
 IdlePeriod is the initial period that Z\-Score won't yield any results.
 
 <a name="ZScore[T].String"></a>
-### func \(\*ZScore\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L66>)
+### func \(\*ZScore\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volatility/z_score.go#L74>)
 
 ```go
 func (z *ZScore[T]) String() string

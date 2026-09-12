@@ -33,7 +33,7 @@ func (b *BuyAndHoldStrategy) String() string {
 
 // ComputeWithContext processes the provided asset snapshots and generates an
 // illustrative stream of actions.
-func (i *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
+func (b *BuyAndHoldStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
 	actions := make(chan Action, cap(snapshots))
 
@@ -81,6 +81,6 @@ func (b *BuyAndHoldStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 // Compute wraps ComputeWithContext for backwards compatibility.
 //
 // Deprecated: Use ComputeWithContext instead.
-func (i *BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
-	return i.ComputeWithContext(context.Background(), snapshots)
+func (b *BuyAndHoldStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan Action {
+	return b.ComputeWithContext(context.Background(), snapshots)
 }

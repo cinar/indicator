@@ -35,7 +35,7 @@ func (i *InverseStrategy) Name() string {
 
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (i *InverseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
-	return helper.MapWithContext(ctx, strategy.ComputeStrategyWithContext(ctx, i.InnerStrategy, snapshots), func(action strategy.Action) strategy.Action {
+	return helper.MapWithContext(ctx, strategy.ComputeWithContext(ctx, i.InnerStrategy, snapshots), func(action strategy.Action) strategy.Action {
 		switch action {
 		case strategy.Buy:
 			return strategy.Sell

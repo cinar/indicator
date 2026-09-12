@@ -26,15 +26,17 @@ The information provided on this project is strictly for informational purposes 
 
 - [Constants](<#constants>)
 - [type AwesomeOscillator](<#AwesomeOscillator>)
-  - [func NewAwesomeOscillator\[T helper.Number\]\(\) \*AwesomeOscillator\[T\]](<#NewAwesomeOscillator>)
+  - [func NewAwesomeOscillator\[T helper.Float\]\(\) \*AwesomeOscillator\[T\]](<#NewAwesomeOscillator>)
   - [func \(a \*AwesomeOscillator\[T\]\) Compute\(highs, lows \<\-chan T\) \<\-chan T](<#AwesomeOscillator[T].Compute>)
   - [func \(a \*AwesomeOscillator\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows \<\-chan T\) \<\-chan T](<#AwesomeOscillator[T].ComputeWithContext>)
   - [func \(a \*AwesomeOscillator\[T\]\) IdlePeriod\(\) int](<#AwesomeOscillator[T].IdlePeriod>)
+  - [func \(a \*AwesomeOscillator\[T\]\) String\(\) string](<#AwesomeOscillator[T].String>)
 - [type ChaikinOscillator](<#ChaikinOscillator>)
-  - [func NewChaikinOscillator\[T helper.Number\]\(\) \*ChaikinOscillator\[T\]](<#NewChaikinOscillator>)
+  - [func NewChaikinOscillator\[T helper.Float\]\(\) \*ChaikinOscillator\[T\]](<#NewChaikinOscillator>)
   - [func \(c \*ChaikinOscillator\[T\]\) Compute\(highs, lows, closings, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChaikinOscillator[T].Compute>)
   - [func \(c \*ChaikinOscillator\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ChaikinOscillator[T].ComputeWithContext>)
   - [func \(c \*ChaikinOscillator\[T\]\) IdlePeriod\(\) int](<#ChaikinOscillator[T].IdlePeriod>)
+  - [func \(c \*ChaikinOscillator\[T\]\) String\(\) string](<#ChaikinOscillator[T].String>)
 - [type ConnorsRsi](<#ConnorsRsi>)
   - [func NewConnorsRsi\[T helper.Float\]\(\) \*ConnorsRsi\[T\]](<#NewConnorsRsi>)
   - [func NewConnorsRsiWithPeriods\[T helper.Float\]\(rsiPeriod, streakRsiPeriod, percentRankPeriod int\) \*ConnorsRsi\[T\]](<#NewConnorsRsiWithPeriods>)
@@ -49,9 +51,16 @@ The information provided on this project is strictly for informational purposes 
   - [func \(c \*CoppockCurve\[T\]\) ComputeWithContext\(ctx context.Context, values \<\-chan T\) \<\-chan T](<#CoppockCurve[T].ComputeWithContext>)
   - [func \(c \*CoppockCurve\[T\]\) IdlePeriod\(\) int](<#CoppockCurve[T].IdlePeriod>)
   - [func \(c \*CoppockCurve\[T\]\) String\(\) string](<#CoppockCurve[T].String>)
+- [type EhlersFisher](<#EhlersFisher>)
+  - [func NewEhlersFisher\[T helper.Float\]\(\) \*EhlersFisher\[T\]](<#NewEhlersFisher>)
+  - [func NewEhlersFisherWithPeriod\[T helper.Float\]\(period int\) \*EhlersFisher\[T\]](<#NewEhlersFisherWithPeriod>)
+  - [func \(e \*EhlersFisher\[T\]\) Compute\(highs, lows \<\-chan T\) \<\-chan T](<#EhlersFisher[T].Compute>)
+  - [func \(e \*EhlersFisher\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows \<\-chan T\) \<\-chan T](<#EhlersFisher[T].ComputeWithContext>)
+  - [func \(e \*EhlersFisher\[T\]\) IdlePeriod\(\) int](<#EhlersFisher[T].IdlePeriod>)
+  - [func \(e \*EhlersFisher\[T\]\) String\(\) string](<#EhlersFisher[T].String>)
 - [type ElderRay](<#ElderRay>)
-  - [func NewElderRay\[T helper.Number\]\(\) \*ElderRay\[T\]](<#NewElderRay>)
-  - [func NewElderRayWithPeriod\[T helper.Number\]\(period int\) \*ElderRay\[T\]](<#NewElderRayWithPeriod>)
+  - [func NewElderRay\[T helper.Float\]\(\) \*ElderRay\[T\]](<#NewElderRay>)
+  - [func NewElderRayWithPeriod\[T helper.Float\]\(period int\) \*ElderRay\[T\]](<#NewElderRayWithPeriod>)
   - [func \(e \*ElderRay\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ElderRay[T].Compute>)
   - [func \(e \*ElderRay\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#ElderRay[T].ComputeWithContext>)
   - [func \(e \*ElderRay\[T\]\) IdlePeriod\(\) int](<#ElderRay[T].IdlePeriod>)
@@ -63,12 +72,13 @@ The information provided on this project is strictly for informational purposes 
   - [func \(f \*Fisher\[T\]\) IdlePeriod\(\) int](<#Fisher[T].IdlePeriod>)
   - [func \(f \*Fisher\[T\]\) String\(\) string](<#Fisher[T].String>)
 - [type IchimokuCloud](<#IchimokuCloud>)
-  - [func NewIchimokuCloud\[T helper.Number\]\(\) \*IchimokuCloud\[T\]](<#NewIchimokuCloud>)
+  - [func NewIchimokuCloud\[T helper.Float\]\(\) \*IchimokuCloud\[T\]](<#NewIchimokuCloud>)
   - [func \(i \*IchimokuCloud\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#IchimokuCloud[T].Compute>)
   - [func \(i \*IchimokuCloud\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#IchimokuCloud[T].ComputeWithContext>)
   - [func \(i \*IchimokuCloud\[T\]\) IdlePeriod\(\) int](<#IchimokuCloud[T].IdlePeriod>)
+  - [func \(i \*IchimokuCloud\[T\]\) String\(\) string](<#IchimokuCloud[T].String>)
 - [type InternalBarStrength](<#InternalBarStrength>)
-  - [func NewInternalBarStrength\[T helper.Number\]\(\) \*InternalBarStrength\[T\]](<#NewInternalBarStrength>)
+  - [func NewInternalBarStrength\[T helper.Float\]\(\) \*InternalBarStrength\[T\]](<#NewInternalBarStrength>)
   - [func \(ibs \*InternalBarStrength\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#InternalBarStrength[T].Compute>)
   - [func \(ibs \*InternalBarStrength\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#InternalBarStrength[T].ComputeWithContext>)
   - [func \(ibs \*InternalBarStrength\[T\]\) IdlePeriod\(\) int](<#InternalBarStrength[T].IdlePeriod>)
@@ -78,26 +88,32 @@ The information provided on this project is strictly for informational purposes 
   - [func \(p \*Ppo\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Ppo[T].Compute>)
   - [func \(p \*Ppo\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Ppo[T].ComputeWithContext>)
   - [func \(p \*Ppo\[T\]\) IdlePeriod\(\) int](<#Ppo[T].IdlePeriod>)
+  - [func \(p \*Ppo\[T\]\) String\(\) string](<#Ppo[T].String>)
 - [type PringsSpecialK](<#PringsSpecialK>)
   - [func NewPringsSpecialK\[T helper.Float\]\(\) \*PringsSpecialK\[T\]](<#NewPringsSpecialK>)
   - [func \(p \*PringsSpecialK\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#PringsSpecialK[T].Compute>)
   - [func \(p \*PringsSpecialK\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#PringsSpecialK[T].ComputeWithContext>)
+  - [func \(p \*PringsSpecialK\[T\]\) IdlePeriod\(\) int](<#PringsSpecialK[T].IdlePeriod>)
+  - [func \(p \*PringsSpecialK\[T\]\) String\(\) string](<#PringsSpecialK[T].String>)
 - [type Pvo](<#Pvo>)
   - [func NewPvo\[T helper.Float\]\(\) \*Pvo\[T\]](<#NewPvo>)
   - [func \(p \*Pvo\[T\]\) Compute\(volumes \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Pvo[T].Compute>)
   - [func \(p \*Pvo\[T\]\) ComputeWithContext\(ctx context.Context, volumes \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T\)](<#Pvo[T].ComputeWithContext>)
   - [func \(p \*Pvo\[T\]\) IdlePeriod\(\) int](<#Pvo[T].IdlePeriod>)
+  - [func \(p \*Pvo\[T\]\) String\(\) string](<#Pvo[T].String>)
 - [type Qstick](<#Qstick>)
-  - [func NewQstick\[T helper.Number\]\(\) \*Qstick\[T\]](<#NewQstick>)
+  - [func NewQstick\[T helper.Float\]\(\) \*Qstick\[T\]](<#NewQstick>)
   - [func \(q \*Qstick\[T\]\) Compute\(openings, closings \<\-chan T\) \<\-chan T](<#Qstick[T].Compute>)
   - [func \(q \*Qstick\[T\]\) ComputeWithContext\(ctx context.Context, openings, closings \<\-chan T\) \<\-chan T](<#Qstick[T].ComputeWithContext>)
   - [func \(q \*Qstick\[T\]\) IdlePeriod\(\) int](<#Qstick[T].IdlePeriod>)
+  - [func \(q \*Qstick\[T\]\) String\(\) string](<#Qstick[T].String>)
 - [type Rsi](<#Rsi>)
   - [func NewRsi\[T helper.Float\]\(\) \*Rsi\[T\]](<#NewRsi>)
   - [func NewRsiWithPeriod\[T helper.Float\]\(period int\) \*Rsi\[T\]](<#NewRsiWithPeriod>)
   - [func \(r \*Rsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Rsi[T].Compute>)
   - [func \(r \*Rsi\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#Rsi[T].ComputeWithContext>)
   - [func \(r \*Rsi\[T\]\) IdlePeriod\(\) int](<#Rsi[T].IdlePeriod>)
+  - [func \(r \*Rsi\[T\]\) String\(\) string](<#Rsi[T].String>)
 - [type Rvi](<#Rvi>)
   - [func NewRvi\[T helper.Float\]\(\) \*Rvi\[T\]](<#NewRvi>)
   - [func \(r \*Rvi\[T\]\) Compute\(opens, highs, lows, closings \<\-chan T\) \(rviResult \<\-chan T, signalResult \<\-chan T\)](<#Rvi[T].Compute>)
@@ -105,29 +121,33 @@ The information provided on this project is strictly for informational purposes 
   - [func \(r \*Rvi\[T\]\) IdlePeriod\(\) int](<#Rvi[T].IdlePeriod>)
   - [func \(r \*Rvi\[T\]\) String\(\) string](<#Rvi[T].String>)
 - [type StochasticOscillator](<#StochasticOscillator>)
-  - [func NewStochasticOscillator\[T helper.Number\]\(\) \*StochasticOscillator\[T\]](<#NewStochasticOscillator>)
+  - [func NewStochasticOscillator\[T helper.Float\]\(\) \*StochasticOscillator\[T\]](<#NewStochasticOscillator>)
   - [func \(s \*StochasticOscillator\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#StochasticOscillator[T].Compute>)
   - [func \(s \*StochasticOscillator\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \(\<\-chan T, \<\-chan T\)](<#StochasticOscillator[T].ComputeWithContext>)
   - [func \(s \*StochasticOscillator\[T\]\) IdlePeriod\(\) int](<#StochasticOscillator[T].IdlePeriod>)
+  - [func \(s \*StochasticOscillator\[T\]\) String\(\) string](<#StochasticOscillator[T].String>)
 - [type StochasticRsi](<#StochasticRsi>)
   - [func NewStochasticRsi\[T helper.Float\]\(\) \*StochasticRsi\[T\]](<#NewStochasticRsi>)
   - [func NewStochasticRsiWithPeriod\[T helper.Float\]\(period int\) \*StochasticRsi\[T\]](<#NewStochasticRsiWithPeriod>)
   - [func \(s \*StochasticRsi\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].Compute>)
   - [func \(s \*StochasticRsi\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#StochasticRsi[T].ComputeWithContext>)
   - [func \(s \*StochasticRsi\[T\]\) IdlePeriod\(\) int](<#StochasticRsi[T].IdlePeriod>)
+  - [func \(s \*StochasticRsi\[T\]\) String\(\) string](<#StochasticRsi[T].String>)
 - [type Streak](<#Streak>)
   - [func NewStreak\[T helper.Float\]\(\) \*Streak\[T\]](<#NewStreak>)
   - [func \(s \*Streak\[T\]\) Compute\(closings \<\-chan T\) \<\-chan T](<#Streak[T].Compute>)
   - [func \(s \*Streak\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \<\-chan T](<#Streak[T].ComputeWithContext>)
   - [func \(s \*Streak\[T\]\) IdlePeriod\(\) int](<#Streak[T].IdlePeriod>)
+  - [func \(s \*Streak\[T\]\) String\(\) string](<#Streak[T].String>)
 - [type TdSequential](<#TdSequential>)
   - [func NewTdSequential\[T helper.Number\]\(\) \*TdSequential\[T\]](<#NewTdSequential>)
   - [func \(t \*TdSequential\[T\]\) Compute\(closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#TdSequential[T].Compute>)
   - [func \(t \*TdSequential\[T\]\) ComputeWithContext\(ctx context.Context, closings \<\-chan T\) \(\<\-chan T, \<\-chan T, \<\-chan T, \<\-chan T\)](<#TdSequential[T].ComputeWithContext>)
   - [func \(t \*TdSequential\[T\]\) IdlePeriod\(\) int](<#TdSequential[T].IdlePeriod>)
+  - [func \(t \*TdSequential\[T\]\) String\(\) string](<#TdSequential[T].String>)
 - [type UltimateOscillator](<#UltimateOscillator>)
-  - [func NewUltimateOscillator\[T helper.Number\]\(\) \*UltimateOscillator\[T\]](<#NewUltimateOscillator>)
-  - [func NewUltimateOscillatorWithPeriods\[T helper.Number\]\(shortPeriod, mediumPeriod, longPeriod int\) \*UltimateOscillator\[T\]](<#NewUltimateOscillatorWithPeriods>)
+  - [func NewUltimateOscillator\[T helper.Float\]\(\) \*UltimateOscillator\[T\]](<#NewUltimateOscillator>)
+  - [func NewUltimateOscillatorWithPeriods\[T helper.Float\]\(shortPeriod, mediumPeriod, longPeriod int\) \*UltimateOscillator\[T\]](<#NewUltimateOscillatorWithPeriods>)
   - [func \(u \*UltimateOscillator\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#UltimateOscillator[T].Compute>)
   - [func \(u \*UltimateOscillator\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#UltimateOscillator[T].ComputeWithContext>)
   - [func \(u \*UltimateOscillator\[T\]\) IdlePeriod\(\) int](<#UltimateOscillator[T].IdlePeriod>)
@@ -137,6 +157,7 @@ The information provided on this project is strictly for informational purposes 
   - [func \(w \*WilliamsR\[T\]\) Compute\(highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].Compute>)
   - [func \(w \*WilliamsR\[T\]\) ComputeWithContext\(ctx context.Context, highs, lows, closings \<\-chan T\) \<\-chan T](<#WilliamsR[T].ComputeWithContext>)
   - [func \(w \*WilliamsR\[T\]\) IdlePeriod\(\) int](<#WilliamsR[T].IdlePeriod>)
+  - [func \(w \*WilliamsR\[T\]\) String\(\) string](<#WilliamsR[T].String>)
 
 
 ## Constants
@@ -316,6 +337,15 @@ const (
 )
 ```
 
+<a name="DefaultEhlersFisherPeriod"></a>
+
+```go
+const (
+    // DefaultEhlersFisherPeriod is the default period for the Ehlers Fisher Transform.
+    DefaultEhlersFisherPeriod = 10
+)
+```
+
 <a name="DefaultElderRayPeriod"></a>
 
 ```go
@@ -362,7 +392,7 @@ const (
 ```
 
 <a name="AwesomeOscillator"></a>
-## type [AwesomeOscillator](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L35-L41>)
+## type [AwesomeOscillator](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L36-L42>)
 
 AwesomeOscillator represents the configuration parameter for calculating the Awesome Oscillator \(AO\). It gauges market momentum by comparing short\-term price action \(5\-period average\) against long\-term trends \(34\-period average\). Its value around a zero line reflects bullishness above and bearishness below. Crossings of the zero line can signal potential trend reversals. Traders use the AO to confirm existing trends, identify entry/exit points, and understand momentum shifts.
 
@@ -374,12 +404,12 @@ AO = 5-Period SMA - 34-Period SMA.
 Example:
 
 ```
-ao := momentum.AwesomeOscillator[float64]()
+ao := momentum.NewAwesomeOscillator[float64]()
 values := ao.Compute(lows, highs)
 ```
 
 ```go
-type AwesomeOscillator[T helper.Number] struct {
+type AwesomeOscillator[T helper.Float] struct {
     // ShortSma is the SMA for the short period.
     ShortSma *trend.Sma[T]
 
@@ -389,16 +419,16 @@ type AwesomeOscillator[T helper.Number] struct {
 ```
 
 <a name="NewAwesomeOscillator"></a>
-### func [NewAwesomeOscillator](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L44>)
+### func [NewAwesomeOscillator](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L45>)
 
 ```go
-func NewAwesomeOscillator[T helper.Number]() *AwesomeOscillator[T]
+func NewAwesomeOscillator[T helper.Float]() *AwesomeOscillator[T]
 ```
 
 NewAwesomeOscillator function initializes a new Awesome Oscillator instance.
 
 <a name="AwesomeOscillator[T].Compute"></a>
-### func \(\*AwesomeOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L77>)
+### func \(\*AwesomeOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L83>)
 
 ```go
 func (a *AwesomeOscillator[T]) Compute(highs, lows <-chan T) <-chan T
@@ -409,7 +439,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="AwesomeOscillator[T].ComputeWithContext"></a>
-### func \(\*AwesomeOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L52>)
+### func \(\*AwesomeOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L53>)
 
 ```go
 func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T
@@ -418,7 +448,7 @@ func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 ComputeWithContext function takes a channel of numbers and computes the AwesomeOscillator.
 
 <a name="AwesomeOscillator[T].IdlePeriod"></a>
-### func \(\*AwesomeOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L70>)
+### func \(\*AwesomeOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L71>)
 
 ```go
 func (a *AwesomeOscillator[T]) IdlePeriod() int
@@ -426,8 +456,17 @@ func (a *AwesomeOscillator[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Awesome Oscillator won't yield any results.
 
+<a name="AwesomeOscillator[T].String"></a>
+### func \(\*AwesomeOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/awesome_oscillator.go#L76>)
+
+```go
+func (a *AwesomeOscillator[T]) String() string
+```
+
+String is the string representation of the Awesome Oscillator.
+
 <a name="ChaikinOscillator"></a>
-## type [ChaikinOscillator](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L34-L43>)
+## type [ChaikinOscillator](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L35-L44>)
 
 ChaikinOscillator represents the configuration parameter for calculating the Chaikin Oscillator. It measures the momentum of the Accumulation/Distribution \(A/D\) using the Moving Average Convergence Divergence \(MACD\) formula. It takes the difference between fast and slow periods EMA of the A/D. Cross above the A/D line indicates bullish.
 
@@ -438,12 +477,12 @@ CO = Ema(fastPeriod, AD) - Ema(slowPeriod, AD)
 Example:
 
 ```
-co := momentum.ChaikinOscillator[float64]()
+co := momentum.NewChaikinOscillator[float64]()
 values := co.Compute(lows, highs)
 ```
 
 ```go
-type ChaikinOscillator[T helper.Number] struct {
+type ChaikinOscillator[T helper.Float] struct {
     // Ad is the Accumulation/Distribution (A/D) instance.
     Ad  *volume.Ad[T]
 
@@ -456,16 +495,16 @@ type ChaikinOscillator[T helper.Number] struct {
 ```
 
 <a name="NewChaikinOscillator"></a>
-### func [NewChaikinOscillator](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L46>)
+### func [NewChaikinOscillator](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L47>)
 
 ```go
-func NewChaikinOscillator[T helper.Number]() *ChaikinOscillator[T]
+func NewChaikinOscillator[T helper.Float]() *ChaikinOscillator[T]
 ```
 
 NewChaikinOscillator function initializes a new Chaikin Oscillator instance.
 
 <a name="ChaikinOscillator[T].Compute"></a>
-### func \(\*ChaikinOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L79>)
+### func \(\*ChaikinOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L85>)
 
 ```go
 func (c *ChaikinOscillator[T]) Compute(highs, lows, closings, volumes <-chan T) (<-chan T, <-chan T)
@@ -476,7 +515,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ChaikinOscillator[T].ComputeWithContext"></a>
-### func \(\*ChaikinOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L55>)
+### func \(\*ChaikinOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L56>)
 
 ```go
 func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) (<-chan T, <-chan T)
@@ -485,13 +524,22 @@ func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 ComputeWithContext function takes a channel of numbers and computes the Chaikin Oscillator.
 
 <a name="ChaikinOscillator[T].IdlePeriod"></a>
-### func \(\*ChaikinOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L72>)
+### func \(\*ChaikinOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L73>)
 
 ```go
 func (c *ChaikinOscillator[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
+
+<a name="ChaikinOscillator[T].String"></a>
+### func \(\*ChaikinOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/chaikin_oscillator.go#L78>)
+
+```go
+func (c *ChaikinOscillator[T]) String() string
+```
+
+String is the string representation of the Chaikin Oscillator.
 
 <a name="ConnorsRsi"></a>
 ## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L36-L52>)
@@ -548,7 +596,7 @@ func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percen
 NewConnorsRsiWithPeriods function initializes a new Connors RSI instance with the given periods.
 
 <a name="ConnorsRsi[T].Compute"></a>
-### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L182>)
+### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L219>)
 
 ```go
 func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T
@@ -568,16 +616,16 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 ComputeWithContext function takes a channel of closings numbers and computes the Connors RSI.
 
 <a name="ConnorsRsi[T].IdlePeriod"></a>
-### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L116>)
+### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L140>)
 
 ```go
 func (c *ConnorsRsi[T]) IdlePeriod() int
 ```
 
-IdlePeriod is the initial period that Connors RSI won't yield any results.
+IdlePeriod is the initial period that Connors RSI won't yield any results. The three components run in parallel, not sequentially, so this is the max of their individual idle periods, not the sum.
 
 <a name="ConnorsRsi[T].String"></a>
-### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L123>)
+### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L155>)
 
 ```go
 func (c *ConnorsRsi[T]) String() string
@@ -670,6 +718,95 @@ func (c *CoppockCurve[T]) String() string
 
 String is the string representation of the Coppock Curve.
 
+<a name="EhlersFisher"></a>
+## type [EhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L41-L50>)
+
+EhlersFisher represents the configuration parameters for calculating the canonical Fisher Transform, per John Ehlers' original Fisher Transform methodology \("Using the Fisher Transform", Stocks & Commodities magazine\). Unlike [Fisher](<#Fisher>), it uses the median of high and low, and recursively smooths both the normalized price and the transformed output.
+
+```
+Price = (High + Low) / 2
+Value1 = 0.33 * 2 * ((Price - MinL) / (MaxH - MinL) - 0.5) + 0.67 * Value1[previous]
+Fisher = 0.5 * ln((1 + Value1) / (1 - Value1)) * 0.5 + 0.5 * Fisher[previous]
+```
+
+Value1 is clamped to \[\-0.999, 0.999\] before it is used in the logarithm, to prevent division by zero or logarithmic infinity errors. The very first emitted Value1 and Fisher, having no prior history, are computed with Value1\[previous\] and Fisher\[previous\] seeded at 0.
+
+Example:
+
+```
+ehlersFisher := momentum.NewEhlersFisher[float64]()
+result := ehlersFisher.Compute(highs, lows)
+```
+
+```go
+type EhlersFisher[T helper.Float] struct {
+    // Period is the lookback period for min/max calculation.
+    Period int
+
+    // Max is the Moving Max instance.
+    Max *trend.MovingMax[T]
+
+    // Min is the Moving Min instance.
+    Min *trend.MovingMin[T]
+}
+```
+
+<a name="NewEhlersFisher"></a>
+### func [NewEhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L54>)
+
+```go
+func NewEhlersFisher[T helper.Float]() *EhlersFisher[T]
+```
+
+NewEhlersFisher function initializes a new Ehlers Fisher Transform instance with the default parameters.
+
+<a name="NewEhlersFisherWithPeriod"></a>
+### func [NewEhlersFisherWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L60>)
+
+```go
+func NewEhlersFisherWithPeriod[T helper.Float](period int) *EhlersFisher[T]
+```
+
+NewEhlersFisherWithPeriod function initializes a new Ehlers Fisher Transform instance with the given period.
+
+<a name="EhlersFisher[T].Compute"></a>
+### func \(\*EhlersFisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L157>)
+
+```go
+func (e *EhlersFisher[T]) Compute(highs, lows <-chan T) <-chan T
+```
+
+Compute wraps ComputeWithContext for backwards compatibility.
+
+Deprecated: Use ComputeWithContext instead.
+
+<a name="EhlersFisher[T].ComputeWithContext"></a>
+### func \(\*EhlersFisher\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L70>)
+
+```go
+func (e *EhlersFisher[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T
+```
+
+ComputeWithContext function takes channels of high and low numbers and computes the Ehlers Fisher Transform.
+
+<a name="EhlersFisher[T].IdlePeriod"></a>
+### func \(\*EhlersFisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L142>)
+
+```go
+func (e *EhlersFisher[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Ehlers Fisher Transform won't yield any results.
+
+<a name="EhlersFisher[T].String"></a>
+### func \(\*EhlersFisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L150>)
+
+```go
+func (e *EhlersFisher[T]) String() string
+```
+
+String is the string representation of the Ehlers Fisher Transform.
+
 <a name="ElderRay"></a>
 ## type [ElderRay](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L32-L35>)
 
@@ -688,7 +825,7 @@ bullPower, bearPower := er.Compute(highs, lows, closings)
 ```
 
 ```go
-type ElderRay[T helper.Number] struct {
+type ElderRay[T helper.Float] struct {
     // Period is the time period.
     Period int
 }
@@ -698,7 +835,7 @@ type ElderRay[T helper.Number] struct {
 ### func [NewElderRay](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L38>)
 
 ```go
-func NewElderRay[T helper.Number]() *ElderRay[T]
+func NewElderRay[T helper.Float]() *ElderRay[T]
 ```
 
 NewElderRay function initializes a new Elder\-Ray Index instance with the default parameters.
@@ -707,7 +844,7 @@ NewElderRay function initializes a new Elder\-Ray Index instance with the defaul
 ### func [NewElderRayWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/elder_ray.go#L43>)
 
 ```go
-func NewElderRayWithPeriod[T helper.Number](period int) *ElderRay[T]
+func NewElderRayWithPeriod[T helper.Float](period int) *ElderRay[T]
 ```
 
 NewElderRayWithPeriod function initializes a new Elder\-Ray Index instance with the given period.
@@ -751,7 +888,7 @@ func (e *ElderRay[T]) String() string
 String is the string representation of the Elder\-Ray Index.
 
 <a name="Fisher"></a>
-## type [Fisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L40-L49>)
+## type [Fisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L47-L56>)
 
 Fisher represents the configuration parameters for calculating the Fisher Transform. The Fisher Transform is a technical indicator that transforms prices into a normal distribution to identify price reversals.
 
@@ -761,6 +898,8 @@ Fisher = 0.5 * ln((1 + x) / (1 - x))
 ```
 
 The clamped x value is bounded between \-0.999 and \+0.999 to prevent division by zero or logarithmic infinity errors.
+
+This is a simplified, non\-recursive variant that uses the closing price only \(rather than the median of high and low\) and performs no smoothing across iterations. As a result, its output will diverge from the canonical Ehlers Fisher Transform implemented by most trading platforms \(e.g. TradingView, TA\-Lib\). For the canonical, recursive formula, see [EhlersFisher](<#EhlersFisher>) instead.
 
 Example:
 
@@ -783,7 +922,7 @@ type Fisher[T helper.Float] struct {
 ```
 
 <a name="NewFisher"></a>
-### func [NewFisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L52>)
+### func [NewFisher](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L59>)
 
 ```go
 func NewFisher[T helper.Float]() *Fisher[T]
@@ -792,7 +931,7 @@ func NewFisher[T helper.Float]() *Fisher[T]
 NewFisher function initializes a new Fisher Transform instance.
 
 <a name="Fisher[T].Compute"></a>
-### func \(\*Fisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L122>)
+### func \(\*Fisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L125>)
 
 ```go
 func (f *Fisher[T]) Compute(closings <-chan T) <-chan T
@@ -803,7 +942,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Fisher[T].ComputeWithContext"></a>
-### func \(\*Fisher\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L61>)
+### func \(\*Fisher\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L68>)
 
 ```go
 func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -812,7 +951,7 @@ func (f *Fisher[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 ComputeWithContext function takes a channel of numbers and computes the Fisher Transform.
 
 <a name="Fisher[T].IdlePeriod"></a>
-### func \(\*Fisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L107>)
+### func \(\*Fisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L110>)
 
 ```go
 func (f *Fisher[T]) IdlePeriod() int
@@ -821,7 +960,7 @@ func (f *Fisher[T]) IdlePeriod() int
 IdlePeriod is the initial period that Fisher Transform won't yield any results.
 
 <a name="Fisher[T].String"></a>
-### func \(\*Fisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L115>)
+### func \(\*Fisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/fisher.go#L118>)
 
 ```go
 func (f *Fisher[T]) String() string
@@ -830,27 +969,29 @@ func (f *Fisher[T]) String() string
 String is the string representation of the Fisher Transform.
 
 <a name="IchimokuCloud"></a>
-## type [IchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L42-L63>)
+## type [IchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L48-L69>)
 
 IchimokuCloud represents the configuration parameter for calculating the Ichimoku Cloud. It is also known as the Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistance, identifies trend direction, gauges momentum, and provides trading signals.
 
 ```
 Tenkan-sen (Conversion Line) = (9-Period High + 9-Period Low) / 2
 Kijun-sen (Base Line) = (26-Period High + 26-Period Low) / 2
-Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2
-Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2
-Chikou Span (Lagging Span) = Closing plotted 26 days in the past.
+Senkou Span A (Leading Span A) = (Conversion Line + Base Line) / 2, plotted LaggingPeriod periods ahead.
+Senkou Span B (Leading Span B) = (52-Period High + 52-Period Low) / 2, plotted LaggingPeriod periods ahead.
+Chikou Span (Lagging Span) = Today's closing, plotted LaggingPeriod periods back on the chart.
 ```
+
+Senkou Span A/B and Chikou Span are all displaced on the chart relative to the day they are computed from. Since real\-world implementations almost universally default both displacements to the same value, LaggingPeriod is reused for both: it is the number of periods Senkou Span A/B are shifted forward, and also the number of periods Chikou Span is shifted back.
 
 Example:
 
 ```
-ic := momentum.IchimokuCloud[float64]()
+ic := momentum.NewIchimokuCloud[float64]()
 conversionLine, baseLine, leadingSpanA, leasingSpanB, laggingSpan := ic.Compute(highs, lows, closings)
 ```
 
 ```go
-type IchimokuCloud[T helper.Number] struct {
+type IchimokuCloud[T helper.Float] struct {
     // ConversionMax is the conversion Moving Max instance.
     ConversionMax *trend.MovingMax[T]
 
@@ -875,16 +1016,16 @@ type IchimokuCloud[T helper.Number] struct {
 ```
 
 <a name="NewIchimokuCloud"></a>
-### func [NewIchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L66>)
+### func [NewIchimokuCloud](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L72>)
 
 ```go
-func NewIchimokuCloud[T helper.Number]() *IchimokuCloud[T]
+func NewIchimokuCloud[T helper.Float]() *IchimokuCloud[T]
 ```
 
 NewIchimokuCloud function initializes a new Ichimoku Cloud instance.
 
 <a name="IchimokuCloud[T].Compute"></a>
-### func \(\*IchimokuCloud\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L139>)
+### func \(\*IchimokuCloud\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L172>)
 
 ```go
 func (i *IchimokuCloud[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T, <-chan T)
@@ -895,7 +1036,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="IchimokuCloud[T].ComputeWithContext"></a>
-### func \(\*IchimokuCloud\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L80>)
+### func \(\*IchimokuCloud\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L86>)
 
 ```go
 func (i *IchimokuCloud[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T, <-chan T)
@@ -904,13 +1045,22 @@ func (i *IchimokuCloud[T]) ComputeWithContext(ctx context.Context, highs, lows, 
 ComputeWithContext function takes a channel of numbers and computes the Ichimoku Cloud. Returns conversionLine, baseLine, leadingSpanA, leadingSpanB, laggingSpan
 
 <a name="IchimokuCloud[T].IdlePeriod"></a>
-### func \(\*IchimokuCloud\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L132>)
+### func \(\*IchimokuCloud\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L160>)
 
 ```go
 func (i *IchimokuCloud[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Ichimoku Cloud won't yield any results.
+
+<a name="IchimokuCloud[T].String"></a>
+### func \(\*IchimokuCloud\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ichimoku_cloud.go#L165>)
+
+```go
+func (i *IchimokuCloud[T]) String() string
+```
+
+String is the string representation of the Ichimoku Cloud.
 
 <a name="InternalBarStrength"></a>
 ## type [InternalBarStrength](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L23>)
@@ -929,20 +1079,20 @@ result := ibs.Compute(highs, lows, closings)
 ```
 
 ```go
-type InternalBarStrength[T helper.Number] struct{}
+type InternalBarStrength[T helper.Float] struct{}
 ```
 
 <a name="NewInternalBarStrength"></a>
 ### func [NewInternalBarStrength](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L26>)
 
 ```go
-func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T]
+func NewInternalBarStrength[T helper.Float]() *InternalBarStrength[T]
 ```
 
 NewInternalBarStrength function initializes a new InternalBarStrength instance.
 
 <a name="InternalBarStrength[T].Compute"></a>
-### func \(\*InternalBarStrength\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L54>)
+### func \(\*InternalBarStrength\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L51>)
 
 ```go
 func (ibs *InternalBarStrength[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -962,7 +1112,7 @@ func (ibs *InternalBarStrength[T]) ComputeWithContext(ctx context.Context, highs
 ComputeWithContext function takes channels of highs, lows, and closings and computes the IBS.
 
 <a name="InternalBarStrength[T].IdlePeriod"></a>
-### func \(\*InternalBarStrength\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L42>)
+### func \(\*InternalBarStrength\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L39>)
 
 ```go
 func (ibs *InternalBarStrength[T]) IdlePeriod() int
@@ -971,7 +1121,7 @@ func (ibs *InternalBarStrength[T]) IdlePeriod() int
 IdlePeriod is the initial period that InternalBarStrength won't yield any results.
 
 <a name="InternalBarStrength[T].String"></a>
-### func \(\*InternalBarStrength\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L47>)
+### func \(\*InternalBarStrength\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L44>)
 
 ```go
 func (ibs *InternalBarStrength[T]) String() string
@@ -980,7 +1130,7 @@ func (ibs *InternalBarStrength[T]) String() string
 String is the string representation of the InternalBarStrength.
 
 <a name="Ppo"></a>
-## type [Ppo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L37-L46>)
+## type [Ppo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L38-L47>)
 
 Ppo represents the configuration parameter for calculating the Percentage Price Oscillator \(PPO\). It is a momentum oscillator for the price. It is used to indicate the ups and downs based on the price. A breakout is confirmed when PPO is positive.
 
@@ -993,7 +1143,7 @@ Histogram = PPO - Signal
 Example:
 
 ```
-ppo := momentum.Ppo[float64]()
+ppo := momentum.NewPpo[float64]()
 p, s, h := ppo.Compute(closings)
 ```
 
@@ -1011,7 +1161,7 @@ type Ppo[T helper.Float] struct {
 ```
 
 <a name="NewPpo"></a>
-### func [NewPpo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L49>)
+### func [NewPpo](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L50>)
 
 ```go
 func NewPpo[T helper.Float]() *Ppo[T]
@@ -1020,7 +1170,7 @@ func NewPpo[T helper.Float]() *Ppo[T]
 NewPpo function initializes a new Percentage Price Oscillator instance.
 
 <a name="Ppo[T].Compute"></a>
-### func \(\*Ppo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L103>)
+### func \(\*Ppo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L109>)
 
 ```go
 func (p *Ppo[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -1031,7 +1181,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Ppo[T].ComputeWithContext"></a>
-### func \(\*Ppo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L59>)
+### func \(\*Ppo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L60>)
 
 ```go
 func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -1040,7 +1190,7 @@ func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-c
 ComputeWithContext function takes a channel of numbers and computes the Percentage Price Oscillator. Returns ppo, signal, histogram.
 
 <a name="Ppo[T].IdlePeriod"></a>
-### func \(\*Ppo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L96>)
+### func \(\*Ppo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L97>)
 
 ```go
 func (p *Ppo[T]) IdlePeriod() int
@@ -1048,10 +1198,21 @@ func (p *Ppo[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Percentage Price Oscillator won't yield any results.
 
+<a name="Ppo[T].String"></a>
+### func \(\*Ppo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ppo.go#L102>)
+
+```go
+func (p *Ppo[T]) String() string
+```
+
+String is the string representation of the PPO.
+
 <a name="PringsSpecialK"></a>
-## type [PringsSpecialK](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L14-L40>)
+## type [PringsSpecialK](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L23-L49>)
 
 PringsSpecialK implements Martin Pring's Special K momentum indicator. It composes multiple Rate\-of\-Change \(ROC\) series smoothed by Simple Moving Averages \(SMA\) and outputs a weighted sum aligned to the slowest path so all terms are time\-synchronized. See Compute for the exact composition and weights.
+
+This constrains on helper.Float rather than the usual helper.Number: the underlying Roc computation divides by an earlier value in the series, and over integer types that division truncates badly enough to distort the weighted sum, so integer support is intentionally not offered here.
 
 ```go
 type PringsSpecialK[T helper.Float] struct {
@@ -1084,7 +1245,7 @@ type PringsSpecialK[T helper.Float] struct {
 ```
 
 <a name="NewPringsSpecialK"></a>
-### func [NewPringsSpecialK](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L43>)
+### func [NewPringsSpecialK](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L52>)
 
 ```go
 func NewPringsSpecialK[T helper.Float]() *PringsSpecialK[T]
@@ -1093,7 +1254,7 @@ func NewPringsSpecialK[T helper.Float]() *PringsSpecialK[T]
 NewPringsSpecialK function initializes a new Martin Pring's Special K instance.
 
 <a name="PringsSpecialK[T].Compute"></a>
-### func \(\*PringsSpecialK\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L136>)
+### func \(\*PringsSpecialK\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L155>)
 
 ```go
 func (p *PringsSpecialK[T]) Compute(closings <-chan T) <-chan T
@@ -1104,7 +1265,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="PringsSpecialK[T].ComputeWithContext"></a>
-### func \(\*PringsSpecialK\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L74>)
+### func \(\*PringsSpecialK\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L83>)
 
 ```go
 func (p *PringsSpecialK[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1112,8 +1273,26 @@ func (p *PringsSpecialK[T]) ComputeWithContext(ctx context.Context, closings <-c
 
 ComputeWithContext function takes a channel of numbers and computes the Prings Special K.
 
+<a name="PringsSpecialK[T].IdlePeriod"></a>
+### func \(\*PringsSpecialK\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L143>)
+
+```go
+func (p *PringsSpecialK[T]) IdlePeriod() int
+```
+
+IdlePeriod is the initial period that Pring's Special K won't yield any results.
+
+<a name="PringsSpecialK[T].String"></a>
+### func \(\*PringsSpecialK\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/prings_special_k.go#L148>)
+
+```go
+func (p *PringsSpecialK[T]) String() string
+```
+
+String is the string representation of the Pring's Special K.
+
 <a name="Pvo"></a>
-## type [Pvo](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L37-L46>)
+## type [Pvo](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L38-L47>)
 
 Pvo represents the configuration parameter for calculating the Percentage Volume Oscillator \(PVO\). It is a momentum oscillator for the price. It is used to indicate the ups and downs based on the price. A breakout is confirmed when PVO is positive.
 
@@ -1126,7 +1305,7 @@ Histogram = PVO - Signal
 Example:
 
 ```
-pvo := momentum.Pvo[float64]()
+pvo := momentum.NewPvo[float64]()
 p, s, h := pvo.Compute(volumes)
 ```
 
@@ -1144,7 +1323,7 @@ type Pvo[T helper.Float] struct {
 ```
 
 <a name="NewPvo"></a>
-### func [NewPvo](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L49>)
+### func [NewPvo](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L50>)
 
 ```go
 func NewPvo[T helper.Float]() *Pvo[T]
@@ -1153,7 +1332,7 @@ func NewPvo[T helper.Float]() *Pvo[T]
 NewPvo function initializes a new Percentage Volume Oscillator instance.
 
 <a name="Pvo[T].Compute"></a>
-### func \(\*Pvo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L103>)
+### func \(\*Pvo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L109>)
 
 ```go
 func (p *Pvo[T]) Compute(volumes <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -1164,7 +1343,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Pvo[T].ComputeWithContext"></a>
-### func \(\*Pvo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L59>)
+### func \(\*Pvo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L60>)
 
 ```go
 func (p *Pvo[T]) ComputeWithContext(ctx context.Context, volumes <-chan T) (<-chan T, <-chan T, <-chan T)
@@ -1173,7 +1352,7 @@ func (p *Pvo[T]) ComputeWithContext(ctx context.Context, volumes <-chan T) (<-ch
 ComputeWithContext function takes a channel of numbers and computes the Percentage Volume Oscillator. Returns pvo, signal, histogram.
 
 <a name="Pvo[T].IdlePeriod"></a>
-### func \(\*Pvo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L96>)
+### func \(\*Pvo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L97>)
 
 ```go
 func (p *Pvo[T]) IdlePeriod() int
@@ -1181,8 +1360,17 @@ func (p *Pvo[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Percentage Volume Oscillator won't yield any results.
 
+<a name="Pvo[T].String"></a>
+### func \(\*Pvo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/pvo.go#L102>)
+
+```go
+func (p *Pvo[T]) String() string
+```
+
+String is the string representation of the PVO.
+
 <a name="Qstick"></a>
-## type [Qstick](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L35-L37>)
+## type [Qstick](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L36-L38>)
 
 Qstick represents the configuration parameter for calculating the Qstick indicator. Qstick is a momentum indicator used to identify an asset's trend by looking at the SMA of the difference between its closing and opening.
 
@@ -1195,29 +1383,29 @@ QS = SMA(Closings - Openings)
 Example:
 
 ```
-qstick := momentum.Qstick[float64]()
+qstick := momentum.NewQstick[float64]()
 qstick.Sma.Period = 50
 
 values := qstick.Compute(openings, closings)
 ```
 
 ```go
-type Qstick[T helper.Number] struct {
+type Qstick[T helper.Float] struct {
     Sma *trend.Sma[T]
 }
 ```
 
 <a name="NewQstick"></a>
-### func [NewQstick](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L40>)
+### func [NewQstick](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L41>)
 
 ```go
-func NewQstick[T helper.Number]() *Qstick[T]
+func NewQstick[T helper.Float]() *Qstick[T]
 ```
 
 NewQstick function initializes a new QStick instance.
 
 <a name="Qstick[T].Compute"></a>
-### func \(\*Qstick\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L66>)
+### func \(\*Qstick\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L72>)
 
 ```go
 func (q *Qstick[T]) Compute(openings, closings <-chan T) <-chan T
@@ -1228,7 +1416,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Qstick[T].ComputeWithContext"></a>
-### func \(\*Qstick\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L51>)
+### func \(\*Qstick\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L52>)
 
 ```go
 func (q *Qstick[T]) ComputeWithContext(ctx context.Context, openings, closings <-chan T) <-chan T
@@ -1237,7 +1425,7 @@ func (q *Qstick[T]) ComputeWithContext(ctx context.Context, openings, closings <
 ComputeWithContext function takes a channel of numbers and computes the Qstick.
 
 <a name="Qstick[T].IdlePeriod"></a>
-### func \(\*Qstick\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L59>)
+### func \(\*Qstick\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L60>)
 
 ```go
 func (q *Qstick[T]) IdlePeriod() int
@@ -1245,8 +1433,17 @@ func (q *Qstick[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Qstick won't yield any results.
 
+<a name="Qstick[T].String"></a>
+### func \(\*Qstick\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/qstick.go#L65>)
+
+```go
+func (q *Qstick[T]) String() string
+```
+
+String is the string representation of the Qstick.
+
 <a name="Rsi"></a>
-## type [Rsi](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L29-L32>)
+## type [Rsi](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L30-L33>)
 
 Rsi represents the configuration parameter for calculating the Relative Strength Index \(RSI\). It is a momentum indicator that measures the magnitude of recent price changes to evaluate overbought and oversold conditions.
 
@@ -1270,7 +1467,7 @@ type Rsi[T helper.Float] struct {
 ```
 
 <a name="NewRsi"></a>
-### func [NewRsi](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L35>)
+### func [NewRsi](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L36>)
 
 ```go
 func NewRsi[T helper.Float]() *Rsi[T]
@@ -1279,7 +1476,7 @@ func NewRsi[T helper.Float]() *Rsi[T]
 NewRsi function initializes a new Relative Strength Index instance with the default parameters.
 
 <a name="NewRsiWithPeriod"></a>
-### func [NewRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L40>)
+### func [NewRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L41>)
 
 ```go
 func NewRsiWithPeriod[T helper.Float](period int) *Rsi[T]
@@ -1299,7 +1496,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Rsi[T].ComputeWithContext"></a>
-### func \(\*Rsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L47>)
+### func \(\*Rsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L48>)
 
 ```go
 func (r *Rsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1308,13 +1505,22 @@ func (r *Rsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 ComputeWithContext function takes a channel of closings numbers and computes the Relative Strength Index.
 
 <a name="Rsi[T].IdlePeriod"></a>
-### func \(\*Rsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L81>)
+### func \(\*Rsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L76>)
 
 ```go
 func (r *Rsi[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Relative Strength Index won't yield any results.
+
+<a name="Rsi[T].String"></a>
+### func \(\*Rsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rsi.go#L81>)
+
+```go
+func (r *Rsi[T]) String() string
+```
+
+String is the string representation of the RSI.
 
 <a name="Rvi"></a>
 ## type [Rvi](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L47-L53>)
@@ -1359,7 +1565,7 @@ func NewRvi[T helper.Float]() *Rvi[T]
 NewRvi function initializes a new RVI instance.
 
 <a name="Rvi[T].Compute"></a>
-### func \(\*Rvi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L156>)
+### func \(\*Rvi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L160>)
 
 ```go
 func (r *Rvi[T]) Compute(opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T)
@@ -1370,7 +1576,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Rvi[T].ComputeWithContext"></a>
-### func \(\*Rvi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L92>)
+### func \(\*Rvi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L94>)
 
 ```go
 func (r *Rvi[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, closings <-chan T) (rviResult <-chan T, signalResult <-chan T)
@@ -1379,7 +1585,7 @@ func (r *Rvi[T]) ComputeWithContext(ctx context.Context, opens, highs, lows, clo
 ComputeWithContext function takes channels of OHLC numbers and computes the Relative Vigor Index and its signal line.
 
 <a name="Rvi[T].IdlePeriod"></a>
-### func \(\*Rvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L140>)
+### func \(\*Rvi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L144>)
 
 ```go
 func (r *Rvi[T]) IdlePeriod() int
@@ -1388,7 +1594,7 @@ func (r *Rvi[T]) IdlePeriod() int
 IdlePeriod is the initial period that RVI won't yield any results.
 
 <a name="Rvi[T].String"></a>
-### func \(\*Rvi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L149>)
+### func \(\*Rvi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/rvi.go#L153>)
 
 ```go
 func (r *Rvi[T]) String() string
@@ -1397,7 +1603,7 @@ func (r *Rvi[T]) String() string
 String is the string representation of the RVI.
 
 <a name="StochasticOscillator"></a>
-## type [StochasticOscillator](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L33-L42>)
+## type [StochasticOscillator](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L38-L47>)
 
 StochasticOscillator represents the configuration parameter for calculating the Stochastic Oscillator. It is a momentum indicator that shows the location of the closing relative to high\-low range over a set number of periods.
 
@@ -1406,15 +1612,17 @@ K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 D = 3-Period SMA of K
 ```
 
+When the window is flat \(Highest High == Lowest Low, i.e. price hasn't moved at all within the window\), %K is an undefined 0/0. It is treated as neutral \(50\), the midpoint of %K's own 0\-100 scale, matching the flat\-market convention established by Rsi.
+
 Example:
 
 ```
-so := momentum.StochasticOscillator[float64]()
-k, d := wr.Compute(highs, lows, closings)
+so := momentum.NewStochasticOscillator[float64]()
+k, d := so.Compute(highs, lows, closings)
 ```
 
 ```go
-type StochasticOscillator[T helper.Number] struct {
+type StochasticOscillator[T helper.Float] struct {
     // Max is the Moving Max instance.
     Max *trend.MovingMax[T]
 
@@ -1427,16 +1635,16 @@ type StochasticOscillator[T helper.Number] struct {
 ```
 
 <a name="NewStochasticOscillator"></a>
-### func [NewStochasticOscillator](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L45>)
+### func [NewStochasticOscillator](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L50>)
 
 ```go
-func NewStochasticOscillator[T helper.Number]() *StochasticOscillator[T]
+func NewStochasticOscillator[T helper.Float]() *StochasticOscillator[T]
 ```
 
 NewStochasticOscillator function initializes a new Stochastic Oscillator instance.
 
 <a name="StochasticOscillator[T].Compute"></a>
-### func \(\*StochasticOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L87>)
+### func \(\*StochasticOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L109>)
 
 ```go
 func (s *StochasticOscillator[T]) Compute(highs, lows, closings <-chan T) (<-chan T, <-chan T)
@@ -1447,7 +1655,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="StochasticOscillator[T].ComputeWithContext"></a>
-### func \(\*StochasticOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L54>)
+### func \(\*StochasticOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L59>)
 
 ```go
 func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T)
@@ -1456,7 +1664,7 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 ComputeWithContext function takes a channel of numbers and computes the Stochastic Oscillator. Returns k and d.
 
 <a name="StochasticOscillator[T].IdlePeriod"></a>
-### func \(\*StochasticOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L80>)
+### func \(\*StochasticOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L97>)
 
 ```go
 func (s *StochasticOscillator[T]) IdlePeriod() int
@@ -1464,8 +1672,17 @@ func (s *StochasticOscillator[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Stochastic Oscillator won't yield any results.
 
+<a name="StochasticOscillator[T].String"></a>
+### func \(\*StochasticOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_oscillator.go#L102>)
+
+```go
+func (s *StochasticOscillator[T]) String() string
+```
+
+String is the string representation of the Stochastic Oscillator.
+
 <a name="StochasticRsi"></a>
-## type [StochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L31-L40>)
+## type [StochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L32-L41>)
 
 StochasticRsi represents the configuration parameter for calculating the Stochastic Relative Strength Index \(RSI\). It is a momentum indicator that focuses on the historical performance to evaluate overbought and oversold conditions.
 
@@ -1496,7 +1713,7 @@ type StochasticRsi[T helper.Float] struct {
 ```
 
 <a name="NewStochasticRsi"></a>
-### func [NewStochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L43>)
+### func [NewStochasticRsi](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L44>)
 
 ```go
 func NewStochasticRsi[T helper.Float]() *StochasticRsi[T]
@@ -1505,7 +1722,7 @@ func NewStochasticRsi[T helper.Float]() *StochasticRsi[T]
 NewStochasticRsi function initializes a new Storchastic RSI instance with the default parameters.
 
 <a name="NewStochasticRsiWithPeriod"></a>
-### func [NewStochasticRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L48>)
+### func [NewStochasticRsiWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L49>)
 
 ```go
 func NewStochasticRsiWithPeriod[T helper.Float](period int) *StochasticRsi[T]
@@ -1514,7 +1731,7 @@ func NewStochasticRsiWithPeriod[T helper.Float](period int) *StochasticRsi[T]
 NewStochasticRsiWithPeriod function initializes a new Stochastic RSI instance with the given period.
 
 <a name="StochasticRsi[T].Compute"></a>
-### func \(\*StochasticRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L89>)
+### func \(\*StochasticRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L95>)
 
 ```go
 func (s *StochasticRsi[T]) Compute(closings <-chan T) <-chan T
@@ -1525,7 +1742,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="StochasticRsi[T].ComputeWithContext"></a>
-### func \(\*StochasticRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L57>)
+### func \(\*StochasticRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L58>)
 
 ```go
 func (s *StochasticRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1534,7 +1751,7 @@ func (s *StochasticRsi[T]) ComputeWithContext(ctx context.Context, closings <-ch
 ComputeWithContext function takes a channel of closings numbers and computes the Stochastic RSI.
 
 <a name="StochasticRsi[T].IdlePeriod"></a>
-### func \(\*StochasticRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L82>)
+### func \(\*StochasticRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L83>)
 
 ```go
 func (s *StochasticRsi[T]) IdlePeriod() int
@@ -1542,8 +1759,17 @@ func (s *StochasticRsi[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 
+<a name="StochasticRsi[T].String"></a>
+### func \(\*StochasticRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/stochastic_rsi.go#L88>)
+
+```go
+func (s *StochasticRsi[T]) String() string
+```
+
+String is the string representation of the Stochastic RSI.
+
 <a name="Streak"></a>
-## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L129>)
+## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L161>)
 
 Streak represents the configuration for calculating the up/down streak length. The streak is the number of consecutive days the price has closed up or down.
 
@@ -1552,7 +1778,7 @@ type Streak[T helper.Float] struct{}
 ```
 
 <a name="NewStreak"></a>
-### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L132>)
+### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L164>)
 
 ```go
 func NewStreak[T helper.Float]() *Streak[T]
@@ -1561,7 +1787,7 @@ func NewStreak[T helper.Float]() *Streak[T]
 NewStreak function initializes a new Streak instance.
 
 <a name="Streak[T].Compute"></a>
-### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L189>)
+### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L226>)
 
 ```go
 func (s *Streak[T]) Compute(closings <-chan T) <-chan T
@@ -1572,7 +1798,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Streak[T].ComputeWithContext"></a>
-### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L138>)
+### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L170>)
 
 ```go
 func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1581,7 +1807,7 @@ func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 ComputeWithContext function takes a channel of closings numbers and computes the streak length. Positive values indicate consecutive up closes, negative values indicate consecutive down closes.
 
 <a name="Streak[T].IdlePeriod"></a>
-### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L175>)
+### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L207>)
 
 ```go
 func (s *Streak[T]) IdlePeriod() int
@@ -1589,10 +1815,21 @@ func (s *Streak[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that Streak won't yield any results.
 
-<a name="TdSequential"></a>
-## type [TdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L43-L55>)
+<a name="Streak[T].String"></a>
+### func \(\*Streak\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L212>)
 
-TdSequential represents the configuration parameters for calculating the Tom DeMark's TD Sequential indicator. TD Sequential is a momentum indicator that identifies potential trend exhaustion and reversals.
+```go
+func (s *Streak[T]) String() string
+```
+
+String is the string representation of the Streak.
+
+<a name="TdSequential"></a>
+## type [TdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L49-L61>)
+
+TdSequential represents the configuration parameters for calculating the Sequential exhaustion momentum indicator \(commonly referred to in technical analysis as TD Sequential\). TD Sequential is a momentum indicator that identifies potential trend exhaustion and reversals.
+
+Trademark Notice: TD Sequential® is a registered trademark of DeMark Analytics, LLC. This implementation is an independent mathematical algorithm developed for educational and research purposes and is not affiliated with, sponsored by, or endorsed by DeMark Analytics, LLC.
 
 The indicator consists of two phases:
 
@@ -1628,7 +1865,7 @@ type TdSequential[T helper.Number] struct {
 ```
 
 <a name="NewTdSequential"></a>
-### func [NewTdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L58>)
+### func [NewTdSequential](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L64>)
 
 ```go
 func NewTdSequential[T helper.Number]() *TdSequential[T]
@@ -1637,7 +1874,7 @@ func NewTdSequential[T helper.Number]() *TdSequential[T]
 NewTdSequential function initializes a new TD Sequential instance with default parameters.
 
 <a name="TdSequential[T].Compute"></a>
-### func \(\*TdSequential\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L242>)
+### func \(\*TdSequential\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L284>)
 
 ```go
 func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T)
@@ -1648,7 +1885,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TdSequential[T].ComputeWithContext"></a>
-### func \(\*TdSequential\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L88>)
+### func \(\*TdSequential\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L94>)
 
 ```go
 func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T)
@@ -1657,7 +1894,7 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 ComputeWithContext function takes a channel of numbers and computes the TD Sequential indicator, supporting context cancellation.
 
 <a name="TdSequential[T].IdlePeriod"></a>
-### func \(\*TdSequential\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L247>)
+### func \(\*TdSequential\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L289>)
 
 ```go
 func (t *TdSequential[T]) IdlePeriod() int
@@ -1665,8 +1902,17 @@ func (t *TdSequential[T]) IdlePeriod() int
 
 IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
 
+<a name="TdSequential[T].String"></a>
+### func \(\*TdSequential\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L294>)
+
+```go
+func (t *TdSequential[T]) String() string
+```
+
+String is the string representation of the TD Sequential.
+
 <a name="UltimateOscillator"></a>
-## type [UltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L43-L52>)
+## type [UltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L49-L58>)
 
 UltimateOscillator represents the configuration parameter for calculating the Ultimate Oscillator \(UO\). It was developed by Larry Williams in 1976 to measure the price momentum of an asset across multiple timeframes. By using the weighted average of three different timeframes the indicator has less volatility and fewer trade signals compared to other oscillators that rely on a single timeframe.
 
@@ -1679,6 +1925,8 @@ Average28 = Sum(BP for 28 periods) / Sum(TR for 28 periods)
 UO = 100 * [(4 * Average7) + (2 * Average14) + Average28] / (4 + 2 + 1)
 ```
 
+When a window's true range sum is zero \(a flat market for that window, i.e. no true range at all across it\), its Average is an undefined 0/0. It is treated as neutral \(0.5\), the midpoint of that Average's own 0\-1 range, so that a fully flat market across all lookback windows resolves to UO's own neutral midpoint of 50 \(0\-100 scale\), matching the flat\-market convention established by Rsi.
+
 Example:
 
 ```
@@ -1687,7 +1935,7 @@ values := uo.Compute(highs, lows, closings)
 ```
 
 ```go
-type UltimateOscillator[T helper.Number] struct {
+type UltimateOscillator[T helper.Float] struct {
     // ShortPeriod is the short period for the UO.
     ShortPeriod int
 
@@ -1700,25 +1948,25 @@ type UltimateOscillator[T helper.Number] struct {
 ```
 
 <a name="NewUltimateOscillator"></a>
-### func [NewUltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L55>)
+### func [NewUltimateOscillator](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L61>)
 
 ```go
-func NewUltimateOscillator[T helper.Number]() *UltimateOscillator[T]
+func NewUltimateOscillator[T helper.Float]() *UltimateOscillator[T]
 ```
 
 NewUltimateOscillator function initializes a new Ultimate Oscillator instance.
 
 <a name="NewUltimateOscillatorWithPeriods"></a>
-### func [NewUltimateOscillatorWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L64>)
+### func [NewUltimateOscillatorWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L70>)
 
 ```go
-func NewUltimateOscillatorWithPeriods[T helper.Number](shortPeriod, mediumPeriod, longPeriod int) *UltimateOscillator[T]
+func NewUltimateOscillatorWithPeriods[T helper.Float](shortPeriod, mediumPeriod, longPeriod int) *UltimateOscillator[T]
 ```
 
 NewUltimateOscillatorWithPeriods function initializes a new Ultimate Oscillator instance with the given periods.
 
 <a name="UltimateOscillator[T].Compute"></a>
-### func \(\*UltimateOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L153>)
+### func \(\*UltimateOscillator\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L166>)
 
 ```go
 func (u *UltimateOscillator[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -1729,7 +1977,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="UltimateOscillator[T].ComputeWithContext"></a>
-### func \(\*UltimateOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L73>)
+### func \(\*UltimateOscillator\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L79>)
 
 ```go
 func (u *UltimateOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -1738,7 +1986,7 @@ func (u *UltimateOscillator[T]) ComputeWithContext(ctx context.Context, highs, l
 ComputeWithContext function takes a channel of numbers and computes the Ultimate Oscillator.
 
 <a name="UltimateOscillator[T].IdlePeriod"></a>
-### func \(\*UltimateOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L142>)
+### func \(\*UltimateOscillator\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L155>)
 
 ```go
 func (u *UltimateOscillator[T]) IdlePeriod() int
@@ -1747,7 +1995,7 @@ func (u *UltimateOscillator[T]) IdlePeriod() int
 IdlePeriod is the initial period that Ultimate Oscillator won't yield any results.
 
 <a name="UltimateOscillator[T].String"></a>
-### func \(\*UltimateOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L146>)
+### func \(\*UltimateOscillator\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ultimate_oscillator.go#L159>)
 
 ```go
 func (u *UltimateOscillator[T]) String() string
@@ -1756,7 +2004,7 @@ func (u *UltimateOscillator[T]) String() string
 
 
 <a name="WilliamsR"></a>
-## type [WilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L31-L37>)
+## type [WilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L32-L38>)
 
 WilliamsR represents the configuration parameter for calculating the Williams %R, or just %R. It is a technical analysis oscillator showing the current closing price in relation to the high and low of the past N days \(for a given N\). It was developed by a publisher and promoter of trading materials, Larry Williams. Its purpose is to tell whether a stock or commodity market is trading near the high or the low, or somewhere in between, of its recent trading range. Buy when \-80 and below. Sell when \-20 and above.
 
@@ -1767,7 +2015,7 @@ WR = (Highest High - Closing) / (Highest High - Lowest Low) * -100.
 Example:
 
 ```
-wr := momentum.WilliamsR[float64]()
+wr := momentum.NewWilliamsR[float64]()
 values := wr.Compute(highs, lows, closings)
 ```
 
@@ -1782,7 +2030,7 @@ type WilliamsR[T helper.Float] struct {
 ```
 
 <a name="NewWilliamsR"></a>
-### func [NewWilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L40>)
+### func [NewWilliamsR](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L41>)
 
 ```go
 func NewWilliamsR[T helper.Float]() *WilliamsR[T]
@@ -1791,7 +2039,7 @@ func NewWilliamsR[T helper.Float]() *WilliamsR[T]
 NewWilliamsR function initializes a new Williams R instance.
 
 <a name="WilliamsR[T].Compute"></a>
-### func \(\*WilliamsR\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L72>)
+### func \(\*WilliamsR\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L90>)
 
 ```go
 func (w *WilliamsR[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -1802,7 +2050,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="WilliamsR[T].ComputeWithContext"></a>
-### func \(\*WilliamsR\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L48>)
+### func \(\*WilliamsR\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L49>)
 
 ```go
 func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -1811,12 +2059,21 @@ func (w *WilliamsR[T]) ComputeWithContext(ctx context.Context, highs, lows, clos
 ComputeWithContext function takes a channel of numbers and computes the Williams R.
 
 <a name="WilliamsR[T].IdlePeriod"></a>
-### func \(\*WilliamsR\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L65>)
+### func \(\*WilliamsR\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L78>)
 
 ```go
 func (w *WilliamsR[T]) IdlePeriod() int
 ```
 
 IdlePeriod is the initial period that Williams R won't yield any results.
+
+<a name="WilliamsR[T].String"></a>
+### func \(\*WilliamsR\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/williams_r.go#L83>)
+
+```go
+func (w *WilliamsR[T]) String() string
+```
+
+String is the string representation of the Williams R.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

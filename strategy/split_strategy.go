@@ -48,8 +48,8 @@ func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan
 
 	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	buyActions := ComputeStrategyWithContext(ctx, s.BuyStrategy, snapshotsSplice[0])
-	sellActions := ComputeStrategyWithContext(ctx, s.SellStrategy, snapshotsSplice[1])
+	buyActions := ComputeWithContext(ctx, s.BuyStrategy, snapshotsSplice[0])
+	sellActions := ComputeWithContext(ctx, s.SellStrategy, snapshotsSplice[1])
 
 	go func() {
 		defer close(result)
