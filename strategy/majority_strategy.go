@@ -38,6 +38,11 @@ func (a *MajorityStrategy) Name() string {
 	return a.name
 }
 
+// String is the string representation of the MajorityStrategy.
+func (a *MajorityStrategy) String() string {
+	return a.Name()
+}
+
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (a *MajorityStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)

@@ -34,6 +34,11 @@ func (a *OrStrategy) Name() string {
 	return a.name
 }
 
+// String is the string representation of the OrStrategy.
+func (a *OrStrategy) String() string {
+	return a.Name()
+}
+
 // ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (a *OrStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
