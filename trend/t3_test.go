@@ -148,3 +148,40 @@ func TestT3IdlePeriod(t *testing.T) {
 		t.Fatalf("Expected %d, got %d", expected, actual)
 	}
 }
+
+// TestT3PeriodChangedAfterConstruction guards against a regression where the
+// chained EMA instances were built once from Period at construction time and
+// cached on T3, so that changing Period afterward (as a JSON config overlay
+// or direct field assignment would) updated IdlePeriod/String but silently
+// computed against the original, stale period instead. The chain must now be
+// built fresh from the current Period every Compute call, so a T3 configured
+// for period 10 up front must produce identical output to one built at the
+// default period and then changed to 10 before Compute is called.
+func TestT3PeriodChangedAfterConstruction(t *testing.T) {
+	prices := make([]float64, 100)
+	for i := range prices {
+		prices[i] = 100 + float64(i%7)
+	}
+
+	changed := trend.NewT3[float64]()
+	changed.Period = 10
+
+	direct := trend.NewT3WithPeriodAndFactor[float64](10, trend.DefaultT3VolumeFactor)
+
+	changedOut := helper.ChanToSlice(changed.Compute(helper.SliceToChan(prices)))
+	directOut := helper.ChanToSlice(direct.Compute(helper.SliceToChan(prices)))
+
+	if changed.IdlePeriod() != direct.IdlePeriod() {
+		t.Fatalf("IdlePeriod mismatch: changed=%d direct=%d", changed.IdlePeriod(), direct.IdlePeriod())
+	}
+
+	if len(changedOut) != len(directOut) {
+		t.Fatalf("expected %d values, got %d", len(directOut), len(changedOut))
+	}
+
+	for i := range directOut {
+		if math.Abs(changedOut[i]-directOut[i]) > 1e-9 {
+			t.Fatalf("value %d: expected %v, got %v", i, directOut[i], changedOut[i])
+		}
+	}
+}
