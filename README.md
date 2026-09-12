@@ -303,6 +303,39 @@ $ indicator-backtest \
 
 Run `indicator-backtest -list-strategies` to print the full list of strategy names that are available to pass to `-strategies`.
 
+### JSON config file
+
+For larger runs, a whole backtest — repository, report, workers, and every strategy along with its tuned parameters — can be described in a single JSON file and passed with `-config`. When `-config` is set, it replaces the other flags (`-list-strategies` still works on its own).
+
+```bash
+$ indicator-backtest -config backtest.json
+```
+
+```json
+{
+  "repository": { "name": "filesystem", "config": "/home/user/assets" },
+  "report": { "name": "html", "config": "/home/user/reports" },
+  "symbols": ["aapl", "msft"],
+  "workers": 4,
+  "lastDays": 365,
+  "addSplits": false,
+  "addAnds": false,
+  "strategies": [
+    { "name": "macd" },
+    {
+      "name": "rsi",
+      "config": {
+        "BuyAt": 20,
+        "SellAt": 80,
+        "Rsi": { "Rma": { "Period": 10 } }
+      }
+    }
+  ]
+}
+```
+
+Each entry in `strategies` names a registered strategy (see `-list-strategies`) and, optionally, a `config` object. `config` is overlaid onto the strategy's default instance field by field — including into nested indicators, such as `Rsi.Rma.Period` above — so only the parameters you want to change need to be listed; everything else keeps its documented default. The available field names are the exported fields on the strategy's Go struct (e.g. [`RsiStrategy`](examples/momentum/rsi_strategy.go)) and the indicator(s) it wraps.
+
 🐳 Docker
 ---------
 
