@@ -44,6 +44,8 @@ The information provided on this project is strictly for informational purposes 
 - [func OutcomeWithContext\[T helper.Number\]\(ctx context.Context, values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#OutcomeWithContext>)
 - [func SharpeRatio\(outcomes \<\-chan float64, periodsPerYear int\) float64](<#SharpeRatio>)
 - [func SharpeRatioWithContext\(ctx context.Context, outcomes \<\-chan float64, periodsPerYear int\) float64](<#SharpeRatioWithContext>)
+- [func SortinoRatio\(outcomes \<\-chan float64, periodsPerYear int\) float64](<#SortinoRatio>)
+- [func SortinoRatioWithContext\(ctx context.Context, outcomes \<\-chan float64, periodsPerYear int\) float64](<#SortinoRatioWithContext>)
 - [type Action](<#Action>)
   - [func \(a Action\) Annotation\(\) string](<#Action.Annotation>)
 - [type AndStrategy](<#AndStrategy>)
@@ -102,6 +104,17 @@ const (
     // the approximate number of trading days used to annualize a Sharpe Ratio computed from daily
     // outcomes.
     DefaultSharpeRatioPeriodsPerYear = 252
+)
+```
+
+<a name="DefaultSortinoRatioPeriodsPerYear"></a>
+
+```go
+const (
+    // DefaultSortinoRatioPeriodsPerYear is the default number of return periods in a year, matching
+    // the approximate number of trading days used to annualize a Sortino Ratio computed from daily
+    // outcomes.
+    DefaultSortinoRatioPeriodsPerYear = 252
 )
 ```
 
@@ -307,6 +320,36 @@ Sharpe = Mean(periodReturns) / StdDev(periodReturns) * Sqrt(periodsPerYear)
 The risk\-free rate is assumed to be zero. The outcomes channel is assumed to hold one cumulative return value per trading period \(for example, one per daily snapshot\), which is exactly what OutcomeWithContext produces. Per\-period returns are derived from the change in the underlying equity curve \(1 \+ outcome\) between consecutive outcomes.
 
 Fewer than two outcome values, or a return series with zero \(or floating\-point\-noise\-level\) variance, such as a strategy that never trades, yields a Sharpe Ratio of zero rather than dividing by a near\-zero standard deviation.
+
+<a name="SortinoRatio"></a>
+## func [SortinoRatio](<https://github.com/cinar/indicator/blob/master/strategy/sortino_ratio.go#L67>)
+
+```go
+func SortinoRatio(outcomes <-chan float64, periodsPerYear int) float64
+```
+
+SortinoRatio wraps SortinoRatioWithContext for backwards compatibility.
+
+Deprecated: Use SortinoRatioWithContext instead.
+
+<a name="SortinoRatioWithContext"></a>
+## func [SortinoRatioWithContext](<https://github.com/cinar/indicator/blob/master/strategy/sortino_ratio.go#L50>)
+
+```go
+func SortinoRatioWithContext(ctx context.Context, outcomes <-chan float64, periodsPerYear int) float64
+```
+
+SortinoRatioWithContext computes the annualized Sortino Ratio for the given stream of cumulative outcome values, as produced by OutcomeWithContext, supporting context cancellation.
+
+```
+Sortino = Mean(periodReturns) / DownsideDeviation(periodReturns) * Sqrt(periodsPerYear)
+```
+
+Unlike the Sharpe Ratio, which divides by the standard deviation of all returns, the Sortino Ratio divides by the downside deviation: the root\-mean\-square of only the shortfall below a minimum acceptable return \(assumed to be zero here\), with periods at or above that return contributing zero. Two return series with identical upside volatility but different downside volatility therefore yield different Sortino Ratios, even when their Sharpe Ratios are equal.
+
+The outcomes channel is assumed to hold one cumulative return value per trading period \(for example, one per daily snapshot\), which is exactly what OutcomeWithContext produces. Per\-period returns are derived from the change in the underlying equity curve \(1 \+ outcome\) between consecutive outcomes.
+
+Fewer than two outcome values, or a return series with zero \(or floating\-point\-noise\-level\) downside deviation, such as a strategy whose returns never fall below the minimum acceptable return, yields a Sortino Ratio of zero rather than dividing by a near\-zero downside deviation.
 
 <a name="Action"></a>
 ## type [Action](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L15>)

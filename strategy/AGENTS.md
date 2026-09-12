@@ -5,7 +5,7 @@ The `strategy` package defines the core interfaces and logic for generating buy,
 ## Key Components
 
 - **Models:** `Action` (Buy/Sell/Hold). `Result` exists only to compare expected vs. actual actions in tests. `Outcome`/`OutcomeWithContext` are functions, not a model — they simulate the P&L of a given action sequence.
-- **Metrics:** `SharpeRatioWithContext` computes a risk-adjusted metric from an outcome curve (more may follow, e.g. Sortino, max drawdown).
+- **Metrics:** `SharpeRatioWithContext` and `SortinoRatioWithContext` compute risk-adjusted metrics from an outcome curve (more may follow, e.g. max drawdown).
 - **Interface:** `Strategy` (not generic).
 - **Combinators:** `AndStrategy`, `OrStrategy`, `MajorityStrategy`, `SplitStrategy`.
 - **Predefined:** `BuyAndHoldStrategy`.
