@@ -31,10 +31,7 @@ func NewInternalBarStrength[T helper.Float]() *InternalBarStrength[T] {
 func (ibs *InternalBarStrength[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
 	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		denom := high - low
-		if denom == 0 {
-			return 0
-		}
-		return (closing - low) / denom
+		return helper.SafeDivide(closing-low, denom, T(0))
 	})
 }
 

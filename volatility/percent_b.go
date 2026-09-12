@@ -53,13 +53,8 @@ func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T)
 	go helper.DrainWithContext(ctx, middleBands)
 
 	return helper.Operate3WithContext(ctx, upperBands, lowerBands, closingsSplice[1], func(upperBand, lowerBand, closing T) T {
-		denom := upperBand - lowerBand
-		if denom == 0 {
-			return 0.5
-		}
-
 		// %B = (Close - Lower Band) / (Upper Band - Lower Band)
-		return (closing - lowerBand) / denom
+		return helper.SafeDivide(closing-lowerBand, upperBand-lowerBand, T(0.5))
 	})
 }
 

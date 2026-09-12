@@ -92,11 +92,8 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 	denominator := helper.SubtractWithContext(ctx, highest, lowests[1])
 
 	rsv := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
-		if denom == 0 {
-			return 50
-		}
-
-		return (num / denom) * 100
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(num, denom, T(0.5)) * 100
 	})
 
 	ks := helper.DuplicateWithContext(ctx, kdj.Sma1.ComputeWithContext(ctx, rsv),

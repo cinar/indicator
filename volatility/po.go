@@ -100,11 +100,7 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 	phMinusPl := helper.SubtractWithContext(ctx, ph, plSplice[1])
 
 	po := helper.Operate3WithContext(ctx, closingsSplice[1], plSplice[0], phMinusPl, func(closing, pl, denom T) T {
-		if denom == 0 {
-			return 50
-		}
-
-		return 100 * (closing - pl) / denom
+		return helper.SafeDivide(100*(closing-pl), denom, T(50))
 	})
 
 	return po

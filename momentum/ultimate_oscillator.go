@@ -133,11 +133,7 @@ func (u *UltimateOscillator[T]) ComputeWithContext(ctx context.Context, highs, l
 	// the ratio is an undefined 0/0; treat it as neutral (0.5, the midpoint of this ratio's own
 	// 0-1 range) instead of propagating NaN.
 	average := func(bpSum, trSum T) T {
-		if trSum == 0 {
-			return 0.5
-		}
-
-		return bpSum / trSum
+		return helper.SafeDivide(bpSum, trSum, T(0.5))
 	}
 
 	avgShort := helper.OperateWithContext(ctx, shortBpSum, shortTrSum, average)

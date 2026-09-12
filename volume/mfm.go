@@ -41,11 +41,7 @@ func NewMfm[T helper.Float]() *Mfm[T] {
 func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
 	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		denom := high - low
-		if denom == 0 {
-			return 0
-		}
-
-		return ((closing - low) - (high - closing)) / denom
+		return helper.SafeDivide((closing-low)-(high-closing), denom, T(0))
 	})
 }
 

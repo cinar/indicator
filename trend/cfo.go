@@ -60,11 +60,7 @@ func (c *Cfo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-cha
 	numerator := helper.SubtractWithContext(ctx, closingPriceSplice[0], forecast)
 
 	return helper.OperateWithContext(ctx, numerator, closingPriceSplice[1], func(num, price T) T {
-		if price == 0 {
-			return 0
-		}
-
-		return (num / price) * T(100)
+		return helper.SafeDivide(num, price, T(0)) * T(100)
 	})
 }
 
