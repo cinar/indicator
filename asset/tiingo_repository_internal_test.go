@@ -10,6 +10,8 @@ import (
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/cinar/indicator/v2/helper"
 )
 
 // closeTrackingBody wraps an io.ReadCloser and records whether Close was called.
@@ -97,8 +99,7 @@ func TestTiingoRepositoryGetSinceClosesBodyOnDecodeError(t *testing.T) {
 	// defer declared after (and therefore run before) close(snapshots),
 	// observing the channel close here guarantees the body is already
 	// closed.
-	for range snapshots {
-	}
+	helper.Drain(snapshots)
 
 	if transport.body == nil {
 		t.Fatal("expected a tracked response body")

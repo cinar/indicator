@@ -36,7 +36,7 @@ func (s *strategyWithoutContext) Report(snapshots <-chan *asset.Snapshot) *helpe
 	return &helper.Report{}
 }
 
-func TestComputeStrategyWithContextFallback(t *testing.T) {
+func TestComputeWithContextFallback(t *testing.T) {
 	date1, _ := time.Parse("2006-01-02", "2021-01-01")
 	date2, _ := time.Parse("2006-01-02", "2021-01-02")
 
@@ -46,7 +46,7 @@ func TestComputeStrategyWithContextFallback(t *testing.T) {
 	})
 
 	s := &strategyWithoutContext{}
-	actions := strategy.ComputeStrategyWithContext(context.Background(), s, snapshots)
+	actions := strategy.ComputeWithContext(context.Background(), s, snapshots)
 
 	count := 0
 	for range actions {

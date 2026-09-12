@@ -8,7 +8,7 @@ import "github.com/cinar/indicator/v2/examples/volume"
 
 Package volume provides illustrative examples demonstrating how to compose volume indicators into trading strategies for educational and research purposes.
 
-This package belongs to the Indicator project. These strategy implementations are provided purely as educational and research examples illustrating how developers can consume core indicator mathematics.
+This package belongs to the Indicator project. Indicator is a Golang module that supplies a variety of technical indicators, strategies, and a backtesting framework for analysis.
 
 ### License
 
@@ -20,7 +20,7 @@ https://github.com/cinar/indicator
 
 ### Disclaimer
 
-The information and example strategies provided in this package are strictly for educational and research purposes only and must not be construed as investment, financial, tax, or trading advice.
+The information provided on this project is strictly for informational and educational purposes and is not to be construed as investment, financial, or trading advice.
 
 ## Index
 
@@ -135,18 +135,18 @@ const (
 ```
 
 <a name="AllStrategies"></a>
-## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/volume/volume.go#L26>)
+## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/volume/volume.go#L27>)
 
 ```go
 func AllStrategies() []strategy.Strategy
 ```
 
-AllStrategies returns a slice containing references to all available volume strategies.
+AllStrategies returns a slice containing references to all available example volume strategies.
 
 <a name="ChaikinMoneyFlowStrategy"></a>
 ## type [ChaikinMoneyFlowStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/chaikin_money_flow_strategy.go#L20-L23>)
 
-ChaikinMoneyFlowStrategy represents the configuration parameters for calculating the Chaikin Money Flow strategy. Recommends a Buy action when it crosses above 0, and recommends a Sell action when it crosses below 0.
+ChaikinMoneyFlowStrategy demonstrates how to compose the Chaikin Money Flow \(CMF\) indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type ChaikinMoneyFlowStrategy struct {
@@ -162,7 +162,7 @@ type ChaikinMoneyFlowStrategy struct {
 func NewChaikinMoneyFlowStrategy() *ChaikinMoneyFlowStrategy
 ```
 
-NewChaikinMoneyFlowStrategy function initializes a new Chaikin Money Flow strategy instance with the default parameters.
+NewChaikinMoneyFlowStrategy initializes an example ChaikinMoneyFlowStrategy instance with default parameters. default parameters.
 
 <a name="NewChaikinMoneyFlowStrategyWith"></a>
 ### func [NewChaikinMoneyFlowStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/chaikin_money_flow_strategy.go#L35>)
@@ -171,7 +171,7 @@ NewChaikinMoneyFlowStrategy function initializes a new Chaikin Money Flow strate
 func NewChaikinMoneyFlowStrategyWith(period int) *ChaikinMoneyFlowStrategy
 ```
 
-NewChaikinMoneyFlowStrategyWith function initializes a new Chaikin Money Flow strategy instance with the given parameters.
+NewChaikinMoneyFlowStrategyWith initializes an example ChaikinMoneyFlowStrategyWith instance with default parameters. given parameters.
 
 <a name="ChaikinMoneyFlowStrategy.Compute"></a>
 ### func \(\*ChaikinMoneyFlowStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/chaikin_money_flow_strategy.go#L128>)
@@ -214,7 +214,7 @@ Report function processes the provided asset snapshots and generates a report an
 <a name="EaseOfMovementStrategy"></a>
 ## type [EaseOfMovementStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/ease_of_movement_strategy.go#L20-L23>)
 
-EaseOfMovementStrategy represents the configuration parameters for calculating the Ease of Movement strategy. Recommends a Buy action when it crosses above 0, and recommends a Sell action when it crosses below 0.
+EaseOfMovementStrategy demonstrates how to compose the Ease of Movement \(EMV\) indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type EaseOfMovementStrategy struct {
@@ -230,7 +230,7 @@ type EaseOfMovementStrategy struct {
 func NewEaseOfMovementStrategy() *EaseOfMovementStrategy
 ```
 
-NewEaseOfMovementStrategy function initializes a new Ease of Movement strategy instance with the default parameters.
+NewEaseOfMovementStrategy initializes an example EaseOfMovementStrategy instance with default parameters. default parameters.
 
 <a name="NewEaseOfMovementStrategyWith"></a>
 ### func [NewEaseOfMovementStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/ease_of_movement_strategy.go#L35>)
@@ -239,7 +239,7 @@ NewEaseOfMovementStrategy function initializes a new Ease of Movement strategy i
 func NewEaseOfMovementStrategyWith(period int) *EaseOfMovementStrategy
 ```
 
-NewEaseOfMovementStrategyWith function initializes a new Ease of Movement strategy instance with the given parameters.
+NewEaseOfMovementStrategyWith initializes an example EaseOfMovementStrategyWith instance with default parameters. given parameters.
 
 <a name="EaseOfMovementStrategy.Compute"></a>
 ### func \(\*EaseOfMovementStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/ease_of_movement_strategy.go#L126>)
@@ -282,7 +282,7 @@ Report function processes the provided asset snapshots and generates a report an
 <a name="ForceIndexStrategy"></a>
 ## type [ForceIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/force_index_strategy.go#L20-L23>)
 
-ForceIndexStrategy represents the configuration parameters for calculating the Force Index strategy. It recommends a Buy action when it crosses above zero, and a Sell action when it crosses below zero.
+ForceIndexStrategy demonstrates how to compose the Force Index indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type ForceIndexStrategy struct {
@@ -298,7 +298,7 @@ type ForceIndexStrategy struct {
 func NewForceIndexStrategy() *ForceIndexStrategy
 ```
 
-NewForceIndexStrategy function initializes a new Force Index strategy instance with the default parameters.
+NewForceIndexStrategy initializes an example ForceIndexStrategy instance with default parameters.
 
 <a name="NewForceIndexStrategyWith"></a>
 ### func [NewForceIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/force_index_strategy.go#L33>)
@@ -307,7 +307,7 @@ NewForceIndexStrategy function initializes a new Force Index strategy instance w
 func NewForceIndexStrategyWith(period int) *ForceIndexStrategy
 ```
 
-NewForceIndexStrategyWith function initializes a new Force Index strategy instance with the given parameters.
+NewForceIndexStrategyWith initializes an example ForceIndexStrategyWith instance with default parameters.
 
 <a name="ForceIndexStrategy.Compute"></a>
 ### func \(\*ForceIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/force_index_strategy.go#L118>)
@@ -327,7 +327,7 @@ Deprecated: Use ComputeWithContext instead.
 func (f *ForceIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="ForceIndexStrategy.Name"></a>
 ### func \(\*ForceIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/force_index_strategy.go#L40>)
@@ -336,7 +336,7 @@ ComputeWithContext processes the provided asset snapshots and generates a stream
 func (f *ForceIndexStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="ForceIndexStrategy.Report"></a>
 ### func \(\*ForceIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/force_index_strategy.go#L72>)
@@ -345,12 +345,12 @@ Name returns the name of the strategy.
 func (f *ForceIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="MoneyFlowIndexStrategy"></a>
 ## type [MoneyFlowIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/money_flow_index_strategy.go#L28-L37>)
 
-MoneyFlowIndexStrategy represents the configuration parameters for calculating the Money Flow Index strategy. Recommends a Sell action when it crosses over 80, and recommends a Buy action when it crosses below 20.
+MoneyFlowIndexStrategy demonstrates how to compose the Money Flow Index \(MFI\) into an illustrative threshold\-based strategy.
 
 ```go
 type MoneyFlowIndexStrategy struct {
@@ -372,7 +372,7 @@ type MoneyFlowIndexStrategy struct {
 func NewMoneyFlowIndexStrategy() *MoneyFlowIndexStrategy
 ```
 
-NewMoneyFlowIndexStrategy function initializes a new Money Flow Index strategy instance with the default parameters.
+NewMoneyFlowIndexStrategy initializes an example MoneyFlowIndexStrategy instance with default parameters.
 
 <a name="NewMoneyFlowIndexStrategyWith"></a>
 ### func [NewMoneyFlowIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/money_flow_index_strategy.go#L49>)
@@ -381,7 +381,7 @@ NewMoneyFlowIndexStrategy function initializes a new Money Flow Index strategy i
 func NewMoneyFlowIndexStrategyWith(sellAt, buyAt float64) *MoneyFlowIndexStrategy
 ```
 
-NewMoneyFlowIndexStrategyWith function initializes a new Money Flow Index strategy instance with the given parameters.
+NewMoneyFlowIndexStrategyWith initializes an example MoneyFlowIndexStrategyWith instance with default parameters. given parameters.
 
 <a name="MoneyFlowIndexStrategy.Compute"></a>
 ### func \(\*MoneyFlowIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/money_flow_index_strategy.go#L144>)
@@ -401,7 +401,7 @@ Deprecated: Use ComputeWithContext instead.
 func (m *MoneyFlowIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="MoneyFlowIndexStrategy.Name"></a>
 ### func \(\*MoneyFlowIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/money_flow_index_strategy.go#L58>)
@@ -410,7 +410,7 @@ ComputeWithContext processes the provided asset snapshots and generates a stream
 func (m *MoneyFlowIndexStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="MoneyFlowIndexStrategy.Report"></a>
 ### func \(\*MoneyFlowIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/money_flow_index_strategy.go#L92>)
@@ -419,12 +419,12 @@ Name returns the name of the strategy.
 func (m *MoneyFlowIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="NegativeVolumeIndexStrategy"></a>
-## type [NegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L27-L33>)
+## type [NegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L26-L32>)
 
-NegativeVolumeIndexStrategy represents the configuration parameters for calculating the Negative Volume Index strategy. Recommends a Buy action when it crosses below its EMA, recommends a Sell action when it crosses above its EMA, and recommends a Hold action otherwise.
+NegativeVolumeIndexStrategy demonstrates how to compose the Negative Volume Index \(NVI\) and its moving average into an illustrative crossover strategy.
 
 ```go
 type NegativeVolumeIndexStrategy struct {
@@ -437,25 +437,25 @@ type NegativeVolumeIndexStrategy struct {
 ```
 
 <a name="NewNegativeVolumeIndexStrategy"></a>
-### func [NewNegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L37>)
+### func [NewNegativeVolumeIndexStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L36>)
 
 ```go
 func NewNegativeVolumeIndexStrategy() *NegativeVolumeIndexStrategy
 ```
 
-NewNegativeVolumeIndexStrategy function initializes a new Negative Volume Index strategy instance with the default parameters.
+NewNegativeVolumeIndexStrategy initializes an example NegativeVolumeIndexStrategy instance with default parameters. default parameters.
 
 <a name="NewNegativeVolumeIndexStrategyWith"></a>
-### func [NewNegativeVolumeIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L45>)
+### func [NewNegativeVolumeIndexStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L44>)
 
 ```go
 func NewNegativeVolumeIndexStrategyWith(emaPeriod int) *NegativeVolumeIndexStrategy
 ```
 
-NewNegativeVolumeIndexStrategyWith function initializes a new Negative Volume Index strategy instance with the given parameters.
+NewNegativeVolumeIndexStrategyWith initializes an example NegativeVolumeIndexStrategyWith instance with default parameters. given parameters.
 
 <a name="NegativeVolumeIndexStrategy.Compute"></a>
-### func \(\*NegativeVolumeIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L149>)
+### func \(\*NegativeVolumeIndexStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L148>)
 
 ```go
 func (n *NegativeVolumeIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -466,36 +466,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="NegativeVolumeIndexStrategy.ComputeWithContext"></a>
-### func \(\*NegativeVolumeIndexStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L58>)
+### func \(\*NegativeVolumeIndexStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L57>)
 
 ```go
 func (n *NegativeVolumeIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="NegativeVolumeIndexStrategy.Name"></a>
-### func \(\*NegativeVolumeIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L53>)
+### func \(\*NegativeVolumeIndexStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L52>)
 
 ```go
 func (n *NegativeVolumeIndexStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="NegativeVolumeIndexStrategy.Report"></a>
-### func \(\*NegativeVolumeIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L93>)
+### func \(\*NegativeVolumeIndexStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/negative_volume_index_strategy.go#L92>)
 
 ```go
 func (n *NegativeVolumeIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="ObvStrategy"></a>
 ## type [ObvStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/obv_strategy.go#L26-L32>)
 
-ObvStrategy represents the configuration parameters for calculating the On\-Balance Volume \(OBV\) strategy. Recommends a Buy action when OBV crosses above its SMA, and recommends a Sell action when OBV crosses below its SMA.
+ObvStrategy demonstrates how to compose the On\-Balance Volume \(OBV\) indicator and its moving average into an illustrative crossover strategy.
 
 ```go
 type ObvStrategy struct {
@@ -514,7 +514,7 @@ type ObvStrategy struct {
 func NewObvStrategy() *ObvStrategy
 ```
 
-NewObvStrategy function initializes a new OBV strategy instance with the default parameters.
+NewObvStrategy initializes an example ObvStrategy instance with default parameters.
 
 <a name="NewObvStrategyWith"></a>
 ### func [NewObvStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/obv_strategy.go#L42>)
@@ -523,7 +523,7 @@ NewObvStrategy function initializes a new OBV strategy instance with the default
 func NewObvStrategyWith(period int) *ObvStrategy
 ```
 
-NewObvStrategyWith function initializes a new OBV strategy instance with the given period.
+NewObvStrategyWith initializes an example ObvStrategyWith instance with default parameters.
 
 <a name="ObvStrategy.Compute"></a>
 ### func \(\*ObvStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/obv_strategy.go#L147>)
@@ -564,9 +564,9 @@ func (s *ObvStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 Report function processes the provided asset snapshots and generates a report annotated with the recommended actions.
 
 <a name="PercentBandMFIStrategy"></a>
-## type [PercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L36-L54>)
+## type [PercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L35-L53>)
 
-PercentBandMFIStrategy represents the configuration parameters for calculating the %B combined with MFI strategy. Recommends a Buy action when %B is above 0.8 and MFI is above 80, and recommends a Sell action when %B is below 0.2 and MFI is below 20.
+PercentBandMFIStrategy demonstrates how to compose Bollinger %B and Money Flow Index \(MFI\) into an illustrative multi\-indicator strategy.
 
 ```go
 type PercentBandMFIStrategy struct {
@@ -591,25 +591,25 @@ type PercentBandMFIStrategy struct {
 ```
 
 <a name="NewPercentBandMFIStrategy"></a>
-### func [NewPercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L57>)
+### func [NewPercentBandMFIStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L56>)
 
 ```go
 func NewPercentBandMFIStrategy() *PercentBandMFIStrategy
 ```
 
-NewPercentBandMFIStrategy function initializes a new PercentBandMFI strategy instance with the default parameters.
+NewPercentBandMFIStrategy initializes an example PercentBandMFIStrategy instance with default parameters.
 
 <a name="NewPercentBandMFIStrategyWith"></a>
-### func [NewPercentBandMFIStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L68>)
+### func [NewPercentBandMFIStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L67>)
 
 ```go
 func NewPercentBandMFIStrategyWith(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt float64) *PercentBandMFIStrategy
 ```
 
-NewPercentBandMFIStrategyWith function initializes a new PercentBandMFI strategy instance with the given parameters.
+NewPercentBandMFIStrategyWith initializes an example PercentBandMFIStrategyWith instance with default parameters. given parameters.
 
 <a name="PercentBandMFIStrategy.Compute"></a>
-### func \(\*PercentBandMFIStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L179>)
+### func \(\*PercentBandMFIStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L178>)
 
 ```go
 func (m *PercentBandMFIStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -620,36 +620,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="PercentBandMFIStrategy.ComputeWithContext"></a>
-### func \(\*PercentBandMFIStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L85>)
+### func \(\*PercentBandMFIStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L84>)
 
 ```go
 func (m *PercentBandMFIStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="PercentBandMFIStrategy.Name"></a>
-### func \(\*PercentBandMFIStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L80>)
+### func \(\*PercentBandMFIStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L79>)
 
 ```go
 func (m *PercentBandMFIStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="PercentBandMFIStrategy.Report"></a>
-### func \(\*PercentBandMFIStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L116>)
+### func \(\*PercentBandMFIStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/percent_b_and_mfi_strategy.go#L115>)
 
 ```go
 func (m *PercentBandMFIStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="WeightedAveragePriceStrategy"></a>
-## type [WeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L21-L24>)
+## type [WeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L20-L23>)
 
-WeightedAveragePriceStrategy represents the configuration parameters for calculating the Weighted Average Price strategy. Recommends a Buy action when the closing crosses below the VWAP, recommends a Sell action when the closing crosses above the VWAP, and recommends a Hold action otherwise.
+WeightedAveragePriceStrategy demonstrates how to compose Volume Weighted Average Price \(VWAP\) into an illustrative price crossover strategy.
 
 ```go
 type WeightedAveragePriceStrategy struct {
@@ -659,25 +659,25 @@ type WeightedAveragePriceStrategy struct {
 ```
 
 <a name="NewWeightedAveragePriceStrategy"></a>
-### func [NewWeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L28>)
+### func [NewWeightedAveragePriceStrategy](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L27>)
 
 ```go
 func NewWeightedAveragePriceStrategy() *WeightedAveragePriceStrategy
 ```
 
-NewWeightedAveragePriceStrategy function initializes a new Weighted Average Price strategy instance with the default parameters.
+NewWeightedAveragePriceStrategy initializes an example WeightedAveragePriceStrategy instance with default parameters. instance with the default parameters.
 
 <a name="NewWeightedAveragePriceStrategyWith"></a>
-### func [NewWeightedAveragePriceStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L36>)
+### func [NewWeightedAveragePriceStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L35>)
 
 ```go
 func NewWeightedAveragePriceStrategyWith(period int) *WeightedAveragePriceStrategy
 ```
 
-NewWeightedAveragePriceStrategyWith function initializes a new Weighted Average Price strategy instance with the given parameters.
+NewWeightedAveragePriceStrategyWith initializes an example WeightedAveragePriceStrategyWith instance with default parameters. instance with the given parameters.
 
 <a name="WeightedAveragePriceStrategy.Compute"></a>
-### func \(\*WeightedAveragePriceStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L124>)
+### func \(\*WeightedAveragePriceStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L123>)
 
 ```go
 func (v *WeightedAveragePriceStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -688,30 +688,30 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="WeightedAveragePriceStrategy.ComputeWithContext"></a>
-### func \(\*WeightedAveragePriceStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L48>)
+### func \(\*WeightedAveragePriceStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L47>)
 
 ```go
 func (v *WeightedAveragePriceStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="WeightedAveragePriceStrategy.Name"></a>
-### func \(\*WeightedAveragePriceStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L43>)
+### func \(\*WeightedAveragePriceStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L42>)
 
 ```go
 func (v *WeightedAveragePriceStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="WeightedAveragePriceStrategy.Report"></a>
-### func \(\*WeightedAveragePriceStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L79>)
+### func \(\*WeightedAveragePriceStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/volume/weighted_average_price_strategy.go#L78>)
 
 ```go
 func (v *WeightedAveragePriceStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

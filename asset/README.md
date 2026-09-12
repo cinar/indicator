@@ -135,7 +135,7 @@ func RegisterRepositoryBuilder(name string, builder RepositoryBuilderFunc)
 RegisterRepositoryBuilder registers the given builder.
 
 <a name="SnapshotsAsClosings"></a>
-## func [SnapshotsAsClosings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L117>)
+## func [SnapshotsAsClosings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L131>)
 
 ```go
 func SnapshotsAsClosings(snapshots <-chan *Snapshot) <-chan float64
@@ -146,7 +146,7 @@ SnapshotsAsClosings extracts the close field from each snapshot in the provided 
 Deprecated: Use SnapshotsAsClosingsWithContext instead.
 
 <a name="SnapshotsAsClosingsWithContext"></a>
-## func [SnapshotsAsClosingsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L107>)
+## func [SnapshotsAsClosingsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L121>)
 
 ```go
 func SnapshotsAsClosingsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
@@ -155,7 +155,7 @@ func SnapshotsAsClosingsWithContext(ctx context.Context, snapshots <-chan *Snaps
 SnapshotsAsClosingsWithContext extracts the close field from each snapshot in the provided channel and returns a new channel containing only those close values, supporting context cancellation.
 
 <a name="SnapshotsAsDates"></a>
-## func [SnapshotsAsDates](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L53>)
+## func [SnapshotsAsDates](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L67>)
 
 ```go
 func SnapshotsAsDates(snapshots <-chan *Snapshot) <-chan time.Time
@@ -166,7 +166,7 @@ SnapshotsAsDates extracts the date field from each snapshot in the provided chan
 Deprecated: Use SnapshotsAsDatesWithContext instead.
 
 <a name="SnapshotsAsDatesWithContext"></a>
-## func [SnapshotsAsDatesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L43>)
+## func [SnapshotsAsDatesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L57>)
 
 ```go
 func SnapshotsAsDatesWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan time.Time
@@ -175,7 +175,7 @@ func SnapshotsAsDatesWithContext(ctx context.Context, snapshots <-chan *Snapshot
 SnapshotsAsDatesWithContext extracts the date field from each snapshot in the provided channel and returns a new channel containing only those date values, supporting context cancellation.
 
 <a name="SnapshotsAsHighs"></a>
-## func [SnapshotsAsHighs](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L85>)
+## func [SnapshotsAsHighs](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L99>)
 
 ```go
 func SnapshotsAsHighs(snapshots <-chan *Snapshot) <-chan float64
@@ -186,7 +186,7 @@ SnapshotsAsHighs extracts the high field from each snapshot in the provided chan
 Deprecated: Use SnapshotsAsHighsWithContext instead.
 
 <a name="SnapshotsAsHighsWithContext"></a>
-## func [SnapshotsAsHighsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L75>)
+## func [SnapshotsAsHighsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L89>)
 
 ```go
 func SnapshotsAsHighsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
@@ -195,7 +195,7 @@ func SnapshotsAsHighsWithContext(ctx context.Context, snapshots <-chan *Snapshot
 SnapshotsAsHighsWithContext extracts the high field from each snapshot in the provided channel and returns a new channel containing only those high values, supporting context cancellation.
 
 <a name="SnapshotsAsLows"></a>
-## func [SnapshotsAsLows](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L101>)
+## func [SnapshotsAsLows](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L115>)
 
 ```go
 func SnapshotsAsLows(snapshots <-chan *Snapshot) <-chan float64
@@ -206,7 +206,7 @@ SnapshotsAsLows extracts the low field from each snapshot in the provided channe
 Deprecated: Use SnapshotsAsLowsWithContext instead.
 
 <a name="SnapshotsAsLowsWithContext"></a>
-## func [SnapshotsAsLowsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L91>)
+## func [SnapshotsAsLowsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L105>)
 
 ```go
 func SnapshotsAsLowsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
@@ -215,7 +215,7 @@ func SnapshotsAsLowsWithContext(ctx context.Context, snapshots <-chan *Snapshot)
 SnapshotsAsLowsWithContext extracts the low field from each snapshot in the provided channel and returns a new channel containing only those low values, supporting context cancellation.
 
 <a name="SnapshotsAsOpenings"></a>
-## func [SnapshotsAsOpenings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L69>)
+## func [SnapshotsAsOpenings](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L83>)
 
 ```go
 func SnapshotsAsOpenings(snapshots <-chan *Snapshot) <-chan float64
@@ -226,7 +226,7 @@ SnapshotsAsOpenings extracts the open field from each snapshot in the provided c
 Deprecated: Use SnapshotsAsOpeningsWithContext instead.
 
 <a name="SnapshotsAsOpeningsWithContext"></a>
-## func [SnapshotsAsOpeningsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L59>)
+## func [SnapshotsAsOpeningsWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L73>)
 
 ```go
 func SnapshotsAsOpeningsWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
@@ -235,7 +235,7 @@ func SnapshotsAsOpeningsWithContext(ctx context.Context, snapshots <-chan *Snaps
 SnapshotsAsOpeningsWithContext extracts the open field from each snapshot in the provided channel and returns a new channel containing only those open values, supporting context cancellation.
 
 <a name="SnapshotsAsVolumes"></a>
-## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L133>)
+## func [SnapshotsAsVolumes](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L147>)
 
 ```go
 func SnapshotsAsVolumes(snapshots <-chan *Snapshot) <-chan float64
@@ -246,7 +246,7 @@ SnapshotsAsVolumes extracts the volume field from each snapshot in the provided 
 Deprecated: Use SnapshotsAsVolumesWithContext instead.
 
 <a name="SnapshotsAsVolumesWithContext"></a>
-## func [SnapshotsAsVolumesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L123>)
+## func [SnapshotsAsVolumesWithContext](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L137>)
 
 ```go
 func SnapshotsAsVolumesWithContext(ctx context.Context, snapshots <-chan *Snapshot) <-chan float64
@@ -255,7 +255,7 @@ func SnapshotsAsVolumesWithContext(ctx context.Context, snapshots <-chan *Snapsh
 SnapshotsAsVolumesWithContext extracts the volume field from each snapshot in the provided channel and returns a new channel containing only those volume values, supporting context cancellation.
 
 <a name="FileSystemRepository"></a>
-## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L20-L26>)
+## type [FileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L19-L25>)
 
 FileSystemRepository stores and retrieves asset snapshots using the local file system.
 
@@ -266,7 +266,7 @@ type FileSystemRepository struct {
 ```
 
 <a name="NewFileSystemRepository"></a>
-### func [NewFileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L30>)
+### func [NewFileSystemRepository](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L29>)
 
 ```go
 func NewFileSystemRepository(base string, csvOptions ...helper.CsvOption[Snapshot]) *FileSystemRepository
@@ -275,7 +275,7 @@ func NewFileSystemRepository(base string, csvOptions ...helper.CsvOption[Snapsho
 NewFileSystemRepository initializes a file system repository with the given base directory and the CSV options.
 
 <a name="FileSystemRepository.Append"></a>
-### func \(\*FileSystemRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L96>)
+### func \(\*FileSystemRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L99>)
 
 ```go
 func (r *FileSystemRepository) Append(name string, snapshots <-chan *Snapshot) error
@@ -284,7 +284,7 @@ func (r *FileSystemRepository) Append(name string, snapshots <-chan *Snapshot) e
 Append adds the given snapshows to the asset with the given name.
 
 <a name="FileSystemRepository.Assets"></a>
-### func \(\*FileSystemRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L38>)
+### func \(\*FileSystemRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L37>)
 
 ```go
 func (r *FileSystemRepository) Assets() ([]string, error)
@@ -293,7 +293,7 @@ func (r *FileSystemRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the repository.
 
 <a name="FileSystemRepository.Get"></a>
-### func \(\*FileSystemRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L60>)
+### func \(\*FileSystemRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L63>)
 
 ```go
 func (r *FileSystemRepository) Get(name string) (<-chan *Snapshot, error)
@@ -302,7 +302,7 @@ func (r *FileSystemRepository) Get(name string) (<-chan *Snapshot, error)
 Get attempts to return a channel of snapshots for the asset with the given name.
 
 <a name="FileSystemRepository.GetSince"></a>
-### func \(\*FileSystemRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L65>)
+### func \(\*FileSystemRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L68>)
 
 ```go
 func (r *FileSystemRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -311,7 +311,7 @@ func (r *FileSystemRepository) GetSince(name string, date time.Time) (<-chan *Sn
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="FileSystemRepository.LastDate"></a>
-### func \(\*FileSystemRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L79>)
+### func \(\*FileSystemRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/file_system_repository.go#L82>)
 
 ```go
 func (r *FileSystemRepository) LastDate(name string) (time.Time, error)
@@ -320,9 +320,9 @@ func (r *FileSystemRepository) LastDate(name string) (time.Time, error)
 LastDate returns the date of the last snapshot for the asset with the given name.
 
 <a name="InMemoryRepository"></a>
-## type [InMemoryRepository](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L15-L18>)
+## type [InMemoryRepository](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L16-L22>)
 
-InMemoryRepository stores and retrieves asset snapshots using an in memory storage.
+InMemoryRepository stores and retrieves asset snapshots using an in memory storage. It is safe for concurrent use.
 
 ```go
 type InMemoryRepository struct {
@@ -331,7 +331,7 @@ type InMemoryRepository struct {
 ```
 
 <a name="NewInMemoryRepository"></a>
-### func [NewInMemoryRepository](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L21>)
+### func [NewInMemoryRepository](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L25>)
 
 ```go
 func NewInMemoryRepository() *InMemoryRepository
@@ -340,7 +340,7 @@ func NewInMemoryRepository() *InMemoryRepository
 NewInMemoryRepository initializes an in memory repository.
 
 <a name="InMemoryRepository.Append"></a>
-### func \(\*InMemoryRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L79>)
+### func \(\*InMemoryRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L95>)
 
 ```go
 func (r *InMemoryRepository) Append(name string, snapshots <-chan *Snapshot) error
@@ -349,7 +349,7 @@ func (r *InMemoryRepository) Append(name string, snapshots <-chan *Snapshot) err
 Append adds the given snapshows to the asset with the given name.
 
 <a name="InMemoryRepository.Assets"></a>
-### func \(\*InMemoryRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L28>)
+### func \(\*InMemoryRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L32>)
 
 ```go
 func (r *InMemoryRepository) Assets() ([]string, error)
@@ -358,7 +358,7 @@ func (r *InMemoryRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the repository.
 
 <a name="InMemoryRepository.Get"></a>
-### func \(\*InMemoryRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L38>)
+### func \(\*InMemoryRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L45>)
 
 ```go
 func (r *InMemoryRepository) Get(name string) (<-chan *Snapshot, error)
@@ -367,7 +367,7 @@ func (r *InMemoryRepository) Get(name string) (<-chan *Snapshot, error)
 Get attempts to return a channel of snapshots for the asset with the given name.
 
 <a name="InMemoryRepository.GetSince"></a>
-### func \(\*InMemoryRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L48>)
+### func \(\*InMemoryRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L64>)
 
 ```go
 func (r *InMemoryRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -376,7 +376,7 @@ func (r *InMemoryRepository) GetSince(name string, date time.Time) (<-chan *Snap
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="InMemoryRepository.LastDate"></a>
-### func \(\*InMemoryRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L62>)
+### func \(\*InMemoryRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/in_memory_repository.go#L78>)
 
 ```go
 func (r *InMemoryRepository) LastDate(name string) (time.Time, error)
@@ -385,7 +385,7 @@ func (r *InMemoryRepository) LastDate(name string) (time.Time, error)
 LastDate returns the date of the last snapshot for the asset with the given name.
 
 <a name="Repository"></a>
-## type [Repository](<https://github.com/cinar/indicator/blob/master/asset/repository.go#L20-L39>)
+## type [Repository](<https://github.com/cinar/indicator/blob/master/asset/repository.go#L20-L52>)
 
 Repository serves as a centralized storage and retrieval location for asset snapshots.
 
@@ -396,10 +396,23 @@ type Repository interface {
 
     // Get attempts to return a channel of snapshots for
     // the asset with the given name.
+    //
+    // Some implementations (e.g. SQLRepository, TiingoRepository) only
+    // return snapshots from 2000-01-01 onward by design, while others
+    // (e.g. InMemoryRepository, FileSystemRepository) return full
+    // history with no floor date; see each implementation's doc comment.
     Get(name string) (<-chan *Snapshot, error)
 
     // GetSince attempts to return a channel of snapshots for
     // the asset with the given name since the given date.
+    //
+    // Implementations may run the underlying retrieval in a background
+    // goroutine that sends on the returned channel; there is no
+    // cancellation parameter on this method, so callers must read the
+    // returned channel to completion. Abandoning it partway through can
+    // leak the goroutine and any resources it holds (e.g. a database
+    // connection or an HTTP response body) for implementations that rely
+    // on the channel being drained to release them.
     GetSince(name string, date time.Time) (<-chan *Snapshot, error)
 
     // LastDate returns the date of the last snapshot for
@@ -431,18 +444,20 @@ type RepositoryBuilderFunc func(config string) (Repository, error)
 ```
 
 <a name="SQLRepository"></a>
-## type [SQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L17-L35>)
+## type [SQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L18-L39>)
 
 SQLRepository provides a SQL backed storage facility for financial market data.
 
 ```go
 type SQLRepository struct {
+    // Logger is the slog logger instance.
+    Logger *slog.Logger
     // contains filtered or unexported fields
 }
 ```
 
 <a name="NewSQLRepository"></a>
-### func [NewSQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L38>)
+### func [NewSQLRepository](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L42>)
 
 ```go
 func NewSQLRepository(dbDriver, dbURL string, dialect SQLRepositoryDialect) (*SQLRepository, error)
@@ -451,7 +466,7 @@ func NewSQLRepository(dbDriver, dbURL string, dialect SQLRepositoryDialect) (*SQ
 NewSQLRepository takes a database driver, URL, and dialect for the asset repository and connects to it.
 
 <a name="SQLRepository.Append"></a>
-### func \(\*SQLRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L170>)
+### func \(\*SQLRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L193>)
 
 ```go
 func (s *SQLRepository) Append(name string, snapshots <-chan *Snapshot) error
@@ -460,7 +475,7 @@ func (s *SQLRepository) Append(name string, snapshots <-chan *Snapshot) error
 Append adds the given snapshots to the asset with the given name.
 
 <a name="SQLRepository.Assets"></a>
-### func \(\*SQLRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L87>)
+### func \(\*SQLRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L92>)
 
 ```go
 func (s *SQLRepository) Assets() ([]string, error)
@@ -469,7 +484,7 @@ func (s *SQLRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the respository.
 
 <a name="SQLRepository.Close"></a>
-### func \(\*SQLRepository\) [Close](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L82>)
+### func \(\*SQLRepository\) [Close](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L87>)
 
 ```go
 func (s *SQLRepository) Close() error
@@ -478,7 +493,7 @@ func (s *SQLRepository) Close() error
 Close closes the database connection.
 
 <a name="SQLRepository.Drop"></a>
-### func \(\*SQLRepository\) [Drop](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L193>)
+### func \(\*SQLRepository\) [Drop](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L216>)
 
 ```go
 func (s *SQLRepository) Drop() error
@@ -487,7 +502,7 @@ func (s *SQLRepository) Drop() error
 Drop drops the snapshots table.
 
 <a name="SQLRepository.Get"></a>
-### func \(\*SQLRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L112>)
+### func \(\*SQLRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L121>)
 
 ```go
 func (s *SQLRepository) Get(name string) (<-chan *Snapshot, error)
@@ -495,8 +510,10 @@ func (s *SQLRepository) Get(name string) (<-chan *Snapshot, error)
 
 Get attempts to return a channel of snapshots for the asset with the given name.
 
+By design, this only returns snapshots from 2000\-01\-01 onward, unlike InMemoryRepository and FileSystemRepository, whose Get returns full history with no floor date.
+
 <a name="SQLRepository.GetSince"></a>
-### func \(\*SQLRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L117>)
+### func \(\*SQLRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L135>)
 
 ```go
 func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -504,8 +521,10 @@ func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot,
 
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
+The query runs in a background goroutine that owns the underlying database rows and sends each scanned snapshot on the returned channel. Callers must drain the returned channel to completion \(or otherwise ensure it keeps being read\) so the goroutine can finish and its deferred cleanup can release the rows/connection; abandoning the channel partway through leaks the goroutine and the underlying database resources, since there is no cancellation signal on this interface. See Repository.GetSince for the broader interface\-level contract.
+
 <a name="SQLRepository.LastDate"></a>
-### func \(\*SQLRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L152>)
+### func \(\*SQLRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/sql_repository.go#L175>)
 
 ```go
 func (s *SQLRepository) LastDate(name string) (time.Time, error)
@@ -541,13 +560,27 @@ type SQLRepositoryDialect interface {
 ```
 
 <a name="Snapshot"></a>
-## type [Snapshot](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L16-L39>)
+## type [Snapshot](<https://github.com/cinar/indicator/blob/master/asset/snapshot.go#L16-L53>)
 
 Snapshot captures a single observation of an asset's price at a specific moment.
 
 ```go
 type Snapshot struct {
     // Date represents the specific timestamp.
+    //
+    // This field has no explicit `format` struct tag, so the CSV
+    // helpers in the helper package (see helper.Csv, helper.CsvFormatTag,
+    // and helper.DefaultDateTimeFormat) read and write it using the
+    // date-only layout "2006-01-02". Any time-of-day component present
+    // in an RFC3339 or similarly timestamped source is silently dropped
+    // when a Snapshot is round-tripped through those CSV helpers; the
+    // in-memory value is unaffected outside of that path. This is a
+    // deliberate, library-wide limitation of the reflection-based CSV
+    // format (which has no per-row error channel), not specific to
+    // Snapshot. If time-of-day precision is ever needed, a `format`
+    // struct tag (e.g. `format:"2006-01-02T15:04:05Z07:00"`, matching
+    // time.RFC3339) could be added to this field without affecting any
+    // other field or requiring changes to the CSV helpers themselves.
     Date time.Time
 
     // Open represents the opening price for the
@@ -573,7 +606,7 @@ type Snapshot struct {
 ```
 
 <a name="Sync"></a>
-## type [Sync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L25-L38>)
+## type [Sync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L27-L40>)
 
 Sync represents the configuration parameters for synchronizing assets between repositories.
 
@@ -595,7 +628,7 @@ type Sync struct {
 ```
 
 <a name="NewSync"></a>
-### func [NewSync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L41>)
+### func [NewSync](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L43>)
 
 ```go
 func NewSync() *Sync
@@ -604,7 +637,7 @@ func NewSync() *Sync
 NewSync function initializes a new sync instance with the default parameters.
 
 <a name="Sync.Run"></a>
-### func \(\*Sync\) [Run](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L51>)
+### func \(\*Sync\) [Run](<https://github.com/cinar/indicator/blob/master/asset/sync.go#L53>)
 
 ```go
 func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error
@@ -613,7 +646,7 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error
 Run synchronizes assets between the source and target repositories using multi\-worker concurrency.
 
 <a name="TiingoEndOfDay"></a>
-## type [TiingoEndOfDay](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L41-L80>)
+## type [TiingoEndOfDay](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L43-L82>)
 
 TiingoEndOfDay is the repose from the end\-of\-day endpoint. https://www.tiingo.com/documentation/end-of-day
 
@@ -661,7 +694,7 @@ type TiingoEndOfDay struct {
 ```
 
 <a name="TiingoEndOfDay.ToSnapshot"></a>
-### func \(\*TiingoEndOfDay\) [ToSnapshot](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L83>)
+### func \(\*TiingoEndOfDay\) [ToSnapshot](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L85>)
 
 ```go
 func (e *TiingoEndOfDay) ToSnapshot() *Snapshot
@@ -670,7 +703,7 @@ func (e *TiingoEndOfDay) ToSnapshot() *Snapshot
 ToSnapshot converts the Tiingo end\-of\-day to a snapshot.
 
 <a name="TiingoMeta"></a>
-## type [TiingoMeta](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L19-L37>)
+## type [TiingoMeta](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L21-L39>)
 
 TiingoMeta is the response from the meta endpoint. https://www.tiingo.com/documentation/end-of-day
 
@@ -697,7 +730,7 @@ type TiingoMeta struct {
 ```
 
 <a name="TiingoRepository"></a>
-## type [TiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L98-L112>)
+## type [TiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L100-L114>)
 
 TiingoRepository provides access to financial market data, retrieving asset snapshots, by interacting with the Tiingo Stock & Financial Markets API. To use this repository, you'll need a valid API key from https://www.tiingo.com.
 
@@ -715,7 +748,7 @@ type TiingoRepository struct {
 ```
 
 <a name="NewTiingoRepository"></a>
-### func [NewTiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L116>)
+### func [NewTiingoRepository](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L118>)
 
 ```go
 func NewTiingoRepository(apiKey string) *TiingoRepository
@@ -724,7 +757,7 @@ func NewTiingoRepository(apiKey string) *TiingoRepository
 NewTiingoRepository initializes a file system repository with the given API key.
 
 <a name="TiingoRepository.Append"></a>
-### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L238>)
+### func \(\*TiingoRepository\) [Append](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L243>)
 
 ```go
 func (*TiingoRepository) Append(_ string, _ <-chan *Snapshot) error
@@ -733,7 +766,7 @@ func (*TiingoRepository) Append(_ string, _ <-chan *Snapshot) error
 Append adds the given snapshows to the asset with the given name.
 
 <a name="TiingoRepository.Assets"></a>
-### func \(\*TiingoRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L126>)
+### func \(\*TiingoRepository\) [Assets](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L128>)
 
 ```go
 func (*TiingoRepository) Assets() ([]string, error)
@@ -742,7 +775,7 @@ func (*TiingoRepository) Assets() ([]string, error)
 Assets returns the names of all assets in the repository.
 
 <a name="TiingoRepository.Get"></a>
-### func \(\*TiingoRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L131>)
+### func \(\*TiingoRepository\) [Get](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L137>)
 
 ```go
 func (r *TiingoRepository) Get(name string) (<-chan *Snapshot, error)
@@ -750,8 +783,10 @@ func (r *TiingoRepository) Get(name string) (<-chan *Snapshot, error)
 
 Get attempts to return a channel of snapshots for the asset with the given name.
 
+By design, this only returns snapshots from 2000\-01\-01 onward, unlike InMemoryRepository and FileSystemRepository, whose Get returns full history with no floor date.
+
 <a name="TiingoRepository.GetSince"></a>
-### func \(\*TiingoRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L136>)
+### func \(\*TiingoRepository\) [GetSince](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L142>)
 
 ```go
 func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error)
@@ -760,7 +795,7 @@ func (r *TiingoRepository) GetSince(name string, date time.Time) (<-chan *Snapsh
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
 <a name="TiingoRepository.LastDate"></a>
-### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L198>)
+### func \(\*TiingoRepository\) [LastDate](<https://github.com/cinar/indicator/blob/master/asset/tiingo_repository.go#L207>)
 
 ```go
 func (r *TiingoRepository) LastDate(name string) (time.Time, error)

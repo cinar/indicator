@@ -8,7 +8,7 @@ import "github.com/cinar/indicator/v2/examples/trend"
 
 Package trend provides illustrative examples demonstrating how to compose trend indicators into trading strategies for educational and research purposes.
 
-This package belongs to the Indicator project. These strategy implementations are provided purely as educational and research examples illustrating how developers can consume core indicator mathematics.
+This package belongs to the Indicator project. Indicator is a Golang module that supplies a variety of technical indicators, strategies, and a backtesting framework for analysis.
 
 ### License
 
@@ -20,7 +20,7 @@ https://github.com/cinar/indicator
 
 ### Disclaimer
 
-The information and example strategies provided in this package are strictly for educational and research purposes only and must not be construed as investment, financial, tax, or trading advice.
+The information provided on this project is strictly for informational and educational purposes and is not to be construed as investment, financial, or trading advice.
 
 ## Index
 
@@ -103,6 +103,7 @@ The information and example strategies provided in this package are strictly for
   - [func \(kdj \*KdjStrategy\) ComputeWithContext\(ctx context.Context, c \<\-chan \*asset.Snapshot\) \<\-chan strategy.Action](<#KdjStrategy.ComputeWithContext>)
   - [func \(\*KdjStrategy\) Name\(\) string](<#KdjStrategy.Name>)
   - [func \(kdj \*KdjStrategy\) Report\(c \<\-chan \*asset.Snapshot\) \*helper.Report](<#KdjStrategy.Report>)
+- [type MacdSignalMode](<#MacdSignalMode>)
 - [type MacdStrategy](<#MacdStrategy>)
   - [func NewMacdStrategy\(\) \*MacdStrategy](<#NewMacdStrategy>)
   - [func NewMacdStrategyWith\(period1, period2, period3 int\) \*MacdStrategy](<#NewMacdStrategyWith>)
@@ -282,18 +283,18 @@ const (
 ```
 
 <a name="AllStrategies"></a>
-## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/trend/trend.go#L24>)
+## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/trend/trend.go#L25>)
 
 ```go
 func AllStrategies() []strategy.Strategy
 ```
 
-AllStrategies returns a slice containing references to all available trend strategies.
+AllStrategies returns a slice containing references to all available example trend strategies.
 
 <a name="AlligatorStrategy"></a>
-## type [AlligatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L32-L41>)
+## type [AlligatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L31-L40>)
 
-AlligatorStrategy represents the configuration parameters for calculating the Alligator strategy. It is a technical indicator to help identify the presence and the direction of the trend. It uses three Smooted Moving Averges \(SMMAs\).
+AlligatorStrategy demonstrates how to compose three Smoothed Moving Averages \(SMMAs\) \(jaw, teeth, lip\) into an illustrative multi\-moving\-average trend\-following strategy.
 
 ```go
 type AlligatorStrategy struct {
@@ -309,25 +310,25 @@ type AlligatorStrategy struct {
 ```
 
 <a name="NewAlligatorStrategy"></a>
-### func [NewAlligatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L44>)
+### func [NewAlligatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L43>)
 
 ```go
 func NewAlligatorStrategy() *AlligatorStrategy
 ```
 
-NewAlligatorStrategy function initializes a new Alligator strategy instance.
+NewAlligatorStrategy initializes an example AlligatorStrategy instance with default parameters.
 
 <a name="NewAlligatorStrategyWith"></a>
-### func [NewAlligatorStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L53>)
+### func [NewAlligatorStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L52>)
 
 ```go
 func NewAlligatorStrategyWith(jawPeriod, teethPeriod, lipPeriod int) *AlligatorStrategy
 ```
 
-NewAlligatorStrategyWith function initializes a new Alligator strategy instance with the given parameters.
+NewAlligatorStrategyWith initializes an example AlligatorStrategyWith instance with default parameters.
 
 <a name="AlligatorStrategy.Compute"></a>
-### func \(\*AlligatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L153>)
+### func \(\*AlligatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L152>)
 
 ```go
 func (a *AlligatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -338,36 +339,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="AlligatorStrategy.ComputeWithContext"></a>
-### func \(\*AlligatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L71>)
+### func \(\*AlligatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L70>)
 
 ```go
 func (a *AlligatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="AlligatorStrategy.Name"></a>
-### func \(\*AlligatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L62>)
+### func \(\*AlligatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L61>)
 
 ```go
 func (a *AlligatorStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="AlligatorStrategy.Report"></a>
-### func \(\*AlligatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L103>)
+### func \(\*AlligatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/alligator_strategy.go#L102>)
 
 ```go
 func (a *AlligatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="ApoStrategy"></a>
-## type [ApoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L20-L24>)
+## type [ApoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L18-L22>)
 
-ApoStrategy represents the configuration parameters for calculating the APO strategy. An APO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive APO values signify an upward trend, while negative values signify a downward trend.
+ApoStrategy demonstrates how to compose the Absolute Price Oscillator \(APO\) indicator into an illustrative centerline crossover strategy.
 
 ```go
 type ApoStrategy struct {
@@ -378,16 +379,16 @@ type ApoStrategy struct {
 ```
 
 <a name="NewApoStrategy"></a>
-### func [NewApoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L27>)
+### func [NewApoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L25>)
 
 ```go
 func NewApoStrategy() *ApoStrategy
 ```
 
-NewApoStrategy function initializes a new APO strategy instance with the default parameters.
+NewApoStrategy initializes an example ApoStrategy instance with default parameters.
 
 <a name="ApoStrategy.Compute"></a>
-### func \(\*ApoStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L106>)
+### func \(\*ApoStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L104>)
 
 ```go
 func (a *ApoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -398,36 +399,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ApoStrategy.ComputeWithContext"></a>
-### func \(\*ApoStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L40>)
+### func \(\*ApoStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L38>)
 
 ```go
 func (a *ApoStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="ApoStrategy.Name"></a>
-### func \(\*ApoStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L34>)
+### func \(\*ApoStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L32>)
 
 ```go
 func (*ApoStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="ApoStrategy.Report"></a>
-### func \(\*ApoStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L73>)
+### func \(\*ApoStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/apo_strategy.go#L71>)
 
 ```go
 func (a *ApoStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="AroonStrategy"></a>
-## type [AroonStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L22-L25>)
+## type [AroonStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L18-L21>)
 
-AroonStrategy represents the configuration parameters for calculating the Aroon strategy. Aroon is a technical analysis tool that gauges trend direction and strength in asset prices. It comprises two lines: Aroon Up and Aroon Down. Aroon Up measures uptrend strength, while Aroon Down measures downtrend strength. When Aroon Up exceeds Aroon Down, it suggests a bullish trend; when Aroon Down surpasses Aroon Up, it indicates a bearish trend.
+AroonStrategy demonstrates how to compose Aroon Up and Aroon Down indicator lines into an illustrative trend crossover strategy.
 
 ```go
 type AroonStrategy struct {
@@ -437,16 +438,16 @@ type AroonStrategy struct {
 ```
 
 <a name="NewAroonStrategy"></a>
-### func [NewAroonStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L29>)
+### func [NewAroonStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L25>)
 
 ```go
 func NewAroonStrategy() *AroonStrategy
 ```
 
-NewAroonStrategy function initializes a new Aroon strategy instance with the default parameters.
+NewAroonStrategy initializes an example AroonStrategy instance with default parameters. with the default parameters.
 
 <a name="AroonStrategy.Compute"></a>
-### func \(\*AroonStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L111>)
+### func \(\*AroonStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L107>)
 
 ```go
 func (a *AroonStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -457,36 +458,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="AroonStrategy.ComputeWithContext"></a>
-### func \(\*AroonStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L42>)
+### func \(\*AroonStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L38>)
 
 ```go
 func (a *AroonStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="AroonStrategy.Name"></a>
-### func \(\*AroonStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L36>)
+### func \(\*AroonStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L32>)
 
 ```go
 func (*AroonStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="AroonStrategy.Report"></a>
-### func \(\*AroonStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L70>)
+### func \(\*AroonStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/aroon_strategy.go#L66>)
 
 ```go
 func (a *AroonStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="BopStrategy"></a>
-## type [BopStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L20-L24>)
+## type [BopStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L18-L22>)
 
-BopStrategy gauges the strength of buying and selling forces using the Balance of Power \(BoP\) indicator. A positive BoP value suggests an upward trend, while a negative value indicates a downward trend. A BoP value of zero implies equilibrium between the two forces.
+BopStrategy demonstrates how to compose the Balance of Power \(BoP\) indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type BopStrategy struct {
@@ -497,16 +498,16 @@ type BopStrategy struct {
 ```
 
 <a name="NewBopStrategy"></a>
-### func [NewBopStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L27>)
+### func [NewBopStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L25>)
 
 ```go
 func NewBopStrategy() *BopStrategy
 ```
 
-NewBopStrategy function initializes a new BoP strategy instance with the default parameters.
+NewBopStrategy initializes an example BopStrategy instance with default parameters.
 
 <a name="BopStrategy.Compute"></a>
-### func \(\*BopStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L106>)
+### func \(\*BopStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L104>)
 
 ```go
 func (b *BopStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -517,36 +518,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="BopStrategy.ComputeWithContext"></a>
-### func \(\*BopStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L40>)
+### func \(\*BopStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L38>)
 
 ```go
 func (b *BopStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="BopStrategy.Name"></a>
-### func \(\*BopStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L34>)
+### func \(\*BopStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L32>)
 
 ```go
 func (*BopStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="BopStrategy.Report"></a>
-### func \(\*BopStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L65>)
+### func \(\*BopStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/bop_strategy.go#L63>)
 
 ```go
 func (b *BopStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="CciStrategy"></a>
-## type [CciStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L19-L22>)
+## type [CciStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L18-L21>)
 
-CciStrategy represents the configuration parameters for calculating the CCI strategy. A CCI value crossing above the 100\+ suggests a bullish trend, while crossing below the 100\- indicates a bearish trend.
+CciStrategy demonstrates how to compose the Commodity Channel Index \(CCI\) indicator into an illustrative threshold\-based strategy.
 
 ```go
 type CciStrategy struct {
@@ -556,16 +557,16 @@ type CciStrategy struct {
 ```
 
 <a name="NewCciStrategy"></a>
-### func [NewCciStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L25>)
+### func [NewCciStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L24>)
 
 ```go
 func NewCciStrategy() *CciStrategy
 ```
 
-NewCciStrategy function initializes a new CCI strategy instance.
+NewCciStrategy initializes an example CciStrategy instance with default parameters.
 
 <a name="CciStrategy.Compute"></a>
-### func \(\*CciStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L104>)
+### func \(\*CciStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L103>)
 
 ```go
 func (t *CciStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -576,36 +577,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="CciStrategy.ComputeWithContext"></a>
-### func \(\*CciStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L37>)
+### func \(\*CciStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L36>)
 
 ```go
 func (t *CciStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="CciStrategy.Name"></a>
-### func \(\*CciStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L32>)
+### func \(\*CciStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L31>)
 
 ```go
 func (*CciStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="CciStrategy.Report"></a>
-### func \(\*CciStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L64>)
+### func \(\*CciStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/cci_strategy.go#L63>)
 
 ```go
 func (t *CciStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="CfoStrategy"></a>
-## type [CfoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L20-L24>)
+## type [CfoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L18-L22>)
 
-CfoStrategy represents the configuration parameters for calculating the CFO strategy. A CFO value crossing above zero suggests a bullish trend, while crossing below zero indicates a bearish trend. Positive CFO values signify an upward trend, while negative values signify a downward trend.
+CfoStrategy demonstrates how to compose the Chande Forecast Oscillator \(CFO\) indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type CfoStrategy struct {
@@ -616,16 +617,16 @@ type CfoStrategy struct {
 ```
 
 <a name="NewCfoStrategy"></a>
-### func [NewCfoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L27>)
+### func [NewCfoStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L25>)
 
 ```go
 func NewCfoStrategy() *CfoStrategy
 ```
 
-NewCfoStrategy function initializes a new CFO strategy instance with the default parameters.
+NewCfoStrategy initializes an example CfoStrategy instance with default parameters.
 
 <a name="CfoStrategy.Compute"></a>
-### func \(\*CfoStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L100>)
+### func \(\*CfoStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L98>)
 
 ```go
 func (c *CfoStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -636,36 +637,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="CfoStrategy.ComputeWithContext"></a>
-### func \(\*CfoStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L40>)
+### func \(\*CfoStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L38>)
 
 ```go
 func (c *CfoStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="CfoStrategy.Name"></a>
-### func \(\*CfoStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L34>)
+### func \(\*CfoStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L32>)
 
 ```go
 func (*CfoStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="CfoStrategy.Report"></a>
-### func \(\*CfoStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L73>)
+### func \(\*CfoStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/cfo_strategy.go#L71>)
 
 ```go
 func (c *CfoStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="DemaStrategy"></a>
-## type [DemaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L29-L37>)
+## type [DemaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L28-L36>)
 
-DemaStrategy represents the configuration parameters for calculating the DEMA strategy. A bullish cross occurs when DEMA with 5 days period moves above DEMA with 35 days period. A bearish cross occurs when DEMA with 35 days period moves above DEMA With 5 days period.
+DemaStrategy demonstrates how to compose Double Exponential Moving Averages \(DEMAs\) with fast and slow periods into an illustrative moving average crossover strategy.
 
 ```go
 type DemaStrategy struct {
@@ -680,16 +681,16 @@ type DemaStrategy struct {
 ```
 
 <a name="NewDemaStrategy"></a>
-### func [NewDemaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L41>)
+### func [NewDemaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L40>)
 
 ```go
 func NewDemaStrategy() *DemaStrategy
 ```
 
-NewDemaStrategy function initializes a new DEMA strategy instance with the default parameters.
+NewDemaStrategy initializes an example DemaStrategy instance with default parameters. with the default parameters.
 
 <a name="DemaStrategy.Compute"></a>
-### func \(\*DemaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L134>)
+### func \(\*DemaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L133>)
 
 ```go
 func (d *DemaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -700,36 +701,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="DemaStrategy.ComputeWithContext"></a>
-### func \(\*DemaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L63>)
+### func \(\*DemaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L62>)
 
 ```go
 func (d *DemaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="DemaStrategy.Name"></a>
-### func \(\*DemaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L57>)
+### func \(\*DemaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L56>)
 
 ```go
 func (*DemaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="DemaStrategy.Report"></a>
-### func \(\*DemaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L93>)
+### func \(\*DemaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/dema_strategy.go#L92>)
 
 ```go
 func (d *DemaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="EnvelopeStrategy"></a>
-## type [EnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L21-L24>)
+## type [EnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L20-L23>)
 
-EnvelopeStrategy represents the configuration parameters for calculating the Envelope strategy. When the closing is above the upper band suggests a Sell recommendation, and when the closing is below the lower band suggests a buy recommendation.
+EnvelopeStrategy demonstrates how to compose moving average envelope bands into an illustrative band breakout strategy.
 
 ```go
 type EnvelopeStrategy struct {
@@ -739,25 +740,25 @@ type EnvelopeStrategy struct {
 ```
 
 <a name="NewEnvelopeStrategy"></a>
-### func [NewEnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L27>)
+### func [NewEnvelopeStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L26>)
 
 ```go
 func NewEnvelopeStrategy() *EnvelopeStrategy
 ```
 
-NewEnvelopeStrategy function initializes a new Envelope strategy with the default parameters.
+NewEnvelopeStrategy initializes an example EnvelopeStrategy instance with default parameters.
 
 <a name="NewEnvelopeStrategyWith"></a>
-### func [NewEnvelopeStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L34>)
+### func [NewEnvelopeStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L33>)
 
 ```go
 func NewEnvelopeStrategyWith(envelope *trend.Envelope[float64]) *EnvelopeStrategy
 ```
 
-NewEnvelopeStrategyWith function initializes a new Envelope strategy with the given Envelope instance.
+NewEnvelopeStrategyWith initializes an example EnvelopeStrategyWith instance with default parameters.
 
 <a name="EnvelopeStrategy.Compute"></a>
-### func \(\*EnvelopeStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L123>)
+### func \(\*EnvelopeStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L122>)
 
 ```go
 func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -768,36 +769,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="EnvelopeStrategy.ComputeWithContext"></a>
-### func \(\*EnvelopeStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L46>)
+### func \(\*EnvelopeStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L45>)
 
 ```go
 func (e *EnvelopeStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="EnvelopeStrategy.Name"></a>
-### func \(\*EnvelopeStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L41>)
+### func \(\*EnvelopeStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L40>)
 
 ```go
 func (e *EnvelopeStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="EnvelopeStrategy.Report"></a>
-### func \(\*EnvelopeStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L77>)
+### func \(\*EnvelopeStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/envelope_strategy.go#L76>)
 
 ```go
 func (e *EnvelopeStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="GoldenCrossStrategy"></a>
-## type [GoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L29-L35>)
+## type [GoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L26-L32>)
 
-GoldenCrossStrategy defines the parameters used to calculate the Golden Cross trading strategy. This strategy uses two Exponential Moving Averages \(EMAs\) with different lengths to identify potential buy and sell signals. \- A buy signal is generated when the \*\*fastest\*\* EMA crosses above the \*\*slowest\*\* EMAs. \- A sell signal is generated when the fastest EMA crosses below the slowest EMAs. \- Otherwise, the strategy recommends holding the asset.
+GoldenCrossStrategy demonstrates how to compose fast and slow Exponential Moving Averages \(EMAs\) into an illustrative golden cross / death cross crossover strategy.
 
 ```go
 type GoldenCrossStrategy struct {
@@ -810,25 +811,25 @@ type GoldenCrossStrategy struct {
 ```
 
 <a name="NewGoldenCrossStrategy"></a>
-### func [NewGoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L38>)
+### func [NewGoldenCrossStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L35>)
 
 ```go
 func NewGoldenCrossStrategy() *GoldenCrossStrategy
 ```
 
-NewGoldenCrossStrategy function initializes a new Golden Cross strategy instance with the default parameters.
+NewGoldenCrossStrategy initializes an example GoldenCrossStrategy instance with default parameters.
 
 <a name="NewGoldenCrossStrategyWith"></a>
-### func [NewGoldenCrossStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L46>)
+### func [NewGoldenCrossStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L43>)
 
 ```go
 func NewGoldenCrossStrategyWith(fastPeriod, slowPeriod int) *GoldenCrossStrategy
 ```
 
-NewGoldenCrossStrategyWith function initializes a new Golden Cross strategy instance with the given periods.
+NewGoldenCrossStrategyWith initializes an example GoldenCrossStrategyWith instance with default parameters.
 
 <a name="GoldenCrossStrategy.Compute"></a>
-### func \(\*GoldenCrossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L160>)
+### func \(\*GoldenCrossStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L157>)
 
 ```go
 func (t *GoldenCrossStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -839,36 +840,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="GoldenCrossStrategy.ComputeWithContext"></a>
-### func \(\*GoldenCrossStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L59>)
+### func \(\*GoldenCrossStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L56>)
 
 ```go
 func (t *GoldenCrossStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="GoldenCrossStrategy.Name"></a>
-### func \(\*GoldenCrossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L54>)
+### func \(\*GoldenCrossStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L51>)
 
 ```go
 func (*GoldenCrossStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="GoldenCrossStrategy.Report"></a>
-### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L85>)
+### func \(\*GoldenCrossStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/golden_cross_strategy.go#L82>)
 
 ```go
 func (t *GoldenCrossStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="HmaStrategy"></a>
 ## type [HmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/hma_strategy.go#L23-L26>)
 
-HmaStrategy represents the configuration parameters for calculating the HMA strategy. A closing price crossing above the HMA suggests a bullish trend, while crossing below the HMA indicates a bearish trend.
+HmaStrategy demonstrates how to compose Hull Moving Averages \(HMAs\) with fast and slow periods into an illustrative moving average crossover strategy.
 
 ```go
 type HmaStrategy struct {
@@ -884,7 +885,7 @@ type HmaStrategy struct {
 func NewHmaStrategy() *HmaStrategy
 ```
 
-NewHmaStrategy function initializes a new HMA strategy instance with the default parameters.
+NewHmaStrategy initializes an example HmaStrategy instance with default parameters.
 
 <a name="NewHmaStrategyWith"></a>
 ### func [NewHmaStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/hma_strategy.go#L34>)
@@ -893,7 +894,7 @@ NewHmaStrategy function initializes a new HMA strategy instance with the default
 func NewHmaStrategyWith(period int) *HmaStrategy
 ```
 
-NewHmaStrategyWith function initializes a new HMA strategy instance with the given period.
+NewHmaStrategyWith initializes an example HmaStrategyWith instance with default parameters.
 
 <a name="HmaStrategy.Compute"></a>
 ### func \(\*HmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/hma_strategy.go#L107>)
@@ -913,7 +914,7 @@ Deprecated: Use ComputeWithContext instead.
 func (h *HmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="HmaStrategy.Name"></a>
 ### func \(\*HmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/hma_strategy.go#L41>)
@@ -922,7 +923,7 @@ ComputeWithContext processes the provided asset snapshots and generates a stream
 func (h *HmaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="HmaStrategy.Report"></a>
 ### func \(\*HmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/hma_strategy.go#L71>)
@@ -931,12 +932,12 @@ Name returns the name of the strategy.
 func (h *HmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="KamaStrategy"></a>
 ## type [KamaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/kama_strategy.go#L18-L21>)
 
-KamaStrategy represents the configuration parameters for calculating the KAMA strategy. A closing price crossing above the KAMA suggests a bullish trend, while crossing below the KAMA indicates a bearish trend.
+KamaStrategy demonstrates how to compose Kaufman's Adaptive Moving Averages \(KAMAs\) with fast and slow periods into an illustrative adaptive moving average crossover strategy.
 
 ```go
 type KamaStrategy struct {
@@ -952,7 +953,7 @@ type KamaStrategy struct {
 func NewKamaStrategy() *KamaStrategy
 ```
 
-NewKamaStrategy function initializes a new KAMA strategy instance.
+NewKamaStrategy initializes an example KamaStrategy instance with default parameters.
 
 <a name="NewKamaStrategyWith"></a>
 ### func [NewKamaStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/kama_strategy.go#L33>)
@@ -961,7 +962,7 @@ NewKamaStrategy function initializes a new KAMA strategy instance.
 func NewKamaStrategyWith(erPeriod, fastScPeriod, slowScPeriod int) *KamaStrategy
 ```
 
-NewKamaStrategyWith function initializes a new KAMA strategy instance with the given parameters.
+NewKamaStrategyWith initializes an example KamaStrategyWith instance with default parameters.
 
 <a name="KamaStrategy.Compute"></a>
 ### func \(\*KamaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/kama_strategy.go#L119>)
@@ -981,7 +982,7 @@ Deprecated: Use ComputeWithContext instead.
 func (k *KamaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="KamaStrategy.Name"></a>
 ### func \(\*KamaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/kama_strategy.go#L44>)
@@ -990,7 +991,7 @@ ComputeWithContext processes the provided asset snapshots and generates a stream
 func (k *KamaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="KamaStrategy.Report"></a>
 ### func \(\*KamaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/kama_strategy.go#L76>)
@@ -999,12 +1000,12 @@ Name returns the name of the strategy.
 func (k *KamaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="KdjStrategy"></a>
-## type [KdjStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L19-L22>)
+## type [KdjStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L18-L21>)
 
-KdjStrategy represents the configuration parameters for calculating the KDJ strategy. Generates BUY action when j value crosses above both k and d values. Generates SELL action when j value crosses below both k and d values.
+KdjStrategy demonstrates how to compose Random Index \(KDJ\) indicator lines into an illustrative crossover strategy.
 
 ```go
 type KdjStrategy struct {
@@ -1014,16 +1015,16 @@ type KdjStrategy struct {
 ```
 
 <a name="NewKdjStrategy"></a>
-### func [NewKdjStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L25>)
+### func [NewKdjStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L24>)
 
 ```go
 func NewKdjStrategy() *KdjStrategy
 ```
 
-NewKdjStrategy function initializes a new KDJ strategy instance.
+NewKdjStrategy initializes an example KdjStrategy instance with default parameters.
 
 <a name="KdjStrategy.Compute"></a>
-### func \(\*KdjStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L116>)
+### func \(\*KdjStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L115>)
 
 ```go
 func (kdj *KdjStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1034,65 +1035,95 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="KdjStrategy.ComputeWithContext"></a>
-### func \(\*KdjStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L38>)
+### func \(\*KdjStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L37>)
 
 ```go
 func (kdj *KdjStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="KdjStrategy.Name"></a>
-### func \(\*KdjStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L32>)
+### func \(\*KdjStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L31>)
 
 ```go
 func (*KdjStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="KdjStrategy.Report"></a>
-### func \(\*KdjStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L72>)
+### func \(\*KdjStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/kdj_strategy.go#L71>)
 
 ```go
 func (kdj *KdjStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
+
+<a name="MacdSignalMode"></a>
+## type [MacdSignalMode](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L19>)
+
+MacdSignalMode selects how MacdStrategy turns a MACD/signal\-line crossover into an action.
+
+```go
+type MacdSignalMode int
+```
+
+<a name="LevelTriggered"></a>
+
+```go
+const (
+    // LevelTriggered evaluates the crossover condition independently on every bar, so it keeps
+    // returning Buy (or Sell) on every consecutive bar for which the condition holds, not just
+    // the bar on which the crossing actually happened. This is the existing default behavior.
+    LevelTriggered MacdSignalMode = iota
+
+    // EdgeTriggered fires Buy/Sell only once, on the bar where the MACD/signal-line crossing
+    // actually occurs, by comparing the previous bar's MACD/signal pair against the current
+    // one. This requires one additional bar of history, so the strategy's idle period is one
+    // bar longer than in LevelTriggered mode.
+    EdgeTriggered
+)
+```
 
 <a name="MacdStrategy"></a>
-## type [MacdStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L22-L26>)
+## type [MacdStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L39-L47>)
 
-MacdStrategy represents the configuration parameters for calculating the MACD strategy. A MACD value crossing above the signal line suggests a bullish trend, while crossing below the signal line indicates a bearish trend.
+MacdStrategy demonstrates how to compose the Moving Average Convergence Divergence \(MACD\) and its signal line into an illustrative, zero\-line\-filtered MACD crossover strategy. Buy signals fire only on a MACD\-above\-signal crossing that occurs while MACD is still below zero; Sell signals fire only on a MACD\-below\-signal crossing while MACD is still above zero.
 
 ```go
 type MacdStrategy struct {
     // Macd represents the configuration parameters for calculating the
     // Moving Average Convergence Divergence (MACD).
     Macd *trend.Macd[float64]
+
+    // SignalMode selects between LevelTriggered (default) and EdgeTriggered crossover
+    // detection. See MacdSignalMode for details.
+    SignalMode MacdSignalMode
 }
 ```
 
 <a name="NewMacdStrategy"></a>
-### func [NewMacdStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L29>)
+### func [NewMacdStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L50>)
 
 ```go
 func NewMacdStrategy() *MacdStrategy
 ```
 
-NewMacdStrategy function initializes a new MACD strategy instance.
+NewMacdStrategy initializes an example MacdStrategy instance with default parameters.
 
 <a name="NewMacdStrategyWith"></a>
-### func [NewMacdStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L38>)
+### func [NewMacdStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L59>)
 
 ```go
 func NewMacdStrategyWith(period1, period2, period3 int) *MacdStrategy
 ```
 
-NewMacdStrategyWith function initializes a new MACD strategy instance with the given parameters.
+NewMacdStrategyWith initializes an example MacdStrategyWith instance with default parameters.
 
 <a name="MacdStrategy.Compute"></a>
-### func \(\*MacdStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L124>)
+### func \(\*MacdStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L183>)
 
 ```go
 func (m *MacdStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1103,38 +1134,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="MacdStrategy.ComputeWithContext"></a>
-### func \(\*MacdStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L59>)
+### func \(\*MacdStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L80>)
 
 ```go
 func (m *MacdStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="MacdStrategy.Name"></a>
-### func \(\*MacdStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L49>)
+### func \(\*MacdStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L70>)
 
 ```go
 func (m *MacdStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="MacdStrategy.Report"></a>
-### func \(\*MacdStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L86>)
+### func \(\*MacdStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/macd_strategy.go#L145>)
 
 ```go
 func (m *MacdStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="QstickStrategy"></a>
-## type [QstickStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L23-L26>)
+## type [QstickStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L18-L21>)
 
-QstickStrategy represents the configuration parameters for calculating the Qstick strategy. Qstick is a momentum indicator used to identify an asset's trend by looking at the SMA of the difference between its closing and opening.
-
-A Qstick above zero indicates increasing buying pressure, while a Qstick below zero indicates increasing selling pressure.
+QstickStrategy demonstrates how to compose the Qstick momentum indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type QstickStrategy struct {
@@ -1144,16 +1173,16 @@ type QstickStrategy struct {
 ```
 
 <a name="NewQstickStrategy"></a>
-### func [NewQstickStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L29>)
+### func [NewQstickStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L24>)
 
 ```go
 func NewQstickStrategy() *QstickStrategy
 ```
 
-NewQstickStrategy function initializes a new Qstick strategy instance.
+NewQstickStrategy initializes an example QstickStrategy instance with default parameters.
 
 <a name="QstickStrategy.Compute"></a>
-### func \(\*QstickStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L115>)
+### func \(\*QstickStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L110>)
 
 ```go
 func (q *QstickStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1164,36 +1193,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="QstickStrategy.ComputeWithContext"></a>
-### func \(\*QstickStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L42>)
+### func \(\*QstickStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L37>)
 
 ```go
 func (q *QstickStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="QstickStrategy.Name"></a>
-### func \(\*QstickStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L36>)
+### func \(\*QstickStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L31>)
 
 ```go
 func (*QstickStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="QstickStrategy.Report"></a>
-### func \(\*QstickStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L75>)
+### func \(\*QstickStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/qstick_strategy.go#L70>)
 
 ```go
 func (q *QstickStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="SmmaStrategy"></a>
-## type [SmmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L30-L38>)
+## type [SmmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L28-L36>)
 
-SmmaStrategy represents the configuration parameters for calculating the Smooted Moving Averge \(SMMA\) strategy. A short\-term SMMA crossing above the long\-term SMMA suggests a bullish trend, while crossing below the long\-term SMMA indicates a bearish trend.
+SmmaStrategy demonstrates how to compose Smoothed Moving Averages \(SMMAs\) with fast and slow periods into an illustrative moving average crossover strategy.
 
 ```go
 type SmmaStrategy struct {
@@ -1208,25 +1237,25 @@ type SmmaStrategy struct {
 ```
 
 <a name="NewSmmaStrategy"></a>
-### func [NewSmmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L41>)
+### func [NewSmmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L39>)
 
 ```go
 func NewSmmaStrategy() *SmmaStrategy
 ```
 
-NewSmmaStrategy function initializes a new SMMA strategy instance.
+NewSmmaStrategy initializes an example SmmaStrategy instance with default parameters.
 
 <a name="NewSmmaStrategyWith"></a>
-### func [NewSmmaStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L49>)
+### func [NewSmmaStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L47>)
 
 ```go
 func NewSmmaStrategyWith(shortPeriod, longPeriod int) *SmmaStrategy
 ```
 
-NewSmmaStrategyWith function initializes a new SMMA strategy instance with the given parameters.
+NewSmmaStrategyWith initializes an example SmmaStrategyWith instance with default parameters.
 
 <a name="SmmaStrategy.Compute"></a>
-### func \(\*SmmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L143>)
+### func \(\*SmmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L141>)
 
 ```go
 func (s *SmmaStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1237,36 +1266,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="SmmaStrategy.ComputeWithContext"></a>
-### func \(\*SmmaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L65>)
+### func \(\*SmmaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L63>)
 
 ```go
 func (s *SmmaStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="SmmaStrategy.Name"></a>
-### func \(\*SmmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L57>)
+### func \(\*SmmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L55>)
 
 ```go
 func (s *SmmaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="SmmaStrategy.Report"></a>
-### func \(\*SmmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L97>)
+### func \(\*SmmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/smma_strategy.go#L95>)
 
 ```go
 func (s *SmmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="TrimaStrategy"></a>
-## type [TrimaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L27-L33>)
+## type [TrimaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L26-L32>)
 
-TrimaStrategy represents the configuration parameters for calculating the TRIMA strategy. A bullish cross occurs when the short TRIMA moves above the long TRIMA. A bearish cross occurs when the short TRIMA moves below the long TRIME.
+TrimaStrategy demonstrates how to compose Triangular Moving Averages \(TRIMAs\) with fast and slow periods into an illustrative moving average crossover strategy.
 
 ```go
 type TrimaStrategy struct {
@@ -1279,16 +1308,16 @@ type TrimaStrategy struct {
 ```
 
 <a name="NewTrimaStrategy"></a>
-### func [NewTrimaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L37>)
+### func [NewTrimaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L36>)
 
 ```go
 func NewTrimaStrategy() *TrimaStrategy
 ```
 
-NewTrimaStrategy function initializes a new TRIMA strategy instance with the default parameters.
+NewTrimaStrategy initializes an example TrimaStrategy instance with default parameters. with the default parameters.
 
 <a name="TrimaStrategy.Compute"></a>
-### func \(\*TrimaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L126>)
+### func \(\*TrimaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L125>)
 
 ```go
 func (t *TrimaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1299,36 +1328,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TrimaStrategy.ComputeWithContext"></a>
-### func \(\*TrimaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L56>)
+### func \(\*TrimaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L55>)
 
 ```go
 func (t *TrimaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="TrimaStrategy.Name"></a>
-### func \(\*TrimaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L50>)
+### func \(\*TrimaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L49>)
 
 ```go
 func (*TrimaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="TrimaStrategy.Report"></a>
-### func \(\*TrimaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L84>)
+### func \(\*TrimaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/trima_strategy.go#L83>)
 
 ```go
 func (t *TrimaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="TripleMovingAverageCrossoverStrategy"></a>
-## type [TripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L33-L42>)
+## type [TripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L29-L38>)
 
-TripleMovingAverageCrossoverStrategy defines the parameters used to calculate the Triple Moving Average Crossover trading strategy. This strategy uses three Exponential Moving Averages \(EMAs\) with different lengths to identify potential buy and sell signals. \- A buy signal is generated when the \*\*fastest\*\* EMA crosses above both the \*\*medium\*\* and \*\*slowest\*\* EMAs. \- A sell signal is generated when the fastest EMA crosses below both the medium and slowest EMAs. \- Otherwise, the strategy recommends holding the asset.
+TripleMovingAverageCrossoverStrategy demonstrates how to compose three Exponential Moving Averages \(EMAs\) with different periods into an illustrative triple crossover strategy.
 
 ```go
 type TripleMovingAverageCrossoverStrategy struct {
@@ -1344,25 +1373,25 @@ type TripleMovingAverageCrossoverStrategy struct {
 ```
 
 <a name="NewTripleMovingAverageCrossoverStrategy"></a>
-### func [NewTripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L45>)
+### func [NewTripleMovingAverageCrossoverStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L41>)
 
 ```go
 func NewTripleMovingAverageCrossoverStrategy() *TripleMovingAverageCrossoverStrategy
 ```
 
-NewTripleMovingAverageCrossoverStrategy function initializes a new Triple Moving Average Crossover strategy instance with the default parameters.
+NewTripleMovingAverageCrossoverStrategy initializes an example TripleMovingAverageCrossoverStrategy instance with default parameters.
 
 <a name="NewTripleMovingAverageCrossoverStrategyWith"></a>
-### func [NewTripleMovingAverageCrossoverStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L54>)
+### func [NewTripleMovingAverageCrossoverStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L50>)
 
 ```go
 func NewTripleMovingAverageCrossoverStrategyWith(fastPeriod, mediumPeriod, slowPeriod int) *TripleMovingAverageCrossoverStrategy
 ```
 
-NewTripleMovingAverageCrossoverStrategyWith function initializes a new Triple Moving Average Crossover strategy instance with the given periods.
+NewTripleMovingAverageCrossoverStrategyWith initializes an example TripleMovingAverageCrossoverStrategyWith instance with default parameters.
 
 <a name="TripleMovingAverageCrossoverStrategy.Compute"></a>
-### func \(\*TripleMovingAverageCrossoverStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L175>)
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L171>)
 
 ```go
 func (t *TripleMovingAverageCrossoverStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1373,36 +1402,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TripleMovingAverageCrossoverStrategy.ComputeWithContext"></a>
-### func \(\*TripleMovingAverageCrossoverStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L68>)
+### func \(\*TripleMovingAverageCrossoverStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L64>)
 
 ```go
 func (t *TripleMovingAverageCrossoverStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="TripleMovingAverageCrossoverStrategy.Name"></a>
-### func \(\*TripleMovingAverageCrossoverStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L63>)
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L59>)
 
 ```go
 func (*TripleMovingAverageCrossoverStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="TripleMovingAverageCrossoverStrategy.Report"></a>
-### func \(\*TripleMovingAverageCrossoverStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L94>)
+### func \(\*TripleMovingAverageCrossoverStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/triple_moving_average_crossover_strategy.go#L90>)
 
 ```go
 func (t *TripleMovingAverageCrossoverStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="TrixStrategy"></a>
-## type [TrixStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L19-L22>)
+## type [TrixStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L18-L21>)
 
-TrixStrategy represents the configuration parameters for calculating the TRIX strategy. A TRIX value crossing above the zero line suggests a bullish trend, while crossing below the zero line indicates a bearish trend.
+TrixStrategy demonstrates how to compose the Triple Exponential Average \(TRIX\) indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type TrixStrategy struct {
@@ -1412,16 +1441,16 @@ type TrixStrategy struct {
 ```
 
 <a name="NewTrixStrategy"></a>
-### func [NewTrixStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L25>)
+### func [NewTrixStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L24>)
 
 ```go
 func NewTrixStrategy() *TrixStrategy
 ```
 
-NewTrixStrategy function initializes a new TRIX strategy instance.
+NewTrixStrategy initializes an example TrixStrategy instance with default parameters.
 
 <a name="TrixStrategy.Compute"></a>
-### func \(\*TrixStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L97>)
+### func \(\*TrixStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L96>)
 
 ```go
 func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1432,42 +1461,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TrixStrategy.ComputeWithContext"></a>
-### func \(\*TrixStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L37>)
+### func \(\*TrixStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L36>)
 
 ```go
 func (t *TrixStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="TrixStrategy.Name"></a>
-### func \(\*TrixStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L32>)
+### func \(\*TrixStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L31>)
 
 ```go
 func (*TrixStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="TrixStrategy.Report"></a>
-### func \(\*TrixStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L61>)
+### func \(\*TrixStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/trix_strategy.go#L60>)
 
 ```go
 func (t *TrixStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="TsiStrategy"></a>
-## type [TsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L30-L36>)
+## type [TsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L25-L31>)
 
-TsiStrategy represents the configuration parameters for calculating the TSI strategy. When the TSI is above zero and crossing above the signal line suggests a bullish trend, while TSI being below zero and crossing below the signal line indicates a bearish trend.
-
-```
-Signal Line = Ema(12, TSI)
-When TSI > 0, TSI > Signal Line, Buy.
-When TSI < 0, TSI < Signal Line, Sell.const
-```
+TsiStrategy demonstrates how to compose the True Strength Index \(TSI\) indicator and its signal line into an illustrative crossover strategy.
 
 ```go
 type TsiStrategy struct {
@@ -1480,25 +1503,25 @@ type TsiStrategy struct {
 ```
 
 <a name="NewTsiStrategy"></a>
-### func [NewTsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L39>)
+### func [NewTsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L34>)
 
 ```go
 func NewTsiStrategy() *TsiStrategy
 ```
 
-NewTsiStrategy function initializes a new TSI strategy instance.
+NewTsiStrategy initializes an example TsiStrategy instance with default parameters.
 
 <a name="NewTsiStrategyWith"></a>
-### func [NewTsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L48>)
+### func [NewTsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L43>)
 
 ```go
 func NewTsiStrategyWith(firstSmoothingPeriod, secondSmoothingPeriod, signalPeriod int) *TsiStrategy
 ```
 
-NewTsiStrategyWith function initializes a new TSI strategy instance with the given parameters.
+NewTsiStrategyWith initializes an example TsiStrategyWith instance with default parameters.
 
 <a name="TsiStrategy.Compute"></a>
-### func \(\*TsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L152>)
+### func \(\*TsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L147>)
 
 ```go
 func (t *TsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1509,16 +1532,16 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TsiStrategy.ComputeWithContext"></a>
-### func \(\*TsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L68>)
+### func \(\*TsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L63>)
 
 ```go
 func (t *TsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="TsiStrategy.IdlePeriod"></a>
-### func \(\*TsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L145>)
+### func \(\*TsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L140>)
 
 ```go
 func (t *TsiStrategy) IdlePeriod() int
@@ -1527,27 +1550,27 @@ func (t *TsiStrategy) IdlePeriod() int
 IdlePeriod is the initial period that TSI strategy yield any results.
 
 <a name="TsiStrategy.Name"></a>
-### func \(\*TsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L60>)
+### func \(\*TsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L55>)
 
 ```go
 func (t *TsiStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="TsiStrategy.Report"></a>
-### func \(\*TsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L97>)
+### func \(\*TsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/tsi_strategy.go#L92>)
 
 ```go
 func (t *TsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="VwmaStrategy"></a>
-## type [VwmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L24-L30>)
+## type [VwmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L23-L29>)
 
-VwmaStrategy represents the configuration parameters for calculating the VWMA strategy. The VwmaStrategy function uses SMA and VWMA indicators to provide a BUY action when VWMA is above SMA, and a SELL signal when VWMA is below SMA, a HOLD otherwse.
+VwmaStrategy demonstrates how to compose Volume Weighted Moving Average \(VWMA\) and Simple Moving Average \(SMA\) into an illustrative moving average crossover strategy.
 
 ```go
 type VwmaStrategy struct {
@@ -1560,16 +1583,16 @@ type VwmaStrategy struct {
 ```
 
 <a name="NewVwmaStrategy"></a>
-### func [NewVwmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L33>)
+### func [NewVwmaStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L32>)
 
 ```go
 func NewVwmaStrategy() *VwmaStrategy
 ```
 
-NewVwmaStrategy function initializes a new VWMA strategy instance with the default parameters.
+NewVwmaStrategy initializes an example VwmaStrategy instance with default parameters.
 
 <a name="VwmaStrategy.Compute"></a>
-### func \(\*VwmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L126>)
+### func \(\*VwmaStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L125>)
 
 ```go
 func (v *VwmaStrategy) Compute(c <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1580,36 +1603,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="VwmaStrategy.ComputeWithContext"></a>
-### func \(\*VwmaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L51>)
+### func \(\*VwmaStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L50>)
 
 ```go
 func (v *VwmaStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="VwmaStrategy.Name"></a>
-### func \(\*VwmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L46>)
+### func \(\*VwmaStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L45>)
 
 ```go
 func (*VwmaStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="VwmaStrategy.Report"></a>
-### func \(\*VwmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L74>)
+### func \(\*VwmaStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/vwma_strategy.go#L73>)
 
 ```go
 func (v *VwmaStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="WeightedCloseStrategy"></a>
-## type [WeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L27-L33>)
+## type [WeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L25-L31>)
 
-WeightedCloseStrategy represents the configuration parameters for calculating the Weighted Close strategy. A weighted close crossing above the moving average suggests a bullish trend, while crossing below the moving average indicates a bearish trend.
+WeightedCloseStrategy demonstrates how to compose Weighted Close prices and their moving average into an illustrative crossover strategy.
 
 ```go
 type WeightedCloseStrategy struct {
@@ -1622,25 +1645,25 @@ type WeightedCloseStrategy struct {
 ```
 
 <a name="NewWeightedCloseStrategy"></a>
-### func [NewWeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L36>)
+### func [NewWeightedCloseStrategy](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L34>)
 
 ```go
 func NewWeightedCloseStrategy() *WeightedCloseStrategy
 ```
 
-NewWeightedCloseStrategy function initializes a new Weighted Close strategy instance.
+NewWeightedCloseStrategy initializes an example WeightedCloseStrategy instance with default parameters.
 
 <a name="NewWeightedCloseStrategyWith"></a>
-### func [NewWeightedCloseStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L44>)
+### func [NewWeightedCloseStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L42>)
 
 ```go
 func NewWeightedCloseStrategyWith(maPeriod int) *WeightedCloseStrategy
 ```
 
-NewWeightedCloseStrategyWith function initializes a new Weighted Close strategy instance with the given parameters.
+NewWeightedCloseStrategyWith initializes an example WeightedCloseStrategyWith instance with default parameters. with the given parameters.
 
 <a name="WeightedCloseStrategy.Compute"></a>
-### func \(\*WeightedCloseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L146>)
+### func \(\*WeightedCloseStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L144>)
 
 ```go
 func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -1651,30 +1674,30 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="WeightedCloseStrategy.ComputeWithContext"></a>
-### func \(\*WeightedCloseStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L59>)
+### func \(\*WeightedCloseStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L57>)
 
 ```go
 func (w *WeightedCloseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="WeightedCloseStrategy.Name"></a>
-### func \(\*WeightedCloseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L52>)
+### func \(\*WeightedCloseStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L50>)
 
 ```go
 func (w *WeightedCloseStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="WeightedCloseStrategy.Report"></a>
-### func \(\*WeightedCloseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L92>)
+### func \(\*WeightedCloseStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/trend/weighted_close_strategy.go#L90>)
 
 ```go
 func (w *WeightedCloseStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

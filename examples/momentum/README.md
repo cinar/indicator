@@ -8,7 +8,7 @@ import "github.com/cinar/indicator/v2/examples/momentum"
 
 Package momentum provides illustrative examples demonstrating how to compose momentum indicators into trading strategies for educational and research purposes.
 
-This package belongs to the Indicator project. These strategy implementations are provided purely as educational and research examples illustrating how developers can consume core indicator mathematics.
+This package belongs to the Indicator project. Indicator is a Golang module that supplies a variety of technical indicators, strategies, and a backtesting framework for analysis.
 
 ### License
 
@@ -20,7 +20,7 @@ https://github.com/cinar/indicator
 
 ### Disclaimer
 
-The information and example strategies provided in this package are strictly for educational and research purposes only and must not be construed as investment, financial, tax, or trading advice.
+The information provided on this project is strictly for informational and educational purposes and is not to be construed as investment, financial, or trading advice.
 
 ## Index
 
@@ -119,10 +119,10 @@ const (
 ```go
 const (
     // DefaultStochasticRsiStrategyBuyAt defines the default level at which a Buy action is generated.
-    DefaultStochasticRsiStrategyBuyAt = 0.8
+    DefaultStochasticRsiStrategyBuyAt = 0.2
 
     // DefaultStochasticRsiStrategySellAt defines the default level at which a Sell action is generated.
-    DefaultStochasticRsiStrategySellAt = 0.2
+    DefaultStochasticRsiStrategySellAt = 0.8
 )
 ```
 
@@ -163,18 +163,18 @@ const (
 ```
 
 <a name="AllStrategies"></a>
-## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/momentum/momentum.go#L24>)
+## func [AllStrategies](<https://github.com/cinar/indicator/blob/master/examples/momentum/momentum.go#L25>)
 
 ```go
 func AllStrategies() []strategy.Strategy
 ```
 
-AllStrategies returns a slice containing references to all available momentum strategies.
+AllStrategies returns a slice containing references to all available example momentum strategies.
 
 <a name="AwesomeOscillatorStrategy"></a>
-## type [AwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L17-L20>)
+## type [AwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L18-L21>)
 
-AwesomeOscillatorStrategy represents the configuration parameters for calculating the Awesome Oscillator strategy.
+AwesomeOscillatorStrategy demonstrates how to compose the Awesome Oscillator indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type AwesomeOscillatorStrategy struct {
@@ -184,16 +184,16 @@ type AwesomeOscillatorStrategy struct {
 ```
 
 <a name="NewAwesomeOscillatorStrategy"></a>
-### func [NewAwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L23>)
+### func [NewAwesomeOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L24>)
 
 ```go
 func NewAwesomeOscillatorStrategy() *AwesomeOscillatorStrategy
 ```
 
-NewAwesomeOscillatorStrategy function initializes a new Awesome Oscillator strategy with the default parameters.
+NewAwesomeOscillatorStrategy initializes an example AwesomeOscillatorStrategy instance with default parameters.
 
 <a name="AwesomeOscillatorStrategy.Compute"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L99>)
+### func \(\*AwesomeOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L100>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -204,36 +204,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="AwesomeOscillatorStrategy.ComputeWithContext"></a>
-### func \(\*AwesomeOscillatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L35>)
+### func \(\*AwesomeOscillatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L36>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="AwesomeOscillatorStrategy.Name"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L30>)
+### func \(\*AwesomeOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L31>)
 
 ```go
 func (*AwesomeOscillatorStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="AwesomeOscillatorStrategy.Report"></a>
-### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L62>)
+### func \(\*AwesomeOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/awesome_oscillator_strategy.go#L63>)
 
 ```go
 func (a *AwesomeOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="CoppockCurveStrategy"></a>
 ## type [CoppockCurveStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/coppock_curve_strategy.go#L18-L21>)
 
-CoppockCurveStrategy represents the configuration parameters for calculating the Coppock Curve strategy. A positive Coppock Curve value suggests a Buy signal, while a negative value suggests a Sell signal.
+CoppockCurveStrategy demonstrates how to compose the Coppock Curve indicator into an illustrative zero\-line crossover strategy.
 
 ```go
 type CoppockCurveStrategy struct {
@@ -249,7 +249,7 @@ type CoppockCurveStrategy struct {
 func NewCoppockCurveStrategy() *CoppockCurveStrategy
 ```
 
-NewCoppockCurveStrategy function initializes a new Coppock Curve strategy instance with the default parameters.
+NewCoppockCurveStrategy initializes an example CoppockCurveStrategy instance with default parameters.
 
 <a name="CoppockCurveStrategy.Compute"></a>
 ### func \(\*CoppockCurveStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/coppock_curve_strategy.go#L94>)
@@ -269,7 +269,7 @@ Deprecated: Use ComputeWithContext instead.
 func (c *CoppockCurveStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="CoppockCurveStrategy.Name"></a>
 ### func \(\*CoppockCurveStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/coppock_curve_strategy.go#L31>)
@@ -278,7 +278,7 @@ ComputeWithContext processes the provided asset snapshots and generates a stream
 func (*CoppockCurveStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="CoppockCurveStrategy.Report"></a>
 ### func \(\*CoppockCurveStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/coppock_curve_strategy.go#L59>)
@@ -287,12 +287,12 @@ Name returns the name of the strategy.
 func (c *CoppockCurveStrategy) Report(cr <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="ElderRayStrategy"></a>
-## type [ElderRayStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L20-L23>)
+## type [ElderRayStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L19-L22>)
 
-ElderRayStrategy represents the configuration parameters for calculating the Elder Ray strategy. Buy when EMA is rising and Bear Power is negative but rising. Sell when EMA is falling and Bull Power is positive but falling.
+ElderRayStrategy demonstrates how to compose Elder\-Ray Bull Power and Bear Power indicators into an illustrative strategy.
 
 ```go
 type ElderRayStrategy struct {
@@ -302,16 +302,16 @@ type ElderRayStrategy struct {
 ```
 
 <a name="NewElderRayStrategy"></a>
-### func [NewElderRayStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L26>)
+### func [NewElderRayStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L25>)
 
 ```go
 func NewElderRayStrategy() *ElderRayStrategy
 ```
 
-NewElderRayStrategy function initializes a new Elder Ray strategy instance with the default parameters.
+NewElderRayStrategy initializes an example ElderRayStrategy instance with default parameters.
 
 <a name="ElderRayStrategy.Compute"></a>
-### func \(\*ElderRayStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L125>)
+### func \(\*ElderRayStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L124>)
 
 ```go
 func (e *ElderRayStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -322,36 +322,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ElderRayStrategy.ComputeWithContext"></a>
-### func \(\*ElderRayStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L38>)
+### func \(\*ElderRayStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L37>)
 
 ```go
 func (e *ElderRayStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="ElderRayStrategy.Name"></a>
-### func \(\*ElderRayStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L33>)
+### func \(\*ElderRayStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L32>)
 
 ```go
 func (*ElderRayStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="ElderRayStrategy.Report"></a>
-### func \(\*ElderRayStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L83>)
+### func \(\*ElderRayStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/elder_ray_strategy.go#L82>)
 
 ```go
 func (e *ElderRayStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="IchimokuCloudStrategy"></a>
-## type [IchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L17-L20>)
+## type [IchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L18-L21>)
 
-IchimokuCloudStrategy represents the configuration parameters for calculating the Ichimoku Cloud strategy.
+IchimokuCloudStrategy demonstrates how to compose Tenkan\-sen and Kijun\-sen lines from the Ichimoku Cloud into an illustrative crossover strategy.
 
 ```go
 type IchimokuCloudStrategy struct {
@@ -361,16 +361,16 @@ type IchimokuCloudStrategy struct {
 ```
 
 <a name="NewIchimokuCloudStrategy"></a>
-### func [NewIchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L23>)
+### func [NewIchimokuCloudStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L24>)
 
 ```go
 func NewIchimokuCloudStrategy() *IchimokuCloudStrategy
 ```
 
-NewIchimokuCloudStrategy function initializes a new Ichimoku Cloud strategy with the default parameters.
+NewIchimokuCloudStrategy initializes an example IchimokuCloudStrategy instance with default parameters.
 
 <a name="IchimokuCloudStrategy.Compute"></a>
-### func \(\*IchimokuCloudStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L113>)
+### func \(\*IchimokuCloudStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L123>)
 
 ```go
 func (i *IchimokuCloudStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -381,36 +381,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="IchimokuCloudStrategy.ComputeWithContext"></a>
-### func \(\*IchimokuCloudStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L35>)
+### func \(\*IchimokuCloudStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L36>)
 
 ```go
 func (i *IchimokuCloudStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="IchimokuCloudStrategy.Name"></a>
-### func \(\*IchimokuCloudStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L30>)
+### func \(\*IchimokuCloudStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L31>)
 
 ```go
 func (*IchimokuCloudStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="IchimokuCloudStrategy.Report"></a>
-### func \(\*IchimokuCloudStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L72>)
+### func \(\*IchimokuCloudStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/ichimoku_cloud_strategy.go#L79>)
 
 ```go
 func (i *IchimokuCloudStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="RsiStrategy"></a>
-## type [RsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L27-L36>)
+## type [RsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L28-L37>)
 
-RsiStrategy represents the configuration parameters for calculating the RSI strategy.
+RsiStrategy demonstrates how to compose the Relative Strength Index \(RSI\) into an illustrative threshold\-based overbought/oversold strategy.
 
 ```go
 type RsiStrategy struct {
@@ -426,25 +426,25 @@ type RsiStrategy struct {
 ```
 
 <a name="NewRsiStrategy"></a>
-### func [NewRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L39>)
+### func [NewRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L40>)
 
 ```go
 func NewRsiStrategy() *RsiStrategy
 ```
 
-NewRsiStrategy function initializes a new RSI strategy instance with the default parameters.
+NewRsiStrategy initializes an example RsiStrategy instance with default parameters.
 
 <a name="NewRsiStrategyWith"></a>
-### func [NewRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L47>)
+### func [NewRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L48>)
 
 ```go
 func NewRsiStrategyWith(buyAt, sellAt float64) *RsiStrategy
 ```
 
-NewRsiStrategyWith function initializes a new RSI strategy instance with the given parameters.
+NewRsiStrategyWith initializes an example RsiStrategyWith instance with default parameters.
 
 <a name="RsiStrategy.Compute"></a>
-### func \(\*RsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L118>)
+### func \(\*RsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L119>)
 
 ```go
 func (r *RsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -455,36 +455,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="RsiStrategy.ComputeWithContext"></a>
-### func \(\*RsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L61>)
+### func \(\*RsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L62>)
 
 ```go
 func (r *RsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="RsiStrategy.Name"></a>
-### func \(\*RsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L56>)
+### func \(\*RsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L57>)
 
 ```go
 func (r *RsiStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="RsiStrategy.Report"></a>
-### func \(\*RsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L85>)
+### func \(\*RsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/rsi_strategy.go#L86>)
 
 ```go
 func (r *RsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="StochasticOscillatorStrategy"></a>
-## type [StochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L29-L38>)
+## type [StochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L28-L37>)
 
-StochasticOscillatorStrategy represents the configuration parameters for calculating the Stochastic Oscillator strategy. When the K line is below the buy threshold, a Buy action is generated. When above the sell threshold, a Sell action is generated.
+StochasticOscillatorStrategy demonstrates how to compose %K and %D Stochastic Oscillator lines into an illustrative crossover strategy.
 
 ```go
 type StochasticOscillatorStrategy struct {
@@ -500,25 +500,25 @@ type StochasticOscillatorStrategy struct {
 ```
 
 <a name="NewStochasticOscillatorStrategy"></a>
-### func [NewStochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L42>)
+### func [NewStochasticOscillatorStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L41>)
 
 ```go
 func NewStochasticOscillatorStrategy() *StochasticOscillatorStrategy
 ```
 
-NewStochasticOscillatorStrategy function initializes a new Stochastic Oscillator strategy instance with the default parameters.
+NewStochasticOscillatorStrategy initializes an example StochasticOscillatorStrategy instance with default parameters. the default parameters.
 
 <a name="NewStochasticOscillatorStrategyWith"></a>
-### func [NewStochasticOscillatorStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L51>)
+### func [NewStochasticOscillatorStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L50>)
 
 ```go
 func NewStochasticOscillatorStrategyWith(buyAt, sellAt float64) *StochasticOscillatorStrategy
 ```
 
-NewStochasticOscillatorStrategyWith function initializes a new Stochastic Oscillator strategy instance with the given parameters.
+NewStochasticOscillatorStrategyWith initializes an example StochasticOscillatorStrategyWith instance with default parameters. the given parameters.
 
 <a name="StochasticOscillatorStrategy.Compute"></a>
-### func \(\*StochasticOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L149>)
+### func \(\*StochasticOscillatorStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L148>)
 
 ```go
 func (s *StochasticOscillatorStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -529,36 +529,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="StochasticOscillatorStrategy.ComputeWithContext"></a>
-### func \(\*StochasticOscillatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L65>)
+### func \(\*StochasticOscillatorStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L64>)
 
 ```go
 func (s *StochasticOscillatorStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="StochasticOscillatorStrategy.Name"></a>
-### func \(\*StochasticOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L60>)
+### func \(\*StochasticOscillatorStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L59>)
 
 ```go
 func (s *StochasticOscillatorStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="StochasticOscillatorStrategy.Report"></a>
-### func \(\*StochasticOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L106>)
+### func \(\*StochasticOscillatorStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_oscillator_strategy.go#L105>)
 
 ```go
 func (s *StochasticOscillatorStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="StochasticRsiStrategy"></a>
-## type [StochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L27-L36>)
+## type [StochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L28-L37>)
 
-StochasticRsiStrategy represents the configuration parameters for calculating the Stochastic RSI strategy.
+StochasticRsiStrategy demonstrates how to compose Stochastic RSI indicator lines into an illustrative crossover strategy.
 
 ```go
 type StochasticRsiStrategy struct {
@@ -574,25 +574,25 @@ type StochasticRsiStrategy struct {
 ```
 
 <a name="NewStochasticRsiStrategy"></a>
-### func [NewStochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L39>)
+### func [NewStochasticRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L40>)
 
 ```go
 func NewStochasticRsiStrategy() *StochasticRsiStrategy
 ```
 
-NewStochasticRsiStrategy function initializes a new Stochastic RSI strategy instance with the default parameters.
+NewStochasticRsiStrategy initializes an example StochasticRsiStrategy instance with default parameters.
 
 <a name="NewStochasticRsiStrategyWith"></a>
-### func [NewStochasticRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L47>)
+### func [NewStochasticRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L48>)
 
 ```go
 func NewStochasticRsiStrategyWith(buyAt, sellAt float64) *StochasticRsiStrategy
 ```
 
-NewStochasticRsiStrategyWith function initializes a new Stochastic RSI strategy instance with the given parameters.
+NewStochasticRsiStrategyWith initializes an example StochasticRsiStrategyWith instance with default parameters.
 
 <a name="StochasticRsiStrategy.Compute"></a>
-### func \(\*StochasticRsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L121>)
+### func \(\*StochasticRsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L122>)
 
 ```go
 func (s *StochasticRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -603,42 +603,36 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="StochasticRsiStrategy.ComputeWithContext"></a>
-### func \(\*StochasticRsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L61>)
+### func \(\*StochasticRsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L62>)
 
 ```go
 func (s *StochasticRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="StochasticRsiStrategy.Name"></a>
-### func \(\*StochasticRsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L56>)
+### func \(\*StochasticRsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L57>)
 
 ```go
 func (s *StochasticRsiStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="StochasticRsiStrategy.Report"></a>
-### func \(\*StochasticRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L85>)
+### func \(\*StochasticRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/stochastic_rsi_strategy.go#L86>)
 
 ```go
 func (s *StochasticRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="TripleRsiStrategy"></a>
-## type [TripleRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L52-L70>)
+## type [TripleRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L41-L59>)
 
-TripleRsiStrategy represents the configuration parameters for calculating the Triple RSI strategy. It assumes that the moving average period is longer than the RSI period.
-
-Recommend Buy: \- The 5\-period RSI is below 30. \- The 5\-period RSI reading is down for the 3rd period in a row. \- The 5\-period RSI reading was below 60 three trading periods ago. \- The close is higher than the 200\-period moving average.
-
-Recommend Sell: \- Sell at the close when the 5\-period RSI crosses above 50.
-
-Based on \[Triple RSI Trading Strategy: Enhance Your Win Rate to 90% — Advanced Insights\]\(https://tradingstrategy.medium.com/triple-rsi-trading-strategy-enhance-your-win-rate-to-90-advanced-insights-6143059ce41d\).
+TripleRsiStrategy demonstrates how to compose three Relative Strength Index \(RSI\) calculations of varying periods into an illustrative multi\-timeframe strategy.
 
 ```go
 type TripleRsiStrategy struct {
@@ -663,25 +657,25 @@ type TripleRsiStrategy struct {
 ```
 
 <a name="NewTripleRsiStrategy"></a>
-### func [NewTripleRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L73>)
+### func [NewTripleRsiStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L62>)
 
 ```go
 func NewTripleRsiStrategy() *TripleRsiStrategy
 ```
 
-NewTripleRsiStrategy function initializes a new Triple RSI strategy instance with the default parameters.
+NewTripleRsiStrategy initializes an example TripleRsiStrategy instance with default parameters.
 
 <a name="NewTripleRsiStrategyWith"></a>
-### func [NewTripleRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L85>)
+### func [NewTripleRsiStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L74>)
 
 ```go
 func NewTripleRsiStrategyWith(period, smaPeriod, downDays int, buySignalAt, buyAt, sellAt float64) *TripleRsiStrategy
 ```
 
-NewTripleRsiStrategyWith function initializes a new RSI strategy instance with the given parameters.
+NewTripleRsiStrategyWith initializes an example TripleRsiStrategyWith instance with default parameters.
 
 <a name="TripleRsiStrategy.Compute"></a>
-### func \(\*TripleRsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L211>)
+### func \(\*TripleRsiStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L203>)
 
 ```go
 func (t *TripleRsiStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -692,16 +686,16 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="TripleRsiStrategy.ComputeWithContext"></a>
-### func \(\*TripleRsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L108>)
+### func \(\*TripleRsiStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L97>)
 
 ```go
 func (t *TripleRsiStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="TripleRsiStrategy.IdlePeriod"></a>
-### func \(\*TripleRsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L103>)
+### func \(\*TripleRsiStrategy\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L92>)
 
 ```go
 func (t *TripleRsiStrategy) IdlePeriod() int
@@ -710,27 +704,27 @@ func (t *TripleRsiStrategy) IdlePeriod() int
 IdlePeriod is the initial period that the Triple RSI strategy won't yield any results.
 
 <a name="TripleRsiStrategy.Name"></a>
-### func \(\*TripleRsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L97>)
+### func \(\*TripleRsiStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L86>)
 
 ```go
 func (t *TripleRsiStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="TripleRsiStrategy.Report"></a>
-### func \(\*TripleRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L169>)
+### func \(\*TripleRsiStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/triple_rsi_strategy.go#L161>)
 
 ```go
 func (t *TripleRsiStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 <a name="WilliamsRStrategy"></a>
-## type [WilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L27-L36>)
+## type [WilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L28-L37>)
 
-WilliamsRStrategy represents the configuration parameters for calculating the Williams R strategy.
+WilliamsRStrategy demonstrates how to compose Williams %R into an illustrative threshold\-based strategy.
 
 ```go
 type WilliamsRStrategy struct {
@@ -746,25 +740,25 @@ type WilliamsRStrategy struct {
 ```
 
 <a name="NewWilliamsRStrategy"></a>
-### func [NewWilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L39>)
+### func [NewWilliamsRStrategy](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L40>)
 
 ```go
 func NewWilliamsRStrategy() *WilliamsRStrategy
 ```
 
-NewWilliamsRStrategy function initializes a new Williams R strategy instance with the default parameters.
+NewWilliamsRStrategy initializes an example WilliamsRStrategy instance with default parameters.
 
 <a name="NewWilliamsRStrategyWith"></a>
-### func [NewWilliamsRStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L47>)
+### func [NewWilliamsRStrategyWith](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L48>)
 
 ```go
 func NewWilliamsRStrategyWith(buyAt, sellAt float64) *WilliamsRStrategy
 ```
 
-NewWilliamsRStrategyWith function initializes a new Williams R strategy instance with the given parameters.
+NewWilliamsRStrategyWith initializes an example WilliamsRStrategyWith instance with default parameters.
 
 <a name="WilliamsRStrategy.Compute"></a>
-### func \(\*WilliamsRStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L128>)
+### func \(\*WilliamsRStrategy\) [Compute](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L129>)
 
 ```go
 func (r *WilliamsRStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action
@@ -775,30 +769,30 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="WilliamsRStrategy.ComputeWithContext"></a>
-### func \(\*WilliamsRStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L61>)
+### func \(\*WilliamsRStrategy\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L62>)
 
 ```go
 func (r *WilliamsRStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action
 ```
 
-ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 
 <a name="WilliamsRStrategy.Name"></a>
-### func \(\*WilliamsRStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L56>)
+### func \(\*WilliamsRStrategy\) [Name](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L57>)
 
 ```go
 func (r *WilliamsRStrategy) Name() string
 ```
 
-Name returns the name of the strategy.
+Name returns the name of the example strategy.
 
 <a name="WilliamsRStrategy.Report"></a>
-### func \(\*WilliamsRStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L89>)
+### func \(\*WilliamsRStrategy\) [Report](<https://github.com/cinar/indicator/blob/master/examples/momentum/williams_r_strategy.go#L90>)
 
 ```go
 func (r *WilliamsRStrategy) Report(c <-chan *asset.Snapshot) *helper.Report
 ```
 
-Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

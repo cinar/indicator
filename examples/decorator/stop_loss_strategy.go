@@ -41,7 +41,7 @@ func (s *StopLossStrategy) Name() string {
 func (s *StopLossStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
 	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	innerActions := strategy.ComputeStrategyWithContext(ctx, s.InnertStrategy, snapshotsSplice[0])
+	innerActions := strategy.ComputeWithContext(ctx, s.InnertStrategy, snapshotsSplice[0])
 	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[1])
 	stopLossAt := 0.0
 

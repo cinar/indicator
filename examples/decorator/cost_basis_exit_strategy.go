@@ -36,7 +36,7 @@ func (c *CostBasisExitStrategy) Name() string {
 func (c *CostBasisExitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
 	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	innerActions := strategy.ComputeStrategyWithContext(ctx, c.InnerStrategy, snapshotsSplice[0])
+	innerActions := strategy.ComputeWithContext(ctx, c.InnerStrategy, snapshotsSplice[0])
 	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[1])
 	boughtAt := 0.0
 
