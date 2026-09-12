@@ -24,6 +24,7 @@ The information provided on this project is strictly for informational purposes 
 
 ## Index
 
+- [Constants](<#constants>)
 - [func ActionSources\(strategies \[\]Strategy, snapshots \<\-chan \*asset.Snapshot\) \[\]\<\-chan Action](<#ActionSources>)
 - [func ActionSourcesWithContext\(ctx context.Context, strategies \[\]Strategy, snapshots \<\-chan \*asset.Snapshot\) \[\]\<\-chan Action](<#ActionSourcesWithContext>)
 - [func ActionsToAnnotations\(ac \<\-chan Action\) \<\-chan string](<#ActionsToAnnotations>)
@@ -41,6 +42,8 @@ The information provided on this project is strictly for informational purposes 
 - [func NormalizeActionsWithContext\(ctx context.Context, ac \<\-chan Action\) \<\-chan Action](<#NormalizeActionsWithContext>)
 - [func Outcome\[T helper.Number\]\(values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#Outcome>)
 - [func OutcomeWithContext\[T helper.Number\]\(ctx context.Context, values \<\-chan T, actions \<\-chan Action\) \<\-chan float64](<#OutcomeWithContext>)
+- [func SharpeRatio\(outcomes \<\-chan float64, periodsPerYear int\) float64](<#SharpeRatio>)
+- [func SharpeRatioWithContext\(ctx context.Context, outcomes \<\-chan float64, periodsPerYear int\) float64](<#SharpeRatioWithContext>)
 - [type Action](<#Action>)
   - [func \(a Action\) Annotation\(\) string](<#Action.Annotation>)
 - [type AndStrategy](<#AndStrategy>)
@@ -88,6 +91,19 @@ The information provided on this project is strictly for informational purposes 
   - [func AllStrategies\(\) \[\]Strategy](<#AllStrategies>)
 - [type WithContext](<#WithContext>)
 
+
+## Constants
+
+<a name="DefaultSharpeRatioPeriodsPerYear"></a>
+
+```go
+const (
+    // DefaultSharpeRatioPeriodsPerYear is the default number of return periods in a year, matching
+    // the approximate number of trading days used to annualize a Sharpe Ratio computed from daily
+    // outcomes.
+    DefaultSharpeRatioPeriodsPerYear = 252
+)
+```
 
 <a name="ActionSources"></a>
 ## func [ActionSources](<https://github.com/cinar/indicator/blob/master/strategy/strategy.go#L152>)
@@ -263,6 +279,34 @@ func OutcomeWithContext[T helper.Number](ctx context.Context, values <-chan T, a
 OutcomeWithContext simulates the potential result of executing the given actions based on the provided values, supporting context cancellation.
 
 The values and actions channels are paired positionally: the value at position i is assumed to be the execution price for the action at position i. Callers that pass same\-bar closing prices are therefore simulating same\-bar/"at close" execution, i.e. the trade is assumed to fill at the very same closing price that produced the signal. This is unrealistic \(a signal cannot be acted upon before the bar that generated it has been observed\) and tends to overstate backtest performance. Callers who want the more realistic assumption of executing on the next bar's open or close should use ComputeWithOutcomeAndTimingWithContext \(or ComputeWithOutcomeAndTiming\) with ExecutionTiming NextOpen or NextClose instead of constructing the values channel directly.
+
+<a name="SharpeRatio"></a>
+## func [SharpeRatio](<https://github.com/cinar/indicator/blob/master/strategy/sharpe_ratio.go#L56>)
+
+```go
+func SharpeRatio(outcomes <-chan float64, periodsPerYear int) float64
+```
+
+SharpeRatio wraps SharpeRatioWithContext for backwards compatibility.
+
+Deprecated: Use SharpeRatioWithContext instead.
+
+<a name="SharpeRatioWithContext"></a>
+## func [SharpeRatioWithContext](<https://github.com/cinar/indicator/blob/master/strategy/sharpe_ratio.go#L39>)
+
+```go
+func SharpeRatioWithContext(ctx context.Context, outcomes <-chan float64, periodsPerYear int) float64
+```
+
+SharpeRatioWithContext computes the annualized Sharpe Ratio for the given stream of cumulative outcome values, as produced by OutcomeWithContext, supporting context cancellation.
+
+```
+Sharpe = Mean(periodReturns) / StdDev(periodReturns) * Sqrt(periodsPerYear)
+```
+
+The risk\-free rate is assumed to be zero. The outcomes channel is assumed to hold one cumulative return value per trading period \(for example, one per daily snapshot\), which is exactly what OutcomeWithContext produces. Per\-period returns are derived from the change in the underlying equity curve \(1 \+ outcome\) between consecutive outcomes.
+
+Fewer than two outcome values, or a return series with zero \(or floating\-point\-noise\-level\) variance, such as a strategy that never trades, yields a Sharpe Ratio of zero rather than dividing by a near\-zero standard deviation.
 
 <a name="Action"></a>
 ## type [Action](<https://github.com/cinar/indicator/blob/master/strategy/action.go#L15>)

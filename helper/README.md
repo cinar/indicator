@@ -99,6 +99,7 @@ The information provided on this project is strictly for informational purposes 
 - [func MapWithPreviousWithContext\[F, T any\]\(ctx context.Context, c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPreviousWithContext>)
 - [func MaxSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MaxSince>)
 - [func MaxSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MaxSinceWithContext>)
+- [func Mean\[T Float\]\(values \[\]T\) T](<#Mean>)
 - [func MinSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MinSince>)
 - [func MinSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MinSinceWithContext>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
@@ -146,6 +147,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SortedPercentRankWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, period int\) \<\-chan T](<#SortedPercentRankWithContext>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func SqrtWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#SqrtWithContext>)
+- [func StdDev\[T Float\]\(values \[\]T\) T](<#StdDev>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
 - [func SubtractWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#SubtractWithContext>)
 - [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
@@ -1119,6 +1121,22 @@ func MaxSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-cha
 
 MaxSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
 
+<a name="Mean"></a>
+## func [Mean](<https://github.com/cinar/indicator/blob/master/helper/mean.go#L13>)
+
+```go
+func Mean[T Float](values []T) T
+```
+
+Mean returns the arithmetic mean of the given values, or zero for an empty slice.
+
+Example:
+
+```
+n := helper.Mean([]float64{1, 2, 3, 4})
+fmt.Println(n) // 2.5
+```
+
 <a name="MinSince"></a>
 ## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L36>)
 
@@ -1658,6 +1676,26 @@ Example:
 c := helper.SliceToChan([]int{9, 81, 16, 100})
 sqrt := helper.Sqrt(c)
 fmt.Println(helper.ChanToSlice(sqrt)) // [3, 9, 4, 10]
+```
+
+<a name="StdDev"></a>
+## func [StdDev](<https://github.com/cinar/indicator/blob/master/helper/std_dev.go#L18>)
+
+```go
+func StdDev[T Float](values []T) T
+```
+
+StdDev returns the population standard deviation of the given values, or zero for an empty slice.
+
+```
+StdDev = Sqrt(1/N * Sum(Pow(value - mean, 2)))
+```
+
+Example:
+
+```
+n := helper.StdDev([]float64{2, 4, 4, 4, 5, 5, 7, 9})
+fmt.Println(n) // 2
 ```
 
 <a name="Subtract"></a>
