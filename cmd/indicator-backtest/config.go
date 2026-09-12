@@ -73,7 +73,9 @@ type Config struct {
 
 // LoadConfig reads and parses the JSON indicator-backtest configuration file at the given path.
 func LoadConfig(path string) (*Config, error) {
-	data, err := os.ReadFile(path)
+	// path is an operator-supplied CLI argument (-config), the same trust level as every
+	// other -*-config flag this command already accepts, not untrusted network input.
+	data, err := os.ReadFile(path) // #nosec G304 -- path is the local file named by the -config flag.
 	if err != nil {
 		return nil, fmt.Errorf("unable to read config file: %w", err)
 	}
