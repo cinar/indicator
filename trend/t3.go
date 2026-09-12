@@ -48,9 +48,6 @@ type T3[T helper.Float] struct {
 
 	// VolumeFactor is the volume factor for the T3 calculation.
 	VolumeFactor T
-
-	// ema1 through ema6 are the EMA instances for chaining.
-	ema1, ema2, ema3, ema4, ema5, ema6 *Ema[T]
 }
 
 // NewT3 function initializes a new T3 instance.
@@ -61,35 +58,30 @@ func NewT3[T helper.Float]() *T3[T] {
 // NewT3WithPeriodAndFactor function initializes a new T3 instance with
 // specified period and volume factor.
 func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) *T3[T] {
-	t := &T3[T]{
+	return &T3[T]{
 		Period:       period,
 		VolumeFactor: T(volumeFactor),
 	}
-
-	// Create 6 chained EMA instances
-	t.ema1 = NewEmaWithPeriod[T](period)
-	t.ema2 = NewEmaWithPeriod[T](period)
-	t.ema3 = NewEmaWithPeriod[T](period)
-	t.ema4 = NewEmaWithPeriod[T](period)
-	t.ema5 = NewEmaWithPeriod[T](period)
-	t.ema6 = NewEmaWithPeriod[T](period)
-
-	return t
 }
 
 // ComputeWithContext function takes a channel of numbers and computes the T3 Moving Average.
 func (t *T3[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
+	// The 6 chained EMA instances are built here, from the current Period,
+	// rather than cached on T3 at construction time, so that changing
+	// Period after construction (and before Compute) is honored instead of
+	// silently computing against a stale period.
+	//
 	// Chain 6 EMAs. ema3, ema4, and ema5 each feed the next EMA in the
 	// chain *and* are used directly below in the weighted sum, so each
 	// needs its own duplicated copy for the second use -- a single
 	// channel only has one consumer's worth of values to give out.
-	ema1 := t.ema1.ComputeWithContext(ctx, closings)
-	ema2 := t.ema2.ComputeWithContext(ctx, ema1)
+	ema1 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, closings)
+	ema2 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema1)
 
-	ema3Splice := helper.DuplicateWithContext(ctx, t.ema3.ComputeWithContext(ctx, ema2), 2)
-	ema4Splice := helper.DuplicateWithContext(ctx, t.ema4.ComputeWithContext(ctx, ema3Splice[0]), 2)
-	ema5Splice := helper.DuplicateWithContext(ctx, t.ema5.ComputeWithContext(ctx, ema4Splice[0]), 2)
-	ema6 := t.ema6.ComputeWithContext(ctx, ema5Splice[0])
+	ema3Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema2), 2)
+	ema4Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema3Splice[0]), 2)
+	ema5Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema4Splice[0]), 2)
+	ema6 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema5Splice[0])
 
 	// Each EMA only starts yielding once it has Period-1 more inputs than
 	// it was given, so ema3/ema4/ema5's channels run ahead of ema6's by
