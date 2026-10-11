@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,8 +6,10 @@ package asset
 
 import (
 	"errors"
+	"io/fs"
 	"log/slog"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -63,7 +65,7 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 	s.Logger.Info("Start syncing.", "assets", len(s.Assets))
 	jobs := helper.SliceToChan(s.Assets)
 
-	hasErrors := false
+	var hasErrors atomic.Bool
 	wg := &sync.WaitGroup{}
 
 	for i := 0; i < s.Workers; i++ {
@@ -74,10 +76,19 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 
 			for name := range jobs {
 				lastDate, err := target.LastDate(name)
-				if err == nil {
+
+				switch {
+				case err == nil:
 					lastDate = lastDate.AddDate(0, 0, 1)
-				} else {
+
+				case errors.Is(err, ErrRepositoryAssetNotFound), errors.Is(err, ErrRepositoryAssetEmpty), errors.Is(err, fs.ErrNotExist):
+					// Asset has genuinely never been synced before.
 					lastDate = defaultStartDate
+
+				default:
+					s.Logger.Error("LastDate failed.", "asset", name, "error", err)
+					hasErrors.Store(true)
+					continue
 				}
 
 				s.Logger.Info("Syncing asset.", "asset", name, "start", lastDate.Format("2006-01-02"))
@@ -85,14 +96,14 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 				snapshots, err := source.GetSince(name, lastDate)
 				if err != nil {
 					s.Logger.Error("GetSince failed.", "asset", name, "error", err)
-					hasErrors = true
+					hasErrors.Store(true)
 					continue
 				}
 
 				err = target.Append(name, snapshots)
 				if err != nil {
 					s.Logger.Error("Append failed.", "asset", name, "error", err)
-					hasErrors = true
+					hasErrors.Store(true)
 					continue
 				}
 
@@ -103,7 +114,7 @@ func (s *Sync) Run(source, target Repository, defaultStartDate time.Time) error 
 
 	wg.Wait()
 
-	if hasErrors {
+	if hasErrors.Load() {
 		return errors.New("has errors")
 	}
 

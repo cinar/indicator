@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -59,6 +59,28 @@ func TestPercentB(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestPercentBFlatMarket(t *testing.T) {
+	percentB := volatility.NewPercentB[float64]()
+	length := percentB.IdlePeriod() + 20
+
+	closings := make([]float64, length)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(percentB.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one %B value")
+	}
+
+	for i, v := range actual {
+		if v != 0.5 {
+			t.Fatalf("expected %%B of 0.5 for flat market at %d, got %v", i, v)
+		}
 	}
 }
 

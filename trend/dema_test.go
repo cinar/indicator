@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -22,9 +22,9 @@ func TestDema(t *testing.T) {
 	})
 
 	expected := helper.SliceToChan([]float64{
-		22.51, 22.7, 22.88, 23.01, 23.06, 23.08, 23.16, 23.11, 23.15, 23.05,
-		22.92, 22.81, 22.74, 22.66, 22.63, 22.74, 22.97, 23.12, 23.27, 23.43,
-		23.52, 23.34,
+		23.38, 23.45, 23.26, 23.08, 22.9, 22.77, 22.65, 22.54, 22.47, 22.45,
+		22.39, 22.35, 22.6, 22.82, 22.97, 23.02, 23.04, 23.1, 23.04, 23.05,
+		22.94, 22.81,
 	})
 
 	dema := trend.NewDema[float64]()
@@ -35,5 +35,14 @@ func TestDema(t *testing.T) {
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestDemaString(t *testing.T) {
+	expected := "DEMA(20,20)"
+	actual := trend.NewDema[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

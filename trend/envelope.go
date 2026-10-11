@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -21,7 +21,7 @@ const (
 )
 
 // Envelope represents the parameters neededd to calcualte the Envelope.
-type Envelope[T helper.Number] struct {
+type Envelope[T helper.Float] struct {
 	// Ma is the moving average used.
 	Ma Ma[T]
 
@@ -30,7 +30,7 @@ type Envelope[T helper.Number] struct {
 }
 
 // NewEnvelope function initializes a new Envelope instance with the default parameters.
-func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T] {
+func NewEnvelope[T helper.Float](ma Ma[T], percentage T) *Envelope[T] {
 	return &Envelope[T]{
 		Ma:         ma,
 		Percentage: percentage,
@@ -38,7 +38,7 @@ func NewEnvelope[T helper.Number](ma Ma[T], percentage T) *Envelope[T] {
 }
 
 // NewEnvelopeWithSma function initalizes a new Envelope instance using SMA.
-func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
+func NewEnvelopeWithSma[T helper.Float]() *Envelope[T] {
 	return NewEnvelope(
 		NewSmaWithPeriod[T](DefaultEnvelopePeriod),
 		T(DefaultEnvelopePercentage),
@@ -46,7 +46,7 @@ func NewEnvelopeWithSma[T helper.Number]() *Envelope[T] {
 }
 
 // NewEnvelopeWithEma function initializes a new Envelope instance using EMA.
-func NewEnvelopeWithEma[T helper.Number]() *Envelope[T] {
+func NewEnvelopeWithEma[T helper.Float]() *Envelope[T] {
 	return NewEnvelope(
 		NewEmaWithPeriod[T](DefaultEnvelopePeriod),
 		T(DefaultEnvelopePercentage),

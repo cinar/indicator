@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -22,22 +22,28 @@ const (
 //
 //	Z-Score = (Price - SMA) / StdDev
 //
+// When every value in the window is identical, StdDev is 0 and Price
+// equals the SMA too, so the ratio is an undefined 0/0. It falls back to
+// 0, which is the mathematically correct answer here (not merely a
+// convention): a value identical to every other value in its window
+// deviates exactly 0 standard deviations from the mean.
+//
 // Example:
 //
 //	z := NewZScore[float64]()
 //	z.Compute(c)
-type ZScore[T helper.Number] struct {
+type ZScore[T helper.Float] struct {
 	// Period is the time period.
 	Period int
 }
 
 // NewZScore function initializes a new Z-Score instance with default parameters.
-func NewZScore[T helper.Number]() *ZScore[T] {
+func NewZScore[T helper.Float]() *ZScore[T] {
 	return NewZScoreWithPeriod[T](DefaultZScorePeriod)
 }
 
 // NewZScoreWithPeriod function initializes a new Z-Score instance with the given period.
-func NewZScoreWithPeriod[T helper.Number](period int) *ZScore[T] {
+func NewZScoreWithPeriod[T helper.Float](period int) *ZScore[T] {
 	return &ZScore[T]{
 		Period: period,
 	}
@@ -54,7 +60,9 @@ func (z *ZScore[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
 	stdChan := std.ComputeWithContext(ctx, cs[1])
 	priceChan := helper.SkipWithContext(ctx, cs[2], z.IdlePeriod())
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, priceChan, smaChan), stdChan)
+	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, priceChan, smaChan), stdChan, func(diff, std T) T {
+		return helper.SafeDivide(diff, std, T(0))
+	})
 }
 
 // IdlePeriod is the initial period that Z-Score won't yield any results.

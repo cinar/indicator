@@ -13,7 +13,7 @@ This package belongs to the Indicator project. Indicator is a Golang module that
 ### License
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.
+Copyright (c) 2021-2026 The Indicator Authors.
 The source code is provided under GNU AGPLv3 License.
 https://github.com/cinar/indicator
 ```
@@ -37,6 +37,7 @@ The information provided on this project is strictly for informational purposes 
 - [func BufferedWithContext\[T any\]\(ctx context.Context, c \<\-chan T, size int\) \<\-chan T](<#BufferedWithContext>)
 - [func ChanToJSON\[T any\]\(c \<\-chan T, w io.Writer\) error](<#ChanToJSON>)
 - [func ChanToSlice\[T any\]\(c \<\-chan T\) \[\]T](<#ChanToSlice>)
+- [func ChanToSlices\[T any\]\(chans ...\<\-chan T\) \[\]\[\]T](<#ChanToSlices>)
 - [func Change\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#Change>)
 - [func ChangePercent\[T Number\]\(c \<\-chan T, before int\) \<\-chan T](<#ChangePercent>)
 - [func ChangePercentWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, before int\) \<\-chan T](<#ChangePercentWithContext>)
@@ -77,6 +78,8 @@ The information provided on this project is strictly for informational purposes 
 - [func HighestWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#HighestWithContext>)
 - [func IncrementBy\[T Number\]\(c \<\-chan T, i T\) \<\-chan T](<#IncrementBy>)
 - [func IncrementByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, i T\) \<\-chan T](<#IncrementByWithContext>)
+- [func IsRising\[T Number\]\(c \<\-chan T, period int\) \<\-chan T](<#IsRising>)
+- [func IsRisingWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, period int\) \<\-chan T](<#IsRisingWithContext>)
 - [func JSONToChan\[T any\]\(r io.Reader\) \<\-chan T](<#JSONToChan>)
 - [func JSONToChanWithContext\[T any\]\(ctx context.Context, r io.Reader\) \<\-chan T](<#JSONToChanWithContext>)
 - [func JSONToChanWithLogger\[T any\]\(r io.Reader, logger \*slog.Logger\) \<\-chan T](<#JSONToChanWithLogger>)
@@ -95,7 +98,10 @@ The information provided on this project is strictly for informational purposes 
 - [func MapWithPrevious\[F, T any\]\(c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPrevious>)
 - [func MapWithPreviousWithContext\[F, T any\]\(ctx context.Context, c \<\-chan F, f func\(T, F\) T, previous T\) \<\-chan T](<#MapWithPreviousWithContext>)
 - [func MaxSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MaxSince>)
+- [func MaxSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MaxSinceWithContext>)
+- [func Mean\[T Float\]\(values \[\]T\) T](<#Mean>)
 - [func MinSince\[T Number\]\(c \<\-chan T, w int\) \<\-chan T](<#MinSince>)
+- [func MinSinceWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, w int\) \<\-chan T](<#MinSinceWithContext>)
 - [func Multiply\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Multiply>)
 - [func MultiplyBy\[T Number\]\(c \<\-chan T, m T\) \<\-chan T](<#MultiplyBy>)
 - [func MultiplyByWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, m T\) \<\-chan T](<#MultiplyByWithContext>)
@@ -121,6 +127,7 @@ The information provided on this project is strictly for informational purposes 
 - [func RoundDigit\[T Number\]\(n T, d int\) T](<#RoundDigit>)
 - [func RoundDigits\[T Number\]\(c \<\-chan T, d int\) \<\-chan T](<#RoundDigits>)
 - [func RoundDigitsWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, d int\) \<\-chan T](<#RoundDigitsWithContext>)
+- [func SafeDivide\[T Number\]\(numerator, denominator, fallback T\) T](<#SafeDivide>)
 - [func Seq\[T Number\]\(from, to, increment T\) \<\-chan T](<#Seq>)
 - [func SeqWithContext\[T Number\]\(ctx context.Context, from, to, increment T\) \<\-chan T](<#SeqWithContext>)
 - [func Shift\[T any\]\(c \<\-chan T, count int, fill T\) \<\-chan T](<#Shift>)
@@ -128,6 +135,7 @@ The information provided on this project is strictly for informational purposes 
 - [func Sign\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sign>)
 - [func SignWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#SignWithContext>)
 - [func Since\[T comparable, R Number\]\(c \<\-chan T\) \<\-chan R](<#Since>)
+- [func SinceWithContext\[T comparable, R Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan R](<#SinceWithContext>)
 - [func Skip\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#Skip>)
 - [func SkipLast\[T any\]\(c \<\-chan T, count int\) \<\-chan T](<#SkipLast>)
 - [func SkipLastWithContext\[T any\]\(ctx context.Context, c \<\-chan T, count int\) \<\-chan T](<#SkipLastWithContext>)
@@ -139,6 +147,7 @@ The information provided on this project is strictly for informational purposes 
 - [func SortedPercentRankWithContext\[T Number\]\(ctx context.Context, c \<\-chan T, period int\) \<\-chan T](<#SortedPercentRankWithContext>)
 - [func Sqrt\[T Number\]\(c \<\-chan T\) \<\-chan T](<#Sqrt>)
 - [func SqrtWithContext\[T Number\]\(ctx context.Context, c \<\-chan T\) \<\-chan T](<#SqrtWithContext>)
+- [func StdDev\[T Float\]\(values \[\]T\) T](<#StdDev>)
 - [func Subtract\[T Number\]\(ac, bc \<\-chan T\) \<\-chan T](<#Subtract>)
 - [func SubtractWithContext\[T Number\]\(ctx context.Context, ac, bc \<\-chan T\) \<\-chan T](<#SubtractWithContext>)
 - [func SyncPeriod\[T any\]\(commonPeriod, period int, c \<\-chan T\) \<\-chan T](<#SyncPeriod>)
@@ -182,7 +191,7 @@ The information provided on this project is strictly for informational purposes 
   - [func NewNumericReportColumn\[T Number\]\(name string, values \<\-chan T\) ReportColumn](<#NewNumericReportColumn>)
 - [type Ring](<#Ring>)
   - [func NewRing\[T any\]\(size int\) \*Ring\[T\]](<#NewRing>)
-  - [func \(r \*Ring\[T\]\) At\(index int\) T](<#Ring[T].At>)
+  - [func \(r \*Ring\[T\]\) At\(index int\) \(T, bool\)](<#Ring[T].At>)
   - [func \(r \*Ring\[T\]\) Get\(\) \(T, bool\)](<#Ring[T].Get>)
   - [func \(r \*Ring\[T\]\) IsEmpty\(\) bool](<#Ring[T].IsEmpty>)
   - [func \(r \*Ring\[T\]\) IsFull\(\) bool](<#Ring[T].IsFull>)
@@ -216,7 +225,7 @@ const (
 ```
 
 <a name="Abs"></a>
-## func [Abs](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L27>)
+## func [Abs](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L49>)
 
 ```go
 func Abs[T Number](c <-chan T) <-chan T
@@ -227,13 +236,17 @@ Abs wraps AbsWithContext for backwards compatibility.
 Deprecated: Use AbsWithContext instead.
 
 <a name="AbsWithContext"></a>
-## func [AbsWithContext](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L18>)
+## func [AbsWithContext](<https://github.com/cinar/indicator/blob/master/helper/abs.go#L31>)
 
 ```go
 func AbsWithContext[T Number](ctx context.Context, c <-chan T) <-chan T
 ```
 
 AbsWithContext calculates the absolute value of each value in a channel of type T.
+
+For an integer T, the absolute value is computed natively \(negating the value directly\) rather than through a float64 round\-trip, so integers beyond float64's 53\-bit exact\-integer range \(e.g., int64 values beyond 2^53\) remain exact.
+
+This does not change the behavior at the minimum value of a signed integer type \(e.g., math.MinInt8, math.MinInt64\), whose true absolute value does not fit in that same type. Negating the minimum value overflows and wraps back to the minimum value itself, which matches the result previously produced by the float64 round\-trip. This is an inherent limitation of two's complement signed integers, not something either implementation can silently correct.
 
 Example:
 
@@ -325,13 +338,15 @@ Buffered wraps BufferedWithContext for backwards compatibility.
 Deprecated: Use BufferedWithContext instead.
 
 <a name="BufferedWithContext"></a>
-## func [BufferedWithContext](<https://github.com/cinar/indicator/blob/master/helper/buffered.go#L18>)
+## func [BufferedWithContext](<https://github.com/cinar/indicator/blob/master/helper/buffered.go#L22>)
 
 ```go
 func BufferedWithContext[T any](ctx context.Context, c <-chan T, size int) <-chan T
 ```
 
 BufferedWithContext takes a channel of any type and returns a new channel of the same type with a buffer of the specified size with context support.
+
+A negative size is treated as zero: the returned channel is unbuffered but still forwards every input value, matching SkipWithContext's negative\-count convention.
 
 <a name="ChanToJSON"></a>
 ## func [ChanToJSON](<https://github.com/cinar/indicator/blob/master/helper/chan_to_json.go#L23>)
@@ -376,6 +391,31 @@ close(c)
 fmt.Println(helper.ChanToSlice(c)) // [1, 2, 3, 4]
 ```
 
+<a name="ChanToSlices"></a>
+## func [ChanToSlices](<https://github.com/cinar/indicator/blob/master/helper/chan_to_slices.go#L28>)
+
+```go
+func ChanToSlices[T any](chans ...<-chan T) [][]T
+```
+
+ChanToSlices converts multiple channels of type T to slices of type T, draining all of the given channels concurrently on their own goroutines. This is the safe way to fully consume the unbuffered output channels returned by DuplicateWithContext \(or any other multi\-output producer\), since draining them one at a time would block the producer forever once its internal buffer, if any, is exhausted.
+
+The returned slices are in the same order as the given channels.
+
+Example:
+
+```
+c1 := make(chan int, 4)
+c2 := make(chan int, 4)
+
+c1 <- 1
+c2 <- 2
+close(c1)
+close(c2)
+
+fmt.Println(helper.ChanToSlices(c1, c2)) // [[1] [2]]
+```
+
 <a name="Change"></a>
 ## func [Change](<https://github.com/cinar/indicator/blob/master/helper/change.go#L29>)
 
@@ -410,8 +450,8 @@ ChangePercentWithContext calculates the percentage change between the current va
 Example:
 
 ```
-c := helper.ChanToSlice([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
-actual := helper.ChangePercent(c, 2))
+c := helper.SliceToChan([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
+actual := helper.ChangePercent(c, 2)
 fmt.Println(helper.ChanToSlice(actual)) // [400, 150, 60, -60, -87.5, -50, 200, 300]
 ```
 
@@ -438,9 +478,9 @@ ChangeRatioWithContext calculates the ratio change between the current value and
 Example:
 
 ```
-c := helper.ChanToSlice([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
-actual := helper.ChangeRatio(c, 2))
-fmt.Println(helper.ChanToSlice(actual)) // [400, 150, 60, -60, -87.5, -50, 200, 300]
+c := helper.SliceToChan([]float64{1, 2, 5, 5, 8, 2, 1, 1, 3, 4})
+actual := helper.ChangeRatio(c, 2)
+fmt.Println(helper.ChanToSlice(actual)) // [4, 1.5, 0.6, -0.6, -0.875, -0.5, 2, 3]
 ```
 
 <a name="ChangeWithContext"></a>
@@ -506,13 +546,13 @@ func CloseDatabaseWithError(db *sql.DB, err error) error
 CloseDatabaseWithError closes the database after an error.
 
 <a name="CommonPeriod"></a>
-## func [CommonPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L24>)
+## func [CommonPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L26>)
 
 ```go
 func CommonPeriod(periods ...int) int
 ```
 
-CommonPeriod calculates the smallest period at which all data channels can be synchronized
+CommonPeriod calculates the largest period at which all data channels can be synchronized, so that every channel has warmed up \(skipped its own idle period\) before values are compared. It returns 0 for empty input.
 
 Example:
 
@@ -551,7 +591,7 @@ func CountWithContext[T Number, O any](ctx context.Context, from T, other <-chan
 CountWithContext generates a sequence of numbers starting with a specified value, from, and incrementing by one until the given other channel continues to produce values, supporting context cancellation.
 
 <a name="DaysBetween"></a>
-## func [DaysBetween](<https://github.com/cinar/indicator/blob/master/helper/days_between.go#L13>)
+## func [DaysBetween](<https://github.com/cinar/indicator/blob/master/helper/days_between.go#L12>)
 
 ```go
 func DaysBetween(from, to time.Time) int
@@ -677,13 +717,15 @@ Duplicate wraps DuplicateWithContext for backwards compatibility.
 Deprecated: Use DuplicateWithContext instead.
 
 <a name="DuplicateWithContext"></a>
-## func [DuplicateWithContext](<https://github.com/cinar/indicator/blob/master/helper/duplicate.go#L18>)
+## func [DuplicateWithContext](<https://github.com/cinar/indicator/blob/master/helper/duplicate.go#L24>)
 
 ```go
 func DuplicateWithContext[T any](ctx context.Context, input <-chan T, count int) []<-chan T
 ```
 
 DuplicateWithContext duplicates a given receive\-only channel by reading each value coming out of that channel and sending them on requested number of new output channels, supporting context cancellation.
+
+The returned output channels are unbuffered \(regardless of the input channel's buffering\), so all of them must be actively read concurrently. Fully draining one output channel before starting to read another will block the producer goroutine forever, since it sends to every output channel for each value before moving on to the next. Use ChanToSlices to safely drain all of the returned channels concurrently, or otherwise ensure each channel is read from its own goroutine.
 
 <a name="Echo"></a>
 ## func [Echo](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L12>)
@@ -697,13 +739,15 @@ Echo wraps EchoWithContext for backwards compatibility.
 Deprecated: Use EchoWithContext instead.
 
 <a name="EchoWithContext"></a>
-## func [EchoWithContext](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L17>)
+## func [EchoWithContext](<https://github.com/cinar/indicator/blob/master/helper/echo.go#L22>)
 
 ```go
 func EchoWithContext[T any](ctx context.Context, input <-chan T, last, count int) <-chan T
 ```
 
 EchoWithContext takes a channel of numbers, repeats the specified count of numbers at the end by the specified count, supporting context cancellation.
+
+A last of zero or less means there is nothing to replay: the repeat phase emits no values regardless of count, and only the original input is forwarded \(NewRing clamps its backing ring to a minimum size of 1 in this case, but that ring's contents are never read\).
 
 <a name="Field"></a>
 ## func [Field](<https://github.com/cinar/indicator/blob/master/helper/field.go#L16>)
@@ -766,13 +810,13 @@ func FirstWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan 
 FirstWithContext takes a channel of values and returns a new channel containing the first N values, supporting context cancellation.
 
 <a name="Gcd"></a>
-## func [Gcd](<https://github.com/cinar/indicator/blob/master/helper/gcd.go#L8>)
+## func [Gcd](<https://github.com/cinar/indicator/blob/master/helper/gcd.go#L10>)
 
 ```go
 func Gcd(values ...int) int
 ```
 
-Gcd calculates the Greatest Common Divisor of the given numbers.
+Gcd calculates the Greatest Common Divisor of the given numbers. It returns 0 for empty input, and treats negative values as their absolute value, since GCD is conventionally non\-negative.
 
 <a name="Head"></a>
 ## func [Head](<https://github.com/cinar/indicator/blob/master/helper/head.go#L12>)
@@ -842,6 +886,34 @@ actual := helper.IncrementBy(helper.SliceToChan(input), 1)
 fmt.Println(helper.ChanToSlice(actual)) // [2, 3, 4, 5]
 ```
 
+<a name="IsRising"></a>
+## func [IsRising](<https://github.com/cinar/indicator/blob/master/helper/is_rising.go#L37>)
+
+```go
+func IsRising[T Number](c <-chan T, period int) <-chan T
+```
+
+IsRising wraps IsRisingWithContext for backwards compatibility.
+
+Deprecated: Use IsRisingWithContext instead.
+
+<a name="IsRisingWithContext"></a>
+## func [IsRisingWithContext](<https://github.com/cinar/indicator/blob/master/helper/is_rising.go#L20>)
+
+```go
+func IsRisingWithContext[T Number](ctx context.Context, c <-chan T, period int) <-chan T
+```
+
+IsRisingWithContext takes a channel of type T values and returns 1 if the current value is strictly greater than the value the given period before, and 0 otherwise, supporting context cancellation.
+
+Example:
+
+```
+input := []int{1, 2, 5, 5, 8, 2, 1, 1, 3, 4}
+output := helper.IsRising(helper.SliceToChan(input), 1)
+fmt.Println(helper.ChanToSlice(output)) // [1, 1, 0, 1, 0, 0, 0, 1, 1]
+```
+
 <a name="JSONToChan"></a>
 ## func [JSONToChan](<https://github.com/cinar/indicator/blob/master/helper/json_to_chan.go#L17>)
 
@@ -906,7 +978,7 @@ Example:
 
 ```
 c := helper.SliceToChan([]int{-10, 20, 4, -5})
-negatives := helper.KeepPositives(c)
+negatives := helper.KeepNegatives(c)
 fmt.Println(helper.ChanToSlice(negatives)) // [-10, 0, 0, -5]
 ```
 
@@ -950,7 +1022,7 @@ Last wraps LastWithContext for backwards compatibility.
 Deprecated: Use LastWithContext instead.
 
 <a name="LastWithContext"></a>
-## func [LastWithContext](<https://github.com/cinar/indicator/blob/master/helper/last.go#L17>)
+## func [LastWithContext](<https://github.com/cinar/indicator/blob/master/helper/last.go#L24>)
 
 ```go
 func LastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
@@ -958,17 +1030,19 @@ func LastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
 
 LastWithContext takes a channel of values and returns a new channel containing the last N values, supporting context cancellation.
 
+A count of zero or less means there is nothing to keep: the input channel is still drained, so upstream stages are not blocked, but no values are emitted. \(Unlike EchoWithContext, clamping a ring to a minimum size of 1 would not be a safe stand\-in here, since it would wrongly surface one value instead of none, so this is guarded explicitly rather than delegated to NewRing.\)
+
 <a name="Lcm"></a>
-## func [Lcm](<https://github.com/cinar/indicator/blob/master/helper/lcm.go#L8>)
+## func [Lcm](<https://github.com/cinar/indicator/blob/master/helper/lcm.go#L10>)
 
 ```go
 func Lcm(values ...int) int
 ```
 
-Lcm calculates the Least Common Multiple of the given numbers.
+Lcm calculates the Least Common Multiple of the given numbers. It returns 0 for empty input, and returns 0 whenever 0 is among the values, matching the convention that LCM involving 0 is 0.
 
 <a name="Lowest"></a>
-## func [Lowest](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L23>)
+## func [Lowest](<https://github.com/cinar/indicator/blob/master/helper/lowest.go#L23>)
 
 ```go
 func Lowest[T Number](c <-chan T, w int) <-chan T
@@ -979,7 +1053,7 @@ Lowest wraps LowestWithContext for backwards compatibility.
 Deprecated: Use LowestWithContext instead.
 
 <a name="LowestWithContext"></a>
-## func [LowestWithContext](<https://github.com/cinar/indicator/blob/master/helper/Lowest.go#L14>)
+## func [LowestWithContext](<https://github.com/cinar/indicator/blob/master/helper/lowest.go#L14>)
 
 ```go
 func LowestWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
@@ -1028,22 +1102,60 @@ func MapWithPreviousWithContext[F, T any](ctx context.Context, c <-chan F, f fun
 MapWithPreviousWithContext applies a transformation function to each element in an input channel, creating a new channel with the transformed values, supporting context cancellation.
 
 <a name="MaxSince"></a>
-## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L14>)
+## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L37>)
 
 ```go
 func MaxSince[T Number](c <-chan T, w int) <-chan T
 ```
 
-MaxSince returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
+MaxSince wraps MaxSinceWithContext for backwards compatibility.
+
+Deprecated: Use MaxSinceWithContext instead.
+
+<a name="MaxSinceWithContext"></a>
+## func [MaxSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L15>)
+
+```go
+func MaxSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+MaxSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
+
+<a name="Mean"></a>
+## func [Mean](<https://github.com/cinar/indicator/blob/master/helper/mean.go#L13>)
+
+```go
+func Mean[T Float](values []T) T
+```
+
+Mean returns the arithmetic mean of the given values, or zero for an empty slice.
+
+Example:
+
+```
+n := helper.Mean([]float64{1, 2, 3, 4})
+fmt.Println(n) // 2.5
+```
 
 <a name="MinSince"></a>
-## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L13>)
+## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L36>)
 
 ```go
 func MinSince[T Number](c <-chan T, w int) <-chan T
 ```
 
-MinSince returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
+MinSince wraps MinSinceWithContext for backwards compatibility.
+
+Deprecated: Use MinSinceWithContext instead.
+
+<a name="MinSinceWithContext"></a>
+## func [MinSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L14>)
+
+```go
+func MinSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
+```
+
+MinSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
 
 <a name="Multiply"></a>
 ## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L33>)
@@ -1291,13 +1403,15 @@ func RemoveAll(t *testing.T, path string)
 RemoveAll removes the files with the given path.
 
 <a name="RoundDigit"></a>
-## func [RoundDigit](<https://github.com/cinar/indicator/blob/master/helper/round_digit.go#L15>)
+## func [RoundDigit](<https://github.com/cinar/indicator/blob/master/helper/round_digit.go#L21>)
 
 ```go
 func RoundDigit[T Number](n T, d int) T
 ```
 
 RoundDigit rounds the given float64 number to d decimal places.
+
+For an integer T, rounding to decimal places is a no\-op, since an integer has no fractional component to round away. In that case, n is returned unchanged, which also avoids routing the value through a lossy float64 round\-trip for integers beyond float64's 53\-bit exact\-integer range \(e.g., int64 values beyond 2^53\).
 
 Example:
 
@@ -1334,6 +1448,27 @@ rounded := helper.RoundDigits(c, 2)
 fmt.Println(helper.ChanToSlice(rounded)) // [10.12, 5.68, 6.78, 8.91]
 ```
 
+<a name="SafeDivide"></a>
+## func [SafeDivide](<https://github.com/cinar/indicator/blob/master/helper/safe_divide.go#L24>)
+
+```go
+func SafeDivide[T Number](numerator, denominator, fallback T) T
+```
+
+SafeDivide divides the given numerator by the given denominator, and returns the given fallback instead of dividing by zero when the denominator is zero.
+
+Several indicators guard a division whose denominator can be legitimately zero \(e.g., a flat high\-low range, or a flat window with no true range at all\), and return a neutral value instead of letting the division produce NaN or Inf. This centralizes that guard so each indicator only needs to supply its own neutral fallback.
+
+Example:
+
+```
+n := helper.SafeDivide(4.0, 2.0, 0.5)
+fmt.Println(n) // 2
+
+n = helper.SafeDivide(4.0, 0.0, 0.5)
+fmt.Println(n) // 0.5
+```
+
 <a name="Seq"></a>
 ## func [Seq](<https://github.com/cinar/indicator/blob/master/helper/seq.go#L12>)
 
@@ -1366,13 +1501,15 @@ Shift wraps ShiftWithContext for backwards compatibility.
 Deprecated: Use ShiftWithContext instead.
 
 <a name="ShiftWithContext"></a>
-## func [ShiftWithContext](<https://github.com/cinar/indicator/blob/master/helper/shift.go#L18>)
+## func [ShiftWithContext](<https://github.com/cinar/indicator/blob/master/helper/shift.go#L22>)
 
 ```go
 func ShiftWithContext[T any](ctx context.Context, c <-chan T, count int, fill T) <-chan T
 ```
 
 ShiftWithContext takes a channel of numbers, shifts them to the right by the specified count, and fills in any missing values with the provided fill value, supporting context cancellation.
+
+A negative count is treated as zero: no fill values are inserted, and every input value is forwarded unchanged, matching SkipWithContext's negative\-count convention.
 
 <a name="Sign"></a>
 ## func [Sign](<https://github.com/cinar/indicator/blob/master/helper/sign.go#L34>)
@@ -1403,13 +1540,24 @@ fmt.Println(helper.ChanToSlice(sign)) // [-1, 1, -1, 0]
 ```
 
 <a name="Since"></a>
-## func [Since](<https://github.com/cinar/indicator/blob/master/helper/since.go#L9>)
+## func [Since](<https://github.com/cinar/indicator/blob/master/helper/since.go#L33>)
 
 ```go
 func Since[T comparable, R Number](c <-chan T) <-chan R
 ```
 
-Since counts the number of periods since the last change of value in a channel of numbers.
+Since wraps SinceWithContext for backwards compatibility.
+
+Deprecated: Use SinceWithContext instead.
+
+<a name="SinceWithContext"></a>
+## func [SinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/since.go#L11>)
+
+```go
+func SinceWithContext[T comparable, R Number](ctx context.Context, c <-chan T) <-chan R
+```
+
+SinceWithContext counts the number of periods since the last change of value in a channel of numbers, supporting context cancellation.
 
 <a name="Skip"></a>
 ## func [Skip](<https://github.com/cinar/indicator/blob/master/helper/skip.go#L12>)
@@ -1434,13 +1582,15 @@ SkipLast wraps SkipLastWithContext for backwards compatibility.
 Deprecated: Use SkipLastWithContext instead.
 
 <a name="SkipLastWithContext"></a>
-## func [SkipLastWithContext](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L18>)
+## func [SkipLastWithContext](<https://github.com/cinar/indicator/blob/master/helper/skip_last.go#L22>)
 
 ```go
 func SkipLastWithContext[T any](ctx context.Context, c <-chan T, count int) <-chan T
 ```
 
 SkipLastWithContext skips the specified number of elements from the end of the given channel, supporting context cancellation.
+
+A negative count is treated as zero: nothing is skipped, and every input value is forwarded unchanged, matching SkipWithContext's negative\-count convention.
 
 <a name="SkipWithContext"></a>
 ## func [SkipWithContext](<https://github.com/cinar/indicator/blob/master/helper/skip.go#L18>)
@@ -1481,7 +1631,7 @@ func SlicesReverse[T any](r []T, i int, f func(T) bool)
 SlicesReverse loops through a slice in reverse order starting from the given index. The given function is called for each element in the slice. If the function returns false, the loop is terminated.
 
 <a name="SortedPercentRank"></a>
-## func [SortedPercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L77>)
+## func [SortedPercentRank](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L78>)
 
 ```go
 func SortedPercentRank[T Number](c <-chan T, period int) <-chan T
@@ -1492,7 +1642,7 @@ SortedPercentRank wraps SortedPercentRankWithContext for backwards compatibility
 Deprecated: Use SortedPercentRankWithContext instead.
 
 <a name="SortedPercentRankWithContext"></a>
-## func [SortedPercentRankWithContext](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L83>)
+## func [SortedPercentRankWithContext](<https://github.com/cinar/indicator/blob/master/helper/percent_rank.go#L84>)
 
 ```go
 func SortedPercentRankWithContext[T Number](ctx context.Context, c <-chan T, period int) <-chan T
@@ -1528,6 +1678,26 @@ sqrt := helper.Sqrt(c)
 fmt.Println(helper.ChanToSlice(sqrt)) // [3, 9, 4, 10]
 ```
 
+<a name="StdDev"></a>
+## func [StdDev](<https://github.com/cinar/indicator/blob/master/helper/std_dev.go#L18>)
+
+```go
+func StdDev[T Float](values []T) T
+```
+
+StdDev returns the population standard deviation of the given values, or zero for an empty slice.
+
+```
+StdDev = Sqrt(1/N * Sum(Pow(value - mean, 2)))
+```
+
+Example:
+
+```
+n := helper.StdDev([]float64{2, 4, 4, 4, 5, 5, 7, 9})
+fmt.Println(n) // 2
+```
+
 <a name="Subtract"></a>
 ## func [Subtract](<https://github.com/cinar/indicator/blob/master/helper/subtract.go#L30>)
 
@@ -1558,7 +1728,7 @@ fmt.Println(helper.ChanToSlice(actual)) // [1, 2, 3, 4, 5]
 ```
 
 <a name="SyncPeriod"></a>
-## func [SyncPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L29>)
+## func [SyncPeriod](<https://github.com/cinar/indicator/blob/master/helper/sync.go#L35>)
 
 ```go
 func SyncPeriod[T any](commonPeriod, period int, c <-chan T) <-chan T
@@ -1598,13 +1768,23 @@ Window wraps WindowWithContext for backwards compatibility.
 Deprecated: Use WindowWithContext instead.
 
 <a name="WindowWithContext"></a>
-## func [WindowWithContext](<https://github.com/cinar/indicator/blob/master/helper/window.go#L18>)
+## func [WindowWithContext](<https://github.com/cinar/indicator/blob/master/helper/window.go#L40>)
 
 ```go
 func WindowWithContext[T any](ctx context.Context, c <-chan T, f func([]T, int) T, w int) <-chan T
 ```
 
 WindowWithContext returns a channel that emits the passed function result within a sliding window of size w from the input channel c, supporting context cancellation.
+
+The aggregation function f receives \(s, i\), where s is the current window's backing slice and i is the rotation offset of the oldest \(chronologically first\) element in s. The backing slice is a fixed\-size ring buffer that is reused and rotated in place as new values arrive, so once the window has filled up \(len\(s\) == w\), a plain left\-to\-right scan of s \(e.g. range s, or s\[0\], s\[1\], ...\) does NOT visit the values in chronological order — it visits them in whatever order they currently sit in the ring.
+
+A custom f that cares about temporal order must use i, not raw position:
+
+- Oldest\-to\-newest: the k\-th oldest element \(0\-based\) is s\[\(i\+k\)%len\(s\)\]. Equivalently, s rotated left by i is the chronological sequence.
+- Newest\-to\-oldest: use the SlicesReverse\(s, i, ...\) helper, which starts just before i \(the newest element\) and walks backward, wrapping around, stopping at i \(the oldest element\). See max\_since.go and min\_since.go for a worked example.
+- While the window is still filling \(len\(s\) \< w\), i is always 0 and s has not wrapped yet, so it is already in chronological order as\-is.
+
+Order\-independent aggregations \(e.g. min/max of the set, as in highest.go and lowest.go\) can safely ignore i, since any permutation of the same values yields the same result.
 
 <a name="Bst"></a>
 ## type [Bst](<https://github.com/cinar/indicator/blob/master/helper/bst.go#L15-L17>)
@@ -1847,7 +2027,7 @@ type Number interface {
 ```
 
 <a name="Report"></a>
-## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L48-L55>)
+## type [Report](<https://github.com/cinar/indicator/blob/master/helper/report.go#L51-L58>)
 
 Report generates an HTML file containing an interactive chart that visually represents the provided data and annotations.
 
@@ -1865,7 +2045,7 @@ type Report struct {
 ```
 
 <a name="NewReport"></a>
-### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L60>)
+### func [NewReport](<https://github.com/cinar/indicator/blob/master/helper/report.go#L63>)
 
 ```go
 func NewReport(title string, date <-chan time.Time) *Report
@@ -1874,7 +2054,7 @@ func NewReport(title string, date <-chan time.Time) *Report
 NewReport takes a channel of time as the time axis and returns a new instance of the Report struct. This instance can later be used to add data and annotations and subsequently generate a report.
 
 <a name="Report.AddChart"></a>
-### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L76>)
+### func \(\*Report\) [AddChart](<https://github.com/cinar/indicator/blob/master/helper/report.go#L79>)
 
 ```go
 func (r *Report) AddChart() int
@@ -1883,7 +2063,7 @@ func (r *Report) AddChart() int
 AddChart adds a new chart to the report and returns its unique identifier. This identifier can be used later to refer to the chart and add columns to it.
 
 <a name="Report.AddColumn"></a>
-### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L83>)
+### func \(\*Report\) [AddColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L86>)
 
 ```go
 func (r *Report) AddColumn(column ReportColumn, charts ...int)
@@ -1892,7 +2072,7 @@ func (r *Report) AddColumn(column ReportColumn, charts ...int)
 AddColumn adds a new data column to the specified charts. If no chart is specified, it will be added to the main chart.
 
 <a name="Report.WriteToFile"></a>
-### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L111>)
+### func \(\*Report\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/report.go#L114>)
 
 ```go
 func (r *Report) WriteToFile(fileName string) error
@@ -1901,7 +2081,7 @@ func (r *Report) WriteToFile(fileName string) error
 WriteToFile writes the generated report content to a file with the specified name. This allows users to conveniently save the report for later viewing or analysis.
 
 <a name="Report.WriteToWriter"></a>
-### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L99>)
+### func \(\*Report\) [WriteToWriter](<https://github.com/cinar/indicator/blob/master/helper/report.go#L102>)
 
 ```go
 func (r *Report) WriteToWriter(writer io.Writer) error
@@ -1910,7 +2090,7 @@ func (r *Report) WriteToWriter(writer io.Writer) error
 WriteToWriter writes the report content to the provided io.Writer. This allows the report to be sent to various destinations, such as a file, a network socket, or even the standard output.
 
 <a name="ReportColumn"></a>
-## type [ReportColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L28-L40>)
+## type [ReportColumn](<https://github.com/cinar/indicator/blob/master/helper/report.go#L28-L43>)
 
 ReportColumn defines the interface that all report data columns must implement. This interface ensures that different types of data columns can be used consistently within the report generation process.
 
@@ -1925,13 +2105,16 @@ type ReportColumn interface {
     // Role returns the role of the report column.
     Role() string
 
-    // Value returns the next data value for the report column.
-    Value() string
+    // Value returns the next data value for the report column. It
+    // returns a non-nil error when the column has no more data to
+    // provide, such as when its backing channel has been exhausted
+    // before the report's time axis has.
+    Value() (string, error)
 }
 ```
 
 <a name="NewAnnotationReportColumn"></a>
-### func [NewAnnotationReportColumn](<https://github.com/cinar/indicator/blob/master/helper/annotation_report_column.go#L16>)
+### func [NewAnnotationReportColumn](<https://github.com/cinar/indicator/blob/master/helper/annotation_report_column.go#L19>)
 
 ```go
 func NewAnnotationReportColumn(values <-chan string) ReportColumn
@@ -1949,7 +2132,7 @@ func NewNumericReportColumn[T Number](name string, values <-chan T) ReportColumn
 NewNumericReportColumn returns a new instance of a numeric data column for a report.
 
 <a name="Ring"></a>
-## type [Ring](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L18-L23>)
+## type [Ring](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L18-L24>)
 
 Ring represents a ring structure that can be instantiated using the NewRing function.
 
@@ -1971,25 +2154,25 @@ type Ring[T any] struct {
 ```
 
 <a name="NewRing"></a>
-### func [NewRing](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L26>)
+### func [NewRing](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L29>)
 
 ```go
 func NewRing[T any](size int) *Ring[T]
 ```
 
-NewRing creates a new ring instance with the given size.
+NewRing creates a new ring instance with the given size. A ring cannot function with zero or negative capacity, so a size less than 1 is clamped to 1.
 
 <a name="Ring[T].At"></a>
-### func \(\*Ring\[T\]\) [At](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L71>)
+### func \(\*Ring\[T\]\) [At](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L84>)
 
 ```go
-func (r *Ring[T]) At(index int) T
+func (r *Ring[T]) At(index int) (T, bool)
 ```
 
-At returns the value at the given index.
+At returns the value at the given index, relative to the oldest element currently in the ring. It returns false if index is out of range, or fewer than index\+1 elements have ever been Put.
 
 <a name="Ring[T].Get"></a>
-### func \(\*Ring\[T\]\) [Get](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L53>)
+### func \(\*Ring\[T\]\) [Get](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L63>)
 
 ```go
 func (r *Ring[T]) Get() (T, bool)
@@ -1998,7 +2181,7 @@ func (r *Ring[T]) Get() (T, bool)
 Get retrieves the available value from the ring buffer. If empty, it returns the default value \(T\) and false.
 
 <a name="Ring[T].IsEmpty"></a>
-### func \(\*Ring\[T\]\) [IsEmpty](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L76>)
+### func \(\*Ring\[T\]\) [IsEmpty](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L95>)
 
 ```go
 func (r *Ring[T]) IsEmpty() bool
@@ -2007,7 +2190,7 @@ func (r *Ring[T]) IsEmpty() bool
 IsEmpty checks if the current ring buffer is empty.
 
 <a name="Ring[T].IsFull"></a>
-### func \(\*Ring\[T\]\) [IsFull](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L81>)
+### func \(\*Ring\[T\]\) [IsFull](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L100>)
 
 ```go
 func (r *Ring[T]) IsFull() bool
@@ -2016,7 +2199,7 @@ func (r *Ring[T]) IsFull() bool
 IsFull checks if the current ring buffer is full.
 
 <a name="Ring[T].Put"></a>
-### func \(\*Ring\[T\]\) [Put](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L37>)
+### func \(\*Ring\[T\]\) [Put](<https://github.com/cinar/indicator/blob/master/helper/ring.go#L45>)
 
 ```go
 func (r *Ring[T]) Put(t T) T

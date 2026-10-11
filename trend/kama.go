@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -33,11 +33,16 @@ const (
 //	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
 //	KAMA = Previous KAMA + SC * (Price - Previous KAMA)
 //
+// A perfectly flat window (no price change at all) makes Volatility zero,
+// which also forces Direction to zero; the Efficiency Ratio is defined as 0
+// (no efficient movement occurred) instead of propagating a 0/0 NaN, matching
+// most published KAMA implementations' explicit zero-volatility case.
+//
 // Example:
 //
 //	kama := trend.NewKama[float64]()
 //	result := kama.Compute(c)
-type Kama[T helper.Number] struct {
+type Kama[T helper.Float] struct {
 	// ErPeriod is the Efficiency Ratio time period.
 	ErPeriod int
 
@@ -49,7 +54,7 @@ type Kama[T helper.Number] struct {
 }
 
 // NewKama function initializes a new KAMA instance with the default parameters.
-func NewKama[T helper.Number]() *Kama[T] {
+func NewKama[T helper.Float]() *Kama[T] {
 	return NewKamaWith[T](
 		DefaultKamaErPeriod,
 		DefaultKamaFastScPeriod,
@@ -58,7 +63,7 @@ func NewKama[T helper.Number]() *Kama[T] {
 }
 
 // NewKamaWith function initializes a new KAMA instance with the given parameters.
-func NewKamaWith[T helper.Number](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T] {
+func NewKamaWith[T helper.Float](erPeriod, fastScPeriod, slowScPeriod int) *Kama[T] {
 	return &Kama[T]{
 		ErPeriod:     erPeriod,
 		FastScPeriod: fastScPeriod,
@@ -71,22 +76,24 @@ func (k *Kama[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-c
 	closingsSplice := helper.DuplicateWithContext(ctx, closings, 3)
 
 	//	Direction = Abs(Close - Previous Close Period Ago)
-	directions := helper.Abs(
-		helper.Change(closingsSplice[0], k.ErPeriod),
+	directions := helper.AbsWithContext(ctx,
+		helper.ChangeWithContext(ctx, closingsSplice[0], k.ErPeriod),
 	)
 
 	//	Volatility = MovingSum(Period, Abs(Close - Previous Close))
 	movingSum := NewMovingSumWithPeriod[T](k.ErPeriod)
 	volatilitys := movingSum.ComputeWithContext(ctx,
-		helper.Abs(
-			helper.Change(closingsSplice[1], 1),
+		helper.AbsWithContext(ctx,
+			helper.ChangeWithContext(ctx, closingsSplice[1], 1),
 		),
 	)
 
 	//	Efficiency Ratio (ER) = Direction / Volatility
-	ers := helper.Divide(directions, volatilitys)
+	ers := helper.OperateWithContext(ctx, directions, volatilitys, func(direction, volatility T) T {
+		return helper.SafeDivide(direction, volatility, T(0))
+	})
 
-	//	Smoothing Constant (SC) = (ER * (2/(Slow + 1) - 2/(Fast + 1)) + (2/(Slow + 1)))^2
+	//	Smoothing Constant (SC) = (ER * (2/(Fast + 1) - 2/(Slow + 1)) + (2/(Slow + 1)))^2
 	fastSc := T(2.0) / T(k.FastScPeriod+1)
 	slowSc := T(2.0) / T(k.SlowScPeriod+1)
 

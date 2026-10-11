@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -27,15 +28,23 @@ const (
 //	MACD = 12-Period EMA - 26-Period EMA.
 //	Signal = 9-Period EMA of MACD.
 //
+// Ema1's period (the "fast" period) must be less than Ema2's period (the
+// "slow" period) for the MACD line to align its two EMA streams correctly.
+// NewMacdWithPeriod automatically swaps period1 and period2 when they are
+// given in the wrong order, so Ema1 always ends up shorter than Ema2.
+//
 // Example:
-type Macd[T helper.Number] struct {
+//
+//	macd := trend.NewMacd[float64]()
+//	macdLine, signal := macd.Compute(c)
+type Macd[T helper.Float] struct {
 	Ema1 *Ema[T]
 	Ema2 *Ema[T]
 	Ema3 *Ema[T]
 }
 
 // NewMacd function initializes a new MACD instance with the default parameters.
-func NewMacd[T helper.Number]() *Macd[T] {
+func NewMacd[T helper.Float]() *Macd[T] {
 	return NewMacdWithPeriod[T](
 		DefaultMacdPeriod1,
 		DefaultMacdPeriod2,
@@ -43,8 +52,17 @@ func NewMacd[T helper.Number]() *Macd[T] {
 	)
 }
 
-// NewMacdWithPeriod function initializes a new MACD instance with the given parameters.
-func NewMacdWithPeriod[T helper.Number](period1, period2, period3 int) *Macd[T] {
+// NewMacdWithPeriod function initializes a new MACD instance with the given
+// parameters. The fast period (period1) must be less than the slow period
+// (period2) for the two EMA streams to align correctly when the MACD line
+// is computed. If period1 is greater than period2, the two are swapped so
+// that the resulting instance is always well-formed regardless of the
+// order the caller passes them in.
+func NewMacdWithPeriod[T helper.Float](period1, period2, period3 int) *Macd[T] {
+	if period1 > period2 {
+		period1, period2 = period2, period1
+	}
+
 	return &Macd[T]{
 		Ema1: NewEmaWithPeriod[T](period1),
 		Ema2: NewEmaWithPeriod[T](period2),
@@ -72,6 +90,11 @@ func (m *Macd[T]) ComputeWithContext(ctx context.Context, c <-chan T) (<-chan T,
 // IdlePeriod is the initial period that MACD won't yield any results.
 func (m *Macd[T]) IdlePeriod() int {
 	return m.Ema2.Period + m.Ema3.Period - 2
+}
+
+// String is the string representation of the MACD.
+func (m *Macd[T]) String() string {
+	return fmt.Sprintf("MACD(%d,%d,%d)", m.Ema1.Period, m.Ema2.Period, m.Ema3.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

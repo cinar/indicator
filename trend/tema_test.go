@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -36,5 +36,14 @@ func TestTema(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestTemaString(t *testing.T) {
+	expected := "TEMA(20,20,20)"
+	actual := trend.NewTema[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

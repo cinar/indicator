@@ -1,0 +1,124 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package trend
+
+import (
+	"fmt"
+
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/trend"
+)
+
+// EnvelopeStrategy demonstrates how to compose moving average envelope bands
+// into an illustrative band breakout strategy.
+type EnvelopeStrategy struct {
+	// Envelope is the envelope indicator instance.
+	Envelope *trend.Envelope[float64]
+}
+
+// NewEnvelopeStrategy initializes an example EnvelopeStrategy instance with default parameters.
+func NewEnvelopeStrategy() *EnvelopeStrategy {
+	return NewEnvelopeStrategyWith(
+		trend.NewEnvelopeWithSma[float64](),
+	)
+}
+
+// NewEnvelopeStrategyWith initializes an example EnvelopeStrategyWith instance with default parameters.
+func NewEnvelopeStrategyWith(envelope *trend.Envelope[float64]) *EnvelopeStrategy {
+	return &EnvelopeStrategy{
+		Envelope: envelope,
+	}
+}
+
+// Name returns the name of the example strategy.
+func (e *EnvelopeStrategy) Name() string {
+	return fmt.Sprintf("Envelope Strategy (%s)", e.Envelope.String())
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
+func (e *EnvelopeStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closingsSplice := helper.DuplicateWithContext(ctx, asset.SnapshotsAsClosingsWithContext(ctx, snapshots),
+		2,
+	)
+
+	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], e.Envelope.IdlePeriod())
+
+	uppers, middles, lowers := e.Envelope.ComputeWithContext(ctx, closingsSplice[0])
+	go helper.DrainWithContext(ctx, middles)
+
+	actions := helper.Operate3WithContext(ctx, uppers, lowers, closingsSplice[1], func(upper, lower, closing float64) strategy.Action {
+		// When the closing is below the lower band suggests a buy recommendation.
+		if closing < lower {
+			return strategy.Buy
+		}
+
+		// When the closing is above the upper band suggests a Sell recommendation.
+		if closing > upper {
+			return strategy.Sell
+		}
+
+		return strategy.Hold
+	})
+
+	// Envelope start only after a full period.
+	actions = helper.ShiftWithContext(ctx, actions, e.Envelope.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
+func (e *EnvelopeStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> closings[0] -> closings
+	//                 closings[1] -> envelope -> upper
+	//                                         -> middle
+	//                                         -> lower
+	// snapshots[2] -> actions     -> annotations
+	//              -> outcomes
+	//
+	snapshotsSplice := helper.Duplicate(c, 3)
+
+	dates := helper.Skip(
+		asset.SnapshotsAsDates(snapshotsSplice[0]),
+		e.Envelope.IdlePeriod(),
+	)
+
+	closingsSplice := helper.Duplicate(asset.SnapshotsAsClosings(snapshotsSplice[1]), 2)
+	closingsSplice[0] = helper.Skip(closingsSplice[0], e.Envelope.IdlePeriod())
+
+	uppers, middles, lowers := e.Envelope.Compute(closingsSplice[1])
+
+	actions, outcomes := strategy.ComputeWithOutcome(e, snapshotsSplice[2])
+	actions = helper.Skip(actions, e.Envelope.IdlePeriod())
+	outcomes = helper.Skip(outcomes, e.Envelope.IdlePeriod())
+
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	report := helper.NewReport(e.Name(), dates)
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closingsSplice[0]))
+	report.AddColumn(helper.NewNumericReportColumn("Upper", uppers))
+	report.AddColumn(helper.NewNumericReportColumn("Middle", middles))
+	report.AddColumn(helper.NewNumericReportColumn("Lower", lowers))
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations))
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (e *EnvelopeStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return e.ComputeWithContext(context.Background(), snapshots)
+}

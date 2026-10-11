@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -29,23 +30,23 @@ const (
 //
 //	atr := volatility.NewAtr()
 //	atr.Compute(highs, lows, closings)
-type Atr[T helper.Number] struct {
+type Atr[T helper.Float] struct {
 	// Ma is the moving average for the ATR.
 	Ma trend.Ma[T]
 }
 
 // NewAtr function initializes a new ATR instance with the default parameters.
-func NewAtr[T helper.Number]() *Atr[T] {
+func NewAtr[T helper.Float]() *Atr[T] {
 	return NewAtrWithPeriod[T](DefaultAtrPeriod)
 }
 
 // NewAtrWithPeriod function initializes a new ATR instance with the given period.
-func NewAtrWithPeriod[T helper.Number](period int) *Atr[T] {
+func NewAtrWithPeriod[T helper.Float](period int) *Atr[T] {
 	return NewAtrWithMa(trend.NewSmaWithPeriod[T](period))
 }
 
 // NewAtrWithMa function initializes a new ATR instance with the given moving average instance.
-func NewAtrWithMa[T helper.Number](ma trend.Ma[T]) *Atr[T] {
+func NewAtrWithMa[T helper.Float](ma trend.Ma[T]) *Atr[T] {
 	return &Atr[T]{
 		Ma: ma,
 	}
@@ -60,10 +61,15 @@ func (a *Atr[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 	return atr
 }
 
-// IdlePeriod is the initial period that Acceleration Bands won't yield any results.
+// IdlePeriod is the initial period that ATR won't yield any results.
 func (a *Atr[T]) IdlePeriod() int {
 	// Ma idle period and for using the previous closing.
 	return a.Ma.IdlePeriod() + 1
+}
+
+// String is the string representation of the ATR.
+func (a *Atr[T]) String() string {
+	return fmt.Sprintf("ATR(%s)", a.Ma.String())
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

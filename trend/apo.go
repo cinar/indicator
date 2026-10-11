@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	//goland:noinspection ALL
@@ -43,7 +44,7 @@ const (
 //	apo.SlowPeriod = 26
 //
 //	result := apo.Compute(c)
-type Apo[T helper.Number] struct {
+type Apo[T helper.Float] struct {
 	// Fast period.
 	FastPeriod int
 
@@ -59,7 +60,7 @@ type Apo[T helper.Number] struct {
 
 // NewApo function initializes a new APO instance
 // with the default parameters.
-func NewApo[T helper.Number]() *Apo[T] {
+func NewApo[T helper.Float]() *Apo[T] {
 	return &Apo[T]{
 		FastPeriod:    DefaultApoFastPeriod,
 		FastSmoothing: DefaultApoFastSmoothing,
@@ -76,11 +77,13 @@ func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 
 	fastEma := NewEma[T]()
 	fastEma.Period = apo.FastPeriod
+	fastEma.Smoothing = apo.FastSmoothing
 	cs[0] = fastEma.ComputeWithContext(ctx, cs[0])
 	cs[0] = helper.SkipWithContext(ctx, cs[0], apo.SlowPeriod-apo.FastPeriod)
 
 	slowEma := NewEma[T]()
 	slowEma.Period = apo.SlowPeriod
+	slowEma.Smoothing = apo.SlowSmoothing
 	cs[1] = slowEma.ComputeWithContext(ctx, cs[1])
 
 	return helper.SubtractWithContext(ctx, cs[0], cs[1])
@@ -89,6 +92,11 @@ func (apo *Apo[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 // IdlePeriod is the initial period that APO won't yield any results.
 func (apo *Apo[T]) IdlePeriod() int {
 	return apo.SlowPeriod - 1
+}
+
+// String is the string representation of the APO.
+func (apo *Apo[T]) String() string {
+	return fmt.Sprintf("APO(%d,%d)", apo.FastPeriod, apo.SlowPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -38,5 +38,39 @@ func TestVwma(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestVwmaNoVolume(t *testing.T) {
+	vwma := trend.NewVwma[float64]()
+
+	count := vwma.Period + 5
+	closing := make([]float64, count)
+	volume := make([]float64, count)
+
+	for i := range count {
+		closing[i] = 100
+		volume[i] = 0
+	}
+
+	actual := helper.ChanToSlice(vwma.Compute(helper.SliceToChan(closing), helper.SliceToChan(volume)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one VWMA value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected VWMA of 0 for a window with no volume, got %v", v)
+		}
+	}
+}
+
+func TestVwmaString(t *testing.T) {
+	expected := "VWMA(20)"
+	actual := trend.NewVwma[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

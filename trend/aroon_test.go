@@ -1,11 +1,14 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package trend_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -32,8 +35,8 @@ func TestAroon(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row *AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row *AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
@@ -79,14 +82,43 @@ func TestAroonCompareRust(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
 	err := helper.CheckEquals(actualUp, expectedUp, actualDown, expectedDown)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAroonCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	high := make(chan float64)
+	low := make(chan float64)
+
+	aroon := trend.NewAroon[float64]()
+	up, down := aroon.ComputeWithContext(ctx, high, low)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-up; ok {
+		t.Fatal("Up channel should be closed after cancellation")
+	}
+	if _, ok := <-down; ok {
+		t.Fatal("Down channel should be closed after cancellation")
 	}
 }
 
@@ -125,13 +157,22 @@ func TestAroonValidateDefinition(t *testing.T) {
 	expectedUp := helper.Map(inputs[2], func(row AroonData) float64 { return row.Up })
 	expectedDown := helper.Map(inputs[3], func(row AroonData) float64 { return row.Down })
 
-	expectedUp = helper.Skip(expectedUp, aroon.Period-1)
-	expectedDown = helper.Skip(expectedDown, aroon.Period-1)
+	expectedUp = helper.Skip(expectedUp, aroon.IdlePeriod())
+	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
 
 	err := helper.CheckEquals(actualUp, expectedUp, actualDown, expectedDown)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAroonString(t *testing.T) {
+	expected := "AROON(25)"
+	actual := trend.NewAroon[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

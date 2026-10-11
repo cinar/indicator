@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -42,6 +42,15 @@ func TestConnorsRsiString(t *testing.T) {
 	connorsRsi := momentum.NewConnorsRsi[float64]()
 	expected := "ConnorsRSI(3, 2, 100)"
 	actual := connorsRsi.String()
+
+	if actual != expected {
+		t.Fatalf("expected %v, got %v", expected, actual)
+	}
+}
+
+func TestStreakString(t *testing.T) {
+	expected := "STREAK"
+	actual := momentum.NewStreak[float64]().String()
 
 	if actual != expected {
 		t.Fatalf("expected %v, got %v", expected, actual)

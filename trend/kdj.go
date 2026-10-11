@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -38,11 +39,15 @@ const (
 //	D = Sma(K, dPeriod)
 //	J = (3 * K) - (2 * D)
 //
+// A zero range (Max(High) == Min(Low)) makes RSV an undefined 0/0. RSV, like
+// its Stochastic %K counterpart, is on a 0-100 scale, so it is defined as the
+// neutral midpoint 50 instead of propagating NaN.
+//
 // Example:
 //
 //	kdj := NewKdj[float64]()
 //	values := kdj.Compute(highs, lows, closings)
-type Kdj[T helper.Number] struct {
+type Kdj[T helper.Float] struct {
 	// MovingMax is the highest high.
 	MovingMax *MovingMax[T]
 
@@ -57,7 +62,7 @@ type Kdj[T helper.Number] struct {
 }
 
 // NewKdj function initializes a new Kdj instance with the default parameters
-func NewKdj[T helper.Number]() *Kdj[T] {
+func NewKdj[T helper.Float]() *Kdj[T] {
 	kdj := &Kdj[T]{
 		MovingMax: NewMovingMax[T](),
 		MovingMin: NewMovingMin[T](),
@@ -83,11 +88,13 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 
 	closing = helper.SkipWithContext(ctx, closing, kdj.MovingMax.Period-1)
 
-	rsv := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closing, lowests[0]),
-		helper.SubtractWithContext(ctx, highest, lowests[1]),
-	),
-		100,
-	)
+	numerator := helper.SubtractWithContext(ctx, closing, lowests[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowests[1])
+
+	rsv := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(num, denom, T(0.5)) * 100
+	})
 
 	ks := helper.DuplicateWithContext(ctx, kdj.Sma1.ComputeWithContext(ctx, rsv),
 		3,
@@ -110,6 +117,11 @@ func (kdj *Kdj[T]) ComputeWithContext(ctx context.Context, high, low, closing <-
 // IdlePeriod is the initial period that KDJ won't yield any results.
 func (kdj *Kdj[T]) IdlePeriod() int {
 	return kdj.MovingMax.Period + kdj.Sma1.Period + kdj.Sma2.Period - 3
+}
+
+// String is the string representation of the KDJ.
+func (kdj *Kdj[T]) String() string {
+	return fmt.Sprintf("KDJ(%d,%d,%d)", kdj.MovingMax.Period, kdj.Sma1.Period, kdj.Sma2.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

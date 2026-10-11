@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -113,6 +113,14 @@ func TestCountActionsEmpty(t *testing.T) {
 	_, _, _, ok := strategy.CountActions([]<-chan strategy.Action{
 		chan1, chan2, chan3,
 	})
+
+	if ok {
+		t.Fatal("is ok")
+	}
+}
+
+func TestCountActionsNoChannels(t *testing.T) {
+	_, _, _, ok := strategy.CountActions([]<-chan strategy.Action{})
 
 	if ok {
 		t.Fatal("is ok")

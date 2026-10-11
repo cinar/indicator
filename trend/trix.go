@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -28,13 +29,13 @@ const (
 //
 //	trix := trend.NewTrix[float64]()
 //	result := trix.Compute(values)
-type Trix[T helper.Number] struct {
+type Trix[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewTrix function initializes a new TRIX instance with the default parameters.
-func NewTrix[T helper.Number]() *Trix[T] {
+func NewTrix[T helper.Float]() *Trix[T] {
 	return &Trix[T]{
 		Period: DefaultTrixPeriod,
 	}
@@ -56,6 +57,11 @@ func (t *Trix[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that TRIX won't yield any results.
 func (t *Trix[T]) IdlePeriod() int {
 	return (t.Period * 3) - 3 + 1
+}
+
+// String is the string representation of the TRIX.
+func (t *Trix[T]) String() string {
+	return fmt.Sprintf("TRIX(%d)", t.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

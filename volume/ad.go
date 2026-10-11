@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -21,13 +21,13 @@ import (
 //
 //	ad := volume.NewAd[float64]()
 //	result := ad.Compute(highs, lows, closings, volumes)
-type Ad[T helper.Number] struct {
+type Ad[T helper.Float] struct {
 	// Mfv is the MFV instance.
 	Mfv *Mfv[T]
 }
 
 // NewAd function initializes a new A/D instance with the default parameters.
-func NewAd[T helper.Number]() *Ad[T] {
+func NewAd[T helper.Float]() *Ad[T] {
 	return &Ad[T]{
 		Mfv: NewMfv[T](),
 	}
@@ -48,6 +48,11 @@ func (a *Ad[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, v
 // IdlePeriod is the initial period that A/D won't yield any results.
 func (*Ad[T]) IdlePeriod() int {
 	return 0
+}
+
+// String is the string representation of the A/D.
+func (*Ad[T]) String() string {
+	return "AD"
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

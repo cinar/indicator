@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -28,7 +29,7 @@ const (
 //
 //	mfi := volume.NewMfi[float64]()
 //	result := mfi.Compute(highs, lows, closings, volumes)
-type Mfi[T helper.Number] struct {
+type Mfi[T helper.Float] struct {
 	// TypicalPrice is the Typical Price instance.
 	TypicalPrice *trend.TypicalPrice[T]
 
@@ -37,12 +38,12 @@ type Mfi[T helper.Number] struct {
 }
 
 // NewMfi function initializes a new MFI instance with the default parameters.
-func NewMfi[T helper.Number]() *Mfi[T] {
+func NewMfi[T helper.Float]() *Mfi[T] {
 	return NewMfiWithPeriod[T](DefaultMfiPeriod)
 }
 
 // NewMfiWithPeriod function initializes a new MFI instance with the given period.
-func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T] {
+func NewMfiWithPeriod[T helper.Float](period int) *Mfi[T] {
 	return &Mfi[T]{
 		TypicalPrice: trend.NewTypicalPrice[T](),
 		Sum:          trend.NewMovingSumWithPeriod[T](period),
@@ -51,15 +52,17 @@ func NewMfiWithPeriod[T helper.Number](period int) *Mfi[T] {
 
 // ComputeWithContext function takes a channel of numbers and computes the MFI.
 func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, volumes <-chan T) <-chan T {
-	//	Raw Money Flow = Typical Price * Volume
-	rawMoneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, m.TypicalPrice.ComputeWithContext(ctx, highs, lows, closings),
-		volumes,
-	),
+	// TP = (High + Low + Close) / 3
+	tpSplice := helper.DuplicateWithContext(ctx,
+		m.TypicalPrice.ComputeWithContext(ctx, highs, lows, closings),
 		2,
 	)
 
-	moneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, helper.SignWithContext(ctx, helper.ChangeWithContext(ctx, rawMoneyFlowSplice[0], 1)),
-		helper.SkipWithContext(ctx, rawMoneyFlowSplice[1], 1),
+	// Raw Money Flow = Typical Price * Volume
+	rawMoneyFlow := helper.MultiplyWithContext(ctx, tpSplice[0], volumes)
+
+	moneyFlowSplice := helper.DuplicateWithContext(ctx, helper.MultiplyWithContext(ctx, helper.SignWithContext(ctx, helper.ChangeWithContext(ctx, tpSplice[1], 1)),
+		helper.SkipWithContext(ctx, rawMoneyFlow, 1),
 	),
 		2,
 	)
@@ -87,6 +90,11 @@ func (m *Mfi[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 // IdlePeriod is the initial period that MFI won't yield any results.
 func (m *Mfi[T]) IdlePeriod() int {
 	return m.Sum.IdlePeriod() + 1
+}
+
+// String is the string representation of the MFI.
+func (m *Mfi[T]) String() string {
+	return fmt.Sprintf("MFI(%d)", m.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

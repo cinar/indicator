@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -31,15 +32,15 @@ const (
 //	Mass Index = SUM(Ratio, 25)
 //
 // Example:
-type MassIndex[T helper.Number] struct {
+type MassIndex[T helper.Float] struct {
 	Ema1      *Ema[T]
 	Ema2      *Ema[T]
 	MovingSum *MovingSum[T]
 }
 
-// NewMassIndex function initializes a new APO instance
+// NewMassIndex function initializes a new Mass Index instance
 // with the default parameters.
-func NewMassIndex[T helper.Number]() *MassIndex[T] {
+func NewMassIndex[T helper.Float]() *MassIndex[T] {
 	mi := &MassIndex[T]{
 		Ema1:      NewEma[T](),
 		Ema2:      NewEma[T](),
@@ -71,6 +72,11 @@ func (m *MassIndex[T]) ComputeWithContext(ctx context.Context, highs, lows <-cha
 // IdlePeriod is the initial period that Mass Index won't yield any results.
 func (m *MassIndex[T]) IdlePeriod() int {
 	return m.Ema1.Period + m.Ema2.Period + m.MovingSum.Period - 3
+}
+
+// String is the string representation of the Mass Index.
+func (m *MassIndex[T]) String() string {
+	return fmt.Sprintf("MASSINDEX(%d,%d,%d)", m.Ema1.Period, m.Ema2.Period, m.MovingSum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

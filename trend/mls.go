@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,8 +6,14 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
+)
+
+const (
+	// DefaultMlsPeriod is the default MLS period.
+	DefaultMlsPeriod = 14
 )
 
 // Mls represents the configuration parameters for calculating the Moving Least Square (MLS). It is a regression
@@ -15,7 +21,7 @@ import (
 //
 //	y = mx + b
 //	b = y-intercept
-//	y = slope
+//	m = slope
 //
 //	m = (period * sumXY - sumX * sumY) / (period * sumX2 - sumX * sumX)
 //	b = (sumY - m * sumX) / period
@@ -24,13 +30,18 @@ import (
 //
 //	mls := trend.NewMlsWithPeriod[float64](14)
 //	ms, bs := mls.Compute(x , y)
-type Mls[T helper.Number] struct {
+type Mls[T helper.Float] struct {
 	// Sum is the moving sum instance.
 	Sum *MovingSum[T]
 }
 
+// NewMls function initializes a new MLS instance with the default parameters.
+func NewMls[T helper.Float]() *Mls[T] {
+	return NewMlsWithPeriod[T](DefaultMlsPeriod)
+}
+
 // NewMlsWithPeriod function initializes a new MLS instance with the given period.
-func NewMlsWithPeriod[T helper.Number](period int) *Mls[T] {
+func NewMlsWithPeriod[T helper.Float](period int) *Mls[T] {
 	return &Mls[T]{
 		Sum: NewMovingSumWithPeriod[T](period),
 	}
@@ -90,6 +101,11 @@ func (m *Mls[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) (<-chan 
 // IdlePeriod is the initial period that MLS won't yield any results.
 func (m *Mls[T]) IdlePeriod() int {
 	return m.Sum.IdlePeriod()
+}
+
+// String is the string representation of the MLS.
+func (m *Mls[T]) String() string {
+	return fmt.Sprintf("MLS(%d)", m.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

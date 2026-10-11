@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -29,9 +30,9 @@ const (
 //
 // Example:
 //
-//	co := momentum.ChaikinOscillator[float64]()
+//	co := momentum.NewChaikinOscillator[float64]()
 //	values := co.Compute(lows, highs)
-type ChaikinOscillator[T helper.Number] struct {
+type ChaikinOscillator[T helper.Float] struct {
 	// Ad is the Accumulation/Distribution (A/D) instance.
 	Ad *volume.Ad[T]
 
@@ -43,7 +44,7 @@ type ChaikinOscillator[T helper.Number] struct {
 }
 
 // NewChaikinOscillator function initializes a new Chaikin Oscillator instance.
-func NewChaikinOscillator[T helper.Number]() *ChaikinOscillator[T] {
+func NewChaikinOscillator[T helper.Float]() *ChaikinOscillator[T] {
 	return &ChaikinOscillator[T]{
 		Ad:       volume.NewAd[T](),
 		ShortEma: trend.NewEmaWithPeriod[T](DefaultChaikinOscillatorShortPeriod),
@@ -71,6 +72,11 @@ func (c *ChaikinOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Chaikin Oscillator won't yield any results.
 func (c *ChaikinOscillator[T]) IdlePeriod() int {
 	return c.LongEma.IdlePeriod()
+}
+
+// String is the string representation of the Chaikin Oscillator.
+func (c *ChaikinOscillator[T]) String() string {
+	return fmt.Sprintf("CO(%d,%d)", c.ShortEma.Period, c.LongEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

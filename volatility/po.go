@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -19,15 +20,22 @@ const (
 // Po represents the configuration parameters for calculating the Projection Oscillator (PO). It uses the linear
 // regression slope, along with highs and lows. Period defines the moving window to calculates the PO.
 //
-//	PL = Min(period, (high + MLS(period, x, high)))
-//	PH = Max(period, (low + MLS(period, x, low)))
+//	PL = Min(period, (low + MLS(period, x, low)))
+//	PH = Max(period, (high + MLS(period, x, high)))
 //	PO = 100 * (Closing - PL) / (PH - PL)
+//
+// PO is expressed on a 0-100 scale locating price within the projected
+// range. When PH and PL collapse to the same value (a flat window, e.g.
+// unchanged highs, lows, and closings), the projected range has zero
+// width, an undefined 0/0. It falls back to the neutral midpoint 50,
+// mirroring the flat-market convention used by RSI and other 0-100
+// range-position oscillators.
 //
 // Example:
 //
 //	po := volatility.NewPo()
 //	ps := po.Compute(highs, lows, closings)
-type Po[T helper.Number] struct {
+type Po[T helper.Float] struct {
 	// Mls is the Moving Least Square instance.
 	mls *trend.Mls[T]
 
@@ -39,12 +47,12 @@ type Po[T helper.Number] struct {
 }
 
 // NewPo function initializes a new PO instance with the default parameters.
-func NewPo[T helper.Number]() *Po[T] {
+func NewPo[T helper.Float]() *Po[T] {
 	return NewPoWithPeriod[T](DefaultPoPeriod)
 }
 
 // NewPoWithPeriod function initializes a new PO instance with the given period.
-func NewPoWithPeriod[T helper.Number](period int) *Po[T] {
+func NewPoWithPeriod[T helper.Float](period int) *Po[T] {
 	return &Po[T]{
 		mls: trend.NewMlsWithPeriod[T](period),
 		min: trend.NewMovingMinWithPeriod[T](period),
@@ -62,26 +70,26 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 		2,
 	)
 
-	// PL = Min(period, (high + MLS(period, x, high)))
-	plM, plB := p.mls.ComputeWithContext(ctx, xSplice[0], highsSplice[0])
+	// PL = Min(period, (low + MLS(period, x, low)))
+	plM, plB := p.mls.ComputeWithContext(ctx, xSplice[0], lowsSplice[0])
 	go helper.DrainWithContext(ctx, plB)
 
-	highsSplice[1] = helper.SkipWithContext(ctx, highsSplice[1], p.mls.IdlePeriod())
+	lowsSplice[1] = helper.SkipWithContext(ctx, lowsSplice[1], p.mls.IdlePeriod())
 
-	plSplice := helper.DuplicateWithContext(ctx, p.min.ComputeWithContext(ctx, helper.AddWithContext(ctx, highsSplice[1],
+	plSplice := helper.DuplicateWithContext(ctx, p.min.ComputeWithContext(ctx, helper.AddWithContext(ctx, lowsSplice[1],
 		plM,
 	),
 	),
 		2,
 	)
 
-	// PH = Max(period, (low + MLS(period, x, low)))
-	phM, phB := p.mls.ComputeWithContext(ctx, xSplice[1], lowsSplice[0])
+	// PH = Max(period, (high + MLS(period, x, high)))
+	phM, phB := p.mls.ComputeWithContext(ctx, xSplice[1], highsSplice[0])
 	go helper.DrainWithContext(ctx, phB)
 
-	lowsSplice[1] = helper.SkipWithContext(ctx, lowsSplice[1], p.mls.IdlePeriod())
+	highsSplice[1] = helper.SkipWithContext(ctx, highsSplice[1], p.mls.IdlePeriod())
 
-	ph := p.max.ComputeWithContext(ctx, helper.AddWithContext(ctx, lowsSplice[1],
+	ph := p.max.ComputeWithContext(ctx, helper.AddWithContext(ctx, highsSplice[1],
 		phM,
 	),
 	)
@@ -89,15 +97,11 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 	// PO = 100 * (Closing - PL) / (PH - PL)
 	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], p.mls.IdlePeriod()+p.min.IdlePeriod())
 
-	po := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1],
-		plSplice[0],
-	),
-		helper.SubtractWithContext(ctx, ph,
-			plSplice[1],
-		),
-	),
-		T(100),
-	)
+	phMinusPl := helper.SubtractWithContext(ctx, ph, plSplice[1])
+
+	po := helper.Operate3WithContext(ctx, closingsSplice[1], plSplice[0], phMinusPl, func(closing, pl, denom T) T {
+		return helper.SafeDivide(100*(closing-pl), denom, T(50))
+	})
 
 	return po
 }
@@ -105,6 +109,11 @@ func (p *Po[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-
 // IdlePeriod is the initial period that PO won't yield any results.
 func (p *Po[T]) IdlePeriod() int {
 	return p.mls.IdlePeriod() + p.min.IdlePeriod()
+}
+
+// String is the string representation of the PO.
+func (p *Po[T]) String() string {
+	return fmt.Sprintf("PO(%d)", p.mls.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

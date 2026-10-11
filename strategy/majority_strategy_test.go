@@ -1,16 +1,19 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package strategy_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/examples/trend"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/trend"
 )
 
 func TestMajorityStrategy(t *testing.T) {
@@ -34,6 +37,49 @@ func TestMajorityStrategy(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMajorityStrategyNoStrategies(t *testing.T) {
+	snapshots := helper.SliceToChan([]*asset.Snapshot{})
+
+	majority := strategy.NewMajorityStrategy("Majority Strategy")
+	actual := majority.Compute(snapshots)
+
+	select {
+	case _, ok := <-actual:
+		if ok {
+			t.Fatal("expected closed channel")
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("timeout - result channel never closed")
+	}
+}
+
+func TestMajorityStrategyCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	snapshots := make(chan *asset.Snapshot)
+
+	majority := strategy.NewMajorityStrategy("Majority Strategy")
+	majority.Strategies = append(majority.Strategies, strategy.NewBuyAndHoldStrategy(), strategy.NewBuyAndHoldStrategy())
+
+	actual := majority.ComputeWithContext(ctx, snapshots)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-actual; ok {
+		t.Fatal("Majority strategy channel should be closed after cancellation")
 	}
 }
 

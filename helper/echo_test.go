@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -15,6 +15,30 @@ func TestEcho(t *testing.T) {
 	expected := helper.SliceToChan([]int{2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8})
 
 	actual := helper.Echo(input, 2, 4)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestEchoZeroLast(t *testing.T) {
+	input := helper.SliceToChan([]int{2, 4, 6, 8})
+	expected := helper.SliceToChan([]int{2, 4, 6, 8})
+
+	actual := helper.Echo(input, 0, 4)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestEchoShorterThanLast(t *testing.T) {
+	input := helper.SliceToChan([]int{2, 4})
+	expected := helper.SliceToChan([]int{2, 4, 2, 4, 2, 4})
+
+	actual := helper.Echo(input, 5, 2)
 
 	err := helper.CheckEquals(actual, expected)
 	if err != nil {

@@ -1,0 +1,146 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package trend
+
+import (
+	"fmt"
+
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/trend"
+)
+
+const (
+	// DefaultWeightedCloseStrategyMaPeriod is the default Moving Average period of 20.
+	DefaultWeightedCloseStrategyMaPeriod = 20
+)
+
+// WeightedCloseStrategy demonstrates how to compose Weighted Close prices
+// and their moving average into an illustrative crossover strategy.
+type WeightedCloseStrategy struct {
+	// WeightedClose represents the configuration parameters for calculating the weighted close.
+	WeightedClose *trend.WeightedClose[float64]
+
+	// Ma represents the configuration parameters for calculating the moving average.
+	Ma trend.Ma[float64]
+}
+
+// NewWeightedCloseStrategy initializes an example WeightedCloseStrategy instance with default parameters.
+func NewWeightedCloseStrategy() *WeightedCloseStrategy {
+	return NewWeightedCloseStrategyWith(
+		DefaultWeightedCloseStrategyMaPeriod,
+	)
+}
+
+// NewWeightedCloseStrategyWith initializes an example WeightedCloseStrategyWith instance with default parameters.
+// with the given parameters.
+func NewWeightedCloseStrategyWith(maPeriod int) *WeightedCloseStrategy {
+	return &WeightedCloseStrategy{
+		WeightedClose: trend.NewWeightedClose[float64](),
+		Ma:            trend.NewSmaWithPeriod[float64](maPeriod),
+	}
+}
+
+// Name returns the name of the example strategy.
+func (w *WeightedCloseStrategy) Name() string {
+	return fmt.Sprintf("Weighted Close Strategy (%d)",
+		w.Ma.IdlePeriod()+1,
+	)
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
+func (w *WeightedCloseStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 3)
+
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+
+	wcSplice := helper.DuplicateWithContext(ctx, w.WeightedClose.ComputeWithContext(ctx, highs, lows, closings),
+		2,
+	)
+
+	mas := trend.ComputeMaWithContext(ctx, w.Ma, wcSplice[1])
+
+	wcSplice[0] = helper.SkipWithContext(ctx, wcSplice[0], w.Ma.IdlePeriod())
+
+	actions := helper.OperateWithContext(ctx, wcSplice[0], mas, func(wc, ma float64) strategy.Action {
+		// A weighted close crossing above the moving average suggests a bullish trend.
+		if wc > ma {
+			return strategy.Buy
+		}
+
+		// A crossing below the moving average indicates a bearish trend.
+		return strategy.Sell
+	})
+
+	// SMMA strategy starts only after a full period.
+	actions = helper.ShiftWithContext(ctx, actions, w.Ma.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an
+// illustrative report annotated with example actions.
+func (w *WeightedCloseStrategy) Report(snapshots <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> highs
+	// snapshots[2] -> lows
+	// snapshots[3] -> closings[0] -> closings
+	//                 closings[1] -> weighted closes[0] -> weighted closes
+	//                                weighted closes[1] -> moving average
+	// snapshots[4] -> actions     -> annotations
+	//              -> outcomes
+	//
+	snapshotsSplice := helper.Duplicate(snapshots, 5)
+
+	dates := asset.SnapshotsAsDates(snapshotsSplice[0])
+	highs := asset.SnapshotsAsHighs(snapshotsSplice[1])
+	lows := asset.SnapshotsAsLows(snapshotsSplice[2])
+	closingsSplice := helper.Duplicate(
+		asset.SnapshotsAsClosings(snapshotsSplice[3]),
+		2,
+	)
+
+	wcSplice := helper.Duplicate(
+		w.WeightedClose.Compute(highs, lows, closingsSplice[1]),
+		2,
+	)
+
+	mas := w.Ma.Compute(wcSplice[1])
+
+	actions, outcomes := strategy.ComputeWithOutcome(w, snapshotsSplice[4])
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	dates = helper.Skip(dates, w.Ma.IdlePeriod())
+	closingsSplice[0] = helper.Skip(closingsSplice[0], w.Ma.IdlePeriod())
+	wcSplice[0] = helper.Skip(wcSplice[0], w.Ma.IdlePeriod())
+	annotations = helper.Skip(annotations, w.Ma.IdlePeriod())
+	outcomes = helper.Skip(outcomes, w.Ma.IdlePeriod())
+
+	report := helper.NewReport(w.Name(), dates)
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closingsSplice[0]))
+	report.AddColumn(helper.NewNumericReportColumn("Weighted Close", wcSplice[0]))
+	report.AddColumn(helper.NewNumericReportColumn("Moving Average", mas))
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations))
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 1)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (w *WeightedCloseStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return w.ComputeWithContext(context.Background(), snapshots)
+}

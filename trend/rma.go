@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -26,18 +27,18 @@ const (
 //	rma.Period = 10
 //
 //	result := rma.Compute(c)
-type Rma[T helper.Number] struct {
+type Rma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewRma function initializes a new RMA instance with the default parameters.
-func NewRma[T helper.Number]() *Rma[T] {
+func NewRma[T helper.Float]() *Rma[T] {
 	return NewRmaWithPeriod[T](DefaultRmaPeriod)
 }
 
 // NewRmaWithPeriod function initializes a new RMA instance with the given period.
-func NewRmaWithPeriod[T helper.Number](period int) *Rma[T] {
+func NewRmaWithPeriod[T helper.Float](period int) *Rma[T] {
 	return &Rma[T]{
 		Period: period,
 	}
@@ -102,4 +103,9 @@ func (r *Rma[T]) Compute(c <-chan T) <-chan T {
 // IdlePeriod is the initial period that RMA won't yield any results.
 func (r *Rma[T]) IdlePeriod() int {
 	return r.Period - 1
+}
+
+// String is the string representation of the RMA.
+func (r *Rma[T]) String() string {
+	return fmt.Sprintf("RMA(%d)", r.Period)
 }

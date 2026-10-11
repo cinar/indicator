@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -20,6 +20,7 @@ var kindToBits = map[reflect.Kind]int{
 	reflect.Int32:   32,
 	reflect.Int64:   64,
 	reflect.Uint:    bits.UintSize,
+	reflect.Uint8:   8,
 	reflect.Uint16:  16,
 	reflect.Uint32:  32,
 	reflect.Uint64:  64,

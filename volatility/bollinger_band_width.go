@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -19,17 +20,21 @@ import (
 //
 //	Band Width = (Upper Band - Lower Band) / Middle BollingerBandWidth
 //
+// If the middle band (an SMA of the closing price) is zero — only
+// possible for a zero-priced instrument, an extremely unlikely
+// real-world scenario — Band Width falls back to 0 instead of NaN/Inf.
+//
 // Example:
 //
 //	bbw := NewBollingerBandWidth[float64]()
 //	bbw.Compute(c)
-type BollingerBandWidth[T helper.Number] struct {
+type BollingerBandWidth[T helper.Float] struct {
 	// Bollinger bands.
 	BollingerBands *BollingerBands[T]
 }
 
 // NewBollingerBandWidth function initializes a new Bollinger Band Width instance with the default parameters.
-func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T] {
+func NewBollingerBandWidth[T helper.Float]() *BollingerBandWidth[T] {
 	return &BollingerBandWidth[T]{
 		BollingerBands: NewBollingerBands[T](),
 	}
@@ -39,14 +44,19 @@ func NewBollingerBandWidth[T helper.Number]() *BollingerBandWidth[T] {
 func (b *BollingerBandWidth[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	upper, middle, lower := b.BollingerBands.ComputeWithContext(ctx, c)
 
-	return helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower),
-		middle,
-	)
+	return helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, upper, lower), middle, func(diff, middle T) T {
+		return helper.SafeDivide(diff, middle, T(0))
+	})
 }
 
 // IdlePeriod is the initial period that Bollinger Band Width won't yield any results.
 func (b *BollingerBandWidth[T]) IdlePeriod() int {
 	return b.BollingerBands.IdlePeriod()
+}
+
+// String is the string representation of the Bollinger Band Width.
+func (b *BollingerBandWidth[T]) String() string {
+	return fmt.Sprintf("BBW(%d)", b.BollingerBands.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

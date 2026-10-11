@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -44,6 +44,44 @@ func TestWma(t *testing.T) {
 	err = helper.CheckEquals(actualWma3, expectedWma3, actualWma5, expectedWma5)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestWmaWeightsNewestHighest is an independent hand-computed reference check
+// that the most recent value gets the highest weight, not the oldest. A prior
+// bug assigned weight N to the oldest value and weight 1 to the newest,
+// inverting the formula; this pins the correct direction so it can't
+// regress silently even if a test fixture is wrong.
+func TestWmaWeightsNewestHighest(t *testing.T) {
+	// values = [1, 2, 3] (3 is newest), period = 3.
+	// Correct WMA = (1*1 + 2*2 + 3*3) / (1+2+3) = 14/6.
+	// The inverted (buggy) formula would give (1*3 + 2*2 + 3*1) / 6 = 10/6.
+	values := helper.SliceToChan([]float64{1, 2, 3})
+
+	wma := trend.NewWmaWith[float64](3)
+	actual := helper.ChanToSlice(wma.Compute(values))
+
+	if len(actual) != 1 {
+		t.Fatalf("expected 1 value, got %d", len(actual))
+	}
+
+	expected := 14.0 / 6.0
+	if diff := actual[0] - expected; diff > 1e-9 || diff < -1e-9 {
+		t.Fatalf("actual %v expected %v (newest value must carry the highest weight)", actual[0], expected)
+	}
+}
+
+func TestNewWma(t *testing.T) {
+	wma := trend.NewWma[float64]()
+	if wma.Period != trend.DefaultWmaPeriod {
+		t.Fatalf("actual %v expected %v", wma.Period, trend.DefaultWmaPeriod)
+	}
+}
+
+func TestNewWmaWithPeriod(t *testing.T) {
+	wma := trend.NewWmaWithPeriod[float64](10)
+	if wma.Period != 10 {
+		t.Fatalf("actual %v expected %v", wma.Period, 10)
 	}
 }
 

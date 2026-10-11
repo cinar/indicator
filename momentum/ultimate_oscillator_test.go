@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -39,5 +39,32 @@ func TestUltimateOscillator(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestUltimateOscillatorFlatMarket verifies that UltimateOscillator returns its neutral value of
+// 50 instead of NaN when there is no true range at all across the lookback windows (a flat
+// market with no price movement).
+func TestUltimateOscillatorFlatMarket(t *testing.T) {
+	uo := momentum.NewUltimateOscillator[float64]()
+
+	bars := uo.IdlePeriod() + 20
+	flat := make([]float64, bars)
+	for i := range flat {
+		flat[i] = 100
+	}
+
+	inputs := helper.Duplicate(helper.SliceToChan(flat), 3)
+
+	actual := helper.ChanToSlice(uo.Compute(inputs[0], inputs[1], inputs[2]))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one UO value")
+	}
+
+	for _, v := range actual {
+		if v != 50 {
+			t.Fatalf("expected UO of 50 for flat market, got %v", v)
+		}
 	}
 }

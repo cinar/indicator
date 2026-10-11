@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -28,7 +29,7 @@ const (
 //
 //	stochasticRsi := momentum.NewStochasticRsi[float64]()
 //	result := stochasticRsi.Compute(closings)
-type StochasticRsi[T helper.Number] struct {
+type StochasticRsi[T helper.Float] struct {
 	// Rsi is that RSI instance.
 	Rsi *Rsi[T]
 
@@ -40,12 +41,12 @@ type StochasticRsi[T helper.Number] struct {
 }
 
 // NewStochasticRsi function initializes a new Storchastic RSI instance with the default parameters.
-func NewStochasticRsi[T helper.Number]() *StochasticRsi[T] {
+func NewStochasticRsi[T helper.Float]() *StochasticRsi[T] {
 	return NewStochasticRsiWithPeriod[T](DefaultStochasticRsiPeriod)
 }
 
 // NewStochasticRsiWithPeriod function initializes a new Stochastic RSI instance with the given period.
-func NewStochasticRsiWithPeriod[T helper.Number](period int) *StochasticRsi[T] {
+func NewStochasticRsiWithPeriod[T helper.Float](period int) *StochasticRsi[T] {
 	return &StochasticRsi[T]{
 		Rsi: NewRsiWithPeriod[T](period),
 		Min: trend.NewMovingMinWithPeriod[T](period),
@@ -81,6 +82,11 @@ func (s *StochasticRsi[T]) ComputeWithContext(ctx context.Context, closings <-ch
 // IdlePeriod is the initial period that Stochasic RSI won't yield any results.
 func (s *StochasticRsi[T]) IdlePeriod() int {
 	return s.Rsi.IdlePeriod() + s.Min.IdlePeriod()
+}
+
+// String is the string representation of the Stochastic RSI.
+func (s *StochasticRsi[T]) String() string {
+	return fmt.Sprintf("STOCHRSI(%d)", s.Min.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

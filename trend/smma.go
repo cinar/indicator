@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -28,18 +28,18 @@ const (
 //	smma.Period = 10
 //
 //	result := smma.Compute(c)
-type Smma[T helper.Number] struct {
+type Smma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewSmma function initializes a new SMMA instance with the default parameters.
-func NewSmma[T helper.Number]() *Smma[T] {
+func NewSmma[T helper.Float]() *Smma[T] {
 	return NewSmmaWithPeriod[T](DefaultSmmaPeriod)
 }
 
 // NewSmmaWithPeriod function initializes a new SMMA instance with the given period.
-func NewSmmaWithPeriod[T helper.Number](period int) *Smma[T] {
+func NewSmmaWithPeriod[T helper.Float](period int) *Smma[T] {
 	return &Smma[T]{
 		Period: period,
 	}

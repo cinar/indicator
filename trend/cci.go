@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -25,21 +26,21 @@ const (
 //
 // Example:
 //
-//	cmi := trend.NewCmi()
-//	cmi.Period = 20
-//	values = cmi.Compute(highs, lows, closings)
-type Cci[T helper.Number] struct {
+//	cci := trend.NewCci[float64]()
+//	cci.Period = 20
+//	values = cci.Compute(highs, lows, closings)
+type Cci[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewCci function initializes a new CCI instance with the default parameters.
-func NewCci[T helper.Number]() *Cci[T] {
+func NewCci[T helper.Float]() *Cci[T] {
 	return NewCciWithPeriod[T](DefaultCciPeriod)
 }
 
 // NewCciWithPeriod function initializes a new CCI instance with the given period.
-func NewCciWithPeriod[T helper.Number](period int) *Cci[T] {
+func NewCciWithPeriod[T helper.Float](period int) *Cci[T] {
 	return &Cci[T]{
 		Period: period,
 	}
@@ -51,12 +52,12 @@ func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 	sma1 := NewSmaWithPeriod[T](c.Period)
 	sma2 := NewSmaWithPeriod[T](c.Period)
 
-	tps := helper.Duplicate[T](
+	tps := helper.DuplicateWithContext[T](ctx,
 		typicalPrice.ComputeWithContext(ctx, highs, lows, closings),
 		3,
 	)
 
-	mas := helper.Duplicate[T](
+	mas := helper.DuplicateWithContext[T](ctx,
 		sma1.ComputeWithContext(ctx, tps[0]),
 		2,
 	)
@@ -84,6 +85,11 @@ func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 // IdlePeriod is the initial period that CCI won't yield any results.
 func (c *Cci[T]) IdlePeriod() int {
 	return (c.Period * 2) - 2
+}
+
+// String is the string representation of the CCI.
+func (c *Cci[T]) String() string {
+	return fmt.Sprintf("CCI(%d)", c.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

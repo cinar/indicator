@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -17,7 +18,7 @@ import (
 //	EMA1 = EMA(values)
 //	EMA2 = EMA(EMA1)
 //	EMA3 = EMA(EMA2)
-type Tema[T helper.Number] struct {
+type Tema[T helper.Float] struct {
 	Ema1 *Ema[T]
 	Ema2 *Ema[T]
 	Ema3 *Ema[T]
@@ -25,7 +26,7 @@ type Tema[T helper.Number] struct {
 
 // NewTema function initializes a new TEMA instance
 // with the default parameters.
-func NewTema[T helper.Number]() *Tema[T] {
+func NewTema[T helper.Float]() *Tema[T] {
 	return &Tema[T]{
 		Ema1: NewEma[T](),
 		Ema2: NewEma[T](),
@@ -62,6 +63,11 @@ func (t *Tema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that TEMA won't yield any results.
 func (t *Tema[T]) IdlePeriod() int {
 	return t.Ema1.Period + t.Ema2.Period + t.Ema3.Period - 3
+}
+
+// String is the string representation of the TEMA.
+func (t *Tema[T]) String() string {
+	return fmt.Sprintf("TEMA(%d,%d,%d)", t.Ema1.Period, t.Ema2.Period, t.Ema3.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

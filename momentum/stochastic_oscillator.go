@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -26,11 +27,15 @@ const (
 //	K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 //	D = 3-Period SMA of K
 //
+// When the window is flat (Highest High == Lowest Low, i.e. price hasn't moved at all within the
+// window), %K is an undefined 0/0. It is treated as neutral (50), the midpoint of %K's own 0-100
+// scale, matching the flat-market convention established by Rsi.
+//
 // Example:
 //
-//	so := momentum.StochasticOscillator[float64]()
-//	k, d := wr.Compute(highs, lows, closings)
-type StochasticOscillator[T helper.Number] struct {
+//	so := momentum.NewStochasticOscillator[float64]()
+//	k, d := so.Compute(highs, lows, closings)
+type StochasticOscillator[T helper.Float] struct {
 	// Max is the Moving Max instance.
 	Max *trend.MovingMax[T]
 
@@ -42,7 +47,7 @@ type StochasticOscillator[T helper.Number] struct {
 }
 
 // NewStochasticOscillator function initializes a new Stochastic Oscillator instance.
-func NewStochasticOscillator[T helper.Number]() *StochasticOscillator[T] {
+func NewStochasticOscillator[T helper.Float]() *StochasticOscillator[T] {
 	return &StochasticOscillator[T]{
 		Max: trend.NewMovingMaxWithPeriod[T](DefaultStochasticOscillatorMaxAndMinPeriod),
 		Min: trend.NewMovingMinWithPeriod[T](DefaultStochasticOscillatorMaxAndMinPeriod),
@@ -54,19 +59,31 @@ func NewStochasticOscillator[T helper.Number]() *StochasticOscillator[T] {
 func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) (<-chan T, <-chan T) {
 	//	K = (Closing - Lowest Low) / (Highest High - Lowest Low) * 100
 	//	D = 3-Period SMA of K
+	maxIdlePeriod := s.Max.IdlePeriod()
+	minIdlePeriod := s.Min.IdlePeriod()
+
 	lowestSplice := helper.DuplicateWithContext(ctx, s.Min.ComputeWithContext(ctx, lows),
 		2,
 	)
 
 	highest := s.Max.ComputeWithContext(ctx, highs)
 
-	closings = helper.SkipWithContext(ctx, closings, s.Min.IdlePeriod())
+	// Max and Min are independently configurable, so their idle periods may differ. Align both
+	// branches on the larger of the two idle periods before combining them.
+	if maxIdlePeriod > minIdlePeriod {
+		lowestSplice[0] = helper.SkipWithContext(ctx, lowestSplice[0], maxIdlePeriod-minIdlePeriod)
+		lowestSplice[1] = helper.SkipWithContext(ctx, lowestSplice[1], maxIdlePeriod-minIdlePeriod)
+	} else if minIdlePeriod > maxIdlePeriod {
+		highest = helper.SkipWithContext(ctx, highest, minIdlePeriod-maxIdlePeriod)
+	}
 
-	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closings, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	),
+	closings = helper.SkipWithContext(ctx, closings, max(maxIdlePeriod, minIdlePeriod))
+
+	kSplice := helper.DuplicateWithContext(ctx, helper.Operate4WithContext(ctx, closings, lowestSplice[0], highest, lowestSplice[1], func(closing, low, high, low2 T) T {
+		denom := high - low2
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(closing-low, denom, T(0.5)) * 100
+	}),
 		2,
 	)
 
@@ -78,7 +95,12 @@ func (s *StochasticOscillator[T]) ComputeWithContext(ctx context.Context, highs,
 
 // IdlePeriod is the initial period that Stochastic Oscillator won't yield any results.
 func (s *StochasticOscillator[T]) IdlePeriod() int {
-	return s.Max.IdlePeriod() + s.Sma.IdlePeriod()
+	return max(s.Max.IdlePeriod(), s.Min.IdlePeriod()) + s.Sma.IdlePeriod()
+}
+
+// String is the string representation of the Stochastic Oscillator.
+func (s *StochasticOscillator[T]) String() string {
+	return fmt.Sprintf("STOCHOSC(%d,%d)", s.Max.Period, s.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

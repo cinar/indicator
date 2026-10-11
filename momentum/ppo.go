@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -32,9 +33,9 @@ const (
 //
 // Example:
 //
-//	ppo := momentum.Ppo[float64]()
+//	ppo := momentum.NewPpo[float64]()
 //	p, s, h := ppo.Compute(closings)
-type Ppo[T helper.Number] struct {
+type Ppo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -46,7 +47,7 @@ type Ppo[T helper.Number] struct {
 }
 
 // NewPpo function initializes a new Percentage Price Oscillator instance.
-func NewPpo[T helper.Number]() *Ppo[T] {
+func NewPpo[T helper.Float]() *Ppo[T] {
 	return &Ppo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultPpoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultPpoLongPeriod),
@@ -95,6 +96,11 @@ func (p *Ppo[T]) ComputeWithContext(ctx context.Context, closings <-chan T) (<-c
 // IdlePeriod is the initial period that Percentage Price Oscillator won't yield any results.
 func (p *Ppo[T]) IdlePeriod() int {
 	return p.LongEma.IdlePeriod() + p.SignalEma.IdlePeriod()
+}
+
+// String is the string representation of the PPO.
+func (p *Ppo[T]) String() string {
+	return fmt.Sprintf("PPO(%d,%d,%d)", p.ShortEma.Period, p.LongEma.Period, p.SignalEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

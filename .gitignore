@@ -8,8 +8,8 @@
 *.so
 *.dylib
 bin
-indicator-backtest
-indicator-sync
+/indicator-backtest
+/indicator-sync
 
 # Test binary, built with `go test -c`
 *.test

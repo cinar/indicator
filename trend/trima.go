@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -25,16 +26,22 @@ const (
 // If period is odd:
 //
 //	TRIMA = SMA((period + 1) / 2, SMA((period + 1) / 2, values))
-type Trima[T helper.Number] struct {
+type Trima[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewTrima function initializes a new TRIMA instance
 // with the default parameters.
-func NewTrima[T helper.Number]() *Trima[T] {
+func NewTrima[T helper.Float]() *Trima[T] {
+	return NewTrimaWithPeriod[T](DefaultTrimaPeriod)
+}
+
+// NewTrimaWithPeriod function initializes a new TRIMA instance
+// with the given period.
+func NewTrimaWithPeriod[T helper.Float](period int) *Trima[T] {
 	return &Trima[T]{
-		Period: DefaultTrimaPeriod,
+		Period: period,
 	}
 }
 
@@ -58,6 +65,11 @@ func (t *Trima[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T 
 func (t *Trima[T]) IdlePeriod() int {
 	period1, period2 := t.calculatePeriods()
 	return period1 + period2 - 2
+}
+
+// String is the string representation of the TRIMA.
+func (t *Trima[T]) String() string {
+	return fmt.Sprintf("TRIMA(%d)", t.Period)
 }
 
 // calculatePeriods calculates the individual periods to use based on the

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -35,5 +35,32 @@ func TestBollingerBandWidth(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestBollingerBandWidthZeroPricedInstrument(t *testing.T) {
+	length := volatility.DefaultBollingerBandsPeriod + 5
+	closings := make([]float64, length)
+
+	bbw := volatility.NewBollingerBandWidth[float64]()
+	actual := helper.ChanToSlice(bbw.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one value")
+	}
+
+	for i, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected band width 0 for zero-priced instrument at %d, got %v", i, v)
+		}
+	}
+}
+
+func TestBollingerBandWidthString(t *testing.T) {
+	expected := "BBW(20)"
+	actual := volatility.NewBollingerBandWidth[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

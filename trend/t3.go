@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,7 +6,6 @@ package trend
 
 import (
 	"fmt"
-	"math"
 
 	"context"
 
@@ -31,10 +30,13 @@ const (
 // where:
 //
 //	c1 = -a^3
-//	c2 = 3a^2
-//	c3 = -3a
-//	c4 = a^3
+//	c2 = 3a^2 + 3a^3
+//	c3 = -6a^2 - 3a - 3a^3
+//	c4 = 1 + 3a + 3a^2 + a^3
 //	a = volume factor
+//
+// The coefficients sum to 1 for any a, the way a weighted moving average's
+// must, so T3 reproduces a constant input exactly.
 //
 // Example:
 //
@@ -46,9 +48,6 @@ type T3[T helper.Float] struct {
 
 	// VolumeFactor is the volume factor for the T3 calculation.
 	VolumeFactor T
-
-	// ema1 through ema6 are the EMA instances for chaining.
-	ema1, ema2, ema3, ema4, ema5, ema6 *Ema[T]
 }
 
 // NewT3 function initializes a new T3 instance.
@@ -59,46 +58,58 @@ func NewT3[T helper.Float]() *T3[T] {
 // NewT3WithPeriodAndFactor function initializes a new T3 instance with
 // specified period and volume factor.
 func NewT3WithPeriodAndFactor[T helper.Float](period int, volumeFactor float64) *T3[T] {
-	t := &T3[T]{
+	return &T3[T]{
 		Period:       period,
 		VolumeFactor: T(volumeFactor),
 	}
-
-	// Create 6 chained EMA instances
-	t.ema1 = NewEmaWithPeriod[T](period)
-	t.ema2 = NewEmaWithPeriod[T](period)
-	t.ema3 = NewEmaWithPeriod[T](period)
-	t.ema4 = NewEmaWithPeriod[T](period)
-	t.ema5 = NewEmaWithPeriod[T](period)
-	t.ema6 = NewEmaWithPeriod[T](period)
-
-	return t
 }
 
 // ComputeWithContext function takes a channel of numbers and computes the T3 Moving Average.
 func (t *T3[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T {
-	// Chain 6 EMAs
-	ema1 := t.ema1.ComputeWithContext(ctx, closings)
-	ema2 := t.ema2.ComputeWithContext(ctx, ema1)
-	ema3 := t.ema3.ComputeWithContext(ctx, ema2)
-	ema4 := t.ema4.ComputeWithContext(ctx, ema3)
-	ema5 := t.ema5.ComputeWithContext(ctx, ema4)
-	ema6 := t.ema6.ComputeWithContext(ctx, ema5)
+	// The 6 chained EMA instances are built here, from the current Period,
+	// rather than cached on T3 at construction time, so that changing
+	// Period after construction (and before Compute) is honored instead of
+	// silently computing against a stale period.
+	//
+	// Chain 6 EMAs. ema3, ema4, and ema5 each feed the next EMA in the
+	// chain *and* are used directly below in the weighted sum, so each
+	// needs its own duplicated copy for the second use -- a single
+	// channel only has one consumer's worth of values to give out.
+	ema1 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, closings)
+	ema2 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema1)
 
-	// Calculate coefficients based on volume factor
+	ema3Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema2), 2)
+	ema4Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema3Splice[0]), 2)
+	ema5Splice := helper.DuplicateWithContext(ctx, NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema4Splice[0]), 2)
+	ema6 := NewEmaWithPeriod[T](t.Period).ComputeWithContext(ctx, ema5Splice[0])
+
+	// Each EMA only starts yielding once it has Period-1 more inputs than
+	// it was given, so ema3/ema4/ema5's channels run ahead of ema6's by
+	// 3/2/1 EMA delays respectively. Skip that many off each so that,
+	// read in lockstep with ema6, they land on the same closing.
+	idle := t.Period - 1
+	ema3Aligned := helper.SkipWithContext(ctx, ema3Splice[1], 3*idle)
+	ema4Aligned := helper.SkipWithContext(ctx, ema4Splice[1], 2*idle)
+	ema5Aligned := helper.SkipWithContext(ctx, ema5Splice[1], idle)
+
+	// Calculate coefficients based on volume factor. These sum to 1 for
+	// any a (verify: -a^3 + 3a^2+3a^3 -6a^2-3a-3a^3 + 1+3a+3a^2+a^3 = 1),
+	// as required of a weighted moving average.
 	a := float64(t.VolumeFactor)
-	c1 := -math.Pow(a, 3)
-	c2 := 3 * math.Pow(a, 2)
-	c3 := -3 * a
-	c4 := math.Pow(a, 3)
+	a2 := a * a
+	a3 := a2 * a
+	c1 := -a3
+	c2 := 3*a2 + 3*a3
+	c3 := -6*a2 - 3*a - 3*a3
+	c4 := 1 + 3*a + 3*a2 + a3
 
 	// T3 = c1*EMA6 + c2*EMA6(EMA6) + c3*EMA6(EMA6(EMA6)) + c4*EMA6(EMA6(EMA6(EMA6)))
 	// Which is: c1*ema6 + c2*ema5 + c3*ema4 + c4*ema3
 	result := helper.AddWithContext(ctx, helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, ema6, T(c1)),
-		helper.MultiplyByWithContext(ctx, ema5, T(c2)),
+		helper.MultiplyByWithContext(ctx, ema5Aligned, T(c2)),
 	),
-		helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, ema4, T(c3)),
-			helper.MultiplyByWithContext(ctx, ema3, T(c4)),
+		helper.AddWithContext(ctx, helper.MultiplyByWithContext(ctx, ema4Aligned, T(c3)),
+			helper.MultiplyByWithContext(ctx, ema3Aligned, T(c4)),
 		),
 	)
 

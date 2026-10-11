@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -14,7 +14,7 @@ import (
 // Example:
 //
 //	c := helper.SliceToChan([]int{-10, 20, 4, -5})
-//	negatives := helper.KeepPositives(c)
+//	negatives := helper.KeepNegatives(c)
 //	fmt.Println(helper.ChanToSlice(negatives)) // [-10, 0, 0, -5]
 func KeepNegativesWithContext[T Number](ctx context.Context, c <-chan T) <-chan T {
 	return ApplyWithContext(ctx, c, func(n T) T {

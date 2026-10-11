@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -43,5 +43,14 @@ func TestPpo(t *testing.T) {
 	err = helper.CheckEquals(actualPpo, expectedPpo, actualSignal, expectedSignal, actualHistogram, expectedHistogram)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestPpoString(t *testing.T) {
+	expected := "PPO(12,26,9)"
+	actual := momentum.NewPpo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

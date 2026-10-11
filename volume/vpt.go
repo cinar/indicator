@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -40,6 +40,11 @@ func (i *Vpt[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 // IdlePeriod is the initial period that VPT won't yield any results.
 func (*Vpt[T]) IdlePeriod() int {
 	return 1
+}
+
+// String is the string representation of the VPT.
+func (*Vpt[T]) String() string {
+	return "VPT"
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

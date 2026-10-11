@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -15,10 +15,10 @@ import (
 // filter for moving average systems.
 //
 //	Typical Price = (High + Low + Closing) / 3
-type TypicalPrice[T helper.Number] struct{}
+type TypicalPrice[T helper.Float] struct{}
 
 // NewTypicalPrice function initializes a new Typical Price instance with the default parameters.
-func NewTypicalPrice[T helper.Number]() *TypicalPrice[T] {
+func NewTypicalPrice[T helper.Float]() *TypicalPrice[T] {
 	return &TypicalPrice[T]{}
 }
 
@@ -29,6 +29,16 @@ func (i *TypicalPrice[T]) ComputeWithContext(ctx context.Context, high, low, clo
 	),
 		3,
 	)
+}
+
+// IdlePeriod is the initial period that Typical Price won't yield any results.
+func (*TypicalPrice[T]) IdlePeriod() int {
+	return 0
+}
+
+// String is the string representation of the Typical Price.
+func (*TypicalPrice[T]) String() string {
+	return "Typical Price"
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

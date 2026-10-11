@@ -1,11 +1,14 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package asset_test
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
+	"os"
 	"path"
 	"reflect"
 	"testing"
@@ -19,7 +22,28 @@ var repositoryBase = "testdata/repository"
 
 func TestFileSystemRepositoryAssets(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
-	expected := []string{"brk-b"}
+	expected := []string{"brk-b", "empty"}
+
+	actual, err := repository.Assets()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("actual %v expected %v", actual, expected)
+	}
+}
+
+func TestFileSystemRepositoryAssetsSkipsDirectories(t *testing.T) {
+	repository := asset.NewFileSystemRepository(repositoryBase)
+	expected := []string{"brk-b", "empty"}
+
+	dirName := path.Join(repositoryBase, "subdir.csv")
+
+	if err := os.Mkdir(dirName, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	defer helper.RemoveAll(t, dirName)
 
 	actual, err := repository.Assets()
 	if err != nil {
@@ -109,8 +133,8 @@ func TestFileSystemRepositoryLastDateNonExisting(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
 
 	_, err := repository.LastDate("brk")
-	if err == nil {
-		t.Fatal("expected error")
+	if !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("expected fs.ErrNotExist, got %v", err)
 	}
 }
 
@@ -118,8 +142,8 @@ func TestFileSystemRepositoryLastDateEmpty(t *testing.T) {
 	repository := asset.NewFileSystemRepository(repositoryBase)
 
 	_, err := repository.LastDate("empty")
-	if err == nil {
-		t.Fatal("expected error")
+	if !errors.Is(err, asset.ErrRepositoryAssetEmpty) {
+		t.Fatalf("expected ErrRepositoryAssetEmpty, got %v", err)
 	}
 }
 

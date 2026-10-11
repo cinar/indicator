@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -37,14 +38,19 @@ const (
 //
 //	UpTrend = If (SuperTrend == FinalUpperBand) Then True Else False
 //
+// By default, the underlying ATR is smoothed using HMA (Hull Moving Average) rather than the more
+// textbook SMA/RMA, so that Super Trend reacts faster to price changes. This comes at the cost of a
+// longer idle period, e.g. 17 for a period of 14, versus 14 for a textbook SMA-based ATR of the same
+// period. Use NewSuperTrendWithMa to use a different moving average, such as SMA or RMA.
+//
 // Example:
-type SuperTrend[T helper.Number] struct {
+type SuperTrend[T helper.Float] struct {
 	Atr        *Atr[T]
 	Multiplier T
 }
 
 // NewSuperTrend function initializes a new Super Trend instance with the default parameters.
-func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
+func NewSuperTrend[T helper.Float]() *SuperTrend[T] {
 	multiplier := DefaultSuperTrendMultiplier
 
 	return NewSuperTrendWithPeriod[T](
@@ -54,7 +60,11 @@ func NewSuperTrend[T helper.Number]() *SuperTrend[T] {
 }
 
 // NewSuperTrendWithPeriod initializes a new Super Trend instance with the given period and multiplier.
-func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTrend[T] {
+//
+// The ATR used internally is built with HMA smoothing (not the textbook SMA/RMA), which increases
+// the effective idle period, e.g. 17 rather than 14 for the default period of 14. Use
+// NewSuperTrendWithMa directly if a different moving average, such as SMA or RMA, is desired.
+func NewSuperTrendWithPeriod[T helper.Float](period int, multiplier T) *SuperTrend[T] {
 	return NewSuperTrendWithMa[T](
 		trend.NewHmaWithPeriod[T](period),
 		multiplier,
@@ -63,7 +73,7 @@ func NewSuperTrendWithPeriod[T helper.Number](period int, multiplier T) *SuperTr
 
 // NewSuperTrendWithMa function initializes a new Super Trend instance with the given moving average instance
 // and multiplier.
-func NewSuperTrendWithMa[T helper.Number](ma trend.Ma[T], multiplier T) *SuperTrend[T] {
+func NewSuperTrendWithMa[T helper.Float](ma trend.Ma[T], multiplier T) *SuperTrend[T] {
 	return &SuperTrend[T]{
 		Atr:        NewAtrWithMa(ma),
 		Multiplier: multiplier,
@@ -160,6 +170,11 @@ func (s *SuperTrend[T]) ComputeWithContext(ctx context.Context, highs, lows, clo
 // IdlePeriod is the initial period that Super Trend won't yield any results.
 func (s *SuperTrend[T]) IdlePeriod() int {
 	return s.Atr.IdlePeriod()
+}
+
+// String is the string representation of the Super Trend.
+func (s *SuperTrend[T]) String() string {
+	return fmt.Sprintf("SUPERTREND(%s,%v)", s.Atr.Ma.String(), s.Multiplier)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

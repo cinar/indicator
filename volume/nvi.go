@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -18,7 +19,7 @@ const (
 // Nvi holds configuration parameters for calculating the Negative Volume Index (NVI). It is a cumulative
 // indicator using the change in volume to decide when the smart money is active.
 //
-// If Volume is greather than Previous Volume:
+// If Volume is greater than Previous Volume:
 //
 //	NVI = Previous NVI
 //
@@ -52,7 +53,7 @@ func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 	previous := n.Initial
 
 	return helper.OperateWithContext(ctx, closingRatios, volumeChanges, func(closingRatio, volumeChange T) T {
-		// If Volume is greather than Previous Volume:
+		// If Volume is greater than Previous Volume:
 		//	NVI = Previous NVI
 		current := previous
 
@@ -70,6 +71,11 @@ func (n *Nvi[T]) ComputeWithContext(ctx context.Context, closings, volumes <-cha
 // IdlePeriod is the initial period that NVI won't yield any results.
 func (*Nvi[T]) IdlePeriod() int {
 	return 1
+}
+
+// String is the string representation of the NVI.
+func (n *Nvi[T]) String() string {
+	return fmt.Sprintf("NVI(%v)", n.Initial)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -24,7 +24,7 @@ type SplitStrategy struct {
 	SellStrategy Strategy
 }
 
-// NewSplitStrategy function initializes a new split strategy with the given parameters.
+// NewSplitStrategy initializes an example SplitStrategy instance with default parameters.
 func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy {
 	return &SplitStrategy{
 		BuyStrategy:  buyStrategy,
@@ -32,19 +32,24 @@ func NewSplitStrategy(buyStrategy, sellStrategy Strategy) *SplitStrategy {
 	}
 }
 
-// Name returns the name of the strategy.
+// Name returns the name of the example strategy.
 func (s *SplitStrategy) Name() string {
 	return fmt.Sprintf("SplitStrategy(%s, %s)", s.BuyStrategy.Name(), s.SellStrategy.Name())
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+// String is the string representation of the SplitStrategy.
+func (s *SplitStrategy) String() string {
+	return s.Name()
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
 	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 2)
 
-	buyActions := ComputeStrategyWithContext(ctx, s.BuyStrategy, snapshotsSplice[0])
-	sellActions := ComputeStrategyWithContext(ctx, s.SellStrategy, snapshotsSplice[1])
+	buyActions := ComputeWithContext(ctx, s.BuyStrategy, snapshotsSplice[0])
+	sellActions := ComputeWithContext(ctx, s.SellStrategy, snapshotsSplice[1])
 
 	go func() {
 		defer close(result)
@@ -92,7 +97,7 @@ func (s *SplitStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan
 	return result
 }
 
-// Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 func (s *SplitStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 

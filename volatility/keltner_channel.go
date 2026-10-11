@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -26,9 +27,9 @@ const (
 //
 // Example:
 //
-//	dc := volatility.NewKeltnerChannel[float64]()
-//	result := dc.Compute(highs, lows, closings)
-type KeltnerChannel[T helper.Number] struct {
+//	kc := volatility.NewKeltnerChannel[float64]()
+//	result := kc.Compute(highs, lows, closings)
+type KeltnerChannel[T helper.Float] struct {
 	// Atr is the ATR instance.
 	Atr *Atr[T]
 
@@ -37,12 +38,12 @@ type KeltnerChannel[T helper.Number] struct {
 }
 
 // NewKeltnerChannel function initializes a new Keltner Channel instance with the default parameters.
-func NewKeltnerChannel[T helper.Number]() *KeltnerChannel[T] {
+func NewKeltnerChannel[T helper.Float]() *KeltnerChannel[T] {
 	return NewKeltnerChannelWithPeriod[T](DefaultKeltnerChannelPeriod)
 }
 
 // NewKeltnerChannelWithPeriod function initializes a new Keltner Channel instance with the given period.
-func NewKeltnerChannelWithPeriod[T helper.Number](period int) *KeltnerChannel[T] {
+func NewKeltnerChannelWithPeriod[T helper.Float](period int) *KeltnerChannel[T] {
 	return &KeltnerChannel[T]{
 		Atr: NewAtrWithPeriod[T](period),
 		Ema: trend.NewEmaWithPeriod[T](period),
@@ -79,6 +80,11 @@ func (k *KeltnerChannel[T]) ComputeWithContext(ctx context.Context, highs, lows,
 // IdlePeriod is the initial period that Keltner Channel won't yield any results.
 func (k *KeltnerChannel[T]) IdlePeriod() int {
 	return k.Atr.IdlePeriod()
+}
+
+// String is the string representation of the Keltner Channel.
+func (k *KeltnerChannel[T]) String() string {
+	return fmt.Sprintf("KC(%d)", k.Ema.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

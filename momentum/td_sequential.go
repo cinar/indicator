@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -25,8 +26,13 @@ const (
 )
 
 // TdSequential represents the configuration parameters for calculating the
-// Tom DeMark's TD Sequential indicator. TD Sequential is a momentum indicator
-// that identifies potential trend exhaustion and reversals.
+// Sequential exhaustion momentum indicator (commonly referred to in technical analysis
+// as TD Sequential). TD Sequential is a momentum indicator that identifies potential
+// trend exhaustion and reversals.
+//
+// Trademark Notice: TD Sequential® is a registered trademark of DeMark Analytics, LLC.
+// This implementation is an independent mathematical algorithm developed for educational
+// and research purposes and is not affiliated with, sponsored by, or endorsed by DeMark Analytics, LLC.
 //
 // The indicator consists of two phases:
 //
@@ -101,9 +107,20 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 
 		var currentBuySetup, currentSellSetup T
 		var buyCountdownCount, sellCountdownCount int
+		var historyCount int
 		inBuyCountdown := false
 		inSellCountdown := false
-		closeHistory := make([]T, 0, t.Lookback+t.CountdownLookback+1)
+
+		// closeHistory only ever needs to answer "what was the close
+		// maxLookback bars ago", so a bounded ring is enough. Growing an
+		// ever-appended slice here would leak memory on a long-running
+		// stream.
+		maxLookback := t.Lookback
+		if t.CountdownLookback > maxLookback {
+			maxLookback = t.CountdownLookback
+		}
+		historySize := maxLookback + 1
+		closeHistory := helper.NewRing[T](historySize)
 
 		for {
 			select {
@@ -123,8 +140,17 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 				}
 			}
 
-			closeHistory = append(closeHistory, current)
-			if len(closeHistory) <= t.Lookback {
+			closeHistory.Put(current)
+
+			// historyCount tracks how many bars the ring has ever seen,
+			// saturating at historySize once the ring is full, so that it
+			// mirrors the ring's own notion of how many elements are
+			// currently addressable via At.
+			if historyCount < historySize {
+				historyCount++
+			}
+
+			if historyCount <= t.Lookback {
 				select {
 				case <-ctx.Done():
 					return
@@ -148,14 +174,17 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 				continue
 			}
 
-			prevClose := closeHistory[len(closeHistory)-1-t.Lookback]
+			prevClose, _ := closeHistory.At(historyCount - 1 - t.Lookback)
 
 			// Setup phase - buy (close < close 4 bars ago)
 			if lessThan(current, prevClose) {
-				if float64(currentBuySetup) >= 0 {
-					currentBuySetup = T(float64(currentBuySetup) + 1)
-				} else {
-					currentBuySetup = 1
+				// Hold steady once the count reaches SetupPeriod instead of counting past it.
+				if float64(currentBuySetup) < float64(t.SetupPeriod) {
+					if float64(currentBuySetup) >= 0 {
+						currentBuySetup = T(float64(currentBuySetup) + 1)
+					} else {
+						currentBuySetup = 1
+					}
 				}
 			} else {
 				currentBuySetup = 0
@@ -163,10 +192,13 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 
 			// Setup phase - sell (close > close 4 bars ago)
 			if greaterThan(current, prevClose) {
-				if float64(currentSellSetup) <= 0 {
-					currentSellSetup = T(float64(currentSellSetup) - 1)
-				} else {
-					currentSellSetup = -1
+				// Hold steady once the count reaches -SetupPeriod instead of counting past it.
+				if float64(currentSellSetup) > -float64(t.SetupPeriod) {
+					if float64(currentSellSetup) <= 0 {
+						currentSellSetup = T(float64(currentSellSetup) - 1)
+					} else {
+						currentSellSetup = -1
+					}
 				}
 			} else {
 				currentSellSetup = 0
@@ -180,10 +212,20 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 				inSellCountdown = true
 			}
 
+			// A completed setup cancels any in-progress countdown in the opposite direction.
+			if float64(currentSellSetup) <= -float64(t.SetupPeriod) {
+				inBuyCountdown = false
+				buyCountdownCount = 0
+			}
+			if float64(currentBuySetup) >= float64(t.SetupPeriod) {
+				inSellCountdown = false
+				sellCountdownCount = 0
+			}
+
 			// Countdown phase - buy (close <= close 2 bars ago)
 			if inBuyCountdown && buyCountdownCount < t.CountdownPeriod {
-				if len(closeHistory) > t.CountdownLookback {
-					cdPrevClose := closeHistory[len(closeHistory)-1-t.CountdownLookback]
+				if historyCount > t.CountdownLookback {
+					cdPrevClose, _ := closeHistory.At(historyCount - 1 - t.CountdownLookback)
 					if lessOrEqual(current, cdPrevClose) {
 						buyCountdownCount++
 					}
@@ -192,8 +234,8 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 
 			// Countdown phase - sell (close >= close 2 bars ago)
 			if inSellCountdown && sellCountdownCount < t.CountdownPeriod {
-				if len(closeHistory) > t.CountdownLookback {
-					cdPrevClose := closeHistory[len(closeHistory)-1-t.CountdownLookback]
+				if historyCount > t.CountdownLookback {
+					cdPrevClose, _ := closeHistory.At(historyCount - 1 - t.CountdownLookback)
 					if greaterOrEqual(current, cdPrevClose) {
 						sellCountdownCount++
 					}
@@ -246,4 +288,9 @@ func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan
 // IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
 func (t *TdSequential[T]) IdlePeriod() int {
 	return t.Lookback + t.SetupPeriod + t.CountdownPeriod
+}
+
+// String is the string representation of the TD Sequential.
+func (t *TdSequential[T]) String() string {
+	return fmt.Sprintf("TDSEQUENTIAL(%d,%d,%d,%d)", t.Lookback, t.CountdownLookback, t.SetupPeriod, t.CountdownPeriod)
 }

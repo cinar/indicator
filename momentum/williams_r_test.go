@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -39,5 +39,40 @@ func TestWilliamsR(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestWilliamsRDifferentMaxMinPeriods verifies that WilliamsR correctly aligns the Max and Min
+// branches when they are independently configured with different periods, rather than assuming
+// Max.IdlePeriod() == Min.IdlePeriod(). Expected values were derived by hand (and cross-checked
+// with an independent reference calculation) for this small synthetic input.
+func TestWilliamsRDifferentMaxMinPeriods(t *testing.T) {
+	highs := helper.SliceToChan([]float64{10, 12, 11, 15, 14, 16})
+	lows := helper.SliceToChan([]float64{5, 6, 4, 7, 8, 9})
+	closings := helper.SliceToChan([]float64{8, 9, 7, 10, 11, 12})
+
+	wr := momentum.NewWilliamsR[float64]()
+	wr.Max.Period = 2
+	wr.Min.Period = 3
+
+	if wr.IdlePeriod() != 2 {
+		t.Fatalf("actual idle period %v expected %v", wr.IdlePeriod(), 2)
+	}
+
+	actual := helper.RoundDigits(wr.Compute(highs, lows, closings), 2)
+	expected := helper.SliceToChan([]float64{-62.5, -45.45, -36.36, -44.44})
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestWilliamsRString(t *testing.T) {
+	expected := "WILLIAMSR(14)"
+	actual := momentum.NewWilliamsR[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -18,11 +18,11 @@ import (
 //
 //	weightedClose := trend.NewWeightedClose[float64]()
 //	result := weightedClose.Compute(highs, lows, closes)
-type WeightedClose[T helper.Number] struct {
+type WeightedClose[T helper.Float] struct {
 }
 
 // NewWeightedClose function initializes a new Weighted Close instance with the default parameters.
-func NewWeightedClose[T helper.Number]() *WeightedClose[T] {
+func NewWeightedClose[T helper.Float]() *WeightedClose[T] {
 	return &WeightedClose[T]{}
 }
 

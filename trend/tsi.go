@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -27,11 +27,16 @@ const (
 //	APCDS = Ema(13, Ema(25, Abs(Current - Prior)))
 //	TSI = (PCDS / APCDS) * 100
 //
+// APCDS (the smoothed absolute price change) is zero only when price has
+// been perfectly flat, in which case there is no momentum to report; TSI is
+// defined as 0, its neutral center on the signed -100 to 100 scale, instead
+// of propagating a 0/0 NaN.
+//
 // Example:
 //
 //	tsi := trend.NewTsi[float64]()
 //	result := tsi.Compute(closings)
-type Tsi[T helper.Number] struct {
+type Tsi[T helper.Float] struct {
 	// FirstSmoothing is the first smoothing moving average.
 	FirstSmoothing Ma[T]
 
@@ -40,7 +45,7 @@ type Tsi[T helper.Number] struct {
 }
 
 // NewTsi function initializes a new TSI instance with the default parameters.
-func NewTsi[T helper.Number]() *Tsi[T] {
+func NewTsi[T helper.Float]() *Tsi[T] {
 	return NewTsiWith[T](
 		DefaultTsiFirstSmoothingPeriod,
 		DefaultTsiSecondSmoothingPeriod,
@@ -48,7 +53,7 @@ func NewTsi[T helper.Number]() *Tsi[T] {
 }
 
 // NewTsiWith function initializes a new TSI instance with the given parameters.
-func NewTsiWith[T helper.Number](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T] {
+func NewTsiWith[T helper.Float](firstSmoothingPeriod, secondSmoothingPeriod int) *Tsi[T] {
 	return &Tsi[T]{
 		FirstSmoothing:  NewEmaWithPeriod[T](firstSmoothingPeriod),
 		SecondSmoothing: NewEmaWithPeriod[T](secondSmoothingPeriod),
@@ -63,19 +68,15 @@ func (t *Tsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-ch
 	)
 
 	//	PCDS = Ema(13, Ema(25, (Current - Prior)))
-	pcds := ComputeMaWithContext(ctx, t.FirstSmoothing, ComputeMaWithContext(ctx, t.SecondSmoothing, pcsSplice[0]))
+	pcds := ComputeMaWithContext(ctx, t.SecondSmoothing, ComputeMaWithContext(ctx, t.FirstSmoothing, pcsSplice[0]))
 
 	// APCDS = Ema(13, Ema(25, Abs(Current - Prior)))
-	apcds := ComputeMaWithContext(ctx, t.FirstSmoothing, ComputeMaWithContext(ctx, t.SecondSmoothing, helper.AbsWithContext(ctx, pcsSplice[1])))
+	apcds := ComputeMaWithContext(ctx, t.SecondSmoothing, ComputeMaWithContext(ctx, t.FirstSmoothing, helper.AbsWithContext(ctx, pcsSplice[1])))
 
 	// TSI = (PCDS / APCDS) * 100
-	tsi := helper.MultiplyByWithContext(ctx,
-		helper.DivideWithContext(ctx,
-			pcds,
-			apcds,
-		),
-		T(100),
-	)
+	tsi := helper.OperateWithContext(ctx, pcds, apcds, func(pcd, apcd T) T {
+		return helper.SafeDivide(pcd, apcd, T(0)) * T(100)
+	})
 
 	return tsi
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,7 +6,9 @@ package helper
 
 import "slices"
 
-// CommonPeriod calculates the smallest period at which all data channels can be synchronized
+// CommonPeriod calculates the largest period at which all data channels can be synchronized,
+// so that every channel has warmed up (skipped its own idle period) before values are compared.
+// It returns 0 for empty input.
 //
 // Example:
 //
@@ -22,6 +24,10 @@ import "slices"
 //	// Synchronize the third channel
 //	c3 := helper.Sync(commonPeriod, 3, c3)
 func CommonPeriod(periods ...int) int {
+	if len(periods) == 0 {
+		return 0
+	}
+
 	return slices.Max(periods)
 }
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -33,16 +34,23 @@ const (
 //	EMA2 = EMA(values, slowPeriod)
 //	MACD = EMA1 - EMA2
 //
-//	%K = Stochastic %K of MACD with kPeriod
-//	%D = Stochastic %D of MACD with dPeriod
+//	%K1, %D1 = Stochastic(MACD, kPeriod, dPeriod)
+//	%K2, %D2 = Stochastic(%D1, kPeriod, dPeriod)
 //
-//	STC = 100 * (MACD - %K) / (%D - %K)
+//	STC = %D2
+//
+// The Stochastic pass (rolling-min/max normalization to a 0-100 range,
+// then smoothed by an SMA) is applied twice, once to MACD and again to
+// the first pass's %D, the way the standard Schaff Trend Cycle algorithm
+// double-smooths MACD -- not once to MACD with a second division against
+// its own %K/%D, which isn't bounded to 0-100 and can divide by a
+// near-zero denominator.
 //
 // Example:
 //
 //	stc := trend.NewStc[float64]()
 //	result := stc.Compute(closings)
-type Stc[T helper.Number] struct {
+type Stc[T helper.Float] struct {
 	// FastPeriod is the period for the fast EMA.
 	FastPeriod int
 
@@ -63,7 +71,7 @@ type Stc[T helper.Number] struct {
 }
 
 // NewStc function initializes a new STC instance with the default parameters.
-func NewStc[T helper.Number]() *Stc[T] {
+func NewStc[T helper.Float]() *Stc[T] {
 	return NewStcWithPeriod[T](
 		DefaultStcFastPeriod,
 		DefaultStcSlowPeriod,
@@ -73,7 +81,7 @@ func NewStc[T helper.Number]() *Stc[T] {
 }
 
 // NewStcWithPeriod function initializes a new STC instance with the given periods.
-func NewStcWithPeriod[T helper.Number](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T] {
+func NewStcWithPeriod[T helper.Float](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T] {
 	apo := NewApo[T]()
 	apo.FastPeriod = fastPeriod
 	apo.SlowPeriod = slowPeriod
@@ -96,44 +104,27 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	c = helper.BufferedWithContext(ctx, c, s.SlowPeriod)
 	macd := s.Apo.ComputeWithContext(ctx, c)
 
-	macd = helper.BufferedWithContext(ctx, macd, s.Stochastic.Period)
-	inputs := helper.DuplicateWithContext(ctx, macd, 4)
+	// %K1 and %K2 are unused (STC only needs the doubly-smoothed %D), but
+	// each comes from the same internal duplicate fan-out as %D1/%D2, so
+	// it still has to be drained -- an unread duplicate branch blocks the
+	// shared producer, stalling %D1/%D2 too.
+	k1, d1 := s.Stochastic.ComputeWithContext(ctx, macd)
+	go helper.DrainWithContext(ctx, k1)
 
-	movingMin := NewMovingMinWithPeriod[T](s.Stochastic.Period)
-	movingMax := NewMovingMaxWithPeriod[T](s.Stochastic.Period)
+	k2, d2 := s.Stochastic.ComputeWithContext(ctx, d1)
+	go helper.DrainWithContext(ctx, k2)
 
-	lowestSplice := helper.DuplicateWithContext(ctx, movingMin.ComputeWithContext(ctx, inputs[0]),
-		2,
-	)
-
-	highest := movingMax.ComputeWithContext(ctx, inputs[1])
-
-	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
-
-	kValues := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	)
-
-	kDuplicate := helper.DuplicateWithContext(ctx, kValues, 2)
-
-	d := s.Stochastic.Sma.ComputeWithContext(ctx, kDuplicate[0])
-
-	kValues = helper.SkipWithContext(ctx, kDuplicate[1], s.Stochastic.Sma.IdlePeriod())
-
-	macdForStc := helper.SkipWithContext(ctx, inputs[3], s.Stochastic.IdlePeriod())
-
-	return helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, macdForStc, kValues),
-		helper.SubtractWithContext(ctx, d, kValues),
-	),
-		100,
-	)
+	return d2
 }
 
 // IdlePeriod is the initial period that STC won't yield any results.
 func (s *Stc[T]) IdlePeriod() int {
-	return s.Apo.IdlePeriod() + s.Stochastic.IdlePeriod()
+	return s.Apo.IdlePeriod() + 2*s.Stochastic.IdlePeriod()
+}
+
+// String is the string representation of the STC.
+func (s *Stc[T]) String() string {
+	return fmt.Sprintf("STC(%d,%d,%d,%d)", s.FastPeriod, s.SlowPeriod, s.KPeriod, s.DPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

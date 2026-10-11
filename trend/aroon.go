@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -31,14 +32,14 @@ const (
 //	aroon.Period = 25
 //
 //	result := aroon.Compute(c)
-type Aroon[T helper.Number] struct {
+type Aroon[T helper.Float] struct {
 	// Period is the period to use.
 	Period int
 }
 
 // NewAroon function initializes a new Aroon instance
 // with the default parameters.
-func NewAroon[T helper.Number]() *Aroon[T] {
+func NewAroon[T helper.Float]() *Aroon[T] {
 	return &Aroon[T]{
 		Period: DefaultAroonPeriod,
 	}
@@ -50,8 +51,8 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 	movingMax := NewMovingMaxWithPeriod[T](a.Period)
 	movingMin := NewMovingMinWithPeriod[T](a.Period)
 
-	sinceLastHigh := helper.MaxSince(movingMax.ComputeWithContext(ctx, high), a.Period)
-	sinceLastLow := helper.MinSince(movingMin.ComputeWithContext(ctx, low), a.Period)
+	sinceLastHigh := helper.MaxSinceWithContext(ctx, movingMax.ComputeWithContext(ctx, high), a.Period)
+	sinceLastLow := helper.MinSinceWithContext(ctx, movingMin.ComputeWithContext(ctx, low), a.Period)
 
 	// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
 	aroonUp := helper.MultiplyByWithContext(ctx, sinceLastHigh, -1)
@@ -68,6 +69,16 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 	aroonDown = helper.RoundDigitsWithContext(ctx, aroonDown, 0)
 
 	return aroonUp, aroonDown
+}
+
+// IdlePeriod is the initial period that Aroon won't yield any results.
+func (a *Aroon[T]) IdlePeriod() int {
+	return a.Period - 1
+}
+
+// String is the string representation of the Aroon.
+func (a *Aroon[T]) String() string {
+	return fmt.Sprintf("AROON(%d)", a.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

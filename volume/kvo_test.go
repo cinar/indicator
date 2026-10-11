@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -58,5 +58,14 @@ func TestKvoIdlePeriod(t *testing.T) {
 	actual := kvo.IdlePeriod()
 	if actual != expected {
 		t.Fatalf("Expected %d, got %d", expected, actual)
+	}
+}
+
+func TestKvoString(t *testing.T) {
+	expected := "KVO(34,55,13)"
+	actual := volume.NewKvo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

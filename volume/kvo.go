@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -36,7 +37,7 @@ const (
 //
 //	kvo := volume.NewKvo[float64]()
 //	kvoResult, signalResult := kvo.Compute(highs, lows, volumes)
-type Kvo[T helper.Number] struct {
+type Kvo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -48,7 +49,7 @@ type Kvo[T helper.Number] struct {
 }
 
 // NewKvo function initializes a new KVO instance.
-func NewKvo[T helper.Number]() *Kvo[T] {
+func NewKvo[T helper.Float]() *Kvo[T] {
 	return &Kvo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultKvoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultKvoLongPeriod),
@@ -102,6 +103,11 @@ func (k *Kvo[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 // IdlePeriod is the initial period that KVO won't yield any results.
 func (k *Kvo[T]) IdlePeriod() int {
 	return k.LongEma.IdlePeriod() + k.SignalEma.IdlePeriod() + 1
+}
+
+// String is the string representation of the KVO.
+func (k *Kvo[T]) String() string {
+	return fmt.Sprintf("KVO(%d,%d,%d)", k.ShortEma.Period, k.LongEma.Period, k.SignalEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

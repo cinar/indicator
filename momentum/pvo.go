@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -32,9 +33,9 @@ const (
 //
 // Example:
 //
-//	pvo := momentum.Pvo[float64]()
+//	pvo := momentum.NewPvo[float64]()
 //	p, s, h := pvo.Compute(volumes)
-type Pvo[T helper.Number] struct {
+type Pvo[T helper.Float] struct {
 	// ShortEma is the short EMA instance.
 	ShortEma *trend.Ema[T]
 
@@ -46,7 +47,7 @@ type Pvo[T helper.Number] struct {
 }
 
 // NewPvo function initializes a new Percentage Volume Oscillator instance.
-func NewPvo[T helper.Number]() *Pvo[T] {
+func NewPvo[T helper.Float]() *Pvo[T] {
 	return &Pvo[T]{
 		ShortEma:  trend.NewEmaWithPeriod[T](DefaultPvoShortPeriod),
 		LongEma:   trend.NewEmaWithPeriod[T](DefaultPvoLongPeriod),
@@ -95,6 +96,11 @@ func (p *Pvo[T]) ComputeWithContext(ctx context.Context, volumes <-chan T) (<-ch
 // IdlePeriod is the initial period that Percentage Volume Oscillator won't yield any results.
 func (p *Pvo[T]) IdlePeriod() int {
 	return p.LongEma.IdlePeriod() + p.SignalEma.IdlePeriod()
+}
+
+// String is the string representation of the PVO.
+func (p *Pvo[T]) String() string {
+	return fmt.Sprintf("PVO(%d,%d,%d)", p.ShortEma.Period, p.LongEma.Period, p.SignalEma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

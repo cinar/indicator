@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -29,5 +29,23 @@ func TestSync(t *testing.T) {
 	err := helper.CheckEquals(actual1, expected1, actual2, expected2, actual3, expected3)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCommonPeriodWithEmptyInput(t *testing.T) {
+	actual := helper.CommonPeriod()
+	expected := 0
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
+	}
+}
+
+func TestCommonPeriodWithValues(t *testing.T) {
+	actual := helper.CommonPeriod(4, 2, 3)
+	expected := 4
+
+	if actual != expected {
+		t.Fatalf("actual %d expected %d", actual, expected)
 	}
 }

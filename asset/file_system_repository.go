@@ -1,11 +1,10 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package asset
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -46,6 +45,10 @@ func (r *FileSystemRepository) Assets() ([]string, error) {
 	suffix := ".csv"
 
 	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
 		name := file.Name()
 
 		if strings.HasSuffix(name, suffix) {
@@ -86,7 +89,7 @@ func (r *FileSystemRepository) LastDate(name string) (time.Time, error) {
 
 	snapshot, ok := <-helper.Last(snapshots, 1)
 	if !ok {
-		return last, errors.New("empty asset")
+		return last, ErrRepositoryAssetEmpty
 	}
 
 	return snapshot.Date, nil

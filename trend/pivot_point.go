@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -163,7 +163,7 @@ func (p *PivotPoint[T]) calculate(h, l, c, currO T) PivotPointResult[T] {
 		res.R2 = res.P + (h - l)
 		res.S2 = res.P - (h - l)
 		res.R3 = h + 2*(res.P-l)
-		res.S3 = l - 2*(res.P-l)
+		res.S3 = l - 2*(h-res.P)
 
 	case PivotPointCamarilla:
 		diff := h - l

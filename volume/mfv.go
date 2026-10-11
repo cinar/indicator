@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -22,13 +22,13 @@ import (
 //
 //	mfv := volume.NewMfv[float64]()
 //	result := mfv.Compute(highs, lows, closings, volumes)
-type Mfv[T helper.Number] struct {
+type Mfv[T helper.Float] struct {
 	// Mfm is the MFM instance.
 	Mfm *Mfm[T]
 }
 
 // NewMfv function initializes a new MFV instance with the default parameters.
-func NewMfv[T helper.Number]() *Mfv[T] {
+func NewMfv[T helper.Float]() *Mfv[T] {
 	return &Mfv[T]{
 		Mfm: NewMfm[T](),
 	}
@@ -44,6 +44,11 @@ func (m *Mfv[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 // IdlePeriod is the initial period that MFV won't yield any results.
 func (*Mfv[T]) IdlePeriod() int {
 	return 0
+}
+
+// String is the string representation of the MFV.
+func (*Mfv[T]) String() string {
+	return "MFV"
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

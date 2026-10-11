@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -15,18 +15,25 @@ import (
 // PercentB represents the parameters for calculating the %B indicator.
 //
 //	%B = (Close - Lower Band) / (Upper Band - Lower Band)
-type PercentB[T helper.Number] struct {
+//
+// %B is expressed on a 0-1 scale locating price within the bands (0 at
+// the lower band, 1 at the upper band). When the bands collapse to zero
+// width (upper == lower, i.e. zero rolling standard deviation — a flat
+// price window), price sits exactly at that single collapsed band value.
+// The ratio is an undefined 0/0, so it falls back to the neutral
+// midpoint 0.5.
+type PercentB[T helper.Float] struct {
 	// BollingerBands is the underlying Bollinger Bands indicator used for calculations.
 	BollingerBands *BollingerBands[T]
 }
 
 // NewPercentB function initializes a new %B instance with the default parameters.
-func NewPercentB[T helper.Number]() *PercentB[T] {
+func NewPercentB[T helper.Float]() *PercentB[T] {
 	return NewPercentBWithPeriod[T](DefaultBollingerBandsPeriod)
 }
 
 // NewPercentBWithPeriod function initializes a new %B instance with the given period.
-func NewPercentBWithPeriod[T helper.Number](period int) *PercentB[T] {
+func NewPercentBWithPeriod[T helper.Float](period int) *PercentB[T] {
 	return &PercentB[T]{
 		BollingerBands: NewBollingerBandsWithPeriod[T](period),
 	}
@@ -47,7 +54,7 @@ func (p *PercentB[T]) ComputeWithContext(ctx context.Context, closings <-chan T)
 
 	return helper.Operate3WithContext(ctx, upperBands, lowerBands, closingsSplice[1], func(upperBand, lowerBand, closing T) T {
 		// %B = (Close - Lower Band) / (Upper Band - Lower Band)
-		return (closing - lowerBand) / (upperBand - lowerBand)
+		return helper.SafeDivide(closing-lowerBand, upperBand-lowerBand, T(0.5))
 	})
 }
 

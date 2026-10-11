@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -35,6 +35,27 @@ func TestTsi(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestTsiFlatMarket(t *testing.T) {
+	tsi := trend.NewTsi[float64]()
+
+	closings := make([]float64, tsi.IdlePeriod()+20)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(tsi.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one TSI value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected TSI of 0 for flat market, got %v", v)
+		}
 	}
 }
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,8 +6,14 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
+)
+
+const (
+	// DefaultMlrPeriod is the default MLR period.
+	DefaultMlrPeriod = 14
 )
 
 // Mlr represents the configuration parameters for calculating the Moving Linear Regression.
@@ -18,13 +24,18 @@ import (
 //
 //	mlr := trend.NewMlrWithPeriod[float64](14)
 //	rs := mlr.Compute(x , y)
-type Mlr[T helper.Number] struct {
+type Mlr[T helper.Float] struct {
 	// Mls is the Moving Least Square instance.
 	Mls *Mls[T]
 }
 
+// NewMlr function initializes a new MLR instance with the default parameters.
+func NewMlr[T helper.Float]() *Mlr[T] {
+	return NewMlrWithPeriod[T](DefaultMlrPeriod)
+}
+
 // NewMlrWithPeriod function initializes a new MLR instance with the given period.
-func NewMlrWithPeriod[T helper.Number](period int) *Mlr[T] {
+func NewMlrWithPeriod[T helper.Float](period int) *Mlr[T] {
 	return &Mlr[T]{
 		Mls: NewMlsWithPeriod[T](period),
 	}
@@ -50,6 +61,11 @@ func (m *Mlr[T]) ComputeWithContext(ctx context.Context, x, y <-chan T) <-chan T
 // IdlePeriod is the initial period that MLR won't yield any results.
 func (m *Mlr[T]) IdlePeriod() int {
 	return m.Mls.IdlePeriod()
+}
+
+// String is the string representation of the MLR.
+func (m *Mlr[T]) String() string {
+	return fmt.Sprintf("MLR(%d)", m.Mls.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -29,11 +30,15 @@ const (
 //	Slow %K = SMA(Fast %K, kPeriod)
 //	Slow %D = SMA(Slow %K, dPeriod)
 //
+// Fast %K is a 0-100 range ratio; a zero range (Max == Min) makes it an
+// undefined 0/0, defined as the neutral midpoint 50 instead of propagating
+// NaN, matching the RSI flat-market convention.
+//
 // Example:
 //
 //	s := trend.NewSlowStochastic[float64]()
 //	k, d := s.Compute(values)
-type SlowStochastic[T helper.Number] struct {
+type SlowStochastic[T helper.Float] struct {
 	// Period is the period for the min/max calculation.
 	Period int
 
@@ -45,7 +50,7 @@ type SlowStochastic[T helper.Number] struct {
 }
 
 // NewSlowStochastic function initializes a new SlowStochastic instance with the default parameters.
-func NewSlowStochastic[T helper.Number]() *SlowStochastic[T] {
+func NewSlowStochastic[T helper.Float]() *SlowStochastic[T] {
 	return &SlowStochastic[T]{
 		Period:  DefaultSlowStochasticPeriod,
 		KPeriod: DefaultSlowStochasticKPeriod,
@@ -54,7 +59,7 @@ func NewSlowStochastic[T helper.Number]() *SlowStochastic[T] {
 }
 
 // NewSlowStochasticWithPeriod function initializes a new SlowStochastic instance with the given periods.
-func NewSlowStochasticWithPeriod[T helper.Number](period, kPeriod, dPeriod int) *SlowStochastic[T] {
+func NewSlowStochasticWithPeriod[T helper.Float](period, kPeriod, dPeriod int) *SlowStochastic[T] {
 	return &SlowStochastic[T]{
 		Period:  period,
 		KPeriod: kPeriod,
@@ -79,11 +84,13 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 
 	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
 
-	fastK := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	)
+	numerator := helper.SubtractWithContext(ctx, skipped, lowestSplice[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowestSplice[1])
+
+	fastK := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(num, denom, T(0.5)) * 100
+	})
 
 	slowKSma := NewSmaWithPeriod[T](s.KPeriod)
 	slowK := slowKSma.ComputeWithContext(ctx, fastK)
@@ -101,6 +108,11 @@ func (s *SlowStochastic[T]) ComputeWithContext(ctx context.Context, values <-cha
 // IdlePeriod is the initial period that Slow Stochastic won't yield any results.
 func (s *SlowStochastic[T]) IdlePeriod() int {
 	return s.Period + s.KPeriod + s.DPeriod - 3
+}
+
+// String is the string representation of the Slow Stochastic.
+func (s *SlowStochastic[T]) String() string {
+	return fmt.Sprintf("SLOWSTOCH(%d,%d,%d)", s.Period, s.KPeriod, s.DPeriod)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

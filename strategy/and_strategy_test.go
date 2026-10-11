@@ -1,11 +1,14 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package strategy_test
 
 import (
+	"context"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/helper"
@@ -53,6 +56,49 @@ func TestAndStrategyReport(t *testing.T) {
 	err = report.WriteToFile(fileName)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAndStrategyNoStrategies(t *testing.T) {
+	snapshots := helper.SliceToChan([]*asset.Snapshot{})
+
+	and := strategy.NewAndStrategy("And Strategy")
+	actual := and.Compute(snapshots)
+
+	select {
+	case _, ok := <-actual:
+		if ok {
+			t.Fatal("expected closed channel")
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("timeout - result channel never closed")
+	}
+}
+
+func TestAndStrategyCancellation(t *testing.T) {
+	runtime.GC()
+	baseline := runtime.NumGoroutine()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	snapshots := make(chan *asset.Snapshot)
+
+	and := strategy.NewAndStrategy("And Strategy")
+	and.Strategies = append(and.Strategies, strategy.NewBuyAndHoldStrategy(), strategy.NewBuyAndHoldStrategy())
+
+	actual := and.ComputeWithContext(ctx, snapshots)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+	runtime.GC()
+
+	current := runtime.NumGoroutine()
+	if current > baseline+2 {
+		t.Fatalf("Goroutine leak detected. Baseline: %d, Current: %d", baseline, current)
+	}
+
+	if _, ok := <-actual; ok {
+		t.Fatal("And strategy channel should be closed after cancellation")
 	}
 }
 

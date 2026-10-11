@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -14,7 +14,7 @@ import (
 	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/trend"
+	"github.com/cinar/indicator/v2/examples/trend"
 )
 
 func TestBacktest(t *testing.T) {
@@ -50,8 +50,22 @@ func TestBacktestAllAssetsAndStrategies(t *testing.T) {
 
 	htmlReport := backtest.NewHTMLReport(outputDir)
 	bt := backtest.NewBacktest(repository, htmlReport)
+	bt.Workers = 16
 
 	err = bt.Run()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestBacktestAllAssetsAndStrategiesWithDataReport(t *testing.T) {
+	repository := asset.NewFileSystemRepository("testdata/repository")
+
+	dataReport := backtest.NewDataReport()
+	bt := backtest.NewBacktest(repository, dataReport)
+	bt.Workers = 16
+
+	err := bt.Run()
 	if err != nil {
 		t.Fatal(err)
 	}

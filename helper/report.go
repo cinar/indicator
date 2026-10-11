@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -35,8 +35,11 @@ type ReportColumn interface {
 	// Role returns the role of the report column.
 	Role() string
 
-	// Value returns the next data value for the report column.
-	Value() string
+	// Value returns the next data value for the report column. It
+	// returns a non-nil error when the column has no more data to
+	// provide, such as when its backing channel has been exhausted
+	// before the report's time axis has.
+	Value() (string, error)
 }
 
 // Report generates an HTML file containing an interactive chart that

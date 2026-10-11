@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -25,18 +25,18 @@ const (
 //	sma.Period = 10
 //
 //	result := sma.Compute(c)
-type Sma[T helper.Number] struct {
+type Sma[T helper.Float] struct {
 	// Period is the time period for the SMA.
 	Period int
 }
 
 // NewSma function initializes a new SMA instance with the default parameters.
-func NewSma[T helper.Number]() *Sma[T] {
+func NewSma[T helper.Float]() *Sma[T] {
 	return NewSmaWithPeriod[T](DefaultSmaPeriod)
 }
 
 // NewSmaWithPeriod function initializes a new SMA instance with the default parameters.
-func NewSmaWithPeriod[T helper.Number](period int) *Sma[T] {
+func NewSmaWithPeriod[T helper.Float](period int) *Sma[T] {
 	return &Sma[T]{
 		Period: period,
 	}

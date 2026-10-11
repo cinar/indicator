@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -27,11 +28,15 @@ const (
 //	K = (Value - Min(Value, period)) / (Max(Value, period) - Min(Value, period)) * 100
 //	D = SMA(K, dPeriod)
 //
+// %K is a 0-100 range ratio; a zero range (Max == Min) makes it an undefined
+// 0/0, defined as the neutral midpoint 50 instead of propagating NaN,
+// matching the RSI flat-market convention.
+//
 // Example:
 //
 //	s := trend.NewStochastic[float64]()
 //	k, d := s.Compute(values)
-type Stochastic[T helper.Number] struct {
+type Stochastic[T helper.Float] struct {
 	// Period is the period for the min/max calculation.
 	Period int
 
@@ -40,12 +45,12 @@ type Stochastic[T helper.Number] struct {
 }
 
 // NewStochastic function initializes a new Stochastic instance with the default parameters.
-func NewStochastic[T helper.Number]() *Stochastic[T] {
+func NewStochastic[T helper.Float]() *Stochastic[T] {
 	return NewStochasticWithPeriod[T](DefaultStochasticPeriod)
 }
 
 // NewStochasticWithPeriod function initializes a new Stochastic instance with the given period.
-func NewStochasticWithPeriod[T helper.Number](period int) *Stochastic[T] {
+func NewStochasticWithPeriod[T helper.Float](period int) *Stochastic[T] {
 	return &Stochastic[T]{
 		Period: period,
 		Sma:    NewSmaWithPeriod[T](DefaultStochasticSmaPeriod),
@@ -69,13 +74,15 @@ func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T)
 
 	skipped := helper.SkipWithContext(ctx, inputs[2], movingMin.IdlePeriod())
 
-	kSplice := helper.DuplicateWithContext(ctx, helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, skipped, lowestSplice[0]),
-		helper.SubtractWithContext(ctx, highest, lowestSplice[1]),
-	),
-		100,
-	),
-		2,
-	)
+	numerator := helper.SubtractWithContext(ctx, skipped, lowestSplice[0])
+	denominator := helper.SubtractWithContext(ctx, highest, lowestSplice[1])
+
+	k := helper.OperateWithContext(ctx, numerator, denominator, func(num, denom T) T {
+		// Fallback of 0.5 pre-scales to 50 once multiplied by 100 below.
+		return helper.SafeDivide(num, denom, T(0.5)) * 100
+	})
+
+	kSplice := helper.DuplicateWithContext(ctx, k, 2)
 
 	d := s.Sma.ComputeWithContext(ctx, kSplice[0])
 	kSplice[1] = helper.SkipWithContext(ctx, kSplice[1], s.Sma.IdlePeriod())
@@ -86,6 +93,11 @@ func (s *Stochastic[T]) ComputeWithContext(ctx context.Context, values <-chan T)
 // IdlePeriod is the initial period that Stochastic won't yield any results.
 func (s *Stochastic[T]) IdlePeriod() int {
 	return s.Period + s.Sma.Period - 2
+}
+
+// String is the string representation of the Stochastic.
+func (s *Stochastic[T]) String() string {
+	return fmt.Sprintf("STOCHASTIC(%d,%d)", s.Period, s.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

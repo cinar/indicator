@@ -1,10 +1,11 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package volatility
 
 import (
+	"fmt"
 	"math"
 
 	"context"
@@ -21,18 +22,18 @@ const (
 // over the specified period.
 //
 //	Std = Sqrt(1/Period * Sum(Pow(value - sma), 2))
-type MovingStd[T helper.Number] struct {
+type MovingStd[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewMovingStd function initializes a new Moving Standard Deviation instance with the default parameters.
-func NewMovingStd[T helper.Number]() *MovingStd[T] {
+func NewMovingStd[T helper.Float]() *MovingStd[T] {
 	return NewMovingStdWithPeriod[T](DefaultMovingStdPeriod)
 }
 
 // NewMovingStdWithPeriod function initializes a new Moving Standard Deviation instance with the given period.
-func NewMovingStdWithPeriod[T helper.Number](period int) *MovingStd[T] {
+func NewMovingStdWithPeriod[T helper.Float](period int) *MovingStd[T] {
 	return &MovingStd[T]{
 		Period: period,
 	}
@@ -65,7 +66,11 @@ func (m *MovingStd[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 					sum2 := T(0)
 
 					for i := 0; i < m.Period; i++ {
-						sum2 += T(math.Pow(float64(ring.At(i)-sma), 2))
+						v, ok := ring.At(i)
+						if !ok {
+							continue
+						}
+						sum2 += T(math.Pow(float64(v-sma), 2))
 					}
 
 					std := T(math.Sqrt(float64(sum2 / T(m.Period))))
@@ -92,4 +97,9 @@ func (m *MovingStd[T]) Compute(c <-chan T) <-chan T {
 // IdlePeriod is the initial period that Moving Standard Deviation won't yield any results.
 func (m *MovingStd[T]) IdlePeriod() int {
 	return m.Period - 1
+}
+
+// String is the string representation of the Moving Standard Deviation.
+func (m *MovingStd[T]) String() string {
+	return fmt.Sprintf("MOVINGSTD(%d)", m.Period)
 }

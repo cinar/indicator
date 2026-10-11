@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -7,6 +7,7 @@ package asset_test
 import (
 	"database/sql"
 	"database/sql/driver"
+	"errors"
 	"io"
 	"testing"
 
@@ -60,8 +61,72 @@ func (r *mockRepoRows) Next(dest []driver.Value) error {
 	return nil
 }
 
+type mockRepoStmtAppendErr struct{}
+
+func (s *mockRepoStmtAppendErr) Close() error  { return nil }
+func (s *mockRepoStmtAppendErr) NumInput() int { return -1 }
+func (s *mockRepoStmtAppendErr) Exec(args []driver.Value) (driver.Result, error) {
+	return nil, errors.New("insert failed")
+}
+func (s *mockRepoStmtAppendErr) Query(args []driver.Value) (driver.Rows, error) {
+	return &mockRepoRows{}, nil
+}
+
+type mockRepoConnAppendErr struct{}
+
+func (c *mockRepoConnAppendErr) Prepare(query string) (driver.Stmt, error) {
+	if query == "APPEND" {
+		return &mockRepoStmtAppendErr{}, nil
+	}
+
+	return &mockRepoStmt{}, nil
+}
+func (c *mockRepoConnAppendErr) Close() error              { return nil }
+func (c *mockRepoConnAppendErr) Begin() (driver.Tx, error) { return nil, nil }
+
+type mockRepoDriverAppendErr struct{}
+
+func (d *mockRepoDriverAppendErr) Open(name string) (driver.Conn, error) {
+	return &mockRepoConnAppendErr{}, nil
+}
+
+type mockRepoRowsEmpty struct{}
+
+func (r *mockRepoRowsEmpty) Columns() []string              { return []string{"Date"} }
+func (r *mockRepoRowsEmpty) Close() error                   { return nil }
+func (r *mockRepoRowsEmpty) Next(dest []driver.Value) error { return io.EOF }
+
+type mockRepoStmtNoRows struct{}
+
+func (s *mockRepoStmtNoRows) Close() error                                    { return nil }
+func (s *mockRepoStmtNoRows) NumInput() int                                   { return -1 }
+func (s *mockRepoStmtNoRows) Exec(args []driver.Value) (driver.Result, error) { return nil, nil }
+func (s *mockRepoStmtNoRows) Query(args []driver.Value) (driver.Rows, error) {
+	return &mockRepoRowsEmpty{}, nil
+}
+
+type mockRepoConnLastDateNoRows struct{}
+
+func (c *mockRepoConnLastDateNoRows) Prepare(query string) (driver.Stmt, error) {
+	if query == "LASTDATE" {
+		return &mockRepoStmtNoRows{}, nil
+	}
+
+	return &mockRepoStmt{}, nil
+}
+func (c *mockRepoConnLastDateNoRows) Close() error              { return nil }
+func (c *mockRepoConnLastDateNoRows) Begin() (driver.Tx, error) { return nil, nil }
+
+type mockRepoDriverLastDateNoRows struct{}
+
+func (d *mockRepoDriverLastDateNoRows) Open(name string) (driver.Conn, error) {
+	return &mockRepoConnLastDateNoRows{}, nil
+}
+
 func init() {
 	sql.Register("mockrepo", &mockRepoDriver{})
+	sql.Register("mockrepoappenderr", &mockRepoDriverAppendErr{})
+	sql.Register("mockrepolastdatenorows", &mockRepoDriverLastDateNoRows{})
 }
 
 func TestSQLRepository(t *testing.T) {
@@ -101,5 +166,63 @@ func TestSQLRepository(t *testing.T) {
 	err = repo.Drop()
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSQLRepositoryGetSinceSkipsScanErrors(t *testing.T) {
+	dialect := &mockDialect{}
+	repo, err := asset.NewSQLRepository("mockrepo", "db", dialect)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+
+	// mockRepoRows only provides a single column, so scanning it into
+	// a Snapshot's six fields fails. That row must be skipped rather
+	// than forwarded downstream as a zero-value Snapshot.
+	snapshots, err := repo.Get("TEST")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	count := 0
+	for range snapshots {
+		count++
+	}
+
+	if count != 0 {
+		t.Fatalf("expected 0 snapshots, got %d", count)
+	}
+}
+
+func TestSQLRepositoryLastDateNoRows(t *testing.T) {
+	dialect := &mockDialect{}
+	repo, err := asset.NewSQLRepository("mockrepolastdatenorows", "db", dialect)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+
+	_, err = repo.LastDate("TEST")
+	if !errors.Is(err, asset.ErrRepositoryAssetNotFound) {
+		t.Fatalf("expected ErrRepositoryAssetNotFound, got %v", err)
+	}
+}
+
+func TestSQLRepositoryAppendReturnsError(t *testing.T) {
+	dialect := &mockDialect{}
+	repo, err := asset.NewSQLRepository("mockrepoappenderr", "db", dialect)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+
+	snapshots := make(chan *asset.Snapshot, 1)
+	snapshots <- &asset.Snapshot{}
+	close(snapshots)
+
+	err = repo.Append("TEST", snapshots)
+	if err == nil {
+		t.Fatal("expected error from Append, got nil")
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -30,9 +31,9 @@ const (
 //
 // Example:
 //
-//	ao := momentum.AwesomeOscillator[float64]()
+//	ao := momentum.NewAwesomeOscillator[float64]()
 //	values := ao.Compute(lows, highs)
-type AwesomeOscillator[T helper.Number] struct {
+type AwesomeOscillator[T helper.Float] struct {
 	// ShortSma is the SMA for the short period.
 	ShortSma *trend.Sma[T]
 
@@ -41,7 +42,7 @@ type AwesomeOscillator[T helper.Number] struct {
 }
 
 // NewAwesomeOscillator function initializes a new Awesome Oscillator instance.
-func NewAwesomeOscillator[T helper.Number]() *AwesomeOscillator[T] {
+func NewAwesomeOscillator[T helper.Float]() *AwesomeOscillator[T] {
 	return &AwesomeOscillator[T]{
 		ShortSma: trend.NewSmaWithPeriod[T](DefaultAwesomeOscillatorShortPeriod),
 		LongSma:  trend.NewSmaWithPeriod[T](DefaultAwesomeOscillatorLongPeriod),
@@ -69,6 +70,11 @@ func (a *AwesomeOscillator[T]) ComputeWithContext(ctx context.Context, highs, lo
 // IdlePeriod is the initial period that Awesome Oscillator won't yield any results.
 func (a *AwesomeOscillator[T]) IdlePeriod() int {
 	return a.LongSma.IdlePeriod()
+}
+
+// String is the string representation of the Awesome Oscillator.
+func (a *AwesomeOscillator[T]) String() string {
+	return fmt.Sprintf("AO(%d,%d)", a.ShortSma.Period, a.LongSma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -23,7 +24,7 @@ import (
 //	dema.Ema2.Period = 16
 //
 //	result := dema.Compute(input)
-type Dema[T helper.Number] struct {
+type Dema[T helper.Float] struct {
 	// Ema1 represents the configuration parameters for
 	// calculating the first EMA.
 	Ema1 *Ema[T]
@@ -35,7 +36,7 @@ type Dema[T helper.Number] struct {
 
 // NewDema function initializes a new DEMA instance
 // with the default parameters.
-func NewDema[T helper.Number]() *Dema[T] {
+func NewDema[T helper.Float]() *Dema[T] {
 	return &Dema[T]{
 		Ema1: NewEma[T](),
 		Ema2: NewEma[T](),
@@ -49,7 +50,7 @@ func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	ema2 := d.Ema2.ComputeWithContext(ctx, ema1[1])
 
 	doubleEma1 := helper.MultiplyByWithContext(ctx, ema1[0], 2)
-	doubleEma1 = helper.BufferedWithContext(ctx, doubleEma1, d.Ema2.Period)
+	doubleEma1 = helper.SkipWithContext(ctx, doubleEma1, d.Ema2.Period-1)
 
 	return helper.SubtractWithContext(ctx, doubleEma1, ema2)
 }
@@ -57,6 +58,11 @@ func (d *Dema[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 // IdlePeriod is the initial period that DEMA won't yield any results.
 func (d *Dema[T]) IdlePeriod() int {
 	return d.Ema1.Period + d.Ema2.Period - 2
+}
+
+// String is the string representation of the DEMA.
+func (d *Dema[T]) String() string {
+	return fmt.Sprintf("DEMA(%d,%d)", d.Ema1.Period, d.Ema2.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

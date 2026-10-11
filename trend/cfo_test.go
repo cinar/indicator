@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -33,5 +33,35 @@ func TestCfo(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCfoZeroPrice(t *testing.T) {
+	cfo := trend.NewCfoWithPeriod[float64](5)
+
+	closing := make([]float64, cfo.IdlePeriod()+5)
+	for i := range closing {
+		closing[i] = 0
+	}
+
+	actual := helper.ChanToSlice(cfo.Compute(helper.SliceToChan(closing)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one CFO value")
+	}
+
+	for _, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected CFO of 0 for a zero closing price, got %v", v)
+		}
+	}
+}
+
+func TestCfoString(t *testing.T) {
+	expected := "CFO(14)"
+	actual := trend.NewCfo[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

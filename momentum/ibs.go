@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -20,10 +20,10 @@ import (
 //
 //	ibs := momentum.NewInternalBarStrength[float64]()
 //	result := ibs.Compute(highs, lows, closings)
-type InternalBarStrength[T helper.Number] struct{}
+type InternalBarStrength[T helper.Float] struct{}
 
 // NewInternalBarStrength function initializes a new InternalBarStrength instance.
-func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T] {
+func NewInternalBarStrength[T helper.Float]() *InternalBarStrength[T] {
 	return &InternalBarStrength[T]{}
 }
 
@@ -31,10 +31,7 @@ func NewInternalBarStrength[T helper.Number]() *InternalBarStrength[T] {
 func (ibs *InternalBarStrength[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
 	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		denom := high - low
-		if denom == 0 {
-			return 0
-		}
-		return (closing - low) / denom
+		return helper.SafeDivide(closing-low, denom, T(0))
 	})
 }
 

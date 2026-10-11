@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package trend
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -20,13 +21,20 @@ const (
 // greater weight.
 //
 //	VWMA = Sum(Price * Volume) / Sum(Volume)
-type Vwma[T helper.Number] struct {
+//
+// A window with no trading at all makes Sum(Volume) zero, so there is no
+// real volume-weighted price to report; VWMA is defined as 0 rather than
+// propagating a 0/0 NaN. This is a known limitation: forward-filling the
+// last valid average would be more representative for plotting purposes,
+// but would require per-window state that no other guard in this indicator
+// family needs, so it is left as a documented edge case instead.
+type Vwma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewVwma function initializes a new VWMA instance with the default parameters.
-func NewVwma[T helper.Number]() *Vwma[T] {
+func NewVwma[T helper.Float]() *Vwma[T] {
 	return &Vwma[T]{
 		Period: DefaultVwmaPeriod,
 	}
@@ -39,14 +47,22 @@ func (v *Vwma[T]) ComputeWithContext(ctx context.Context, closing, volume <-chan
 	sum := NewMovingSum[T]()
 	sum.Period = v.Period
 
-	return helper.DivideWithContext(ctx, sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closing, volumes[0])),
-		sum.ComputeWithContext(ctx, volumes[1]),
-	)
+	priceVolumeSum := sum.ComputeWithContext(ctx, helper.MultiplyWithContext(ctx, closing, volumes[0]))
+	volumeSum := sum.ComputeWithContext(ctx, volumes[1])
+
+	return helper.OperateWithContext(ctx, priceVolumeSum, volumeSum, func(pv, vol T) T {
+		return helper.SafeDivide(pv, vol, T(0))
+	})
 }
 
 // IdlePeriod is the initial period that VWMA won't yield any results.
 func (v *Vwma[T]) IdlePeriod() int {
 	return v.Period - 1
+}
+
+// String is the string representation of the VWMA.
+func (v *Vwma[T]) String() string {
+	return fmt.Sprintf("VWMA(%d)", v.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

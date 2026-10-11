@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -25,17 +26,26 @@ const (
 //	Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 //	Ulcer Index = Sqrt(Squared Average)
 //
+// High Closings is a rolling max of Closings, so it is zero or negative
+// only when every closing in the window is zero or negative — a
+// degenerate/invalid-price input (e.g. a worthless or corrupted feed),
+// not a normal market condition. Rather than propagate a NaN/Inf (or
+// panic, which would crash the whole streaming pipeline for one bad
+// window), that bar's Percentage Drawdown falls back to 0, the neutral
+// "no computable drawdown" value: it contributes no signal to the
+// Squared Average instead of a fabricated one.
+//
 // Example:
 //
 //	ui := volatility.NewUlcerIndex[float64]()
 //	ui.Compute(closings)
-type UlcerIndex[T helper.Number] struct {
+type UlcerIndex[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewUlcerIndex function initializes a new Ulcer Index instance with the default parameters.
-func NewUlcerIndex[T helper.Number]() *UlcerIndex[T] {
+func NewUlcerIndex[T helper.Float]() *UlcerIndex[T] {
 	return &UlcerIndex[T]{
 		Period: DefaultUlcerIndexPeriod,
 	}
@@ -54,17 +64,24 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 	//	Percentage Drawdown = 100 * ((Closings - High Closings) / High Closings)
 	closingsSplice[1] = helper.SkipWithContext(ctx, closingsSplice[1], movingMax.Period-1)
 
-	percentageDrawdown := helper.MultiplyByWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1], highsSplice[0]),
+	percentageDrawdown := helper.MultiplyByWithContext(ctx, helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, closingsSplice[1], highsSplice[0]),
 		highsSplice[1],
+		func(diff, highClosing T) T {
+			if highClosing <= 0 {
+				return 0
+			}
+
+			return diff / highClosing
+		},
 	),
 		100,
 	)
 
 	//	Squared Average = Sma(period, Percent Drawdown * Percent Drawdown)
 	sma := trend.NewSmaWithPeriod[T](u.Period)
-	squaredAverage := helper.PowWithContext(ctx, sma.ComputeWithContext(ctx, percentageDrawdown),
+	squaredAverage := sma.ComputeWithContext(ctx, helper.PowWithContext(ctx, percentageDrawdown,
 		2,
-	)
+	))
 
 	// Ulcer Index = Sqrt(Squared Average)
 	ulcerIndex := helper.SqrtWithContext(ctx, squaredAverage)
@@ -75,6 +92,11 @@ func (u *UlcerIndex[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 // IdlePeriod is the initial period that Ulcer Index won't yield any results.
 func (u *UlcerIndex[T]) IdlePeriod() int {
 	return (u.Period - 1) * 2
+}
+
+// String is the string representation of the Ulcer Index.
+func (u *UlcerIndex[T]) String() string {
+	return fmt.Sprintf("ULCERINDEX(%d)", u.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

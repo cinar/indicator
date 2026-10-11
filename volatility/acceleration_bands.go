@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -23,17 +24,23 @@ const (
 //	Middle Band = SMA(Closing)
 //	Lower Band = SMA(Low * (1 - 4 * (High - Low) / (High + Low)))
 //
+// When a bar has both High and Low equal to zero (a zero-priced or
+// untraded instrument), the (High - Low) / (High + Low) ratio is an
+// undefined 0/0. It falls back to 0, leaving that bar's contribution to
+// the bands unadjusted, since there is no price range to derive a
+// directional adjustment from.
+//
 // Example:
 //
 //	accelerationBands := NewAccelerationBands[float64]()
 //	accelerationBands.Compute(values)
-type AccelerationBands[T helper.Number] struct {
+type AccelerationBands[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
 // NewAccelerationBands function initializes a new Acceleration Bands instance with the default parameters.
-func NewAccelerationBands[T helper.Number]() *AccelerationBands[T] {
+func NewAccelerationBands[T helper.Float]() *AccelerationBands[T] {
 	return &AccelerationBands[T]{
 		Period: DefaultAccelerationBandsPeriod,
 	}
@@ -44,8 +51,11 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 	highs := helper.DuplicateWithContext(ctx, high, 3)
 	lows := helper.DuplicateWithContext(ctx, low, 3)
 
-	ks := helper.DuplicateWithContext(ctx, helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, highs[0], lows[0]),
+	ks := helper.DuplicateWithContext(ctx, helper.OperateWithContext(ctx, helper.SubtractWithContext(ctx, highs[0], lows[0]),
 		helper.AddWithContext(ctx, highs[1], lows[1]),
+		func(diff, sum T) T {
+			return helper.SafeDivide(diff, sum, T(0))
+		},
 	),
 		2,
 	)
@@ -78,6 +88,11 @@ func (a *AccelerationBands[T]) ComputeWithContext(ctx context.Context, high, low
 // IdlePeriod is the initial period that Acceleration Bands won't yield any results.
 func (a *AccelerationBands[T]) IdlePeriod() int {
 	return a.Period - 1
+}
+
+// String is the string representation of the Acceleration Bands.
+func (a *AccelerationBands[T]) String() string {
+	return fmt.Sprintf("ACCELBANDS(%d)", a.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

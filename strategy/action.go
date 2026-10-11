@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -107,6 +107,10 @@ func DenormalizeActions(ac <-chan Action) <-chan Action {
 
 // CountActions taken a slice of Action channels, and counts them by their type.
 func CountActions(acs []<-chan Action) (int, int, int, bool) {
+	if len(acs) == 0 {
+		return 0, 0, 0, false
+	}
+
 	var buy, hold, sell int
 
 	for _, ac := range acs {

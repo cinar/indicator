@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -43,5 +43,14 @@ func TestChandelierExit(t *testing.T) {
 	err = helper.CheckEquals(actualShort, expectedShort, actualLong, expectedLong)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestChandelierExitString(t *testing.T) {
+	expected := "CE(22,3)"
+	actual := volatility.NewChandelierExit[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

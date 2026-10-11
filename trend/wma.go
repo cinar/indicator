@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -12,23 +12,40 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultWmaPeriod is the default WMA period.
+	DefaultWmaPeriod = 20
+)
+
 // Wma represents the configuration parameters for calculating the Weighted Moving Average (WMA).
 // It calculates a moving average by putting more weight on recent data and less on past data.
 //
-//	WMA = ((Value1 * 1/N) + (Value2 * 2/N) + ...) / 2
-type Wma[T helper.Number] struct {
+//	WMA = (Oldest * 1 + ... + Newest * N) / (N * (N + 1) / 2)
+type Wma[T helper.Float] struct {
 	// Time period.
 	Period int
 }
 
-// NewWmaWith function initializes a new WMA instance with the given parameters.
-func NewWmaWith[T helper.Number](period int) *Wma[T] {
+// NewWma function initializes a new WMA instance with the default parameters.
+func NewWma[T helper.Float]() *Wma[T] {
+	return NewWmaWithPeriod[T](DefaultWmaPeriod)
+}
+
+// NewWmaWithPeriod function initializes a new WMA instance with the given parameters.
+func NewWmaWithPeriod[T helper.Float](period int) *Wma[T] {
 	if period <= 0 {
 		panic("period must be greater than 0")
 	}
 	return &Wma[T]{
 		Period: period,
 	}
+}
+
+// NewWmaWith is an alias for NewWmaWithPeriod for backwards compatibility.
+//
+// Deprecated: Use NewWmaWithPeriod instead.
+func NewWmaWith[T helper.Float](period int) *Wma[T] {
+	return NewWmaWithPeriod[T](period)
 }
 
 // ComputeWithContext computes the WMA over the input stream.
@@ -45,8 +62,11 @@ func (w *Wma[T]) ComputeWithContext(ctx context.Context, values <-chan T) <-chan
 		var sum T
 
 		for i := 0; i < w.Period; i++ {
-			v := window.At(i)
-			sum += v * T(w.Period-i)
+			v, ok := window.At(i)
+			if !ok {
+				continue
+			}
+			sum += v * T(i+1)
 		}
 
 		return sum / divisor

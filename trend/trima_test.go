@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -10,6 +10,20 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
+
+func TestNewTrima(t *testing.T) {
+	trima := trend.NewTrima[float64]()
+	if trima.Period != trend.DefaultTrimaPeriod {
+		t.Fatalf("actual %v expected %v", trima.Period, trend.DefaultTrimaPeriod)
+	}
+}
+
+func TestNewTrimaWithPeriod(t *testing.T) {
+	trima := trend.NewTrimaWithPeriod[float64](10)
+	if trima.Period != 10 {
+		t.Fatalf("actual %v expected %v", trima.Period, 10)
+	}
+}
 
 func TestTrimaWithOddPeriod(t *testing.T) {
 	type Data struct {
@@ -66,5 +80,14 @@ func TestTrimaWithEvenPeriod(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestTrimaString(t *testing.T) {
+	expected := "TRIMA(15)"
+	actual := trend.NewTrima[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

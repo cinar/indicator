@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volatility
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -20,16 +21,16 @@ const (
 )
 
 // ChandelierExit represents the configuration parameters for calculating the Chandelier Exit.
-// It sets a trailing stop-loss based on the Average True Value (ATR).
+// It sets a trailing stop-loss based on the Average True Range (ATR).
 //
-//	Chandelier Exit Long = 22-Period SMA High - ATR(22) * 3
-//	Chandelier Exit Short = 22-Period SMA Low + ATR(22) * 3
+//	Chandelier Exit Long = 22-Period Highest High - ATR(22) * 3
+//	Chandelier Exit Short = 22-Period Lowest Low + ATR(22) * 3
 //
 // Example:
 //
 //	ce := volatility.NewChandelierExit[float64]()
 //	ceLong, ceShort := ce.Compute(highs, lows, closings)
-type ChandelierExit[T helper.Number] struct {
+type ChandelierExit[T helper.Float] struct {
 	// Period is time period.
 	Period int
 
@@ -38,7 +39,7 @@ type ChandelierExit[T helper.Number] struct {
 }
 
 // NewChandelierExit function initializes a new Chandelier Exit instance with the default parameters.
-func NewChandelierExit[T helper.Number]() *ChandelierExit[T] {
+func NewChandelierExit[T helper.Float]() *ChandelierExit[T] {
 	return &ChandelierExit[T]{
 		Period:     DefaultChandelierExitPeriod,
 		Multiplier: DefaultChandelierExitMultiplier,
@@ -78,6 +79,11 @@ func (c *ChandelierExit[T]) ComputeWithContext(ctx context.Context, highs, lows,
 // IdlePeriod is the initial period that Chandelier Exit won't yield any results.
 func (c *ChandelierExit[T]) IdlePeriod() int {
 	return c.Period
+}
+
+// String is the string representation of the Chandelier Exit.
+func (c *ChandelierExit[T]) String() string {
+	return fmt.Sprintf("CE(%d,%v)", c.Period, c.Multiplier)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

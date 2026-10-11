@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -29,16 +29,21 @@ func NewOrStrategy(name string, strategies ...Strategy) *OrStrategy {
 	}
 }
 
-// Name returns the name of the strategy.
+// Name returns the name of the example strategy.
 func (a *OrStrategy) Name() string {
 	return a.name
 }
 
-// ComputeWithContext processes the provided asset snapshots and generates a stream of actionable recommendations.
+// String is the string representation of the OrStrategy.
+func (a *OrStrategy) String() string {
+	return a.Name()
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
 func (a *OrStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan Action {
 	result := make(chan Action)
 
-	sources := ActionSources(a.Strategies, snapshots)
+	sources := ActionSourcesWithContext(ctx, a.Strategies, snapshots)
 
 	go func() {
 		defer close(result)
@@ -62,7 +67,7 @@ func (a *OrStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *a
 	return result
 }
 
-// Report processes the provided asset snapshots and generates a report annotated with the recommended actions.
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
 func (a *OrStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	snapshots := helper.Duplicate(c, 3)
 

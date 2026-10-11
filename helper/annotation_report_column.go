@@ -1,10 +1,13 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
 package helper
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // annotationReportColumn is the annotation report column struct.
 type annotationReportColumn struct {
@@ -34,13 +37,19 @@ func (*annotationReportColumn) Role() string {
 	return "annotation"
 }
 
-// Value returns the next data value for the report column.
-func (c *annotationReportColumn) Value() string {
-	value := <-c.values
+// Value returns the next data value for the report column. It returns
+// an error when the backing channel is exhausted before the report's
+// time axis is, which would otherwise silently produce a "null" value.
+func (c *annotationReportColumn) Value() (string, error) {
+	value, ok := <-c.values
 
-	if value != "" {
-		return fmt.Sprintf("%q", value)
+	if !ok {
+		return "", errors.New("annotation report column: no more data available")
 	}
 
-	return "null"
+	if value != "" {
+		return fmt.Sprintf("%q", value), nil
+	}
+
+	return "null", nil
 }

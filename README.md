@@ -1,16 +1,26 @@
-[![GoDoc](https://godoc.org/github.com/cinar/indicator/v2?status.svg)](https://godoc.org/github.com/cinar/indicator/v2) [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://opensource.org/licenses/AGPLv3) [![Go Report Card](https://goreportcard.com/badge/github.com/cinar/indicator/v2)](https://goreportcard.com/report/github.com/cinar/indicator/v2) ![Go CI](https://github.com/cinar/indicator/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cinar/indicator/graph/badge.svg?token=MB7L69UAWM)](https://codecov.io/gh/cinar/indicator) [![GHCR Version](https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github)](https://github.com/cinar/indicator/pkgs/container/indicator) [![GitHub Stars](https://img.shields.io/github/stars/cinar/indicator?style=social)](https://github.com/cinar/indicator/stargazers)
-
-
 <p align="center">
     <img src="logo.png" />
 </p>
 
+<p align="center">
+    <a href="https://pkg.go.dev/github.com/cinar/indicator/v2"><img src="https://img.shields.io/badge/Go_Reference-007D9C?style=for-the-badge&logo=go&logoColor=white" alt="Go Reference" /></a>
+    <a href="LICENSE.md"><img src="https://img.shields.io/github/license/cinar/indicator?style=for-the-badge" alt="License" /></a>
+    <a href="https://github.com/cinar/indicator/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/cinar/indicator/ci.yml?branch=main&style=for-the-badge&logo=github&label=CI" alt="Go CI" /></a>
+    <a href="https://codecov.io/gh/cinar/indicator"><img src="https://img.shields.io/codecov/c/github/cinar/indicator?style=for-the-badge&logo=codecov&logoColor=white" alt="Codecov" /></a>
+    <a href="https://github.com/cinar/indicator/pkgs/container/indicator"><img src="https://img.shields.io/github/v/tag/cinar/indicator?label=ghcr&sort=semver&logo=github&style=for-the-badge" alt="GHCR Version" /></a>
+    <a href="https://github.com/cinar/indicator/stargazers"><img src="https://img.shields.io/github/stars/cinar/indicator?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Stars" /></a>
+</p>
+<p align="center">
+    <a href="https://trendshift.io/repositories/23333?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-23333" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/23333" alt="cinar%2Findicator | Trendshift" width="250" height="55"/></a>
+</p>
+
+
 Indicator Go
 ============
 
-Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting with real-time strategy execution.
+Indicator is a Golang module that provides an extensive set of technical analysis indicators, strategies, and a framework for backtesting.
 
-> An extensive technical analysis library for algorithmic trading - 80+ indicators, backtesting framework, and AI integration via MCP.
+> An extensive technical analysis library for research and education - 80+ indicators and backtesting framework.
 
 ### Major improvements in v2:
 
@@ -19,9 +29,26 @@ Indicator is a Golang module that provides an extensive set of technical analysi
 -	**Streamlined Data Handling:** The library was rewritten to operate on data streams (Go channels) for both inputs and outputs. If you prefer using slices, helper functions like [helper.SliceToChan](helper/README.md#SliceToChan) and [helper.ChanToSlice](helper/README.md#ChanToSlice) are available. Alternatively, you can still use the [v1 version](https://github.com/cinar/indicator/tree/v1).
 -	**Configurable Indicators and Strategies:** All indicators and strategies were designed to be fully configurable with no preset values.
 -	**Generics Support:** The library leverages Golang generics to support various numeric data formats.
--   **MCP Support:** MCP (Multi-Client Protocol Server) support is integrated into the library, facilitating its use with various AI tools.
 
-I also have a TypeScript version of this module now at [Indicator TS](https://github.com/cinar/indicatorts).
+There is also a TypeScript version of this module at [Indicator TS](https://github.com/cinar/indicatorts).
+
+⚠️ Risk Disclosure & Legal Disclaimer
+------------------------------------
+
+1. **Strict Educational, Research, and Informational Purpose Notice:**
+This repository, software library, documentation, and all associated tools, mathematical models, indicator calculations, example strategies, and backtesting utilities are provided strictly and solely for educational, academic, and research purposes. Nothing contained herein constitutes, or is intended to constitute, investment, financial, tax, legal, or trading advice. No communication or output from this software shall be construed as a recommendation, endorsement, solicitation, or offer to buy or sell any security, commodity, currency, digital asset, or other financial instrument.
+
+2. **Non-Advisory and Non-Fiduciary Status:**
+The Indicator Authors, maintainers, contributors, and copyright holders are not registered investment advisers (RIAs), registered broker-dealers, commodity trading advisors (CTAs), commodity pool operators (CPOs), financial planners, or tax advisors with the U.S. Securities and Exchange Commission (SEC), the U.S. Commodity Futures Trading Commission (CFTC), the Financial Industry Regulatory Authority (FINRA), or any other regulatory agency or authority in any jurisdiction. The maintainers do not act in any fiduciary capacity, and no fiduciary, advisory, or professional-client relationship is established through the use of, contribution to, or access to this software.
+
+3. **Risk Disclosure Regarding Substantial Trading Losses and Leverage:**
+Trading and investing in equities, options, futures, foreign exchange (Forex), commodities, and cryptocurrencies carries substantial risk of loss and is not suitable for all individuals or investors. Prices of financial instruments fluctuate significantly and unpredictably. The use of leverage, margin, or derivative contracts can rapidly amplify losses as well as gains, potentially resulting in the complete loss of all invested capital or losses exceeding initial deposits. You should carefully consider whether trading is appropriate for you in light of your personal financial condition, experience level, and risk tolerance, and you should consult with qualified, licensed financial advisors before making any investment or trading decisions.
+
+4. **CFTC-Style Hypothetical and Backtested Performance Disclosure (CFTC Rule 4.41):**
+Hypothetical, simulated, or backtested performance results have inherent and significant limitations. Unlike an actual performance record, simulated results do not represent actual trading. Because trades have not actually been executed, results may over- or under-compensate for the impact, if any, of certain market factors, including but not limited to lack of liquidity, order execution delays, market impact, exchange fees, slippage, and spread. Furthermore, hypothetical and simulated trading programs are designed with the benefit of hindsight and retrospective knowledge of historical price movements. No representation or warranty is being made that any account, strategy, or portfolio will or is likely to achieve profits, avoid losses, or experience outcomes similar to those illustrated in any backtest, example, or simulation.
+
+5. **"AS IS" Software Liability Limitation & Disclaimers:**
+This software is provided on an "AS IS" and "AS AVAILABLE" basis, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, COMPLETENESS, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, MAINTAINERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, FINANCIAL LOSSES, TRADING LOSSES, LOSS OF CAPITAL, LOSS OF PROFITS, LOSS OF DATA, SYSTEM FAILURES, INACCURATE CALCULATIONS, OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND UNDER ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 👆 Indicators Provided
 ----------------------
@@ -134,85 +161,85 @@ The following list of indicators are currently supported by this package:
 -   [Net Present Value (NPV)](valuation/README.md#Npv)
 -   [Present Value (PV)](valuation/README.md#Pv)
 
-🧠 Strategies Provided
-----------------------
+💡 Example Strategies (Educational Demonstrations)
+---------------------------------------------------
 
-The following list of strategies are currently supported by this package:
+The following concrete strategies are provided in the `examples/` directory purely as illustrative demonstrations on how developers can consume the core indicator mathematics and generic backtesting framework. They are intended strictly for educational and research purposes:
 
 ### ⚖ Base Strategies
 
--	[Buy and Hold Strategy](strategy/README.md#type-buyandholdstrategy)
+-	[Buy and Hold Strategy](strategy/README.md#BuyAndHoldStrategy)
 
-### 📈 Trend Strategies
+### 📈 Trend Strategy Examples
 
--   [Alligator Strategy](strategy/trend/README.md#AlligatorStrategy)
--	[Absolute Price Oscillator (APO) Strategy](strategy/trend/README.md#ApoStrategy)
--	[Aroon Strategy](strategy/trend/README.md#AroonStrategy)
--	[Balance of Power (BoP) Strategy](strategy/trend/README.md#BopStrategy)
--	[Chande Forecast Oscillator Strategy](strategy/trend/README.md#CfoStrategy)
--	[Commodity Channel Index (CCI) Strategy](strategy/trend/README.md#CciStrategy)
--	[Double Exponential Moving Average (DEMA) Strategy](strategy/trend/README.md#DemaStrategy)
--   [Envelope Strategy](strategy/trend/README.md#EnvelopeStrategy)
--	[Golden Cross Strategy](strategy/trend/README.md#GoldenCrossStrategy)
--	[Hull Moving Average (HMA) Strategy](strategy/trend/README.md#HmaStrategy)
--	[Kaufman's Adaptive Moving Average (KAMA) Strategy](strategy/trend/README.md#KamaStrategy)
--	[Moving Average Convergence Divergence (MACD) Strategy](strategy/trend/README.md#MacdStrategy)
--	[Qstick Strategy](strategy/trend/README.md#QstickStrategy)
--	[Random Index (KDJ) Strategy](strategy/trend/README.md#KdjStrategy)
--   [Smoothed Moving Average (SMMA) Strategy](strategy/trend/README.md#SmmaStrategy)
--	[Triangular Moving Average (TRIMA) Strategy](strategy/trend/README.md#TrimaStrategy)
--	[Triple Exponential Average (TRIX) Strategy](strategy/trend/README.md#TrixStrategy)
--	[Triple Moving Average Crossover Strategy](strategy/trend/README.md#TripleMovingAverageCrossoverStrategy)
--	[True Strength Index (TSI) Strategy](strategy/trend/README.md#TsiStrategy)
--	[Volume Weighted Moving Average (VWMA) Strategy](strategy/trend/README.md#VwmaStrategy)
--   [Weighted Close Strategy](strategy/trend/README.md#WeightedCloseStrategy)
+-   [Alligator Strategy](examples/trend/README.md#AlligatorStrategy)
+-	[Absolute Price Oscillator (APO) Strategy](examples/trend/README.md#ApoStrategy)
+-	[Aroon Strategy](examples/trend/README.md#AroonStrategy)
+-	[Balance of Power (BoP) Strategy](examples/trend/README.md#BopStrategy)
+-	[Chande Forecast Oscillator Strategy](examples/trend/README.md#CfoStrategy)
+-	[Commodity Channel Index (CCI) Strategy](examples/trend/README.md#CciStrategy)
+-	[Double Exponential Moving Average (DEMA) Strategy](examples/trend/README.md#DemaStrategy)
+-   [Envelope Strategy](examples/trend/README.md#EnvelopeStrategy)
+-	[Golden Cross Strategy](examples/trend/README.md#GoldenCrossStrategy)
+-	[Hull Moving Average (HMA) Strategy](examples/trend/README.md#HmaStrategy)
+-	[Kaufman's Adaptive Moving Average (KAMA) Strategy](examples/trend/README.md#KamaStrategy)
+-	[Moving Average Convergence Divergence (MACD) Strategy](examples/trend/README.md#MacdStrategy)
+-	[Qstick Strategy](examples/trend/README.md#QstickStrategy)
+-	[Random Index (KDJ) Strategy](examples/trend/README.md#KdjStrategy)
+-   [Smoothed Moving Average (SMMA) Strategy](examples/trend/README.md#SmmaStrategy)
+-	[Triangular Moving Average (TRIMA) Strategy](examples/trend/README.md#TrimaStrategy)
+-	[Triple Exponential Average (TRIX) Strategy](examples/trend/README.md#TrixStrategy)
+-	[Triple Moving Average Crossover Strategy](examples/trend/README.md#TripleMovingAverageCrossoverStrategy)
+-	[True Strength Index (TSI) Strategy](examples/trend/README.md#TsiStrategy)
+-	[Volume Weighted Moving Average (VWMA) Strategy](examples/trend/README.md#VwmaStrategy)
+-   [Weighted Close Strategy](examples/trend/README.md#WeightedCloseStrategy)
 
-### 🚀 Momentum Strategies
+### 🚀 Momentum Strategy Examples
 
--	[Awesome Oscillator Strategy](strategy/momentum/README.md#AwesomeOscillatorStrategy)
--	[Coppock Curve Strategy](strategy/momentum/README.md#CoppockCurveStrategy)
--	[Elder Ray Strategy](strategy/momentum/README.md#ElderRayStrategy)
--	[Ichimoku Cloud Strategy](strategy/momentum/README.md#IchimokuCloudStrategy)
--	[RSI Strategy](strategy/momentum/README.md#RsiStrategy)
--	[Stochastic Oscillator Strategy](strategy/momentum/README.md#StochasticOscillatorStrategy)
--	[Stochastic RSI Strategy](strategy/momentum/README.md#StochasticRsiStrategy)
--	[Triple RSI Strategy](strategy/momentum/README.md#TripleRsiStrategy)
--	[Williams R Strategy](strategy/momentum/README.md#WilliamsRStrategy)
+-	[Awesome Oscillator Strategy](examples/momentum/README.md#AwesomeOscillatorStrategy)
+-	[Coppock Curve Strategy](examples/momentum/README.md#CoppockCurveStrategy)
+-	[Elder Ray Strategy](examples/momentum/README.md#ElderRayStrategy)
+-	[Ichimoku Cloud Strategy](examples/momentum/README.md#IchimokuCloudStrategy)
+-	[RSI Strategy](examples/momentum/README.md#RsiStrategy)
+-	[Stochastic Oscillator Strategy](examples/momentum/README.md#StochasticOscillatorStrategy)
+-	[Stochastic RSI Strategy](examples/momentum/README.md#StochasticRsiStrategy)
+-	[Triple RSI Strategy](examples/momentum/README.md#TripleRsiStrategy)
+-	[Williams R Strategy](examples/momentum/README.md#WilliamsRStrategy)
 
-### 🎢 Volatility Strategies
+### 🎢 Volatility Strategy Examples
 
--	[Bollinger Bands Strategy](strategy/volatility/README.md#BollingerBandsStrategy)
--	[Donchian Channel Breakout Strategy](strategy/volatility/README.md#DonchianChannelBreakoutStrategy)
--	[Super Trend Strategy](strategy/volatility/README.md#SuperTrendStrategy)
+-	[Bollinger Bands Strategy](examples/volatility/README.md#BollingerBandsStrategy)
+-	[Donchian Channel Breakout Strategy](examples/volatility/README.md#DonchianChannelBreakoutStrategy)
+-	[Super Trend Strategy](examples/volatility/README.md#SuperTrendStrategy)
 
-### 📢 Volume Strategies
+### 📢 Volume Strategy Examples
 
--	[Chaikin Money Flow Strategy](strategy/volume/README.md#ChaikinMoneyFlowStrategy)
--	[Ease of Movement Strategy](strategy/volume/README.md#EaseOfMovementStrategy)
--	[Force Index Strategy](strategy/volume/README.md#ForceIndexStrategy)
--	[Money Flow Index Strategy](strategy/volume/README.md#MoneyFlowIndexStrategy)
--	[Negative Volume Index Strategy](strategy/volume/README.md#NegativeVolumeIndexStrategy)
--	[On-Balance Volume (OBV) Strategy](strategy/volume/README.md#ObvStrategy)
--	[Percent Band and MFI Strategy](strategy/volume/README.md#PercentBandMFIStrategy)
--	[Weighted Average Price Strategy](strategy/volume/README.md#WeightedAveragePriceStrategy)
+-	[Chaikin Money Flow Strategy](examples/volume/README.md#ChaikinMoneyFlowStrategy)
+-	[Ease of Movement Strategy](examples/volume/README.md#EaseOfMovementStrategy)
+-	[Force Index Strategy](examples/volume/README.md#ForceIndexStrategy)
+-	[Money Flow Index Strategy](examples/volume/README.md#MoneyFlowIndexStrategy)
+-	[Negative Volume Index Strategy](examples/volume/README.md#NegativeVolumeIndexStrategy)
+-	[On-Balance Volume (OBV) Strategy](examples/volume/README.md#ObvStrategy)
+-	[Percent Band and MFI Strategy](examples/volume/README.md#PercentBandMFIStrategy)
+-	[Weighted Average Price Strategy](examples/volume/README.md#WeightedAveragePriceStrategy)
 
-### 🧪 Compound Strategies
+### 🧪 Compound Strategy Examples
 
-Compound strategies merge multiple strategies to produce integrated recommendations. They combine individual strategies' recommendations using various decision-making logic.
+Compound strategies demonstrate merging multiple indicator signals into unified actions using various logical combinations.
 
 -	[And Strategy](strategy/README.md#AndStrategy)
 -	[Majority Strategy](strategy/README.md#MajorityStrategy)
--	[MACD-RSI Strategy](strategy/compound/README.md#MacdRsiStrategy)
+-	[MACD-RSI Strategy](examples/compound/README.md#MacdRsiStrategy)
 -	[Or Strategy](strategy/README.md#OrStrategy)
 -	[Split Strategy](strategy/README.md#SplitStrategy)
 
-### 🎁 Decorator Strategies
+### 🎁 Decorator Strategy Examples
 
-Decorator strategies offer a way to alter the recommendations of other strategies.
+Decorator strategies offer an illustrative way to alter or filter the recommendations of underlying strategies.
 
--   [Inverse Strategy](strategy/decorator/README.md#InverseStrategy)
--   [No Loss Strategy](strategy/decorator/README.md#NoLossStrategy)
--   [Stop Loss Strategy](strategy/decorator/README.md#StopLossStrategy)
+-   [Inverse Strategy](examples/decorator/README.md#InverseStrategy)
+-   [Cost Basis Exit Strategy](examples/decorator/README.md#CostBasisExitStrategy)
+-   [Stop Loss Strategy](examples/decorator/README.md#StopLossStrategy)
 
 🗃 Repositories
 --------------
@@ -224,7 +251,6 @@ The following [repository implementations](asset/README.md#Repository) are provi
 -	[File System Repository](asset/README.md#FileSystemRepository)
 -	[In Memory Repository](asset/README.md#InMemoryRepository)
 -	[Tiingo Repository](asset/README.md#TiingoRepository)
--	[Alpaca Markets Repository](https://github.com/cinar/indicatoralpaca)
 
 The [Sync function](asset/README.md#Sync) facilitates the synchronization of assets between designated source and target repositories by employing multi-worker concurrency for enhanced efficiency. This function serves the purpose of procuring the most recent snapshots from remote repositories and seamlessly transferring them to local repositories, such as file system repositories.
 
@@ -244,9 +270,15 @@ This command effectively retrieves the most recent snapshots for assets residing
 ⏳ Backtesting
 --------------
 
-The [Backtest functionality](backtest/README.md#Backtest), using the [Outcome](strategy/README.md#Outcome), rigorously evaluates the potential performance of the specified strategies applied to a defined set of assets. It generates comprehensive visual representations for each strategy-asset pairing.
+The [Backtest functionality](backtest/README.md#Backtest), using the [Outcome](strategy/README.md#Outcome), evaluates the hypothetical performance of specified strategies applied to a defined set of historical asset data. It generates comprehensive visual representations for each strategy-asset pairing.
 
 ```go
+import (
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/backtest"
+	"github.com/cinar/indicator/v2/examples/trend"
+)
+
 report := backtest.NewHTMLReport(outputDir)
 bt := backtest.NewBacktest(repository, report)
 bt.Names = append(bt.Names, "brk-b")
@@ -258,20 +290,59 @@ if err != nil {
 }
 ```
 
-The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. This capability encompasses the application of all currently recognized strategies, culminating in the generation of detailed reports within a designated output directory.
+The `indicator-backtest` command line tool empowers users to conduct comprehensive backtesting of assets residing within a specified repository. It does not run any strategy by default — you must explicitly name the strategies to backtest with the `-strategies` flag, culminating in the generation of detailed reports within a designated output directory.
 
 ```bash
 $ indicator-backtest \
-    -source-name filesystem \
-    -source-config /home/user/assets \
-    -output /home/user/reports \
+    -repository-name filesystem \
+    -repository-config /home/user/assets \
+    -report-config /home/user/reports \
+    -strategies apo,macd,rsi \
     -workers 1
 ```
 
-☁️  MCP Server
---------------
+Run `indicator-backtest -list-strategies` to print the full list of strategy names that are available to pass to `-strategies`.
 
-The [MCP Server](mcp/README.md) (Multi-Client Protocol Server) provides a robust and scalable solution for serving trading strategies to multiple clients. It enables real-time strategy execution and data processing, making it ideal for applications requiring high-throughput and low-latency interactions with trading algorithms.
+### JSON config file
+
+For larger runs, a whole backtest — repository, report, workers, and every strategy along with its tuned parameters — can be described in a single JSON file and passed with `-config`. When `-config` is set, it replaces the other flags (`-list-strategies` still works on its own).
+
+```bash
+$ indicator-backtest -config backtest.json
+```
+
+```json
+{
+  "repository": { "name": "filesystem", "config": "/home/user/assets" },
+  "report": { "name": "html", "config": "/home/user/reports" },
+  "symbols": ["aapl", "msft"],
+  "workers": 4,
+  "lastDays": 365,
+  "addSplits": false,
+  "addAnds": false,
+  "strategies": [
+    { "name": "macd" },
+    {
+      "name": "rsi",
+      "config": {
+        "BuyAt": 20,
+        "SellAt": 80,
+        "Rsi": { "Rma": { "Period": 10 } }
+      }
+    }
+  ]
+}
+```
+
+Each entry in `strategies` names a registered strategy (see `-list-strategies`) and, optionally, a `config` object. `config` is overlaid onto the strategy's default instance field by field — including into nested indicators, such as `Rsi.Rma.Period` above — so only the parameters you want to change need to be listed; everything else keeps its documented default. The available field names are the exported fields on the strategy's Go struct (e.g. [`RsiStrategy`](examples/momentum/rsi_strategy.go)) and the indicator(s) it wraps.
+
+📊 Performance Metrics
+----------------------
+
+The following risk-adjusted metrics can be computed from a strategy's [Outcome](strategy/README.md#Outcome) curve, for comparing strategies beyond raw cumulative return.
+
+-	[Sharpe Ratio](strategy/README.md#SharpeRatioWithContext)
+-	[Sortino Ratio](strategy/README.md#SortinoRatioWithContext)
 
 🐳 Docker
 ---------
@@ -289,7 +360,8 @@ docker run -it --rm \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
   --days 365 \
-  --assets aapl msft googl
+  --assets aapl msft googl \
+  --strategies apo,macd,rsi
 
 # View results (macOS)
 open output/index.html
@@ -306,7 +378,10 @@ xdg-open output/index.html
 | `--days` | Days of historical data to fetch | 365 |
 | `--last` | Days to backtest | 365 |
 | `--assets` | Space-separated ticker symbols (default: all) | all |
+| `--strategies` | Comma-separated strategy names to backtest (required) | - |
 | `--output` | Output directory for reports | /app/output |
+
+Run `docker run --rm --entrypoint ./indicator-backtest ghcr.io/cinar/indicator:latest -list-strategies` to see the available strategy names.
 
 ### Examples
 
@@ -315,7 +390,8 @@ xdg-open output/index.html
 docker run -it --rm \
   -v $(pwd)/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
-  --api-key YOUR_TIINGO_API_KEY
+  --api-key YOUR_TIINGO_API_KEY \
+  --strategies apo,macd,rsi
 
 # Backtest specific stocks for last 6 months, test last 30 days
 docker run -it --rm \
@@ -324,13 +400,15 @@ docker run -it --rm \
   --api-key YOUR_TIINGO_API_KEY \
   --days 180 \
   --last 30 \
-  --assets aapl msft googl amzn
+  --assets aapl msft googl amzn \
+  --strategies apo,macd,rsi
 
 # Custom output directory
 docker run -it --rm \
   -v /path/to/my/reports:/app/output \
   ghcr.io/cinar/indicator:latest \
   --api-key YOUR_TIINGO_API_KEY \
+  --strategies apo,macd,rsi \
   --output /app/output
 ```
 
@@ -364,8 +442,6 @@ import (
 Indicator Go is part of a broader ecosystem of technical analysis tools:
 
 - [Indicator TS](https://github.com/cinar/indicatorts) - TypeScript/JavaScript implementation of the same indicators and strategies
-- [Indicator Alpaca](https://github.com/cinar/indicatoralpaca) - Alpaca Markets integration for live trading
-- [MCP Server](mcp/README.md) - Model Context Protocol server for AI integration
 
 💖 Our Sponsors
 ---------------
@@ -379,24 +455,13 @@ Contributing to the Project
 
 Anyone can contribute to Indicator library. Please make sure to read our [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) guide first. Follow the [How to Contribute to Indicator](./CONTRIBUTING.md) to contribute. Signining a [Contributor Agreement](./CLA.md) is also required to contribute to the project.
 
-⚠️ Risk Disclosure & Disclaimer
--------------------------------
-
-**Financial Risk:** Trading stocks, futures, and cryptocurrencies involves significant risk of loss and is not suitable for every investor. The use of leveraged instruments can lead to losses greater than the initial investment.
-
-**Not Financial Advice:** The information and tools provided in this project are strictly for educational and informational purposes and are not to be construed as advice or solicitation to buy or sell any security. They do NOT constitute financial, investment, or trading advice. Onur Cinar is not a financial advisor.
-
-**No Warranties:** This software is provided "AS IS," without warranty of any kind. Technical analysis indicators are based on historical data and do not guarantee future results. While we strive for 90%+ test coverage, software can contain bugs.
-
-**Limitation of Liability:** In no event shall the author or contributors be liable for any financial loss, data loss, or any other damages arising from the use of this library. Use at your own risk.
-
 License
 -------
 
-The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact me.
+The `v2.x.x` and above are dual-licensed under GNU AGPLv3 License and a commercial license. For free use and modifications of the code, you can use the AGPLv3 license. If you require commercial license with different terms, please contact the maintainers.
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.    
+Copyright (c) 2021-2026 The Indicator Authors.    
 The source code is provided under GNU AGPLv3 License.
 
 This program is free software: you can redistribute it and/or modify
@@ -416,7 +481,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The version `v1.x.x` is provided under MIT License.
 
 ```
-Copyright (c) 2021-2026 Onur Cinar.
+Copyright (c) 2021-2026 The Indicator Authors.
 The source code is provided under MIT License.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -437,3 +502,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+Trademarks
+----------
+
+- **TD Sequential®** is a registered trademark of DeMark Analytics, LLC. This library is an independent open-source mathematical implementation and is not affiliated with, sponsored by, or endorsed by DeMark Analytics, LLC.
+- **Bollinger Bands®** is a registered trademark of John Bollinger.
+- **ConnorsRSI®** is a registered trademark of Connors Group, Inc.
+- All other product names, logos, and brands mentioned herein are trademarks or registered trademarks of their respective owners. Mention of third-party products, services, or trademarks is for nominative identification and educational purposes only and does not imply affiliation or endorsement.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -28,18 +29,18 @@ const (
 //
 //	emv := volume.NewEmv[float64]()
 //	result := emv.Compute(highs, lows, volumes)
-type Emv[T helper.Number] struct {
+type Emv[T helper.Float] struct {
 	// Sma is the SMA instance.
 	Sma *trend.Sma[T]
 }
 
 // NewEmv function initializes a new EMV instance with the default parameters.
-func NewEmv[T helper.Number]() *Emv[T] {
+func NewEmv[T helper.Float]() *Emv[T] {
 	return NewEmvWithPeriod[T](DefaultEmvPeriod)
 }
 
 // NewEmvWithPeriod function initializes a new EMV instance with the given period.
-func NewEmvWithPeriod[T helper.Number](period int) *Emv[T] {
+func NewEmvWithPeriod[T helper.Float](period int) *Emv[T] {
 	return &Emv[T]{
 		Sma: trend.NewSmaWithPeriod[T](period),
 	}
@@ -62,12 +63,14 @@ func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 	d := 100000000
 
 	// Box Ratio = ((Volume / 100000000) / (High - Low))
-	boxRatio := helper.DivideWithContext(ctx, helper.DivideByWithContext(ctx, volumes,
+	boxRatio := helper.SkipWithContext(ctx, helper.DivideWithContext(ctx, helper.DivideByWithContext(ctx, volumes,
 		T(d),
 	),
 		helper.SubtractWithContext(ctx, highsSplice[1],
 			lowsSplice[1],
 		),
+	),
+		1,
 	)
 
 	// EMV(1) = Distance Moved / Box Ratio
@@ -81,6 +84,11 @@ func (e *Emv[T]) ComputeWithContext(ctx context.Context, highs, lows, volumes <-
 // IdlePeriod is the initial period that EMV won't yield any results.
 func (e *Emv[T]) IdlePeriod() int {
 	return e.Sma.IdlePeriod() + 1
+}
+
+// String is the string representation of the EMV.
+func (e *Emv[T]) String() string {
+	return fmt.Sprintf("EMV(%d)", e.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

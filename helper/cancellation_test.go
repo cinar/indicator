@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -64,6 +64,25 @@ func TestCancellationWithApplyWindow(t *testing.T) {
 	_, ok = <-windowed
 	if ok {
 		t.Fatal("Windowed channel should be closed after cancellation")
+	}
+}
+
+func TestCancellationWithMaxSinceMinSince(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	input := make(chan int)
+
+	maxSince := helper.MaxSinceWithContext(ctx, input, 3)
+	minSince := helper.MinSinceWithContext(ctx, input, 3)
+
+	cancel()
+
+	time.Sleep(50 * time.Millisecond)
+
+	if _, ok := <-maxSince; ok {
+		t.Fatal("MaxSince channel should be closed after cancellation")
+	}
+	if _, ok := <-minSince; ok {
+		t.Fatal("MinSince channel should be closed after cancellation")
 	}
 }
 

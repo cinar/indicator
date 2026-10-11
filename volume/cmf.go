@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package volume
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -23,11 +24,16 @@ const (
 //	MFV = MFM * Volume
 //	CMF = Sum(20, Money Flow Volume) / Sum(20, Volume)
 //
+// When no trading occurred anywhere in the window, the volume sum is 0 and the
+// money-flow-volume-weighted ratio is undefined (0/0). CMF returns 0, since a
+// value near 0 conventionally reads as "no strong buying or selling pressure" -
+// exactly what a window with no trading should report.
+//
 // Example:
 //
 //	cmf := volume.NewCmf[float64]()
 //	result := cmf.Compute(highs, lows, closings, volumes)
-type Cmf[T helper.Number] struct {
+type Cmf[T helper.Float] struct {
 	// Mfv is the MFV instance.
 	Mfv *Mfv[T]
 
@@ -36,12 +42,12 @@ type Cmf[T helper.Number] struct {
 }
 
 // NewCmf function initializes a new CMF instance with the default parameters.
-func NewCmf[T helper.Number]() *Cmf[T] {
+func NewCmf[T helper.Float]() *Cmf[T] {
 	return NewCmfWithPeriod[T](DefaultCmfPeriod)
 }
 
 // NewCmfWithPeriod function initializes a new CMF instance with the given period.
-func NewCmfWithPeriod[T helper.Number](period int) *Cmf[T] {
+func NewCmfWithPeriod[T helper.Float](period int) *Cmf[T] {
 	return &Cmf[T]{
 		Mfv: NewMfv[T](),
 		Sum: trend.NewMovingSumWithPeriod[T](period),
@@ -57,14 +63,22 @@ func (c *Cmf[T]) ComputeWithContext(ctx context.Context, highs, lows, closings, 
 	mfvs := c.Mfv.ComputeWithContext(ctx, highs, lows, closings, volumesSplice[0])
 
 	//	CMF = Sum(20, Money Flow Volume) / Sum(20, Volume)
-	return helper.DivideWithContext(ctx, c.Sum.ComputeWithContext(ctx, mfvs),
+	return helper.OperateWithContext(ctx, c.Sum.ComputeWithContext(ctx, mfvs),
 		c.Sum.ComputeWithContext(ctx, volumesSplice[1]),
+		func(mfvSum, volumeSum T) T {
+			return helper.SafeDivide(mfvSum, volumeSum, T(0))
+		},
 	)
 }
 
-// IdlePeriod is the initial period that MFV won't yield any results.
+// IdlePeriod is the initial period that CMF won't yield any results.
 func (c *Cmf[T]) IdlePeriod() int {
 	return c.Sum.IdlePeriod()
+}
+
+// String is the string representation of the CMF.
+func (c *Cmf[T]) String() string {
+	return fmt.Sprintf("CMF(%d)", c.Sum.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

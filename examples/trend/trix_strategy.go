@@ -1,0 +1,98 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package trend
+
+import (
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/trend"
+)
+
+// TrixStrategy demonstrates how to compose the Triple Exponential Average (TRIX)
+// indicator into an illustrative zero-line crossover strategy.
+type TrixStrategy struct {
+	// Trix represents the configuration parameters for calculating the TRIX.
+	Trix *trend.Trix[float64]
+}
+
+// NewTrixStrategy initializes an example TrixStrategy instance with default parameters.
+func NewTrixStrategy() *TrixStrategy {
+	return &TrixStrategy{
+		Trix: trend.NewTrix[float64](),
+	}
+}
+
+// Name returns the name of the example strategy.
+func (*TrixStrategy) Name() string {
+	return "TRIX Strategy"
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
+func (t *TrixStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshots)
+
+	trixs := t.Trix.ComputeWithContext(ctx, closings)
+
+	actions := helper.MapWithContext(ctx, trixs, func(trix float64) strategy.Action {
+		if trix > 0 {
+			return strategy.Buy
+		}
+
+		if trix < 0 {
+			return strategy.Sell
+		}
+
+		return strategy.Hold
+	})
+
+	// TRIX starts only after a full period.
+	actions = helper.ShiftWithContext(ctx, actions, t.Trix.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
+func (t *TrixStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> closings[0] -> closings
+	//                 closings[1] -> trixs
+	// snapshots[2] -> actions     -> annotations
+	//              -> outcomes
+	//
+	snapshots := helper.Duplicate(c, 3)
+
+	dates := asset.SnapshotsAsDates(snapshots[0])
+	closings := helper.Duplicate(asset.SnapshotsAsClosings(snapshots[1]), 2)
+
+	trixs := t.Trix.Compute(closings[0])
+	trixs = helper.Shift(trixs, t.Trix.IdlePeriod(), 0)
+
+	actions, outcomes := strategy.ComputeWithOutcome(t, snapshots[2])
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	report := helper.NewReport(t.Name(), dates)
+	report.AddChart()
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closings[1]))
+	report.AddColumn(helper.NewNumericReportColumn("TRIX", trixs), 1)
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (t *TrixStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return t.ComputeWithContext(context.Background(), snapshots)
+}

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -10,6 +10,20 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
 )
+
+func TestNewMlr(t *testing.T) {
+	mlr := trend.NewMlr[float64]()
+	if mlr.Mls.Sum.Period != trend.DefaultMlrPeriod {
+		t.Fatalf("actual %v expected %v", mlr.Mls.Sum.Period, trend.DefaultMlrPeriod)
+	}
+}
+
+func TestNewMlrWithPeriod(t *testing.T) {
+	mlr := trend.NewMlrWithPeriod[float64](10)
+	if mlr.Mls.Sum.Period != 10 {
+		t.Fatalf("actual %v expected %v", mlr.Mls.Sum.Period, 10)
+	}
+}
 
 func TestMlr(t *testing.T) {
 	type Data struct {
@@ -38,5 +52,14 @@ func TestMlr(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMlrString(t *testing.T) {
+	expected := "MLR(4)"
+	actual := trend.NewMlrWithPeriod[float64](4).String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

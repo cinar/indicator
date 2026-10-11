@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -37,5 +37,29 @@ func TestMfm(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMfmZeroDenom(t *testing.T) {
+	highs := helper.SliceToChan([]float64{10, 10, 10})
+	lows := helper.SliceToChan([]float64{10, 10, 10})
+	closings := helper.SliceToChan([]float64{10, 10, 10})
+
+	mfm := volume.NewMfm[float64]()
+	actuals := mfm.Compute(highs, lows, closings)
+
+	for actual := range actuals {
+		if actual != 0 {
+			t.Fatalf("expected 0 when high == low, got %v", actual)
+		}
+	}
+}
+
+func TestMfmString(t *testing.T) {
+	expected := "MFM"
+	actual := volume.NewMfm[float64]().String()
+
+	if actual != expected {
+		t.Fatalf("actual %v expected %v", actual, expected)
 	}
 }

@@ -1,0 +1,146 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
+package volume
+
+import (
+	"fmt"
+
+	"context"
+
+	"github.com/cinar/indicator/v2/asset"
+	"github.com/cinar/indicator/v2/helper"
+	"github.com/cinar/indicator/v2/strategy"
+	"github.com/cinar/indicator/v2/volume"
+)
+
+const (
+	// DefaultMoneyFlowIndexStrategySellAt is the default sell at of 80.
+	DefaultMoneyFlowIndexStrategySellAt = 80
+
+	// DefaultMoneyFlowIndexStrategyBuyAt is the default buy at of 20.
+	DefaultMoneyFlowIndexStrategyBuyAt = 20
+)
+
+// MoneyFlowIndexStrategy demonstrates how to compose the Money Flow Index (MFI)
+// into an illustrative threshold-based strategy.
+type MoneyFlowIndexStrategy struct {
+	// MoneyFlowIndex is the Money Flow Index indicator instance.
+	MoneyFlowIndex *volume.Mfi[float64]
+
+	// SellAt is the sell at value.
+	SellAt float64
+
+	// BuyAt is the buy at value.
+	BuyAt float64
+}
+
+// NewMoneyFlowIndexStrategy initializes an example MoneyFlowIndexStrategy instance with default parameters.
+func NewMoneyFlowIndexStrategy() *MoneyFlowIndexStrategy {
+	return NewMoneyFlowIndexStrategyWith(
+		DefaultMoneyFlowIndexStrategySellAt,
+		DefaultMoneyFlowIndexStrategyBuyAt,
+	)
+}
+
+// NewMoneyFlowIndexStrategyWith initializes an example MoneyFlowIndexStrategyWith instance with default parameters.
+// given parameters.
+func NewMoneyFlowIndexStrategyWith(sellAt, buyAt float64) *MoneyFlowIndexStrategy {
+	return &MoneyFlowIndexStrategy{
+		MoneyFlowIndex: volume.NewMfi[float64](),
+		SellAt:         sellAt,
+		BuyAt:          buyAt,
+	}
+}
+
+// Name returns the name of the example strategy.
+func (m *MoneyFlowIndexStrategy) Name() string {
+	return fmt.Sprintf("Money Flow Index Strategy (%.2f,%.2f)", m.SellAt, m.BuyAt)
+}
+
+// ComputeWithContext processes the provided asset snapshots and generates an illustrative stream of actions.
+func (m *MoneyFlowIndexStrategy) ComputeWithContext(ctx context.Context, snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	snapshotsSplice := helper.DuplicateWithContext(ctx, snapshots, 4)
+
+	highs := asset.SnapshotsAsHighsWithContext(ctx, snapshotsSplice[0])
+	lows := asset.SnapshotsAsLowsWithContext(ctx, snapshotsSplice[1])
+	closings := asset.SnapshotsAsClosingsWithContext(ctx, snapshotsSplice[2])
+	volumes := asset.SnapshotsAsVolumesWithContext(ctx, snapshotsSplice[3])
+
+	mfis := m.MoneyFlowIndex.ComputeWithContext(ctx, highs, lows, closings, volumes)
+
+	actions := helper.MapWithContext(ctx, mfis, func(mfi float64) strategy.Action {
+		if mfi >= m.SellAt {
+			return strategy.Sell
+		}
+
+		if mfi <= m.BuyAt {
+			return strategy.Buy
+		}
+
+		return strategy.Hold
+	})
+
+	// Money Flow Index starts only after a full period.
+	actions = helper.ShiftWithContext(ctx, actions, m.MoneyFlowIndex.IdlePeriod(), strategy.Hold)
+
+	return actions
+}
+
+// Report processes the provided asset snapshots and generates an illustrative report annotated with example actions.
+func (m *MoneyFlowIndexStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
+	//
+	// snapshots[0] -> dates
+	// snapshots[1] -> highs       |
+	// snapshots[2] -> lows        |
+	// snapshots[3] -> closings[0] -> closings
+	//                 closings[1] -> money flow index
+	// snapshots[4] -> volumes
+	// snapshots[5] -> actions     -> annotations
+	//              -> outcomes
+	//
+	snapshots := helper.Duplicate(c, 6)
+
+	dates := helper.Skip(
+		asset.SnapshotsAsDates(snapshots[0]),
+		m.MoneyFlowIndex.IdlePeriod(),
+	)
+
+	highs := asset.SnapshotsAsHighs(snapshots[1])
+	lows := asset.SnapshotsAsLows(snapshots[2])
+	closingsSplice := helper.Duplicate(
+		asset.SnapshotsAsClosings(snapshots[3]),
+		2,
+	)
+	volumes := asset.SnapshotsAsVolumes(snapshots[4])
+
+	mfis := m.MoneyFlowIndex.Compute(highs, lows, closingsSplice[0], volumes)
+	closingsSplice[1] = helper.Skip(closingsSplice[1], m.MoneyFlowIndex.IdlePeriod())
+
+	actions, outcomes := strategy.ComputeWithOutcome(m, snapshots[5])
+	actions = helper.Skip(actions, m.MoneyFlowIndex.IdlePeriod())
+	outcomes = helper.Skip(outcomes, m.MoneyFlowIndex.IdlePeriod())
+
+	annotations := strategy.ActionsToAnnotations(actions)
+	outcomes = helper.MultiplyBy(outcomes, 100)
+
+	report := helper.NewReport(m.Name(), dates)
+	report.AddChart()
+	report.AddChart()
+
+	report.AddColumn(helper.NewNumericReportColumn("Close", closingsSplice[1]))
+	report.AddColumn(helper.NewNumericReportColumn("Money Flow Index", mfis), 1)
+	report.AddColumn(helper.NewAnnotationReportColumn(annotations), 0, 1)
+
+	report.AddColumn(helper.NewNumericReportColumn("Outcome", outcomes), 2)
+
+	return report
+}
+
+// Compute wraps ComputeWithContext for backwards compatibility.
+//
+// Deprecated: Use ComputeWithContext instead.
+func (m *MoneyFlowIndexStrategy) Compute(snapshots <-chan *asset.Snapshot) <-chan strategy.Action {
+	return m.ComputeWithContext(context.Background(), snapshots)
+}

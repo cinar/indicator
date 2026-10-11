@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,6 +6,7 @@ package momentum
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cinar/indicator/v2/helper"
 	"github.com/cinar/indicator/v2/trend"
@@ -28,16 +29,16 @@ const (
 //
 // Example:
 //
-//	qstick := momentum.Qstick[float64]()
+//	qstick := momentum.NewQstick[float64]()
 //	qstick.Sma.Period = 50
 //
 //	values := qstick.Compute(openings, closings)
-type Qstick[T helper.Number] struct {
+type Qstick[T helper.Float] struct {
 	Sma *trend.Sma[T]
 }
 
 // NewQstick function initializes a new QStick instance.
-func NewQstick[T helper.Number]() *Qstick[T] {
+func NewQstick[T helper.Float]() *Qstick[T] {
 	qstick := &Qstick[T]{
 		Sma: trend.NewSma[T](),
 	}
@@ -58,6 +59,11 @@ func (q *Qstick[T]) ComputeWithContext(ctx context.Context, openings, closings <
 // IdlePeriod is the initial period that Qstick won't yield any results.
 func (q *Qstick[T]) IdlePeriod() int {
 	return q.Sma.IdlePeriod()
+}
+
+// String is the string representation of the Qstick.
+func (q *Qstick[T]) String() string {
+	return fmt.Sprintf("QSTICK(%d)", q.Sma.Period)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

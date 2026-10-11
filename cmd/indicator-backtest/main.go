@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -10,15 +10,11 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/cinar/indicator/v2/asset"
 	"github.com/cinar/indicator/v2/backtest"
 	"github.com/cinar/indicator/v2/strategy"
-	"github.com/cinar/indicator/v2/strategy/compound"
-	"github.com/cinar/indicator/v2/strategy/momentum"
-	"github.com/cinar/indicator/v2/strategy/trend"
-	"github.com/cinar/indicator/v2/strategy/volatility"
-	"github.com/cinar/indicator/v2/strategy/volume"
 )
 
 func main() {
@@ -26,29 +22,72 @@ func main() {
 	var repositoryConfig string
 	var reportName string
 	var reportConfig string
+	var strategyNames string
+	var listStrategies bool
 	var workers int
 	var lastDays int
 	var addSplits bool
 	var addAnds bool
+	var configPath string
 
 	stdErr := log.New(os.Stderr, "", 0)
 	stdErr.Println("Indicator Backtest")
-	stdErr.Println("Copyright (c) 2021-2026 Onur Cinar.")
+	stdErr.Println("Copyright (c) 2021-2026 The Indicator Authors.")
 	stdErr.Println("The source code is provided under GNU AGPLv3 License.")
 	stdErr.Println("https://github.com/cinar/indicator")
+	stdErr.Println()
+	stdErr.Println("DISCLAIMER: For educational and research purposes only. Not investment or financial advice.")
+	stdErr.Println("Backtested performance is hypothetical and does not guarantee future results.")
 	stdErr.Println()
 
 	flag.StringVar(&repositoryName, "repository-name", "filesystem", "repository name")
 	flag.StringVar(&repositoryConfig, "repository-config", "", "repository config")
 	flag.StringVar(&reportName, "report-name", "html", "report name")
 	flag.StringVar(&reportConfig, "report-config", ".", "report type")
+	flag.StringVar(&strategyNames, "strategies", "", "comma-separated list of strategy names to backtest (see -list-strategies)")
+	flag.BoolVar(&listStrategies, "list-strategies", false, "list the available strategy names and exit")
 	flag.IntVar(&workers, "workers", backtest.DefaultBacktestWorkers, "number of concurrent workers")
 	flag.IntVar(&lastDays, "last", backtest.DefaultLastDays, "number of days to do backtest")
 	flag.BoolVar(&addSplits, "splits", false, "add the split strategies")
 	flag.BoolVar(&addAnds, "ands", false, "add the and strategies")
+	flag.StringVar(&configPath, "config", "", "path to a JSON config file describing the full backtest run (see README); when set, all other flags except -list-strategies are ignored")
 	flag.Parse()
 
 	logger := slog.Default()
+
+	if listStrategies {
+		for _, name := range StrategyNames() {
+			stdErr.Println(name)
+		}
+
+		return
+	}
+
+	if configPath != "" {
+		config, err := LoadConfig(configPath)
+		if err != nil {
+			logger.Error("Unable to load config file.", "path", configPath, "error", err)
+			os.Exit(1)
+		}
+
+		backtester, err := NewBacktestFromConfig(config, logger)
+		if err != nil {
+			logger.Error("Unable to initialize backtest from config file.", "path", configPath, "error", err)
+			os.Exit(1)
+		}
+
+		if err := backtester.Run(); err != nil {
+			logger.Error("Unable to run backtest.", "error", err)
+			os.Exit(1)
+		}
+
+		return
+	}
+
+	if strategyNames == "" {
+		logger.Error("No strategies specified. Provide one or more with -strategies (comma-separated), or see -list-strategies for the available names.")
+		os.Exit(1)
+	}
 
 	source, err := asset.NewRepository(repositoryName, repositoryConfig)
 	if err != nil {
@@ -67,12 +106,18 @@ func main() {
 	backtester.LastDays = lastDays
 	backtester.Logger = logger
 	backtester.Names = append(backtester.Names, flag.Args()...)
-	backtester.Strategies = append(backtester.Strategies, compound.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, momentum.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, strategy.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, trend.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, volatility.AllStrategies()...)
-	backtester.Strategies = append(backtester.Strategies, volume.AllStrategies()...)
+
+	for _, name := range strings.Split(strategyNames, ",") {
+		name = strings.TrimSpace(name)
+
+		s, err := NewStrategy(name)
+		if err != nil {
+			logger.Error("Unable to initialize strategy.", "name", name, "error", err)
+			os.Exit(1)
+		}
+
+		backtester.Strategies = append(backtester.Strategies, s)
+	}
 
 	if addSplits {
 		backtester.Strategies = append(backtester.Strategies, strategy.AllSplitStrategies(backtester.Strategies)...)

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -13,6 +13,11 @@ import (
 	"github.com/cinar/indicator/v2/helper"
 )
 
+const (
+	// DefaultHmaPeriod is the default HMA period.
+	DefaultHmaPeriod = 20
+)
+
 // Hma represents the configuration parameters for calculating the Hull Moving Average (HMA). Developed by
 // Alan Hull in 2005, HMA attempts to minimize the lag of a traditional moving average.
 //
@@ -20,7 +25,15 @@ import (
 //	WMA2 = WMA(period, values)
 //	WMA3 = WMA(sqrt(period), (2 * WMA1) - WMA2)
 //	HMA = WMA3
-type Hma[T helper.Number] struct {
+//
+// Note on period derivation: reference HMA implementations vary in how they derive the WMA1 and WMA3
+// sub-periods from period/2 and sqrt(period). Some truncate period/2 (integer division) rather than
+// rounding it, while most round sqrt(period). This implementation rounds both (via math.Round in
+// NewHmaWithPeriod), which is a deliberate, internally consistent choice rather than a bug. For even
+// periods this matches the common truncating variants, but for odd periods it can yield a WMA1 length
+// one greater than a truncating implementation would use, which may explain small output differences
+// when cross-checking against another platform's HMA.
+type Hma[T helper.Float] struct {
 	// First WMA.
 	wma1 *Wma[T]
 
@@ -31,12 +44,18 @@ type Hma[T helper.Number] struct {
 	wma3 *Wma[T]
 }
 
+// NewHma function initializes a new HMA instance with the default parameters.
+func NewHma[T helper.Float]() *Hma[T] {
+	return NewHmaWithPeriod[T](DefaultHmaPeriod)
+}
+
 // NewHmaWithPeriod function initializes a new HMA instance with the given parameters.
-func NewHmaWithPeriod[T helper.Number](period int) *Hma[T] {
+func NewHmaWithPeriod[T helper.Float](period int) *Hma[T] {
 	return &Hma[T]{
-		wma1: NewWmaWith[T](int(math.Round(float64(period) / 2))),
-		wma2: NewWmaWith[T](period),
-		wma3: NewWmaWith[T](int(math.Round(math.Sqrt(float64(period))))),
+		// Rounded rather than truncated; see the variant-choice note on the Hma type above.
+		wma1: NewWmaWithPeriod[T](int(math.Round(float64(period) / 2))),
+		wma2: NewWmaWithPeriod[T](period),
+		wma3: NewWmaWithPeriod[T](int(math.Round(math.Sqrt(float64(period))))),
 	}
 }
 

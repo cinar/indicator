@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -36,6 +36,28 @@ func TestZScore(t *testing.T) {
 	err = helper.CheckEquals(actual, expected)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestZScoreFlatMarket(t *testing.T) {
+	z := volatility.NewZScore[float64]()
+	length := z.IdlePeriod() + 20
+
+	closings := make([]float64, length)
+	for i := range closings {
+		closings[i] = 100
+	}
+
+	actual := helper.ChanToSlice(z.Compute(helper.SliceToChan(closings)))
+
+	if len(actual) == 0 {
+		t.Fatal("expected at least one Z-Score value")
+	}
+
+	for i, v := range actual {
+		if v != 0 {
+			t.Fatalf("expected Z-Score of 0 for flat market at %d, got %v", i, v)
+		}
 	}
 }
 

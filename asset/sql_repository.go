@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -6,8 +6,9 @@ package asset
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"time"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -15,6 +16,9 @@ import (
 
 // SQLRepository provides a SQL backed storage facility for financial market data.
 type SQLRepository struct {
+	// Logger is the slog logger instance.
+	Logger *slog.Logger
+
 	// db is the database connection.
 	db *sql.DB
 
@@ -67,12 +71,13 @@ func NewSQLRepository(dbDriver, dbURL string, dialect SQLRepositoryDialect) (*SQ
 	}
 
 	repository := &SQLRepository{
-		db,
-		dialect,
-		assetQuery,
-		getSinceQuery,
-		lastDateQuery,
-		appendQuery,
+		Logger:        slog.Default(),
+		db:            db,
+		dialect:       dialect,
+		assetsQuery:   assetQuery,
+		getSinceQuery: getSinceQuery,
+		lastDateQuery: lastDateQuery,
+		appendQuery:   appendQuery,
 	}
 
 	return repository, nil
@@ -109,11 +114,24 @@ func (s *SQLRepository) Assets() ([]string, error) {
 }
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
+//
+// By design, this only returns snapshots from 2000-01-01 onward, unlike
+// InMemoryRepository and FileSystemRepository, whose Get returns full
+// history with no floor date.
 func (s *SQLRepository) Get(name string) (<-chan *Snapshot, error) {
 	return s.GetSince(name, time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC))
 }
 
 // GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
+//
+// The query runs in a background goroutine that owns the underlying database
+// rows and sends each scanned snapshot on the returned channel. Callers must
+// drain the returned channel to completion (or otherwise ensure it keeps
+// being read) so the goroutine can finish and its deferred cleanup can
+// release the rows/connection; abandoning the channel partway through leaks
+// the goroutine and the underlying database resources, since there is no
+// cancellation signal on this interface. See Repository.GetSince for the
+// broader interface-level contract.
 func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot, error) {
 	rows, err := s.getSinceQuery.Query(name, date)
 	if err != nil {
@@ -138,10 +156,15 @@ func (s *SQLRepository) GetSince(name string, date time.Time) (<-chan *Snapshot,
 				&snapshot.Volume,
 			)
 			if err != nil {
-				log.Printf("unable to scan row: %v", err)
+				s.Logger.Error("Unable to scan row.", "asset", name, "error", err)
+				continue
 			}
 
 			snapshots <- snapshot
+		}
+
+		if err := rows.Err(); err != nil {
+			s.Logger.Error("Unable to iterate rows.", "asset", name, "error", err)
 		}
 	}()
 
@@ -157,7 +180,7 @@ func (s *SQLRepository) LastDate(name string) (time.Time, error) {
 	err := row.Scan(&date)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return date, fmt.Errorf("unable to find asset")
+			return date, ErrRepositoryAssetNotFound
 		}
 
 		return date, fmt.Errorf("unable to get the last date: %w", err)
@@ -168,25 +191,25 @@ func (s *SQLRepository) LastDate(name string) (time.Time, error) {
 
 // Append adds the given snapshots to the asset with the given name.
 func (s *SQLRepository) Append(name string, snapshots <-chan *Snapshot) error {
-	go func() {
-		for snapshot := range snapshots {
-			_, err := s.appendQuery.Exec(
-				name,
-				snapshot.Date,
-				snapshot.Open,
-				snapshot.High,
-				snapshot.Low,
-				snapshot.Close,
-				snapshot.Volume,
-			)
+	var appendErrors []error
 
-			if err != nil {
-				log.Printf("unable to append snapshot: %v", err)
-			}
+	for snapshot := range snapshots {
+		_, err := s.appendQuery.Exec(
+			name,
+			snapshot.Date,
+			snapshot.Open,
+			snapshot.High,
+			snapshot.Low,
+			snapshot.Close,
+			snapshot.Volume,
+		)
+
+		if err != nil {
+			appendErrors = append(appendErrors, fmt.Errorf("unable to append snapshot: %w", err))
 		}
-	}()
+	}
 
-	return nil
+	return errors.Join(appendErrors...)
 }
 
 // Drop drops the snapshots table.
