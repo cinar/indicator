@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2026 Onur Cinar.
+// Copyright (c) 2021-2026 The Indicator Authors.
 // The source code is provided under GNU AGPLv3 License.
 // https://github.com/cinar/indicator
 
@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -46,26 +47,37 @@ func main() {
 var apiHost = "https://fxmacrodata.com"
 
 func fetchCalendar(currency, startDate, endDate string) ([]calendarEvent, error) {
-	endpoint := fmt.Sprintf("%s/api/v1/calendar/%s", apiHost, currency)
+	base, err := url.Parse(apiHost)
+	if err != nil || base.Hostname() == "" || base.User != nil ||
+		(base.Scheme != "https" && base.Scheme != "http") ||
+		strings.ContainsAny(apiHost, "?#") {
+		return nil, fmt.Errorf("calendar API host must be HTTP(S), with a host and no credentials, query or fragment")
+	}
+	endpoint := strings.TrimRight(base.String(), "/") + "/api/v1/calendar/" + url.PathEscape(currency)
 	params := url.Values{}
 	params.Set("start_date", startDate)
 	params.Set("end_date", endDate)
 
-	client := http.Client{Timeout: 20 * time.Second}
+	client := http.Client{
+		Timeout: 20 * time.Second,
+		CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
 	res, err := client.Get(endpoint + "?" + params.Encode())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("calendar request failed")
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with %s", res.Status)
+		return nil, fmt.Errorf("calendar request failed with HTTP %d", res.StatusCode)
 	}
 
 	var payload calendarResponse
 	decoder := json.NewDecoder(res.Body)
 	if err := decoder.Decode(&payload); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("calendar response could not be decoded")
 	}
 	var extra any
 	if err := decoder.Decode(&extra); err != io.EOF {
