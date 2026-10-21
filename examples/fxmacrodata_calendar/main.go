@@ -7,15 +7,20 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"sort"
+	"time"
 )
 
 type calendarResponse struct {
-	Data []calendarEvent `json:"data"`
+	Data   []calendarEvent `json:"data"`
+	Error  json.RawMessage `json:"error,omitempty"`
+	Detail json.RawMessage `json:"detail,omitempty"`
 }
 
 type calendarEvent struct {
@@ -46,7 +51,8 @@ func fetchCalendar(currency, startDate, endDate string) ([]calendarEvent, error)
 	params.Set("start_date", startDate)
 	params.Set("end_date", endDate)
 
-	res, err := http.Get(endpoint + "?" + params.Encode())
+	client := http.Client{Timeout: 20 * time.Second}
+	res, err := client.Get(endpoint + "?" + params.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -57,8 +63,21 @@ func fetchCalendar(currency, startDate, endDate string) ([]calendarEvent, error)
 	}
 
 	var payload calendarResponse
-	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&payload); err != nil {
 		return nil, err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		return nil, fmt.Errorf("calendar response must contain one JSON value")
+	}
+	for _, field := range []json.RawMessage{payload.Error, payload.Detail} {
+		if len(field) > 0 && !bytes.Equal(bytes.TrimSpace(field), []byte("null")) {
+			return nil, fmt.Errorf("calendar response contains an error")
+		}
+	}
+	if payload.Data == nil {
+		return nil, fmt.Errorf("calendar response must contain a data list")
 	}
 	return payload.Data, nil
 }
