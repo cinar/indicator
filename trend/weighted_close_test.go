@@ -25,8 +25,8 @@ func TestWeightedClose(t *testing.T) {
 	}
 
 	inputs := helper.Duplicate(input, 4)
-	highs := helper.Map(inputs[0], func(d *Data) float64 { return d.Close })
-	lows := helper.Map(inputs[1], func(d *Data) float64 { return d.Close })
+	highs := helper.Map(inputs[0], func(d *Data) float64 { return d.High })
+	lows := helper.Map(inputs[1], func(d *Data) float64 { return d.Low })
 	closings := helper.Map(inputs[2], func(d *Data) float64 { return d.Close })
 	expected := helper.Map(inputs[3], func(d *Data) float64 { return d.WeightedClose })
 

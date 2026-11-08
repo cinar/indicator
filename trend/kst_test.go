@@ -135,12 +135,15 @@ func TestKst(t *testing.T) {
 	kst := trend.NewKst[float64]()
 	actualKst, actualSignal := kst.Compute(closing)
 
-	actualKst = helper.RoundDigits(actualKst, 2)
-	actualSignal = helper.RoundDigits(actualSignal, 2)
+	actualKst = helper.RoundDigits(actualKst, 4)
+	actualSignal = helper.RoundDigits(actualSignal, 4)
 
 	inputs[1] = helper.Skip(inputs[1], kst.IdlePeriod())
 
+	compared := 0
+
 	for data := range inputs[1] {
+		compared++
 		actualK := <-actualKst
 		actualS := <-actualSignal
 
@@ -151,5 +154,11 @@ func TestKst(t *testing.T) {
 		if actualS != data.Signal {
 			t.Fatalf("actual %v expected %v", actualS, data.Signal)
 		}
+	}
+
+	// A CSV parse error ends the input early instead of failing the read,
+	// so make sure the rows were actually compared.
+	if compared == 0 {
+		t.Fatal("no rows compared")
 	}
 }
