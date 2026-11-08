@@ -8,13 +8,13 @@ import (
 	"context"
 	"encoding/csv"
 	"errors"
+	"fmt"
 	"io"
 	"io/fs"
 	"log/slog"
 	"os"
 	"path/filepath"
 	"reflect"
-	"sync"
 )
 
 const (
@@ -132,66 +132,86 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T {
 // ReadFromReaderWithContext parses the CSV data from the provided reader,
 // maps the data to corresponding struct fields, and delivers
 // the resulting it through the channel, supporting context cancellation.
+//
+// The rows are parsed as they are read. A row that cannot be parsed is
+// logged and ends the channel early, since the channel cannot carry an
+// error. Use ReadFromFile or ReadFromCsvFile to get the error instead.
 func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader) <-chan *T {
 	rows := make(chan *T)
 
 	go func() {
 		defer close(rows)
 
-		csvReader := csv.NewReader(reader)
-
-		// If CSV has headers, align column indices to match the
-		// order of column headers.
-		if c.hasHeader {
-			err := c.updateColumnIndexes(csvReader)
-			if err != nil {
-				c.Logger.Error("Unable to update the column indexes.", "error", err)
-				return
-			}
-		}
-
-		for {
+		err := c.readRows(ctx, reader, func(row *T) bool {
 			select {
 			case <-ctx.Done():
-				return
-			default:
-			}
-
-			record, err := csvReader.Read()
-			if err == io.EOF {
-				break
-			}
-
-			if err != nil {
-				c.Logger.Error("Unable to read row.", "error", err)
-				break
-			}
-
-			row := new(T)
-			rowValue := reflect.ValueOf(row).Elem()
-
-			for _, column := range c.columns {
-				if column.ColumnIndex == -1 {
-					continue
-				}
-
-				err := setReflectValue(rowValue.Field(column.FieldIndex),
-					record[column.ColumnIndex], column.Format)
-				if err != nil {
-					c.Logger.Error("Unable to set value.", "error", err)
-					return
-				}
-			}
-
-			select {
-			case <-ctx.Done():
-				return
+				return false
 			case rows <- row:
+				return true
 			}
+		})
+		if err != nil && !errors.Is(err, ctx.Err()) {
+			c.Logger.Error("Unable to read the CSV data.", "error", err)
 		}
 	}()
 
 	return rows
+}
+
+// readRows parses the rows from the provided reader and passes each one to
+// emit, until the input ends, emit returns false, or a row cannot be parsed.
+// An input without a header row has no rows.
+func (c *Csv[T]) readRows(ctx context.Context, reader io.Reader, emit func(*T) bool) error {
+	csvReader := csv.NewReader(reader)
+
+	// If CSV has headers, align column indices to match the
+	// order of column headers.
+	if c.hasHeader {
+		err := c.updateColumnIndexes(csvReader)
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+
+		if err != nil {
+			return fmt.Errorf("unable to read the header: %w", err)
+		}
+	}
+
+	for {
+		err := ctx.Err()
+		if err != nil {
+			return err
+		}
+
+		record, err := csvReader.Read()
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+
+		if err != nil {
+			return err
+		}
+
+		row := new(T)
+		rowValue := reflect.ValueOf(row).Elem()
+
+		for _, column := range c.columns {
+			if column.ColumnIndex == -1 {
+				continue
+			}
+
+			err := setReflectValue(rowValue.Field(column.FieldIndex),
+				record[column.ColumnIndex], column.Format)
+			if err != nil {
+				line, _ := csvReader.FieldPos(column.ColumnIndex)
+				return fmt.Errorf("line %d, column %s: %w", line, column.Header, err)
+			}
+		}
+
+		if !emit(row) {
+			return nil
+		}
+	}
 }
 
 // ReadFromFile parses the CSV data from the provided file name,
@@ -204,24 +224,33 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error) {
 // ReadFromFileWithContext parses the CSV data from the provided file name,
 // maps the data to corresponding struct fields, and delivers
 // the resulting rows through the channel, supporting context cancellation.
+//
+// The whole file is parsed before the function returns, so a row that
+// cannot be parsed is returned as an error, with its line and column,
+// instead of ending the channel early.
 func (c *Csv[T]) ReadFromFileWithContext(ctx context.Context, fileName string) (<-chan *T, error) {
 	file, err := os.Open(filepath.Clean(fileName))
 	if err != nil {
 		return nil, err
 	}
 
-	wg := &sync.WaitGroup{}
-	rows := WaitableWithContext(ctx, wg, c.ReadFromReaderWithContext(ctx, file))
+	var rows []*T
 
-	go func() {
-		wg.Wait()
-		err := file.Close()
-		if err != nil {
-			c.Logger.Error("Unable to close file.", "error", err)
-		}
-	}()
+	err = c.readRows(ctx, file, func(row *T) bool {
+		rows = append(rows, row)
+		return true
+	})
 
-	return rows, nil
+	closeErr := file.Close()
+	if closeErr != nil {
+		c.Logger.Error("Unable to close file.", "error", closeErr)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", fileName, err)
+	}
+
+	return SliceToChanWithContext(ctx, rows), nil
 }
 
 // AppendToFile appends the provided rows of data to the end of the specified file, creating
