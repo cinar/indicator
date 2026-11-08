@@ -40,9 +40,19 @@ func (m *MovingMin[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 
 	bst := helper.NewBst[T]()
 
+	// The shifted stream starts with Period fill values, which are not part
+	// of the input. Removing them would drop an equal input value, such as
+	// a real 0, from the window, so nothing is removed until the window is
+	// full.
+	count := 0
+
 	mins := helper.OperateWithContext(ctx, cs[0], cs[1], func(c, b T) T {
 		bst.Insert(c)
-		bst.Remove(b)
+		if count < m.Period {
+			count++
+		} else {
+			bst.Remove(b)
+		}
 		return bst.Min()
 	})
 

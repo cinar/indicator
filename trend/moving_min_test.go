@@ -24,6 +24,22 @@ func TestMovingMin(t *testing.T) {
 	}
 }
 
+// TestMovingMinZeroInFirstWindow checks that a 0 in the first window counts
+// toward the minimum. The shifted stream used to remove values starts with
+// zero fill values, which used to remove the real 0s.
+func TestMovingMinZeroInFirstWindow(t *testing.T) {
+	input := helper.SliceToChan([]float64{0, 0, 1, 2, 3})
+	expected := helper.SliceToChan([]float64{0, 0, 1})
+
+	movingMin := trend.NewMovingMinWithPeriod[float64](3)
+	actual := movingMin.Compute(input)
+
+	err := helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestMovingMinString(t *testing.T) {
 	expected := "MOVINGMIN(4)"
 	actual := trend.NewMovingMinWithPeriod[int](4).String()
