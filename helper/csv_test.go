@@ -5,8 +5,10 @@
 package helper_test
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -150,6 +152,131 @@ func TestCsvReadFromFile(t *testing.T) {
 
 	if row.Close != 30.4 {
 		t.Fatalf("actual %v expected 30.4", row.Close)
+	}
+}
+
+// writeCsvTestFile writes the content to a CSV file in a temporary directory
+// and returns its name.
+func writeCsvTestFile(t *testing.T, content string) string {
+	t.Helper()
+
+	fileName := filepath.Join(t.TempDir(), "test.csv")
+
+	err := os.WriteFile(fileName, []byte(content), 0o600)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return fileName
+}
+
+func TestCsvReadFromFileInvalidField(t *testing.T) {
+	type Row struct {
+		Close float64
+		High  float64
+	}
+
+	// The empty High cell on line 3 must be reported, not end the rows
+	// early after line 2.
+	fileName := writeCsvTestFile(t, "Close,High\n1,2\n3,\n5,6\n")
+
+	rows, err := helper.ReadFromCsvFile[Row](fileName)
+	if err == nil {
+		t.Fatalf("actual %v expected error", helper.ChanToSlice(rows))
+	}
+
+	if !strings.Contains(err.Error(), "line 3, column High") {
+		t.Fatalf("actual %v expected the line and column", err)
+	}
+}
+
+func TestCsvReadFromFileInvalidRecord(t *testing.T) {
+	type Row struct {
+		Close float64
+		High  float64
+	}
+
+	fileName := writeCsvTestFile(t, "Close,High\n1,2\n3\n")
+
+	_, err := helper.ReadFromCsvFile[Row](fileName)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestCsvReadFromEmptyFile(t *testing.T) {
+	type Row struct {
+		Close float64
+	}
+
+	fileName := writeCsvTestFile(t, "")
+
+	rows, err := helper.ReadFromCsvFile[Row](fileName)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if actual := helper.ChanToSlice(rows); len(actual) != 0 {
+		t.Fatalf("actual %v expected no rows", actual)
+	}
+}
+
+func TestCsvReadFromFileCancelled(t *testing.T) {
+	type Row struct {
+		Close float64
+	}
+
+	fileName := writeCsvTestFile(t, "Close\n1\n")
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	_, err := helper.ReadFromCsvFileWithContext[Row](ctx, fileName)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestCsvReadFromReaderCancelled(t *testing.T) {
+	type Row struct {
+		Close float64
+	}
+
+	csv, err := helper.NewCsv[Row]()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	rows := csv.ReadFromReaderWithContext(ctx, strings.NewReader("Close\n1\n2\n3\n"))
+
+	if row := <-rows; row.Close != 1 {
+		t.Fatalf("actual %v expected 1", row.Close)
+	}
+
+	// The reader is now waiting to send the second row; cancelling ends it
+	// and closes the channel without the remaining rows.
+	cancel()
+
+	if actual := helper.ChanToSlice(rows); len(actual) > 1 {
+		t.Fatalf("actual %d rows expected at most 1 after cancel", len(actual))
+	}
+}
+
+func TestCsvReadFromReaderInvalidHeader(t *testing.T) {
+	type Row struct {
+		Close float64
+	}
+
+	csv, err := helper.NewCsv[Row]()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// An unterminated quote in the header row.
+	row, ok := <-csv.ReadFromReader(strings.NewReader("\"Close\n1\n"))
+	if ok {
+		t.Fatalf("actual %v expected closed", row)
 	}
 }
 

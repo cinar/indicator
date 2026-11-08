@@ -287,7 +287,7 @@ fmt.Println(actual) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 ```
 
 <a name="AppendOrWriteToCsvFile"></a>
-## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L384>)
+## func [AppendOrWriteToCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L413>)
 
 ```go
 func AppendOrWriteToCsvFile[T any](fileName string, rows <-chan *T, options ...CsvOption[T]) error
@@ -298,7 +298,7 @@ AppendOrWriteToCsvFile wraps AppendOrWriteToCsvFileWithContext for backwards com
 Deprecated: Use AppendOrWriteToCsvFileWithContext instead.
 
 <a name="AppendOrWriteToCsvFileWithContext"></a>
-## func [AppendOrWriteToCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L390>)
+## func [AppendOrWriteToCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L419>)
 
 ```go
 func AppendOrWriteToCsvFileWithContext[T any](ctx context.Context, fileName string, rows <-chan *T, options ...CsvOption[T]) error
@@ -1365,7 +1365,7 @@ fmt.Println(helper.ChanToSlice(squared)) // [4, 9, 25, 100]
 ```
 
 <a name="ReadFromCsvFile"></a>
-## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L366>)
+## func [ReadFromCsvFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L395>)
 
 ```go
 func ReadFromCsvFile[T any](fileName string, options ...CsvOption[T]) (<-chan *T, error)
@@ -1376,7 +1376,7 @@ ReadFromCsvFile wraps ReadFromCsvFileWithContext for backwards compatibility.
 Deprecated: Use ReadFromCsvFileWithContext instead.
 
 <a name="ReadFromCsvFileWithContext"></a>
-## func [ReadFromCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L372>)
+## func [ReadFromCsvFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L401>)
 
 ```go
 func ReadFromCsvFileWithContext[T any](ctx context.Context, fileName string, options ...CsvOption[T]) (<-chan *T, error)
@@ -1886,7 +1886,7 @@ func NewCsv[T any](options ...CsvOption[T]) (*Csv[T], error)
 NewCsv creates a new CSV instance with the provided options.
 
 <a name="Csv[T].AppendToFile"></a>
-### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L229>)
+### func \(\*Csv\[T\]\) [AppendToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L258>)
 
 ```go
 func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
@@ -1895,7 +1895,7 @@ func (c *Csv[T]) AppendToFile(fileName string, rows <-chan *T) error
 AppendToFile appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist.
 
 <a name="Csv[T].AppendToFileWithContext"></a>
-### func \(\*Csv\[T\]\) [AppendToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L235>)
+### func \(\*Csv\[T\]\) [AppendToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L264>)
 
 ```go
 func (c *Csv[T]) AppendToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error
@@ -1904,7 +1904,7 @@ func (c *Csv[T]) AppendToFileWithContext(ctx context.Context, fileName string, r
 AppendToFileWithContext appends the provided rows of data to the end of the specified file, creating the file if it doesn't exist, supporting context cancellation.
 
 <a name="Csv[T].ReadFromFile"></a>
-### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L200>)
+### func \(\*Csv\[T\]\) [ReadFromFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L220>)
 
 ```go
 func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
@@ -1913,13 +1913,15 @@ func (c *Csv[T]) ReadFromFile(fileName string) (<-chan *T, error)
 ReadFromFile parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel.
 
 <a name="Csv[T].ReadFromFileWithContext"></a>
-### func \(\*Csv\[T\]\) [ReadFromFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L207>)
+### func \(\*Csv\[T\]\) [ReadFromFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L231>)
 
 ```go
 func (c *Csv[T]) ReadFromFileWithContext(ctx context.Context, fileName string) (<-chan *T, error)
 ```
 
 ReadFromFileWithContext parses the CSV data from the provided file name, maps the data to corresponding struct fields, and delivers the resulting rows through the channel, supporting context cancellation.
+
+The whole file is parsed before the function returns, so a row that cannot be parsed is returned as an error, with its line and column, instead of ending the channel early.
 
 <a name="Csv[T].ReadFromReader"></a>
 ### func \(\*Csv\[T\]\) [ReadFromReader](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L128>)
@@ -1931,7 +1933,7 @@ func (c *Csv[T]) ReadFromReader(reader io.Reader) <-chan *T
 ReadFromReader parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel.
 
 <a name="Csv[T].ReadFromReaderWithContext"></a>
-### func \(\*Csv\[T\]\) [ReadFromReaderWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L135>)
+### func \(\*Csv\[T\]\) [ReadFromReaderWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L139>)
 
 ```go
 func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader) <-chan *T
@@ -1939,8 +1941,10 @@ func (c *Csv[T]) ReadFromReaderWithContext(ctx context.Context, reader io.Reader
 
 ReadFromReaderWithContext parses the CSV data from the provided reader, maps the data to corresponding struct fields, and delivers the resulting it through the channel, supporting context cancellation.
 
+The rows are parsed as they are read. A row that cannot be parsed is logged and ends the channel early, since the channel cannot carry an error. Use ReadFromFile or ReadFromCsvFile to get the error instead.
+
 <a name="Csv[T].WriteToFile"></a>
-### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L252>)
+### func \(\*Csv\[T\]\) [WriteToFile](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L281>)
 
 ```go
 func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error
@@ -1949,7 +1953,7 @@ func (c *Csv[T]) WriteToFile(fileName string, rows <-chan *T) error
 WriteToFile creates a new file with the given name and writes the provided rows of data to it, overwriting any existing content.
 
 <a name="Csv[T].WriteToFileWithContext"></a>
-### func \(\*Csv\[T\]\) [WriteToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L258>)
+### func \(\*Csv\[T\]\) [WriteToFileWithContext](<https://github.com/cinar/indicator/blob/master/helper/csv.go#L287>)
 
 ```go
 func (c *Csv[T]) WriteToFileWithContext(ctx context.Context, fileName string, rows <-chan *T) error
