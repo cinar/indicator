@@ -242,16 +242,6 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 				}
 			}
 
-			// Reset countdown when completed
-			if buyCountdownCount >= t.CountdownPeriod {
-				buyCountdownCount = 0
-				inBuyCountdown = false
-			}
-			if sellCountdownCount >= t.CountdownPeriod {
-				sellCountdownCount = 0
-				inSellCountdown = false
-			}
-
 			select {
 			case <-ctx.Done():
 				return
@@ -271,6 +261,17 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 			case <-ctx.Done():
 				return
 			case sellCountdown <- T(sellCountdownCount):
+			}
+
+			// Reset a completed countdown after emitting it, so the bar
+			// that completes the countdown reports CountdownPeriod.
+			if buyCountdownCount >= t.CountdownPeriod {
+				buyCountdownCount = 0
+				inBuyCountdown = false
+			}
+			if sellCountdownCount >= t.CountdownPeriod {
+				sellCountdownCount = 0
+				inSellCountdown = false
 			}
 		}
 	}()

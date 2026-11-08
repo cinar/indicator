@@ -117,6 +117,34 @@ func TestTdSequentialSetupCapsAtSetupPeriod(t *testing.T) {
 	}
 }
 
+// TestTdSequentialCountdownReportsCompletion checks that the bar that
+// completes a countdown reports CountdownPeriod (13). The count used to be
+// reset before it was emitted, so the completing bar reported 0 and the
+// output never reached 13.
+func TestTdSequentialCountdownReportsCompletion(t *testing.T) {
+	// 30 strictly decreasing closes: the buy setup completes at index 12,
+	// and every bar from there is at or below the close 2 bars back, so the
+	// buy countdown advances 1, 2, ... and completes at index 24.
+	closings := make([]float64, 0, 30)
+	price := 100.0
+
+	for i := 0; i < 30; i++ {
+		closings = append(closings, price)
+		price--
+	}
+
+	rows := tdSequentialRows(closings)
+
+	if rows[24].buyCountdown != momentum.DefaultTdSequentialCountdownPeriod {
+		t.Fatalf("row 24: buyCountdown = %v, want %v (completed)", rows[24].buyCountdown, momentum.DefaultTdSequentialCountdownPeriod)
+	}
+
+	// The countdown restarts after the completing bar.
+	if rows[25].buyCountdown != 1 {
+		t.Fatalf("row 25: buyCountdown = %v, want 1 (restarted)", rows[25].buyCountdown)
+	}
+}
+
 // TestTdSequentialCountdownCrossCancel checks that an in-progress buy
 // countdown is cancelled the moment an opposite (sell) setup completes, as
 // required by the TD Sequential methodology. Without the fix, buyCountdown
