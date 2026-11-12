@@ -48,11 +48,13 @@ func NewAroon[T helper.Float]() *Aroon[T] {
 // ComputeWithContext function takes a channel of numbers and computes the Aroon
 // over the specified period.
 func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (<-chan T, <-chan T) {
-	movingMax := NewMovingMaxWithPeriod[T](a.Period)
-	movingMin := NewMovingMinWithPeriod[T](a.Period)
+	// The highest high and lowest low are looked for in the last Period + 1
+	// bars, the current one included.
+	sinceLastHigh := barsSinceLatest(ctx, high, a.Period+1, func(n, best T) bool { return n > best })
+	sinceLastLow := barsSinceLatest(ctx, low, a.Period+1, func(n, best T) bool { return n < best })
 
-	sinceLastHigh := helper.MaxSinceWithContext(ctx, movingMax.ComputeWithContext(ctx, high), a.Period)
-	sinceLastLow := helper.MinSinceWithContext(ctx, movingMin.ComputeWithContext(ctx, low), a.Period)
+	sinceLastHigh = helper.SkipWithContext(ctx, sinceLastHigh, a.Period)
+	sinceLastLow = helper.SkipWithContext(ctx, sinceLastLow, a.Period)
 
 	// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
 	aroonUp := helper.MultiplyByWithContext(ctx, sinceLastHigh, -1)
@@ -73,12 +75,33 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 
 // IdlePeriod is the initial period that Aroon won't yield any results.
 func (a *Aroon[T]) IdlePeriod() int {
-	return a.Period - 1
+	return a.Period
 }
 
 // String is the string representation of the Aroon.
 func (a *Aroon[T]) String() string {
 	return fmt.Sprintf("AROON(%d)", a.Period)
+}
+
+// barsSinceLatest returns how many bars ago the best value in each window of
+// w bars was, where better reports whether n beats the best so far. On ties
+// the most recent bar wins, as in TA-Lib.
+func barsSinceLatest[T helper.Float](ctx context.Context, c <-chan T, w int, better func(n, best T) bool) <-chan T {
+	return helper.WindowWithContext(ctx, c, func(s []T, i int) T {
+		var best T
+		since, k := 0, 0
+
+		// Walk from the newest bar to the oldest.
+		helper.SlicesReverse(s, i, func(n T) bool {
+			if k == 0 || better(n, best) {
+				best, since = n, k
+			}
+			k++
+			return true
+		})
+
+		return T(since)
+	}, w)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.

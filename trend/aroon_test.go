@@ -46,9 +46,9 @@ func TestAroon(t *testing.T) {
 	}
 }
 
-// TestAroonCompareRust compares the result of the Go implementation with the result of a Rust implementation.
-func TestAroonCompareRust(t *testing.T) {
-	// compares to: https://github.com/sabinchitrakar/aroon-rs/blob/master/docs/aroon.md
+// TestAroonCompareTaLib compares a short period with TA-Lib 0.8.3
+// AROON(high, low, 5) on the same data.
+func TestAroonCompareTaLib(t *testing.T) {
 	type AroonData struct {
 		High float64
 		Low  float64
@@ -56,25 +56,27 @@ func TestAroonCompareRust(t *testing.T) {
 		Down float64
 	}
 	var testData = []AroonData{
-		{High: 82.15, Low: 81.29, Up: 0, Down: 0}, // None
-		{High: 81.89, Low: 80.64, Up: 0, Down: 0}, // None
-		{High: 83.03, Low: 81.31, Up: 0, Down: 0}, // None
-		{High: 83.30, Low: 82.65, Up: 0, Down: 0}, // None
-		{High: 83.85, Low: 83.07, Up: 0, Down: 0}, // None
-		{High: 83.90, Low: 83.11, Up: 20.00, Down: 100.00},
-		{High: 83.33, Low: 82.49, Up: 20.00, Down: 80.00},
-		{High: 84.30, Low: 82.30, Up: 100.00, Down: 100.00},
-		{High: 84.84, Low: 84.15, Up: 80.00, Down: 100.00},
-		{High: 85.00, Low: 84.11, Up: 60.00, Down: 100.00},
-		{High: 85.90, Low: 84.03, Up: 40.00, Down: 100.00},
-		{High: 86.58, Low: 85.39, Up: 20.00, Down: 100.00},
-		{High: 86.98, Low: 85.76, Up: 60.00, Down: 100.00},
-		{High: 88.00, Low: 87.17, Up: 40.00, Down: 100.00},
-		{High: 87.87, Low: 87.01, Up: 20.00, Down: 80.00},
+		{High: 82.15, Low: 81.29}, // None
+		{High: 81.89, Low: 80.64}, // None
+		{High: 83.03, Low: 81.31}, // None
+		{High: 83.30, Low: 82.65}, // None
+		{High: 83.85, Low: 83.07}, // None
+		{High: 83.90, Low: 83.11, Up: 100, Down: 20},
+		{High: 83.33, Low: 82.49, Up: 80, Down: 0},
+		{High: 84.30, Low: 82.30, Up: 100, Down: 0},
+		{High: 84.84, Low: 84.15, Up: 100, Down: 80},
+		{High: 85.00, Low: 84.11, Up: 100, Down: 60},
+		{High: 85.90, Low: 84.03, Up: 100, Down: 40},
+		{High: 86.58, Low: 85.39, Up: 100, Down: 20},
+		{High: 86.98, Low: 85.76, Up: 100, Down: 0},
+		{High: 88.00, Low: 87.17, Up: 100, Down: 40},
+		{High: 87.87, Low: 87.01, Up: 80, Down: 20},
 	}
 
 	input := helper.SliceToChan[AroonData](testData)
-	aroon := trend.NewAroon[float64]()
+	aroon := &trend.Aroon[float64]{
+		Period: 5,
+	}
 
 	inputs := helper.Duplicate(input, 4)
 	high := helper.Map(inputs[0], func(row AroonData) float64 { return row.High })
@@ -139,11 +141,14 @@ func TestAroonValidateDefinition(t *testing.T) {
 		Down float64
 	}
 	var testData = []AroonData{
-		{High: 11, Low: 9, Up: 0, Down: 0},    // None
-		{High: 10, Low: 9, Up: 0, Down: 0},    // None
-		{High: 9, Low: 9, Up: 100, Down: 100}, // None
-		{High: 9, Low: 9, Up: 67, Down: 67},   // None
-		{High: 9, Low: 9, Up: 33, Down: 33},   // None
+		{High: 10, Low: 5}, // None
+		{High: 12, Low: 4}, // None
+		{High: 11, Low: 6}, // None
+		// The high of 12 and the low of 4 repeat; the most recent one counts.
+		{High: 12, Low: 4, Up: 100, Down: 100},
+		{High: 9, Low: 7, Up: 67, Down: 67},
+		{High: 8, Low: 8, Up: 33, Down: 33},
+		{High: 7, Low: 9, Up: 0, Down: 0},
 	}
 
 	input := helper.SliceToChan[AroonData](testData)

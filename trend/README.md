@@ -781,7 +781,7 @@ func NewAroon[T helper.Float]() *Aroon[T]
 NewAroon function initializes a new Aroon instance with the default parameters.
 
 <a name="Aroon[T].Compute"></a>
-### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L87>)
+### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L110>)
 
 ```go
 func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T)
@@ -801,7 +801,7 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 ComputeWithContext function takes a channel of numbers and computes the Aroon over the specified period.
 
 <a name="Aroon[T].IdlePeriod"></a>
-### func \(\*Aroon\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L75>)
+### func \(\*Aroon\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L77>)
 
 ```go
 func (a *Aroon[T]) IdlePeriod() int
@@ -810,7 +810,7 @@ func (a *Aroon[T]) IdlePeriod() int
 IdlePeriod is the initial period that Aroon won't yield any results.
 
 <a name="Aroon[T].String"></a>
-### func \(\*Aroon\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L80>)
+### func \(\*Aroon\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L82>)
 
 ```go
 func (a *Aroon[T]) String() string
