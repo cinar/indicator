@@ -29,6 +29,10 @@ const (
 //
 //	CRSI = (RSI(3) + RSI(Streak, 2) + PercentRank(ROC, 100)) / 3
 //
+// PercentRank(ROC, 100) is the percentage of the 100 preceding one-bar ROC
+// values that are below the current one, as in Connors' definition and
+// TA-Lib CRSI.
+//
 // Example:
 //
 //	connorsRsi := momentum.NewConnorsRsi[float64]()
@@ -100,7 +104,9 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 
 	// Component 3: PercentRank of ROC
 	rocs := c.Roc.ComputeWithContext(ctx, cs[2])
-	percentRanks := helper.PercentRankWithContext(ctx, rocs, c.PercentRankPeriod)
+	// PercentRank ranks against its period-1 preceding values, so period+1 ranks
+	// the ROC against the PercentRankPeriod preceding values, as Connors defines it.
+	percentRanks := helper.PercentRankWithContext(ctx, rocs, c.PercentRankPeriod+1)
 
 	// The three components run in parallel over the same closing-price stream, but each
 	// reaches its first value at a different offset. Skip the faster branches so all
@@ -127,9 +133,8 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 func (c *ConnorsRsi[T]) componentIdlePeriods() (rsiIdle, streakRsiIdle, percentRankIdle int) {
 	rsiIdle = c.Rsi.IdlePeriod()
 	streakRsiIdle = c.Streak.IdlePeriod() + c.StreakRsi.IdlePeriod()
-	// PercentRank ranks a value once it has period-1 predecessors, so it becomes
-	// idle one input sooner than a naive period-based count would suggest.
-	percentRankIdle = c.Roc.IdlePeriod() + c.PercentRankPeriod - 1
+	// The first ROC is ranked once PercentRankPeriod ROCs precede it.
+	percentRankIdle = c.Roc.IdlePeriod() + c.PercentRankPeriod
 
 	return rsiIdle, streakRsiIdle, percentRankIdle
 }

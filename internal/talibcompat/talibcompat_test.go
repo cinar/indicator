@@ -187,7 +187,7 @@ var testCases = []testCase{
 	{name: "ChaikinOscillator", columns: []string{"ADOSC", "AD"}, fromBar: 150, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewChaikinOscillator[float64]().Compute(in(b.high), in(b.low), in(b.close), in(b.volume)))
 	}},
-	{name: "ConnorsRsi", columns: []string{"CRSI"}, skip: "https://github.com/cinar/indicator/issues/524", compute: func(b *bars) []<-chan float64 {
+	{name: "ConnorsRsi", columns: []string{"CRSI"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewConnorsRsi[float64]().Compute(in(b.close)))
 	}},
 	{name: "CoppockCurve", columns: []string{"COPPOCK"}, compute: func(b *bars) []<-chan float64 {
