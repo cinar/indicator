@@ -193,7 +193,7 @@ var testCases = []testCase{
 	{name: "CoppockCurve", columns: []string{"COPPOCK"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewCoppockCurve[float64]().Compute(in(b.close)))
 	}},
-	{name: "EhlersFisher", columns: []string{"EFISHER"}, skip: "https://github.com/cinar/indicator/issues/523", compute: func(b *bars) []<-chan float64 {
+	{name: "EhlersFisher", columns: []string{"EFISHER"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewEhlersFisher[float64]().Compute(in(b.high), in(b.low)))
 	}},
 	{name: "ElderRay", columns: []string{"ELDER_BULL", "ELDER_BEAR"}, compute: func(b *bars) []<-chan float64 {
