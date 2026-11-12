@@ -542,13 +542,15 @@ func (c *ChaikinOscillator[T]) String() string
 String is the string representation of the Chaikin Oscillator.
 
 <a name="ConnorsRsi"></a>
-## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L36-L52>)
+## type [ConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L40-L56>)
 
 ConnorsRsi represents the configuration parameters for calculating the Connors RSI. It is a momentum indicator that combines three components: 1. RSI of closing prices 2. RSI of up/down streak length 3. Percentile rank of the rate of change
 
 ```
 CRSI = (RSI(3) + RSI(Streak, 2) + PercentRank(ROC, 100)) / 3
 ```
+
+PercentRank\(ROC, 100\) is the percentage of the 100 preceding one\-bar ROC values that are below the current one, as in Connors' definition and TA\-Lib CRSI.
 
 Example:
 
@@ -578,7 +580,7 @@ type ConnorsRsi[T helper.Float] struct {
 ```
 
 <a name="NewConnorsRsi"></a>
-### func [NewConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L55>)
+### func [NewConnorsRsi](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L59>)
 
 ```go
 func NewConnorsRsi[T helper.Float]() *ConnorsRsi[T]
@@ -587,7 +589,7 @@ func NewConnorsRsi[T helper.Float]() *ConnorsRsi[T]
 NewConnorsRsi function initializes a new Connors RSI instance with the default parameters.
 
 <a name="NewConnorsRsiWithPeriods"></a>
-### func [NewConnorsRsiWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L64>)
+### func [NewConnorsRsiWithPeriods](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L68>)
 
 ```go
 func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percentRankPeriod int) *ConnorsRsi[T]
@@ -596,7 +598,7 @@ func NewConnorsRsiWithPeriods[T helper.Float](rsiPeriod, streakRsiPeriod, percen
 NewConnorsRsiWithPeriods function initializes a new Connors RSI instance with the given periods.
 
 <a name="ConnorsRsi[T].Compute"></a>
-### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L219>)
+### func \(\*ConnorsRsi\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L224>)
 
 ```go
 func (c *ConnorsRsi[T]) Compute(closings <-chan T) <-chan T
@@ -607,7 +609,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="ConnorsRsi[T].ComputeWithContext"></a>
-### func \(\*ConnorsRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L87>)
+### func \(\*ConnorsRsi\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L91>)
 
 ```go
 func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -616,7 +618,7 @@ func (c *ConnorsRsi[T]) ComputeWithContext(ctx context.Context, closings <-chan 
 ComputeWithContext function takes a channel of closings numbers and computes the Connors RSI.
 
 <a name="ConnorsRsi[T].IdlePeriod"></a>
-### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L140>)
+### func \(\*ConnorsRsi\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L145>)
 
 ```go
 func (c *ConnorsRsi[T]) IdlePeriod() int
@@ -625,7 +627,7 @@ func (c *ConnorsRsi[T]) IdlePeriod() int
 IdlePeriod is the initial period that Connors RSI won't yield any results. The three components run in parallel, not sequentially, so this is the max of their individual idle periods, not the sum.
 
 <a name="ConnorsRsi[T].String"></a>
-### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L155>)
+### func \(\*ConnorsRsi\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L160>)
 
 ```go
 func (c *ConnorsRsi[T]) String() string
@@ -719,17 +721,17 @@ func (c *CoppockCurve[T]) String() string
 String is the string representation of the Coppock Curve.
 
 <a name="EhlersFisher"></a>
-## type [EhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L41-L50>)
+## type [EhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L48-L57>)
 
 EhlersFisher represents the configuration parameters for calculating the canonical Fisher Transform, per John Ehlers' original Fisher Transform methodology \("Using the Fisher Transform", Stocks & Commodities magazine\). Unlike [Fisher](<#Fisher>), it uses the median of high and low, and recursively smooths both the normalized price and the transformed output.
 
 ```
 Price = (High + Low) / 2
 Value1 = 0.33 * 2 * ((Price - MinL) / (MaxH - MinL) - 0.5) + 0.67 * Value1[previous]
-Fisher = 0.5 * ln((1 + Value1) / (1 - Value1)) * 0.5 + 0.5 * Fisher[previous]
+Fisher = 0.5 * ln((1 + Value1) / (1 - Value1)) + 0.5 * Fisher[previous]
 ```
 
-Value1 is clamped to \[\-0.999, 0.999\] before it is used in the logarithm, to prevent division by zero or logarithmic infinity errors. The very first emitted Value1 and Fisher, having no prior history, are computed with Value1\[previous\] and Fisher\[previous\] seeded at 0.
+As in Ehlers' article, Value1 is set to 0.999 when it exceeds 0.99, and to \-0.999 when it falls below \-0.99, which keeps the logarithm finite. This matches TA\-Lib FISHER. The very first emitted Value1 and Fisher, having no prior history, are computed with Value1\[previous\] and Fisher\[previous\] seeded at 0.
 
 Example:
 
@@ -752,7 +754,7 @@ type EhlersFisher[T helper.Float] struct {
 ```
 
 <a name="NewEhlersFisher"></a>
-### func [NewEhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L54>)
+### func [NewEhlersFisher](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L61>)
 
 ```go
 func NewEhlersFisher[T helper.Float]() *EhlersFisher[T]
@@ -761,7 +763,7 @@ func NewEhlersFisher[T helper.Float]() *EhlersFisher[T]
 NewEhlersFisher function initializes a new Ehlers Fisher Transform instance with the default parameters.
 
 <a name="NewEhlersFisherWithPeriod"></a>
-### func [NewEhlersFisherWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L60>)
+### func [NewEhlersFisherWithPeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L67>)
 
 ```go
 func NewEhlersFisherWithPeriod[T helper.Float](period int) *EhlersFisher[T]
@@ -770,7 +772,7 @@ func NewEhlersFisherWithPeriod[T helper.Float](period int) *EhlersFisher[T]
 NewEhlersFisherWithPeriod function initializes a new Ehlers Fisher Transform instance with the given period.
 
 <a name="EhlersFisher[T].Compute"></a>
-### func \(\*EhlersFisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L157>)
+### func \(\*EhlersFisher\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L164>)
 
 ```go
 func (e *EhlersFisher[T]) Compute(highs, lows <-chan T) <-chan T
@@ -781,7 +783,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="EhlersFisher[T].ComputeWithContext"></a>
-### func \(\*EhlersFisher\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L70>)
+### func \(\*EhlersFisher\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L77>)
 
 ```go
 func (e *EhlersFisher[T]) ComputeWithContext(ctx context.Context, highs, lows <-chan T) <-chan T
@@ -790,7 +792,7 @@ func (e *EhlersFisher[T]) ComputeWithContext(ctx context.Context, highs, lows <-
 ComputeWithContext function takes channels of high and low numbers and computes the Ehlers Fisher Transform.
 
 <a name="EhlersFisher[T].IdlePeriod"></a>
-### func \(\*EhlersFisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L142>)
+### func \(\*EhlersFisher\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L149>)
 
 ```go
 func (e *EhlersFisher[T]) IdlePeriod() int
@@ -799,7 +801,7 @@ func (e *EhlersFisher[T]) IdlePeriod() int
 IdlePeriod is the initial period that Ehlers Fisher Transform won't yield any results.
 
 <a name="EhlersFisher[T].String"></a>
-### func \(\*EhlersFisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L150>)
+### func \(\*EhlersFisher\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/ehlers_fisher.go#L157>)
 
 ```go
 func (e *EhlersFisher[T]) String() string
@@ -1769,7 +1771,7 @@ func (s *StochasticRsi[T]) String() string
 String is the string representation of the Stochastic RSI.
 
 <a name="Streak"></a>
-## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L161>)
+## type [Streak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L166>)
 
 Streak represents the configuration for calculating the up/down streak length. The streak is the number of consecutive days the price has closed up or down.
 
@@ -1778,7 +1780,7 @@ type Streak[T helper.Float] struct{}
 ```
 
 <a name="NewStreak"></a>
-### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L164>)
+### func [NewStreak](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L169>)
 
 ```go
 func NewStreak[T helper.Float]() *Streak[T]
@@ -1787,7 +1789,7 @@ func NewStreak[T helper.Float]() *Streak[T]
 NewStreak function initializes a new Streak instance.
 
 <a name="Streak[T].Compute"></a>
-### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L226>)
+### func \(\*Streak\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L231>)
 
 ```go
 func (s *Streak[T]) Compute(closings <-chan T) <-chan T
@@ -1798,7 +1800,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Streak[T].ComputeWithContext"></a>
-### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L170>)
+### func \(\*Streak\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L175>)
 
 ```go
 func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <-chan T
@@ -1807,7 +1809,7 @@ func (s *Streak[T]) ComputeWithContext(ctx context.Context, closings <-chan T) <
 ComputeWithContext function takes a channel of closings numbers and computes the streak length. Positive values indicate consecutive up closes, negative values indicate consecutive down closes.
 
 <a name="Streak[T].IdlePeriod"></a>
-### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L207>)
+### func \(\*Streak\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L212>)
 
 ```go
 func (s *Streak[T]) IdlePeriod() int
@@ -1816,7 +1818,7 @@ func (s *Streak[T]) IdlePeriod() int
 IdlePeriod is the initial period that Streak won't yield any results.
 
 <a name="Streak[T].String"></a>
-### func \(\*Streak\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L212>)
+### func \(\*Streak\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/connors_rsi.go#L217>)
 
 ```go
 func (s *Streak[T]) String() string
