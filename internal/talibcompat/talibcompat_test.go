@@ -78,7 +78,7 @@ var testCases = []testCase{
 	{name: "Bop", columns: []string{"BOP"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewBop[float64]().Compute(in(b.open), in(b.high), in(b.low), in(b.close)))
 	}},
-	{name: "Cci", columns: []string{"CCI"}, skip: "https://github.com/cinar/indicator/issues/521", compute: func(b *bars) []<-chan float64 {
+	{name: "Cci", columns: []string{"CCI"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewCci[float64]().Compute(in(b.high), in(b.low), in(b.close)))
 	}},
 	{name: "Cfo", columns: []string{"CFO"}, skip: "https://github.com/cinar/indicator/issues/530", compute: func(b *bars) []<-chan float64 {
