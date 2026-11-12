@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2026 The Indicator Authors.
+// The source code is provided under GNU AGPLv3 License.
+// https://github.com/cinar/indicator
+
 package trend_test
 
 import (
@@ -23,7 +27,7 @@ func TestDpo(t *testing.T) {
 	expected := helper.Map(inputs[1], func(d *DpoData) float64 { return d.Dpo })
 
 	dpo := trend.NewDpo[float64]()
-	actual := helper.RoundDigits(dpo.Compute(closing), 2)
+	actual := helper.RoundDigits(dpo.Compute(closing), 4)
 	expected = helper.Skip(expected, dpo.IdlePeriod())
 
 	err = helper.CheckEquals(actual, expected)

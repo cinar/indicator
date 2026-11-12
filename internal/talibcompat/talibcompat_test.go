@@ -87,7 +87,7 @@ var testCases = []testCase{
 	{name: "Dema", columns: []string{"DEMA"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewDema[float64]().Compute(in(b.close)))
 	}},
-	{name: "Dpo", columns: []string{"DPO"}, skip: "https://github.com/cinar/indicator/issues/522", compute: func(b *bars) []<-chan float64 {
+	{name: "Dpo", columns: []string{"DPO"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewDpo[float64]().Compute(in(b.close)))
 	}},
 	{name: "Ema", columns: []string{"EMA"}, compute: func(b *bars) []<-chan float64 {
