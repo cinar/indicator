@@ -1874,7 +1874,7 @@ func NewTdSequential[T helper.Number]() *TdSequential[T]
 NewTdSequential function initializes a new TD Sequential instance with default parameters.
 
 <a name="TdSequential[T].Compute"></a>
-### func \(\*TdSequential\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L284>)
+### func \(\*TdSequential\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L285>)
 
 ```go
 func (t *TdSequential[T]) Compute(closings <-chan T) (<-chan T, <-chan T, <-chan T, <-chan T)
@@ -1894,7 +1894,7 @@ func (t *TdSequential[T]) ComputeWithContext(ctx context.Context, closings <-cha
 ComputeWithContext function takes a channel of numbers and computes the TD Sequential indicator, supporting context cancellation.
 
 <a name="TdSequential[T].IdlePeriod"></a>
-### func \(\*TdSequential\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L289>)
+### func \(\*TdSequential\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L290>)
 
 ```go
 func (t *TdSequential[T]) IdlePeriod() int
@@ -1903,7 +1903,7 @@ func (t *TdSequential[T]) IdlePeriod() int
 IdlePeriod is the initial period that TD Sequential won't yield meaningful results.
 
 <a name="TdSequential[T].String"></a>
-### func \(\*TdSequential\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L294>)
+### func \(\*TdSequential\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/momentum/td_sequential.go#L295>)
 
 ```go
 func (t *TdSequential[T]) String() string

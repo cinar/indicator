@@ -2180,7 +2180,7 @@ func NewMovingMaxWithPeriod[T helper.Number](period int) *MovingMax[T]
 NewMovingMaxWithPeriod function initializes a new Moving Max instance with the given period.
 
 <a name="MovingMax[T].Compute"></a>
-### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L65>)
+### func \(\*MovingMax\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L75>)
 
 ```go
 func (m *MovingMax[T]) Compute(c <-chan T) <-chan T
@@ -2200,7 +2200,7 @@ func (m *MovingMax[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 ComputeWithContext function takes a channel of numbers and computes the Moving Max over the specified period.
 
 <a name="MovingMax[T].IdlePeriod"></a>
-### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L53>)
+### func \(\*MovingMax\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L63>)
 
 ```go
 func (m *MovingMax[T]) IdlePeriod() int
@@ -2209,7 +2209,7 @@ func (m *MovingMax[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Max won't yield any results.
 
 <a name="MovingMax[T].String"></a>
-### func \(\*MovingMax\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L58>)
+### func \(\*MovingMax\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/moving_max.go#L68>)
 
 ```go
 func (m *MovingMax[T]) String() string
@@ -2250,7 +2250,7 @@ func NewMovingMinWithPeriod[T helper.Number](period int) *MovingMin[T]
 NewMovingMinWithPeriod function initializes a new Moving Min instance with the given period.
 
 <a name="MovingMin[T].Compute"></a>
-### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L65>)
+### func \(\*MovingMin\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L75>)
 
 ```go
 func (m *MovingMin[T]) Compute(c <-chan T) <-chan T
@@ -2270,7 +2270,7 @@ func (m *MovingMin[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-cha
 ComputeWithContext function takes a channel of numbers and computes the Moving Min over the specified period.
 
 <a name="MovingMin[T].IdlePeriod"></a>
-### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L53>)
+### func \(\*MovingMin\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L63>)
 
 ```go
 func (m *MovingMin[T]) IdlePeriod() int
@@ -2279,7 +2279,7 @@ func (m *MovingMin[T]) IdlePeriod() int
 IdlePeriod is the initial period that Mocing Min won't yield any results.
 
 <a name="MovingMin[T].String"></a>
-### func \(\*MovingMin\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L58>)
+### func \(\*MovingMin\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/moving_min.go#L68>)
 
 ```go
 func (m *MovingMin[T]) String() string
