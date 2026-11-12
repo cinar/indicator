@@ -458,10 +458,10 @@ const (
     // DefaultStcSlowPeriod is the default slow EMA period for STC.
     DefaultStcSlowPeriod = 50
 
-    // DefaultStcKPeriod is the default period for the Stochastic %K.
+    // DefaultStcKPeriod is the default window length of each stochastic pass.
     DefaultStcKPeriod = 10
 
-    // DefaultStcDPeriod is the default period for the Stochastic %D.
+    // DefaultStcDPeriod is the default smoothing period; 3 gives a factor of 0.5.
     DefaultStcDPeriod = 3
 )
 ```
@@ -881,15 +881,17 @@ func (*Bop[T]) String() string
 String is the string representation of the BOP.
 
 <a name="Cci"></a>
-## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L32-L35>)
+## type [Cci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L37-L40>)
 
 Cci represents the configuration parameters for calculating the Commodity Channel Index \(CCI\). CCI is a momentum\-based oscillator used to help determine when an investment vehicle is reaching a condition of being overbought or oversold.
 
 ```
 Moving Average = Sma(Period, Typical Price)
-Mean Deviation = Sma(Period, Abs(Typical Price - Moving Average))
+Mean Deviation = Sum(Abs(Typical Price[j] - Moving Average)) / Period, for j over the window
 CCI = (Typical Price - Moving Average) / (0.015 * Mean Deviation)
 ```
+
+The mean deviation measures every typical price in the window against the current moving average, as in Lambert's definition and TA\-Lib CCI. When the mean deviation is zero, CCI is 0.
 
 Example:
 
@@ -907,7 +909,7 @@ type Cci[T helper.Float] struct {
 ```
 
 <a name="NewCci"></a>
-### func [NewCci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L38>)
+### func [NewCci](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L43>)
 
 ```go
 func NewCci[T helper.Float]() *Cci[T]
@@ -916,7 +918,7 @@ func NewCci[T helper.Float]() *Cci[T]
 NewCci function initializes a new CCI instance with the default parameters.
 
 <a name="NewCciWithPeriod"></a>
-### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L43>)
+### func [NewCciWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L48>)
 
 ```go
 func NewCciWithPeriod[T helper.Float](period int) *Cci[T]
@@ -925,7 +927,7 @@ func NewCciWithPeriod[T helper.Float](period int) *Cci[T]
 NewCciWithPeriod function initializes a new CCI instance with the given period.
 
 <a name="Cci[T].Compute"></a>
-### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L98>)
+### func \(\*Cci\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L106>)
 
 ```go
 func (c *Cci[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -936,16 +938,16 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Cci[T].ComputeWithContext"></a>
-### func \(\*Cci\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L50>)
+### func \(\*Cci\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L55>)
 
 ```go
 func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
 ```
 
-ComputeWithContext function takes a channel of numbers and computes the CCI and the signal line.
+ComputeWithContext function takes a channel of numbers and computes the CCI.
 
 <a name="Cci[T].IdlePeriod"></a>
-### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L86>)
+### func \(\*Cci\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L94>)
 
 ```go
 func (c *Cci[T]) IdlePeriod() int
@@ -954,7 +956,7 @@ func (c *Cci[T]) IdlePeriod() int
 IdlePeriod is the initial period that CCI won't yield any results.
 
 <a name="Cci[T].String"></a>
-### func \(\*Cci\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L91>)
+### func \(\*Cci\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/cci.go#L99>)
 
 ```go
 func (c *Cci[T]) String() string
@@ -1122,13 +1124,16 @@ func (d *Dema[T]) String() string
 String is the string representation of the DEMA.
 
 <a name="Dpo"></a>
-## type [Dpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L29-L33>)
+## type [Dpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L31-L35>)
 
-Dpo computes the Detrended Price Oscillator. Formula \(common approximation\): Let k = floor\(period/2\) \+ 1. For time index t \>= period\-1\+k:
+Dpo computes the Detrended Price Oscillator. It compares a past price with the current simple moving average, which removes the trend from the price:
 
 ```
-DPO[t] = Price[t] - SMA[t - k]
+k = floor(period/2) + 1
+DPO[t] = Price[t - k] - SMA[t]
 ```
+
+This matches TA\-Lib DPO.
 
 Example:
 
@@ -1144,7 +1149,7 @@ type Dpo[T helper.Float] struct {
 ```
 
 <a name="NewDpo"></a>
-### func [NewDpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L36>)
+### func [NewDpo](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L38>)
 
 ```go
 func NewDpo[T helper.Float]() *Dpo[T]
@@ -1153,7 +1158,7 @@ func NewDpo[T helper.Float]() *Dpo[T]
 NewDpo creates a new DPO instance with default parameters.
 
 <a name="NewDpoWithPeriod"></a>
-### func [NewDpoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L44>)
+### func [NewDpoWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L46>)
 
 ```go
 func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T]
@@ -1162,7 +1167,7 @@ func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T]
 NewDpoWithPeriod initializes a new DPO instance with the given period. Periods \<= 1 are clamped to DefaultDpoPeriod.
 
 <a name="Dpo[T].Compute"></a>
-### func \(\*Dpo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L87>)
+### func \(\*Dpo\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L90>)
 
 ```go
 func (d *Dpo[T]) Compute(closing <-chan T) <-chan T
@@ -1173,7 +1178,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Dpo[T].ComputeWithContext"></a>
-### func \(\*Dpo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L55>)
+### func \(\*Dpo\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L57>)
 
 ```go
 func (d *Dpo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T
@@ -1182,7 +1187,7 @@ func (d *Dpo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-cha
 ComputeWithContext calculates the DPO indicator over the input price channel.
 
 <a name="Dpo[T].IdlePeriod"></a>
-### func \(\*Dpo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L75>)
+### func \(\*Dpo\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L78>)
 
 ```go
 func (d *Dpo[T]) IdlePeriod() int
@@ -1191,7 +1196,7 @@ func (d *Dpo[T]) IdlePeriod() int
 IdlePeriod returns the number of leading samples to discard before the first DPO value is available.
 
 <a name="Dpo[T].String"></a>
-### func \(\*Dpo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L80>)
+### func \(\*Dpo\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/dpo.go#L83>)
 
 ```go
 func (d *Dpo[T]) String() string
@@ -2959,22 +2964,25 @@ func (s *Smma[T]) String() string
 String is the string representation of the SMMA.
 
 <a name="Stc"></a>
-## type [Stc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L53-L71>)
+## type [Stc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L58-L77>)
 
-Stc represents the configuration parameters for calculating the Schaff Trend Cycle \(STC\) indicator. It combines MACD with stochastic oscillators to identify trend direction and potential entry points.
+Stc represents the configuration parameters for calculating the Schaff Trend Cycle \(STC\) indicator. It applies a stochastic normalization to MACD twice, smoothing the result of each pass exponentially, as in Doug Schaff's definition and TA\-Lib STC.
 
 ```
-EMA1 = EMA(values, fastPeriod)
-EMA2 = EMA(values, slowPeriod)
-MACD = EMA1 - EMA2
+MACD = EMA(values, fastPeriod) - EMA(values, slowPeriod)
 
-%K1, %D1 = Stochastic(MACD, kPeriod, dPeriod)
-%K2, %D2 = Stochastic(%D1, kPeriod, dPeriod)
+%K1 = 100 * (MACD - Min(MACD, kPeriod)) / (Max(MACD, kPeriod) - Min(MACD, kPeriod))
+PF  = PF[previous] + factor * (%K1 - PF[previous])
 
-STC = %D2
+%K2 = 100 * (PF - Min(PF, kPeriod)) / (Max(PF, kPeriod) - Min(PF, kPeriod))
+STC = STC[previous] + factor * (%K2 - STC[previous])
+
+factor = 2 / (dPeriod + 1)
 ```
 
-The Stochastic pass \(rolling\-min/max normalization to a 0\-100 range, then smoothed by an SMA\) is applied twice, once to MACD and again to the first pass's %D, the way the standard Schaff Trend Cycle algorithm double\-smooths MACD \-\- not once to MACD with a second division against its own %K/%D, which isn't bounded to 0\-100 and can divide by a near\-zero denominator.
+Both EMAs start on the same bar, the slow EMA's first: the fast EMA is seeded with the average of the fastPeriod values before it, rather than of the first fastPeriod values, as in TA\-Lib STC and MACD. This differs from [Apo](<#Apo>) and [Macd](<#Macd>), whose fast EMA starts earlier; the two converge as the series grows.
+
+The default dPeriod of 3 gives Schaff's factor of 0.5. Each smoothed series starts from its first %K value. When the window's maximum equals its minimum, %K is undefined and the previous smoothed value is kept \(0 if there is none yet\).
 
 Example:
 
@@ -2991,22 +2999,23 @@ type Stc[T helper.Float] struct {
     // SlowPeriod is the period for the slow EMA.
     SlowPeriod int
 
-    // KPeriod is the period for the Stochastic %K.
+    // KPeriod is the window length of each stochastic pass (the cycle length).
     KPeriod int
 
-    // DPeriod is the period for the Stochastic %D.
+    // DPeriod sets the smoothing factor, 2 / (DPeriod + 1), applied after
+    // each stochastic pass.
     DPeriod int
 
-    // Apo is the APO instance for MACD calculation.
-    Apo *Apo[T]
+    // FastEma is the fast EMA of the MACD.
+    FastEma *Ema[T]
 
-    // Stochastic is the Stochastic instance.
-    Stochastic *Stochastic[T]
+    // SlowEma is the slow EMA of the MACD.
+    SlowEma *Ema[T]
 }
 ```
 
 <a name="NewStc"></a>
-### func [NewStc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L74>)
+### func [NewStc](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L80>)
 
 ```go
 func NewStc[T helper.Float]() *Stc[T]
@@ -3015,7 +3024,7 @@ func NewStc[T helper.Float]() *Stc[T]
 NewStc function initializes a new STC instance with the default parameters.
 
 <a name="NewStcWithPeriod"></a>
-### func [NewStcWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L84>)
+### func [NewStcWithPeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L90>)
 
 ```go
 func NewStcWithPeriod[T helper.Float](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T]
@@ -3024,7 +3033,7 @@ func NewStcWithPeriod[T helper.Float](fastPeriod, slowPeriod, kPeriod, dPeriod i
 NewStcWithPeriod function initializes a new STC instance with the given periods.
 
 <a name="Stc[T].Compute"></a>
-### func \(\*Stc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L133>)
+### func \(\*Stc\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L165>)
 
 ```go
 func (s *Stc[T]) Compute(c <-chan T) <-chan T
@@ -3035,7 +3044,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Stc[T].ComputeWithContext"></a>
-### func \(\*Stc\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L103>)
+### func \(\*Stc\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L102>)
 
 ```go
 func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
@@ -3044,7 +3053,7 @@ func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T
 ComputeWithContext function takes a channel of numbers and computes the STC indicator.
 
 <a name="Stc[T].IdlePeriod"></a>
-### func \(\*Stc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L121>)
+### func \(\*Stc\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L153>)
 
 ```go
 func (s *Stc[T]) IdlePeriod() int
@@ -3053,7 +3062,7 @@ func (s *Stc[T]) IdlePeriod() int
 IdlePeriod is the initial period that STC won't yield any results.
 
 <a name="Stc[T].String"></a>
-### func \(\*Stc\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L126>)
+### func \(\*Stc\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/stc.go#L158>)
 
 ```go
 func (s *Stc[T]) String() string

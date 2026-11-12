@@ -17,6 +17,12 @@ import (
 const (
 	// DefaultEhlersFisherPeriod is the default period for the Ehlers Fisher Transform.
 	DefaultEhlersFisherPeriod = 10
+
+	// ehlersFisherLimit is the Value1 magnitude above which Value1 is clamped.
+	ehlersFisherLimit = 0.99
+
+	// ehlersFisherClamp is the value Value1 is clamped to.
+	ehlersFisherClamp = 0.999
 )
 
 // EhlersFisher represents the configuration parameters for calculating the
@@ -27,10 +33,11 @@ const (
 //
 //	Price = (High + Low) / 2
 //	Value1 = 0.33 * 2 * ((Price - MinL) / (MaxH - MinL) - 0.5) + 0.67 * Value1[previous]
-//	Fisher = 0.5 * ln((1 + Value1) / (1 - Value1)) * 0.5 + 0.5 * Fisher[previous]
+//	Fisher = 0.5 * ln((1 + Value1) / (1 - Value1)) + 0.5 * Fisher[previous]
 //
-// Value1 is clamped to [-0.999, 0.999] before it is used in the logarithm,
-// to prevent division by zero or logarithmic infinity errors. The very
+// As in Ehlers' article, Value1 is set to 0.999 when it exceeds 0.99, and
+// to -0.999 when it falls below -0.99, which keeps the logarithm finite.
+// This matches TA-Lib FISHER. The very
 // first emitted Value1 and Fisher, having no prior history, are computed
 // with Value1[previous] and Fisher[previous] seeded at 0.
 //
@@ -117,14 +124,14 @@ func (e *EhlersFisher[T]) smoothWithContext(ctx context.Context, normalized <-ch
 
 				v1 := 0.33*2*(float64(n)-0.5) + 0.67*float64(value1)
 
-				if v1 > FisherClamp {
-					v1 = FisherClamp
-				} else if v1 < -FisherClamp {
-					v1 = -FisherClamp
+				if v1 > ehlersFisherLimit {
+					v1 = ehlersFisherClamp
+				} else if v1 < -ehlersFisherLimit {
+					v1 = -ehlersFisherClamp
 				}
 
 				value1 = T(v1)
-				fisher = T(0.5*math.Log((1+v1)/(1-v1))*0.5 + 0.5*float64(fisher))
+				fisher = T(0.5*math.Log((1+v1)/(1-v1)) + 0.5*float64(fisher))
 
 				select {
 				case <-ctx.Done():

@@ -7,6 +7,7 @@ package trend
 import (
 	"context"
 	"fmt"
+	"math"
 
 	"github.com/cinar/indicator/v2/helper"
 )
@@ -21,8 +22,12 @@ const (
 // being overbought or oversold.
 //
 //	Moving Average = Sma(Period, Typical Price)
-//	Mean Deviation = Sma(Period, Abs(Typical Price - Moving Average))
+//	Mean Deviation = Sum(Abs(Typical Price[j] - Moving Average)) / Period, for j over the window
 //	CCI = (Typical Price - Moving Average) / (0.015 * Mean Deviation)
+//
+// The mean deviation measures every typical price in the window against
+// the current moving average, as in Lambert's definition and TA-Lib CCI.
+// When the mean deviation is zero, CCI is 0.
 //
 // Example:
 //
@@ -46,45 +51,48 @@ func NewCciWithPeriod[T helper.Float](period int) *Cci[T] {
 	}
 }
 
-// ComputeWithContext function takes a channel of numbers and computes the CCI and the signal line.
+// ComputeWithContext function takes a channel of numbers and computes the CCI.
 func (c *Cci[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
 	typicalPrice := NewTypicalPrice[T]()
-	sma1 := NewSmaWithPeriod[T](c.Period)
-	sma2 := NewSmaWithPeriod[T](c.Period)
+	tps := typicalPrice.ComputeWithContext(ctx, highs, lows, closings)
 
-	tps := helper.DuplicateWithContext[T](ctx,
-		typicalPrice.ComputeWithContext(ctx, highs, lows, closings),
-		3,
-	)
+	ccis := helper.WindowWithContext(ctx, tps, c.cci, c.Period)
 
-	mas := helper.DuplicateWithContext[T](ctx,
-		sma1.ComputeWithContext(ctx, tps[0]),
-		2,
-	)
+	return helper.SkipWithContext(ctx, ccis, c.IdlePeriod())
+}
 
-	tps[1] = helper.SkipWithContext(ctx, tps[1], sma1.Period-1)
-	tps[2] = helper.SkipWithContext(ctx, tps[2], sma1.Period-1)
+// cci computes the CCI of the newest value in the given window. The
+// aggregation is order independent except for the newest value, which is
+// located through the window's rotation offset.
+func (c *Cci[T]) cci(window []T, offset int) T {
+	n := T(len(window))
 
-	md := sma2.ComputeWithContext(ctx, helper.AbsWithContext(ctx, helper.SubtractWithContext(ctx, tps[1], mas[0])))
+	var sum T
+	for _, tp := range window {
+		sum += tp
+	}
 
-	mas[1] = helper.SkipWithContext(ctx, mas[1], sma2.Period-1)
-	tps[2] = helper.SkipWithContext(ctx, tps[2], sma2.Period-1)
+	mean := sum / n
 
-	multiplier := 0.015
+	var deviation T
+	for _, tp := range window {
+		deviation += T(math.Abs(float64(tp - mean)))
+	}
 
-	cci := helper.DivideWithContext(ctx, helper.SubtractWithContext(ctx, tps[2], mas[1]),
-		helper.MultiplyBy[T](
-			md,
-			T(multiplier),
-		),
-	)
+	deviation /= n
 
-	return cci
+	if deviation == 0 {
+		return 0
+	}
+
+	newest := window[(offset+len(window)-1)%len(window)]
+
+	return (newest - mean) / (0.015 * deviation)
 }
 
 // IdlePeriod is the initial period that CCI won't yield any results.
 func (c *Cci[T]) IdlePeriod() int {
-	return (c.Period * 2) - 2
+	return c.Period - 1
 }
 
 // String is the string representation of the CCI.

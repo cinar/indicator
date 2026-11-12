@@ -78,7 +78,7 @@ var testCases = []testCase{
 	{name: "Bop", columns: []string{"BOP"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewBop[float64]().Compute(in(b.open), in(b.high), in(b.low), in(b.close)))
 	}},
-	{name: "Cci", columns: []string{"CCI"}, skip: "https://github.com/cinar/indicator/issues/521", compute: func(b *bars) []<-chan float64 {
+	{name: "Cci", columns: []string{"CCI"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewCci[float64]().Compute(in(b.high), in(b.low), in(b.close)))
 	}},
 	{name: "Cfo", columns: []string{"CFO"}, skip: "https://github.com/cinar/indicator/issues/530", compute: func(b *bars) []<-chan float64 {
@@ -87,7 +87,7 @@ var testCases = []testCase{
 	{name: "Dema", columns: []string{"DEMA"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewDema[float64]().Compute(in(b.close)))
 	}},
-	{name: "Dpo", columns: []string{"DPO"}, skip: "https://github.com/cinar/indicator/issues/522", compute: func(b *bars) []<-chan float64 {
+	{name: "Dpo", columns: []string{"DPO"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewDpo[float64]().Compute(in(b.close)))
 	}},
 	{name: "Ema", columns: []string{"EMA"}, compute: func(b *bars) []<-chan float64 {
@@ -144,7 +144,7 @@ var testCases = []testCase{
 	{name: "Smma", columns: []string{"SMMA"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewSmma[float64]().Compute(in(b.close)))
 	}},
-	{name: "Stc", columns: []string{"STC"}, skip: "https://github.com/cinar/indicator/issues/525", compute: func(b *bars) []<-chan float64 {
+	{name: "Stc", columns: []string{"STC"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewStc[float64]().Compute(in(b.close)))
 	}},
 	{name: "Stochastic", columns: []string{"STOCH1_K", "STOCH1_D"}, compute: func(b *bars) []<-chan float64 {
@@ -187,13 +187,13 @@ var testCases = []testCase{
 	{name: "ChaikinOscillator", columns: []string{"ADOSC", "AD"}, fromBar: 150, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewChaikinOscillator[float64]().Compute(in(b.high), in(b.low), in(b.close), in(b.volume)))
 	}},
-	{name: "ConnorsRsi", columns: []string{"CRSI"}, skip: "https://github.com/cinar/indicator/issues/524", compute: func(b *bars) []<-chan float64 {
+	{name: "ConnorsRsi", columns: []string{"CRSI"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewConnorsRsi[float64]().Compute(in(b.close)))
 	}},
 	{name: "CoppockCurve", columns: []string{"COPPOCK"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewCoppockCurve[float64]().Compute(in(b.close)))
 	}},
-	{name: "EhlersFisher", columns: []string{"EFISHER"}, skip: "https://github.com/cinar/indicator/issues/523", compute: func(b *bars) []<-chan float64 {
+	{name: "EhlersFisher", columns: []string{"EFISHER"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewEhlersFisher[float64]().Compute(in(b.high), in(b.low)))
 	}},
 	{name: "ElderRay", columns: []string{"ELDER_BULL", "ELDER_BEAR"}, compute: func(b *bars) []<-chan float64 {

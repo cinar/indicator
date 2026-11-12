@@ -40,9 +40,8 @@ func TestEhlersFisherSimple(t *testing.T) {
 
 // referenceEhlersFisher computes the canonical, recursive Fisher Transform
 // with a plain sliding-window min/max over slices, independently of
-// EhlersFisher's channel implementation. It was cross-checked against a
-// standalone Python implementation (momentum/ref_ehlers_fisher.py), which
-// is not part of this repository's build and reuses none of its code.
+// EhlersFisher's channel implementation, following the formula in Ehlers'
+// "Using the Fisher Transform" article.
 func referenceEhlersFisher(highs, lows []float64, period int) []float64 {
 	prices := make([]float64, len(highs))
 	for i := range highs {
@@ -70,14 +69,14 @@ func referenceEhlersFisher(highs, lows []float64, period int) []float64 {
 		normalized := (prices[i] - lo) / (hi - lo)
 
 		value1 := 0.33*2*(normalized-0.5) + 0.67*value1Prev
-		if value1 > momentum.FisherClamp {
-			value1 = momentum.FisherClamp
+		if value1 > 0.99 {
+			value1 = 0.999
 		}
-		if value1 < -momentum.FisherClamp {
-			value1 = -momentum.FisherClamp
+		if value1 < -0.99 {
+			value1 = -0.999
 		}
 
-		fisher := 0.5*math.Log((1+value1)/(1-value1))*0.5 + 0.5*fisherPrev
+		fisher := 0.5*math.Log((1+value1)/(1-value1)) + 0.5*fisherPrev
 
 		out = append(out, fisher)
 
@@ -117,14 +116,14 @@ func referenceEhlersFisherWithoutRecursion(highs, lows []float64, period int) []
 		normalized := (prices[i] - lo) / (hi - lo)
 
 		value1 := 0.33 * 2 * (normalized - 0.5)
-		if value1 > momentum.FisherClamp {
-			value1 = momentum.FisherClamp
+		if value1 > 0.99 {
+			value1 = 0.999
 		}
-		if value1 < -momentum.FisherClamp {
-			value1 = -momentum.FisherClamp
+		if value1 < -0.99 {
+			value1 = -0.999
 		}
 
-		fisher := 0.5 * math.Log((1+value1)/(1-value1)) * 0.5
+		fisher := 0.5 * math.Log((1+value1)/(1-value1))
 
 		out = append(out, fisher)
 	}
@@ -133,29 +132,26 @@ func referenceEhlersFisherWithoutRecursion(highs, lows []float64, period int) []
 }
 
 // TestEhlersFisherHandComputedValues cross-checks EhlersFisher's output,
-// row by row, against values independently computed by
-// momentum/ref_ehlers_fisher.py (a from-scratch Python implementation of
-// the canonical Fisher Transform formula that does not call into this
-// repository's code at all).
+// row by row, against TA-Lib FISHER(high, low, 5) for the same input.
 func TestEhlersFisherHandComputedValues(t *testing.T) {
 	highs := []float64{10, 12, 11, 13, 15, 14, 16, 18, 17, 19, 21, 20, 22, 24, 23}
 	lows := []float64{8, 9, 10, 11, 12, 11, 13, 15, 14, 16, 17, 16, 18, 20, 19}
 	period := 5
 
-	// Values produced by momentum/ref_ehlers_fisher.py for this exact
-	// input series and period.
+	// Values produced by TA-Lib 0.8.3 FISHER for this exact input series
+	// and period.
 	expected := []float64{
-		0.171414127208,
-		0.257738657336,
-		0.439378744650,
-		0.653075802263,
-		0.700425364935,
-		0.842058042445,
-		1.024270914222,
-		0.947057655784,
-		1.022651266895,
-		1.169576573401,
-		1.065780375637,
+		0.342828254415,
+		0.515477314672,
+		0.878757489300,
+		1.306151604525,
+		1.400850729870,
+		1.684116084891,
+		2.048541828445,
+		1.894115311568,
+		2.045302533791,
+		2.339153146801,
+		2.131560751273,
 	}
 
 	if len(expected) < 8 {
@@ -261,5 +257,48 @@ func TestEhlersFisher(t *testing.T) {
 	)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestEhlersFisherClamp checks the Value1 clamp, which sets Value1 to
+// ±0.999 once it passes ±0.99, against TA-Lib FISHER(high, low, 5) on a
+// series that rises and then falls steadily enough to trigger it.
+func TestEhlersFisherClamp(t *testing.T) {
+	var highs, lows []float64
+	for i := 0; i < 40; i++ {
+		mid := 100 + float64(i)
+		if i >= 20 {
+			mid = 100 + float64(38-i)
+		}
+
+		highs = append(highs, mid+1)
+		lows = append(lows, mid-1)
+	}
+
+	// Values produced by TA-Lib 0.8.3 FISHER for this exact input series
+	// and period. The jumps after 4.686 and after -4.507 are the clamp.
+	expected := []float64{
+		0.342828254415, 0.791373872129, 1.261492949351, 1.725174983451,
+		2.175408580680, 2.612568601427, 3.039143272643, 3.457799327674,
+		3.870773984113, 4.279770426648, 4.686022806084, 6.143212570292,
+		6.871807452396, 7.236104893448, 7.418253613974, 7.509327974237,
+		4.798325884638, 2.593732724946, 1.092822252263, 0.042939059260,
+		-0.739155652702, -1.365244343253, -1.900559549376, -2.382692314323,
+		-2.833314002311, -3.265009971831, -3.685172921140, -4.098205747151,
+		-4.506770165842, -6.053586250171, -6.826994292336, -7.213698313418,
+		-7.407050323959, -7.503726329230, -7.552064331865, -7.576233333183,
+	}
+
+	ehlersFisher := momentum.NewEhlersFisherWithPeriod[float64](5)
+	actual := helper.ChanToSlice(ehlersFisher.Compute(helper.SliceToChan(highs), helper.SliceToChan(lows)))
+
+	if len(actual) != len(expected) {
+		t.Fatalf("expected %d values, got %d", len(expected), len(actual))
+	}
+
+	for i := range expected {
+		if math.Abs(actual[i]-expected[i]) > 1e-9 {
+			t.Fatalf("value %d: expected %v, got %v", i, expected[i], actual[i])
+		}
 	}
 }

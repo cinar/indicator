@@ -51,6 +51,52 @@ func TestStcSlowStochastic(t *testing.T) {
 	}
 }
 
+func TestStc(t *testing.T) {
+	type Data struct {
+		Close float64
+		Stc   float64
+	}
+
+	input, err := helper.ReadFromCsvFile[Data]("testdata/stc.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	inputs := helper.Duplicate(input, 2)
+	closing := helper.Map(inputs[0], func(d *Data) float64 { return d.Close })
+	expected := helper.Map(inputs[1], func(d *Data) float64 { return d.Stc })
+
+	stc := trend.NewStc[float64]()
+
+	actual := helper.RoundDigits(stc.Compute(closing), 2)
+	expected = helper.Skip(expected, stc.IdlePeriod())
+
+	err = helper.CheckEquals(actual, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestStcFlatRange(t *testing.T) {
+	values := make([]float64, 100)
+	for i := range values {
+		values[i] = 100
+	}
+
+	stc := trend.NewStc[float64]()
+	result := helper.ChanToSlice(stc.Compute(helper.SliceToChan(values)))
+
+	if len(result) != len(values)-stc.IdlePeriod() {
+		t.Fatalf("expected %d values, got %d", len(values)-stc.IdlePeriod(), len(result))
+	}
+
+	for i, v := range result {
+		if v != 0 {
+			t.Fatalf("value %d: expected 0, got %v", i, v)
+		}
+	}
+}
+
 // TestStcFull checks that STC's output length matches IdlePeriod() once the
 // Stochastic pass is applied twice (once to MACD, again to its %D), which
 // needs more warm-up than the 19-row testdata/stochastic.csv fixture

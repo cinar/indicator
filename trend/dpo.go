@@ -15,12 +15,14 @@ import (
 // DefaultDpoPeriod is the default period for DPO calculation.
 const DefaultDpoPeriod = 20
 
-// Dpo computes the Detrended Price Oscillator.
-// Formula (common approximation):
-// Let k = floor(period/2) + 1.
-// For time index t >= period-1+k:
+// Dpo computes the Detrended Price Oscillator. It compares a past price
+// with the current simple moving average, which removes the trend from
+// the price:
 //
-//	DPO[t] = Price[t] - SMA[t - k]
+//	k = floor(period/2) + 1
+//	DPO[t] = Price[t - k] - SMA[t]
+//
+// This matches TA-Lib DPO.
 //
 // Example:
 //
@@ -53,27 +55,28 @@ func NewDpoWithPeriod[T helper.Float](period int) *Dpo[T] {
 
 // ComputeWithContext calculates the DPO indicator over the input price channel.
 func (d *Dpo[T]) ComputeWithContext(ctx context.Context, closing <-chan T) <-chan T {
-	k := d.period/2 + 1
+	k := d.shift()
+	idle := d.IdlePeriod()
 	dup := helper.DuplicateWithContext(ctx, closing, 2)
 
-	// compute SMA on the first duplicated stream
-	sma := NewSma[T]()
-	sma.Period = d.period
-	smaOut := sma.ComputeWithContext(ctx, dup[0])
+	sma := NewSmaWithPeriod[T](d.period)
+	smaOut := helper.SkipWithContext(ctx, sma.ComputeWithContext(ctx, dup[0]), idle-sma.IdlePeriod())
 
-	// align the original price stream and the SMA stream according to DPO formula
-	skippedClosing := helper.SkipWithContext(ctx, dup[1], d.IdlePeriod())
-	smaDelayed := helper.SkipLastWithContext(ctx, smaOut, k)
+	// Price[t - k] is aligned with SMA[t] by dropping the first idle-k
+	// prices and the last k prices.
+	shiftedClosing := helper.SkipLastWithContext(ctx, helper.SkipWithContext(ctx, dup[1], idle-k), k)
 
-	// DPO = Price - shifted SMA
-	return helper.OperateWithContext(ctx, skippedClosing, smaDelayed, func(price, shiftedSma T) T {
-		return price - shiftedSma
-	})
+	return helper.SubtractWithContext(ctx, shiftedClosing, smaOut)
+}
+
+// shift returns the number of bars, k, that the price is shifted back by.
+func (d *Dpo[T]) shift() int {
+	return d.period/2 + 1
 }
 
 // IdlePeriod returns the number of leading samples to discard before the first DPO value is available.
 func (d *Dpo[T]) IdlePeriod() int {
-	return (d.period - 1) + (d.period/2 + 1)
+	return max(d.period-1, d.shift())
 }
 
 // String is the string representation of the DPO.
