@@ -18,33 +18,38 @@ const (
 	// DefaultStcSlowPeriod is the default slow EMA period for STC.
 	DefaultStcSlowPeriod = 50
 
-	// DefaultStcKPeriod is the default period for the Stochastic %K.
+	// DefaultStcKPeriod is the default window length of each stochastic pass.
 	DefaultStcKPeriod = 10
 
-	// DefaultStcDPeriod is the default period for the Stochastic %D.
+	// DefaultStcDPeriod is the default smoothing period; 3 gives a factor of 0.5.
 	DefaultStcDPeriod = 3
 )
 
 // Stc represents the configuration parameters for calculating the
-// Schaff Trend Cycle (STC) indicator. It combines MACD with
-// stochastic oscillators to identify trend direction and potential
-// entry points.
+// Schaff Trend Cycle (STC) indicator. It applies a stochastic
+// normalization to MACD twice, smoothing the result of each pass
+// exponentially, as in Doug Schaff's definition and TA-Lib STC.
 //
-//	EMA1 = EMA(values, fastPeriod)
-//	EMA2 = EMA(values, slowPeriod)
-//	MACD = EMA1 - EMA2
+//	MACD = EMA(values, fastPeriod) - EMA(values, slowPeriod)
 //
-//	%K1, %D1 = Stochastic(MACD, kPeriod, dPeriod)
-//	%K2, %D2 = Stochastic(%D1, kPeriod, dPeriod)
+//	%K1 = 100 * (MACD - Min(MACD, kPeriod)) / (Max(MACD, kPeriod) - Min(MACD, kPeriod))
+//	PF  = PF[previous] + factor * (%K1 - PF[previous])
 //
-//	STC = %D2
+//	%K2 = 100 * (PF - Min(PF, kPeriod)) / (Max(PF, kPeriod) - Min(PF, kPeriod))
+//	STC = STC[previous] + factor * (%K2 - STC[previous])
 //
-// The Stochastic pass (rolling-min/max normalization to a 0-100 range,
-// then smoothed by an SMA) is applied twice, once to MACD and again to
-// the first pass's %D, the way the standard Schaff Trend Cycle algorithm
-// double-smooths MACD -- not once to MACD with a second division against
-// its own %K/%D, which isn't bounded to 0-100 and can divide by a
-// near-zero denominator.
+//	factor = 2 / (dPeriod + 1)
+//
+// Both EMAs start on the same bar, the slow EMA's first: the fast EMA is
+// seeded with the average of the fastPeriod values before it, rather than
+// of the first fastPeriod values, as in TA-Lib STC and MACD. This differs
+// from [Apo] and [Macd], whose fast EMA starts earlier; the two converge
+// as the series grows.
+//
+// The default dPeriod of 3 gives Schaff's factor of 0.5. Each smoothed
+// series starts from its first %K value. When the window's maximum equals
+// its minimum, %K is undefined and the previous smoothed value is kept
+// (0 if there is none yet).
 //
 // Example:
 //
@@ -57,17 +62,18 @@ type Stc[T helper.Float] struct {
 	// SlowPeriod is the period for the slow EMA.
 	SlowPeriod int
 
-	// KPeriod is the period for the Stochastic %K.
+	// KPeriod is the window length of each stochastic pass (the cycle length).
 	KPeriod int
 
-	// DPeriod is the period for the Stochastic %D.
+	// DPeriod sets the smoothing factor, 2 / (DPeriod + 1), applied after
+	// each stochastic pass.
 	DPeriod int
 
-	// Apo is the APO instance for MACD calculation.
-	Apo *Apo[T]
+	// FastEma is the fast EMA of the MACD.
+	FastEma *Ema[T]
 
-	// Stochastic is the Stochastic instance.
-	Stochastic *Stochastic[T]
+	// SlowEma is the slow EMA of the MACD.
+	SlowEma *Ema[T]
 }
 
 // NewStc function initializes a new STC instance with the default parameters.
@@ -82,44 +88,70 @@ func NewStc[T helper.Float]() *Stc[T] {
 
 // NewStcWithPeriod function initializes a new STC instance with the given periods.
 func NewStcWithPeriod[T helper.Float](fastPeriod, slowPeriod, kPeriod, dPeriod int) *Stc[T] {
-	apo := NewApo[T]()
-	apo.FastPeriod = fastPeriod
-	apo.SlowPeriod = slowPeriod
-
-	stochastic := NewStochasticWithPeriod[T](kPeriod)
-	stochastic.Sma.Period = dPeriod
-
 	return &Stc[T]{
 		FastPeriod: fastPeriod,
 		SlowPeriod: slowPeriod,
 		KPeriod:    kPeriod,
 		DPeriod:    dPeriod,
-		Apo:        apo,
-		Stochastic: stochastic,
+		FastEma:    NewEmaWithPeriod[T](fastPeriod),
+		SlowEma:    NewEmaWithPeriod[T](slowPeriod),
 	}
 }
 
 // ComputeWithContext function takes a channel of numbers and computes the STC indicator.
 func (s *Stc[T]) ComputeWithContext(ctx context.Context, c <-chan T) <-chan T {
 	c = helper.BufferedWithContext(ctx, c, s.SlowPeriod)
-	macd := s.Apo.ComputeWithContext(ctx, c)
+	cs := helper.DuplicateWithContext(ctx, c, 2)
 
-	// %K1 and %K2 are unused (STC only needs the doubly-smoothed %D), but
-	// each comes from the same internal duplicate fan-out as %D1/%D2, so
-	// it still has to be drained -- an unread duplicate branch blocks the
-	// shared producer, stalling %D1/%D2 too.
-	k1, d1 := s.Stochastic.ComputeWithContext(ctx, macd)
-	go helper.DrainWithContext(ctx, k1)
+	// Skipping the first SlowPeriod-FastPeriod values makes the fast EMA
+	// start on the same bar as the slow EMA.
+	fast := s.FastEma.ComputeWithContext(ctx, helper.SkipWithContext(ctx, cs[0], s.SlowPeriod-s.FastPeriod))
+	slow := s.SlowEma.ComputeWithContext(ctx, cs[1])
+	macd := helper.SubtractWithContext(ctx, fast, slow)
 
-	k2, d2 := s.Stochastic.ComputeWithContext(ctx, d1)
-	go helper.DrainWithContext(ctx, k2)
+	pf := s.smoothedStochasticWithContext(ctx, macd)
 
-	return d2
+	return s.smoothedStochasticWithContext(ctx, pf)
+}
+
+// smoothedStochasticWithContext normalizes the values to 0-100 against the
+// minimum and maximum of the last KPeriod values, and smooths the result
+// exponentially.
+func (s *Stc[T]) smoothedStochasticWithContext(ctx context.Context, values <-chan T) <-chan T {
+	vs := helper.DuplicateWithContext(ctx, values, 3)
+
+	maxs := NewMovingMaxWithPeriod[T](s.KPeriod)
+	mins := NewMovingMinWithPeriod[T](s.KPeriod)
+
+	highest := maxs.ComputeWithContext(ctx, vs[0])
+	lowest := mins.ComputeWithContext(ctx, vs[1])
+	current := helper.SkipWithContext(ctx, vs[2], maxs.IdlePeriod())
+
+	factor := T(2) / T(s.DPeriod+1)
+	started := false
+
+	var smoothed T
+
+	return helper.Operate3WithContext(ctx, current, highest, lowest, func(value, high, low T) T {
+		k := smoothed
+		if high > low {
+			k = 100 * (value - low) / (high - low)
+		}
+
+		if started {
+			smoothed += factor * (k - smoothed)
+		} else {
+			smoothed = k
+			started = true
+		}
+
+		return smoothed
+	})
 }
 
 // IdlePeriod is the initial period that STC won't yield any results.
 func (s *Stc[T]) IdlePeriod() int {
-	return s.Apo.IdlePeriod() + 2*s.Stochastic.IdlePeriod()
+	return s.SlowEma.IdlePeriod() + 2*(s.KPeriod-1)
 }
 
 // String is the string representation of the STC.

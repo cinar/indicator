@@ -144,7 +144,7 @@ var testCases = []testCase{
 	{name: "Smma", columns: []string{"SMMA"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewSmma[float64]().Compute(in(b.close)))
 	}},
-	{name: "Stc", columns: []string{"STC"}, skip: "https://github.com/cinar/indicator/issues/525", compute: func(b *bars) []<-chan float64 {
+	{name: "Stc", columns: []string{"STC"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewStc[float64]().Compute(in(b.close)))
 	}},
 	{name: "Stochastic", columns: []string{"STOCH1_K", "STOCH1_D"}, compute: func(b *bars) []<-chan float64 {
