@@ -1102,7 +1102,7 @@ func MapWithPreviousWithContext[F, T any](ctx context.Context, c <-chan F, f fun
 MapWithPreviousWithContext applies a transformation function to each element in an input channel, creating a new channel with the transformed values, supporting context cancellation.
 
 <a name="MaxSince"></a>
-## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L37>)
+## func [MaxSince](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L21>)
 
 ```go
 func MaxSince[T Number](c <-chan T, w int) <-chan T
@@ -1113,13 +1113,13 @@ MaxSince wraps MaxSinceWithContext for backwards compatibility.
 Deprecated: Use MaxSinceWithContext instead.
 
 <a name="MaxSinceWithContext"></a>
-## func [MaxSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L15>)
+## func [MaxSinceWithContext](<https://github.com/cinar/indicator/blob/master/helper/max_since.go#L14>)
 
 ```go
 func MaxSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
 ```
 
-MaxSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the maximum within the window of size w.
+MaxSinceWithContext returns a channel of T indicating since when \(number of previous values\) the maximum within the window of size w was seen. When the maximum occurs more than once, the most recent one counts. NaN values are ignored, and a window of only NaN values yields NaN.
 
 <a name="Mean"></a>
 ## func [Mean](<https://github.com/cinar/indicator/blob/master/helper/mean.go#L13>)
@@ -1138,7 +1138,7 @@ fmt.Println(n) // 2.5
 ```
 
 <a name="MinSince"></a>
-## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L36>)
+## func [MinSince](<https://github.com/cinar/indicator/blob/master/helper/min_since.go#L21>)
 
 ```go
 func MinSince[T Number](c <-chan T, w int) <-chan T
@@ -1155,7 +1155,7 @@ Deprecated: Use MinSinceWithContext instead.
 func MinSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T
 ```
 
-MinSinceWithContext returns a channel of T indicating since when \(number of previous values\) the respective value was the minimum.
+MinSinceWithContext returns a channel of T indicating since when \(number of previous values\) the minimum within the window of size w was seen. When the minimum occurs more than once, the most recent one counts. NaN values are ignored, and a window of only NaN values yields NaN.
 
 <a name="Multiply"></a>
 ## func [Multiply](<https://github.com/cinar/indicator/blob/master/helper/multiply.go#L33>)
