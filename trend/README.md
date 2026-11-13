@@ -746,14 +746,16 @@ func (apo *Apo[T]) String() string
 String is the string representation of the APO.
 
 <a name="Aroon"></a>
-## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L35-L38>)
+## type [Aroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L40-L43>)
 
 Aroon represent the configuration for calculating the Aroon indicator. It is a technical analysis tool that gauges trend direction and strength in asset prices. It comprises two lines: Aroon Up and Aroon Down. Aroon Up measures uptrend strength, while Aroon Down measures downtrend strength. When Aroon Up exceeds Aroon Down, it suggests a bullish trend; when Aroon Down surpasses Aroon Up, it indicates a bearish trend.
 
 ```
-Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
-Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
+Aroon Up = ((Period - Bars Since Highest High) / Period) * 100
+Aroon Down = ((Period - Bars Since Lowest Low) / Period) * 100
 ```
+
+The highest high and lowest low are looked for in the last Period \+ 1 bars, the current one included. When the extreme occurs more than once, the most recent one counts, as in TA\-Lib. A Period below 1 produces no output.
 
 Example:
 
@@ -772,7 +774,7 @@ type Aroon[T helper.Float] struct {
 ```
 
 <a name="NewAroon"></a>
-### func [NewAroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L42>)
+### func [NewAroon](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L47>)
 
 ```go
 func NewAroon[T helper.Float]() *Aroon[T]
@@ -781,7 +783,7 @@ func NewAroon[T helper.Float]() *Aroon[T]
 NewAroon function initializes a new Aroon instance with the default parameters.
 
 <a name="Aroon[T].Compute"></a>
-### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L110>)
+### func \(\*Aroon\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L94>)
 
 ```go
 func (a *Aroon[T]) Compute(high, low <-chan T) (<-chan T, <-chan T)
@@ -792,7 +794,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Aroon[T].ComputeWithContext"></a>
-### func \(\*Aroon\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L50>)
+### func \(\*Aroon\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L55>)
 
 ```go
 func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (<-chan T, <-chan T)
@@ -801,7 +803,7 @@ func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (
 ComputeWithContext function takes a channel of numbers and computes the Aroon over the specified period.
 
 <a name="Aroon[T].IdlePeriod"></a>
-### func \(\*Aroon\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L77>)
+### func \(\*Aroon\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L82>)
 
 ```go
 func (a *Aroon[T]) IdlePeriod() int
@@ -810,7 +812,7 @@ func (a *Aroon[T]) IdlePeriod() int
 IdlePeriod is the initial period that Aroon won't yield any results.
 
 <a name="Aroon[T].String"></a>
-### func \(\*Aroon\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L82>)
+### func \(\*Aroon\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/trend/aroon.go#L87>)
 
 ```go
 func (a *Aroon[T]) String() string

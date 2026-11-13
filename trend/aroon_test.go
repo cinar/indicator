@@ -6,6 +6,7 @@ package trend_test
 
 import (
 	"context"
+	"math"
 	"runtime"
 	"testing"
 	"time"
@@ -132,8 +133,10 @@ func TestAroonCancellation(t *testing.T) {
 #'\code{n}) x 100.
 */
 
+// TestAroonValidateDefinition checks the definition above on hand-made data
+// with repeated highs and lows, where the most recent one counts, as in
+// TA-Lib. At period 3 the values are not whole numbers.
 func TestAroonValidateDefinition(t *testing.T) {
-	// compares to: https://github.com/sabinchitrakar/aroon-rs/blob/master/docs/aroon.md
 	type AroonData struct {
 		High float64
 		Low  float64
@@ -146,8 +149,8 @@ func TestAroonValidateDefinition(t *testing.T) {
 		{High: 11, Low: 6}, // None
 		// The high of 12 and the low of 4 repeat; the most recent one counts.
 		{High: 12, Low: 4, Up: 100, Down: 100},
-		{High: 9, Low: 7, Up: 67, Down: 67},
-		{High: 8, Low: 8, Up: 33, Down: 33},
+		{High: 9, Low: 7, Up: 66.67, Down: 66.67},
+		{High: 8, Low: 8, Up: 33.33, Down: 33.33},
 		{High: 7, Low: 9, Up: 0, Down: 0},
 	}
 
@@ -166,8 +169,46 @@ func TestAroonValidateDefinition(t *testing.T) {
 	expectedDown = helper.Skip(expectedDown, aroon.IdlePeriod())
 
 	actualUp, actualDown := aroon.Compute(high, low)
+	actualUp = helper.RoundDigits(actualUp, 2)
+	actualDown = helper.RoundDigits(actualDown, 2)
 
 	err := helper.CheckEquals(actualUp, expectedUp, actualDown, expectedDown)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestAroonInvalidPeriod(t *testing.T) {
+	for _, period := range []int{0, -1} {
+		aroon := &trend.Aroon[float64]{
+			Period: period,
+		}
+
+		up, down := aroon.Compute(helper.SliceToChan([]float64{1, 2, 3}), helper.SliceToChan([]float64{1, 2, 3}))
+
+		if actual := helper.ChanToSlice(up); len(actual) != 0 {
+			t.Fatalf("period %d up %v expected none", period, actual)
+		}
+		if actual := helper.ChanToSlice(down); len(actual) != 0 {
+			t.Fatalf("period %d down %v expected none", period, actual)
+		}
+	}
+}
+
+func TestAroonNaN(t *testing.T) {
+	// A missing high or low is skipped; the extremes around it still count.
+	nan := math.NaN()
+	high := helper.SliceToChan([]float64{1, 3, nan, 2, 4})
+	low := helper.SliceToChan([]float64{4, 2, nan, 3, 1})
+	expected := []float64{50, 0, 100}
+
+	aroon := &trend.Aroon[float64]{
+		Period: 2,
+	}
+
+	up, down := aroon.Compute(high, low)
+
+	err := helper.CheckEquals(up, helper.SliceToChan(expected), down, helper.SliceToChan(expected))
 	if err != nil {
 		t.Fatal(err)
 	}

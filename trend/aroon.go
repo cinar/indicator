@@ -23,8 +23,13 @@ const (
 // Up exceeds Aroon Down, it suggests a bullish trend; when Aroon Down
 // surpasses Aroon Up, it indicates a bearish trend.
 //
-//	Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
-//	Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
+//	Aroon Up = ((Period - Bars Since Highest High) / Period) * 100
+//	Aroon Down = ((Period - Bars Since Lowest Low) / Period) * 100
+//
+// The highest high and lowest low are looked for in the last Period + 1
+// bars, the current one included. When the extreme occurs more than once,
+// the most recent one counts, as in TA-Lib. A Period below 1 produces no
+// output.
 //
 // Example:
 //
@@ -48,29 +53,29 @@ func NewAroon[T helper.Float]() *Aroon[T] {
 // ComputeWithContext function takes a channel of numbers and computes the Aroon
 // over the specified period.
 func (a *Aroon[T]) ComputeWithContext(ctx context.Context, high, low <-chan T) (<-chan T, <-chan T) {
+	if a.Period < 1 {
+		// A window of size 0 produces no output.
+		return helper.MaxSinceWithContext(ctx, high, 0), helper.MinSinceWithContext(ctx, low, 0)
+	}
+
 	// The highest high and lowest low are looked for in the last Period + 1
 	// bars, the current one included.
-	sinceLastHigh := barsSinceLatest(ctx, high, a.Period+1, func(n, best T) bool { return n > best })
-	sinceLastLow := barsSinceLatest(ctx, low, a.Period+1, func(n, best T) bool { return n < best })
+	sinceLastHigh := helper.MaxSinceWithContext(ctx, high, a.Period+1)
+	sinceLastLow := helper.MinSinceWithContext(ctx, low, a.Period+1)
 
 	sinceLastHigh = helper.SkipWithContext(ctx, sinceLastHigh, a.Period)
 	sinceLastLow = helper.SkipWithContext(ctx, sinceLastLow, a.Period)
 
-	// Aroon Up = ((25 - Period Since Last 25 Period High) / 25) * 100
-	aroonUp := helper.MultiplyByWithContext(ctx, sinceLastHigh, -1)
-	aroonUp = helper.IncrementByWithContext(ctx, aroonUp, T(a.Period))
-	aroonUp = helper.DivideByWithContext(ctx, aroonUp, T(a.Period))
-	aroonUp = helper.MultiplyByWithContext(ctx, aroonUp, 100)
-	aroonUp = helper.RoundDigitsWithContext(ctx, aroonUp, 0)
+	return a.fromBarsSince(ctx, sinceLastHigh), a.fromBarsSince(ctx, sinceLastLow)
+}
 
-	// Aroon Down = ((25 - Period Since Last 25 Period Low) / 25) * 100
-	aroonDown := helper.MultiplyByWithContext(ctx, sinceLastLow, -1)
-	aroonDown = helper.IncrementByWithContext(ctx, aroonDown, T(a.Period))
-	aroonDown = helper.DivideByWithContext(ctx, aroonDown, T(a.Period))
-	aroonDown = helper.MultiplyByWithContext(ctx, aroonDown, 100)
-	aroonDown = helper.RoundDigitsWithContext(ctx, aroonDown, 0)
-
-	return aroonUp, aroonDown
+// fromBarsSince converts the bars since an extreme to an Aroon line. It is
+// computed as (Period - Bars Since) * (100 / Period), in the same order as
+// TA-Lib, so that the floating-point results are the same.
+func (a *Aroon[T]) fromBarsSince(ctx context.Context, since <-chan T) <-chan T {
+	line := helper.MultiplyByWithContext(ctx, since, -1)
+	line = helper.IncrementByWithContext(ctx, line, T(a.Period))
+	return helper.MultiplyByWithContext(ctx, line, 100/T(a.Period))
 }
 
 // IdlePeriod is the initial period that Aroon won't yield any results.
@@ -81,27 +86,6 @@ func (a *Aroon[T]) IdlePeriod() int {
 // String is the string representation of the Aroon.
 func (a *Aroon[T]) String() string {
 	return fmt.Sprintf("AROON(%d)", a.Period)
-}
-
-// barsSinceLatest returns how many bars ago the best value in each window of
-// w bars was, where better reports whether n beats the best so far. On ties
-// the most recent bar wins, as in TA-Lib.
-func barsSinceLatest[T helper.Float](ctx context.Context, c <-chan T, w int, better func(n, best T) bool) <-chan T {
-	return helper.WindowWithContext(ctx, c, func(s []T, i int) T {
-		var best T
-		since, k := 0, 0
-
-		// Walk from the newest bar to the oldest.
-		helper.SlicesReverse(s, i, func(n T) bool {
-			if k == 0 || better(n, best) {
-				best, since = n, k
-			}
-			k++
-			return true
-		})
-
-		return T(since)
-	}, w)
 }
 
 // Compute wraps ComputeWithContext for backwards compatibility.
