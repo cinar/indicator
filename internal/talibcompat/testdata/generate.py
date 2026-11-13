@@ -60,6 +60,8 @@ def references(o, h, l, c, v):
     # trend
     r["APO"] = ta.APO(c, 14, 30, 1)
     r["AROON_DOWN"], r["AROON_UP"] = ta.AROON(h, l, 25)
+    # A period where 100 / period is not a whole number.
+    r["AROON14_DOWN"], r["AROON14_UP"] = ta.AROON(h, l, 14)
     r["BOP"] = ta.BOP(o, h, l, c)
     r["CCI"] = ta.CCI(h, l, c, 20)
     r["CFO"] = ta.FOSC(c, 14)

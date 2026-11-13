@@ -72,8 +72,11 @@ var testCases = []testCase{
 	{name: "Apo", columns: []string{"APO"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewApo[float64]().Compute(in(b.close)))
 	}},
-	{name: "Aroon", columns: []string{"AROON_UP", "AROON_DOWN"}, skip: "https://github.com/cinar/indicator/issues/520", compute: func(b *bars) []<-chan float64 {
+	{name: "Aroon", columns: []string{"AROON_UP", "AROON_DOWN"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewAroon[float64]().Compute(in(b.high), in(b.low)))
+	}},
+	{name: "Aroon14", columns: []string{"AROON14_UP", "AROON14_DOWN"}, compute: func(b *bars) []<-chan float64 {
+		return outs((&trend.Aroon[float64]{Period: 14}).Compute(in(b.high), in(b.low)))
 	}},
 	{name: "Bop", columns: []string{"BOP"}, compute: func(b *bars) []<-chan float64 {
 		return outs(trend.NewBop[float64]().Compute(in(b.open), in(b.high), in(b.low), in(b.close)))
