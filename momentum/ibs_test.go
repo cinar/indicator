@@ -5,6 +5,7 @@
 package momentum_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/cinar/indicator/v2/helper"
@@ -68,7 +69,19 @@ func TestInternalBarStrengthZeroDenom(t *testing.T) {
 	actual := ibs.Compute(highs, lows, closings)
 
 	val := <-actual
-	if val != 0.0 {
-		t.Fatalf("expected 0.0 when high == low, got %f", val)
+	if val != 0.5 {
+		t.Fatalf("expected neutral 0.5 when high == low, got %f", val)
+	}
+}
+
+func TestInternalBarStrengthFlatBarsFloat32(t *testing.T) {
+	ibs := momentum.NewInternalBarStrength[float32]()
+	actual := ibs.ComputeWithContext(context.Background(),
+		helper.SliceToChan([]float32{100, 102, 100, 104}),
+		helper.SliceToChan([]float32{100, 100, 100, 100}),
+		helper.SliceToChan([]float32{100, 100, 100, 104}))
+	expected := helper.SliceToChan([]float32{0.5, 0, 0.5, 1})
+	if err := helper.CheckEquals(actual, expected); err != nil {
+		t.Fatal(err)
 	}
 }
