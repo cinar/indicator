@@ -1067,7 +1067,7 @@ String is the string representation of the Ichimoku Cloud.
 <a name="InternalBarStrength"></a>
 ## type [InternalBarStrength](<https://github.com/cinar/indicator/blob/master/momentum/ibs.go#L23>)
 
-InternalBarStrength represents the parameters for calculating the Internal Bar Strength \(IBS\). It tracks price location within a daily high\-low range.
+InternalBarStrength represents the parameters for calculating the Internal Bar Strength \(IBS\). It tracks price location within a daily high\-low range. Bars with no range return the neutral midpoint, 0.5.
 
 ```
 IBS = (Close - Low) / (High - Low)

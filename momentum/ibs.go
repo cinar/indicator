@@ -12,7 +12,7 @@ import (
 
 // InternalBarStrength represents the parameters for calculating the
 // Internal Bar Strength (IBS). It tracks price location within a daily
-// high-low range.
+// high-low range. Bars with no range return the neutral midpoint, 0.5.
 //
 //	IBS = (Close - Low) / (High - Low)
 //
@@ -31,7 +31,7 @@ func NewInternalBarStrength[T helper.Float]() *InternalBarStrength[T] {
 func (ibs *InternalBarStrength[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T {
 	return helper.Operate3WithContext(ctx, highs, lows, closings, func(high, low, closing T) T {
 		denom := high - low
-		return helper.SafeDivide(closing-low, denom, T(0))
+		return helper.SafeDivide(closing-low, denom, T(0.5))
 	})
 }
 
