@@ -660,7 +660,7 @@ func (m *Mfi[T]) String() string
 String is the string representation of the MFI.
 
 <a name="Mfm"></a>
-## type [Mfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L33>)
+## type [Mfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L32>)
 
 Mfm holds configuration parameters for calculating the Money Flow Multiplier \(MFM\), which adjusts volume based on the closing price's position within the high\-low range:
 
@@ -670,7 +670,7 @@ MFM = ((Closing - Low) - (High - Closing)) / (High - Low)
 
 \- Positive MFM: Close in upper half of range, indicating buying pressure. \- Negative MFM: Close in lower half of range, indicating selling pressure. \- MFM of 1: Close equals high, strongest buying pressure. \- MFM of \-1: Close equals low, strongest selling pressure.
 
-On a flat bar \(High == Low\), the close's position within the range is undefined \(0/0\). MFM returns 0, the neutral point of its \[\-1, 1\] scale, matching the InternalBarStrength precedent for the identical High\-Low denominator. Since MFM feeds Mfv, Ad, and Cmf, a neutral 0 flows through as "zero contribution" to all of them.
+On a flat bar \(High == Low\), the close's position within the range is undefined \(0/0\). MFM returns 0, the neutral point of its \[\-1, 1\] scale. Since MFM feeds Mfv, Ad, and Cmf, a neutral 0 flows through as "zero contribution" to all of them.
 
 Example:
 
@@ -684,7 +684,7 @@ type Mfm[T helper.Float] struct{}
 ```
 
 <a name="NewMfm"></a>
-### func [NewMfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L36>)
+### func [NewMfm](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L35>)
 
 ```go
 func NewMfm[T helper.Float]() *Mfm[T]
@@ -693,7 +693,7 @@ func NewMfm[T helper.Float]() *Mfm[T]
 NewMfm function initializes a new MFM instance with the default parameters.
 
 <a name="Mfm[T].Compute"></a>
-### func \(\*Mfm\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L61>)
+### func \(\*Mfm\[T\]\) [Compute](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L60>)
 
 ```go
 func (i *Mfm[T]) Compute(highs, lows, closings <-chan T) <-chan T
@@ -704,7 +704,7 @@ Compute wraps ComputeWithContext for backwards compatibility.
 Deprecated: Use ComputeWithContext instead.
 
 <a name="Mfm[T].ComputeWithContext"></a>
-### func \(\*Mfm\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L41>)
+### func \(\*Mfm\[T\]\) [ComputeWithContext](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L40>)
 
 ```go
 func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <-chan T) <-chan T
@@ -713,7 +713,7 @@ func (i *Mfm[T]) ComputeWithContext(ctx context.Context, highs, lows, closings <
 ComputeWithContext function takes a channel of numbers and computes the MFM.
 
 <a name="Mfm[T].IdlePeriod"></a>
-### func \(\*Mfm\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L49>)
+### func \(\*Mfm\[T\]\) [IdlePeriod](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L48>)
 
 ```go
 func (*Mfm[T]) IdlePeriod() int
@@ -722,7 +722,7 @@ func (*Mfm[T]) IdlePeriod() int
 IdlePeriod is the initial period that MFM won't yield any results.
 
 <a name="Mfm[T].String"></a>
-### func \(\*Mfm\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L54>)
+### func \(\*Mfm\[T\]\) [String](<https://github.com/cinar/indicator/blob/master/volume/mfm.go#L53>)
 
 ```go
 func (*Mfm[T]) String() string
