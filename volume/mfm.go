@@ -21,10 +21,9 @@ import (
 // - MFM of -1: Close equals low, strongest selling pressure.
 //
 // On a flat bar (High == Low), the close's position within the range is undefined
-// (0/0). MFM returns 0, the neutral point of its [-1, 1] scale, matching the
-// InternalBarStrength precedent for the identical High-Low denominator. Since MFM
-// feeds Mfv, Ad, and Cmf, a neutral 0 flows through as "zero contribution" to all
-// of them.
+// (0/0). MFM returns 0, the neutral point of its [-1, 1] scale. Since MFM feeds
+// Mfv, Ad, and Cmf, a neutral 0 flows through as "zero contribution" to all of
+// them.
 //
 // Example:
 //

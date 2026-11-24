@@ -204,7 +204,7 @@ var testCases = []testCase{
 		go helper.Drain(lagging)
 		return outs(conversion, base, spanA, spanB)
 	}},
-	{name: "InternalBarStrength", columns: []string{"IBS"}, skip: "https://github.com/cinar/indicator/issues/532", compute: func(b *bars) []<-chan float64 {
+	{name: "InternalBarStrength", columns: []string{"IBS"}, compute: func(b *bars) []<-chan float64 {
 		return outs(momentum.NewInternalBarStrength[float64]().Compute(in(b.high), in(b.low), in(b.close)))
 	}},
 	{name: "Ppo", columns: []string{"PPO", "PPO_SIGNAL", "PPO_HIST"}, compute: func(b *bars) []<-chan float64 {
