@@ -4,30 +4,15 @@
 
 package helper
 
-import (
-	"context"
-	"slices"
-)
+import "context"
 
 // MinSinceWithContext returns a channel of T indicating since when
-// (number of previous values) the respective value was the minimum.
+// (number of previous values) the minimum within the window of size w
+// was seen. When the minimum occurs more than once, the most recent one
+// counts. NaN values are ignored, and a window of only NaN values yields
+// NaN.
 func MinSinceWithContext[T Number](ctx context.Context, c <-chan T, w int) <-chan T {
-	return WindowWithContext(ctx, c, func(w []T, i int) T {
-		since := 0
-		found := false
-		m := slices.Min(w)
-		SlicesReverse(w, i, func(n T) bool {
-			if found && n > m {
-				return false
-			}
-			since++
-			if n == m {
-				found = true
-			}
-			return true
-		})
-		return T(since - 1)
-	}, w)
+	return extremeSinceWithContext(ctx, c, w, func(a, b T) bool { return a < b })
 }
 
 // MinSince wraps MinSinceWithContext for backwards compatibility.

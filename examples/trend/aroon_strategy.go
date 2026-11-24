@@ -56,7 +56,7 @@ func (a *AroonStrategy) ComputeWithContext(ctx context.Context, c <-chan *asset.
 	})
 
 	// Aroon starts only after a full period.
-	actions = helper.ShiftWithContext(ctx, actions, a.Aroon.Period-1, strategy.Hold)
+	actions = helper.ShiftWithContext(ctx, actions, a.Aroon.IdlePeriod(), strategy.Hold)
 
 	return actions
 }
@@ -80,8 +80,8 @@ func (a *AroonStrategy) Report(c <-chan *asset.Snapshot) *helper.Report {
 	closings := asset.SnapshotsAsClosings(snapshots[3])
 
 	ups, downs := a.Aroon.Compute(highs, lows)
-	ups = helper.Shift(ups, a.Aroon.Period-1, 0)
-	downs = helper.Shift(downs, a.Aroon.Period-1, 0)
+	ups = helper.Shift(ups, a.Aroon.IdlePeriod(), 0)
+	downs = helper.Shift(downs, a.Aroon.IdlePeriod(), 0)
 
 	actions, outcomes := strategy.ComputeWithOutcome(a, snapshots[4])
 	annotations := strategy.ActionsToAnnotations(actions)
